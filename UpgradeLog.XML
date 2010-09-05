@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="DBDiff">
+</Property><Property Name="Solution File" Value="C:\Users\esteban\Documents\TRABAJOS\Trabajos Mios\DBDiff\Codigo\DBDiff.sln">
+</Property><Property Name="Date" Value="domingo, 17 de febrero de 2008">
+</Property><Property Name="Time" Value="16:41 p.m.">
+</Property></Properties><Event ErrorLevel="0" Project="DBDiff" Source="DBDiff\DBDiff.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DBDiff" Source="DBDiff\DBDiff.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DBDiff.SchemaAttributes" Source="DBDiff.SchemaAttributes\DBDiff.SchemaAttributes.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DBDiff.SchemaAttributes" Source="DBDiff.SchemaAttributes\DBDiff.SchemaAttributes.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DBDiff.Schema" Source="DBDiff.Schema\DBDiff.Schema.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DBDiff.Schema" Source="DBDiff.Schema\DBDiff.Schema.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DBDiff.Schema.SQLServer2000" Source="DBDiff.Schema.SQLServer2000\DBDiff.Schema.SQLServer2000.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DBDiff.Schema.SQLServer2000" Source="DBDiff.Schema.SQLServer2000\DBDiff.Schema.SQLServer2000.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DBDiff.Schema.SQLServer" Source="DBDiff.Schema.SQLServer2005\DBDiff.Schema.SQLServer.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DBDiff.Schema.SQLServer" Source="DBDiff.Schema.SQLServer2005\DBDiff.Schema.SQLServer.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DBDiff.Schema.MySQL" Source="DBDiff.Schema.MySQL5\DBDiff.Schema.MySQL.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DBDiff.Schema.MySQL" Source="DBDiff.Schema.MySQL5\DBDiff.Schema.MySQL.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DBDiff.Test" Source="DBDiff.Test\DBDiff.Test.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DBDiff.Test" Source="DBDiff.Test\DBDiff.Test.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="SQLDisplayControl" Source="SQLDisplayControl\SQLDisplayControl.vbproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="SQLDisplayControl" Source="SQLDisplayControl\SQLDisplayControl.vbproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DBDiff.Front" Source="DBDiff.Front\DBDiff.Front.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DBDiff.Front" Source="DBDiff.Front\DBDiff.Front.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="DBDiff.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="DBDiff.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DBDiff" Source="DBDiff\DBDiff.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DBDiff.SchemaAttributes" Source="DBDiff.SchemaAttributes\DBDiff.SchemaAttributes.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DBDiff.Schema" Source="DBDiff.Schema\DBDiff.Schema.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DBDiff.Schema.SQLServer2000" Source="DBDiff.Schema.SQLServer2000\DBDiff.Schema.SQLServer2000.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DBDiff.Schema.SQLServer" Source="DBDiff.Schema.SQLServer2005\DBDiff.Schema.SQLServer.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DBDiff.Schema.MySQL" Source="DBDiff.Schema.MySQL5\DBDiff.Schema.MySQL.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="3" Project="" Source="DBDiff.vsmdi" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="DBDiff.vsmdi" Description="The file was converted to the current format.">
+</Event><Event ErrorLevel="3" Project="" Source="localtestrun.testrunconfig" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="localtestrun.testrunconfig" Description="The file was converted to the current format.">
+</Event><Event ErrorLevel="0" Project="DBDiff.Test" Source="DBDiff.Test\DBDiff.Test.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="SQLDisplayControl" Source="SQLDisplayControl\SQLDisplayControl.vbproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DBDiff.Front" Source="DBDiff.Front\DBDiff.Front.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>
