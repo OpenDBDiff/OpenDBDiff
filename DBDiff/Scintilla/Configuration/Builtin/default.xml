@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ScintillaNET>
+	<Language Name="default">
+		<Styles>
+			<!-- 
+				Here are all the "common" styles. I took all the lexer style names and combined them.
+				Any names that showed up three or more times are in this list.
+				
+				This should be filled with style values as much as possible then the rest removed
+				so that it isn't slowing down configuration
+			-->
+			<Style Name="ASM"						/>
+			<Style Name="ATTRIBUTE"					ForeColor="Red" />
+			<Style Name="BACKTICKS"					ForeColor="Red" />
+			<Style Name="BINARY"					ForeColor="Orange" />
+			<Style Name="BINNUMBER"					ForeColor="Orange" />
+			<Style Name="BRACELIGHT"				ForeColor="Red" Bold="Yes"/>
+			<Style Name="BLOCK_COMMENT"				ForeColor="Green" />
+			<Style Name="CHAR"						ForeColor="Red" />
+			<Style Name="CHARACTER"					ForeColor="Red" />
+			<Style Name="CLASSNAME"					ForeColor="Purple" />
+			<Style Name="COMMAND"					ForeColor="Red" />
+			<Style Name="COMMENT"					ForeColor="Green" />
+			<Style Name="COMMENTBLOCK"				ForeColor="Green" />
+			<Style Name="COMMENTDOC"				ForeColor="Green" />
+			<Style Name="COMMENTDOCKEYWORD"			ForeColor="Green" />
+			<Style Name="COMMENTDOCKEYWORDERROR"	ForeColor="Green" />
+			<Style Name="COMMENTLINE"				ForeColor="Green" />
+			<Style Name="COMMENTLINEBANG"			ForeColor="Green" />
+			<Style Name="COMMENTLINEDOC"			ForeColor="Green" />
+			<Style Name="CONSTANT"					Bold="True" />
+			<Style Name="CONTROL"					ForeColor="Blue" />
+			<Style Name="DATE"						/>
+			<Style Name="DEFAULT"					FontName="Courier New" Size="10"/>
+			<Style Name="DIRECTIVE"					ForeColor="Blue" />
+			<Style Name="DOUBLESTRING"				ForeColor="Red" />
+			<Style Name="ERROR"						ForeColor="White"	BackColor="Red"				/>
+			<Style Name="FUNCTION"					ForeColor="Fuchsia" />
+			<Style Name="GLOBAL" />
+			<Style Name="GLOBALCLASS"				ForeColor="Purple"/>
+			<Style Name="HERE_DELIM" />
+			<Style Name="HEXNUMBER"					ForeColor="Orange"/>
+			<Style Name="IDENTIFIER" />
+			<Style Name="KEYWORD"					ForeColor="Blue" />
+			<Style Name="KEYWORD2"					ForeColor="Teal"/>
+			<Style Name="KEYWORD3"					ForeColor="DarkGreen"/>
+			<Style Name="KEYWORD4"					ForeColor="DarkRed"/>
+			<Style Name="LABEL" />
+			<Style Name="LINE_COMMENT"				ForeColor="Green"/>
+			<Style Name="NUMBER"					ForeColor="Orange" />
+			<Style Name="OPERATOR"					ForeColor="DarkGoldenRod"/>
+			<Style Name="PREPROCESSOR"				ForeColor="Blue"/>
+			<Style Name="REGEX" />
+			<Style Name="SIMPLESTRING" />
+			<Style Name="SPECIAL" />
+			<Style Name="START" />
+			<Style Name="STRING"					ForeColor="Red"/>
+			<Style Name="STRINGEOL"					ForeColor="Red" BackColor="#ffaaa" EolFilled="True" />
+			<Style Name="STRINGRQ"					ForeColor="Red"/>
+			<Style Name="SYMBOL" />
+			<Style Name="SYMBOLS" />
+			<Style Name="TAG"						ForeColor="Blue"/>
+			<Style Name="TEXT" />
+			<Style Name="TRIPLE" />
+			<Style Name="TRIPLEDOUBLE" />
+			<Style Name="UUID" />
+			<Style Name="UUID" />
+			<Style Name="VALUE" />
+			<Style Name="VARIABLE"					ForeColor="Purple"/>
+			<Style Name="VERBATIM"					ForeColor="Red"/>
+			<Style Name="WORD"						ForeColor="Blue"/>
+			<Style Name="WORD2"						ForeColor="Teal"/>
+			<Style Name="WORD3" />
+			<Style Name="WORD4" />
+			<Style Name="WORD5" />
+			<Style Name="WORD6" />
+			<Style Name="WORD7" />
+			<Style Name="WORD8" />
+		</Styles>
+	</Language>
+</ScintillaNET>
