@@ -1,0 +1,89 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{13BCC83A-8109-4B7A-A0FF-0E4B2FBD8E23}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DBDiff.Schema.Sybase</RootNamespace>
+    <AssemblyName>DBDiff.Schema.Sybase</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Sybase.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Sybase.Data.AseClient, Version=1.1.327.0, Culture=neutral, PublicKeyToken=26e0f1529304f4a7" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Front\AseConnectFront.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Front\AseConnectFront.Designer.cs">
+      <DependentUpon>AseConnectFront.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Generate.cs" />
+    <Compile Include="Generates\GenerateTables.cs" />
+    <Compile Include="Model\Column.cs" />
+    <Compile Include="Model\Columns.cs" />
+    <Compile Include="Model\Database.cs" />
+    <Compile Include="Model\SybaseSchemaBase.cs" />
+    <Compile Include="Model\Table.cs" />
+    <Compile Include="Model\Tables.cs" />
+    <Compile Include="Model\TableTrigger.cs" />
+    <Compile Include="Model\TableTriggers.cs" />
+    <Compile Include="Options\AseOption.cs" />
+    <Compile Include="Options\AseOptionDefault.cs" />
+    <Compile Include="Options\AseOptionFilter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DBDiff.Front\DBDiff.Front.csproj">
+      <Project>{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}</Project>
+      <Name>DBDiff.Front</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DBDiff.Schema\DBDiff.Schema.csproj">
+      <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
+      <Name>DBDiff.Schema</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Front\AseConnectFront.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AseConnectFront.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sybase.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
