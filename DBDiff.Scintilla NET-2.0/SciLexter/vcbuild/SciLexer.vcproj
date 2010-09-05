@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="DBDiff.SciLexer"
 	ProjectGUID="{4F1EDEC7-018C-479A-A89F-C35DC1780708}"
 	RootNamespace="DBDiff.SciLexer"
+	SccProjectName="SAK"
+	SccAuxPath="SAK"
+	SccLocalPath="SAK"
+	SccProvider="SAK"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
@@ -947,7 +951,151 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
+				RelativePath="..\include\Accessor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\AutoComplete.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\CallTip.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\CellBuffer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\CharacterSet.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\CharClassify.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ContractionState.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Decoration.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Document.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\DocumentAccessor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Editor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ExternalLexer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Indicator.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\KeyMap.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\KeyWords.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\LineMarker.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Partitioning.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\PerLine.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\Platform.h"
+				>
+			</File>
+			<File
+				RelativePath="..\win32\PlatformRes.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\PositionCache.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\PropSet.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\RESearch.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\RunStyles.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\SciLexer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Scintilla.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ScintillaBase.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ScintillaWidget.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\SplitVector.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\SString.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Style.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\StyleContext.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\SVector.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\UniConversion.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ViewStyle.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\WindowAccessor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\XPM.h"
 				>
 			</File>
 		</Filter>

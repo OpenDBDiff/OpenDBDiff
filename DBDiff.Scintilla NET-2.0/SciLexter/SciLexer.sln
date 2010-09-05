@@ -1,9 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SciLexer", "vcbuild\SciLexer.vcproj", "{4F1EDEC7-018C-479A-A89F-C35DC1780708}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBDiff.SciLexer", "vcbuild\SciLexer.vcproj", "{4F1EDEC7-018C-479A-A89F-C35DC1780708}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/TFS04
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = vcbuild\\SciLexer.vcproj
+		SccProjectName1 = vcbuild
+		SccLocalPath1 = vcbuild
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
