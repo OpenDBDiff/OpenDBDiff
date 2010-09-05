@@ -1,0 +1,94 @@
+<VSPerformanceSession Version="1.00">
+  <Options>
+    <Solution>DBDiff.sln</Solution>
+    <CollectionMethod>Instrumentation</CollectionMethod>
+    <AllocationMethod>None</AllocationMethod>
+    <AddReport>true</AddReport>
+    <UniqueReport>Timestamp</UniqueReport>
+    <SamplingMethod>Cycles</SamplingMethod>
+    <CycleCount>10000000</CycleCount>
+    <PageFaultCount>10</PageFaultCount>
+    <SysCallCount>10</SysCallCount>
+    <SamplingCounter PlatformID="00000000" CounterID="0000000000000000" ReloadValue="00000000000f4240" />
+    <RelocateBinaries>false</RelocateBinaries>
+    <HardwareCounters EnableHWCounters="false" />
+    <EtwSettings />
+  </Options>
+  <PreinstrumentEvent>
+    <InstrEventExclude>false</InstrEventExclude>
+  </PreinstrumentEvent>
+  <PostinstrumentEvent>
+    <InstrEventExclude>false</InstrEventExclude>
+  </PostinstrumentEvent>
+  <Binaries>
+    <TestBinary>
+      <Path>TestDBDiff\obj\Debug\TestDBDiff.dll</Path>
+      <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
+      <Instrument>false</Instrument>
+      <LaunchProject>true</LaunchProject>
+      <LaunchMethod>Test</LaunchMethod>
+      <StartupDirectory>TestDBDiff\bin\Debug\</StartupDirectory>
+      <Arguments />
+      <NetAppHost>IIS</NetAppHost>
+      <PreinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PreinstrumentEvent>
+      <PostinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PostinstrumentEvent>
+      <ProjRef>{CF51161B-F852-4B91-98F6-3A66D00B4747}|TestDBDiff\TestDBDiff.csproj</ProjRef>
+      <ProjPath>TestDBDiff\TestDBDiff.csproj</ProjPath>
+      <ProjName>TestDBDiff.GenerateTest.ToXMLTest</ProjName>
+      <TestId>{47ac3218-3d75-581d-503d-872b94d01c0d}</TestId>
+      <TestName>TestDBDiff.GenerateTest.ToXMLTest</TestName>
+    </TestBinary>
+    <ProjBinary>
+      <Path>DBDiff.Schema\obj\Debug\DBDiff.Schema.dll</Path>
+      <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
+      <Instrument>true</Instrument>
+      <LaunchProject>true</LaunchProject>
+      <LaunchMethod>Executable</LaunchMethod>
+      <StartupDirectory>DBDiff.Schema\bin\Debug\</StartupDirectory>
+      <Arguments />
+      <NetAppHost>IIS</NetAppHost>
+      <PreinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PreinstrumentEvent>
+      <PostinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PostinstrumentEvent>
+      <ProjRef>{FDCD8DA2-9CBE-45FD-920B-10E8B802FD13}|DBDiff.Schema\DBDiff.Schema.csproj</ProjRef>
+      <ProjPath>DBDiff.Schema\DBDiff.Schema.csproj</ProjPath>
+      <ProjName>DBDiff.Schema</ProjName>
+    </ProjBinary>
+    <ProjBinary>
+      <Path>DBLibrary\DBLibrarySQLServer2000\obj\Debug\DBDiff.DBLibrary.SQLServer2000.dll</Path>
+      <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
+      <Instrument>true</Instrument>
+      <LaunchProject>true</LaunchProject>
+      <LaunchMethod>Executable</LaunchMethod>
+      <StartupDirectory>DBLibrary\DBLibrarySQLServer2000\bin\Debug\</StartupDirectory>
+      <Arguments />
+      <NetAppHost>IIS</NetAppHost>
+      <PreinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PreinstrumentEvent>
+      <PostinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PostinstrumentEvent>
+      <ProjRef>{3CB847CA-F518-4CBC-A161-30EC969EAFD0}|DBLibrary\DBLibrarySQLServer2000\DBDiff.DBLibrary.SQLServer2000.csproj</ProjRef>
+      <ProjPath>DBLibrary\DBLibrarySQLServer2000\DBDiff.DBLibrary.SQLServer2000.csproj</ProjPath>
+      <ProjName>DBDiff.DBLibrary.SQLServer2000</ProjName>
+    </ProjBinary>
+  </Binaries>
+  <Reports>
+    <Report>
+      <Path>TestDBDiff070323.vsp</Path>
+    </Report>
+  </Reports>
+  <Launches>
+    <TestBinary>
+      <Path>:TB:{47ac3218-3d75-581d-503d-872b94d01c0d}:TestDBDiff.GenerateTest.ToXMLTest:{CF51161B-F852-4B91-98F6-3A66D00B4747}|TestDBDiff\TestDBDiff.csproj</Path>
+    </TestBinary>
+  </Launches>
+</VSPerformanceSession>
