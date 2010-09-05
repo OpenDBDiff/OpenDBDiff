@@ -15,7 +15,7 @@ namespace DBDiff.Schema.SQLServer.Model
         /// <summary>
         /// Clona el objeto Columns en una nueva instancia.
         /// </summary>
-        public Columns Clone(Table parentObject)
+        public new Columns Clone(Table parentObject)
         {
             Columns columns = new Columns(parentObject);
             for (int index = 0; index < this.Count; index++)
@@ -25,7 +25,7 @@ namespace DBDiff.Schema.SQLServer.Model
             return columns;
         }
 
-        public override string ToSQL()
+        public override string ToSql()
         {
             StringBuilder sql = new StringBuilder();
             for (int index = 0; index < this.Count; index++)
@@ -47,7 +47,7 @@ namespace DBDiff.Schema.SQLServer.Model
             string sqlCons = "";
             string sqlBinds = "";
             SQLScriptList list = new SQLScriptList();
-            if (Parent.Status != Enums.ObjectStatusType.AlterRebuildStatus)
+            if (Parent.Status != Enums.ObjectStatusType.RebuildStatus)
             {
                 this.ForEach(item =>
                 {
@@ -55,15 +55,19 @@ namespace DBDiff.Schema.SQLServer.Model
                     {
                         if (item.DefaultConstraint != null)
                             list.Add(item.DefaultConstraint.Drop());
-                        sqlDrop += "[" + item.Name + "],";
+                        /*Si la columna formula debe ser eliminada y ya fue efectuada la operacion en otro momento, no
+                         * se borra nuevamente*/
+                        if (!item.GetWasInsertInDiffList(Enums.ScripActionType.AlterColumnFormula))
+                            sqlDrop += "[" + item.Name + "],";
                     }
                     if (item.HasState(Enums.ObjectStatusType.CreateStatus))
                         sqlAdd += "\r\n" + item.ToSql(true) + ",";
-                    if ((item.HasState(Enums.ObjectStatusType.AlterStatus) || (item.HasState(Enums.ObjectStatusType.AlterRebuildDependenciesStatus))))
+                    if ((item.HasState(Enums.ObjectStatusType.AlterStatus) || (item.HasState(Enums.ObjectStatusType.RebuildDependenciesStatus))))
                     {
-                        if ((!item.Parent.HasState(Enums.ObjectStatusType.AlterRebuildDependenciesStatus) || (!item.Parent.HasState(Enums.ObjectStatusType.AlterRebuildStatus))))
+                        if ((!item.Parent.HasState(Enums.ObjectStatusType.RebuildDependenciesStatus) || (!item.Parent.HasState(Enums.ObjectStatusType.RebuildStatus))))
                             list.AddRange(item.RebuildSchemaBindingDependencies());
                         list.AddRange(item.RebuildConstraint(false));
+                        list.AddRange(item.RebuildDependencies());
                         list.AddRange(item.Alter(Enums.ScripActionType.AlterTable));
                     }
                     if (item.HasState(Enums.ObjectStatusType.UpdateStatus))

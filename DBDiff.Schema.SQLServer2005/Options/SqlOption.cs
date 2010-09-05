@@ -10,6 +10,7 @@ namespace DBDiff.Schema.SQLServer.Options
         private SqlOptionIgnore ignore;
         private SqlOptionScript script;
         private SqlOptionFilter filters;
+        private SqlOptionComparison comparison;
 
         public SqlOption()
         {
@@ -17,6 +18,7 @@ namespace DBDiff.Schema.SQLServer.Options
             ignore = new SqlOptionIgnore(true);
             script = new SqlOptionScript();
             filters = new SqlOptionFilter();
+            comparison = new SqlOptionComparison();
         }
 
         public SqlOption(Boolean defaultFilter)
@@ -24,6 +26,14 @@ namespace DBDiff.Schema.SQLServer.Options
             defaults = new SqlOptionDefault();
             ignore = new SqlOptionIgnore(defaultFilter);
             script = new SqlOptionScript();
+            filters = new SqlOptionFilter();
+            comparison = new SqlOptionComparison();
+        }
+
+        public SqlOptionComparison Comparison
+        {
+            get { return comparison; }
+            set { comparison = value; }
         }
 
         public SqlOptionFilter Filters

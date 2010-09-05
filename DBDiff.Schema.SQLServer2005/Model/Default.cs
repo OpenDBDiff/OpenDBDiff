@@ -9,9 +9,9 @@ namespace DBDiff.Schema.SQLServer.Model
     {
         private string value;
 
-        public Default(ISchemaBase parent):base(Enums.ObjectType.Default)
+        public Default(ISchemaBase parent)
+            : base(parent, Enums.ObjectType.Default)
         {
-            this.Parent = parent;            
         }
 
         public Default Clone(ISchemaBase parent)

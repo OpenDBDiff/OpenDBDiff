@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("EgSoft")]
 [assembly: AssemblyProduct("DBDiff")]
-[assembly: AssemblyCopyright("Copyright © EgSoft 2007")]
+[assembly: AssemblyCopyright("Copyright © EgSoft 2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -11,7 +11,7 @@ namespace DBDiff.Schema.Model
     {
         private Enums.ObjectStatusType status;
         private Enums.ObjectType type;
-        private ISchemaBase parent;                
+        private ISchemaBase parent;
         private int id;
         private string name;
         private string owner;
@@ -20,6 +20,7 @@ namespace DBDiff.Schema.Model
         private string nameCharacterClose;
         private Hashtable wasInsertInDiffList;
         private Boolean isSystem;
+        private IDatabase rootParent = null;
 
         protected SchemaBase(string nameCharacterOpen, string nameCharacterClose, Enums.ObjectType objectType)
         {
@@ -70,17 +71,62 @@ namespace DBDiff.Schema.Model
             set { parent = value; }
         }
 
+        public IDatabase RootParent
+        {
+            get 
+            {
+                if (rootParent != null) return rootParent;
+                if (this.Parent != null)
+                {
+                    if (this.Parent.Parent != null)
+                        if (this.Parent.Parent.Parent != null)
+                            rootParent = (IDatabase)this.Parent.Parent.Parent;
+                        else
+                            rootParent = (IDatabase)this.Parent.Parent;
+                    else
+                        rootParent = (IDatabase)this.Parent;
+                }
+                return rootParent;
+            }
+        }
+
+        public int CompareFullNameTo(string name, string myName)
+        {
+            if (!RootParent.IsCaseSensity)
+                return myName.ToUpper().CompareTo(name.ToUpper());
+            else
+                return myName.CompareTo(name);
+        }
+    
+        /// <summary>
+        /// SQL Code for the database object
+        /// </summary>
         public abstract string ToSql();
 
+        /// <summary>
+        /// SQL Code for drop the database object
+        /// </summary>
         public abstract string ToSqlDrop();
 
+        /// <summary>
+        /// SQL Code for add the database object
+        /// </summary>
         public abstract string ToSqlAdd();
 
+        /// <summary>
+        /// Deep clone the object
+        /// </summary>
+        /// <param name="parent">Parent of the object</param>
+        /// <returns></returns>
         public virtual ISchemaBase Clone(ISchemaBase parent)
         {
             return null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public virtual SQLScriptList ToSqlDiff()
         {
             return null;
@@ -177,6 +223,9 @@ namespace DBDiff.Schema.Model
             set { name = value; }
         }
 
+        /// <summary>
+        /// Determine if the database object if a System object or not
+        /// </summary>
         public Boolean IsSystem
         {
             get { return isSystem; }
@@ -192,19 +241,19 @@ namespace DBDiff.Schema.Model
             get { return status; }
             set
             {
-                if ((status != Enums.ObjectStatusType.AlterRebuildStatus) && (status != Enums.ObjectStatusType.AlterRebuildDependenciesStatus))
+                if ((status != Enums.ObjectStatusType.RebuildStatus) && (status != Enums.ObjectStatusType.RebuildDependenciesStatus))
                     status = value;
                 if (Parent != null)
                 {
                     //Si el estado de la tabla era el original, lo cambia, sino deja el actual estado.
-                    if (Parent.Status == Enums.ObjectStatusType.OriginalStatus || value == Enums.ObjectStatusType.AlterRebuildStatus || value == Enums.ObjectStatusType.AlterRebuildDependenciesStatus)
+                    if (Parent.Status == Enums.ObjectStatusType.OriginalStatus || value == Enums.ObjectStatusType.RebuildStatus || value == Enums.ObjectStatusType.RebuildDependenciesStatus)
                     {
-                        if ((value != Enums.ObjectStatusType.OriginalStatus) && (value != Enums.ObjectStatusType.AlterRebuildStatus) && (value != Enums.ObjectStatusType.AlterRebuildDependenciesStatus))
+                        if ((value != Enums.ObjectStatusType.OriginalStatus) && (value != Enums.ObjectStatusType.RebuildStatus) && (value != Enums.ObjectStatusType.RebuildDependenciesStatus))
                             Parent.Status = Enums.ObjectStatusType.AlterStatus;
-                        if (value == Enums.ObjectStatusType.AlterRebuildDependenciesStatus)
-                            Parent.Status = Enums.ObjectStatusType.AlterRebuildDependenciesStatus;
-                        if (value == Enums.ObjectStatusType.AlterRebuildStatus)
-                            Parent.Status = Enums.ObjectStatusType.AlterRebuildStatus;
+                        if (value == Enums.ObjectStatusType.RebuildDependenciesStatus)
+                            Parent.Status = Enums.ObjectStatusType.RebuildDependenciesStatus;
+                        if (value == Enums.ObjectStatusType.RebuildStatus)
+                            Parent.Status = Enums.ObjectStatusType.RebuildStatus;
                     }
                 }
             }
@@ -223,6 +272,15 @@ namespace DBDiff.Schema.Model
         public virtual int DependenciesCount
         {
             get { return 0; }
+        }
+
+        /// <summary>
+        /// Get if the SQL commands for the collection must build in one single statement
+        /// or one statmente for each item of the collection.
+        /// </summary>
+        public virtual Boolean MustBuildSqlInLine
+        {
+            get { return false; }
         }
     }
 }

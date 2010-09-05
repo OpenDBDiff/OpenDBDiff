@@ -21,7 +21,7 @@ namespace DBDiff.Schema.SQLServer.Front
         public SqlServerConnectFront()
         {
             InitializeComponent();
-            //cboAuthentication.SelectedIndex = 0;
+            cboAuthentication.SelectedIndex = 1;
         }
 
         private void cboAuthentication_SelectedIndexChanged(object sender, EventArgs e)

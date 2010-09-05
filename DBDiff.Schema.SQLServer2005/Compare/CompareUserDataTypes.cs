@@ -47,7 +47,7 @@ namespace DBDiff.Schema.SQLServer.Compare
                                 newNode.Status = Enums.ObjectStatusType.AlterStatus;
                             }
                             else
-                                newNode.Status = Enums.ObjectStatusType.AlterRebuildStatus;
+                                newNode.Status = Enums.ObjectStatusType.RebuildStatus;
                         }
                         CamposOrigen[node.FullName] = newNode;
                     }

@@ -10,9 +10,8 @@ namespace DBDiff.Schema.SQLServer.Model
         private string value;
 
         public Synonym(ISchemaBase parent)
-            : base(Enums.ObjectType.Synonym)
+            : base(parent, Enums.ObjectType.Synonym)
         {
-            this.Parent = parent;
         }
 
         public override ISchemaBase Clone(ISchemaBase parent)

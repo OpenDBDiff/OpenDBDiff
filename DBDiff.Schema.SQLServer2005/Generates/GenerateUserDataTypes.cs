@@ -8,6 +8,7 @@ using DBDiff.Schema.SQLServer.Options;
 using DBDiff.Schema.SQLServer.Model;
 using DBDiff.Schema.SQLServer.Generates.Util;
 using DBDiff.Schema.Model;
+using DBDiff.Schema.Errors;
 
 namespace DBDiff.Schema.SQLServer.Generates
 {
@@ -48,7 +49,7 @@ namespace DBDiff.Schema.SQLServer.Generates
         {
             string sql = "select ISNULL(AF.name,'') AS assembly_name, ISNULL(AT.assembly_id,0) AS assembly_id, ISNULL(assembly_class,'') AS assembly_class, T.max_length, S2.name as defaultowner, O2.name as defaultname, S1.name as ruleowner, O.name as rulename, ISNULL(T2.Name,'') AS basetypename, S.Name AS Owner, T.Name, T.is_assembly_type, T.user_type_id AS tid, T.is_nullable, T.precision, T.scale from sys.types T ";
             sql += "INNER JOIN sys.schemas S ON S.schema_id = T.schema_id ";
-            sql += "LEFT JOIN sys.types T2 ON t2.user_type_id = T.system_type_id ";
+            sql += "LEFT JOIN sys.types T2 ON T2.user_type_id = T.system_type_id ";
             sql += "LEFT JOIN sys.objects O ON O.type = 'R' and O.object_id = T.rule_object_id ";
             sql += "LEFT JOIN sys.schemas S1 ON S1.schema_id = O.schema_id ";
             sql += "LEFT JOIN sys.objects O2 ON O2.type = 'D' and O2.object_id = T.default_object_id ";
@@ -78,51 +79,58 @@ namespace DBDiff.Schema.SQLServer.Generates
             }
         }
 
-        public static void Fill(Database database, string connectionString)
+        public static void Fill(Database database, string connectionString, List<MessageLog> messages)
         {
-            if (database.Options.Ignore.FilterUserDataType)
+            try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                if (database.Options.Ignore.FilterUserDataType)
                 {
-                    using (SqlCommand command = new SqlCommand(GetSQL(), conn))
+                    using (SqlConnection conn = new SqlConnection(connectionString))
                     {
-                        conn.Open();
-                        command.CommandTimeout = 0;
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        using (SqlCommand command = new SqlCommand(GetSQL(), conn))
                         {
-                            while (reader.Read())
+                            conn.Open();
+                            command.CommandTimeout = 0;
+                            using (SqlDataReader reader = command.ExecuteReader())
                             {
-                                UserDataType type = new UserDataType(database);
-                                type.Id = (int)reader["tid"];
-                                type.AllowNull = (bool)reader["is_nullable"];
-                                type.Size = (short)reader["max_length"];
-                                type.Name = reader["Name"].ToString();
-                                type.Owner = reader["owner"].ToString();
-                                type.Precision = int.Parse(reader["precision"].ToString());
-                                type.Scale = int.Parse(reader["scale"].ToString());
-                                if (!String.IsNullOrEmpty(reader["defaultname"].ToString()))
+                                while (reader.Read())
                                 {
-                                    type.Default.Name = reader["defaultname"].ToString();
-                                    type.Default.Owner = reader["defaultowner"].ToString();
-                                }
-                                if (!String.IsNullOrEmpty(reader["rulename"].ToString()))
-                                {
-                                    type.Rule.Name = reader["rulename"].ToString();
-                                    type.Rule.Owner = reader["ruleowner"].ToString();
-                                }
-                                type.Type = reader["basetypename"].ToString();
-                                type.IsAssembly = (bool)reader["is_assembly_type"];
-                                type.AssemblyId = (int)reader["assembly_id"];
-                                type.AssemblyName = reader["assembly_name"].ToString();
-                                type.AssemblyClass = reader["assembly_class"].ToString();
+                                    UserDataType type = new UserDataType(database);
+                                    type.Id = (int)reader["tid"];
+                                    type.AllowNull = (bool)reader["is_nullable"];
+                                    type.Size = (short)reader["max_length"];
+                                    type.Name = reader["Name"].ToString();
+                                    type.Owner = reader["owner"].ToString();
+                                    type.Precision = int.Parse(reader["precision"].ToString());
+                                    type.Scale = int.Parse(reader["scale"].ToString());
+                                    if (!String.IsNullOrEmpty(reader["defaultname"].ToString()))
+                                    {
+                                        type.Default.Name = reader["defaultname"].ToString();
+                                        type.Default.Owner = reader["defaultowner"].ToString();
+                                    }
+                                    if (!String.IsNullOrEmpty(reader["rulename"].ToString()))
+                                    {
+                                        type.Rule.Name = reader["rulename"].ToString();
+                                        type.Rule.Owner = reader["ruleowner"].ToString();
+                                    }
+                                    type.Type = reader["basetypename"].ToString();
+                                    type.IsAssembly = (bool)reader["is_assembly_type"];
+                                    type.AssemblyId = (int)reader["assembly_id"];
+                                    type.AssemblyName = reader["assembly_name"].ToString();
+                                    type.AssemblyClass = reader["assembly_class"].ToString();
 
-                                database.UserTypes.Add(type);
+                                    database.UserTypes.Add(type);
+                                }
                             }
                         }
                     }
+                    if (database.Options.Ignore.FilterTable)
+                        FillColumnsDependencies(database.UserTypes, connectionString);
                 }
-                if (database.Options.Ignore.FilterTable)
-                    FillColumnsDependencies(database.UserTypes, connectionString);
+            }
+            catch (Exception ex)
+            {
+                messages.Add(new MessageLog(ex.Message, ex.StackTrace, MessageLog.LogType.Error));
             }
         }
     }

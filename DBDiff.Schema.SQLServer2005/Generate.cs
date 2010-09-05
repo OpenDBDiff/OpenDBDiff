@@ -63,18 +63,18 @@ namespace DBDiff.Schema.SQLServer
                 //tables.OnTableProgress += new Progress.ProgressHandler(tables_OnTableProgress);
                 databaseSchema.Options = filters;
                 databaseSchema.Name = this.Name;
-                databaseSchema.Info = (new GenerateDatabase(connectionString, filters)).Get();
-                /*Thread t1 = new Thread(delegate()
+                databaseSchema.Info = (new GenerateDatabase(connectionString, filters)).Get(databaseSchema);
+                Thread t1 = new Thread(delegate()
                 {
                     try
-                    {*/
+                    {
                         GenerateRules.Fill(databaseSchema, connectionString);
                         GenerateTables.Fill(databaseSchema, connectionString, messages);
-                        GenerateUserDataTypes.Fill(databaseSchema, connectionString);
+                        GenerateUserDataTypes.Fill(databaseSchema, connectionString, messages);
                         GenerateXMLSchemas.Fill(databaseSchema, connectionString);
                         GenerateSchemas.Fill(databaseSchema, connectionString);
                         GenerateUsers.Fill(databaseSchema, connectionString);
-                    /*}
+                    }
                     catch (Exception ex)
                     {
                         error = ex.StackTrace;
@@ -83,12 +83,13 @@ namespace DBDiff.Schema.SQLServer
                 Thread t2 = new Thread(delegate()
                 {
                     try
-                    {*/
+                    {
+                        GeneratePartionFunctions.Fill(databaseSchema, connectionString);
                         GenerateFileGroups.Fill(databaseSchema, connectionString);                        
                         GenerateDDLTriggers.Fill(databaseSchema, connectionString);
                         GenerateSynonyms.Fill(databaseSchema, connectionString);
                         GenerateAssemblies.Fill(databaseSchema, connectionString);
-                    /*}
+                    }
                     catch (Exception ex)
                     {
                         error = ex.StackTrace;
@@ -97,11 +98,11 @@ namespace DBDiff.Schema.SQLServer
                 Thread t3 = new Thread(delegate()
                 {
                     try
-                    {*/
+                    {
                         GenerateStoreProcedures.Fill(databaseSchema, connectionString);
                         GenerateViews.Fill(databaseSchema, connectionString);
                         GenerateFunctions.Fill(databaseSchema, connectionString);
-                    /*}
+                    }
                     catch (Exception ex)
                     {
                         error = ex.StackTrace;
@@ -112,11 +113,11 @@ namespace DBDiff.Schema.SQLServer
                 t3.Start();
                 t1.Join();
                 t2.Join();
-                t3.Join();*/
+                t3.Join();
                 if (String.IsNullOrEmpty(error))
                 {
                     /*Las propiedades extendidas deben ir despues de haber capturado el resto de los objetos de la base*/
-                    GenerateExtendedProperties.Fill(databaseSchema, connectionString);
+                    GenerateExtendedProperties.Fill(databaseSchema, connectionString,messages);
                     databaseSchema.BuildDependency();
                     return databaseSchema;
                 }

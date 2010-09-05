@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Text;
 using DBDiff.Schema.Model;
 using DBDiff.Schema.SQLServer.Model.Util;
@@ -47,15 +48,21 @@ namespace DBDiff.Schema.SQLServer.Model
         private SQLScriptList ToSQLUnBindAll()
         {
             SQLScriptList listDiff = new SQLScriptList();
-            //UserDataTypes useDataTypes = ((Database)this.Parent).UserTypes.FindRules(this.FullName);
+            Hashtable items = new Hashtable();
             List<UserDataType> useDataTypes = ((Database)this.Parent).UserTypes.FindAll(item => { return item.Rule.FullName.Equals(this.FullName); });
             foreach (UserDataType item in useDataTypes)
             {
                 foreach (ObjectDependency dependency in item.Dependencys)
                 {
                     Column column = ((Database)this.Parent).Tables[dependency.Name].Columns[dependency.ColumnName];
-                    if (!column.IsComputed)
-                        listDiff.Add("EXEC sp_unbindrule '" + column.FullName + "'\r\nGO\r\n", 0, Enums.ScripActionType.UnbindRuleColumn);
+                    if ((!column.IsComputed) && (column.Status != Enums.ObjectStatusType.CreateStatus))
+                    {
+                        if (!items.ContainsKey(column.FullName))
+                        {
+                            listDiff.Add("EXEC sp_unbindrule '" + column.FullName + "'\r\nGO\r\n", 0, Enums.ScripActionType.UnbindRuleColumn);
+                            items.Add(column.FullName, column.FullName);
+                        }
+                    }
                 }
                 if (item.Rule.Status != Enums.ObjectStatusType.CreateStatus)
                     listDiff.Add("EXEC sp_unbindrule '" + item.FullName + "'\r\nGO\r\n", 0, Enums.ScripActionType.UnbindRuleType);

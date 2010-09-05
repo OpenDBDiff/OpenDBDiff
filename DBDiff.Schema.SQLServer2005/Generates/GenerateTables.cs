@@ -16,64 +16,167 @@ using DBDiff.Schema.Misc;
 namespace DBDiff.Schema.SQLServer.Generates
 {
     public static class GenerateTables
-    {             
+    {
+        private static int colIDIndex = -1;
+        private static int colNameIndex = -1;
+        private static int colFormulaIndex = -1;
+        private static int colIsPersistedIndex = -1;
+        private static int colIsComputedIndex = -1;
+        private static int colNullableIndex = -1;
+        private static int colXmlSchemaIndex = -1;
+        private static int colIs_xml_documentIndex = -1;
+        private static int colPrecisionIndex = -1;
+        private static int colScaleIndex = -1;
+        private static int colDataUserTypeIdIndex = -1;
+        private static int colIsUserDefinedTypeIndex = -1;
+        private static int colSizeIndex = -1;
+        private static int colHasIndexIndex = -1;
+        private static int colHasComputedFormulaIndex = -1;
+        private static int colIsRowGuidIndex = -1;
+        private static int colTypeIndex = -1;
+        private static int colOwnerType = -1;
+        private static int colis_sparseIndex = -1;
+        private static int colIs_FileStream = -1;
+        private static int colDefaultIdIndex = -1;
+        private static int colDefaultNameIndex = -1;
+        private static int colDefaultDefinitionIndex = -1;
+        private static int colrule_object_idIndex = -1;
+        private static int colIsIdentityReplIndex = -1;
+        private static int colCollationIndex = -1;
+        private static int colIsIdentityIndex = -1;
+        private static int colIdentSeedIndex = -1;
+        private static int colIdentIncrementIndex = -1;
+        private static int TableIdIndex = -1;
+        private static int TableNameIndex = -1;
+        private static int TableOwnerIndex = -1;
+        private static int Text_In_Row_limitIndex = -1;
+        private static int HasClusteredIndexIndex = -1;
+        private static int large_value_types_out_of_rowIndex = -1;
+        private static int HasVarDecimalIndex = -1;
+        private static int FileGroupIndex = -1;
+        private static int FileGroupTextIndex = -1;
+        private static int FileGroupStreamIndex = -1;
+
+        private static void InitTableIndex(Database database, SqlDataReader reader)
+        {
+            if (TableIdIndex == -1)
+            {
+                TableIdIndex = reader.GetOrdinal("TableId");
+                TableNameIndex = reader.GetOrdinal("TableName");
+                TableOwnerIndex = reader.GetOrdinal("TableOwner");
+                Text_In_Row_limitIndex = reader.GetOrdinal("Text_In_Row_limit");
+                HasClusteredIndexIndex = reader.GetOrdinal("HasClusteredIndex");
+                large_value_types_out_of_rowIndex = reader.GetOrdinal("large_value_types_out_of_row");
+                HasVarDecimalIndex = reader.GetOrdinal("HasVarDecimal");
+                FileGroupIndex = reader.GetOrdinal("FileGroup");
+                FileGroupTextIndex = reader.GetOrdinal("FileGroupText");
+                if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+                {
+                    FileGroupStreamIndex = reader.GetOrdinal("FileGroupStream");
+                }
+            }
+        }
+
+        private static void InitColIndex(Database database, SqlDataReader reader)
+        {
+            if (colNameIndex == -1)
+            {
+                colIDIndex = reader.GetOrdinal("ID");
+                colNameIndex = reader.GetOrdinal("Name");
+                colFormulaIndex = reader.GetOrdinal("Formula");
+                colIsPersistedIndex = reader.GetOrdinal("FormulaPersisted");
+                colIsComputedIndex = reader.GetOrdinal("IsComputed");
+                colNullableIndex = reader.GetOrdinal("IsNullable");
+                colOwnerType = reader.GetOrdinal("OwnerType");
+                colXmlSchemaIndex = reader.GetOrdinal("XmlSchema");
+                colIs_xml_documentIndex = reader.GetOrdinal("Is_xml_document");
+                colPrecisionIndex = reader.GetOrdinal("Precision");
+                colScaleIndex = reader.GetOrdinal("Scale");
+                colDataUserTypeIdIndex = reader.GetOrdinal("user_type_id");
+                colIsUserDefinedTypeIndex = reader.GetOrdinal("is_user_defined");                
+                colSizeIndex = reader.GetOrdinal("Size");
+                colHasIndexIndex = reader.GetOrdinal("HasIndex");
+                colHasComputedFormulaIndex = reader.GetOrdinal("HasComputedFormula");
+                colIsRowGuidIndex = reader.GetOrdinal("IsRowGuid");
+                colTypeIndex = reader.GetOrdinal("Type");
+                colDefaultIdIndex = reader.GetOrdinal("DefaultId");
+                colDefaultNameIndex = reader.GetOrdinal("DefaultName");
+                colDefaultDefinitionIndex = reader.GetOrdinal("DefaultDefinition");
+                colrule_object_idIndex = reader.GetOrdinal("rule_object_id");
+                colIsIdentityReplIndex = reader.GetOrdinal("IsIdentityRepl");
+                colCollationIndex = reader.GetOrdinal("Collation");
+                colIsIdentityIndex = reader.GetOrdinal("IsIdentity");
+                colIdentSeedIndex = reader.GetOrdinal("IdentSeed");
+                colIdentIncrementIndex = reader.GetOrdinal("IdentIncrement");
+                if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+                {
+                    colis_sparseIndex = reader.GetOrdinal("is_sparse");
+                    colIs_FileStream = reader.GetOrdinal("is_filestream");
+                }
+            }
+        }
+
         private static void FillColumn(Table table, SqlDataReader reader)
         {
+            InitColIndex((Database)table.Parent, reader);
             Column col = new Column(table);
-            col.Id = (int)reader["ID"];
+            col.Id = (int)reader[colIDIndex];
             if (!((Database)table.Parent).Options.Ignore.FilterIgnoreColumnOrder)
                 col.Position = table.Columns.Count + 1;
             if (!((Database)table.Parent).Options.Ignore.FilterIgnoreNotForReplication)
-                col.IsIdentityForReplication = ((int)reader["IsIdentityRepl"] == 1);
+                col.IsIdentityForReplication = ((int)reader[colIsIdentityReplIndex] == 1);
             if (!((Database)table.Parent).Options.Ignore.FilterIgnoreColumnCollation)
-                col.Collation = reader["Collation"].ToString();
+                col.Collation = (string)reader[colCollationIndex];
 
-            col.IsIdentity = (bool)reader["IsIdentity"];
+            col.IsIdentity = (bool)reader[colIsIdentityIndex];
             if ((col.IsIdentity) || (col.IsIdentityForReplication))
             {
-                if (!reader.IsDBNull(reader.GetOrdinal("IdentSeed")))
-                    col.IdentitySeed = (int)(decimal)reader["IdentSeed"];
+                if (!reader.IsDBNull(colIdentSeedIndex))
+                    col.IdentitySeed = (int)(decimal)reader[colIdentSeedIndex];
                 else
                     col.IdentitySeed = 1;
-                if (!reader.IsDBNull(reader.GetOrdinal("IdentIncrement")))
-                    col.IdentityIncrement = (int)(decimal)reader["IdentIncrement"];
+                if (!reader.IsDBNull(colIdentIncrementIndex))
+                    col.IdentityIncrement = (int)(decimal)reader[colIdentIncrementIndex];
                 else
                     col.IdentityIncrement = 1;
             }
-            col.Name = reader["Name"].ToString();
+            col.Name = (string)reader[colNameIndex];
             col.Owner = table.Owner;
-            col.ComputedFormula = reader["formula"].ToString();
-            col.IsPersisted = (bool)reader["FormulaPersisted"];
-            col.IsComputed = (bool)reader["IsComputed"];
-            col.Nullable = (bool)reader["IsNullable"];
-            
-            col.XmlSchema = reader["XMLSchema"].ToString();
-            col.IsXmlDocument = (bool)reader["Is_xml_document"];
-            col.Precision = (byte)reader["Precision"];
-            col.Scale = (byte)reader["Scale"];
-            col.DataUserTypeId = (int)reader["user_type_id"];
-            col.IsUserDefinedType = (bool)reader["is_user_defined"];
-            if (!String.IsNullOrEmpty(reader["Size"].ToString()))
-                col.Size = (short)reader["Size"];
-            col.HasIndexDependencies = ((int)reader["HasIndex"] == 1); ;
-            col.HasComputedDependencies = ((int)reader["HasComputedFormula"] == 1);
-            col.IsRowGuid = (bool)reader["IsRowGuid"];
-            col.Type = reader["Type"].ToString();
+            col.ComputedFormula = (string)reader[colFormulaIndex];
+            col.IsPersisted = (bool)reader[colIsPersistedIndex];
+            col.IsComputed = (bool)reader[colIsComputedIndex];
+            col.IsNullable = (bool)reader[colNullableIndex];            
+            col.XmlSchema = reader[colXmlSchemaIndex].ToString();
+            col.IsXmlDocument = (bool)reader[colIs_xml_documentIndex];
+            col.Precision = (byte)reader[colPrecisionIndex];
+            col.Scale = (byte)reader[colScaleIndex];
+            col.DataUserTypeId = (int)reader[colDataUserTypeIdIndex];
+            col.IsUserDefinedType = (bool)reader[colIsUserDefinedTypeIndex];
+            if (!String.IsNullOrEmpty(reader[colSizeIndex].ToString()))
+                col.Size = (short)reader[colSizeIndex];
+            col.HasIndexDependencies = ((int)reader[colHasIndexIndex] == 1); ;
+            col.HasComputedDependencies = ((int)reader[colHasComputedFormulaIndex] == 1);
+            col.IsRowGuid = (bool)reader[colIsRowGuidIndex];
+            if (col.IsUserDefinedType)
+                col.Type = "[" + (string)reader[colOwnerType] + "].[" + (string)reader[colTypeIndex] + "]";
+            else
+                col.Type = (string)reader[colTypeIndex];
             if (((Database)table.Parent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
             {
-                col.IsSparse = (bool)reader["is_sparse"];
+                col.IsSparse = (bool)reader[colis_sparseIndex];
+                col.IsFileStream = (bool)reader[colIs_FileStream];
             }
-            if ((int)reader["DefaultId"] != 0)
+            if ((int)reader[colDefaultIdIndex] != 0)
             {
                 col.DefaultConstraint = new ColumnConstraint(col);
-                col.DefaultConstraint.Id = (int)reader["DefaultId"];
+                col.DefaultConstraint.Id = (int)reader[colDefaultIdIndex];
                 col.DefaultConstraint.Owner = table.Owner;
-                col.DefaultConstraint.Name = reader["DefaultName"].ToString();
+                col.DefaultConstraint.Name = (string)reader[colDefaultNameIndex];
                 col.DefaultConstraint.Type = Constraint.ConstraintType.Default;
-                col.DefaultConstraint.Definition = reader["DefaultDefinition"].ToString();
+                col.DefaultConstraint.Definition = (string)reader[colDefaultDefinitionIndex];
             }
-            if ((int)reader["rule_object_id"] != 0)
-                col.Rule = ((Database)table.Parent).Rules.Find((int)reader["rule_object_id"]);
+            if ((int)reader[colrule_object_idIndex] != 0)
+                col.Rule = ((Database)table.Parent).Rules.Find((int)reader[colrule_object_idIndex]);
             table.Columns.Add(col);
         }
 
@@ -118,27 +221,32 @@ namespace DBDiff.Schema.SQLServer.Generates
                         {
                             while (reader.Read())
                             {
-                                if (lastObjectId != (int)reader["TableId"])
+                                InitTableIndex(database, reader);
+                                if (lastObjectId != (int)reader[TableIdIndex])
                                 {
-                                    lastObjectId = (int)reader["TableId"];
+                                    lastObjectId = (int)reader[TableIdIndex];
                                     item = new Table(database);
-                                    item.Id = (int)reader["TableId"];
-                                    item.Name = reader["TableName"].ToString();
-                                    item.Owner = reader["TableOwner"].ToString();
-                                    item.HasClusteredIndex = (int)reader["HasClusteredIndex"] == 1;
-                                    textInRow = (int)reader["Text_In_Row_limit"];
-                                    largeValues = (Boolean)reader["large_value_types_out_of_row"];
-                                    varDecimal = ((int)reader["HasVarDecimal"]) == 1;
+                                    item.Id = (int)reader[TableIdIndex];
+                                    item.Name = (string)reader[TableNameIndex];
+                                    item.Owner = (string)reader[TableOwnerIndex];
+                                    item.HasClusteredIndex = (int)reader[HasClusteredIndexIndex] == 1;
+                                    textInRow = (int)reader[Text_In_Row_limitIndex];
+                                    largeValues = (Boolean)reader[large_value_types_out_of_rowIndex];
+                                    varDecimal = ((int)reader[HasVarDecimalIndex]) == 1;
                                     if (database.Options.Ignore.FilterTableFileGroup)
                                     {
-                                        item.FileGroup = reader["FileGroup"].ToString();
-                                        item.FileGroupText = reader["FileGroupText"].ToString();
+                                        item.FileGroup = (string)reader[FileGroupIndex];
+                                        item.FileGroupText = (string)reader[FileGroupTextIndex];
+                                        if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+                                        {
+                                            item.FileGroupStream = (string)reader[FileGroupStreamIndex];
+                                        }
                                     }
                                     if (database.Options.Ignore.FilterTableOption)
                                     {
-                                        if (textInRow > 0) item.Options.Add("TextInRow", textInRow.ToString(CultureInfo.InvariantCulture));
-                                        if (largeValues) item.Options.Add("LargeValues", "1");
-                                        if (varDecimal) item.Options.Add("VarDecimal", "1");
+                                        if (textInRow > 0) item.Options.Add(new TableOption("TextInRow", textInRow.ToString(CultureInfo.InvariantCulture),item));
+                                        if (largeValues) item.Options.Add(new TableOption("LargeValues", "1",item));
+                                        if (varDecimal) item.Options.Add(new TableOption("VarDecimal", "1",item));
                                     }
                                     database.Tables.Add(item);
                                 }

@@ -27,10 +27,10 @@ namespace DBDiff.Schema.SQLServer.Compare
                 if (!CamposOrigen.Exists(node.FullName))
                 {
                     Column newNode = node.Clone(CamposOrigen.Parent);
-                    if ((newNode.Position == 1) || ((newNode.DefaultConstraint == null) && (!newNode.Nullable) && (!newNode.IsComputed) && (!newNode.IsIdentity) && (!newNode.IsIdentityForReplication)))
+                    if ((newNode.Position == 1) || ((newNode.DefaultConstraint == null) && (!newNode.IsNullable) && (!newNode.IsComputed) && (!newNode.IsIdentity) && (!newNode.IsIdentityForReplication)))
                     {
                         newNode.Status = Enums.ObjectStatusType.CreateStatus;
-                        newNode.Parent.Status = Enums.ObjectStatusType.AlterRebuildStatus;
+                        newNode.Parent.Status = Enums.ObjectStatusType.RebuildStatus;
                     }
                     else
                         newNode.Status = Enums.ObjectStatusType.CreateStatus;
@@ -51,22 +51,21 @@ namespace DBDiff.Schema.SQLServer.Compare
                             if (node.HasToRebuildOnlyConstraint)
                             {
                                 node.Status = Enums.ObjectStatusType.AlterStatus;
-                                if ((campoOrigen.Nullable) && (!node.Nullable))
+                                if ((campoOrigen.IsNullable) && (!node.IsNullable))
                                     node.Status += (int)Enums.ObjectStatusType.UpdateStatus;
-                                CamposOrigen.Parent.Status = Enums.ObjectStatusType.AlterRebuildDependenciesStatus;
                             }
                             else
                             {
                                 if (node.HasToRebuild(campoOrigen.Position + sumPosition, campoOrigen.Type))
-                                    node.Status = Enums.ObjectStatusType.AlterRebuildStatus;
+                                    node.Status = Enums.ObjectStatusType.RebuildStatus;
                                 else
                                 {
                                     node.Status = Enums.ObjectStatusType.AlterStatus;
-                                    if ((campoOrigen.Nullable) && (!node.Nullable))
+                                    if ((campoOrigen.IsNullable) && (!node.IsNullable))
                                         node.Status += (int)Enums.ObjectStatusType.UpdateStatus;                                        
                                 }
                             }
-                            if (node.Status != Enums.ObjectStatusType.AlterRebuildStatus)
+                            if (node.Status != Enums.ObjectStatusType.RebuildStatus)
                             {
                                 if (!Column.CompareRule(campoOrigen, node))
                                 {
@@ -76,11 +75,11 @@ namespace DBDiff.Schema.SQLServer.Compare
                         }
                         else
                         {
-                            node.Status = Enums.ObjectStatusType.AlterRebuildStatus;
+                            node.Status = Enums.ObjectStatusType.RebuildStatus;
                         }                        
                         CamposOrigen[node.FullName] = node.Clone(CamposOrigen.Parent);
                     }
-                    CamposOrigen[node.FullName].DefaultConstraint = CompareColumnsConstraints.GenerateDiferences(oldDefault, node.DefaultConstraint);
+                    CamposOrigen[node.FullName].DefaultConstraint = CompareColumnsConstraints.GenerateDiferences(campoOrigen, node);
                 }
             }
         }

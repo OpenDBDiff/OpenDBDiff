@@ -13,29 +13,6 @@ namespace DBDiff.Schema.SQLServer.Model
         {            
         }
 
-        public new Constraint this[string name]
-        {
-            get 
-            {
-                return Find(delegate(Constraint item) { return item.FullName.Equals(name, base.Comparion); }); 
-            }
-            set
-            {
-                for (int index = 0; index < base.Count; index++)
-                {
-                    if (((Constraint)base[index]).FullName.Equals(name, base.Comparion))
-                    {
-                        if (Parent != null)
-                        {
-                            ((Database)Parent.Parent).Dependencies.Set(Parent.Id, value);
-                        }
-                        base[index] = value;
-                        break;
-                    }
-                }
-            }
-        }
-
         public string ToSQL(Constraint.ConstraintType type)
         {
             StringBuilder sql = new StringBuilder();

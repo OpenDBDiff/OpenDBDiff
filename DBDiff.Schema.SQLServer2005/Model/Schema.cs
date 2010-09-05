@@ -7,9 +7,9 @@ namespace DBDiff.Schema.SQLServer.Model
 {
     public class Schema : SQLServerSchemaBase
     {
-        public Schema(Database parent):base(Enums.ObjectType.Schema)
-        {
-            this.Parent = parent;            
+        public Schema(Database parent)
+            : base(parent, Enums.ObjectType.Schema)
+        {                        
         }
 
         public override string ToSql()

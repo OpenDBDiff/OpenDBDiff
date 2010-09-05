@@ -10,6 +10,24 @@ namespace DBDiff.Schema.SQLServer.Generates
 {
     public static class GenerateStoreProcedures
     {
+        private static int NameIndex = -1;
+        private static int object_idIndex = -1;
+        private static int ownerIndex = -1;
+        private static int textIndex = -1;
+        private static int typeIndex = -1;
+
+        private static void InitIndex(SqlDataReader reader)
+        {
+            if (NameIndex == -1)
+            {
+                object_idIndex = reader.GetOrdinal("object_id");
+                NameIndex = reader.GetOrdinal("Name");
+                ownerIndex = reader.GetOrdinal("owner");
+                textIndex = reader.GetOrdinal("text");
+                typeIndex = reader.GetOrdinal("type");
+            }
+        }
+
         private static string GetSQLParameters()
         {
             string sql = "";
@@ -74,21 +92,22 @@ namespace DBDiff.Schema.SQLServer.Generates
                         {
                             while (reader.Read())
                             {
-                                if ((reader["type"].ToString().Trim().Equals("P")) && (database.Options.Ignore.FilterStoreProcedure))
+                                InitIndex(reader);
+                                if ((reader[typeIndex].ToString().Trim().Equals("P")) && (database.Options.Ignore.FilterStoreProcedure))
                                 {
                                     StoreProcedure item = new StoreProcedure(database);
-                                    item.Id = (int)reader["object_id"];
-                                    item.Name = reader["name"].ToString();
-                                    item.Owner = reader["owner"].ToString();
-                                    item.Text = reader["text"].ToString();
+                                    item.Id = (int)reader[object_idIndex];
+                                    item.Name = (string)reader[NameIndex];
+                                    item.Owner = (string)reader[ownerIndex];
+                                    item.Text = (string)reader[textIndex];
                                     database.Procedures.Add(item);
                                 }
-                                if ((reader["type"].ToString().Trim().Equals("PC")) && (database.Options.Ignore.FilterCLRStoreProcedure))
+                                if ((reader[typeIndex].ToString().Trim().Equals("PC")) && (database.Options.Ignore.FilterCLRStoreProcedure))
                                 {
                                     CLRStoreProcedure item = new CLRStoreProcedure(database);
-                                    item.Id = (int)reader["object_id"];
-                                    item.Name = reader["name"].ToString();
-                                    item.Owner = reader["owner"].ToString();
+                                    item.Id = (int)reader[object_idIndex];
+                                    item.Name = reader[NameIndex].ToString();
+                                    item.Owner = reader[ownerIndex].ToString();
                                     item.IsAssembly = true;
                                     item.AssemblyId = (int)reader["assembly_id"];
                                     item.AssemblyName = reader["assembly_name"].ToString();
@@ -101,7 +120,8 @@ namespace DBDiff.Schema.SQLServer.Generates
                         }
                     }                    
                 }
-                FillParameters(database, connectionString);
+                if (database.CLRProcedures.Count > 0)
+                    FillParameters(database, connectionString);
             }
         }
     }

@@ -14,8 +14,9 @@ namespace DBDiff.Schema.SQLServer.Generates
     {
         public static void Fill(Database database, string connectionString, string type)
         {
-            string last = "";
+            int indexid = 0;
             int parentId = 0;
+            bool change = false;
             ISchemaBase parent = null;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -36,11 +37,15 @@ namespace DBDiff.Schema.SQLServer.Generates
                                     parent = database.Views.Find(parentId);
                                 else
                                     parent = database.Tables.Find(parentId);
-                            }                            
-                            if (!last.Equals(reader["Name"].ToString()))
+                                change = true;
+                            }
+                            else
+                                change = false;
+                            if ((indexid != (int)reader["Index_id"]) || (change))
                             {
                                 con = new Index(parent);
                                 con.Name = reader["Name"].ToString();
+                                con.Owner = parent.Owner;
                                 con.Type = (Index.IndexTypeEnum)(byte)reader["type"];
                                 con.Id = (int)reader["Index_id"];
                                 con.AllowPageLocks = (bool)reader["allow_page_locks"];
@@ -59,13 +64,13 @@ namespace DBDiff.Schema.SQLServer.Generates
                                     con.FillFactor = (byte)reader["fill_factor"];
                                 if ((database.Options.Ignore.FilterTableFileGroup) && (con.Type != Index.IndexTypeEnum.XML))
                                     con.FileGroup = reader["FileGroup"].ToString();
-                                last = reader["Name"].ToString();
+                                indexid = (int)reader["Index_id"];
                                 if (type.Equals("V"))
                                     ((View)parent).Indexes.Add(con);
                                 else
                                     ((Table)parent).Indexes.Add(con);
                             }
-                            IndexColumn ccon = new IndexColumn((Table)con.Parent);
+                            IndexColumn ccon = new IndexColumn(con.Parent);
                             ccon.Name = reader["ColumnName"].ToString();
                             ccon.IsIncluded = (bool)reader["is_included_column"];
                             ccon.Order = (bool)reader["is_descending_key"];

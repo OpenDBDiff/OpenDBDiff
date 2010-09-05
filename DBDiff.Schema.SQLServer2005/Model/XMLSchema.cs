@@ -12,9 +12,8 @@ namespace DBDiff.Schema.SQLServer.Model
         private List<ObjectDependency> dependencys;
 
         public XMLSchema(ISchemaBase parent)
-            : base(Enums.ObjectType.XMLSchema)
+            : base(parent, Enums.ObjectType.XMLSchema)
         {
-            this.Parent = parent;
             this.dependencys = new List<ObjectDependency>();
         }
 
@@ -70,7 +69,7 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             Hashtable fields = new Hashtable();
             SQLScriptList list = new SQLScriptList();
-            if ((this.Status == Enums.ObjectStatusType.AlterStatus) || (this.Status == Enums.ObjectStatusType.AlterRebuildStatus))
+            if ((this.Status == Enums.ObjectStatusType.AlterStatus) || (this.Status == Enums.ObjectStatusType.RebuildStatus))
             {
                 foreach (ObjectDependency dependency in this.Dependencys)
                 {
@@ -87,11 +86,11 @@ namespace DBDiff.Schema.SQLServer.Model
                             if (!fields.ContainsKey(column.FullName))
                             {
                                 if (column.HasToRebuildOnlyConstraint)
-                                    column.Parent.Status = Enums.ObjectStatusType.AlterRebuildDependenciesStatus;
+                                    column.Parent.Status = Enums.ObjectStatusType.RebuildDependenciesStatus;
                                 list.AddRange(column.RebuildConstraint(true));
                                 list.Add("ALTER TABLE " + column.Parent.FullName + " ALTER COLUMN " + column.ToSQLRedefine(null,0, "") + "\r\nGO\r\n", 0, Enums.ScripActionType.AlterColumn);
                                 /*Si la columna va a ser eliminada o la tabla va a ser reconstruida, no restaura la columna*/
-                                if ((column.Status != Enums.ObjectStatusType.DropStatus) && (column.Parent.Status != Enums.ObjectStatusType.AlterRebuildStatus))
+                                if ((column.Status != Enums.ObjectStatusType.DropStatus) && (column.Parent.Status != Enums.ObjectStatusType.RebuildStatus))
                                     list.AddRange(column.Alter( Enums.ScripActionType.AlterColumnRestore));
                                 fields.Add(column.FullName, column.FullName);
                             }
@@ -120,8 +119,7 @@ namespace DBDiff.Schema.SQLServer.Model
             if (this.Status == Enums.ObjectStatusType.AlterStatus)
             {
                 list.AddRange(ToSQLChangeColumns());
-                list.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropXMLSchema);
-                list.Add(ToSql(), 0, Enums.ScripActionType.AddXMLSchema);
+                list.Add(ToSqlDrop() + ToSql(), 0, Enums.ScripActionType.AddXMLSchema);
             }
             return list;
         }

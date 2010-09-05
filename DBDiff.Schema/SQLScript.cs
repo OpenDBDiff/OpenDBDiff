@@ -10,6 +10,8 @@ namespace DBDiff.Schema
         private int dependencies;
         private Enums.ScripActionType status;
         private int deep;
+        //private SQLScriptList childs;
+        private bool isDrop = false;
 
         public SQLScript(int deepvalue, string sqlScript, int dependenciesCount, Enums.ScripActionType action)
         {
@@ -17,6 +19,7 @@ namespace DBDiff.Schema
             dependencies = dependenciesCount;
             status = action;
             deep = deepvalue;
+            //childs = new SQLScriptList();
         }
 
         public SQLScript(string sqlScript, int dependenciesCount, Enums.ScripActionType action)
@@ -24,7 +27,14 @@ namespace DBDiff.Schema
             sql = sqlScript;
             dependencies = dependenciesCount;
             status = action;
+            //childs = new SQLScriptList();
         }
+
+        /*public SQLScriptList Childs
+        {
+            get { return childs; }
+            set { childs = value; }
+        }*/
 
         public int Deep
         {
@@ -48,6 +58,22 @@ namespace DBDiff.Schema
         {
             get { return sql; }
             set { sql = value; }
+        }
+
+        public bool IsDropAction
+        {
+            get
+            {
+                return ((status == Enums.ScripActionType.DropView) || (status == Enums.ScripActionType.DropFunction)|| (status == Enums.ScripActionType.DropStoreProcedure));
+            }
+        }
+
+        public bool IsAddAction
+        {
+            get
+            {
+                return ((status == Enums.ScripActionType.AddView) || (status == Enums.ScripActionType.AddFunction) || (status == Enums.ScripActionType.AddStoreProcedure));
+            }
         }
 
         public int CompareTo(SQLScript other)

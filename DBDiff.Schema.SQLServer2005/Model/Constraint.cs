@@ -31,9 +31,8 @@ namespace DBDiff.Schema.SQLServer.Model
         private Boolean isDisabled;
 
         public Constraint(Table parent)
-            : base(Enums.ObjectType.Constraint)
+            : base(parent,Enums.ObjectType.Constraint)
         {
-            this.Parent = parent;
             this.Columns = new ConstraintColumns(this);
             this.Index = new Index(parent);
         }
@@ -216,7 +215,7 @@ namespace DBDiff.Schema.SQLServer.Model
             if (origen.NotForReplication != destino.NotForReplication) return false;
             if ((origen.RelationalTableFullName == null) && (destino.RelationalTableFullName != null)) return false;            
             if (origen.RelationalTableFullName != null)
-                if (!origen.RelationalTableFullName.Equals(destino.RelationalTableFullName)) return false;
+                if (!origen.RelationalTableFullName.Equals(destino.RelationalTableFullName, StringComparison.CurrentCultureIgnoreCase)) return false;
             if ((origen.Definition == null) && (destino.Definition != null)) return false;
             if (origen.Definition != null)
                 if ((!origen.Definition.Equals(destino.Definition)) && (!origen.Definition.Equals("(" + destino.Definition + ")"))) return false;

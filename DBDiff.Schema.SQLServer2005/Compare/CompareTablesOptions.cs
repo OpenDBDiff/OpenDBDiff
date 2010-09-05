@@ -2,18 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Compare
 {
     internal class CompareTablesOptions:CompareBase<TableOption>
     {
-        public static void GenerateDiferences(TableOptions CamposOrigen, TableOptions CamposDestino)
+        public static void GenerateDiferences(SchemaList<TableOption, Table> CamposOrigen, SchemaList<TableOption, Table> CamposDestino)
         {
             foreach (TableOption node in CamposDestino)
             {
                 if (!CamposOrigen.Exists(node.FullName))
                 {
-                    TableOption newNode = node.Clone(CamposOrigen.Parent);
+                    TableOption newNode = (TableOption)node.Clone(CamposOrigen.Parent);
                     newNode.Status = Enums.ObjectStatusType.CreateStatus;
                     CamposOrigen.Add(newNode);
                 }
@@ -21,7 +22,7 @@ namespace DBDiff.Schema.SQLServer.Compare
                 {
                     if (!TableOption.Compare(node, CamposOrigen[node.FullName]))
                     {
-                        TableOption newNode = node.Clone(CamposOrigen.Parent);
+                        TableOption newNode = (TableOption)node.Clone(CamposOrigen.Parent);
                         newNode.Status = Enums.ObjectStatusType.AlterStatus;
                         CamposOrigen[node.FullName] = newNode;
                     }

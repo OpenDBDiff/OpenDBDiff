@@ -9,11 +9,12 @@ namespace DBDiff.Schema.SQLServer.Model
     {
         private Boolean readOnly;
         private Boolean defaultFileGroup;
+        private Boolean isFileStream;
         private FileGroupFiles files;
 
-        public FileGroup(Database parent) : base(Enums.ObjectType.FileGroup)
+        public FileGroup(Database parent)
+            : base(parent, Enums.ObjectType.FileGroup)
         {
-            this.Parent = parent;
             files = new FileGroupFiles(this);
         }
 
@@ -26,6 +27,7 @@ namespace DBDiff.Schema.SQLServer.Model
             file.Id = this.Id;
             file.Files = this.Files.Clone(file);
             file.Guid = this.Guid;
+            file.IsFileStream = this.IsFileStream;
             return file;
         }
 
@@ -33,6 +35,12 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             get { return files; }
             set { files = value; }
+        }
+
+        public Boolean IsFileStream
+        {
+            get { return isFileStream; }
+            set { isFileStream = value; }
         }
 
         public Boolean IsDefaultFileGroup
@@ -47,15 +55,13 @@ namespace DBDiff.Schema.SQLServer.Model
             set { readOnly = value; }
         }
 
-        /// <summary>
-        /// Compara dos triggers y devuelve true si son iguales, caso contrario, devuelve false.
-        /// </summary>
         public static Boolean Compare(FileGroup origen, FileGroup destino)
         {
             if (destino == null) throw new ArgumentNullException("destino");
             if (origen == null) throw new ArgumentNullException("origen");
             if (origen.IsReadOnly != destino.IsReadOnly) return false;
             if (origen.IsDefaultFileGroup != destino.IsDefaultFileGroup) return false;
+            if (origen.IsFileStream != destino.IsFileStream) return false;
             return true;
         }
 
@@ -63,7 +69,12 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             string sql = "ALTER DATABASE [" + Parent.Name + "] " + action + " ";
             sql += "FILEGROUP [" + Name + "]";
-            if (IsDefaultFileGroup) sql += " DEFAULT";
+            if (action.Equals("MODIFY"))
+            {
+                if (IsDefaultFileGroup) sql += " DEFAULT";
+            }
+            else
+                if (IsFileStream) sql += " CONTAINS FILESTREAM";
             if (IsReadOnly) sql += " READONLY";
             sql += "\r\nGO\r\n";
             return sql;
@@ -74,6 +85,8 @@ namespace DBDiff.Schema.SQLServer.Model
             string sql = ToSQL("ADD");
             foreach (FileGroupFile file in this.Files)
                 sql += file.ToSql();
+            if (IsDefaultFileGroup)
+                sql += ToSQL("MODIFY");
             return sql;
         }
 
@@ -82,6 +95,8 @@ namespace DBDiff.Schema.SQLServer.Model
             string sql = ToSQL("ADD");
             foreach (FileGroupFile file in this.Files)
                 sql += file.ToSqlAdd();
+            if (IsDefaultFileGroup)
+                sql += ToSQL("MODIFY");
             return sql;
         }
 

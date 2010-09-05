@@ -10,13 +10,14 @@ namespace DBDiff.Schema.SQLServer.Model
         private int objectId;
         private int subObjectId;
         private int ownerTableId;
-        private ISchemaBase objectSchema;
+        private string fullName;
         private int typeId;
+        private Enums.ObjectType type;
 
-        public ISchemaBase ObjectSchema
+        public string FullName
         {
-            get { return objectSchema; }
-            set { objectSchema = value; }
+            get { return fullName; }
+            set { fullName = value; }
         }
 
         public int DataTypeId
@@ -27,7 +28,8 @@ namespace DBDiff.Schema.SQLServer.Model
 
         public Enums.ObjectType Type
         {
-            get { return objectSchema.ObjectType; }
+            get { return type; }
+            set { type = value; }
         }
 
         public int SubObjectId

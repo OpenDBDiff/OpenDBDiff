@@ -9,28 +9,32 @@ namespace DBDiff.Schema.SQLServer.Model
     public class Table : SQLServerSchemaBase, IComparable<Table>
     {
         private Columns columns;
-        private Constraints constraints;
-        private TableOptions options;
+        private Constraints constraints;        
         private Table originalTable;
+        private SchemaList<TableOption, Table> options;
         private SchemaList<Trigger, Table> triggers;
         private SchemaList<CLRTrigger, Table> clrtriggers;
         private SchemaList<Index, Table> indexes;
+        private SchemaList<TablePartition, Table> partitions;
         private Boolean hasClusteredIndex;
         private int dependenciesCount;
         private string fileGroup;
         private string fileGroupText;
+        private string fileGroupStream;
         private List<ISchemaBase> dependencis = null;
+        private string compressType;
 
-        public Table(Database parent):base(Enums.ObjectType.Table)
+        public Table(Database parent)
+            : base(parent, Enums.ObjectType.Table)
         {
-            this.Parent = parent;
             dependenciesCount = -1;
             columns = new Columns(this);
             constraints = new Constraints(this);
-            options = new TableOptions(this);
+            options = new SchemaList<TableOption, Table>(this);
             triggers = new SchemaList<Trigger, Table>(this, parent.AllObjects);
             clrtriggers = new SchemaList<CLRTrigger, Table>(this, parent.AllObjects);
             indexes = new SchemaList<Index, Table>(this, parent.AllObjects);
+            partitions = new SchemaList<TablePartition, Table>(this, parent.AllObjects);
         }
 
         /// <summary>
@@ -46,25 +50,46 @@ namespace DBDiff.Schema.SQLServer.Model
             table.Status = this.Status;
             table.FileGroup = this.FileGroup;
             table.FileGroupText = this.FileGroupText;
+            table.FileGroupStream = this.FileGroupStream;
             table.HasClusteredIndex = this.HasClusteredIndex;
             table.dependenciesCount = this.DependenciesCount;
             table.Columns = this.Columns.Clone(table);
             table.Options = this.Options.Clone(table);
+            table.CompressType = this.CompressType;
             //table.triggers = this.Triggers.Clone(table);
             table.indexes = this.Indexes.Clone(table);
+            table.partitions = this.Partitions.Clone(table);
             return table;
         }
 
-        public TableOptions Options
+        public SchemaList<TablePartition, Table> Partitions
+        {
+            get { return partitions; }
+            set { partitions = value; }
+        }
+
+        public SchemaList<TableOption, Table> Options
         {
             get { return options; }
             set { options = value; }
+        }
+
+        public string CompressType
+        {
+            get { return compressType; }
+            set { compressType = value; }
         }
 
         public string FileGroupText
         {
             get { return fileGroupText; }
             set { fileGroupText = value; }
+        }
+
+        public string FileGroupStream
+        {
+            get { return fileGroupStream; }
+            set { fileGroupStream = value; }
         }
 
         /// <summary>
@@ -173,7 +198,7 @@ namespace DBDiff.Schema.SQLServer.Model
             if (columns.Count > 0)
             {
                 sql += "CREATE TABLE " + FullName + "\r\n(\r\n";
-                sql += columns.ToSQL();
+                sql += columns.ToSql();
                 if (constraints.Count > 0)
                 {
                     sql += ",\r\n";
@@ -183,7 +208,11 @@ namespace DBDiff.Schema.SQLServer.Model
                         sql += constraints.ToSQL(Constraint.ConstraintType.ForeignKey);
                 }
                 else
+                {
                     sql += "\r\n";
+                    if (!String.IsNullOrEmpty(compressType))
+                        sql += "WITH (DATA_COMPRESSION = " + compressType + ")\r\n";
+                }
                 sql += ")";
                 if (!String.IsNullOrEmpty(FileGroup)) sql += " ON [" + FileGroup + "]";
                 if (!String.IsNullOrEmpty(FileGroupText))
@@ -191,12 +220,17 @@ namespace DBDiff.Schema.SQLServer.Model
                     if (this.HasBlobColumn)
                         sql += " TEXTIMAGE_ON [" + FileGroupText + "]";
                 }
+                if (!String.IsNullOrEmpty(FileGroupStream))
+                {
+                    sql += " FILESTREAM_ON [" + FileGroupStream + "]";
+                }
+
                 sql += "\r\n";
                 sql += "GO\r\n";
                 sql += constraints.ToSQLAdd(Constraint.ConstraintType.Check);
-                sql += indexes.ToSQL();
-                sql += options.ToSQL();
-                sql += triggers.ToSQL();
+                sql += indexes.ToSql();
+                sql += options.ToSql();
+                sql += triggers.ToSql();
             }
             return sql;
 
@@ -231,7 +265,7 @@ namespace DBDiff.Schema.SQLServer.Model
                 }
                 if (!found)
                 {
-                    this.Status = Enums.ObjectStatusType.AlterRebuildStatus;
+                    this.Status = Enums.ObjectStatusType.RebuildStatus;
                     listDiff = ToSqlDiff();
                 }
             }
@@ -263,7 +297,7 @@ namespace DBDiff.Schema.SQLServer.Model
                 listDiff.Add(ToSql(false), dependenciesCount, Enums.ScripActionType.AddTable);
                 listDiff.Add(Constraints.ToSQLAdd(Constraint.ConstraintType.ForeignKey), dependenciesCount, Enums.ScripActionType.AddConstraintFK);
             }
-            if (this.Status == Enums.ObjectStatusType.AlterRebuildDependenciesStatus)
+            if (this.Status == Enums.ObjectStatusType.RebuildDependenciesStatus)
             {
                 GenerateDependencis();
                 listDiff.AddRange(ToSQLDropDependencis());
@@ -284,7 +318,7 @@ namespace DBDiff.Schema.SQLServer.Model
                 listDiff.AddRange(triggers.ToSqlDiff());
                 listDiff.AddRange(clrtriggers.ToSqlDiff());
             }
-            if (this.Status == Enums.ObjectStatusType.AlterRebuildStatus)
+            if (this.Status == Enums.ObjectStatusType.RebuildStatus)
             {
                 GenerateDependencis();
                 listDiff.AddRange(ToSQLRebuild());
@@ -293,8 +327,8 @@ namespace DBDiff.Schema.SQLServer.Model
                 listDiff.AddRange(indexes.ToSqlDiff());
                 listDiff.AddRange(options.ToSqlDiff());
                 //Como recrea la tabla, solo pone los nuevos triggers, por eso va ToSQL y no ToSQLDiff
-                listDiff.Add(triggers.ToSQL(), dependenciesCount, Enums.ScripActionType.AddTrigger);
-                listDiff.Add(clrtriggers.ToSQL(), dependenciesCount, Enums.ScripActionType.AddTrigger);
+                listDiff.Add(triggers.ToSql(), dependenciesCount, Enums.ScripActionType.AddTrigger);
+                listDiff.Add(clrtriggers.ToSql(), dependenciesCount, Enums.ScripActionType.AddTrigger);
             }
             return listDiff;
         }
@@ -310,7 +344,7 @@ namespace DBDiff.Schema.SQLServer.Model
             {
                 foreach (Column column in this.Columns)
                 {
-                    if ((column.Status != Enums.ObjectStatusType.DropStatus) && !((column.Status == Enums.ObjectStatusType.CreateStatus) && (column.Nullable == true)))
+                    if ((column.Status != Enums.ObjectStatusType.DropStatus) && !((column.Status == Enums.ObjectStatusType.CreateStatus) && (column.IsNullable == true)))
                     {
                         if ((!column.IsComputed) && (!column.Type.ToLower().Equals("timestamp")))
                         {
@@ -348,7 +382,7 @@ namespace DBDiff.Schema.SQLServer.Model
                         sql += "SET IDENTITY_INSERT [" + Owner + "].[" + tempTable + "] OFF\r\nGO\r\n\r\n";
                     sql += "DROP TABLE " + this.FullName + "\r\nGO\r\n";
                     sql += "EXEC sp_rename N'[" + Owner + "].[" + tempTable + "]',N'" + this.Name + "', 'OBJECT'\r\nGO\r\n\r\n";
-                    sql += OriginalTable.Options.ToSQL();
+                    sql += OriginalTable.Options.ToSql();
                 }
                 else
                     sql = "";
@@ -393,6 +427,10 @@ namespace DBDiff.Schema.SQLServer.Model
                 if (this.HasBlobColumn)
                     sql += " TEXTIMAGE_ON [" + FileGroupText + "]";
             }
+            if (!String.IsNullOrEmpty(FileGroupStream))
+            {
+                sql += " FILESTREAM_ON [" + FileGroupStream + "]";
+            }
             sql += "\r\n";
             sql += "GO\r\n";
             return sql;
@@ -402,12 +440,12 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             List<ISchemaBase> myDependencis = null;
             /*Si el estado es AlterRebuildDependeciesStatus, busca las dependencias solamente en las columnas que fueron modificadas*/
-            if (this.Status == Enums.ObjectStatusType.AlterRebuildDependenciesStatus)
+            if (this.Status == Enums.ObjectStatusType.RebuildDependenciesStatus)
             {
                 myDependencis = new List<ISchemaBase>();
                 for (int ic = 0; ic < this.Columns.Count; ic++)
                 {
-                    if ((this.Columns[ic].Status == Enums.ObjectStatusType.AlterRebuildDependenciesStatus) || (this.Columns[ic].Status == Enums.ObjectStatusType.AlterStatus))
+                    if ((this.Columns[ic].Status == Enums.ObjectStatusType.RebuildDependenciesStatus) || (this.Columns[ic].Status == Enums.ObjectStatusType.AlterStatus))
                         myDependencis.AddRange(((Database)Parent).Dependencies.Find(this.Id, 0, this.Columns[ic].DataUserTypeId));
                 }
                 /*Si no encuentra ninguna, toma todas las de la tabla*/
@@ -500,7 +538,7 @@ namespace DBDiff.Schema.SQLServer.Model
             {
                 if (columns[index].DefaultConstraint != null)
                 {
-                    if (columns[index].DefaultConstraint.CanCreate)
+                    if ((columns[index].DefaultConstraint.CanCreate) && (columns.Parent.Status != Enums.ObjectStatusType.RebuildStatus))
                         listDiff.Add(columns[index].DefaultConstraint.Create());
                 }
             }

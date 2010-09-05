@@ -7,32 +7,17 @@ namespace DBDiff.Schema.SQLServer.Model
 {
     public abstract class SQLServerSchemaBase:SchemaBase, ISQLServerSchemaBase
     {
-        private List<ExtendedProperty> extendedProperties;
+        private SchemaList<ExtendedProperty,ISchemaBase> extendedProperties;
 
-        protected SQLServerSchemaBase(Enums.ObjectType objectType):base("[", "]", objectType)
+        protected SQLServerSchemaBase(ISchemaBase parent, Enums.ObjectType objectType):base("[", "]", objectType)
         {
-            extendedProperties = new List<ExtendedProperty>();
+            this.Parent = parent;
+            extendedProperties = new SchemaList<ExtendedProperty, ISchemaBase>(parent);
         }
 
-        public List<ExtendedProperty> ExtendedProperties
+        public SchemaList<ExtendedProperty, ISchemaBase> ExtendedProperties
         {
             get { return extendedProperties; }
-        }
-
-        protected SQLScriptList ToSqlDiffExtendedProperties()
-        {            
-            SQLScriptList list = new SQLScriptList();
-            if (this.Status != Enums.ObjectStatusType.CreateStatus)
-            {
-                extendedProperties.ForEach(item =>
-                    {
-                        if (item.Status == Enums.ObjectStatusType.CreateStatus)
-                            list.Add(item.Create());
-                        if (item.Status == Enums.ObjectStatusType.DropStatus)
-                            list.Add(item.Drop());
-                    });
-            }
-            return list;
         }
     }
 }

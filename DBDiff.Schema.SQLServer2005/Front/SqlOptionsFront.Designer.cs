@@ -29,6 +29,8 @@ namespace DBDiff.Schema.SQLServer.Front
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.checkPartitionFunction = new System.Windows.Forms.CheckBox();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
@@ -94,6 +96,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.optScriptSchemaBindingAlter = new System.Windows.Forms.RadioButton();
             this.optScriptSchemaDrop = new System.Windows.Forms.RadioButton();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.rdoCaseAutomatic = new System.Windows.Forms.RadioButton();
+            this.rdoCaseInsensitive = new System.Windows.Forms.RadioButton();
+            this.rdoCaseSensitive = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -105,10 +112,14 @@ namespace DBDiff.Schema.SQLServer.Front
             this.tabPage3.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBox5);
+            this.groupBox1.Controls.Add(this.checkPartitionFunction);
             this.groupBox1.Controls.Add(this.checkBox4);
             this.groupBox1.Controls.Add(this.checkBox3);
             this.groupBox1.Controls.Add(this.checkBox2);
@@ -142,10 +153,36 @@ namespace DBDiff.Schema.SQLServer.Front
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(440, 298);
+            this.groupBox1.Size = new System.Drawing.Size(440, 312);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filters Objects";
+            // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Checked = true;
+            this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox5.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.checkBox5.Location = new System.Drawing.Point(163, 283);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(106, 17);
+            this.checkBox5.TabIndex = 43;
+            this.checkBox5.Text = "Partition Schema";
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
+            // checkPartitionFunction
+            // 
+            this.checkPartitionFunction.AutoSize = true;
+            this.checkPartitionFunction.Checked = true;
+            this.checkPartitionFunction.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkPartitionFunction.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.checkPartitionFunction.Location = new System.Drawing.Point(163, 260);
+            this.checkPartitionFunction.Name = "checkPartitionFunction";
+            this.checkPartitionFunction.Size = new System.Drawing.Size(108, 17);
+            this.checkPartitionFunction.TabIndex = 42;
+            this.checkPartitionFunction.Text = "Partition Function";
+            this.checkPartitionFunction.UseVisualStyleBackColor = true;
             // 
             // checkBox4
             // 
@@ -697,6 +734,7 @@ namespace DBDiff.Schema.SQLServer.Front
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
@@ -723,9 +761,9 @@ namespace DBDiff.Schema.SQLServer.Front
             // 
             this.groupBox6.Controls.Add(this.chkIgnoreNotForReplication);
             this.groupBox6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.groupBox6.Location = new System.Drawing.Point(6, 307);
+            this.groupBox6.Location = new System.Drawing.Point(6, 324);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(440, 67);
+            this.groupBox6.Size = new System.Drawing.Size(440, 54);
             this.groupBox6.TabIndex = 1;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Other options";
@@ -887,6 +925,61 @@ namespace DBDiff.Schema.SQLServer.Front
             this.optScriptSchemaDrop.Text = "DROP/CREATE object";
             this.optScriptSchemaDrop.UseVisualStyleBackColor = true;
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.groupBox7);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(453, 384);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Comparision";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.rdoCaseSensitive);
+            this.groupBox7.Controls.Add(this.rdoCaseInsensitive);
+            this.groupBox7.Controls.Add(this.rdoCaseAutomatic);
+            this.groupBox7.Location = new System.Drawing.Point(6, 6);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(441, 97);
+            this.groupBox7.TabIndex = 0;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Case sensitibity options";
+            // 
+            // rdoCaseAutomatic
+            // 
+            this.rdoCaseAutomatic.AutoSize = true;
+            this.rdoCaseAutomatic.Checked = true;
+            this.rdoCaseAutomatic.Location = new System.Drawing.Point(6, 19);
+            this.rdoCaseAutomatic.Name = "rdoCaseAutomatic";
+            this.rdoCaseAutomatic.Size = new System.Drawing.Size(200, 17);
+            this.rdoCaseAutomatic.TabIndex = 0;
+            this.rdoCaseAutomatic.TabStop = true;
+            this.rdoCaseAutomatic.Text = "Automatic (detect database collation)";
+            this.rdoCaseAutomatic.UseVisualStyleBackColor = true;
+            // 
+            // rdoCaseInsensitive
+            // 
+            this.rdoCaseInsensitive.AutoSize = true;
+            this.rdoCaseInsensitive.Location = new System.Drawing.Point(6, 42);
+            this.rdoCaseInsensitive.Name = "rdoCaseInsensitive";
+            this.rdoCaseInsensitive.Size = new System.Drawing.Size(101, 17);
+            this.rdoCaseInsensitive.TabIndex = 1;
+            this.rdoCaseInsensitive.Text = "Case insensitive";
+            this.rdoCaseInsensitive.UseVisualStyleBackColor = true;
+            // 
+            // rdoCaseSensitive
+            // 
+            this.rdoCaseSensitive.AutoSize = true;
+            this.rdoCaseSensitive.Location = new System.Drawing.Point(6, 65);
+            this.rdoCaseSensitive.Name = "rdoCaseSensitive";
+            this.rdoCaseSensitive.Size = new System.Drawing.Size(93, 17);
+            this.rdoCaseSensitive.TabIndex = 2;
+            this.rdoCaseSensitive.Text = "Case sensitive";
+            this.rdoCaseSensitive.UseVisualStyleBackColor = true;
+            // 
             // SqlOptionsFront
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -909,6 +1002,9 @@ namespace DBDiff.Schema.SQLServer.Front
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -981,5 +1077,12 @@ namespace DBDiff.Schema.SQLServer.Front
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkPartitionFunction;
+        private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.RadioButton rdoCaseAutomatic;
+        private System.Windows.Forms.RadioButton rdoCaseSensitive;
+        private System.Windows.Forms.RadioButton rdoCaseInsensitive;
     }
 }

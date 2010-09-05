@@ -7,31 +7,35 @@ namespace DBDiff.Schema.SQLServer.Compare
 {
     internal class CompareColumnsConstraints:CompareBase<ColumnConstraint>
     {
-        public static ColumnConstraint GenerateDiferences(ColumnConstraint CamposOrigen, ColumnConstraint CamposDestino)
+        public static ColumnConstraint GenerateDiferences(Column CamposOrigen, Column CamposDestino)
         {
-            if ((CamposOrigen == null) && (CamposDestino != null))
+            if ((CamposOrigen.DefaultConstraint == null) && (CamposDestino.DefaultConstraint != null))
             {
-                CamposOrigen = CamposDestino;//.Clone((Column)CamposOrigen.Parent);
-                CamposOrigen.Status = Enums.ObjectStatusType.CreateStatus;
-                CamposOrigen.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                CamposOrigen.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;                
+                CamposOrigen.DefaultConstraint = CamposDestino.DefaultConstraint.Clone(CamposOrigen);
+                CamposOrigen.DefaultConstraint.Status = Enums.ObjectStatusType.CreateStatus;
+                CamposOrigen.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                CamposOrigen.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
             }
-            if ((CamposOrigen != null) && (CamposDestino != null))
+            else
             {
-                if (!ColumnConstraint.Compare(CamposOrigen, CamposDestino))
+                if ((CamposOrigen.DefaultConstraint != null) && (CamposDestino.DefaultConstraint != null))
                 {
-                    CamposOrigen = CamposDestino.Clone((Column)CamposOrigen.Parent);
-                    //Indico que hay un ALTER TABLE, pero sobre la columna, no seteo ningun estado.
-                    CamposOrigen.Status = Enums.ObjectStatusType.AlterStatus;
-                    CamposOrigen.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                    CamposOrigen.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                    if (!ColumnConstraint.Compare(CamposOrigen.DefaultConstraint, CamposDestino.DefaultConstraint))
+                    {
+                        CamposOrigen.DefaultConstraint = CamposDestino.DefaultConstraint.Clone(CamposOrigen);
+                        //Indico que hay un ALTER TABLE, pero sobre la columna, no seteo ningun estado.
+                        CamposOrigen.DefaultConstraint.Status = Enums.ObjectStatusType.AlterStatus;
+                        CamposOrigen.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                        CamposOrigen.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                    }
                 }
-            }
-            if ((CamposOrigen != null) && (CamposDestino == null))
-            {
-                CamposOrigen.Status = Enums.ObjectStatusType.DropStatus;
-                CamposOrigen.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                CamposOrigen.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                else
+                    if ((CamposOrigen.DefaultConstraint != null) && (CamposDestino.DefaultConstraint == null))
+                    {
+                        CamposOrigen.DefaultConstraint.Status = Enums.ObjectStatusType.DropStatus;
+                        CamposOrigen.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                        CamposOrigen.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                    }
             }
             /*foreach (ColumnConstraint node in CamposDestino)
             {
@@ -65,7 +69,7 @@ namespace DBDiff.Schema.SQLServer.Compare
             }
             );
             */
-            return CamposOrigen;
+            return CamposOrigen.DefaultConstraint;
         }
     }
 }

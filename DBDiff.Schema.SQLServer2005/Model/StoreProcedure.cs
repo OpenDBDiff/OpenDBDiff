@@ -37,14 +37,14 @@ namespace DBDiff.Schema.SQLServer.Model
 
         public override string ToSql()
         {
-            if (String.IsNullOrEmpty(sql))
-                sql = FormatCode.FormatCreate("PROCEDURE;PROC", Text, this);
+            //if (String.IsNullOrEmpty(sql))
+                sql = FormatCode.FormatCreate("PROC(EDURE)?", Text, this);
             return sql;
         }
 
         public string ToSQLAlter()
         {
-            return FormatCode.FormatAlter("PROCEDURE;PROC", ToSql(), this, false);
+            return FormatCode.FormatAlter("PROC(EDURE)?", ToSql(), this, false);
         }
 
         /// <summary>

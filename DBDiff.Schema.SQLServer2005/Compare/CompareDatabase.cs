@@ -29,6 +29,7 @@ namespace DBDiff.Schema.SQLServer.Compare
                 CompareViews.GenerateDiferences(Origen.Views, Destino.Views);
                 CompareFunctions.GenerateDiferences(Origen.Functions, Destino.Functions);
                 CompareRoles.GenerateDiferences(Origen.Roles, Destino.Roles);
+                ComparePartitionFunction.GenerateDiferences(Origen.PartitionFunctions, Destino.PartitionFunctions); 
                 return data;
             }
             catch (SchemaException)

@@ -9,16 +9,22 @@ namespace DBDiff.Schema.SQLServer.Model
     {
         private string vale;
 
-        public TableOption(ISchemaBase parent)
-            : base(Enums.ObjectType.TableOption)
+        public TableOption(string Name, string value, ISchemaBase parent)
+            : base(parent, Enums.ObjectType.TableOption)
         {
-            this.Parent = parent ;
+            this.Name = Name;
+            this.Value = value;
+        }
+
+        public TableOption(ISchemaBase parent)
+            : base(parent, Enums.ObjectType.TableOption)
+        {
         }
 
         /// <summary>
         /// Clona el objeto en una nueva instancia.
         /// </summary>
-        public TableOption Clone(ISchemaBase parent)
+        public override ISchemaBase Clone(ISchemaBase parent)
         {
             TableOption option = new TableOption(parent);
             option.Name = this.Name;

@@ -8,7 +8,7 @@ using DBDiff.Schema.SQLServer.Options;
 
 namespace DBDiff.Schema.SQLServer.Model
 {
-    public class Database : SQLServerSchemaBase
+    public class Database : SQLServerSchemaBase, IDatabase
     {
         private SqlOption options;
         
@@ -29,12 +29,13 @@ namespace DBDiff.Schema.SQLServer.Model
         private SchemaList<Table, Database> tables;
         private SchemaList<User, Database> users;
         private SchemaList<View, Database> views;
+        private SchemaList<PartitionFunction, Database> partitionFunctions;
         private Roles roles;
-        private Dictionary<string, ISchemaBase> allObjects;
+        private SearchSchemaBase allObjects;
 
-        public Database():base(Enums.ObjectType.Database)
+        public Database():base(null, Enums.ObjectType.Database)
         {
-            allObjects = new Dictionary<string, ISchemaBase>();
+            allObjects = new SearchSchemaBase();
             constraintDependencies = new Dependencies();
             userTypes = new SchemaList<UserDataType, Database>(this, this.allObjects);
             xmlSchemas = new SchemaList<XMLSchema, Database>(this, this.allObjects);
@@ -49,14 +50,22 @@ namespace DBDiff.Schema.SQLServer.Model
             views = new SchemaList<View, Database>(this, this.allObjects);
             users = new SchemaList<User, Database>(this, this.allObjects);
             functions = new SchemaList<Function, Database>(this,this.allObjects);
+            partitionFunctions = new SchemaList<PartitionFunction, Database>(this, this.allObjects);
             roles = new Roles(this);
             tables = new SchemaList<Table, Database>(this, this.allObjects);
             defaults = new Defaults(this);            
         }
 
-        internal Dictionary<string, ISchemaBase> AllObjects
+        internal SearchSchemaBase AllObjects
         {
             get { return allObjects; }            
+        }
+
+        [ShowItemAttribute("Partition Functions", "PartitionFunction")]
+        public SchemaList<PartitionFunction, Database> PartitionFunctions
+        {
+            get { return partitionFunctions; }
+            set { partitionFunctions = value; }
         }
 
         [ShowItemAttribute("Defaults")]
@@ -210,23 +219,48 @@ namespace DBDiff.Schema.SQLServer.Model
             set { base.Name = value; }
         }
 
+        public Boolean IsCaseSensity
+        {
+            get
+            {
+                bool isCS = false;
+                if (!String.IsNullOrEmpty(info.Collation))
+                    isCS = info.Collation.IndexOf("_CS_") != -1;
+
+                if (this.Options.Comparison.CaseSensityType == DBDiff.Schema.SQLServer.Options.SqlOptionComparison.CaseSensityOptions.Automatic)
+                {
+                    if (isCS)
+                        return true;
+                    else
+                        return false;
+                }
+                if (this.Options.Comparison.CaseSensityType == DBDiff.Schema.SQLServer.Options.SqlOptionComparison.CaseSensityOptions.CaseSensity)
+                    return true;
+                if (this.Options.Comparison.CaseSensityType == DBDiff.Schema.SQLServer.Options.SqlOptionComparison.CaseSensityOptions.CaseInsensity)
+                    return false;
+
+                return false;
+            }
+        }
+
         public override string ToSql()
         {
             string sql = "";
-            sql += fileGroups.ToSQL();
-            sql += schemas.ToSQL();
-            sql += xmlSchemas.ToSQL();
-            sql += rules.ToSQL();
-            sql += userTypes.ToSQL();
-            sql += assemblies.ToSQL();
-            sql += tables.ToSQL();
-            sql += functions.ToSQL();
-            sql += procedures.ToSQL();
-            sql += CLRprocedures.ToSQL();
-            sql += ddlTriggers.ToSQL();
-            sql += synonyms.ToSQL();
-            sql += views.ToSQL();
-            sql += users.ToSQL();
+            sql += fileGroups.ToSql();
+            sql += schemas.ToSql();
+            sql += xmlSchemas.ToSql();
+            sql += rules.ToSql();
+            sql += userTypes.ToSql();
+            sql += assemblies.ToSql();
+            sql += tables.ToSql();
+            sql += functions.ToSql();
+            sql += procedures.ToSql();
+            sql += CLRprocedures.ToSql();
+            sql += ddlTriggers.ToSql();
+            sql += synonyms.ToSql();
+            sql += views.ToSql();
+            sql += users.ToSql();
+            sql += partitionFunctions.ToSql();
             return sql;
         }
 
@@ -237,10 +271,66 @@ namespace DBDiff.Schema.SQLServer.Model
 
         public ISchemaBase Find(String FullName)
         {
-            if (allObjects.ContainsKey(FullName))
-                return allObjects[FullName];
-            else
+            try
+            {
+                Enums.ObjectType type = allObjects.GetType(FullName);
+                string parentName = "";
+
+                switch (type)
+                {
+                    case Enums.ObjectType.Table:
+                        return tables[FullName];
+                    case Enums.ObjectType.StoreProcedure:
+                        return procedures[FullName];
+                    case Enums.ObjectType.Function:
+                        return functions[FullName];
+                    case Enums.ObjectType.View:
+                        return views[FullName];
+                    case Enums.ObjectType.Assembly:
+                        return assemblies[FullName];
+                    case Enums.ObjectType.UserDataType:
+                        return userTypes[FullName];
+                    case Enums.ObjectType.XMLSchema:
+                        return xmlSchemas[FullName];
+                    case Enums.ObjectType.CLRStoreProcedure:
+                        return CLRProcedures[FullName];
+                    case Enums.ObjectType.Synonym:
+                        return synonyms[FullName];
+                    case Enums.ObjectType.Rule:
+                        return rules[FullName];
+                    case Enums.ObjectType.PartitionFunction:
+                        return partitionFunctions[FullName];
+                    case Enums.ObjectType.Role:
+                        return roles[FullName];
+                    case Enums.ObjectType.Constraint:
+                        parentName = allObjects.GetParentName(FullName);
+                        return tables[parentName].Constraints[FullName];
+                    case Enums.ObjectType.Index:
+                        parentName = allObjects.GetParentName(FullName);
+                        return tables[parentName].Indexes[FullName];
+                    case Enums.ObjectType.Trigger:
+                        parentName = allObjects.GetParentName(FullName);
+                        return tables[parentName].Triggers[FullName];
+                    case Enums.ObjectType.CLRTrigger:
+                        parentName = allObjects.GetParentName(FullName);
+                        return tables[parentName].CLRTriggers[FullName];
+                }
                 return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private SQLScriptList CleanScripts(SQLScriptList listDiff)
+        {
+            SQLScriptList alters = listDiff.FindAlter();
+            for (int j = 0; j < alters.Count; j++)
+            {
+                //alters[j].
+            }
+            return null;
         }
 
         public override SQLScriptList ToSqlDiff()
@@ -262,6 +352,7 @@ namespace DBDiff.Schema.SQLServer.Model
             listDiff.AddRange(users.ToSqlDiff());
             listDiff.AddRange(functions.ToSqlDiff());
             listDiff.AddRange(roles.ToSqlDiff());
+            listDiff.AddRange(partitionFunctions.ToSqlDiff());
             return listDiff;
         }
 
@@ -290,7 +381,7 @@ namespace DBDiff.Schema.SQLServer.Model
                 schema = index.Parent;
                 foreach (IndexColumn icolumn in index.Columns)
                 {
-                    this.Dependencies.Add(schema.Id, icolumn.Id, schema.Id, icolumn.DataTypeId, index);
+                    this.Dependencies.Add(this,schema.Id, icolumn.Id, schema.Id, icolumn.DataTypeId, index);
                 }
             }
 
@@ -303,15 +394,15 @@ namespace DBDiff.Schema.SQLServer.Model
                     {
                         foreach (ConstraintColumn ccolumn in con.Columns)
                         {
-                            this.Dependencies.Add(schema.Id, ccolumn.Id, schema.Id, ccolumn.DataTypeId, con);
+                            this.Dependencies.Add(this,schema.Id, ccolumn.Id, schema.Id, ccolumn.DataTypeId, con);
                             if (con.Type == Constraint.ConstraintType.ForeignKey)
                             {
-                                this.Dependencies.Add(con.RelationalTableId, ccolumn.ColumnRelationalId, schema.Id, ccolumn.ColumnRelationalDataTypeId, con);
+                                this.Dependencies.Add(this,con.RelationalTableId, ccolumn.ColumnRelationalId, schema.Id, ccolumn.ColumnRelationalDataTypeId, con);
                             }
                         }
                     }
                     else
-                        this.Dependencies.Add(schema.Id, 0, schema.Id, 0, con);
+                        this.Dependencies.Add(this,schema.Id, 0, schema.Id, 0, con);
                 }
             }
         }

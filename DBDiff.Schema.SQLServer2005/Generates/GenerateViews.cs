@@ -64,7 +64,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                             if (item.IsSchemaBinding)
                             {
                                 if (!reader.IsDBNull(reader.GetOrdinal("referenced_major_id")))
-                                    database.Dependencies.Add((int)reader["referenced_major_id"], item);
+                                    database.Dependencies.Add(database,(int)reader["referenced_major_id"], item);
                                 if (!String.IsNullOrEmpty(reader["TableName"].ToString()))
                                     item.DependenciesIn.Add(reader["TableName"].ToString());
                                 if (!String.IsNullOrEmpty(reader["DependOut"].ToString()))

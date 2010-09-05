@@ -59,7 +59,7 @@ namespace DBDiff
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(9, 357);
+            this.progressBar1.Location = new System.Drawing.Point(9, 394);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(766, 26);
             this.progressBar1.TabIndex = 3;
@@ -81,10 +81,10 @@ namespace DBDiff
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Location = new System.Drawing.Point(7, 234);
+            this.tabControl1.Location = new System.Drawing.Point(7, 197);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(791, 420);
+            this.tabControl1.Size = new System.Drawing.Size(791, 457);
             this.tabControl1.TabIndex = 3;
             // 
             // tabPage2
@@ -93,7 +93,7 @@ namespace DBDiff
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(783, 394);
+            this.tabPage2.Size = new System.Drawing.Size(783, 431);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Schema";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -105,7 +105,7 @@ namespace DBDiff
             this.groupBox1.Controls.Add(this.schemaTreeView1);
             this.groupBox1.Location = new System.Drawing.Point(6, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(335, 382);
+            this.groupBox1.Size = new System.Drawing.Size(335, 419);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             // 
@@ -119,7 +119,7 @@ namespace DBDiff
             this.schemaTreeView1.FilterNewObjects = true;
             this.schemaTreeView1.Location = new System.Drawing.Point(7, 10);
             this.schemaTreeView1.Name = "schemaTreeView1";
-            this.schemaTreeView1.Size = new System.Drawing.Size(322, 366);
+            this.schemaTreeView1.Size = new System.Drawing.Size(322, 403);
             this.schemaTreeView1.TabIndex = 0;
             // 
             // tabPage1
@@ -130,9 +130,9 @@ namespace DBDiff
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(783, 394);
+            this.tabPage1.Size = new System.Drawing.Size(783, 431);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Sincronized Script";
+            this.tabPage1.Text = "Synchronized Script";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // txtDiferencias
@@ -143,7 +143,7 @@ namespace DBDiff
             this.txtDiferencias.Location = new System.Drawing.Point(9, 6);
             this.txtDiferencias.Name = "txtDiferencias";
             this.txtDiferencias.ShowSintax = false;
-            this.txtDiferencias.Size = new System.Drawing.Size(766, 345);
+            this.txtDiferencias.Size = new System.Drawing.Size(766, 382);
             this.txtDiferencias.TabIndex = 5;
             this.txtDiferencias.Type = SQLRichControl.SQLTextControl.SQLType.SQLServer;
             // 
@@ -157,6 +157,7 @@ namespace DBDiff
             this.GroupDb.Size = new System.Drawing.Size(665, 36);
             this.GroupDb.TabIndex = 0;
             this.GroupDb.TabStop = false;
+            this.GroupDb.Visible = false;
             // 
             // optSybase
             // 
@@ -197,7 +198,7 @@ namespace DBDiff
             // 
             // groupBox2
             // 
-            this.groupBox2.Location = new System.Drawing.Point(7, 38);
+            this.groupBox2.Location = new System.Drawing.Point(7, 1);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(430, 190);
             this.groupBox2.TabIndex = 1;
@@ -206,7 +207,7 @@ namespace DBDiff
             // 
             // groupBox3
             // 
-            this.groupBox3.Location = new System.Drawing.Point(445, 38);
+            this.groupBox3.Location = new System.Drawing.Point(445, 1);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(430, 190);
             this.groupBox3.TabIndex = 2;
@@ -224,7 +225,7 @@ namespace DBDiff
             this.btnOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOptions.Image = global::DBDiff.Properties.Resources.Control_panel_2;
             this.btnOptions.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnOptions.Location = new System.Drawing.Point(804, 314);
+            this.btnOptions.Location = new System.Drawing.Point(804, 280);
             this.btnOptions.Name = "btnOptions";
             this.btnOptions.Size = new System.Drawing.Size(95, 55);
             this.btnOptions.TabIndex = 5;
@@ -239,7 +240,7 @@ namespace DBDiff
             this.btnCopy.Enabled = false;
             this.btnCopy.Image = global::DBDiff.Properties.Resources.Copy;
             this.btnCopy.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnCopy.Location = new System.Drawing.Point(804, 436);
+            this.btnCopy.Location = new System.Drawing.Point(804, 402);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(95, 55);
             this.btnCopy.TabIndex = 7;
@@ -254,7 +255,7 @@ namespace DBDiff
             this.btnSaveAs.Enabled = false;
             this.btnSaveAs.Image = global::DBDiff.Properties.Resources.Floppy;
             this.btnSaveAs.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnSaveAs.Location = new System.Drawing.Point(804, 375);
+            this.btnSaveAs.Location = new System.Drawing.Point(804, 341);
             this.btnSaveAs.Name = "btnSaveAs";
             this.btnSaveAs.Size = new System.Drawing.Size(95, 55);
             this.btnSaveAs.TabIndex = 6;
@@ -268,7 +269,7 @@ namespace DBDiff
             this.btnCompare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCompare.Image = global::DBDiff.Properties.Resources.Compare;
             this.btnCompare.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnCompare.Location = new System.Drawing.Point(804, 253);
+            this.btnCompare.Location = new System.Drawing.Point(804, 219);
             this.btnCompare.Name = "btnCompare";
             this.btnCompare.Size = new System.Drawing.Size(95, 55);
             this.btnCompare.TabIndex = 4;
@@ -292,7 +293,7 @@ namespace DBDiff
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Open DBDiff Beta 5";
+            this.Text = "Open DBDiff Beta 6";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);

@@ -17,7 +17,7 @@ namespace DBDiff.Schema.SQLServer.Compare
         protected static void MarkDrop(List<T> origen, List<T> destino, Action<T> action)
         {
             List<T> dropList = (from node in origen
-                                where !destino.Exists(item => item.FullName.Equals(node.FullName))
+                                where !destino.Exists(item => (item.CompareFullNameTo(node.FullName, item.FullName) == 0))
                                 select node).ToList<T>();
             dropList.ForEach(action);
         }
@@ -25,10 +25,10 @@ namespace DBDiff.Schema.SQLServer.Compare
         protected static void CompareExtendedProperties(ISQLServerSchemaBase origen, ISQLServerSchemaBase destino)
         {
             List<ExtendedProperty> dropList = (from node in origen.ExtendedProperties
-                                               where !destino.ExtendedProperties.Exists(item => item.Name.Equals(node.Name))
+                                               where !destino.ExtendedProperties.Exists(item => item.Name.Equals(node.Name, StringComparison.CurrentCultureIgnoreCase))
                                                select node).ToList<ExtendedProperty>();
             List<ExtendedProperty> addList = (from node in destino.ExtendedProperties
-                                               where !origen.ExtendedProperties.Exists(item => item.Name.Equals(node.Name))
+                                              where !origen.ExtendedProperties.Exists(item => item.Name.Equals(node.Name, StringComparison.CurrentCultureIgnoreCase))
                                                select node).ToList<ExtendedProperty>();
             dropList.ForEach(item => { item.Status = Enums.ObjectStatusType.DropStatus;} );
             addList.ForEach(item => { item.Status = Enums.ObjectStatusType.CreateStatus; });

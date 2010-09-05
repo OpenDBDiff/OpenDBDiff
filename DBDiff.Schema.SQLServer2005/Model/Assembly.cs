@@ -15,7 +15,6 @@ namespace DBDiff.Schema.SQLServer.Model
         public Assembly(ISchemaBase parent)
             : base(parent, Enums.ObjectType.Assembly, Enums.ScripActionType.AddAssembly, Enums.ScripActionType.DropAssembly)
         {
-            this.Parent = parent;
             this.Files = new SchemaList<AssemblyFile,Assembly>(this);
         }
 
@@ -76,7 +75,8 @@ namespace DBDiff.Schema.SQLServer.Model
             sql += "FROM " + Text + "\r\n";
             sql += "WITH PERMISSION_SET = " + access + "\r\n";
             sql += "GO\r\n";
-            files.ForEach(item => sql += item.ToSql());
+            sql += files.ToSql();            
+            sql += this.ExtendedProperties.ToSql();
             return sql;
         }
 
@@ -105,28 +105,25 @@ namespace DBDiff.Schema.SQLServer.Model
 
         public override SQLScriptList ToSqlDiff()
         {
-            SQLScriptList listDiff = new SQLScriptList();
+            SQLScriptList list = new SQLScriptList();
 
             if (this.Status == Enums.ObjectStatusType.DropStatus)
             {
-                listDiff.AddRange(RebuildDependencys());
-                listDiff.Add(Drop());
+                list.AddRange(RebuildDependencys());
+                list.Add(Drop());
             }
             if (this.Status == Enums.ObjectStatusType.CreateStatus)
-            {
-                listDiff.Add(Create());
-                ExtendedProperties.ForEach(item => listDiff.Add(item.Create()));
-            }
-            if (this.HasState(Enums.ObjectStatusType.AlterRebuildStatus))
-                listDiff.AddRange(Rebuild());
+                list.Add(Create());
+            if (this.HasState(Enums.ObjectStatusType.RebuildStatus))
+                list.AddRange(Rebuild());
             if (this.HasState(Enums.ObjectStatusType.ChangeOwner))
-                listDiff.Add(ToSQLAlterOwner(), 0, Enums.ScripActionType.AlterAssembly);
+                list.Add(ToSQLAlterOwner(), 0, Enums.ScripActionType.AlterAssembly);
             if (this.HasState(Enums.ObjectStatusType.PermisionSet))
-                listDiff.Add(ToSQLAlter(), 0, Enums.ScripActionType.AlterAssembly);
+                list.Add(ToSQLAlter(), 0, Enums.ScripActionType.AlterAssembly);
             if (this.HasState(Enums.ObjectStatusType.AlterStatus))
-                listDiff.AddRange(Files.ToSqlDiff());
-            listDiff.AddRange(this.ToSqlDiffExtendedProperties());
-            return listDiff;
+                list.AddRange(Files.ToSqlDiff());
+            list.AddRange(this.ExtendedProperties.ToSqlDiff());
+            return list;
         }
 
         public bool Compare(Assembly obj)

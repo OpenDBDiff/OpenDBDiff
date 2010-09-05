@@ -15,7 +15,7 @@ namespace DBDiff.Schema.SQLServer.Generates
         private static string GetSQL()
         {
             string sql = "";
-            sql += "SELECT OBJECT_DEFINITION(t.object_id) AS Text,T.name,is_disabled,is_not_for_replication,is_instead_of_trigger ";
+            sql += "SELECT OBJECT_DEFINITION(T.object_id) AS Text,T.name,is_disabled,is_not_for_replication,is_instead_of_trigger ";
             sql += "FROM sys.triggers T ";
             sql += "WHERE T.parent_id = 0 AND T.parent_class = 0";
             return sql;

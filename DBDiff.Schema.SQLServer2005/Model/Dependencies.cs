@@ -8,23 +8,34 @@ namespace DBDiff.Schema.SQLServer.Model
 {
     internal class Dependencies: List<Dependence>
     {
-        public void Add(int tableId, int columnId, int ownerTableId, int typeId, ISchemaBase constraint)
+        private Database database;
+
+        public Database Database
+        {
+            get { return database; }
+        }
+
+        public void Add(Database database, int tableId, int columnId, int ownerTableId, int typeId, ISchemaBase constraint)
         {
             Dependence depends = new Dependence();
             depends.SubObjectId = columnId;
             depends.ObjectId = tableId;
             depends.OwnerTableId = ownerTableId;
 
-            depends.ObjectSchema = constraint;
+            depends.FullName = constraint.FullName;
+            depends.Type = constraint.ObjectType;
             depends.DataTypeId = typeId;
+            this.database = database;
             base.Add(depends);
         }
 
-        public void Add(int objectId, ISchemaBase objectSchema)
+        public void Add(Database database, int objectId, ISchemaBase objectSchema)
         {
             Dependence depends = new Dependence();
             depends.ObjectId = objectId;
-            depends.ObjectSchema = objectSchema;
+            depends.FullName = objectSchema.FullName;
+            depends.Type = objectSchema.ObjectType;
+            this.database = database;
             base.Add(depends);
         }
 
@@ -33,30 +44,38 @@ namespace DBDiff.Schema.SQLServer.Model
         /// </summary>
         public List<ISchemaBase> FindNotOwner(int tableId, Enums.ObjectType type)
         {
-            List<ISchemaBase> cons = new List<ISchemaBase>();
-            this.ForEach(depens =>
+            try
             {
-                if (depens.Type == type)
+                List<ISchemaBase> cons = new List<ISchemaBase>();
+                this.ForEach(depens =>
                 {
-                    if (depens.Type == Enums.ObjectType.Constraint)
+                    if (depens.Type == type)
                     {
-                        if ((depens.ObjectId == tableId) && (((Constraint)depens.ObjectSchema).Type == Constraint.ConstraintType.ForeignKey))
-                            cons.Add(depens.ObjectSchema);
+                        ISchemaBase item = (ISchemaBase)database.Find(depens.FullName);
+                        if (depens.Type == Enums.ObjectType.Constraint)
+                        {
+                            if ((depens.ObjectId == tableId) && (((Constraint)item).Type == Constraint.ConstraintType.ForeignKey))
+                                cons.Add(item);
+                        }
+                        else
+                            if (depens.ObjectId == tableId)
+                                cons.Add(item);
                     }
-                    else
-                        if (depens.ObjectId == tableId)
-                            cons.Add(depens.ObjectSchema);
-                }
-                    
-            });
-            return cons;
+
+                });
+                return cons;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
 
         /// <summary>
         /// Devuelve todos las constraints dependientes de una tabla.
         /// </summary>
-        public void Set(int tableId, Constraint constraint)
+        /*public void Set(int tableId, Constraint constraint)
         {
             this.ForEach(item =>
             {
@@ -64,7 +83,7 @@ namespace DBDiff.Schema.SQLServer.Model
                     if ((item.ObjectId == tableId) && (item.ObjectSchema.Name.Equals(constraint.Name)))
                         item.ObjectSchema = constraint;
             });           
-        }
+        }*/
 
         /// <summary>
         /// Devuelve todos las constraints dependientes de una tabla.
@@ -114,16 +133,25 @@ namespace DBDiff.Schema.SQLServer.Model
         /// </summary>
         public List<ISchemaBase> Find(int tableId, int columnId, int dataTypeId)
         {
-            List<ISchemaBase> cons = new List<ISchemaBase>();
+            List<string> cons = new List<string>();
+            List<ISchemaBase> real = new List<ISchemaBase>();
+
             cons = (from depends in this
                     where (depends.Type == Enums.ObjectType.Constraint || depends.Type == Enums.ObjectType.Index) &&
                     ((depends.DataTypeId == dataTypeId || dataTypeId == 0) && (depends.SubObjectId == columnId || columnId == 0) && (depends.ObjectId == tableId))
-                    select depends.ObjectSchema)
+                    select depends.FullName)
                         .Concat(from depends in this
                                 where (depends.Type == Enums.ObjectType.View || depends.Type == Enums.ObjectType.Function) &&
                                 (depends.ObjectId == tableId)
-                                select depends.ObjectSchema).ToList();
-            return cons;
+                                select depends.FullName).ToList();
+
+            cons.ForEach(item => 
+                { 
+                    ISchemaBase schema = database.Find(item);
+                    if (schema != null) real.Add(schema); 
+                }
+            );
+            return real;
         }
     }
 }

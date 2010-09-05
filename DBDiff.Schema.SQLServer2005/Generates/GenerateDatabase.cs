@@ -22,25 +22,26 @@ namespace DBDiff.Schema.SQLServer.Generates
             this.objectFilter = filter;
         }
 
-        private static string GetSQL()
+        private static string GetSQL(Database databaseSchema)
         {
             string sql;
-            sql = "SELECT SUBSTRING(CONVERT(varchar,SERVERPROPERTY('productversion')),1,PATINDEX('.',CONVERT(varchar,SERVERPROPERTY('productversion')))+2) AS Version";
+            sql = "SELECT DATABASEPROPERTYEX('" + databaseSchema.Name + "','Collation') AS Collation, SUBSTRING(CONVERT(varchar,SERVERPROPERTY('productversion')),1,PATINDEX('.',CONVERT(varchar,SERVERPROPERTY('productversion')))+2) AS Version";
             return sql;
         }
 
-        public DatabaseInfo Get()
+        public DatabaseInfo Get(Database databaseSchema)
         {
             DatabaseInfo item = new DatabaseInfo();
             using (SqlConnection conn = new SqlConnection(connectioString))
             {
-                using (SqlCommand command = new SqlCommand(GetSQL(), conn))
+                using (SqlCommand command = new SqlCommand(GetSQL(databaseSchema), conn))
                 {
                     conn.Open();
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
+                            item.Collation = reader["Collation"].ToString();
                             item.VersionNumber = float.Parse(reader["Version"].ToString().Replace(".",""));
                         }
                     }
@@ -48,5 +49,7 @@ namespace DBDiff.Schema.SQLServer.Generates
             }
             return item;
         }
+
+
     }
 }

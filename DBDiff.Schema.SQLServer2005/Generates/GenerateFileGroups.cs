@@ -61,7 +61,8 @@ namespace DBDiff.Schema.SQLServer.Generates
             sql += "name, ";
             sql += "data_space_id AS [ID], ";
             sql += "is_default, ";
-            sql += "is_read_only ";
+            sql += "is_read_only, ";
+            sql += "type ";
             sql += "FROM sys.filegroups ORDER BY name";
             return sql;
         }
@@ -87,6 +88,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                                     item.Owner = "";
                                     item.IsDefaultFileGroup = (bool)reader["is_default"];
                                     item.IsReadOnly = (bool)reader["is_read_only"];
+                                    item.IsFileStream = reader["type"].Equals("FD");
                                     FillFiles(item,connectionString);
                                     database.FileGroups.Add(item);
                                 }

@@ -12,9 +12,9 @@ namespace DBDiff.Schema.SQLServer.Model
         private int keyOrder;
         private int dataTypeId;
 
-        public IndexColumn(ISchemaBase parentObject):base(Enums.ObjectType.IndexColumn)
+        public IndexColumn(ISchemaBase parentObject)
+            : base(parentObject, Enums.ObjectType.IndexColumn)
         {
-            Parent = parentObject;
         }
 
         public IndexColumn Clone(ISchemaBase parent)

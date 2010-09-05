@@ -32,10 +32,10 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>%24/OpenDBiff/DBDiff.Schema</SccProjectName>
+    <SccLocalPath>.</SccLocalPath>
+    <SccAuxPath>https://tfs.codeplex.com/tfs/TFS04</SccAuxPath>
+    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,6 +55,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="C5, Version=1.1.0.0, Culture=neutral, PublicKeyToken=06a1b38866503b69, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Componentes\C5.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -66,11 +70,14 @@
     <Compile Include="Errors\MessageLog.cs" />
     <Compile Include="Events\Progress.cs" />
     <Compile Include="Events\ProgressEventArgs.cs" />
+    <Compile Include="Model\IDatabase.cs" />
+    <Compile Include="Model\ISchemaList.cs" />
     <Compile Include="Model\SchemaList.cs" />
     <Compile Include="Misc\SchemaException.cs" />
     <Compile Include="Model\ISchemaBase.cs" />
     <Compile Include="Model\SchemaBase.cs" />
     <Compile Include="Attributes\ShowCollection.cs" />
+    <Compile Include="Model\SearchSchemaBase.cs" />
     <Compile Include="SQLScript.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLScriptList.cs" />

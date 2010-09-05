@@ -25,7 +25,8 @@ namespace DBDiff.Schema.Model
         SQLScriptList ToSqlDiff();
         SQLScript Create();
         SQLScript Drop();
+        int CompareFullNameTo(string name, string myName);
         Boolean IsCodeType { get; }
-        
+        IDatabase RootParent { get; }        
     }
 }

@@ -16,9 +16,8 @@ namespace DBDiff.Schema.SQLServer.Model
         private int dataTypeId;
 
         public ConstraintColumn(Constraint parentObject)
-            : base(Enums.ObjectType.ConstraintColumn)
+            : base(parentObject, Enums.ObjectType.ConstraintColumn)
         {
-            Parent = parentObject;
         }
 
         public ConstraintColumn Clone()
@@ -113,7 +112,7 @@ namespace DBDiff.Schema.SQLServer.Model
             if ((origen.ColumnRelationalName == null) && (destino.ColumnRelationalName != null)) return false;
             if (origen.ColumnRelationalName != null)
             {
-                if (!origen.ColumnRelationalName.Equals(destino.ColumnRelationalName)) return false;
+                if (!origen.ColumnRelationalName.Equals(destino.ColumnRelationalName, StringComparison.CurrentCultureIgnoreCase)) return false;
             }
             if (origen.IsIncluded != destino.IsIncluded) return false;
             if (origen.Order != destino.Order) return false;

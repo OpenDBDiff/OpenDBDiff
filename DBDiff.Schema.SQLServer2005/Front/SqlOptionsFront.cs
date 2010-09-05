@@ -76,6 +76,14 @@ namespace DBDiff.Schema.SQLServer.Front
                 optScriptSchemaBindingAlter.Checked = true;
             else
                 optScriptSchemaDrop.Checked = true;
+
+            if (option.Comparison.CaseSensityType == SqlOptionComparison.CaseSensityOptions.Automatic)
+                rdoCaseAutomatic.Checked = true;
+            if (option.Comparison.CaseSensityType == SqlOptionComparison.CaseSensityOptions.CaseInsensity)
+                rdoCaseInsensitive.Checked = true;
+            if (option.Comparison.CaseSensityType == SqlOptionComparison.CaseSensityOptions.CaseSensity)
+                rdoCaseSensitive.Checked = true;
+
             LoadFilters();
         }
 
@@ -114,6 +122,13 @@ namespace DBDiff.Schema.SQLServer.Front
             option.Ignore.FilterRules = chkCompRules.Checked;
             option.Ignore.FilterIgnoreNotForReplication = chkIgnoreNotForReplication.Checked;
             option.Script.AlterObjectOnSchemaBinding = optScriptSchemaBindingAlter.Checked;
+
+            if (rdoCaseAutomatic.Checked)
+                option.Comparison.CaseSensityType = SqlOptionComparison.CaseSensityOptions.Automatic;
+            if (rdoCaseInsensitive.Checked)
+                option.Comparison.CaseSensityType = SqlOptionComparison.CaseSensityOptions.CaseInsensity;
+            if (rdoCaseSensitive.Checked)
+                option.Comparison.CaseSensityType = SqlOptionComparison.CaseSensityOptions.CaseSensity;
         }
 
         private void chkCompIndices_CheckedChanged(object sender, EventArgs e)

@@ -90,7 +90,7 @@ namespace DBDiff.Schema.SQLServer.Generates
 
         private static void FillForeignKey(Database database, string connectionString)
         {
-            string last = "";
+            int lastid = 0;
             int parentId = 0;
             Table table = null;
 
@@ -109,8 +109,8 @@ namespace DBDiff.Schema.SQLServer.Generates
                             {
                                 parentId = (int)reader["parent_object_id"];
                                 table = database.Tables.Find(parentId);
-                            }                            
-                            if (!last.Equals(reader["Name"].ToString()))
+                            }
+                            if (lastid != (int)reader["object_id"])
                             {
                                 //if (!String.IsNullOrEmpty(last)) cons.Add(con);
                                 con = new Constraint(table);
@@ -126,7 +126,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 con.OnUpdateCascade = (byte)reader["update_referential_action"];
                                 if (!database.Options.Ignore.FilterIgnoreNotForReplication)
                                     con.NotForReplication = (bool)reader["is_not_for_replication"];
-                                last = reader["Name"].ToString();
+                                lastid = (int)reader["object_id"];
                                 table.Constraints.Add(con);
                             }
                             ConstraintColumn ccon = new ConstraintColumn(con);
@@ -150,8 +150,10 @@ namespace DBDiff.Schema.SQLServer.Generates
         private static string GetSQLUniqueKey()
         {
             StringBuilder sql = new StringBuilder();
-            sql.Append("SELECT I.object_Id AS id,dsidx.Name as FileGroup, C.user_type_id, C.column_id, I.Index_id, C.Name AS ColumnName, I.Name, I.type, I.fill_factor, I.is_padded, I.allow_row_locks, I.allow_page_locks, I.ignore_dup_key, I.is_disabled, IC.is_descending_key, IC.is_included_column ");
+            sql.Append("SELECT S.Name as Owner, I.object_Id AS id,dsidx.Name as FileGroup, C.user_type_id, C.column_id, I.Index_id, C.Name AS ColumnName, I.Name, I.type, I.fill_factor, I.is_padded, I.allow_row_locks, I.allow_page_locks, I.ignore_dup_key, I.is_disabled, IC.is_descending_key, IC.is_included_column ");
             sql.Append("FROM sys.indexes I ");
+            sql.Append("INNER JOIN sys.objects O ON O.object_id = I.object_id ");
+            sql.Append("INNER JOIN sys.schemas S ON S.schema_id = O.schema_id ");
             sql.Append("INNER JOIN sys.index_columns IC ON IC.index_id = I.index_id AND IC.object_id = I.object_id ");
             sql.Append("INNER JOIN sys.columns C ON C.column_id = IC.column_id AND IC.object_id = C.object_id ");
             sql.Append("INNER JOIN sys.data_spaces AS dsidx ON dsidx.data_space_id = I.data_space_id ");
@@ -161,8 +163,9 @@ namespace DBDiff.Schema.SQLServer.Generates
 
         private static void FillUniqueKey(Database database, string connectionString)
         {
-            string last = "";
+            int lastId = 0;
             int parentId = 0;
+            bool change = false;
             Table table = null;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -176,16 +179,20 @@ namespace DBDiff.Schema.SQLServer.Generates
                         Constraint con = null;
                         while (reader.Read())
                         {
-                            if (parentId != (int)reader["id"])
+                            if (parentId != (int)reader["ID"])
                             {
-                                parentId = (int)reader["id"];
+                                parentId = (int)reader["ID"];
                                 table = database.Tables.Find(parentId);
-                            } 
-                            if (!last.Equals(reader["Name"].ToString()))
+                                change = true;
+                            }
+                            else
+                                change = false;
+                            if ((lastId != (int)reader["Index_id"]) || (change))
                             {
                                 con = new Constraint(table);
                                 con.Name = reader["Name"].ToString();
-                                con.Id = (int)reader["id"];
+                                con.Owner = (string)reader["Owner"];
+                                con.Id = (int)reader["Index_id"];
                                 con.Type = Constraint.ConstraintType.Unique;
                                 con.Index.Id = (int)reader["Index_id"];
                                 con.Index.AllowPageLocks = (bool)reader["allow_page_locks"];
@@ -201,7 +208,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 con.Index.Name = con.Name;
                                 if (database.Options.Ignore.FilterTableFileGroup)
                                     con.Index.FileGroup = reader["FileGroup"].ToString();
-                                last = con.Name;
+                                lastId = (int)reader["Index_id"];
                                 table.Constraints.Add(con);
                             }
                             ConstraintColumn ccon = new ConstraintColumn(con);
@@ -221,8 +228,9 @@ namespace DBDiff.Schema.SQLServer.Generates
         #region PrimaryKey Functions...
         private static void FillPrimaryKey(Database database, string connectionString)
         {
-            string last = "";
+            int lastId = 0;
             int parentId = 0;
+            bool change = false;
             Table table = null;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -240,12 +248,16 @@ namespace DBDiff.Schema.SQLServer.Generates
                             {
                                 parentId = (int)reader["ID"];
                                 table = database.Tables.Find(parentId);
+                                change = true;
                             }
-                            if (!last.Equals(reader["Name"].ToString()))
+                            else
+                                change = false;
+                            if ((lastId != (int)reader["Index_id"]) || (change))
                             {
                                 con = new Constraint(table);
                                 con.Id = (int)reader["Index_id"];
                                 con.Name = (string)reader["Name"];
+                                con.Owner = (string)reader["Owner"];
                                 con.Type = Constraint.ConstraintType.PrimaryKey;
                                 con.Index.Id = (int)reader["Index_id"];
                                 con.Index.AllowPageLocks = (bool)reader["allow_page_locks"];
@@ -261,7 +273,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 con.Index.Name = con.Name;
                                 if (database.Options.Ignore.FilterTableFileGroup)
                                     con.Index.FileGroup = reader["FileGroup"].ToString();
-                                last = con.Name;
+                                lastId = (int)reader["Index_id"];
                                 table.Constraints.Add(con);
                             }
                             ConstraintColumn ccon = new ConstraintColumn(con);

@@ -48,12 +48,12 @@ namespace DBDiff.Schema.SQLServer.Compare
                             tablaOriginal.FileGroup = node.FileGroup;
                             /*Esto solo aplica a las tablas heap, el resto hace el campo en el filegroup del indice clustered*/
                             if (!tablaOriginal.HasClusteredIndex)
-                                tablaOriginal.Status = Enums.ObjectStatusType.AlterRebuildStatus;
+                                tablaOriginal.Status = Enums.ObjectStatusType.RebuildStatus;
                         }
                         if (!Table.CompareFileGroupText(tablaOriginal, node))
                         {
                             tablaOriginal.FileGroupText = node.FileGroupText;
-                            tablaOriginal.Status = Enums.ObjectStatusType.AlterRebuildStatus;
+                            tablaOriginal.Status = Enums.ObjectStatusType.RebuildStatus;
                         }
                     }
                 }

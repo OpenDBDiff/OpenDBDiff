@@ -17,9 +17,8 @@ namespace DBDiff.Schema.SQLServer.Model
         private Boolean withNoCheck;
 
         public ColumnConstraint(Column parent)
-            : base(Enums.ObjectType.Constraint)
+            : base(parent, Enums.ObjectType.Constraint)
         {
-            this.Parent = parent;
         }
 
         /// <summary>
@@ -144,7 +143,8 @@ namespace DBDiff.Schema.SQLServer.Model
             get
             {
                 Enums.ObjectStatusType tableStatus = this.Parent.Parent.Status;
-                return (((tableStatus == Enums.ObjectStatusType.OriginalStatus) || (tableStatus == Enums.ObjectStatusType.AlterRebuildDependenciesStatus)) && (this.Status == Enums.ObjectStatusType.OriginalStatus));
+                Enums.ObjectStatusType columnStatus = this.Parent.Status;
+                return ((columnStatus != Enums.ObjectStatusType.DropStatus) && (((tableStatus == Enums.ObjectStatusType.AlterStatus) || (tableStatus == Enums.ObjectStatusType.OriginalStatus) || (tableStatus == Enums.ObjectStatusType.RebuildDependenciesStatus)) && (this.Status == Enums.ObjectStatusType.OriginalStatus)));
             }
         }
 

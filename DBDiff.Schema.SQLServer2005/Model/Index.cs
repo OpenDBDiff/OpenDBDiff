@@ -31,11 +31,11 @@ namespace DBDiff.Schema.SQLServer.Model
         private string fileGroup;
         private string filterDefintion;
 
-        public Index(ISchemaBase table)
-            : base(Enums.ObjectType.Index)
+        public Index(ISchemaBase parent)
+            : base(parent, Enums.ObjectType.Index)
         {
-            Parent = table;
-            columns = new IndexColumns(table);
+            filterDefintion = "";
+            columns = new IndexColumns(parent);
         }
 
         public override ISchemaBase Clone(ISchemaBase parent)
@@ -58,8 +58,9 @@ namespace DBDiff.Schema.SQLServer.Model
             index.Status = this.Status;
             index.Type = this.Type;
             index.Owner = this.Owner;
-            index.Guid = this.Guid;
+            //index.Guid = this.Guid;
             index.FilterDefintion = this.FilterDefintion;
+            this.ExtendedProperties.ForEach(item => index.ExtendedProperties.Add(item));
             return index;
         }
 
@@ -204,6 +205,17 @@ namespace DBDiff.Schema.SQLServer.Model
         }
 
         /// <summary>
+        /// Nombre completo del objeto, incluyendo el owner.
+        /// </summary>
+        public override string FullName
+        {
+            get
+            {
+                return Parent.FullName + ".[" + Name + "]";
+            }
+        }
+
+        /// <summary>
         /// Compara dos indices y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
         public static Boolean Compare(Index origen, Index destino)
@@ -221,8 +233,8 @@ namespace DBDiff.Schema.SQLServer.Model
             if (origen.IsUniqueKey != destino.IsUniqueKey) return false;
             if (origen.Type != destino.Type) return false;
             if (origen.SortInTempDb != destino.SortInTempDb) return false;
+            if (!origen.FilterDefintion.Equals(destino.FilterDefintion)) return false;
             if (!IndexColumns.Compare(origen.Columns, destino.Columns)) return false;
-            //return true;
             return CompareFileGroup(origen,destino);
         }
 
@@ -240,6 +252,7 @@ namespace DBDiff.Schema.SQLServer.Model
             if (origen.IsUniqueKey != destino.IsUniqueKey) return false;
             if (origen.Type != destino.Type) return false;
             if (origen.SortInTempDb != destino.SortInTempDb) return false;
+            if (!origen.FilterDefintion.Equals(destino.FilterDefintion)) return false;
             if (!IndexColumns.Compare(origen.Columns, destino.Columns)) return false;
             //return true;
             return CompareFileGroup(origen, destino);
@@ -303,6 +316,8 @@ namespace DBDiff.Schema.SQLServer.Model
             sql.Append("\r\nGO\r\n");
             if (IsDisabled)
                 sql.Append("ALTER INDEX [" + Name + "] ON " + ((Table)Parent).FullName + " DISABLE\r\nGO\r\n");
+
+            sql.Append(this.ExtendedProperties.ToSql());
             return sql.ToString();
         }
 
@@ -379,6 +394,7 @@ namespace DBDiff.Schema.SQLServer.Model
                 listDiff.Add(this.ToSQLDrop(this.FileGroup), ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.DropIndex);
                 listDiff.Add(this.ToSQLAdd(), ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.AddIndex);
             }*/
+            list.AddRange(this.ExtendedProperties.ToSqlDiff());
             return list;
         }
     }

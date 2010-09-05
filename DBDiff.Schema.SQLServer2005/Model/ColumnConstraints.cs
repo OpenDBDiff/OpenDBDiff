@@ -73,8 +73,9 @@ namespace DBDiff.Schema.SQLServer.Model
             if (columnConstraint != null)
             {
                 base.Add(columnConstraint);
-                if (!((Database)parent.Parent.Parent).AllObjects.ContainsKey(columnConstraint.FullName))
-                    ((Database)parent.Parent.Parent).AllObjects.Add(columnConstraint.FullName, columnConstraint);
+                ((Database)parent.Parent.Parent).AllObjects.Add(columnConstraint);
+                /*if (!((Database)parent.Parent.Parent).AllObjects.ContainsKey(columnConstraint.FullName.ToUpper()))
+                    ((Database)parent.Parent.Parent).AllObjects.Add(columnConstraint.FullName.ToUpper(), columnConstraint.ObjectType);*/
             }
             else
                 throw new ArgumentNullException("columnConstraint");

@@ -15,7 +15,8 @@ namespace DBDiff.Schema.SQLServer.Model
 
         private float versionNumber;
         private VersionTypeEnum version;
-        
+        private string collation;
+
         public DatabaseInfo()
         {
             version = VersionTypeEnum.SQLServer2005;
@@ -26,11 +27,17 @@ namespace DBDiff.Schema.SQLServer.Model
             get { return version; }
         }
 
+        public string Collation
+        {
+            get { return collation; }
+            set { collation = value; }
+        }
+
         public float VersionNumber
         {
             get { return versionNumber; }
-            set 
-            { 
+            set
+            {
                 versionNumber = value;
                 if ((versionNumber >= 8) && (versionNumber < 9)) version = VersionTypeEnum.SQLServer2000;
                 if ((versionNumber >= 9) && (versionNumber < 10)) version = VersionTypeEnum.SQLServer2005;

@@ -16,6 +16,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private Boolean isComputed;
         private Boolean isRowGuid;
         private Boolean isSparse;
+        private Boolean isFileStream;
         private string computedFormula;
         private string type;
         private int size;
@@ -35,18 +36,15 @@ namespace DBDiff.Schema.SQLServer.Model
         private Default _default;
         private Rule rule;
         private ColumnConstraint defaultConstraint;
-        //private List<ObjectDependency> dependencys;
 
         public Column(ISchemaBase parent)
-            : base(Enums.ObjectType.Column)
+            : base(parent, Enums.ObjectType.Column)
         {
-            this.Parent = parent;            
             computedFormula = "";
             collation = "";
             this._default = new Default(this);
             this.rule = new Rule(this);
             this.DefaultConstraint = null;
-            //this.dependencys = new List<ObjectDependency>();
         }
 
         /// <summary>
@@ -71,11 +69,12 @@ namespace DBDiff.Schema.SQLServer.Model
             col.IsComputed = this.IsComputed;
             col.IsRowGuid = this.IsRowGuid;
             col.IsPersisted = this.IsPersisted;
+            col.IsFileStream = this.IsFileStream;
             col.isSparse = this.isSparse;
             col.HasComputedDependencies = this.HasComputedDependencies;
             col.HasIndexDependencies = this.HasIndexDependencies;
             col.Name = this.Name;
-            col.Nullable = this.Nullable;
+            col.IsNullable = this.IsNullable;
             col.Position = this.Position;
             col.Precision = this.Precision;            
             col.Scale = this.Scale;
@@ -93,12 +92,6 @@ namespace DBDiff.Schema.SQLServer.Model
             return col;
         }
 
-        /*public List<ObjectDependency> Dependencys
-        {
-            get { return dependencys; }
-            set { dependencys = value; }
-        }*/
-
         public ColumnConstraint DefaultConstraint
         {
             get { return defaultConstraint; }
@@ -115,6 +108,12 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             get { return _default; }
             set { _default = value; }
+        }
+
+        public Boolean IsFileStream
+        {
+            get { return isFileStream; }
+            set { isFileStream = value; }
         }
 
         /// <summary>
@@ -207,7 +206,7 @@ namespace DBDiff.Schema.SQLServer.Model
         /// Gets or sets a value indicating whether this <see cref="Column"/> is nullable.
         /// </summary>
         /// <value><c>true</c> if nullable; otherwise, <c>false</c>.</value>
-        public Boolean Nullable
+        public Boolean IsNullable
         {
             get { return nullable; }
             set { nullable = value; }
@@ -437,7 +436,7 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             get
             {
-                return (this.HasState(Enums.ObjectStatusType.UpdateStatus)) || ((!this.Nullable) && (this.Status == Enums.ObjectStatusType.CreateStatus));
+                return (this.HasState(Enums.ObjectStatusType.UpdateStatus)) || ((!this.IsNullable) && (this.Status == Enums.ObjectStatusType.CreateStatus));
             }
         }
 
@@ -541,7 +540,10 @@ namespace DBDiff.Schema.SQLServer.Model
             sql += "[" + Name + "] ";
             if (!IsComputed)
             {
-                sql += "[" + Type + "]";
+                if (this.IsUserDefinedType)
+                    sql += Type;
+                else
+                    sql += "[" + Type + "]";
                 if (Type.Equals("binary") || Type.Equals("varbinary") || Type.Equals("varchar") || Type.Equals("char") || Type.Equals("nchar") || Type.Equals("nvarchar"))
                 {
                     if (Size == -1)
@@ -573,7 +575,8 @@ namespace DBDiff.Schema.SQLServer.Model
                 if (IsIdentity) sql += " IDENTITY (" + IdentitySeed.ToString(CultureInfo.InvariantCulture) + "," + IdentityIncrement.ToString(CultureInfo.InvariantCulture) + ")";
                 if (IsIdentityForReplication) sql += " NOT FOR REPLICATION";
                 if (IsSparse) sql += " SPARSE";
-                if (Nullable)
+                if (IsFileStream) sql += " FILESTREAM";
+                if (IsNullable)
                     sql += " NULL";
                 else
                     sql += " NOT NULL";
@@ -590,6 +593,47 @@ namespace DBDiff.Schema.SQLServer.Model
                     sql += " " + DefaultConstraint.ToSql().Replace("\t", "").Trim();
             }
             return sql;
+        }
+
+        public SQLScriptList RebuildDependencies()
+        {
+            SQLScriptList list = new SQLScriptList();
+            list.AddRange(RebuildConstraint());
+            list.AddRange(RebuildIndex());
+            return list;
+        }
+
+        private SQLScriptList RebuildConstraint()
+        {
+            SQLScriptList list = new SQLScriptList();
+            ((Table)Parent).Constraints.ForEach(item =>
+            {
+                ConstraintColumn ic = item.Columns.Find(this.Id);
+                if (ic != null)
+                {
+                    if (ic.Status != Enums.ObjectStatusType.CreateStatus) list.Add(item.Drop());
+                    if (ic.Status != Enums.ObjectStatusType.DropStatus) list.Add(item.Create());
+                }
+            });
+            return list;
+        }
+
+        private SQLScriptList RebuildIndex()
+        {
+            SQLScriptList list = new SQLScriptList();
+            if (HasIndexDependencies)
+            {                
+                ((Table)Parent).Indexes.ForEach(item =>
+                    {
+                        IndexColumn ic = item.Columns.Find(this.Id);
+                        if (ic != null)
+                        {
+                            if (ic.Status != Enums.ObjectStatusType.CreateStatus) list.Add(item.Drop());
+                            if (ic.Status != Enums.ObjectStatusType.DropStatus) list.Add(item.Create());
+                        }
+                    });
+            }
+            return list;
         }
 
         public SQLScriptList RebuildConstraint(Boolean Check)
@@ -670,17 +714,18 @@ namespace DBDiff.Schema.SQLServer.Model
                 if ((origen.XmlSchema == null) && (destino.XmlSchema != null)) return false;
                 if (origen.XmlSchema != null)
                     if (!origen.XmlSchema.Equals(destino.XmlSchema)) return false;
-                if (origen.Nullable != destino.nullable) return false;
+                if (origen.IsNullable != destino.IsNullable) return false;
+                if (origen.IsFileStream != destino.IsFileStream) return false;
                 if (origen.IsSparse != destino.IsSparse) return false;
                 if (!origen.Collation.Equals(destino.Collation)) return false;                
-                if (!origen.Type.Equals(destino.type)) return false;
+                if (!origen.Type.Equals(destino.type, StringComparison.CurrentCultureIgnoreCase)) return false;
                 //Si el tipo de campo es custom, no compara size del campo.
                 if (!origen.IsUserDefinedType)
                 {
                     if (origen.Precision != destino.precision) return false;
                     if (origen.Scale != destino.scale) return false;
                     //Si el tamaño de un campo Text cambia, entonces por la opcion TextInRowLimit.
-                    if ((origen.Size != destino.size) && (origen.Type.Equals(destino.Type)) && (!origen.Type.Equals("text"))) return false;
+                    if ((origen.Size != destino.size) && (origen.Type.Equals(destino.Type, StringComparison.CurrentCultureIgnoreCase)) && (!origen.Type.Equals("text", StringComparison.CurrentCultureIgnoreCase))) return false;
                 }
                 
             }
