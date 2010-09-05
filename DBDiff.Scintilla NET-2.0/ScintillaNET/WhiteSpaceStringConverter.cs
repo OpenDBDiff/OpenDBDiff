@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Windows.Forms;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	public class WhiteSpaceStringConverter : TypeConverter
 	{

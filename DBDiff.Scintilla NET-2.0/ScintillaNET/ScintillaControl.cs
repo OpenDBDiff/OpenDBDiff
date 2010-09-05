@@ -9,9 +9,9 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Security.Permissions;
 using System.Text;
-using ScintillaNet.Configuration;
+using DBDiff.Scintilla.Configuration;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	[DefaultBindingProperty("Text"), DefaultProperty("Text"), DefaultEvent("DocumentChanged")]
 	public partial class Scintilla : System.Windows.Forms.Control, INativeScintilla, ISupportInitialize

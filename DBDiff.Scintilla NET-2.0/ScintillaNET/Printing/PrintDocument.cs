@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Printing;
 using System.ComponentModel;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	/// <summary>
 	/// ScintillaNET derived class for handling printing of source code from a Scintilla control.
@@ -25,7 +25,7 @@ namespace ScintillaNet
 		public PrintDocument(Scintilla oScintillaControl)
 		{
 			m_oScintillaControl = oScintillaControl;
-			DefaultPageSettings = new ScintillaNet.PageSettings();
+			DefaultPageSettings = new DBDiff.Scintilla.PageSettings();
 		}
 
 		

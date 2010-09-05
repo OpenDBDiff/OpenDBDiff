@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Printing;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	[TypeConverterAttribute(typeof(System.ComponentModel.ExpandableObjectConverter))]
 	public class Printing : ScintillaHelperBase

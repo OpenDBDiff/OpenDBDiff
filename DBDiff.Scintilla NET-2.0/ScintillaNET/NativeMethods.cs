@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using System;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	internal static class NativeMethods
 	{

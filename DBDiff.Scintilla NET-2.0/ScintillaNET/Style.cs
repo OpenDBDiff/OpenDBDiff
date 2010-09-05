@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	[TypeConverterAttribute(typeof(System.ComponentModel.ExpandableObjectConverter))]
 	public class StyleCollection : ScintillaHelperBase

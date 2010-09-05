@@ -12,7 +12,7 @@ using System.Drawing.Design;
 using System.Windows.Forms.Design;
 
 
-namespace ScintillaNet.Design
+namespace DBDiff.Scintilla.Design
 {
 	public class FlagCheckedListBox : CheckedListBox
 	{

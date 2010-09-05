@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	/// <summary>
 	/// Type of border to print for a Page Information section

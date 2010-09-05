@@ -12,13 +12,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         private Boolean isFileStream;
         private FileGroupFiles files;
 
-        public FileGroup(Database parent)
+        public FileGroup(ISchemaBase parent)
             : base(parent, Enums.ObjectType.FileGroup)
         {
             files = new FileGroupFiles(this);
         }
 
-        public FileGroup Clone(Database parent)
+        public override ISchemaBase Clone(ISchemaBase parent)
         {
             FileGroup file = new FileGroup(parent);
             file.IsDefaultFileGroup = this.IsDefaultFileGroup;

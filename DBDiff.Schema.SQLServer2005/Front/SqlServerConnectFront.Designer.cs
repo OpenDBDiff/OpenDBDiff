@@ -93,6 +93,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.cboServer.TabIndex = 0;
             this.cboServer.SelectedIndexChanged += new System.EventHandler(this.cboServer_SelectedIndexChanged);
             this.cboServer.DropDown += new System.EventHandler(this.cboServer_DropDown);
+            this.cboServer.TextChanged += new System.EventHandler(this.cboServer_TextChanged);
             // 
             // cboAuthentication
             // 
@@ -123,6 +124,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.cboDatabase.Name = "cboDatabase";
             this.cboDatabase.Size = new System.Drawing.Size(223, 21);
             this.cboDatabase.TabIndex = 4;
+            this.cboDatabase.SelectedIndexChanged += new System.EventHandler(this.cboDatabase_SelectedIndexChanged);
             this.cboDatabase.DropDown += new System.EventHandler(this.cboDatabase_DropDown);
             // 
             // label6
@@ -147,11 +149,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnTest.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnTest.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTest.Location = new System.Drawing.Point(335, 127);
+            this.btnTest.Location = new System.Drawing.Point(327, 126);
             this.btnTest.Name = "btnTest";
-            this.btnTest.Size = new System.Drawing.Size(93, 28);
+            this.btnTest.Size = new System.Drawing.Size(54, 28);
             this.btnTest.TabIndex = 5;
-            this.btnTest.Text = "Test Connection";
+            this.btnTest.Text = "Test";
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
@@ -173,7 +175,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel1.Controls.Add(this.lblName);
             this.gradientPanel1.Location = new System.Drawing.Point(0, 0);
             this.gradientPanel1.Name = "gradientPanel1";
-            this.gradientPanel1.Size = new System.Drawing.Size(430, 24);
+            this.gradientPanel1.Size = new System.Drawing.Size(384, 24);
             this.gradientPanel1.TabIndex = 26;
             // 
             // pictureBox1
@@ -204,7 +206,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Name = "SqlServerConnectFront";
-            this.Size = new System.Drawing.Size(430, 156);
+            this.Size = new System.Drawing.Size(384, 156);
             this.gradientPanel1.ResumeLayout(false);
             this.gradientPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

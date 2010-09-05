@@ -10,7 +10,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
     {
         protected override void DoNew<Root>(SchemaList<UserDataType, Root> CamposOrigen, UserDataType node)
         {
-            UserDataType newNode = node.Clone(CamposOrigen.Parent);
+            UserDataType newNode = (UserDataType)node.Clone(CamposOrigen.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
             Boolean HasAssembly = CamposOrigen.Exists(item => item.AssemblyFullName.Equals(node.AssemblyFullName) && item.IsAssembly);
             if (HasAssembly)
@@ -22,7 +22,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
         {
             if (!node.Compare(CamposOrigen[node.FullName]))
             {
-                UserDataType newNode = node.Clone(CamposOrigen.Parent);
+                UserDataType newNode = (UserDataType)node.Clone(CamposOrigen.Parent);
                 newNode.Dependencys.AddRange(CamposOrigen[node.FullName].Dependencys);
 
                 if (!UserDataType.CompareDefault(node, CamposOrigen[node.FullName]))

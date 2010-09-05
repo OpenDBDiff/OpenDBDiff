@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	public static class Utilities
 	{

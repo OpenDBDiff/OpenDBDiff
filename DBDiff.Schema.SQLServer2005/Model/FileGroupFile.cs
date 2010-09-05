@@ -96,8 +96,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             string result = "";
             string[] flies = path.Split('\\');
             for (int index = 0; index < flies.Length - 1; index++)
-                result += flies[index] + "\\";
-            result += Parent.Parent.Name + "_DB.ndf";
+                if (!String.IsNullOrEmpty(flies[index]))
+                    result += flies[index] + "\\";
+            result += Parent.Parent.Name + "_" + Name + "_DB.ndf";
             return result;
         }
 
@@ -119,17 +120,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public override string ToSql()
         {
             if (type != 2)
-                return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD " + ((Type != 1) ? "" : "LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + PhysicalName + "' , SIZE = " + Size * 1000 + "KB , FILEGROWTH = " + growth * 1000 + TypeGrowth + ") TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
+                return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD" + ((Type != 1) ? "" : " LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + PhysicalName + "' , SIZE = " + Size * 1000 + "KB , FILEGROWTH = " + growth * 1000 + TypeGrowth + ") TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
             else
-                return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD " + ((Type != 1) ? "" : "LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + PhysicalName + "') TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
+                return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD" + ((Type != 1) ? "" : " LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + PhysicalName + "') TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
         }
 
         public override string ToSqlAdd()
         {
             if (type != 2)
-                return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD " + ((Type != 1) ? "" : "LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + GetNameNewFileGroup(PhysicalName) + "' , SIZE = " + Size * 1000 + "KB , FILEGROWTH = " + growth * 1000 + TypeGrowth + ") TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
+                return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD" + ((Type != 1) ? "" : " LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + GetNameNewFileGroup(PhysicalName) + "' , SIZE = " + Size * 1000 + "KB , FILEGROWTH = " + growth * 1000 + TypeGrowth + ") TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
             else
-                return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD " + ((Type != 1) ? "" : "LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + GetNameNewFileGroup(PhysicalName) + "') TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
+                return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD" + ((Type != 1) ? "" : " LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + GetNameNewFileGroup(PhysicalName) + "') TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
         }
 
         public string ToSQLAlter()

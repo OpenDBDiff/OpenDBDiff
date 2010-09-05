@@ -7,7 +7,7 @@
 			</Properties>
 
 			<Keywords List="0">
-        accent_sensitivity action add after all alter allow_row_locks allow_page_locks any application as asc assembly authorization backup begin
+        accent_sensitivity action add after all alter allow_row_locks allow_page_locks any application as asc assembly authorization auto backup begin
         break browse bulk by caller catalog cascade case catch check checkpoint close clustered
         coalesce collate column collection commit committed compute confirm constraint
         contains containstable continue controlrow convert create cross current
@@ -17,7 +17,7 @@
         escape except exec execute external external_access exists exit fetch file filegroup filestream fillfactor floppy for
         foreign forward_only freetext freetexttable from full fulltext function geometry geography go goto
         grant group hash having hierarchyid holdlock identity identity_insert identitycol if in
-        ignore_dup_key include index instead inner insert intersect into is isolation key kill left level
+        ignore_dup_key include index instead inner insert intersect into is isolation key kill language left level
         lineno load login mirrorexit merge move national name next no nocheck nocount nonclustered nolock
         nounload nullif of off offsets on once only online open opendatasource
         openquery openrowset option  order outer output over pad_index partition path percent perm

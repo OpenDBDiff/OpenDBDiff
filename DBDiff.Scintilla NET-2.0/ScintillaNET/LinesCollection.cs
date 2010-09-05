@@ -3,7 +3,7 @@ using System.Collections;
 using System.Text;
 using System.Drawing;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	public class LinesCollection : ScintillaHelperBase, ICollection
 	{

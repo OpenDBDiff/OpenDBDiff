@@ -15,7 +15,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
     public class GenerateUserDataTypes
     {
-        private Generate root;
+        private readonly Generate root;
 
         public GenerateUserDataTypes(Generate root)
         {
@@ -55,6 +55,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         private static void FillColumnsDependencies(SchemaList<UserDataType, Database> types, string connectionString)
         {
+            if (types == null) throw new ArgumentNullException("types");
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand(GetSQLColumnsDependencis(), conn))

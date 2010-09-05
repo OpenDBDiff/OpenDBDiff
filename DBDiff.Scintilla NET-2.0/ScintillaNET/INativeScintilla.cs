@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	/// <summary>
 	/// Interface representing the native Scintilla Message Based API. In addition

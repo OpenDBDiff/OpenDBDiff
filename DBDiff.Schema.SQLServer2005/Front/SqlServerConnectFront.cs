@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Threading;
@@ -16,7 +12,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         private string errorConnection;
         private Boolean isDatabaseFilled = false;
         private Boolean isServerFilled = false;
-        private Thread thread = null;
         private delegate void clearCombo();
         private delegate void addCombo(string item);
 
@@ -39,10 +34,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             get { return errorConnection; }
         }
 
-        /// <summary>
-        /// Gets or sets the index of the database.
-        /// </summary>
-        /// <value>The index of the database.</value>
         public int DatabaseIndex
         {
             get { return cboDatabase.SelectedIndex; }
@@ -56,11 +47,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         public string DatabaseName
         {
             get { return cboDatabase.Text; }
+            set { cboDatabase.Text = value; }
         }
-        /// <summary>
-        /// Gets or sets the name of the user.
-        /// </summary>
-        /// <value>The name of the user.</value>
+
         public string UserName
         {
             get { return txtUsername.Text; }
@@ -79,28 +68,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             set { lblName.Text = value; }
         }
 
-        /// <summary>
-        /// Gets or sets the name of the server.
-        /// </summary>
-        /// <value>The name of the server.</value>
         public string ServerName
         {
             get { return cboServer.Text; }
             set { cboServer.Text = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the type of the connection.
-        /// </summary>
-        /// <value>The type of the connection.</value>
-        public int ConnectionType
-        {
-            get { return cboAuthentication.SelectedIndex; }
-            set
-            {
-                cboAuthentication.SelectedIndex = value;
-                //txtUsername.Text = "";
-            }
         }
 
         public Boolean TestConnection()
@@ -131,6 +102,42 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
                     sql += "Integrated Security=SSPI;";
                 return sql;
             }
+            set
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    string[] items = value.Split(';');
+                    for (int j = 0; j < items.Length; j++)
+                    {
+                        string[] item = items[j].Split('=');
+                        if (item[0].Equals("User Id", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            UserName = item[1];
+                            cboAuthentication.SelectedIndex = 1;
+                        }
+                        if (item[0].Equals("Password", StringComparison.InvariantCultureIgnoreCase))
+                            Password = item[1];
+                        if (item[0].Equals("Data Source", StringComparison.InvariantCultureIgnoreCase))
+                            ServerName = item[1];
+                        if (item[0].Equals("Initial Catalog", StringComparison.InvariantCultureIgnoreCase))
+                            DatabaseName = item[1];
+                        if (item[0].Equals("Integrated Security", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            cboAuthentication.SelectedIndex = 0;
+                            UserName = "";
+                            Password = "";
+                        }
+                    }
+                }
+                else
+                {
+                    cboAuthentication.SelectedIndex = 1;
+                    UserName = "";
+                    Password = "";
+                    ServerName = "(local)";
+                    DatabaseName = "";
+                }
+            }
         }
 
         private void btnTest_Click(object sender, EventArgs e)
@@ -144,23 +151,23 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
 
         private void AddComboItem(string item)
         {
-            if (!this.InvokeRequired)
+            if (!InvokeRequired)
                 cboDatabase.Items.Add(item);
             else
             {
                 addCombo add = new addCombo(AddComboItem);
-                this.Invoke(add, new string[] { item });
+                Invoke(add, new string[] { item });
             }
         }
 
         private void ClearDatabase()
         {
-            if (!this.InvokeRequired)
+            if (!InvokeRequired)
                 cboDatabase.Items.Clear();
             else
             {
                 clearCombo clear = new clearCombo(ClearDatabase);
-                this.Invoke(clear);
+                Invoke(clear);
             }
         }
 
@@ -168,7 +175,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         {
             if (!isDatabaseFilled)
             {
-                String connectionString = this.ConnectionString;
+                String connectionString = ConnectionString;
                 ClearDatabase();
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -222,7 +229,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             }
             finally
             {
-                this.Cursor = Cursors.Default;
+                Cursor = Cursors.Default;
             }
         }
 
@@ -243,6 +250,16 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             {
                 this.Cursor = Cursors.Default;
             }
+        }
+
+        private void cboDatabase_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cboServer_TextChanged(object sender, EventArgs e)
+        {
+            isDatabaseFilled = false;
         }
     }
 }

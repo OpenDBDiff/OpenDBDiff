@@ -180,32 +180,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         }       
 
         /// <summary>
-        /// Convierte el schema de la tabla en XML.
-        /// </summary>  
-        public string ToXML()
-        {
-            string xml = "";
-            if (this.Type == Constraint.ConstraintType.PrimaryKey)
-            {
-                xml += "<CONSTRAINT name=\"" + Name + "\" type=\"PK\"/>\n";
-            }
-            if (this.Type == Constraint.ConstraintType.Unique)
-            {
-                xml += "<CONSTRAINT name=\"" + Name + "\" type=\"UQ\"/>\n";
-            }
-            if (this.Type == Constraint.ConstraintType.ForeignKey)
-            {
-                xml += "<CONSTRAINT name=\"" + Name + "\" type=\"FK\" relationalTableId=\"" + relationalTableId.ToString(CultureInfo.InvariantCulture) + "\" relationalTable=\"" + relationalTable + "\">\n";
-                xml += "\t<WITHNOCHECK>" + (WithNoCheck ? "1" : "0") + "</WITHNOCHECK>";
-                xml += "\t<UPDATECASCADE>" + OnUpdateCascade.ToString(CultureInfo.InvariantCulture) + "</UPDATECASCADE>";
-                xml += "\t<DELETECASCADE>" + OnDeleteCascade.ToString(CultureInfo.InvariantCulture) + "</DELETECASCADE>";
-                xml += "</CONSTRAINT>";
-            }          
-  
-            return xml;
-        }
-
-        /// <summary>
         /// Compara dos campos y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
         public static Boolean Compare(Constraint origen, Constraint destino)

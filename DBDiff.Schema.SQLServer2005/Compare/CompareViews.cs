@@ -28,7 +28,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 
                 CamposOrigen[node.FullName] = newNode;
             }
-            CompareIndexes.GenerateDiferences(original.Indexes, node.Indexes);
+            (new CompareIndexes()).GenerateDiferences<View>(original.Indexes, node.Indexes);
             (new CompareTriggers()).GenerateDiferences<View>(original.Triggers, node.Triggers);
         }
 

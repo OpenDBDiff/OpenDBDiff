@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Collections;
 using System.Text;
 using System.Data.SqlClient;
-using DBDiff.Schema.Events;
-using DBDiff.Schema.SQLServer.Generates.Options;
 using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Generates
@@ -100,14 +96,16 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             {                                
                                 if (lastViewId != (int)reader["assembly_id"])
                                 {
-                                    item = new Assembly(database);
-                                    item.Id = (int)reader["assembly_id"];
-                                    item.Name = reader["Name"].ToString();
-                                    item.Owner = reader["Owner"].ToString();
-                                    item.CLRName = reader["clr_name"].ToString();
-                                    item.PermissionSet = reader["permission_set_desc"].ToString();
-                                    item.Text = ToHex((byte[])reader["content"]);
-                                    item.Visible = (bool)reader["is_visible"];
+                                    item = new Assembly(database)
+                                               {
+                                                   Id = (int) reader["assembly_id"],
+                                                   Name = reader["Name"].ToString(),
+                                                   Owner = reader["Owner"].ToString(),
+                                                   CLRName = reader["clr_name"].ToString(),
+                                                   PermissionSet = reader["permission_set_desc"].ToString(),
+                                                   Text = ToHex((byte[]) reader["content"]),
+                                                   Visible = (bool) reader["is_visible"]
+                                               };
                                     lastViewId = item.Id;
                                     database.Assemblies.Add(item);
                                 }

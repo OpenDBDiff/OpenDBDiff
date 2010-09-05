@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	public enum VOID
 	{

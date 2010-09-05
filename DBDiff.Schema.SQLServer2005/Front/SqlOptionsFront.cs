@@ -50,7 +50,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             txtXML.Text = option.Defaults.DefaultXml;
 
             chkCompAssemblys.Checked = option.Ignore.FilterAssemblies;
+            chkCompCLRFunctions.Checked = option.Ignore.FilterCLRFunction;
+            chkCompCLRStore.Checked = option.Ignore.FilterCLRStoreProcedure;
+            chkCompCLRTrigger.Checked = option.Ignore.FilterCLRTrigger;
+            chkCompCLRUDT.Checked = option.Ignore.FilterCLRUDT;
+
             chkConstraints.Checked = option.Ignore.FilterConstraint;
+            chkConstraintsPK.Checked = option.Ignore.FilterConstraintPK;
+            chkConstraintsFK.Checked = option.Ignore.FilterConstraintFK;
+            chkConstraintsUK.Checked = option.Ignore.FilterConstraintUK;
+            chkConstraintsCheck.Checked = option.Ignore.FilterConstraintCheck;
+
             chkCompExtendedProperties.Checked = option.Ignore.FilterExtendedPropertys;
             chkCompFunciones.Checked = option.Ignore.FilterFunction;
             chkIndex.Checked = option.Ignore.FilterIndex;
@@ -66,6 +76,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             chkTables.Checked = option.Ignore.FilterTable;
             chkTablesColumnIdentity.Checked = option.Ignore.FilterColumnIdentity;
             chkTablesColumnCollation.Checked = option.Ignore.FilterColumnCollation;
+            chkTableLockEscalation.Checked = option.Ignore.FilterTableLockEscalation;
+            chkTableChangeTracking.Checked = option.Ignore.FilterTableChangeTracking;
+
             chkTablesColumnOrder.Checked = option.Ignore.FilterColumnOrder;
             chkIgnoreNotForReplication.Checked = option.Ignore.FilterNotForReplication;
 
@@ -90,6 +103,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             if (option.Comparison.CaseSensityType == SqlOptionComparison.CaseSensityOptions.CaseSensity)
                 rdoCaseSensitive.Checked = true;
 
+            if (option.Comparison.CaseSensityInCode == SqlOptionComparison.CaseSensityOptions.CaseInsensity)
+                rdoCaseInsensityInCode.Checked = true;
+            if (option.Comparison.CaseSensityInCode == SqlOptionComparison.CaseSensityOptions.CaseSensity)
+                rdoCaseSensityInCode.Checked = true;
+
+            chkIgnoreWhiteSpaceInCode.Checked = option.Comparison.IgnoreWhiteSpacesInCode;
+
             LoadFilters();
         }
 
@@ -106,7 +126,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             option.Defaults.DefaultXml = txtXML.Text;
 
             option.Ignore.FilterAssemblies = chkCompAssemblys.Checked;
+            option.Ignore.FilterCLRFunction = chkCompCLRFunctions.Checked && chkCompAssemblys.Checked;
+            option.Ignore.FilterCLRStoreProcedure = chkCompCLRStore.Checked && chkCompAssemblys.Checked;
+            option.Ignore.FilterCLRTrigger = chkCompCLRTrigger.Checked && chkCompAssemblys.Checked;
+            option.Ignore.FilterCLRUDT = chkCompCLRUDT.Checked && chkCompAssemblys.Checked;
+
             option.Ignore.FilterConstraint = chkConstraints.Checked;
+            option.Ignore.FilterConstraintPK = chkConstraintsPK.Checked;
+            option.Ignore.FilterConstraintFK = chkConstraintsFK.Checked;
+            option.Ignore.FilterConstraintUK = chkConstraintsUK.Checked;
+            option.Ignore.FilterConstraintCheck = chkConstraintsCheck.Checked;
+
             option.Ignore.FilterFunction = chkCompFunciones.Checked;
             
             option.Ignore.FilterIndex = chkIndex.Checked;
@@ -121,7 +151,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             option.Ignore.FilterColumnIdentity = chkTablesColumnIdentity.Checked && chkTables.Checked;
             option.Ignore.FilterColumnCollation = chkTablesColumnCollation.Checked && chkTables.Checked;
             option.Ignore.FilterColumnOrder = chkTablesColumnOrder.Checked && chkTables.Checked;
-            option.Ignore.FilterTableOption = chkTableOption.Checked && chkTables.Checked; ;
+            option.Ignore.FilterTableOption = chkTableOption.Checked && chkTables.Checked;
+            option.Ignore.FilterTableLockEscalation = chkTableLockEscalation.Checked && chkTables.Checked;
+            option.Ignore.FilterTableChangeTracking = chkTableChangeTracking.Checked && chkTables.Checked;
 
             option.Ignore.FilterTableFileGroup = chkFileGroups.Checked;            
             option.Ignore.FilterTrigger = chkCompTriggers.Checked;
@@ -145,6 +177,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
                 option.Comparison.CaseSensityType = SqlOptionComparison.CaseSensityOptions.CaseInsensity;
             if (rdoCaseSensitive.Checked)
                 option.Comparison.CaseSensityType = SqlOptionComparison.CaseSensityOptions.CaseSensity;
+
+            if (rdoCaseInsensityInCode.Checked)
+                option.Comparison.CaseSensityInCode = SqlOptionComparison.CaseSensityOptions.CaseInsensity;
+            if (rdoCaseSensityInCode.Checked)
+                option.Comparison.CaseSensityInCode = SqlOptionComparison.CaseSensityOptions.CaseSensity;
+
+            option.Comparison.IgnoreWhiteSpacesInCode = chkIgnoreWhiteSpaceInCode.Checked;
         }
 
         private void chkCompIndices_CheckedChanged(object sender, EventArgs e)
@@ -160,6 +199,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             chkTablesColumnCollation.Enabled = chkTables.Checked;
             chkTablesColumnIdentity.Enabled = chkTables.Checked;
             chkTablesColumnOrder.Enabled = chkTables.Checked;
+            chkTableChangeTracking.Enabled = chkTables.Checked;
+            chkTableLockEscalation.Enabled = chkTables.Checked;
+            chkTableOption.Enabled = chkTables.Checked; 
         }
 
         private void btnApply_Click(object sender, EventArgs e)
@@ -188,6 +230,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         private void chkFullText_CheckedChanged(object sender, EventArgs e)
         {
             chkFullTextPath.Enabled = chkFullText.Checked;
+        }
+
+        private void chkCompAssemblys_CheckedChanged(object sender, EventArgs e)
+        {
+            chkCompCLRStore.Enabled = chkCompAssemblys.Checked;
+            chkCompCLRTrigger.Enabled = chkCompAssemblys.Checked;
+            chkCompCLRFunctions.Enabled = chkCompAssemblys.Checked;
+            chkCompCLRUDT.Enabled = chkCompAssemblys.Checked;
         }
     }
 }

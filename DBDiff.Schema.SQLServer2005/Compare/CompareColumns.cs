@@ -1,14 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
-    internal static class CompareColumns
+    internal class CompareColumns
     {
-        public static void GenerateDiferences<T>(Columns<T> CamposOrigen, Columns<T> CamposDestino) where T:ISchemaBase
+        public void GenerateDiferences<T>(Columns<T> CamposOrigen, Columns<T> CamposDestino) where T:ISchemaBase
         {
             int restPosition = 0;
             int sumPosition = 0;
@@ -41,10 +39,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 else
                 {
                     Column campoOrigen = CamposOrigen[node.FullName];
-                    ColumnConstraint oldDefault = null;
+                    /*ColumnConstraint oldDefault = null;
                     if (campoOrigen.DefaultConstraint != null)
-                        oldDefault = campoOrigen.DefaultConstraint.Clone(campoOrigen);
-                    if (!Column.Compare(campoOrigen, node))
+                        oldDefault = campoOrigen.DefaultConstraint.Clone(campoOrigen);*/
+                    Boolean IsColumnEqual = Column.Compare(campoOrigen, node);
+                    if ((!IsColumnEqual) || (campoOrigen.Position != node.Position))
                     {
                         if (Column.CompareIdentity(campoOrigen, node))
                         {
@@ -61,9 +60,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                                     node.Status = Enums.ObjectStatusType.RebuildStatus;
                                 else
                                 {
-                                    node.Status = Enums.ObjectStatusType.AlterStatus;
-                                    if ((campoOrigen.IsNullable) && (!node.IsNullable))
-                                        node.Status += (int)Enums.ObjectStatusType.UpdateStatus;                                        
+                                    if (!IsColumnEqual)
+                                    {
+                                        node.Status = Enums.ObjectStatusType.AlterStatus;
+                                        if ((campoOrigen.IsNullable) && (!node.IsNullable))
+                                            node.Status += (int)Enums.ObjectStatusType.UpdateStatus;                                        
+                                    }
                                 }
                             }
                             if (node.Status != Enums.ObjectStatusType.RebuildStatus)

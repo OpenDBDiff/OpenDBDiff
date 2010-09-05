@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.ComponentModel;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	
 	/// <summary>

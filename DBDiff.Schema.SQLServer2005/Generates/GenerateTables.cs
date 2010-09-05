@@ -1,62 +1,62 @@
 using System;
 using System.Collections.Generic;
-using System.Collections;
+using System.Data;
 using System.Globalization;
-using System.Text;
 using System.Data.SqlClient;
-using System.Threading;
 using DBDiff.Schema.Errors;
 using DBDiff.Schema.Model;
 using DBDiff.Schema.Events;
-using DBDiff.Schema.SQLServer.Generates.Options;
 using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
 using DBDiff.Schema.SQLServer.Generates.Generates.Util;
-using DBDiff.Schema.Misc;
+using Constraint=DBDiff.Schema.SQLServer.Generates.Model.Constraint;
 
 namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
     public class GenerateTables
     {
-        private static int colIDIndex = -1;
-        private static int colNameIndex = -1;
-        private static int colFormulaIndex = -1;
-        private static int colIsPersistedIndex = -1;
-        private static int colIsComputedIndex = -1;
-        private static int colNullableIndex = -1;
-        private static int colXmlSchemaIndex = -1;
-        private static int colIs_xml_documentIndex = -1;
-        private static int colPrecisionIndex = -1;
-        private static int colScaleIndex = -1;
-        private static int colDataUserTypeIdIndex = -1;
-        private static int colIsUserDefinedTypeIndex = -1;
-        private static int colSizeIndex = -1;
-        private static int colHasIndexIndex = -1;
-        private static int colHasComputedFormulaIndex = -1;
-        private static int colIsRowGuidIndex = -1;
-        private static int colTypeIndex = -1;
-        private static int colOwnerType = -1;
-        private static int colis_sparseIndex = -1;
-        private static int colIs_FileStream = -1;
-        private static int colDefaultIdIndex = -1;
-        private static int colDefaultNameIndex = -1;
-        private static int colDefaultDefinitionIndex = -1;
-        private static int colrule_object_idIndex = -1;
-        private static int colIsIdentityReplIndex = -1;
-        private static int colCollationIndex = -1;
-        private static int colIsIdentityIndex = -1;
-        private static int colIdentSeedIndex = -1;
-        private static int colIdentIncrementIndex = -1;
-        private static int TableIdIndex = -1;
-        private static int TableNameIndex = -1;
-        private static int TableOwnerIndex = -1;
-        private static int Text_In_Row_limitIndex = -1;
-        private static int HasClusteredIndexIndex = -1;
-        private static int large_value_types_out_of_rowIndex = -1;
-        private static int HasVarDecimalIndex = -1;
-        private static int FileGroupIndex = -1;
-        private static int FileGroupTextIndex = -1;
-        private static int FileGroupStreamIndex = -1;
+        private int colIDIndex = -1;
+        private int colNameIndex = -1;
+        private int colFormulaIndex = -1;
+        private int colIsPersistedIndex = -1;
+        private int colIsComputedIndex = -1;
+        private int colNullableIndex = -1;
+        private int colXmlSchemaIndex = -1;
+        private int colIs_xml_documentIndex = -1;
+        private int colPrecisionIndex = -1;
+        private int colScaleIndex = -1;
+        private int colDataUserTypeIdIndex = -1;
+        private int colIsUserDefinedTypeIndex = -1;
+        private int colSizeIndex = -1;
+        private int colHasIndexIndex = -1;
+        private int colHasComputedFormulaIndex = -1;
+        private int colIsRowGuidIndex = -1;
+        private int colTypeIndex = -1;
+        private int colOwnerType = -1;
+        private int colis_sparseIndex = -1;
+        private int colIs_FileStream = -1;
+        private int colDefaultIdIndex = -1;
+        private int colDefaultNameIndex = -1;
+        private int colDefaultDefinitionIndex = -1;
+        private int colrule_object_idIndex = -1;
+        private int colIsIdentityReplIndex = -1;
+        private int colCollationIndex = -1;
+        private int colIsIdentityIndex = -1;
+        private int colIdentSeedIndex = -1;
+        private int colIdentIncrementIndex = -1;
+        private int TableIdIndex = -1;
+        private int TableNameIndex = -1;
+        private int TableOwnerIndex = -1;
+        private int TableHasChangeTracking = -1;
+        private int TableHasChangeTrackingTrackColumn = -1;
+        private int TableLockEscalation = -1;
+        private int Text_In_Row_limitIndex = -1;
+        private int HasClusteredIndexIndex = -1;
+        private int large_value_types_out_of_rowIndex = -1;
+        private int HasVarDecimalIndex = -1;
+        private int FileGroupIndex = -1;
+        private int FileGroupTextIndex = -1;
+        private int FileGroupStreamIndex = -1;
 
         private Generate root;
 
@@ -65,8 +65,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             this.root = root;
         }
 
-        private static void InitTableIndex(Database database, SqlDataReader reader)
+        private void InitTableIndex(Database database, IDataRecord reader)
         {
+            if (reader == null) throw new ArgumentNullException("reader");
             if (TableIdIndex == -1)
             {
                 TableIdIndex = reader.GetOrdinal("TableId");
@@ -81,12 +82,16 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                 if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
                 {
                     FileGroupStreamIndex = reader.GetOrdinal("FileGroupStream");
+                    TableHasChangeTracking = reader.GetOrdinal("HasChangeTracking");
+                    TableHasChangeTrackingTrackColumn = reader.GetOrdinal("HasChangeTrackingTrackColumn");
+                    TableLockEscalation = reader.GetOrdinal("lock_escalation_desc");
                 }
             }
         }
 
-        private static void InitColIndex(Database database, SqlDataReader reader)
+        private void InitColIndex(Database database, IDataRecord reader)
         {
+            if (reader == null) throw new ArgumentNullException("reader");
             if (colNameIndex == -1)
             {
                 colIDIndex = reader.GetOrdinal("ID");
@@ -124,7 +129,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             }
         }
 
-        private static void FillColumn<T>(ITable<T> table, SqlDataReader reader) where T:ISchemaBase
+        private void FillColumn<T>(ITable<T> table, SqlDataReader reader) where T:ISchemaBase
         {
             Database database = (Database)table.Parent;
 
@@ -168,7 +173,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             col.IsUserDefinedType = (bool)reader[colIsUserDefinedTypeIndex];
             if (!String.IsNullOrEmpty(reader[colSizeIndex].ToString()))
                 col.Size = (short)reader[colSizeIndex];
-            col.HasIndexDependencies = ((int)reader[colHasIndexIndex] == 1); ;
+            col.HasIndexDependencies = ((int)reader[colHasIndexIndex] == 1);
             col.HasComputedDependencies = ((int)reader[colHasComputedFormulaIndex] == 1);
             col.IsRowGuid = (bool)reader[colIsRowGuidIndex];
             if (col.IsUserDefinedType)
@@ -182,12 +187,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             }
             if ((int)reader[colDefaultIdIndex] != 0)
             {
-                col.DefaultConstraint = new ColumnConstraint(col);
-                col.DefaultConstraint.Id = (int)reader[colDefaultIdIndex];
-                col.DefaultConstraint.Owner = table.Owner;
-                col.DefaultConstraint.Name = (string)reader[colDefaultNameIndex];
-                col.DefaultConstraint.Type = Constraint.ConstraintType.Default;
-                col.DefaultConstraint.Definition = (string)reader[colDefaultDefinitionIndex];
+                col.DefaultConstraint = new ColumnConstraint(col)
+                                            {
+                                                Id = (int) reader[colDefaultIdIndex],
+                                                Owner = table.Owner,
+                                                Name = (string) reader[colDefaultNameIndex],
+                                                Type = Constraint.ConstraintType.Default,
+                                                Definition = (string) reader[colDefaultDefinitionIndex]
+                                            };
             }
             if ((int)reader[colrule_object_idIndex] != 0)
                 col.Rule = ((Database)table.Parent).Rules.Find((int)reader[colrule_object_idIndex]);
@@ -214,86 +221,90 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         private void FillTables(Database database, string connectionString)
         {
-            try
-            {
-                int textInRow;
-                Boolean largeValues;
-                Boolean varDecimal;
-                int lastObjectId = 0;
-                bool isTable = true;
-                ISchemaBase item = null;
+            int textInRow;
+            Boolean largeValues;
+            Boolean varDecimal;
+            int lastObjectId = 0;
+            bool isTable = true;
+            ISchemaBase item = null;
 
-                using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(TableSQLCommand.GetTableDetail(database.Info.Version), conn))
                 {
-                    using (SqlCommand command = new SqlCommand(TableSQLCommand.GetTableDetail(database.Info.Version), conn))
+                    conn.Open();
+                    command.CommandTimeout = 0;
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        conn.Open();
-                        command.CommandTimeout = 0;
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
+                            InitTableIndex(database, reader);
+                            if (lastObjectId != (int)reader[TableIdIndex])
                             {
-                                InitTableIndex(database, reader);
-                                if (lastObjectId != (int)reader[TableIdIndex])
-                                {
-                                    lastObjectId = (int)reader[TableIdIndex];
-                                    isTable = reader["ObjectType"].ToString().Trim().Equals("U");
-                                    if (isTable)
-                                    {
-                                        item = new Table(database);
-                                        item.Id = (int)reader[TableIdIndex];
-                                        item.Name = (string)reader[TableNameIndex];
-                                        item.Owner = (string)reader[TableOwnerIndex];
-                                        ((Table)item).HasClusteredIndex = (int)reader[HasClusteredIndexIndex] == 1;
-                                        textInRow = (int)reader[Text_In_Row_limitIndex];
-                                        largeValues = (Boolean)reader[large_value_types_out_of_rowIndex];
-                                        varDecimal = ((int)reader[HasVarDecimalIndex]) == 1;
-                                        if (database.Options.Ignore.FilterTableFileGroup)
-                                        {
-                                            ((Table)item).FileGroup = (string)reader[FileGroupIndex];
-                                            ((Table)item).FileGroupText = (string)reader[FileGroupTextIndex];
-                                            if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
-                                            {
-                                                ((Table)item).FileGroupStream = (string)reader[FileGroupStreamIndex];
-                                            }
-                                        }
-                                        if (database.Options.Ignore.FilterTableOption)
-                                        {
-                                            if (textInRow > 0) ((Table)item).Options.Add(new TableOption("TextInRow", textInRow.ToString(CultureInfo.InvariantCulture), item));
-                                            if (largeValues) ((Table)item).Options.Add(new TableOption("LargeValues", "1", item));
-                                            if (varDecimal) ((Table)item).Options.Add(new TableOption("VarDecimal", "1", item));
-                                        }
-                                        database.Tables.Add((Table)item);
-                                    }
-                                    else
-                                    {
-                                        item = new TableType(database);
-                                        item.Id = (int)reader[TableIdIndex];
-                                        item.Name = (string)reader[TableNameIndex];
-                                        item.Owner = (string)reader[TableOwnerIndex];
-                                        database.TablesTypes.Add((TableType)item);
-                                    }
-                                }
+                                lastObjectId = (int)reader[TableIdIndex];
+                                isTable = reader["ObjectType"].ToString().Trim().Equals("U");
                                 if (isTable)
                                 {
-                                    if (database.Options.Ignore.FilterTable)
-                                        FillColumn<Table>((ITable<Table>)item, reader);
+                                    item = new Table(database);
+                                    item.Id = (int)reader[TableIdIndex];
+                                    item.Name = (string)reader[TableNameIndex];
+                                    item.Owner = (string)reader[TableOwnerIndex];
+                                    ((Table)item).HasClusteredIndex = (int)reader[HasClusteredIndexIndex] == 1;
+                                    textInRow = (int)reader[Text_In_Row_limitIndex];
+                                    largeValues = (Boolean)reader[large_value_types_out_of_rowIndex];
+                                    varDecimal = ((int)reader[HasVarDecimalIndex]) == 1;
+                                    if (database.Options.Ignore.FilterTableFileGroup)
+                                    {
+                                        ((Table)item).FileGroup = (string)reader[FileGroupIndex];
+                                        ((Table)item).FileGroupText = (string)reader[FileGroupTextIndex];
+                                        if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+                                        {
+                                            if (database.Options.Ignore.FilterTableChangeTracking)
+                                            {
+                                                ((Table)item).FileGroupStream = (string)reader[FileGroupStreamIndex];
+                                                ((Table)item).HasChangeTracking = ((int)reader[TableHasChangeTracking]) == 1;
+                                                ((Table)item).HasChangeTrackingTrackColumn = ((int)reader[TableHasChangeTrackingTrackColumn]) == 1;
+                                            }
+                                        }
+                                    }
+                                    if (database.Options.Ignore.FilterTableOption)
+                                    {
+                                        if (textInRow > 0) ((Table)item).Options.Add(new TableOption("TextInRow", textInRow.ToString(CultureInfo.InvariantCulture), item));
+                                        if (largeValues) ((Table)item).Options.Add(new TableOption("LargeValues", "1", item));
+                                        if (varDecimal) ((Table)item).Options.Add(new TableOption("VarDecimal", "1", item));
+                                    }
+                                    if ((database.Options.Ignore.FilterTableLockEscalation) && (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008))
+                                        ((Table)item).Options.Add(new TableOption("LockEscalation", (string)reader[TableLockEscalation], item));
+                                    else
+                                        ((Table)item).Options.Add(new TableOption("LockEscalation", "TABLE", item));
+                                    database.Tables.Add((Table)item);
                                 }
                                 else
                                 {
-                                    if (database.Options.Ignore.FilterUserDataType)
-                                        FillColumn<TableType>((ITable<TableType>)item, reader);
-                                }                                
+                                    item = new TableType(database)
+                                               {
+                                                   Id = (int) reader[TableIdIndex],
+                                                   Name = (string) reader[TableNameIndex],
+                                                   Owner = (string) reader[TableOwnerIndex]
+                                               };
+                                    database.TablesTypes.Add((TableType)item);
+                                }
                             }
+                            if (isTable)
+                            {
+                                if (database.Options.Ignore.FilterTable)
+                                    FillColumn((ITable<Table>)item, reader);
+                            }
+                            else
+                            {
+                                if (database.Options.Ignore.FilterUserDataType)
+                                    FillColumn((ITable<TableType>)item, reader);
+                            }                                
                         }
                     }
                 }
-                //tables.ToSQL();
             }
-            catch
-            {
-                throw;
-            }
+            //tables.ToSQL();
         }
 
 

@@ -28,7 +28,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkFullTextPath = new System.Windows.Forms.CheckBox();
             this.chkIndexFilter = new System.Windows.Forms.CheckBox();
             this.chkConstraintsCheck = new System.Windows.Forms.CheckBox();
             this.chkConstraintsUK = new System.Windows.Forms.CheckBox();
@@ -37,8 +37,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.checkPartitionFunction = new System.Windows.Forms.CheckBox();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.chkCompCLRUDT = new System.Windows.Forms.CheckBox();
+            this.chkCompCLRFunctions = new System.Windows.Forms.CheckBox();
             this.chkCompCLRTrigger = new System.Windows.Forms.CheckBox();
             this.chkCompCLRStore = new System.Windows.Forms.CheckBox();
             this.chkIndexRowLock = new System.Windows.Forms.CheckBox();
@@ -66,7 +66,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompTriggers = new System.Windows.Forms.CheckBox();
             this.chkCompVistas = new System.Windows.Forms.CheckBox();
             this.chkCompExtendedProperties = new System.Windows.Forms.CheckBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtXML = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.txtTime = new System.Windows.Forms.TextBox();
@@ -85,93 +84,91 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label3 = new System.Windows.Forms.Label();
             this.txtDefaultInteger = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.gradientPanel6 = new Ascend.Windows.Forms.GradientPanel();
             this.chkIgnoreNotForReplication = new System.Windows.Forms.CheckBox();
+            this.gradientPanel5 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel4 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel3 = new Ascend.Windows.Forms.GradientPanel();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.gradientPanel2 = new Ascend.Windows.Forms.GradientPanel();
+            this.chkTableChangeTracking = new System.Windows.Forms.CheckBox();
+            this.chkTableLockEscalation = new System.Windows.Forms.CheckBox();
+            this.gradientPanel1 = new Ascend.Windows.Forms.GradientPanel();
+            this.label11 = new System.Windows.Forms.Label();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.gradientPanel15 = new Ascend.Windows.Forms.GradientPanel();
+            this.chkIgnoreWhiteSpaceInCode = new System.Windows.Forms.CheckBox();
+            this.gradientPanel14 = new Ascend.Windows.Forms.GradientPanel();
+            this.label14 = new System.Windows.Forms.Label();
+            this.gradientPanel13 = new Ascend.Windows.Forms.GradientPanel();
+            this.rdoCaseSensityInCode = new System.Windows.Forms.RadioButton();
+            this.rdoCaseInsensityInCode = new System.Windows.Forms.RadioButton();
+            this.gradientPanel12 = new Ascend.Windows.Forms.GradientPanel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.gradientPanel11 = new Ascend.Windows.Forms.GradientPanel();
             this.rdoCaseSensitive = new System.Windows.Forms.RadioButton();
-            this.rdoCaseInsensitive = new System.Windows.Forms.RadioButton();
             this.rdoCaseAutomatic = new System.Windows.Forms.RadioButton();
+            this.rdoCaseInsensitive = new System.Windows.Forms.RadioButton();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.btnAdd = new System.Windows.Forms.Button();
-            this.btnApply = new System.Windows.Forms.Button();
+            this.gradientPanel10 = new Ascend.Windows.Forms.GradientPanel();
             this.lstFilters = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
+            this.btnApply = new System.Windows.Forms.Button();
+            this.gradientPanel9 = new Ascend.Windows.Forms.GradientPanel();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.gradientPanel8 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel7 = new Ascend.Windows.Forms.GradientPanel();
+            this.label12 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.optScriptSchemaBindingAlter = new System.Windows.Forms.RadioButton();
             this.optScriptSchemaDrop = new System.Windows.Forms.RadioButton();
-            this.chkFullTextPath = new System.Windows.Forms.CheckBox();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.gradientPanel16 = new Ascend.Windows.Forms.GradientPanel();
+            this.label15 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.groupBox6.SuspendLayout();
+            this.gradientPanel6.SuspendLayout();
+            this.gradientPanel5.SuspendLayout();
+            this.gradientPanel4.SuspendLayout();
+            this.gradientPanel3.SuspendLayout();
+            this.gradientPanel2.SuspendLayout();
+            this.gradientPanel1.SuspendLayout();
             this.tabPage5.SuspendLayout();
-            this.groupBox7.SuspendLayout();
+            this.gradientPanel15.SuspendLayout();
+            this.gradientPanel14.SuspendLayout();
+            this.gradientPanel13.SuspendLayout();
+            this.gradientPanel12.SuspendLayout();
+            this.gradientPanel11.SuspendLayout();
             this.tabPage4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
+            this.gradientPanel10.SuspendLayout();
+            this.gradientPanel9.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.gradientPanel8.SuspendLayout();
+            this.gradientPanel7.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.gradientPanel16.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // chkFullTextPath
             // 
-            this.groupBox1.Controls.Add(this.chkFullTextPath);
-            this.groupBox1.Controls.Add(this.chkIndexFilter);
-            this.groupBox1.Controls.Add(this.chkConstraintsCheck);
-            this.groupBox1.Controls.Add(this.chkConstraintsUK);
-            this.groupBox1.Controls.Add(this.chkConstraintsFK);
-            this.groupBox1.Controls.Add(this.chkConstraintsPK);
-            this.groupBox1.Controls.Add(this.checkBox5);
-            this.groupBox1.Controls.Add(this.checkPartitionFunction);
-            this.groupBox1.Controls.Add(this.checkBox4);
-            this.groupBox1.Controls.Add(this.checkBox3);
-            this.groupBox1.Controls.Add(this.checkBox2);
-            this.groupBox1.Controls.Add(this.chkCompCLRTrigger);
-            this.groupBox1.Controls.Add(this.chkCompCLRStore);
-            this.groupBox1.Controls.Add(this.chkIndexRowLock);
-            this.groupBox1.Controls.Add(this.chkFullText);
-            this.groupBox1.Controls.Add(this.chkCompRules);
-            this.groupBox1.Controls.Add(this.chkCompRoles);
-            this.groupBox1.Controls.Add(this.chkCompUsers);
-            this.groupBox1.Controls.Add(this.chkIndexIncludeColumns);
-            this.groupBox1.Controls.Add(this.chkCompTriggersDDL);
-            this.groupBox1.Controls.Add(this.chkIndexFillFactor);
-            this.groupBox1.Controls.Add(this.chkTablesColumnOrder);
-            this.groupBox1.Controls.Add(this.chkCompAssemblys);
-            this.groupBox1.Controls.Add(this.chkFileGroups);
-            this.groupBox1.Controls.Add(this.chkTablesColumnIdentity);
-            this.groupBox1.Controls.Add(this.chkTablesColumnCollation);
-            this.groupBox1.Controls.Add(this.chkConstraints);
-            this.groupBox1.Controls.Add(this.chkCompSchemas);
-            this.groupBox1.Controls.Add(this.chkCompUDT);
-            this.groupBox1.Controls.Add(this.chkIndex);
-            this.groupBox1.Controls.Add(this.chkTableOption);
-            this.groupBox1.Controls.Add(this.chkCompXMLSchemas);
-            this.groupBox1.Controls.Add(this.chkCompFunciones);
-            this.groupBox1.Controls.Add(this.chkCompStoreProcedure);
-            this.groupBox1.Controls.Add(this.chkTables);
-            this.groupBox1.Controls.Add(this.chkCompTriggers);
-            this.groupBox1.Controls.Add(this.chkCompVistas);
-            this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.groupBox1.Location = new System.Drawing.Point(6, 6);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(440, 341);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Filters Objects";
+            this.chkFullTextPath.AutoSize = true;
+            this.chkFullTextPath.Checked = true;
+            this.chkFullTextPath.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkFullTextPath.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkFullTextPath.Location = new System.Drawing.Point(28, 44);
+            this.chkFullTextPath.Name = "chkFullTextPath";
+            this.chkFullTextPath.Size = new System.Drawing.Size(86, 17);
+            this.chkFullTextPath.TabIndex = 36;
+            this.chkFullTextPath.Text = "Include Path";
+            this.chkFullTextPath.UseVisualStyleBackColor = true;
             // 
             // chkIndexFilter
             // 
@@ -179,7 +176,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIndexFilter.Checked = true;
             this.chkIndexFilter.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkIndexFilter.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkIndexFilter.Location = new System.Drawing.Point(30, 213);
+            this.chkIndexFilter.Location = new System.Drawing.Point(30, 215);
             this.chkIndexFilter.Name = "chkIndexFilter";
             this.chkIndexFilter.Size = new System.Drawing.Size(91, 17);
             this.chkIndexFilter.TabIndex = 9;
@@ -192,7 +189,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkConstraintsCheck.Checked = true;
             this.chkConstraintsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkConstraintsCheck.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkConstraintsCheck.Location = new System.Drawing.Point(30, 317);
+            this.chkConstraintsCheck.Location = new System.Drawing.Point(30, 310);
             this.chkConstraintsCheck.Name = "chkConstraintsCheck";
             this.chkConstraintsCheck.Size = new System.Drawing.Size(57, 17);
             this.chkConstraintsCheck.TabIndex = 14;
@@ -205,7 +202,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkConstraintsUK.Checked = true;
             this.chkConstraintsUK.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkConstraintsUK.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkConstraintsUK.Location = new System.Drawing.Point(30, 297);
+            this.chkConstraintsUK.Location = new System.Drawing.Point(30, 291);
             this.chkConstraintsUK.Name = "chkConstraintsUK";
             this.chkConstraintsUK.Size = new System.Drawing.Size(81, 17);
             this.chkConstraintsUK.TabIndex = 13;
@@ -218,7 +215,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkConstraintsFK.Checked = true;
             this.chkConstraintsFK.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkConstraintsFK.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkConstraintsFK.Location = new System.Drawing.Point(30, 277);
+            this.chkConstraintsFK.Location = new System.Drawing.Point(30, 272);
             this.chkConstraintsFK.Name = "chkConstraintsFK";
             this.chkConstraintsFK.Size = new System.Drawing.Size(82, 17);
             this.chkConstraintsFK.TabIndex = 12;
@@ -231,7 +228,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkConstraintsPK.Checked = true;
             this.chkConstraintsPK.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkConstraintsPK.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkConstraintsPK.Location = new System.Drawing.Point(30, 256);
+            this.chkConstraintsPK.Location = new System.Drawing.Point(30, 253);
             this.chkConstraintsPK.Name = "chkConstraintsPK";
             this.chkConstraintsPK.Size = new System.Drawing.Size(81, 17);
             this.chkConstraintsPK.TabIndex = 11;
@@ -244,7 +241,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.checkBox5.Checked = true;
             this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox5.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkBox5.Location = new System.Drawing.Point(298, 173);
+            this.checkBox5.Location = new System.Drawing.Point(13, 201);
             this.checkBox5.Name = "checkBox5";
             this.checkBox5.Size = new System.Drawing.Size(106, 17);
             this.checkBox5.TabIndex = 27;
@@ -257,7 +254,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.checkPartitionFunction.Checked = true;
             this.checkPartitionFunction.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkPartitionFunction.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkPartitionFunction.Location = new System.Drawing.Point(298, 152);
+            this.checkPartitionFunction.Location = new System.Drawing.Point(13, 180);
             this.checkPartitionFunction.Name = "checkPartitionFunction";
             this.checkPartitionFunction.Size = new System.Drawing.Size(108, 17);
             this.checkPartitionFunction.TabIndex = 26;
@@ -270,38 +267,38 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.checkBox4.Checked = true;
             this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkBox4.Location = new System.Drawing.Point(298, 129);
+            this.checkBox4.Location = new System.Drawing.Point(28, 27);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(104, 17);
             this.checkBox4.TabIndex = 35;
             this.checkBox4.Text = "CLR Aggregates";
             this.checkBox4.UseVisualStyleBackColor = true;
             // 
-            // checkBox3
+            // chkCompCLRUDT
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Checked = true;
-            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkBox3.Location = new System.Drawing.Point(298, 106);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(130, 17);
-            this.checkBox3.TabIndex = 34;
-            this.checkBox3.Text = "CLR User Data Types";
-            this.checkBox3.UseVisualStyleBackColor = true;
+            this.chkCompCLRUDT.AutoSize = true;
+            this.chkCompCLRUDT.Checked = true;
+            this.chkCompCLRUDT.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCompCLRUDT.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkCompCLRUDT.Location = new System.Drawing.Point(28, 84);
+            this.chkCompCLRUDT.Name = "chkCompCLRUDT";
+            this.chkCompCLRUDT.Size = new System.Drawing.Size(130, 17);
+            this.chkCompCLRUDT.TabIndex = 34;
+            this.chkCompCLRUDT.Text = "CLR User Data Types";
+            this.chkCompCLRUDT.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // chkCompCLRFunctions
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Checked = true;
-            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkBox2.Location = new System.Drawing.Point(298, 83);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(96, 17);
-            this.checkBox2.TabIndex = 33;
-            this.checkBox2.Text = "CLR Functions";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.chkCompCLRFunctions.AutoSize = true;
+            this.chkCompCLRFunctions.Checked = true;
+            this.chkCompCLRFunctions.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCompCLRFunctions.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkCompCLRFunctions.Location = new System.Drawing.Point(28, 46);
+            this.chkCompCLRFunctions.Name = "chkCompCLRFunctions";
+            this.chkCompCLRFunctions.Size = new System.Drawing.Size(96, 17);
+            this.chkCompCLRFunctions.TabIndex = 33;
+            this.chkCompCLRFunctions.Text = "CLR Functions";
+            this.chkCompCLRFunctions.UseVisualStyleBackColor = true;
             // 
             // chkCompCLRTrigger
             // 
@@ -309,7 +306,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompCLRTrigger.Checked = true;
             this.chkCompCLRTrigger.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompCLRTrigger.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompCLRTrigger.Location = new System.Drawing.Point(298, 61);
+            this.chkCompCLRTrigger.Location = new System.Drawing.Point(28, 103);
             this.chkCompCLRTrigger.Name = "chkCompCLRTrigger";
             this.chkCompCLRTrigger.Size = new System.Drawing.Size(88, 17);
             this.chkCompCLRTrigger.TabIndex = 32;
@@ -322,7 +319,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompCLRStore.Checked = true;
             this.chkCompCLRStore.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompCLRStore.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompCLRStore.Location = new System.Drawing.Point(298, 39);
+            this.chkCompCLRStore.Location = new System.Drawing.Point(28, 65);
             this.chkCompCLRStore.Name = "chkCompCLRStore";
             this.chkCompCLRStore.Size = new System.Drawing.Size(132, 17);
             this.chkCompCLRStore.TabIndex = 31;
@@ -335,7 +332,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIndexRowLock.Checked = true;
             this.chkIndexRowLock.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkIndexRowLock.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkIndexRowLock.Location = new System.Drawing.Point(30, 149);
+            this.chkIndexRowLock.Location = new System.Drawing.Point(30, 158);
             this.chkIndexRowLock.Name = "chkIndexRowLock";
             this.chkIndexRowLock.Size = new System.Drawing.Size(80, 17);
             this.chkIndexRowLock.TabIndex = 6;
@@ -348,7 +345,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkFullText.Checked = true;
             this.chkFullText.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkFullText.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkFullText.Location = new System.Drawing.Point(163, 277);
+            this.chkFullText.Location = new System.Drawing.Point(10, 25);
             this.chkFullText.Name = "chkFullText";
             this.chkFullText.Size = new System.Drawing.Size(63, 17);
             this.chkFullText.TabIndex = 29;
@@ -362,7 +359,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompRules.Checked = true;
             this.chkCompRules.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompRules.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompRules.Location = new System.Drawing.Point(163, 170);
+            this.chkCompRules.Location = new System.Drawing.Point(13, 157);
             this.chkCompRules.Name = "chkCompRules";
             this.chkCompRules.Size = new System.Drawing.Size(53, 17);
             this.chkCompRules.TabIndex = 22;
@@ -375,7 +372,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompRoles.Checked = true;
             this.chkCompRoles.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompRoles.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompRoles.Location = new System.Drawing.Point(163, 236);
+            this.chkCompRoles.Location = new System.Drawing.Point(10, 82);
             this.chkCompRoles.Name = "chkCompRoles";
             this.chkCompRoles.Size = new System.Drawing.Size(53, 17);
             this.chkCompRoles.TabIndex = 28;
@@ -388,7 +385,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompUsers.Checked = true;
             this.chkCompUsers.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompUsers.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompUsers.Location = new System.Drawing.Point(163, 193);
+            this.chkCompUsers.Location = new System.Drawing.Point(10, 63);
             this.chkCompUsers.Name = "chkCompUsers";
             this.chkCompUsers.Size = new System.Drawing.Size(53, 17);
             this.chkCompUsers.TabIndex = 23;
@@ -401,7 +398,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIndexIncludeColumns.Checked = true;
             this.chkIndexIncludeColumns.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkIndexIncludeColumns.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkIndexIncludeColumns.Location = new System.Drawing.Point(30, 192);
+            this.chkIndexIncludeColumns.Location = new System.Drawing.Point(30, 196);
             this.chkIndexIncludeColumns.Name = "chkIndexIncludeColumns";
             this.chkIndexIncludeColumns.Size = new System.Drawing.Size(104, 17);
             this.chkIndexIncludeColumns.TabIndex = 8;
@@ -414,7 +411,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompTriggersDDL.Checked = true;
             this.chkCompTriggersDDL.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompTriggersDDL.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompTriggersDDL.Location = new System.Drawing.Point(163, 105);
+            this.chkCompTriggersDDL.Location = new System.Drawing.Point(13, 92);
             this.chkCompTriggersDDL.Name = "chkCompTriggersDDL";
             this.chkCompTriggersDDL.Size = new System.Drawing.Size(89, 17);
             this.chkCompTriggersDDL.TabIndex = 19;
@@ -427,7 +424,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIndexFillFactor.Checked = true;
             this.chkIndexFillFactor.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkIndexFillFactor.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkIndexFillFactor.Location = new System.Drawing.Point(30, 170);
+            this.chkIndexFillFactor.Location = new System.Drawing.Point(30, 177);
             this.chkIndexFillFactor.Name = "chkIndexFillFactor";
             this.chkIndexFillFactor.Size = new System.Drawing.Size(71, 17);
             this.chkIndexFillFactor.TabIndex = 7;
@@ -440,7 +437,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTablesColumnOrder.Checked = true;
             this.chkTablesColumnOrder.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkTablesColumnOrder.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkTablesColumnOrder.Location = new System.Drawing.Point(30, 83);
+            this.chkTablesColumnOrder.Location = new System.Drawing.Point(30, 44);
             this.chkTablesColumnOrder.Name = "chkTablesColumnOrder";
             this.chkTablesColumnOrder.Size = new System.Drawing.Size(90, 17);
             this.chkTablesColumnOrder.TabIndex = 3;
@@ -452,13 +449,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompAssemblys.AutoSize = true;
             this.chkCompAssemblys.Checked = true;
             this.chkCompAssemblys.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCompAssemblys.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkCompAssemblys.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompAssemblys.Location = new System.Drawing.Point(298, 16);
+            this.chkCompAssemblys.Location = new System.Drawing.Point(10, 8);
             this.chkCompAssemblys.Name = "chkCompAssemblys";
-            this.chkCompAssemblys.Size = new System.Drawing.Size(75, 17);
+            this.chkCompAssemblys.Size = new System.Drawing.Size(84, 17);
             this.chkCompAssemblys.TabIndex = 30;
             this.chkCompAssemblys.Text = "Assemblys";
             this.chkCompAssemblys.UseVisualStyleBackColor = true;
+            this.chkCompAssemblys.CheckedChanged += new System.EventHandler(this.chkCompAssemblys_CheckedChanged);
             // 
             // chkFileGroups
             // 
@@ -466,7 +465,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkFileGroups.Checked = true;
             this.chkFileGroups.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkFileGroups.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkFileGroups.Location = new System.Drawing.Point(163, 256);
+            this.chkFileGroups.Location = new System.Drawing.Point(10, 6);
             this.chkFileGroups.Name = "chkFileGroups";
             this.chkFileGroups.Size = new System.Drawing.Size(79, 17);
             this.chkFileGroups.TabIndex = 25;
@@ -479,7 +478,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTablesColumnIdentity.Checked = true;
             this.chkTablesColumnIdentity.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkTablesColumnIdentity.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkTablesColumnIdentity.Location = new System.Drawing.Point(30, 61);
+            this.chkTablesColumnIdentity.Location = new System.Drawing.Point(30, 63);
             this.chkTablesColumnIdentity.Name = "chkTablesColumnIdentity";
             this.chkTablesColumnIdentity.Size = new System.Drawing.Size(97, 17);
             this.chkTablesColumnIdentity.TabIndex = 2;
@@ -492,7 +491,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTablesColumnCollation.Checked = true;
             this.chkTablesColumnCollation.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkTablesColumnCollation.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkTablesColumnCollation.Location = new System.Drawing.Point(30, 39);
+            this.chkTablesColumnCollation.Location = new System.Drawing.Point(30, 25);
             this.chkTablesColumnCollation.Name = "chkTablesColumnCollation";
             this.chkTablesColumnCollation.Size = new System.Drawing.Size(104, 17);
             this.chkTablesColumnCollation.TabIndex = 1;
@@ -504,10 +503,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkConstraints.AutoSize = true;
             this.chkConstraints.Checked = true;
             this.chkConstraints.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkConstraints.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkConstraints.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkConstraints.Location = new System.Drawing.Point(10, 236);
+            this.chkConstraints.Location = new System.Drawing.Point(10, 234);
             this.chkConstraints.Name = "chkConstraints";
-            this.chkConstraints.Size = new System.Drawing.Size(78, 17);
+            this.chkConstraints.Size = new System.Drawing.Size(89, 17);
             this.chkConstraints.TabIndex = 10;
             this.chkConstraints.Text = "Constraints";
             this.chkConstraints.UseVisualStyleBackColor = true;
@@ -519,7 +519,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompSchemas.Checked = true;
             this.chkCompSchemas.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompSchemas.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompSchemas.Location = new System.Drawing.Point(163, 214);
+            this.chkCompSchemas.Location = new System.Drawing.Point(10, 101);
             this.chkCompSchemas.Name = "chkCompSchemas";
             this.chkCompSchemas.Size = new System.Drawing.Size(70, 17);
             this.chkCompSchemas.TabIndex = 24;
@@ -532,7 +532,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompUDT.Checked = true;
             this.chkCompUDT.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompUDT.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompUDT.Location = new System.Drawing.Point(163, 127);
+            this.chkCompUDT.Location = new System.Drawing.Point(13, 114);
             this.chkCompUDT.Name = "chkCompUDT";
             this.chkCompUDT.Size = new System.Drawing.Size(106, 17);
             this.chkCompUDT.TabIndex = 20;
@@ -544,10 +544,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIndex.AutoSize = true;
             this.chkIndex.Checked = true;
             this.chkIndex.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkIndex.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkIndex.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkIndex.Location = new System.Drawing.Point(10, 127);
+            this.chkIndex.Location = new System.Drawing.Point(10, 139);
             this.chkIndex.Name = "chkIndex";
-            this.chkIndex.Size = new System.Drawing.Size(63, 17);
+            this.chkIndex.Size = new System.Drawing.Size(70, 17);
             this.chkIndex.TabIndex = 5;
             this.chkIndex.Text = "Indexes";
             this.chkIndex.UseVisualStyleBackColor = true;
@@ -559,7 +560,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTableOption.Checked = true;
             this.chkTableOption.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkTableOption.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkTableOption.Location = new System.Drawing.Point(30, 104);
+            this.chkTableOption.Location = new System.Drawing.Point(30, 82);
             this.chkTableOption.Name = "chkTableOption";
             this.chkTableOption.Size = new System.Drawing.Size(92, 17);
             this.chkTableOption.TabIndex = 4;
@@ -572,7 +573,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompXMLSchemas.Checked = true;
             this.chkCompXMLSchemas.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompXMLSchemas.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompXMLSchemas.Location = new System.Drawing.Point(163, 149);
+            this.chkCompXMLSchemas.Location = new System.Drawing.Point(13, 136);
             this.chkCompXMLSchemas.Name = "chkCompXMLSchemas";
             this.chkCompXMLSchemas.Size = new System.Drawing.Size(95, 17);
             this.chkCompXMLSchemas.TabIndex = 21;
@@ -585,7 +586,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompFunciones.Checked = true;
             this.chkCompFunciones.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompFunciones.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompFunciones.Location = new System.Drawing.Point(163, 19);
+            this.chkCompFunciones.Location = new System.Drawing.Point(13, 6);
             this.chkCompFunciones.Name = "chkCompFunciones";
             this.chkCompFunciones.Size = new System.Drawing.Size(72, 17);
             this.chkCompFunciones.TabIndex = 15;
@@ -598,7 +599,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompStoreProcedure.Checked = true;
             this.chkCompStoreProcedure.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompStoreProcedure.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompStoreProcedure.Location = new System.Drawing.Point(163, 39);
+            this.chkCompStoreProcedure.Location = new System.Drawing.Point(13, 26);
             this.chkCompStoreProcedure.Name = "chkCompStoreProcedure";
             this.chkCompStoreProcedure.Size = new System.Drawing.Size(108, 17);
             this.chkCompStoreProcedure.TabIndex = 16;
@@ -610,10 +611,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTables.AutoSize = true;
             this.chkTables.Checked = true;
             this.chkTables.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkTables.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkTables.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkTables.Location = new System.Drawing.Point(10, 19);
+            this.chkTables.Location = new System.Drawing.Point(10, 6);
             this.chkTables.Name = "chkTables";
-            this.chkTables.Size = new System.Drawing.Size(58, 17);
+            this.chkTables.Size = new System.Drawing.Size(64, 17);
             this.chkTables.TabIndex = 0;
             this.chkTables.Text = "Tables";
             this.chkTables.UseVisualStyleBackColor = true;
@@ -625,7 +627,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompTriggers.Checked = true;
             this.chkCompTriggers.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompTriggers.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompTriggers.Location = new System.Drawing.Point(163, 83);
+            this.chkCompTriggers.Location = new System.Drawing.Point(13, 70);
             this.chkCompTriggers.Name = "chkCompTriggers";
             this.chkCompTriggers.Size = new System.Drawing.Size(64, 17);
             this.chkCompTriggers.TabIndex = 18;
@@ -638,7 +640,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompVistas.Checked = true;
             this.chkCompVistas.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompVistas.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompVistas.Location = new System.Drawing.Point(163, 60);
+            this.chkCompVistas.Location = new System.Drawing.Point(13, 47);
             this.chkCompVistas.Name = "chkCompVistas";
             this.chkCompVistas.Size = new System.Drawing.Size(54, 17);
             this.chkCompVistas.TabIndex = 17;
@@ -651,46 +653,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompExtendedProperties.Checked = true;
             this.chkCompExtendedProperties.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompExtendedProperties.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompExtendedProperties.Location = new System.Drawing.Point(175, 19);
+            this.chkCompExtendedProperties.Location = new System.Drawing.Point(177, 7);
             this.chkCompExtendedProperties.Name = "chkCompExtendedProperties";
             this.chkCompExtendedProperties.Size = new System.Drawing.Size(121, 17);
             this.chkCompExtendedProperties.TabIndex = 1;
             this.chkCompExtendedProperties.Text = "Extended Properties";
             this.chkCompExtendedProperties.UseVisualStyleBackColor = true;
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.txtXML);
-            this.groupBox2.Controls.Add(this.label10);
-            this.groupBox2.Controls.Add(this.txtTime);
-            this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.txtVariant);
-            this.groupBox2.Controls.Add(this.label8);
-            this.groupBox2.Controls.Add(this.txtNText);
-            this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Controls.Add(this.txtBlob);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.txtDate);
-            this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.txtText);
-            this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.txtDefaultReal);
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.txtDefaultInteger);
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.groupBox2.Location = new System.Drawing.Point(6, 6);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(441, 391);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Default Values";
-            // 
             // txtXML
             // 
             this.txtXML.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtXML.Location = new System.Drawing.Point(9, 310);
+            this.txtXML.Location = new System.Drawing.Point(16, 257);
             this.txtXML.Name = "txtXML";
             this.txtXML.Size = new System.Drawing.Size(388, 20);
             this.txtXML.TabIndex = 18;
@@ -699,7 +672,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // 
             this.label10.AutoSize = true;
             this.label10.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label10.Location = new System.Drawing.Point(6, 294);
+            this.label10.Location = new System.Drawing.Point(13, 241);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(29, 13);
             this.label10.TabIndex = 17;
@@ -708,16 +681,16 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // txtTime
             // 
             this.txtTime.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtTime.Location = new System.Drawing.Point(206, 169);
+            this.txtTime.Location = new System.Drawing.Point(268, 116);
             this.txtTime.Name = "txtTime";
-            this.txtTime.Size = new System.Drawing.Size(191, 20);
+            this.txtTime.Size = new System.Drawing.Size(237, 20);
             this.txtTime.TabIndex = 16;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
             this.label9.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label9.Location = new System.Drawing.Point(206, 153);
+            this.label9.Location = new System.Drawing.Point(268, 100);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(26, 13);
             this.label9.TabIndex = 15;
@@ -726,7 +699,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // txtVariant
             // 
             this.txtVariant.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtVariant.Location = new System.Drawing.Point(9, 262);
+            this.txtVariant.Location = new System.Drawing.Point(16, 209);
             this.txtVariant.Name = "txtVariant";
             this.txtVariant.Size = new System.Drawing.Size(388, 20);
             this.txtVariant.TabIndex = 14;
@@ -735,7 +708,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label8.Location = new System.Drawing.Point(6, 246);
+            this.label8.Location = new System.Drawing.Point(13, 193);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(58, 13);
             this.label8.TabIndex = 13;
@@ -744,25 +717,25 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // txtNText
             // 
             this.txtNText.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtNText.Location = new System.Drawing.Point(206, 121);
+            this.txtNText.Location = new System.Drawing.Point(268, 68);
             this.txtNText.Name = "txtNText";
-            this.txtNText.Size = new System.Drawing.Size(191, 20);
+            this.txtNText.Size = new System.Drawing.Size(237, 20);
             this.txtNText.TabIndex = 12;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label7.Location = new System.Drawing.Point(206, 105);
+            this.label7.Location = new System.Drawing.Point(268, 52);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(111, 13);
+            this.label7.Size = new System.Drawing.Size(184, 13);
             this.label7.TabIndex = 11;
-            this.label7.Text = "nchar, nvarchar, ntext";
+            this.label7.Text = "nchar, nvarchar, nvarchar(max), ntext";
             // 
             // txtBlob
             // 
             this.txtBlob.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtBlob.Location = new System.Drawing.Point(9, 217);
+            this.txtBlob.Location = new System.Drawing.Point(16, 164);
             this.txtBlob.Name = "txtBlob";
             this.txtBlob.Size = new System.Drawing.Size(388, 20);
             this.txtBlob.TabIndex = 10;
@@ -771,43 +744,43 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // 
             this.label6.AutoSize = true;
             this.label6.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label6.Location = new System.Drawing.Point(6, 201);
+            this.label6.Location = new System.Drawing.Point(13, 148);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(118, 13);
+            this.label6.Size = new System.Drawing.Size(192, 13);
             this.label6.TabIndex = 9;
-            this.label6.Text = "binary, varbinary, image";
+            this.label6.Text = "binary, image, varbinary, varbinary(max)";
             // 
             // txtDate
             // 
             this.txtDate.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtDate.Location = new System.Drawing.Point(9, 169);
+            this.txtDate.Location = new System.Drawing.Point(16, 116);
             this.txtDate.Name = "txtDate";
-            this.txtDate.Size = new System.Drawing.Size(191, 20);
+            this.txtDate.Size = new System.Drawing.Size(237, 20);
             this.txtDate.TabIndex = 8;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label5.Location = new System.Drawing.Point(6, 153);
+            this.label5.Location = new System.Drawing.Point(13, 100);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(168, 13);
+            this.label5.Size = new System.Drawing.Size(240, 13);
             this.label5.TabIndex = 7;
-            this.label5.Text = "datetime, smalldatetime, datetime2";
+            this.label5.Text = "datetime, smalldatetime, datetime2, datetimeoffset";
             // 
             // txtText
             // 
             this.txtText.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtText.Location = new System.Drawing.Point(9, 121);
+            this.txtText.Location = new System.Drawing.Point(16, 68);
             this.txtText.Name = "txtText";
-            this.txtText.Size = new System.Drawing.Size(191, 20);
+            this.txtText.Size = new System.Drawing.Size(237, 20);
             this.txtText.TabIndex = 6;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label4.Location = new System.Drawing.Point(6, 105);
+            this.label4.Location = new System.Drawing.Point(13, 52);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(160, 13);
             this.label4.TabIndex = 5;
@@ -816,16 +789,16 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // txtDefaultReal
             // 
             this.txtDefaultReal.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtDefaultReal.Location = new System.Drawing.Point(206, 78);
+            this.txtDefaultReal.Location = new System.Drawing.Point(268, 25);
             this.txtDefaultReal.Name = "txtDefaultReal";
-            this.txtDefaultReal.Size = new System.Drawing.Size(191, 20);
+            this.txtDefaultReal.Size = new System.Drawing.Size(237, 20);
             this.txtDefaultReal.TabIndex = 4;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label3.Location = new System.Drawing.Point(203, 62);
+            this.label3.Location = new System.Drawing.Point(265, 9);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(232, 13);
             this.label3.TabIndex = 3;
@@ -834,30 +807,20 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // txtDefaultInteger
             // 
             this.txtDefaultInteger.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtDefaultInteger.Location = new System.Drawing.Point(9, 78);
+            this.txtDefaultInteger.Location = new System.Drawing.Point(16, 25);
             this.txtDefaultInteger.Name = "txtDefaultInteger";
-            this.txtDefaultInteger.Size = new System.Drawing.Size(191, 20);
+            this.txtDefaultInteger.Size = new System.Drawing.Size(237, 20);
             this.txtDefaultInteger.TabIndex = 2;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label2.Location = new System.Drawing.Point(6, 62);
+            this.label2.Location = new System.Drawing.Point(13, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(160, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "integer, smallint, bigint, tinyint, bit";
-            // 
-            // label1
-            // 
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.Location = new System.Drawing.Point(6, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(336, 39);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "In some situations the Application has to assign to columns some default types, s" +
-                "uch 0, zero string or current date. Specify the values for the datatypes:";
             // 
             // tabControl1
             // 
@@ -870,92 +833,307 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(461, 429);
+            this.tabControl1.Size = new System.Drawing.Size(545, 442);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.groupBox6);
-            this.tabPage1.Controls.Add(this.groupBox1);
+            this.tabPage1.BackColor = System.Drawing.Color.White;
+            this.tabPage1.Controls.Add(this.gradientPanel6);
+            this.tabPage1.Controls.Add(this.gradientPanel5);
+            this.tabPage1.Controls.Add(this.gradientPanel4);
+            this.tabPage1.Controls.Add(this.gradientPanel3);
+            this.tabPage1.Controls.Add(this.gradientPanel2);
+            this.tabPage1.Controls.Add(this.gradientPanel1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(0);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(453, 403);
+            this.tabPage1.Size = new System.Drawing.Size(537, 416);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Objects";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabPage1.Text = "Filter by Type";
             // 
-            // groupBox6
+            // gradientPanel6
             // 
-            this.groupBox6.Controls.Add(this.chkIgnoreNotForReplication);
-            this.groupBox6.Controls.Add(this.chkCompExtendedProperties);
-            this.groupBox6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.groupBox6.Location = new System.Drawing.Point(6, 353);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(440, 44);
-            this.groupBox6.TabIndex = 1;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Other options";
+            this.gradientPanel6.Controls.Add(this.chkIgnoreNotForReplication);
+            this.gradientPanel6.Controls.Add(this.chkCompExtendedProperties);
+            this.gradientPanel6.GradientLowColor = System.Drawing.Color.White;
+            this.gradientPanel6.Location = new System.Drawing.Point(5, 377);
+            this.gradientPanel6.Name = "gradientPanel6";
+            this.gradientPanel6.Size = new System.Drawing.Size(525, 33);
+            this.gradientPanel6.TabIndex = 7;
             // 
             // chkIgnoreNotForReplication
             // 
             this.chkIgnoreNotForReplication.AutoSize = true;
             this.chkIgnoreNotForReplication.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkIgnoreNotForReplication.Location = new System.Drawing.Point(10, 19);
+            this.chkIgnoreNotForReplication.Location = new System.Drawing.Point(12, 7);
             this.chkIgnoreNotForReplication.Name = "chkIgnoreNotForReplication";
             this.chkIgnoreNotForReplication.Size = new System.Drawing.Size(150, 17);
             this.chkIgnoreNotForReplication.TabIndex = 0;
             this.chkIgnoreNotForReplication.Text = "Ignore Not For Replication";
             this.chkIgnoreNotForReplication.UseVisualStyleBackColor = true;
             // 
+            // gradientPanel5
+            // 
+            this.gradientPanel5.Controls.Add(this.checkBox5);
+            this.gradientPanel5.Controls.Add(this.chkCompFunciones);
+            this.gradientPanel5.Controls.Add(this.checkPartitionFunction);
+            this.gradientPanel5.Controls.Add(this.chkCompVistas);
+            this.gradientPanel5.Controls.Add(this.chkCompRules);
+            this.gradientPanel5.Controls.Add(this.chkCompTriggers);
+            this.gradientPanel5.Controls.Add(this.chkCompTriggersDDL);
+            this.gradientPanel5.Controls.Add(this.chkCompStoreProcedure);
+            this.gradientPanel5.Controls.Add(this.chkCompUDT);
+            this.gradientPanel5.Controls.Add(this.chkCompXMLSchemas);
+            this.gradientPanel5.GradientLowColor = System.Drawing.Color.White;
+            this.gradientPanel5.Location = new System.Drawing.Point(359, 33);
+            this.gradientPanel5.Name = "gradientPanel5";
+            this.gradientPanel5.Size = new System.Drawing.Size(171, 338);
+            this.gradientPanel5.TabIndex = 6;
+            // 
+            // gradientPanel4
+            // 
+            this.gradientPanel4.Controls.Add(this.chkCompCLRStore);
+            this.gradientPanel4.Controls.Add(this.chkCompAssemblys);
+            this.gradientPanel4.Controls.Add(this.checkBox4);
+            this.gradientPanel4.Controls.Add(this.chkCompCLRTrigger);
+            this.gradientPanel4.Controls.Add(this.chkCompCLRUDT);
+            this.gradientPanel4.Controls.Add(this.chkCompCLRFunctions);
+            this.gradientPanel4.GradientLowColor = System.Drawing.Color.White;
+            this.gradientPanel4.Location = new System.Drawing.Point(182, 176);
+            this.gradientPanel4.Name = "gradientPanel4";
+            this.gradientPanel4.Size = new System.Drawing.Size(171, 195);
+            this.gradientPanel4.TabIndex = 5;
+            // 
+            // gradientPanel3
+            // 
+            this.gradientPanel3.Controls.Add(this.checkBox1);
+            this.gradientPanel3.Controls.Add(this.chkFullTextPath);
+            this.gradientPanel3.Controls.Add(this.chkCompUsers);
+            this.gradientPanel3.Controls.Add(this.chkCompSchemas);
+            this.gradientPanel3.Controls.Add(this.chkFileGroups);
+            this.gradientPanel3.Controls.Add(this.chkCompRoles);
+            this.gradientPanel3.Controls.Add(this.chkFullText);
+            this.gradientPanel3.GradientLowColor = System.Drawing.Color.White;
+            this.gradientPanel3.Location = new System.Drawing.Point(182, 33);
+            this.gradientPanel3.Name = "gradientPanel3";
+            this.gradientPanel3.Size = new System.Drawing.Size(171, 137);
+            this.gradientPanel3.TabIndex = 4;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.checkBox1.Location = new System.Drawing.Point(10, 120);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(76, 17);
+            this.checkBox1.TabIndex = 37;
+            this.checkBox1.Text = "Permisions";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // gradientPanel2
+            // 
+            this.gradientPanel2.Controls.Add(this.chkTableChangeTracking);
+            this.gradientPanel2.Controls.Add(this.chkTableLockEscalation);
+            this.gradientPanel2.Controls.Add(this.chkTables);
+            this.gradientPanel2.Controls.Add(this.chkIndexFilter);
+            this.gradientPanel2.Controls.Add(this.chkTableOption);
+            this.gradientPanel2.Controls.Add(this.chkConstraintsCheck);
+            this.gradientPanel2.Controls.Add(this.chkIndex);
+            this.gradientPanel2.Controls.Add(this.chkConstraintsUK);
+            this.gradientPanel2.Controls.Add(this.chkConstraints);
+            this.gradientPanel2.Controls.Add(this.chkConstraintsFK);
+            this.gradientPanel2.Controls.Add(this.chkTablesColumnCollation);
+            this.gradientPanel2.Controls.Add(this.chkConstraintsPK);
+            this.gradientPanel2.Controls.Add(this.chkTablesColumnIdentity);
+            this.gradientPanel2.Controls.Add(this.chkTablesColumnOrder);
+            this.gradientPanel2.Controls.Add(this.chkIndexFillFactor);
+            this.gradientPanel2.Controls.Add(this.chkIndexIncludeColumns);
+            this.gradientPanel2.Controls.Add(this.chkIndexRowLock);
+            this.gradientPanel2.GradientLowColor = System.Drawing.Color.White;
+            this.gradientPanel2.Location = new System.Drawing.Point(5, 33);
+            this.gradientPanel2.Name = "gradientPanel2";
+            this.gradientPanel2.Size = new System.Drawing.Size(171, 338);
+            this.gradientPanel2.TabIndex = 3;
+            // 
+            // chkTableChangeTracking
+            // 
+            this.chkTableChangeTracking.AutoSize = true;
+            this.chkTableChangeTracking.Checked = true;
+            this.chkTableChangeTracking.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkTableChangeTracking.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkTableChangeTracking.Location = new System.Drawing.Point(30, 120);
+            this.chkTableChangeTracking.Name = "chkTableChangeTracking";
+            this.chkTableChangeTracking.Size = new System.Drawing.Size(108, 17);
+            this.chkTableChangeTracking.TabIndex = 16;
+            this.chkTableChangeTracking.Text = "Change Tracking";
+            this.chkTableChangeTracking.UseVisualStyleBackColor = true;
+            // 
+            // chkTableLockEscalation
+            // 
+            this.chkTableLockEscalation.AutoSize = true;
+            this.chkTableLockEscalation.Checked = true;
+            this.chkTableLockEscalation.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkTableLockEscalation.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkTableLockEscalation.Location = new System.Drawing.Point(30, 101);
+            this.chkTableLockEscalation.Name = "chkTableLockEscalation";
+            this.chkTableLockEscalation.Size = new System.Drawing.Size(102, 17);
+            this.chkTableLockEscalation.TabIndex = 15;
+            this.chkTableLockEscalation.Text = "Lock Escalation";
+            this.chkTableLockEscalation.UseVisualStyleBackColor = true;
+            // 
+            // gradientPanel1
+            // 
+            this.gradientPanel1.Controls.Add(this.label11);
+            this.gradientPanel1.GradientLowColor = System.Drawing.Color.SteelBlue;
+            this.gradientPanel1.Location = new System.Drawing.Point(5, 6);
+            this.gradientPanel1.Name = "gradientPanel1";
+            this.gradientPanel1.Size = new System.Drawing.Size(525, 21);
+            this.gradientPanel1.TabIndex = 2;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(4, 4);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(125, 13);
+            this.label11.TabIndex = 3;
+            this.label11.Text = "Filter Object by Type";
+            // 
             // tabPage5
             // 
-            this.tabPage5.Controls.Add(this.groupBox7);
+            this.tabPage5.BackColor = System.Drawing.Color.White;
+            this.tabPage5.Controls.Add(this.gradientPanel15);
+            this.tabPage5.Controls.Add(this.gradientPanel14);
+            this.tabPage5.Controls.Add(this.gradientPanel13);
+            this.tabPage5.Controls.Add(this.gradientPanel12);
+            this.tabPage5.Controls.Add(this.gradientPanel11);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(453, 403);
+            this.tabPage5.Size = new System.Drawing.Size(537, 416);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Comparision";
-            this.tabPage5.UseVisualStyleBackColor = true;
             // 
-            // groupBox7
+            // gradientPanel15
             // 
-            this.groupBox7.Controls.Add(this.rdoCaseSensitive);
-            this.groupBox7.Controls.Add(this.rdoCaseInsensitive);
-            this.groupBox7.Controls.Add(this.rdoCaseAutomatic);
-            this.groupBox7.Location = new System.Drawing.Point(6, 6);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(441, 97);
-            this.groupBox7.TabIndex = 0;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Case sensitibity options";
+            this.gradientPanel15.Controls.Add(this.chkIgnoreWhiteSpaceInCode);
+            this.gradientPanel15.GradientLowColor = System.Drawing.Color.White;
+            this.gradientPanel15.Location = new System.Drawing.Point(5, 232);
+            this.gradientPanel15.Name = "gradientPanel15";
+            this.gradientPanel15.Size = new System.Drawing.Size(525, 31);
+            this.gradientPanel15.TabIndex = 7;
+            // 
+            // chkIgnoreWhiteSpaceInCode
+            // 
+            this.chkIgnoreWhiteSpaceInCode.AutoSize = true;
+            this.chkIgnoreWhiteSpaceInCode.Location = new System.Drawing.Point(7, 7);
+            this.chkIgnoreWhiteSpaceInCode.Name = "chkIgnoreWhiteSpaceInCode";
+            this.chkIgnoreWhiteSpaceInCode.Size = new System.Drawing.Size(331, 17);
+            this.chkIgnoreWhiteSpaceInCode.TabIndex = 2;
+            this.chkIgnoreWhiteSpaceInCode.Text = "Ignore white spaces in Store Procedures, Triggers and Functions";
+            this.chkIgnoreWhiteSpaceInCode.UseVisualStyleBackColor = true;
+            // 
+            // gradientPanel14
+            // 
+            this.gradientPanel14.Controls.Add(this.label14);
+            this.gradientPanel14.GradientLowColor = System.Drawing.Color.SteelBlue;
+            this.gradientPanel14.Location = new System.Drawing.Point(5, 135);
+            this.gradientPanel14.Name = "gradientPanel14";
+            this.gradientPanel14.Size = new System.Drawing.Size(525, 21);
+            this.gradientPanel14.TabIndex = 6;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(4, 4);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(256, 13);
+            this.label14.TabIndex = 3;
+            this.label14.Text = "Procedures, Functions and Triggers Options";
+            // 
+            // gradientPanel13
+            // 
+            this.gradientPanel13.Controls.Add(this.rdoCaseSensityInCode);
+            this.gradientPanel13.Controls.Add(this.rdoCaseInsensityInCode);
+            this.gradientPanel13.GradientLowColor = System.Drawing.Color.White;
+            this.gradientPanel13.Location = new System.Drawing.Point(5, 162);
+            this.gradientPanel13.Name = "gradientPanel13";
+            this.gradientPanel13.Size = new System.Drawing.Size(525, 64);
+            this.gradientPanel13.TabIndex = 5;
+            // 
+            // rdoCaseSensityInCode
+            // 
+            this.rdoCaseSensityInCode.AutoSize = true;
+            this.rdoCaseSensityInCode.Location = new System.Drawing.Point(13, 36);
+            this.rdoCaseSensityInCode.Name = "rdoCaseSensityInCode";
+            this.rdoCaseSensityInCode.Size = new System.Drawing.Size(93, 17);
+            this.rdoCaseSensityInCode.TabIndex = 2;
+            this.rdoCaseSensityInCode.Text = "Case sensitive";
+            this.rdoCaseSensityInCode.UseVisualStyleBackColor = true;
+            // 
+            // rdoCaseInsensityInCode
+            // 
+            this.rdoCaseInsensityInCode.AutoSize = true;
+            this.rdoCaseInsensityInCode.Checked = true;
+            this.rdoCaseInsensityInCode.Location = new System.Drawing.Point(13, 13);
+            this.rdoCaseInsensityInCode.Name = "rdoCaseInsensityInCode";
+            this.rdoCaseInsensityInCode.Size = new System.Drawing.Size(101, 17);
+            this.rdoCaseInsensityInCode.TabIndex = 1;
+            this.rdoCaseInsensityInCode.TabStop = true;
+            this.rdoCaseInsensityInCode.Text = "Case insensitive";
+            this.rdoCaseInsensityInCode.UseVisualStyleBackColor = true;
+            // 
+            // gradientPanel12
+            // 
+            this.gradientPanel12.Controls.Add(this.label13);
+            this.gradientPanel12.GradientLowColor = System.Drawing.Color.SteelBlue;
+            this.gradientPanel12.Location = new System.Drawing.Point(5, 6);
+            this.gradientPanel12.Name = "gradientPanel12";
+            this.gradientPanel12.Size = new System.Drawing.Size(525, 21);
+            this.gradientPanel12.TabIndex = 4;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(4, 4);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(197, 13);
+            this.label13.TabIndex = 3;
+            this.label13.Text = "Collation Case Sensitibity Options";
+            // 
+            // gradientPanel11
+            // 
+            this.gradientPanel11.Controls.Add(this.rdoCaseSensitive);
+            this.gradientPanel11.Controls.Add(this.rdoCaseAutomatic);
+            this.gradientPanel11.Controls.Add(this.rdoCaseInsensitive);
+            this.gradientPanel11.GradientLowColor = System.Drawing.Color.White;
+            this.gradientPanel11.Location = new System.Drawing.Point(5, 33);
+            this.gradientPanel11.Name = "gradientPanel11";
+            this.gradientPanel11.Size = new System.Drawing.Size(525, 87);
+            this.gradientPanel11.TabIndex = 3;
             // 
             // rdoCaseSensitive
             // 
             this.rdoCaseSensitive.AutoSize = true;
-            this.rdoCaseSensitive.Location = new System.Drawing.Point(6, 65);
+            this.rdoCaseSensitive.Location = new System.Drawing.Point(14, 59);
             this.rdoCaseSensitive.Name = "rdoCaseSensitive";
             this.rdoCaseSensitive.Size = new System.Drawing.Size(93, 17);
             this.rdoCaseSensitive.TabIndex = 2;
             this.rdoCaseSensitive.Text = "Case sensitive";
             this.rdoCaseSensitive.UseVisualStyleBackColor = true;
             // 
-            // rdoCaseInsensitive
-            // 
-            this.rdoCaseInsensitive.AutoSize = true;
-            this.rdoCaseInsensitive.Location = new System.Drawing.Point(6, 42);
-            this.rdoCaseInsensitive.Name = "rdoCaseInsensitive";
-            this.rdoCaseInsensitive.Size = new System.Drawing.Size(101, 17);
-            this.rdoCaseInsensitive.TabIndex = 1;
-            this.rdoCaseInsensitive.Text = "Case insensitive";
-            this.rdoCaseInsensitive.UseVisualStyleBackColor = true;
-            // 
             // rdoCaseAutomatic
             // 
             this.rdoCaseAutomatic.AutoSize = true;
             this.rdoCaseAutomatic.Checked = true;
-            this.rdoCaseAutomatic.Location = new System.Drawing.Point(6, 19);
+            this.rdoCaseAutomatic.Location = new System.Drawing.Point(14, 13);
             this.rdoCaseAutomatic.Name = "rdoCaseAutomatic";
             this.rdoCaseAutomatic.Size = new System.Drawing.Size(200, 17);
             this.rdoCaseAutomatic.TabIndex = 0;
@@ -963,34 +1141,34 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.rdoCaseAutomatic.Text = "Automatic (detect database collation)";
             this.rdoCaseAutomatic.UseVisualStyleBackColor = true;
             // 
+            // rdoCaseInsensitive
+            // 
+            this.rdoCaseInsensitive.AutoSize = true;
+            this.rdoCaseInsensitive.Location = new System.Drawing.Point(14, 36);
+            this.rdoCaseInsensitive.Name = "rdoCaseInsensitive";
+            this.rdoCaseInsensitive.Size = new System.Drawing.Size(101, 17);
+            this.rdoCaseInsensitive.TabIndex = 1;
+            this.rdoCaseInsensitive.Text = "Case insensitive";
+            this.rdoCaseInsensitive.UseVisualStyleBackColor = true;
+            // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.groupBox5);
+            this.tabPage4.BackColor = System.Drawing.Color.White;
+            this.tabPage4.Controls.Add(this.btnAdd);
+            this.tabPage4.Controls.Add(this.gradientPanel10);
+            this.tabPage4.Controls.Add(this.btnApply);
+            this.tabPage4.Controls.Add(this.gradientPanel9);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(453, 403);
+            this.tabPage4.Size = new System.Drawing.Size(537, 416);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Filters";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.btnAdd);
-            this.groupBox5.Controls.Add(this.btnApply);
-            this.groupBox5.Controls.Add(this.lstFilters);
-            this.groupBox5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.groupBox5.Location = new System.Drawing.Point(6, 6);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(441, 372);
-            this.groupBox5.TabIndex = 3;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Filters Objects";
+            this.tabPage4.Text = "Filter by Name";
             // 
             // btnAdd
             // 
             this.btnAdd.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAdd.Location = new System.Drawing.Point(313, 342);
+            this.btnAdd.Location = new System.Drawing.Point(412, 374);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(58, 23);
             this.btnAdd.TabIndex = 3;
@@ -998,16 +1176,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // btnApply
+            // gradientPanel10
             // 
-            this.btnApply.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnApply.Location = new System.Drawing.Point(377, 342);
-            this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(58, 23);
-            this.btnApply.TabIndex = 2;
-            this.btnApply.Text = "Edit";
-            this.btnApply.UseVisualStyleBackColor = true;
-            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            this.gradientPanel10.Controls.Add(this.lstFilters);
+            this.gradientPanel10.GradientLowColor = System.Drawing.Color.White;
+            this.gradientPanel10.Location = new System.Drawing.Point(6, 33);
+            this.gradientPanel10.Name = "gradientPanel10";
+            this.gradientPanel10.Size = new System.Drawing.Size(524, 335);
+            this.gradientPanel10.TabIndex = 5;
             // 
             // lstFilters
             // 
@@ -1016,9 +1192,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
-            this.lstFilters.Location = new System.Drawing.Point(6, 19);
+            this.lstFilters.Location = new System.Drawing.Point(7, 8);
             this.lstFilters.Name = "lstFilters";
-            this.lstFilters.Size = new System.Drawing.Size(429, 317);
+            this.lstFilters.Size = new System.Drawing.Size(509, 320);
             this.lstFilters.TabIndex = 0;
             this.lstFilters.UseCompatibleStateImageBehavior = false;
             this.lstFilters.View = System.Windows.Forms.View.Details;
@@ -1041,46 +1217,112 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // 
             this.columnHeader4.Text = "";
             // 
+            // btnApply
+            // 
+            this.btnApply.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnApply.Location = new System.Drawing.Point(473, 374);
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(58, 23);
+            this.btnApply.TabIndex = 2;
+            this.btnApply.Text = "Edit";
+            this.btnApply.UseVisualStyleBackColor = true;
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            // 
+            // gradientPanel9
+            // 
+            this.gradientPanel9.Controls.Add(this.label1);
+            this.gradientPanel9.GradientLowColor = System.Drawing.Color.SteelBlue;
+            this.gradientPanel9.Location = new System.Drawing.Point(5, 6);
+            this.gradientPanel9.Name = "gradientPanel9";
+            this.gradientPanel9.Size = new System.Drawing.Size(525, 21);
+            this.gradientPanel9.TabIndex = 4;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(4, 4);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(129, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Filter Object by Name";
+            // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.groupBox2);
+            this.tabPage2.BackColor = System.Drawing.Color.White;
+            this.tabPage2.Controls.Add(this.gradientPanel8);
+            this.tabPage2.Controls.Add(this.gradientPanel7);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(453, 403);
+            this.tabPage2.Size = new System.Drawing.Size(537, 416);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Defaults";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // gradientPanel8
+            // 
+            this.gradientPanel8.Controls.Add(this.txtXML);
+            this.gradientPanel8.Controls.Add(this.label2);
+            this.gradientPanel8.Controls.Add(this.label10);
+            this.gradientPanel8.Controls.Add(this.txtDefaultInteger);
+            this.gradientPanel8.Controls.Add(this.txtTime);
+            this.gradientPanel8.Controls.Add(this.label3);
+            this.gradientPanel8.Controls.Add(this.label9);
+            this.gradientPanel8.Controls.Add(this.txtDefaultReal);
+            this.gradientPanel8.Controls.Add(this.txtVariant);
+            this.gradientPanel8.Controls.Add(this.label4);
+            this.gradientPanel8.Controls.Add(this.label8);
+            this.gradientPanel8.Controls.Add(this.txtText);
+            this.gradientPanel8.Controls.Add(this.txtNText);
+            this.gradientPanel8.Controls.Add(this.label5);
+            this.gradientPanel8.Controls.Add(this.label7);
+            this.gradientPanel8.Controls.Add(this.txtDate);
+            this.gradientPanel8.Controls.Add(this.txtBlob);
+            this.gradientPanel8.Controls.Add(this.label6);
+            this.gradientPanel8.GradientLowColor = System.Drawing.Color.White;
+            this.gradientPanel8.Location = new System.Drawing.Point(5, 33);
+            this.gradientPanel8.Name = "gradientPanel8";
+            this.gradientPanel8.Size = new System.Drawing.Size(525, 377);
+            this.gradientPanel8.TabIndex = 4;
+            // 
+            // gradientPanel7
+            // 
+            this.gradientPanel7.Controls.Add(this.label12);
+            this.gradientPanel7.GradientLowColor = System.Drawing.Color.SteelBlue;
+            this.gradientPanel7.Location = new System.Drawing.Point(5, 6);
+            this.gradientPanel7.Name = "gradientPanel7";
+            this.gradientPanel7.Size = new System.Drawing.Size(525, 21);
+            this.gradientPanel7.TabIndex = 3;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(4, 4);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(90, 13);
+            this.label12.TabIndex = 3;
+            this.label12.Text = "Default Values";
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.groupBox3);
+            this.tabPage3.BackColor = System.Drawing.Color.White;
+            this.tabPage3.Controls.Add(this.groupBox4);
+            this.tabPage3.Controls.Add(this.gradientPanel16);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(453, 403);
+            this.tabPage3.Size = new System.Drawing.Size(537, 416);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Script";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.groupBox4);
-            this.groupBox3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.groupBox3.Location = new System.Drawing.Point(6, 6);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(444, 365);
-            this.groupBox3.TabIndex = 2;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Advanced Script Options";
             // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.optScriptSchemaBindingAlter);
             this.groupBox4.Controls.Add(this.optScriptSchemaDrop);
-            this.groupBox4.Location = new System.Drawing.Point(6, 19);
+            this.groupBox4.Location = new System.Drawing.Point(5, 33);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(432, 66);
-            this.groupBox4.TabIndex = 3;
+            this.groupBox4.Size = new System.Drawing.Size(525, 66);
+            this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "When rebuild a View WITH SCHEMABINDING";
             // 
@@ -1109,18 +1351,24 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.optScriptSchemaDrop.Text = "DROP/CREATE object";
             this.optScriptSchemaDrop.UseVisualStyleBackColor = true;
             // 
-            // chkFullTextPath
+            // gradientPanel16
             // 
-            this.chkFullTextPath.AutoSize = true;
-            this.chkFullTextPath.Checked = true;
-            this.chkFullTextPath.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkFullTextPath.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkFullTextPath.Location = new System.Drawing.Point(179, 297);
-            this.chkFullTextPath.Name = "chkFullTextPath";
-            this.chkFullTextPath.Size = new System.Drawing.Size(86, 17);
-            this.chkFullTextPath.TabIndex = 36;
-            this.chkFullTextPath.Text = "Include Path";
-            this.chkFullTextPath.UseVisualStyleBackColor = true;
+            this.gradientPanel16.Controls.Add(this.label15);
+            this.gradientPanel16.GradientLowColor = System.Drawing.Color.SteelBlue;
+            this.gradientPanel16.Location = new System.Drawing.Point(5, 6);
+            this.gradientPanel16.Name = "gradientPanel16";
+            this.gradientPanel16.Size = new System.Drawing.Size(525, 21);
+            this.gradientPanel16.TabIndex = 3;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(4, 4);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(148, 13);
+            this.label15.TabIndex = 3;
+            this.label15.Text = "Advanced Script Options";
             // 
             // SqlOptionsFront
             // 
@@ -1128,32 +1376,52 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl1);
             this.Name = "SqlOptionsFront";
-            this.Size = new System.Drawing.Size(461, 429);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.Size = new System.Drawing.Size(545, 442);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
+            this.gradientPanel6.ResumeLayout(false);
+            this.gradientPanel6.PerformLayout();
+            this.gradientPanel5.ResumeLayout(false);
+            this.gradientPanel5.PerformLayout();
+            this.gradientPanel4.ResumeLayout(false);
+            this.gradientPanel4.PerformLayout();
+            this.gradientPanel3.ResumeLayout(false);
+            this.gradientPanel3.PerformLayout();
+            this.gradientPanel2.ResumeLayout(false);
+            this.gradientPanel2.PerformLayout();
+            this.gradientPanel1.ResumeLayout(false);
+            this.gradientPanel1.PerformLayout();
             this.tabPage5.ResumeLayout(false);
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
+            this.gradientPanel15.ResumeLayout(false);
+            this.gradientPanel15.PerformLayout();
+            this.gradientPanel14.ResumeLayout(false);
+            this.gradientPanel14.PerformLayout();
+            this.gradientPanel13.ResumeLayout(false);
+            this.gradientPanel13.PerformLayout();
+            this.gradientPanel12.ResumeLayout(false);
+            this.gradientPanel12.PerformLayout();
+            this.gradientPanel11.ResumeLayout(false);
+            this.gradientPanel11.PerformLayout();
             this.tabPage4.ResumeLayout(false);
-            this.groupBox5.ResumeLayout(false);
+            this.gradientPanel10.ResumeLayout(false);
+            this.gradientPanel9.ResumeLayout(false);
+            this.gradientPanel9.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.gradientPanel8.ResumeLayout(false);
+            this.gradientPanel8.PerformLayout();
+            this.gradientPanel7.ResumeLayout(false);
+            this.gradientPanel7.PerformLayout();
             this.tabPage3.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.gradientPanel16.ResumeLayout(false);
+            this.gradientPanel16.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox chkCompExtendedProperties;
         private System.Windows.Forms.CheckBox chkConstraints;
         private System.Windows.Forms.CheckBox chkCompSchemas;
@@ -1166,8 +1434,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         private System.Windows.Forms.CheckBox chkTables;
         private System.Windows.Forms.CheckBox chkCompTriggers;
         private System.Windows.Forms.CheckBox chkCompVistas;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtDefaultReal;
         private System.Windows.Forms.Label label3;
@@ -1195,13 +1461,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         private System.Windows.Forms.CheckBox chkIndexIncludeColumns;
         private System.Windows.Forms.CheckBox chkCompUsers;
         private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.RadioButton optScriptSchemaBindingAlter;
-        private System.Windows.Forms.RadioButton optScriptSchemaDrop;
         private System.Windows.Forms.CheckBox chkCompRoles;
         private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.ListView lstFilters;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
@@ -1209,20 +1470,18 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.Button btnApply;
         private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.CheckBox chkIgnoreNotForReplication;
         private System.Windows.Forms.CheckBox chkCompRules;
         private System.Windows.Forms.CheckBox chkFullText;
         private System.Windows.Forms.CheckBox chkIndexRowLock;
         private System.Windows.Forms.CheckBox chkCompCLRStore;
         private System.Windows.Forms.CheckBox chkCompCLRTrigger;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox chkCompCLRFunctions;
+        private System.Windows.Forms.CheckBox chkCompCLRUDT;
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.CheckBox checkPartitionFunction;
         private System.Windows.Forms.CheckBox checkBox5;
         private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.RadioButton rdoCaseAutomatic;
         private System.Windows.Forms.RadioButton rdoCaseSensitive;
         private System.Windows.Forms.RadioButton rdoCaseInsensitive;
@@ -1236,5 +1495,36 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         private System.Windows.Forms.CheckBox chkConstraintsCheck;
         private System.Windows.Forms.CheckBox chkIndexFilter;
         private System.Windows.Forms.CheckBox chkFullTextPath;
+        private System.Windows.Forms.RadioButton rdoCaseSensityInCode;
+        private System.Windows.Forms.RadioButton rdoCaseInsensityInCode;
+        private System.Windows.Forms.CheckBox chkIgnoreWhiteSpaceInCode;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel1;
+        private System.Windows.Forms.Label label11;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel2;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel3;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel4;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel5;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel6;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel8;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel7;
+        private System.Windows.Forms.Label label12;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel9;
+        private System.Windows.Forms.Label label1;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel10;
+        private System.Windows.Forms.CheckBox chkTableLockEscalation;
+        private System.Windows.Forms.CheckBox chkTableChangeTracking;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel12;
+        private System.Windows.Forms.Label label13;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel11;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel13;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel14;
+        private System.Windows.Forms.Label label14;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel15;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel16;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.RadioButton optScriptSchemaBindingAlter;
+        private System.Windows.Forms.RadioButton optScriptSchemaDrop;
     }
 }

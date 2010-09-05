@@ -1,291 +1,159 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using DBDiff.Schema.Model;
 using DBDiff.Schema.Attributes;
+using DBDiff.Schema.Model;
 using DBDiff.Schema.SQLServer.Generates.Options;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class Database : SQLServerSchemaBase, IDatabase
     {
-        private SqlOption options;
-        
-        private Dependencies constraintDependencies;        
-        private Defaults defaults;        
-        private DatabaseInfo info;
-        private SchemaList<FileGroup, Database> fileGroups;
-        private SchemaList<UserDataType, Database> userTypes;                
-        private SchemaList<Schema, Database> schemas;        
-        private SchemaList<Trigger, Database> ddlTriggers;
-        private SchemaList<XMLSchema, Database> xmlSchemas;
-        private SchemaList<Assembly, Database> assemblies;                
-        private SchemaList<Function, Database> functions;
-        private SchemaList<StoreProcedure, Database> procedures;
-        private SchemaList<CLRStoreProcedure, Database> CLRprocedures;
-        private SchemaList<Rule, Database> rules;
-        private SchemaList<Synonym, Database> synonyms;
-        private SchemaList<Table, Database> tables;
-        private SchemaList<TableType, Database> tablesTypes;
-        private SchemaList<User, Database> users;
-        private SchemaList<View, Database> views;
-        private SchemaList<FullText, Database> fullText;
-        private SchemaList<PartitionFunction, Database> partitionFunctions;
-        private SchemaList<PartitionScheme, Database> partitionScheme;
-        private Roles roles;
-        private SearchSchemaBase allObjects;
-        private SqlAction actionMessage;
+        private readonly List<DatabaseChangeStatus> _changesOptions;
+        private DatabaseInfo _info;
 
-        public Database():base(null, Enums.ObjectType.Database)
+        public Database() : base(null, Enums.ObjectType.Database)
         {
-            allObjects = new SearchSchemaBase();
-            constraintDependencies = new Dependencies();
-            tablesTypes = new SchemaList<TableType, Database>(this, this.allObjects);
-            userTypes = new SchemaList<UserDataType, Database>(this, this.allObjects);
-            xmlSchemas = new SchemaList<XMLSchema, Database>(this, this.allObjects);
-            schemas = new SchemaList<Schema, Database>(this, this.allObjects);
-            procedures = new SchemaList<StoreProcedure, Database>(this, this.allObjects);
-            CLRprocedures = new SchemaList<CLRStoreProcedure, Database>(this, this.allObjects);
-            fileGroups = new SchemaList<FileGroup, Database>(this);
-            rules = new SchemaList<Rule, Database>(this, this.allObjects);
-            ddlTriggers = new SchemaList<Trigger, Database>(this, this.allObjects);
-            synonyms = new SchemaList<Synonym, Database>(this, this.allObjects);
-            assemblies = new SchemaList<Assembly, Database>(this,this.allObjects);
-            views = new SchemaList<View, Database>(this, this.allObjects);
-            users = new SchemaList<User, Database>(this, this.allObjects);
-            fullText = new SchemaList<FullText, Database>(this, this.allObjects);
-            functions = new SchemaList<Function, Database>(this,this.allObjects);
-            partitionFunctions = new SchemaList<PartitionFunction, Database>(this, this.allObjects);
-            partitionScheme = new SchemaList<PartitionScheme, Database>(this, this.allObjects);
-            roles = new Roles(this);
-            tables = new SchemaList<Table, Database>(this, this.allObjects);
-            defaults = new Defaults(this);
-            actionMessage = new SqlAction(this);
+            AllObjects = new SearchSchemaBase();
+            _changesOptions = new List<DatabaseChangeStatus>();
+            Dependencies = new Dependencies();
+            TablesTypes = new SchemaList<TableType, Database>(this, AllObjects);
+            UserTypes = new SchemaList<UserDataType, Database>(this, AllObjects);
+            XmlSchemas = new SchemaList<XMLSchema, Database>(this, AllObjects);
+            Schemas = new SchemaList<Schema, Database>(this, AllObjects);
+            Procedures = new SchemaList<StoreProcedure, Database>(this, AllObjects);
+            CLRProcedures = new SchemaList<CLRStoreProcedure, Database>(this, AllObjects);
+            CLRFunctions = new SchemaList<CLRFunction, Database>(this, AllObjects);
+            FileGroups = new SchemaList<FileGroup, Database>(this);
+            Rules = new SchemaList<Rule, Database>(this, AllObjects);
+            DDLTriggers = new SchemaList<Trigger, Database>(this, AllObjects);
+            Synonyms = new SchemaList<Synonym, Database>(this, AllObjects);
+            Assemblies = new SchemaList<Assembly, Database>(this, AllObjects);
+            Views = new SchemaList<View, Database>(this, AllObjects);
+            Users = new SchemaList<User, Database>(this, AllObjects);
+            FullText = new SchemaList<FullText, Database>(this, AllObjects);
+            Functions = new SchemaList<Function, Database>(this, AllObjects);
+            PartitionFunctions = new SchemaList<PartitionFunction, Database>(this, AllObjects);
+            PartitionSchemes = new SchemaList<PartitionScheme, Database>(this, AllObjects);
+            Roles = new SchemaList<Role, Database>(this);
+            Tables = new SchemaList<Table, Database>(this, AllObjects);
+            Defaults = new SchemaList<Default, Database>(this, AllObjects);
+            ActionMessage = new SqlAction(this);
         }
 
-        public override ISchemaBase Clone(ISchemaBase parent)
-        {
-            Database item = new Database();
-            item.assemblies = this.Assemblies.Clone(this);
-            item.tables = this.Tables.Clone(this);
-            item.procedures = this.Procedures.Clone(this);
-            item.functions = this.Functions.Clone(this);
-            item.views = this.Views.Clone(this);
-            item.allObjects = this.AllObjects;
-            return item;
-        }
+        internal SearchSchemaBase AllObjects { get; private set; }
 
-        public SqlAction ActionMessage 
-        { 
-            get
-            {
-                return actionMessage;
-            } 
-        }
+        [ShowItem("Full Text Catalog", "FullText")]
+        public SchemaList<FullText, Database> FullText { get; private set; }
 
-        internal SearchSchemaBase AllObjects
-        {
-            get { return allObjects; }            
-        }
+        [ShowItem("Table Type", "Table")]
+        public SchemaList<TableType, Database> TablesTypes { get; private set; }
 
-        [ShowItemAttribute("Full Text Catalog", "FullText")]
-        public SchemaList<FullText, Database> FullText
-        {
-            get { return fullText; }
-            set { fullText = value; }
-        }
+        [ShowItem("Partition Scheme", "PartitionScheme")]
+        public SchemaList<PartitionScheme, Database> PartitionSchemes { get; private set; }
 
-        [ShowItemAttribute("Table Type", "Table")]
-        public SchemaList<TableType, Database> TablesTypes
-        {
-            get { return tablesTypes; }
-            set { tablesTypes = value; }
-        }
+        [ShowItem("Partition Functions", "PartitionFunction")]
+        public SchemaList<PartitionFunction, Database> PartitionFunctions { get; private set; }
 
-        [ShowItemAttribute("Partition Scheme", "PartitionScheme")]
-        public SchemaList<PartitionScheme, Database> PartitionSchemes
-        {
-            get { return partitionScheme; }
-            set { partitionScheme = value; }
-        }
+        [ShowItem("Defaults")]
+        public SchemaList<Default, Database> Defaults { get; private set; }
 
-        [ShowItemAttribute("Partition Functions", "PartitionFunction")]
-        public SchemaList<PartitionFunction, Database> PartitionFunctions
-        {
-            get { return partitionFunctions; }
-            set { partitionFunctions = value; }
-        }
+        [ShowItem("Roles", "Rol")]
+        public SchemaList<Role, Database> Roles { get; private set; }
 
-        [ShowItemAttribute("Defaults")]
-        public Defaults Defaults
-        {
-            get { return defaults; }
-            set { defaults = value; }
-        }
+        [ShowItem("Functions", "Function", true)]
+        public SchemaList<Function, Database> Functions { get; private set; }
 
-        [ShowItemAttribute("Roles","Rol")]
-        public Roles Roles
-        {
-            get { return roles; }
-        }
+        [ShowItem("Users", "User")]
+        public SchemaList<User, Database> Users { get; private set; }
 
-        [ShowItemAttribute("Functions","Function",true)]
-        public SchemaList<Function, Database> Functions
-        {
-            get { return functions; }
-        }
+        [ShowItem("Views", "View", true)]
+        public SchemaList<View, Database> Views { get; private set; }
 
-        [ShowItemAttribute("Users","User")]
-        public SchemaList<User, Database> Users
-        {
-            get { return users; }
-        }
+        [ShowItem("Assemblies", "Assembly")]
+        public SchemaList<Assembly, Database> Assemblies { get; private set; }
 
-        [ShowItemAttribute("Views","View",true)]
-        public SchemaList<View, Database> Views
-        {
-            get { return views; }
-            set { views = value; }
-        }
+        [ShowItem("Synonyms")]
+        public SchemaList<Synonym, Database> Synonyms { get; private set; }
 
-        [ShowItemAttribute("Assemblies","Assembly")]
-        public SchemaList<Assembly, Database> Assemblies
-        {
-            get { return assemblies; }
-        }
+        [ShowItem("DLL Triggers")]
+        public SchemaList<Trigger, Database> DDLTriggers { get; private set; }
 
-        [ShowItemAttribute("Synonyms")]
-        public SchemaList<Synonym, Database> Synonyms
-        {
-            get { return synonyms; }
-        }
+        [ShowItem("File Groups")]
+        public SchemaList<FileGroup, Database> FileGroups { get; private set; }
 
-        public SqlOption Options
-        {
-            get { return options; }
-            set { options = value; }
-        }
+        [ShowItem("Rules")]
+        public SchemaList<Rule, Database> Rules { get; private set; }
+
+        [ShowItem("Store Procedures", "Procedure", true)]
+        public SchemaList<StoreProcedure, Database> Procedures { get; private set; }
+
+        [ShowItem("CLR Store Procedures", "CLRProcedure", true)]
+        public SchemaList<CLRStoreProcedure, Database> CLRProcedures { get; private set; }
+
+        [ShowItem("CLR Functions", "CLRFunction", true)]
+        public SchemaList<CLRFunction, Database> CLRFunctions { get; private set; }
+
+        [ShowItem("Schemas", "Schema")]
+        public SchemaList<Schema, Database> Schemas { get; private set; }
+
+        [ShowItem("XML Schemas", "XMLSchema")]
+        public SchemaList<XMLSchema, Database> XmlSchemas { get; private set; }
+
+        [ShowItem("Tables", "Table")]
+        public SchemaList<Table, Database> Tables { get; private set; }
+
+        [ShowItem("User Types", "UDT")]
+        public SchemaList<UserDataType, Database> UserTypes { get; private set; }
+
+        public SqlOption Options { get; set; }
 
         public DatabaseInfo Info
         {
-            get { return info; }
-            set { info = value; }
+            get { return _info; }
+            set { _info = value; }
         }
 
         /// <summary>
         /// Coleccion de dependencias de constraints.
         /// </summary>
-        internal Dependencies Dependencies
+        internal Dependencies Dependencies { get; set; }
+
+        private List<DatabaseChangeStatus> ChangesOptions
         {
-            get { return constraintDependencies; }
-            set { constraintDependencies = value; }
+            get { return _changesOptions; }
         }
 
-        [ShowItemAttribute("DLL Triggers")]
-        public SchemaList<Trigger, Database> DDLTriggers
+        #region IDatabase Members
+
+        public override ISchemaBase Clone(ISchemaBase parent)
         {
-            get { return ddlTriggers; }
+            var item = new Database
+                           {
+                               Assemblies = Assemblies.Clone(this),
+                               Tables = Tables.Clone(this),
+                               Procedures = Procedures.Clone(this),
+                               Functions = Functions.Clone(this),
+                               Views = Views.Clone(this),
+                               AllObjects = AllObjects
+                           };
+            return item;
         }
 
-        [ShowItemAttribute("File Groups")]
-        public SchemaList<FileGroup, Database> FileGroups
-        {
-            get { return fileGroups; }
-        }
-
-        [ShowItemAttribute("Rules")]
-        public SchemaList<Rule, Database> Rules
-        {
-            get { return rules; }
-        }
-
-        /// <summary>
-        /// Coleccion de Store Procedures de la base.
-        /// </summary>
-        [ShowItemAttribute("Store Procedures","Procedure", true)]
-        public SchemaList<StoreProcedure, Database> Procedures
-        {
-            get { return procedures; }
-        }
-
-        [ShowItemAttribute("CLR Store Procedures", "CLRProcedure", true)]
-        public SchemaList<CLRStoreProcedure, Database> CLRProcedures
-        {
-            get { return CLRprocedures; }
-        }
-
-        /// <summary>
-        /// Coleccion de schemas de la base.
-        /// </summary>
-        [ShowItemAttribute("Schemas","Schema")]
-        public SchemaList<Schema, Database> Schemas
-        {
-            get { return schemas; }
-        }
-
-        /// <summary>
-        /// Coleccion de XML schemas de la base
-        /// </summary>
-        [ShowItemAttribute("XML Schemas","XMLSchema")]
-        public SchemaList<XMLSchema, Database> XmlSchemas
-        {
-            get { return xmlSchemas; }
-        }
-
-        /// <summary>
-        /// Coleccion de tablas de la base.
-        /// </summary>
-        [ShowItemAttribute("Tables","Table")]
-        public SchemaList<Table, Database> Tables
-        {
-            get { return tables; }
-        }
-
-        /// <summary>
-        /// Coleccion de userTypes de la base.
-        /// </summary>
-        [ShowItemAttribute("User Types","UDT")]
-        public SchemaList<UserDataType, Database> UserTypes
-        {
-            get { return userTypes; }
-            set { userTypes = value; }
-        }
-
-        
-        /// <summary>
-        /// Nombre del objecto
-        /// </summary>
-        public new string Name
-        {
-            get
-            {
-                if (base.Name.IndexOf(' ', 0) == -1)
-                    return base.Name;
-                else
-                    return "[" + base.Name + "]";
-            }
-            set { base.Name = value; }
-        }
+        public SqlAction ActionMessage { get; private set; }
 
         public Boolean IsCaseSensity
         {
             get
             {
                 bool isCS = false;
-                if (!String.IsNullOrEmpty(info.Collation))
-                    isCS = info.Collation.IndexOf("_CS_") != -1;
+                if (!String.IsNullOrEmpty(_info.Collation))
+                    isCS = _info.Collation.IndexOf("_CS_") != -1;
 
-                if (this.Options.Comparison.CaseSensityType == DBDiff.Schema.SQLServer.Generates.Options.SqlOptionComparison.CaseSensityOptions.Automatic)
-                {
-                    if (isCS)
-                        return true;
-                    else
-                        return false;
-                }
-                if (this.Options.Comparison.CaseSensityType == DBDiff.Schema.SQLServer.Generates.Options.SqlOptionComparison.CaseSensityOptions.CaseSensity)
+                if (Options.Comparison.CaseSensityType == SqlOptionComparison.CaseSensityOptions.Automatic)
+                    return isCS;
+                if (Options.Comparison.CaseSensityType == SqlOptionComparison.CaseSensityOptions.CaseSensity)
                     return true;
-                if (this.Options.Comparison.CaseSensityType == DBDiff.Schema.SQLServer.Generates.Options.SqlOptionComparison.CaseSensityOptions.CaseInsensity)
+                if (Options.Comparison.CaseSensityType == SqlOptionComparison.CaseSensityOptions.CaseInsensity)
                     return false;
 
                 return false;
@@ -295,22 +163,23 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public override string ToSql()
         {
             string sql = "";
-            sql += fileGroups.ToSql();
-            sql += schemas.ToSql();
-            sql += xmlSchemas.ToSql();
-            sql += rules.ToSql();
-            sql += userTypes.ToSql();
-            sql += assemblies.ToSql();
-            sql += tables.ToSql();
-            sql += functions.ToSql();
-            sql += procedures.ToSql();
-            sql += CLRprocedures.ToSql();
-            sql += ddlTriggers.ToSql();
-            sql += synonyms.ToSql();
-            sql += views.ToSql();
-            sql += users.ToSql();
-            sql += partitionFunctions.ToSql();
-            sql += fullText.ToSql();
+            sql += FileGroups.ToSql();
+            sql += Schemas.ToSql();
+            sql += XmlSchemas.ToSql();
+            sql += Rules.ToSql();
+            sql += UserTypes.ToSql();
+            sql += Assemblies.ToSql();
+            sql += Tables.ToSql();
+            sql += Functions.ToSql();
+            sql += Procedures.ToSql();
+            sql += CLRProcedures.ToSql();
+            sql += CLRFunctions.ToSql();
+            sql += DDLTriggers.ToSql();
+            sql += Synonyms.ToSql();
+            sql += Views.ToSql();
+            sql += Users.ToSql();
+            sql += PartitionFunctions.ToSql();
+            sql += FullText.ToSql();
             return sql;
         }
 
@@ -319,126 +188,30 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             this.t
         }*/
 
-        public ISchemaBase Find(int id)
-        {
-            try
-            {
-                string full = allObjects.GetFullName(id);
-                return Find(full);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public ISchemaBase Find(String FullName)
-        {
-            try
-            {
-                Enums.ObjectType type = allObjects.GetType(FullName);
-                string parentName = "";
-
-                switch (type)
-                {
-                    case Enums.ObjectType.Table:
-                        return tables[FullName];
-                    case Enums.ObjectType.StoreProcedure:
-                        return procedures[FullName];
-                    case Enums.ObjectType.Function:
-                        return functions[FullName];
-                    case Enums.ObjectType.View:
-                        return views[FullName];
-                    case Enums.ObjectType.Assembly:
-                        return assemblies[FullName];
-                    case Enums.ObjectType.UserDataType:
-                        return userTypes[FullName];
-                    case Enums.ObjectType.TableType:
-                        return tablesTypes[FullName];
-                    case Enums.ObjectType.XMLSchema:
-                        return xmlSchemas[FullName];
-                    case Enums.ObjectType.CLRStoreProcedure:
-                        return CLRProcedures[FullName];
-                    case Enums.ObjectType.Synonym:
-                        return synonyms[FullName];
-                    case Enums.ObjectType.FullText:
-                        return fullText[FullName];
-                    case Enums.ObjectType.Rule:
-                        return rules[FullName];
-                    case Enums.ObjectType.PartitionFunction:
-                        return partitionFunctions[FullName];
-                    case Enums.ObjectType.PartitionScheme:
-                        return partitionScheme[FullName];
-                    case Enums.ObjectType.Role:
-                        return roles[FullName];
-                    case Enums.ObjectType.Schema:
-                        return schemas[FullName];
-                    case Enums.ObjectType.Constraint:
-                        parentName = allObjects.GetParentName(FullName);
-                        return tables[parentName].Constraints[FullName];
-                    case Enums.ObjectType.Index:
-                        parentName = allObjects.GetParentName(FullName);
-                        type = allObjects.GetType(parentName);
-                        if (type == Enums.ObjectType.Table)
-                            return tables[parentName].Indexes[FullName];
-                        else
-                            return views[parentName].Indexes[FullName];
-                    case Enums.ObjectType.Trigger:
-                        parentName = allObjects.GetParentName(FullName);
-                        type = allObjects.GetType(parentName);
-                        if (type == Enums.ObjectType.Table)
-                            return tables[parentName].Triggers[FullName];
-                        else
-                            return views[parentName].Triggers[FullName];
-                    case Enums.ObjectType.CLRTrigger:
-                        parentName = allObjects.GetParentName(FullName);
-                        type = allObjects.GetType(parentName);
-                        if (type == Enums.ObjectType.Table)
-                            return tables[parentName].CLRTriggers[FullName];
-                        else
-                            return views[parentName].CLRTriggers[FullName];
-                }
-                return null;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private SQLScriptList CleanScripts(SQLScriptList listDiff)
-        {
-            SQLScriptList alters = listDiff.FindAlter();
-            for (int j = 0; j < alters.Count; j++)
-            {
-                //alters[j].
-            }
-            return null;
-        }
-
         public override SQLScriptList ToSqlDiff()
         {
-            SQLScriptList listDiff = new SQLScriptList();
-            listDiff.Add("USE " + Name + "\r\nGO\r\n\r\n", 0, Enums.ScripActionType.UseDatabase);
-            listDiff.AddRange(assemblies.ToSqlDiff());
-            listDiff.AddRange(userTypes.ToSqlDiff());
-            listDiff.AddRange(tablesTypes.ToSqlDiff());
-            listDiff.AddRange(tables.ToSqlDiff());            
-            listDiff.AddRange(rules.ToSqlDiff());
-            listDiff.AddRange(schemas.ToSqlDiff());
-            listDiff.AddRange(xmlSchemas.ToSqlDiff());
-            listDiff.AddRange(procedures.ToSqlDiff());
-            listDiff.AddRange(CLRprocedures.ToSqlDiff());
-            listDiff.AddRange(fileGroups.ToSqlDiff());
-            listDiff.AddRange(ddlTriggers.ToSqlDiff());
-            listDiff.AddRange(synonyms.ToSqlDiff());            
-            listDiff.AddRange(views.ToSqlDiff());
-            listDiff.AddRange(users.ToSqlDiff());
-            listDiff.AddRange(functions.ToSqlDiff());
-            listDiff.AddRange(roles.ToSqlDiff());
-            listDiff.AddRange(partitionFunctions.ToSqlDiff());
-            listDiff.AddRange(partitionScheme.ToSqlDiff());
-            listDiff.AddRange(fullText.ToSqlDiff());
+            var listDiff = new SQLScriptList();
+            listDiff.Add("USE [" + Name + "]\r\nGO\r\n\r\n", 0, Enums.ScripActionType.UseDatabase);
+            listDiff.AddRange(Assemblies.ToSqlDiff());
+            listDiff.AddRange(UserTypes.ToSqlDiff());
+            listDiff.AddRange(TablesTypes.ToSqlDiff());
+            listDiff.AddRange(Tables.ToSqlDiff());
+            listDiff.AddRange(Rules.ToSqlDiff());
+            listDiff.AddRange(Schemas.ToSqlDiff());
+            listDiff.AddRange(XmlSchemas.ToSqlDiff());
+            listDiff.AddRange(Procedures.ToSqlDiff());
+            listDiff.AddRange(CLRProcedures.ToSqlDiff());
+            listDiff.AddRange(CLRFunctions.ToSqlDiff());
+            listDiff.AddRange(FileGroups.ToSqlDiff());
+            listDiff.AddRange(DDLTriggers.ToSqlDiff());
+            listDiff.AddRange(Synonyms.ToSqlDiff());
+            listDiff.AddRange(Views.ToSqlDiff());
+            listDiff.AddRange(Users.ToSqlDiff());
+            listDiff.AddRange(Functions.ToSqlDiff());
+            listDiff.AddRange(Roles.ToSqlDiff());
+            listDiff.AddRange(PartitionFunctions.ToSqlDiff());
+            listDiff.AddRange(PartitionSchemes.ToSqlDiff());
+            listDiff.AddRange(FullText.ToSqlDiff());
             return listDiff;
         }
 
@@ -452,45 +225,160 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return "";
         }
 
+        #endregion
+
+        public ISchemaBase Find(int id)
+        {
+            try
+            {
+                string full = AllObjects.GetFullName(id);
+                return Find(full);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public ISchemaBase Find(String _FullName)
+        {
+            try
+            {
+                Enums.ObjectType type = AllObjects.GetType(_FullName);
+                string parentName = "";
+
+                switch (type)
+                {
+                    case Enums.ObjectType.Table:
+                        return Tables[_FullName];
+                    case Enums.ObjectType.StoreProcedure:
+                        return Procedures[_FullName];
+                    case Enums.ObjectType.Function:
+                        return Functions[_FullName];
+                    case Enums.ObjectType.View:
+                        return Views[_FullName];
+                    case Enums.ObjectType.Assembly:
+                        return Assemblies[_FullName];
+                    case Enums.ObjectType.UserDataType:
+                        return UserTypes[_FullName];
+                    case Enums.ObjectType.TableType:
+                        return TablesTypes[_FullName];
+                    case Enums.ObjectType.XMLSchema:
+                        return XmlSchemas[_FullName];
+                    case Enums.ObjectType.CLRStoreProcedure:
+                        return CLRProcedures[_FullName];
+                    case Enums.ObjectType.CLRFunction:
+                        return CLRFunctions[_FullName];
+                    case Enums.ObjectType.Synonym:
+                        return Synonyms[_FullName];
+                    case Enums.ObjectType.FullText:
+                        return FullText[_FullName];
+                    case Enums.ObjectType.Rule:
+                        return Rules[_FullName];
+                    case Enums.ObjectType.PartitionFunction:
+                        return PartitionFunctions[_FullName];
+                    case Enums.ObjectType.PartitionScheme:
+                        return PartitionSchemes[_FullName];
+                    case Enums.ObjectType.Role:
+                        return Roles[_FullName];
+                    case Enums.ObjectType.Schema:
+                        return Schemas[_FullName];
+                    case Enums.ObjectType.Constraint:
+                        parentName = AllObjects.GetParentName(_FullName);
+                        return Tables[parentName].Constraints[_FullName];
+                    case Enums.ObjectType.Index:
+                        parentName = AllObjects.GetParentName(_FullName);
+                        type = AllObjects.GetType(parentName);
+                        if (type == Enums.ObjectType.Table)
+                            return Tables[parentName].Indexes[_FullName];
+                        return Views[parentName].Indexes[_FullName];
+                    case Enums.ObjectType.Trigger:
+                        parentName = AllObjects.GetParentName(_FullName);
+                        type = AllObjects.GetType(parentName);
+                        if (type == Enums.ObjectType.Table)
+                            return Tables[parentName].Triggers[_FullName];
+                        return Views[parentName].Triggers[_FullName];
+                    case Enums.ObjectType.CLRTrigger:
+                        parentName = AllObjects.GetParentName(_FullName);
+                        type = AllObjects.GetType(parentName);
+                        if (type == Enums.ObjectType.Table)
+                            return Tables[parentName].CLRTriggers[_FullName];
+                        return Views[parentName].CLRTriggers[_FullName];
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /*private SQLScriptList CleanScripts(SQLScriptList listDiff)
+        {
+            SQLScriptList alters = listDiff.FindAlter();
+            for (int j = 0; j < alters.Count; j++)
+            {
+                //alters[j].
+            }
+            return null;
+        }*/
+
         public void BuildDependency()
         {
             ISchemaBase schema;
-            List<Index> indexes = new List<Index>();
-            Constraints<Table> constraints = new Constraints<Table>(null);
+            var indexes = new List<Index>();
+            var constraints = new List<Constraint>();
 
-            this.Tables.ForEach(item => { indexes.AddRange(item.Indexes); });
-            this.Views.ForEach(item => { indexes.AddRange(item.Indexes); });
-            this.Tables.ForEach(item => { constraints.AddRange(item.Constraints); });
+            Tables.ForEach(item => indexes.AddRange(item.Indexes));
+            Views.ForEach(item => indexes.AddRange(item.Indexes));
+            Tables.ForEach(item => constraints.AddRange(item.Constraints));
 
             foreach (Index index in indexes)
             {
                 schema = index.Parent;
                 foreach (IndexColumn icolumn in index.Columns)
                 {
-                    this.Dependencies.Add(this,schema.Id, icolumn.Id, schema.Id, icolumn.DataTypeId, index);
+                    Dependencies.Add(this, schema.Id, icolumn.Id, schema.Id, icolumn.DataTypeId, index);
                 }
             }
 
-            if (constraints != null)
+            foreach (Constraint con in constraints)
             {
-                foreach (Constraint con in constraints)
+                schema = con.Parent;
+                if (con.Type != Constraint.ConstraintType.Check)
                 {
-                    schema = con.Parent;
-                    if (con.Type != Constraint.ConstraintType.Check)
+                    foreach (ConstraintColumn ccolumn in con.Columns)
                     {
-                        foreach (ConstraintColumn ccolumn in con.Columns)
+                        Dependencies.Add(this, schema.Id, ccolumn.Id, schema.Id, ccolumn.DataTypeId, con);
+                        if (con.Type == Constraint.ConstraintType.ForeignKey)
                         {
-                            this.Dependencies.Add(this,schema.Id, ccolumn.Id, schema.Id, ccolumn.DataTypeId, con);
-                            if (con.Type == Constraint.ConstraintType.ForeignKey)
+                            Dependencies.Add(this, con.RelationalTableId, ccolumn.ColumnRelationalId, schema.Id,
+                                             ccolumn.ColumnRelationalDataTypeId, con);
+                        }
+                        else
+                        {
+                            if (
+                                ((Table) schema).FullTextIndex.Exists(
+                                    item => { return item.Index.Equals(con.Name); }))
                             {
-                                this.Dependencies.Add(this,con.RelationalTableId, ccolumn.ColumnRelationalId, schema.Id, ccolumn.ColumnRelationalDataTypeId, con);
+                                Dependencies.Add(this, schema.Id, 0, schema.Id, 0, con);
                             }
                         }
                     }
-                    else
-                        this.Dependencies.Add(this,schema.Id, 0, schema.Id, 0, con);
                 }
+                else
+                    Dependencies.Add(this, schema.Id, 0, schema.Id, 0, con);
             }
         }
+
+        #region Nested type: DatabaseChangeStatus
+
+        private enum DatabaseChangeStatus
+        {
+            AlterChangeTracking = 1,
+            AlterCollation = 2
+        }
+
+        #endregion
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace ScintillaNet
+﻿namespace DBDiff.Scintilla
 {
 	partial class GoToDialog
 	{

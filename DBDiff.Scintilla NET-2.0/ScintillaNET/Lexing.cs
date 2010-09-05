@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.IO;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	[TypeConverterAttribute(typeof(System.ComponentModel.ExpandableObjectConverter))]
 	public class Lexing : ScintillaHelperBase
@@ -197,7 +197,7 @@ namespace ScintillaNet
 		#region WhiteSpaceChars
 		internal char[] WhiteSpaceCharsArr;
 		private string _whiteSpaceChars;
-		[TypeConverter(typeof(ScintillaNet.WhiteSpaceStringConverter))]
+		[TypeConverter(typeof(DBDiff.Scintilla.WhiteSpaceStringConverter))]
 		public string WhiteSpaceChars
 		{
 			get

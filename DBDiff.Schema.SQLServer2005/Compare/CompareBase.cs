@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DBDiff.Schema.Model;
 using DBDiff.Schema.SQLServer.Generates.Model;
 
@@ -17,16 +16,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
         protected virtual void DoNew<Root>(SchemaList<T, Root> CamposOrigen, T node) where Root : ISchemaBase
         {
             T newNode = node;//.Clone(CamposOrigen.Parent);
+            newNode.Parent = CamposOrigen.Parent;
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
             CamposOrigen.Add(newNode);
         }
 
-        protected virtual void DoDelete(T node)
+        protected void DoDelete(T node)
         {
             node.Status = Enums.ObjectStatusType.DropStatus;
         }
 
-        public virtual void GenerateDiferences<Root>(SchemaList<T, Root> CamposOrigen, SchemaList<T, Root> CamposDestino) where Root : ISchemaBase
+        public void GenerateDiferences<Root>(SchemaList<T, Root> CamposOrigen, SchemaList<T, Root> CamposDestino) where Root : ISchemaBase
         {
             bool has = true;
             int DestinoIndex = 0;
@@ -60,24 +60,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                     has = true;
                 }
             }
-        }
-
-        public virtual void GenerateDiferences(SchemaList<T, Database> CamposOrigen, SchemaList<T, Database> CamposDestino)
-        {
-            GenerateDiferences<Database>(CamposOrigen, CamposDestino); 
-        }
-
-        protected static void MarkDrop(List<T> origen, List<T> destino)
-        {
-            MarkDrop(origen, destino, node => node.Status = Enums.ObjectStatusType.DropStatus);
-        }
-
-        protected static void MarkDrop(List<T> origen, List<T> destino, Action<T> action)
-        {
-            List<T> dropList = (from node in origen
-                                where !destino.Exists(item => (item.CompareFullNameTo(node.FullName, item.FullName) == 0))
-                                select node).ToList<T>();
-            dropList.ForEach(action);
         }
 
         protected static void CompareExtendedProperties(ISQLServerSchemaBase origen, ISQLServerSchemaBase destino)

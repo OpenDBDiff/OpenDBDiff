@@ -110,7 +110,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             }
                             if (lastid != (int)reader["object_id"])
                             {
-                                //if (!String.IsNullOrEmpty(last)) cons.Add(con);
                                 con = new Constraint(table);
                                 con.Id = (int)reader["object_id"];
                                 con.Name = reader["Name"].ToString();
@@ -221,77 +220,87 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             int parentId = 0;
             bool change = false;
             ISchemaBase table = null;
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            try
             {
-                using (SqlCommand command = new SqlCommand(ConstraintSQLCommand.GetPrimaryKey(database.Info.Version, null), conn))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    conn.Open();
-                    command.CommandTimeout = 0;
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    using (SqlCommand command = new SqlCommand(ConstraintSQLCommand.GetPrimaryKey(database.Info.Version, null), conn))
                     {
-                        Constraint con = null;
-                        while (reader.Read())
+                        conn.Open();
+                        command.CommandTimeout = 0;
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            if (parentId != (int)reader["ID"])
+                            Constraint con = null;
+                            while (reader.Read())
                             {
-                                parentId = (int)reader["ID"];
-                                if (reader["ObjectType"].ToString().Trim().Equals("U"))
-                                    table = database.Tables.Find(parentId);
+                                if (parentId != (int)reader["ID"])
+                                {
+                                    parentId = (int)reader["ID"];
+                                    if (reader["ObjectType"].ToString().Trim().Equals("U"))
+                                        table = database.Tables.Find(parentId);
+                                    else
+                                        table = database.TablesTypes.Find(parentId);
+                                    change = true;
+                                }
                                 else
-                                    table = database.TablesTypes.Find(parentId);
-                                change = true;
+                                    change = false;
+                                if ((lastId != (int)reader["Index_id"]) || (change))
+                                {
+                                    con = new Constraint(table);
+                                    con.Id = (int)reader["Index_id"];
+                                    con.Name = (string)reader["Name"];
+                                    con.Owner = (string)reader["Owner"];
+                                    con.Type = Constraint.ConstraintType.PrimaryKey;
+                                    con.Index.Id = (int)reader["Index_id"];
+                                    con.Index.AllowPageLocks = (bool)reader["allow_page_locks"];
+                                    con.Index.AllowRowLocks = (bool)reader["allow_row_locks"];
+                                    con.Index.FillFactor = (byte)reader["fill_factor"];
+                                    con.Index.IgnoreDupKey = (bool)reader["ignore_dup_key"];
+                                    con.Index.IsAutoStatistics = (bool)reader["ignore_dup_key"];
+                                    con.Index.IsDisabled = (bool)reader["is_disabled"];
+                                    con.Index.IsPadded = (bool)reader["is_padded"];
+                                    con.Index.IsPrimaryKey = true;
+                                    con.Index.IsUniqueKey = false;
+                                    con.Index.Type = (Index.IndexTypeEnum)(byte)reader["type"];
+                                    con.Index.Name = con.Name;
+                                    if (database.Options.Ignore.FilterTableFileGroup)
+                                        con.Index.FileGroup = reader["FileGroup"].ToString();
+                                    lastId = (int)reader["Index_id"];
+                                    if (reader["ObjectType"].ToString().Trim().Equals("U"))
+                                        ((Table)table).Constraints.Add(con);
+                                    else
+                                        ((TableType)table).Constraints.Add(con);
+                                }
+                                ConstraintColumn ccon = new ConstraintColumn(con);
+                                ccon.Name = (string)reader["ColumnName"];
+                                ccon.IsIncluded = (bool)reader["is_included_column"];
+                                ccon.Order = (bool)reader["is_descending_key"];
+                                ccon.KeyOrder = (byte)reader["key_ordinal"];
+                                ccon.Id = (int)reader["column_id"];
+                                ccon.DataTypeId = (int)reader["user_type_id"];
+                                con.Columns.Add(ccon);
                             }
-                            else
-                                change = false;
-                            if ((lastId != (int)reader["Index_id"]) || (change))
-                            {
-                                con = new Constraint(table);
-                                con.Id = (int)reader["Index_id"];
-                                con.Name = (string)reader["Name"];
-                                con.Owner = (string)reader["Owner"];
-                                con.Type = Constraint.ConstraintType.PrimaryKey;
-                                con.Index.Id = (int)reader["Index_id"];
-                                con.Index.AllowPageLocks = (bool)reader["allow_page_locks"];
-                                con.Index.AllowRowLocks = (bool)reader["allow_row_locks"];
-                                con.Index.FillFactor = (byte)reader["fill_factor"];
-                                con.Index.IgnoreDupKey = (bool)reader["ignore_dup_key"];
-                                con.Index.IsAutoStatistics = (bool)reader["ignore_dup_key"];
-                                con.Index.IsDisabled = (bool)reader["is_disabled"];
-                                con.Index.IsPadded = (bool)reader["is_padded"];
-                                con.Index.IsPrimaryKey = true;
-                                con.Index.IsUniqueKey = false;
-                                con.Index.Type = (Index.IndexTypeEnum)(byte)reader["type"];
-                                con.Index.Name = con.Name;
-                                if (database.Options.Ignore.FilterTableFileGroup)
-                                    con.Index.FileGroup = reader["FileGroup"].ToString();
-                                lastId = (int)reader["Index_id"];
-                                if (reader["ObjectType"].ToString().Trim().Equals("U"))
-                                    ((Table)table).Constraints.Add(con);
-                                else
-                                    ((TableType)table).Constraints.Add(con);
-                            }
-                            ConstraintColumn ccon = new ConstraintColumn(con);
-                            ccon.Name = (string)reader["ColumnName"];
-                            ccon.IsIncluded = (bool)reader["is_included_column"];
-                            ccon.Order = (bool)reader["is_descending_key"];
-                            ccon.KeyOrder = (byte)reader["key_ordinal"];
-                            ccon.Id = (int)reader["column_id"];
-                            ccon.DataTypeId = (int)reader["user_type_id"];
-                            con.Columns.Add(ccon);
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
         #endregion
 
         public void Fill(Database database, string connectionString)
         {
-            FillPrimaryKey(database, connectionString);
-            FillForeignKey(database, connectionString);
-            FillUniqueKey(database, connectionString);
-            FillCheck(database, connectionString);
+            if (database.Options.Ignore.FilterConstraintPK)
+                FillPrimaryKey(database, connectionString);
+            if (database.Options.Ignore.FilterConstraintFK)
+                FillForeignKey(database, connectionString);
+            if (database.Options.Ignore.FilterConstraintUK)
+                FillUniqueKey(database, connectionString);
+            if (database.Options.Ignore.FilterConstraintCheck)
+                FillCheck(database, connectionString);
         }
     }
 }

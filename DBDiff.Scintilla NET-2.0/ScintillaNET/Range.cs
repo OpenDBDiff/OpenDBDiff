@@ -4,7 +4,7 @@ using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	/// <summary>
 	/// A range within the editor. Start and End are both Positions.

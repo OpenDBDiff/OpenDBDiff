@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DBDiff.Schema.SQLServer.Generates.Generates;
 using DBDiff.Schema.SQLServer.Generates.Options;
 using System.IO;
 using System.Data.SqlClient;
@@ -53,7 +54,7 @@ namespace DBDiff.OCDB
                 DBDiff.Schema.SQLServer.Generates.Model.Database destino;
                 if (TestConnection(arguments.ConnectionString1, arguments.ConnectionString2))
                 {
-                    DBDiff.Schema.SQLServer.Generates.Generate sql = new DBDiff.Schema.SQLServer.Generates.Generate();
+                    Generate sql = new Generate();
                     sql.ConnectionString = arguments.ConnectionString1;
                     System.Console.WriteLine("Reading first database...");
                     sql.Options = SqlFilter;
@@ -63,7 +64,7 @@ namespace DBDiff.OCDB
                     System.Console.WriteLine("Reading second database...");
                     destino = sql.Process();
                     System.Console.WriteLine("Comparing databases schemas...");
-                    origen = DBDiff.Schema.SQLServer.Generates.Generate.Compare(origen, destino);
+                    origen = Generate.Compare(origen, destino);
                     System.Console.WriteLine("Generating SQL file...");
                     SaveFile(arguments.OutputFile, origen.ToSql());
                 }

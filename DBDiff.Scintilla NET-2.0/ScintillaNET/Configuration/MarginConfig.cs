@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 
-namespace ScintillaNet.Configuration
+namespace DBDiff.Scintilla.Configuration
 {
 	public class MarginConfigList : List<MarginConfig>
 	{

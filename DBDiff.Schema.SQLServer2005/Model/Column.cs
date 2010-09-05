@@ -601,6 +601,32 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             SQLScriptList list = new SQLScriptList();
             list.AddRange(RebuildConstraint());
             list.AddRange(RebuildIndex());
+            list.AddRange(RebuildFullTextIndex());
+            return list;
+        }
+
+        private SQLScriptList RebuildFullTextIndex()
+        {
+            return RebuildFullTextIndex(null);
+        }
+
+        private SQLScriptList RebuildFullTextIndex(string index)
+        {
+            bool it;
+            SQLScriptList list = new SQLScriptList();
+            ((Table)Parent).FullTextIndex.ForEach(item =>
+            {
+                if (index == null)
+                    it = item.Columns.Exists(col => { return col.ColumnName.Equals(this.Name); });
+                else
+                    it = item.Index.Equals(index);
+                if (it)
+                {
+                    if (item.Status != Enums.ObjectStatusType.CreateStatus) list.Add(item.Drop());
+                    if (item.Status != Enums.ObjectStatusType.DropStatus) list.Add(item.Create());
+                }
+            }
+            );
             return list;
         }
 
@@ -614,6 +640,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 {
                     if (item.Status != Enums.ObjectStatusType.CreateStatus) list.Add(item.Drop());
                     if (item.Status != Enums.ObjectStatusType.DropStatus) list.Add(item.Create());
+                    list.AddRange(RebuildFullTextIndex(item.Name));
                 }
             });
             return list;
@@ -631,6 +658,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                         {
                             if (item.Status != Enums.ObjectStatusType.CreateStatus) list.Add(item.Drop());
                             if (item.Status != Enums.ObjectStatusType.DropStatus) list.Add(item.Create());
+                            list.AddRange(RebuildFullTextIndex(item.Name));
                         }
                     });
             }
@@ -708,7 +736,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (origen == null) throw new ArgumentNullException("origen");
             if (!origen.ComputedFormula.Equals(destino.ComputedFormula)) return false;
             if (origen.IsComputed != destino.isComputed) return false;
-            if (origen.Position != destino.Position) return false;
+            //if (origen.Position != destino.Position) return false;
             if (!origen.IsComputed)
             {
                 if (origen.IsXmlDocument != destino.IsXmlDocument) return false;

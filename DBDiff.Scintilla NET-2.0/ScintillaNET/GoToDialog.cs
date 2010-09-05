@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	public partial class GoToDialog : Form
 	{

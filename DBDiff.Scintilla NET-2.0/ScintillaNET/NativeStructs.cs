@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {			
 	[StructLayout(LayoutKind.Sequential)]
 	public struct CharacterRange 

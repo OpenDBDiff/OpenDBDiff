@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Drawing;
 using System.ComponentModel;
 using System.Windows.Forms;
-namespace ScintillaNet.Configuration
+namespace DBDiff.Scintilla.Configuration
 {
 	[TypeConverterAttribute(typeof(System.ComponentModel.ExpandableObjectConverter))]
 	public class ConfigurationManager : ScintillaHelperBase

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	[TypeConverterAttribute(typeof(System.ComponentModel.ExpandableObjectConverter))]
 	public class LineWrap : ScintillaHelperBase
@@ -45,7 +45,7 @@ namespace ScintillaNet
 		#endregion
 
 		#region VisualFlags
-		[Editor(typeof(ScintillaNet.Design.FlagEnumUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+		[Editor(typeof(DBDiff.Scintilla.Design.FlagEnumUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
 		public WrapVisualFlag VisualFlags
 		{
 			get
@@ -70,7 +70,7 @@ namespace ScintillaNet
 		#endregion
 
 		#region VisualFlagsLocation
-		[Editor(typeof(ScintillaNet.Design.FlagEnumUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
+		[Editor(typeof(DBDiff.Scintilla.Design.FlagEnumUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
 		public WrapVisualLocation VisualFlagsLocation
 		{
 			get

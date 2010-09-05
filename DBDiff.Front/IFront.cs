@@ -15,7 +15,7 @@ namespace DBDiff.Front
         bool Visible { get; set; }
         DockStyle Dock { get; set; }
         Boolean TestConnection();
-        string ConnectionString { get; }
+        string ConnectionString { get; set; }
         string ErrorConnection { get; }
         string DatabaseName { get; }
         string Text { get; set; }

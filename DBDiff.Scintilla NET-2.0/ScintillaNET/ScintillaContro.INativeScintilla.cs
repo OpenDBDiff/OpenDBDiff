@@ -4,7 +4,7 @@ using System.Text;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Drawing;
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	public partial class Scintilla	
 	{

@@ -7,7 +7,7 @@ using System.Xml;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace ScintillaNet.Configuration
+namespace DBDiff.Scintilla.Configuration
 {
 	public class Configuration
 	{

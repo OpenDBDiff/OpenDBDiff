@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Text;
 
-namespace ScintillaNet.Configuration
+namespace DBDiff.Scintilla.Configuration
 {
 	public class IndicatorConfigList : KeyedCollection<int, IndicatorConfig>
 	{

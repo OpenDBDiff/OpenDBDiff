@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ScintillaNet.Configuration
+namespace DBDiff.Scintilla.Configuration
 {
 	public class LexerPropertiesConfig : Dictionary<string, string>
 	{

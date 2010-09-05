@@ -3,7 +3,7 @@ using System.Text;
 using System.ComponentModel;
 using System.Collections;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	public abstract class ScintillaHelperBase : IDisposable
 	{

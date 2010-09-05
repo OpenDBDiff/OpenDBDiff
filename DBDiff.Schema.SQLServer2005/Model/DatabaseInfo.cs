@@ -16,6 +16,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         private float versionNumber;
         private VersionTypeEnum version;
         private string collation;
+        private bool hasChangeTracking;
+        private bool isChangeTrackingAutoCleanup;
+        private int changeTrackingRetentionPeriod;
+        private int changeTrackingPeriodUnits;
+        private string changeTrackingPeriodUnitsDesc;
+        private bool hasFullTextEnabled;
 
         public DatabaseInfo()
         {
@@ -33,6 +39,42 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             set { collation = value; }
         }
 
+        public bool HasFullTextEnabled
+        {
+            get { return hasFullTextEnabled; }
+            set { hasFullTextEnabled = value; }
+        }
+
+        public string ChangeTrackingPeriodUnitsDesc
+        {
+            get { return changeTrackingPeriodUnitsDesc; }
+            set { changeTrackingPeriodUnitsDesc = value; }
+        }
+
+        public int ChangeTrackingPeriodUnits
+        {
+            get { return changeTrackingPeriodUnits; }
+            set { changeTrackingPeriodUnits = value; }
+        }
+
+        public int ChangeTrackingRetentionPeriod
+        {
+            get { return changeTrackingRetentionPeriod; }
+            set { changeTrackingRetentionPeriod = value; }
+        }
+
+        public bool IsChangeTrackingAutoCleanup
+        {
+            get { return isChangeTrackingAutoCleanup; }
+            set { isChangeTrackingAutoCleanup = value; }
+        }
+
+        public bool HasChangeTracking
+        {
+            get { return hasChangeTracking; }
+            set { hasChangeTracking = value; }
+        }
+
         public float VersionNumber
         {
             get { return versionNumber; }
@@ -44,6 +86,5 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 if ((versionNumber >= 10) && (versionNumber < 11)) version = VersionTypeEnum.SQLServer2008;
             }
         }
-
     }
 }

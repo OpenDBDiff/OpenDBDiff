@@ -4,6 +4,7 @@ using System.Text;
 using System.Data.SqlClient;
 using DBDiff.Schema.SQLServer.Generates.Options;
 using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
 
 namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
@@ -22,31 +23,36 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             this.objectFilter = filter;
         }
 
-        private static string GetSQL(Database databaseSchema)
-        {
-            string sql;
-            sql = "SELECT DATABASEPROPERTYEX('" + databaseSchema.Name + "','Collation') AS Collation, SUBSTRING(CONVERT(varchar,SERVERPROPERTY('productversion')),1,PATINDEX('.',CONVERT(varchar,SERVERPROPERTY('productversion')))+2) AS Version";
-            return sql;
-        }
-
-        public DatabaseInfo Get(Database databaseSchema)
+        public DatabaseInfo Get(Database database)
         {
             DatabaseInfo item = new DatabaseInfo();
             using (SqlConnection conn = new SqlConnection(connectioString))
             {
-                using (SqlCommand command = new SqlCommand(GetSQL(databaseSchema), conn))
+                using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.GetVersion(database), conn))
                 {
                     conn.Open();
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            item.Collation = reader["Collation"].ToString();
                             item.VersionNumber = float.Parse(reader["Version"].ToString().Replace(".",""));
                         }
                     }
                 }
+                using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.Get(item.Version, database), conn))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            item.Collation = reader["Collation"].ToString();
+                            item.HasFullTextEnabled = ((int)reader["IsFulltextEnabled"]) == 1;
+                        }
+                    }
+                }
+
             }
+            
             return item;
         }
 

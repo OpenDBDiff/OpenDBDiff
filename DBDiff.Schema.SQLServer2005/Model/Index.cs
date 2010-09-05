@@ -16,197 +16,68 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             GEO = 4
         }
 
-        private Boolean allow_row_locks;
-        private Boolean allow_page_locks;
-        private Boolean ignore_dup_key;
-        private Boolean isPadded;
-        private Boolean isDisabled;
-        private short fillFactor;
-        private IndexTypeEnum type;
-        private Boolean isPrimaryKey;
-        private Boolean isUniqueKey;
-        private Boolean isAutoStatistics;
-        private Boolean sortInTempDb;
-        private IndexColumns columns;
-        private string fileGroup;
-        private string filterDefintion;
-
         public Index(ISchemaBase parent)
             : base(parent, Enums.ObjectType.Index)
         {
-            filterDefintion = "";
-            columns = new IndexColumns(parent);
+            FilterDefintion = "";
+            Columns = new IndexColumns(parent);
         }
 
         public override ISchemaBase Clone(ISchemaBase parent)
         {
-            Index index = new Index(parent);
-            index.AllowPageLocks = this.AllowPageLocks;
-            index.AllowRowLocks = this.AllowRowLocks;
-            index.Columns = this.Columns.Clone();
-            index.FillFactor = this.FillFactor;
-            index.FileGroup = this.FileGroup;
-            index.Id = this.Id;
-            index.IgnoreDupKey = this.IgnoreDupKey;
-            index.IsAutoStatistics = this.IsAutoStatistics;
-            index.IsDisabled = this.IsDisabled;
-            index.IsPadded = this.IsPadded;
-            index.IsPrimaryKey = this.IsPrimaryKey;
-            index.IsUniqueKey = this.IsUniqueKey;
-            index.Name = this.Name;
-            index.SortInTempDb = this.SortInTempDb;
-            index.Status = this.Status;
-            index.Type = this.Type;
-            index.Owner = this.Owner;
-            //index.Guid = this.Guid;
-            index.FilterDefintion = this.FilterDefintion;
-            this.ExtendedProperties.ForEach(item => index.ExtendedProperties.Add(item));
+            Index index = new Index(parent)
+                              {
+                                  AllowPageLocks = this.AllowPageLocks,
+                                  AllowRowLocks = this.AllowRowLocks,
+                                  Columns = this.Columns.Clone(),
+                                  FillFactor = this.FillFactor,
+                                  FileGroup = this.FileGroup,
+                                  Id = this.Id,
+                                  IgnoreDupKey = this.IgnoreDupKey,
+                                  IsAutoStatistics = this.IsAutoStatistics,
+                                  IsDisabled = this.IsDisabled,
+                                  IsPadded = this.IsPadded,
+                                  IsPrimaryKey = this.IsPrimaryKey,
+                                  IsUniqueKey = this.IsUniqueKey,
+                                  Name = this.Name,
+                                  SortInTempDb = this.SortInTempDb,
+                                  Status = this.Status,
+                                  Type = this.Type,
+                                  Owner = this.Owner,
+                                  FilterDefintion = this.FilterDefintion
+                              };
+            ExtendedProperties.ForEach(item => index.ExtendedProperties.Add(item));
             return index;
         }
 
-        /// <summary>
-        /// Gets or sets the file group.
-        /// </summary>
-        /// <value>The file group.</value>
-        public string FileGroup
-        {
-            get { return fileGroup; }
-            set { fileGroup = value; }
-        }
+        public string FileGroup { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [sort in temp db].
-        /// </summary>
-        /// <value><c>true</c> if [sort in temp db]; otherwise, <c>false</c>.</value>
-        public Boolean SortInTempDb
-        {
-            get { return sortInTempDb; }
-            set { sortInTempDb = value; }
-        }
+        public Boolean SortInTempDb { get; set; }
 
-        public string FilterDefintion
-        {
-            get { return filterDefintion; }
-            set { filterDefintion = value; }
-        }
+        public string FilterDefintion { get; set; }
 
-        public IndexColumns Columns
-        {
-            get { return columns; }
-            set { columns = value; }
-        }
+        public IndexColumns Columns { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this index is auto statistics on/off.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this index is auto statistics; otherwise, <c>false</c>.
-        /// </value>
-        public Boolean IsAutoStatistics
-        {
-          get { return isAutoStatistics; }
-          set { isAutoStatistics = value; }
-        }
+        public Boolean IsAutoStatistics { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this index is unique key.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this index is unique key; otherwise, <c>false</c>.
-        /// </value>
-        public Boolean IsUniqueKey
-        {
-            get { return isUniqueKey; }
-            set { isUniqueKey = value; }
-        }
+        public Boolean IsUniqueKey { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this index is primary key.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this index is primary key; otherwise, <c>false</c>.
-        /// </value>
-        public Boolean IsPrimaryKey
-        {
-            get { return isPrimaryKey; }
-            set { isPrimaryKey = value; }
-        }
+        public Boolean IsPrimaryKey { get; set; }
 
-        /// <summary>
-        /// Gets or sets the type.
-        /// </summary>
-        /// <value>The type.</value>
-        public IndexTypeEnum Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
+        public IndexTypeEnum Type { get; set; }
 
-        /// <summary>
-        /// Gets or sets the fill factor.
-        /// </summary>
-        /// <value>The fill factor.</value>
-        public short FillFactor
-        {
-            get { return fillFactor; }
-            set { fillFactor = value; }
-        }
+        public short FillFactor { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this index is disabled.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this index is disabled; otherwise, <c>false</c>.
-        /// </value>
-        public Boolean IsDisabled
-        {
-            get { return isDisabled; }
-            set { isDisabled = value; }
-        }
+        public Boolean IsDisabled { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this index is padded.
-        /// </summary>
-        /// <value><c>true</c> if this index is padded; otherwise, <c>false</c>.</value>
-        public Boolean IsPadded
-        {
-            get { return isPadded; }
-            set { isPadded = value; }
-        }
+        public Boolean IsPadded { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [ignore dup key].
-        /// </summary>
-        /// <value><c>true</c> if [ignore dup key]; otherwise, <c>false</c>.</value>
-        public Boolean IgnoreDupKey
-        {
-            get { return ignore_dup_key; }
-            set { ignore_dup_key = value; }
-        }
+        public Boolean IgnoreDupKey { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [allow page locks].
-        /// </summary>
-        /// <value><c>true</c> if [allow page locks]; otherwise, <c>false</c>.</value>
-        public Boolean AllowPageLocks
-        {
-            get { return allow_page_locks; }
-            set { allow_page_locks = value; }
-        }
+        public Boolean AllowPageLocks { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [allow row locks].
-        /// </summary>
-        /// <value><c>true</c> if [allow row locks]; otherwise, <c>false</c>.</value>
-        public Boolean AllowRowLocks
-        {
-            get { return allow_row_locks; }
-            set { allow_row_locks = value; }
-        }
+        public Boolean AllowRowLocks { get; set; }
 
-        /// <summary>
-        /// Nombre completo del objeto, incluyendo el owner.
-        /// </summary>
         public override string FullName
         {
             get
@@ -258,7 +129,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return CompareFileGroup(origen, destino);
         }
 
-        public static Boolean CompareFileGroup(Index origen, Index destino)
+        private static Boolean CompareFileGroup(Index origen, Index destino)
         {
             if (destino == null) throw new ArgumentNullException("destino");
             if (origen == null) throw new ArgumentNullException("origen");
@@ -288,7 +159,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                     sql.Append("\t[" + Columns[j].Name + "]");
                     if (Type != IndexTypeEnum.XML)
                     {
-                        if (this.Columns[j].Order) sql.Append(" DESC"); else sql.Append(" ASC");
+                        if (Columns[j].Order) sql.Append(" DESC"); else sql.Append(" ASC");
                     }
                     if (j < Columns.Count - 1) sql.Append(",");
                     sql.Append("\r\n");
@@ -302,7 +173,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (!String.IsNullOrEmpty(includes)) includes = includes.Substring(0, includes.Length - 1);
             sql.Append(includes);
             sql.Append(")");
-            if (!String.IsNullOrEmpty(filterDefintion)) sql.Append("\r\n WHERE " + filterDefintion + "\r\n");
+            if (!String.IsNullOrEmpty(FilterDefintion)) sql.Append("\r\n WHERE " + FilterDefintion + "\r\n");
             sql.Append(" WITH (");
             if (Parent.ObjectType == Enums.ObjectType.TableType)
             {
@@ -324,7 +195,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (IsDisabled)
                 sql.Append("ALTER INDEX [" + Name + "] ON " + ((Table)Parent).FullName + " DISABLE\r\nGO\r\n");
 
-            sql.Append(this.ExtendedProperties.ToSql());
+            sql.Append(ExtendedProperties.ToSql());
             return sql.ToString();
         }
 
@@ -338,7 +209,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return ToSqlDrop(null);
         }
 
-        public string ToSqlDrop(string FileGroupName)
+        private string ToSqlDrop(string FileGroupName)
         {
             string sql = "DROP INDEX [" + Name + "] ON " + Parent.FullName;
             if (!String.IsNullOrEmpty(FileGroupName)) sql += " WITH (MOVE TO [" + FileGroupName + "])";
@@ -352,10 +223,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (!GetWasInsertInDiffList(action))
             {
                 SetWasInsertInDiffList(action);
-                return new SQLScript(this.ToSqlAdd(), Parent.DependenciesCount, action);
+                return new SQLScript(ToSqlAdd(), Parent.DependenciesCount, action);
             }
-            else
-                return null;
+            return null;
         }
 
         public override SQLScript Drop()
@@ -364,46 +234,43 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (!GetWasInsertInDiffList(action))
             {
                 SetWasInsertInDiffList(action);
-                return new SQLScript(this.ToSqlDrop(), Parent.DependenciesCount, action);
+                return new SQLScript(ToSqlDrop(), Parent.DependenciesCount, action);
             }
-            else
-                return null;
+            return null;
         }
 
-        public string ToSQLEnabledDisabled()
+        private string ToSqlEnabled()
         {
-            StringBuilder sql = new StringBuilder();
-            if (this.IsDisabled)
+            if (IsDisabled)
                 return "ALTER INDEX [" + Name + "] ON " + Parent.FullName + " DISABLE\r\nGO\r\n";
-            else
-                return "ALTER INDEX [" + Name + "] ON " + Parent.FullName + " REBUILD\r\nGO\r\n";
+            return "ALTER INDEX [" + Name + "] ON " + Parent.FullName + " REBUILD\r\nGO\r\n";
         }
 
         public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList list = new SQLScriptList();
-            if (this.Status != Enums.ObjectStatusType.OriginalStatus)
+            if (Status != Enums.ObjectStatusType.OriginalStatus)
                 RootParent.ActionMessage[Parent.FullName].Add(this);
 
-            if (this.HasState(Enums.ObjectStatusType.DropStatus))
+            if (HasState(Enums.ObjectStatusType.DropStatus))
                 list.Add(Drop());
-            if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+            if (HasState(Enums.ObjectStatusType.CreateStatus))
                 list.Add(Create());
-            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
+            if (HasState(Enums.ObjectStatusType.AlterStatus))
             {
                 list.Add(Drop());
                 list.Add(Create());
             }
-            if (this.Status == Enums.ObjectStatusType.DisabledStatus)
+            if (Status == Enums.ObjectStatusType.DisabledStatus)
             {
-                list.Add(this.ToSQLEnabledDisabled(), Parent.DependenciesCount, Enums.ScripActionType.AlterIndex);
+                list.Add(ToSqlEnabled(), Parent.DependenciesCount, Enums.ScripActionType.AlterIndex);
             }
             /*if (this.Status == StatusEnum.ObjectStatusType.ChangeFileGroup)
             {
                 listDiff.Add(this.ToSQLDrop(this.FileGroup), ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.DropIndex);
                 listDiff.Add(this.ToSQLAdd(), ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.AddIndex);
             }*/
-            list.AddRange(this.ExtendedProperties.ToSqlDiff());
+            list.AddRange(ExtendedProperties.ToSqlDiff());
             return list;
         }
     }

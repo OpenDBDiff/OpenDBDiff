@@ -4,7 +4,7 @@ using System.Text;
 using System.ComponentModel;
 using System.Drawing;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	[TypeConverterAttribute(typeof(System.ComponentModel.ExpandableObjectConverter))]
 	public class LongLines : ScintillaHelperBase

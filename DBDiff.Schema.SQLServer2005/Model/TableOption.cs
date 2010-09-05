@@ -58,6 +58,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 return "EXEC sp_tableoption " + Parent.Name + ", 'large value types out of row','0'\r\nGO\r\n";
             if (this.Name.Equals("VarDecimal"))
                 return "EXEC sp_tableoption " + Parent.Name + ", 'vardecimal storage format','0'\r\nGO\r\n";
+            if (this.Name.Equals("LockEscalation"))
+                return "";
             return "";
         }
 
@@ -69,6 +71,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 return "EXEC sp_tableoption " + Parent.Name + ", 'large value types out of row'," + vale + "\r\nGO\r\n";
             if (this.Name.Equals("VarDecimal"))
                 return "EXEC sp_tableoption " + Parent.Name + ", 'vardecimal storage format','1'\r\nGO\r\n";
+            if (this.Name.Equals("LockEscalation"))
+            {
+                if ((!this.Value.Equals("TABLE")) || (this.Status != Enums.ObjectStatusType.OriginalStatus))
+                    return "ALTER TABLE " + Parent.Name + " SET (LOCK_ESCALATION = " + Value + ")\r\nGO\r\n";
+            }
             return "";
         }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	public class GoTo : ScintillaHelperBase
 	{

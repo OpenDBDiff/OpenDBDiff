@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
-namespace ScintillaNet
+namespace DBDiff.Scintilla
 {
 	#region DropMarkerCollectEventArgs
 	public class DropMarkerCollectEventArgs : CancelEventArgs
