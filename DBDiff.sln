@@ -20,6 +20,27 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLRichControl", "..\..\SQLRichControl\SQLRichControl\SQLRichControl.csproj", "{C9AC85A9-06F5-4F74-82F7-25993E65BBDA}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/TFS04
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = DBDiff\\DBDiff.csproj
+		SccProjectName1 = DBDiff
+		SccLocalPath1 = DBDiff
+		SccProjectUniqueName2 = DBDiff.Schema\\DBDiff.Schema.csproj
+		SccProjectName2 = DBDiff.Schema
+		SccLocalPath2 = DBDiff.Schema
+		SccProjectUniqueName3 = DBDiff.Schema.SQLServer2005\\DBDiff.Schema.SQLServer.csproj
+		SccProjectName3 = DBDiff.Schema.SQLServer2005
+		SccLocalPath3 = DBDiff.Schema.SQLServer2005
+		SccProjectUniqueName4 = DBDiff.Test\\DBDiff.Test.csproj
+		SccProjectName4 = DBDiff.Test
+		SccLocalPath4 = DBDiff.Test
+		SccProjectUniqueName5 = DBDiff.Front\\DBDiff.Front.csproj
+		SccProjectName5 = DBDiff.Front
+		SccLocalPath5 = DBDiff.Front
+	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = DBDiff.vsmdi
 	EndGlobalSection
