@@ -1,0 +1,569 @@
+MIME-Version: 1.0
+Content-Location: file:///C:/08EBA2D4/ManualTest.htm
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="us-ascii"
+
+<html xmlns:o=3D"urn:schemas-microsoft-com:office:office"
+xmlns:w=3D"urn:schemas-microsoft-com:office:word"
+xmlns:dt=3D"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"
+xmlns=3D"http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=3DContent-Type content=3D"text/html; charset=3Dus-ascii">
+<meta name=3DProgId content=3DWord.Document>
+<meta name=3DGenerator content=3D"Microsoft Word 11">
+<meta name=3DOriginator content=3D"Microsoft Word 11">
+<link rel=3DFile-List href=3D"ManualTest_files/filelist.xml">
+<title>To do: set description</title>
+<!--[if gte mso 9]><xml>
+ <o:CustomDocumentProperties>
+  <o:TestType dt:dt=3D"string">Manual Test</o:TestType>
+  <o:TestID dt:dt=3D"string">448ea663-aff0-4ae5-9b8c-fc4c7ff96c65</o:TestID>
+ </o:CustomDocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:UseWord2002TableStyleRules/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState=3D"false" LatentStyleCount=3D"156">
+ </w:LatentStyles>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:1627421319 -2147483648 8 0 66047 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+h1
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:16.0pt;
+	font-family:Arial;
+	mso-font-kerning:16.0pt;}
+h2
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:14.0pt;
+	font-family:Arial;
+	font-style:italic;}
+p.Graphic, li.Graphic, div.Graphic
+	{mso-style-name:Graphic;
+	margin-top:6.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	mso-pagination:none;
+	font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	mso-ansi-language:EN-GB;}
+p.Comment, li.Comment, div.Comment
+	{mso-style-name:Comment;
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	font-family:Tahoma;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]-->
+</head>
+
+<body lang=3DEN-US style=3D'tab-interval:.5in'>
+
+<div class=3DSection1>
+
+<p class=3DComment style=3D'text-align:justify'><a name=3DAuthorName><b
+style=3D'mso-bidi-font-weight:normal'><span style=3D'font-size:12.0pt'>To t=
+he Test
+Author<o:p></o:p></span></b></a></p>
+
+<p class=3DComment style=3D'text-align:justify'><span style=3D'mso-bookmark=
+:AuthorName'><b
+style=3D'mso-bidi-font-weight:normal'><o:p>&nbsp;</o:p></b></span></p>
+
+<p class=3DComment style=3D'text-align:justify'><span style=3D'mso-bookmark=
+:AuthorName'>This
+template provides a structure you can use to create a manual test. <o:p></o=
+:p></span></p>
+
+<p class=3DComment style=3D'text-align:justify'><span style=3D'mso-bookmark=
+:AuthorName'><o:p>&nbsp;</o:p></span></p>
+
+<p class=3DComment style=3D'text-align:justify'><span style=3D'mso-bookmark=
+:AuthorName'><b
+style=3D'mso-bidi-font-weight:normal'>What is a manual test?<o:p></o:p></b>=
+</span></p>
+
+<p class=3DComment style=3D'text-align:justify'><span style=3D'mso-bookmark=
+:AuthorName'><b
+style=3D'mso-bidi-font-weight:normal'><o:p>&nbsp;</o:p></b></span></p>
+
+<p class=3DComment style=3D'text-align:justify'><span style=3D'mso-bookmark=
+:AuthorName'>A
+manual test is a description of test steps that a tester performs. Typicall=
+y,
+manual tests are used when the test steps are difficult or time-consuming to
+automate, or cannot be automated&#8212;for example, to determine a componen=
+t's
+behavior when network connectivity is lost. Visual Studio Team Test treats
+manual tests the same as automated tests. For example, it displays manual t=
+ests
+in the Team Test windows. It also tracks manual test results the same way it
+tracks automated test results, and displays them in the Test Results window=
+. <o:p></o:p></span></p>
+
+<p class=3DComment style=3D'text-align:justify'><span style=3D'mso-bookmark=
+:AuthorName'><o:p>&nbsp;</o:p></span></p>
+
+<p class=3DComment style=3D'text-align:justify'><span style=3D'mso-bookmark=
+:AuthorName'><b
+style=3D'mso-bidi-font-weight:normal'>Using this template<o:p></o:p></b></s=
+pan></p>
+
+<p class=3DComment style=3D'text-align:justify'><span style=3D'mso-bookmark=
+:AuthorName'><b
+style=3D'mso-bidi-font-weight:normal'><o:p>&nbsp;</o:p></b></span></p>
+
+<p class=3DComment style=3D'text-align:justify'><span style=3D'mso-bookmark=
+:AuthorName'>Modify
+the &#8220;Test Title&#8221; text to provide a two- to three-word descripti=
+on
+of your test. Under the &#8220;Test Details&#8221; heading, describe wh=
+at
+this manual test will verify. Under the &#8220;Test Target&#8221; heading, describe the
+specific functionality that this test will exercise. In the &#8220;Test
+Steps&#8221; table, describe exactly what steps to take, and in what order,=
+ to
+complete the test. For each step, state the result that the tester should
+expect. The &#8220;Revision History&#8221; table lists the changes made to =
+the
+test, who made the changes (an e-mail alias is often used), and when each
+change was made.<o:p></o:p></span></p>
+
+<p class=3DComment style=3D'text-align:justify'><span style=3D'mso-bookmark=
+:AuthorName'><o:p>&nbsp;</o:p></span></p>
+
+<p class=3DComment style=3D'text-align:justify'><span style=3D'mso-bookmark=
+:AuthorName'>By
+using Microsoft Word as your test editor, you can use rich-text features in
+your manual test.<o:p></o:p></span></p>
+
+<h1><span style=3D'mso-bookmark:AuthorName'><span style=3D'font-family:Taho=
+ma;
+mso-bidi-font-family:Arial;font-weight:normal;mso-bidi-font-weight:bold'>Te=
+st
+Title<o:p></o:p></span></span></h1>
+
+<p class=3DComment><span style=3D'mso-bookmark:AuthorName'><span style=3D'b=
+ackground:
+yellow;mso-highlight:yellow'>(Enter the test name here.</span>)<o:p></o:p><=
+/span></p>
+
+<h2><span style=3D'mso-bookmark:AuthorName'><span style=3D'font-size:12.0pt;
+font-family:Tahoma;mso-bidi-font-family:Arial;font-weight:normal;mso-bidi-f=
+ont-weight:
+bold;font-style:normal;mso-bidi-font-style:italic'>Test Details</span><=
+/span><span
+style=3D'mso-bookmark:AuthorName'><span style=3D'font-family:Tahoma;mso-bid=
+i-font-family:
+Arial;font-weight:normal;mso-bidi-font-weight:bold;font-style:normal;
+mso-bidi-font-style:italic'><o:p></o:p></span></span></h2>
+
+<p class=3DComment><span style=3D'mso-bookmark:AuthorName'><span style=3D'b=
+ackground:
+yellow;mso-highlight:yellow'>(Provide the tester with detailed information
+about what this test exercises or validates.</span>)<o:p></o:p></span></p>
+
+<h2><span style=3D'mso-bookmark:AuthorName'><span style=3D'font-size:12.0pt;
+font-family:Tahoma;mso-bidi-font-family:Arial;font-weight:normal;mso-bidi-f=
+ont-weight:
+bold;font-style:normal;mso-bidi-font-style:italic'>Test Target<o:p></o:p></=
+span></span></h2>
+
+<p class=3DComment><span style=3D'mso-bookmark:AuthorName'><span style=3D'b=
+ackground:
+yellow;mso-highlight:yellow'>(Describe the functionality that is being test=
+ed.)</span></span><o:p></o:p></p>
+
+<h2><span style=3D'font-size:12.0pt;font-family:Tahoma;mso-bidi-font-family=
+:Arial;
+font-weight:normal;mso-bidi-font-weight:bold;font-style:normal;mso-bidi-fon=
+t-style:
+italic'>Test Steps<o:p></o:p></span></h2>
+
+<p class=3DComment><span style=3D'background:yellow;mso-highlight:yellow'>(=
+Provide
+the tester with step-by-step instructions that explain how to complete the =
+manual
+test.)</span><o:p></o:p></p>
+
+<table class=3DMsoNormalTable border=3D1 cellspacing=3D0 cellpadding=3D0
+ style=3D'margin-left:7.1pt;border-collapse:collapse;border:none;mso-border=
+-alt:
+ solid windowtext .5pt;mso-padding-alt:0in 4.8pt 0in 4.8pt;mso-border-insid=
+eh:
+ .5pt solid windowtext;mso-border-insidev:.5pt solid windowtext'>
+ <thead>
+  <tr style=3D'mso-yfti-irow:0;mso-yfti-firstrow:yes;page-break-inside:avoi=
+d'>
+   <td width=3D74 style=3D'width:55.5pt;border:solid windowtext 1.0pt;mso-b=
+order-alt:
+   solid windowtext .5pt;background:#E5E5E5;mso-shading:windowtext;mso-patt=
+ern:
+   gray-10 auto;padding:0in 4.8pt 0in 4.8pt'>
+   <p class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><span
+   style=3D'font-size:10.0pt;font-family:Tahoma;mso-bidi-font-family:"Times=
+ New Roman"'>Step
+   No.<o:p></o:p></span></p>
+   </td>
+   <td width=3D312 style=3D'width:3.25in;border:solid windowtext 1.0pt;bord=
+er-left:
+   none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid wind=
+owtext .5pt;
+   background:#E5E5E5;mso-shading:windowtext;mso-pattern:gray-10 auto;
+   padding:0in 4.8pt 0in 4.8pt'>
+   <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+   mso-bidi-font-family:"Times New Roman"'>Step Description<o:p></o:p></spa=
+n></p>
+   </td>
+   <td width=3D180 style=3D'width:135.0pt;border:solid windowtext 1.0pt;bor=
+der-left:
+   none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid wind=
+owtext .5pt;
+   background:#E5E5E5;mso-shading:windowtext;mso-pattern:gray-10 auto;
+   padding:0in 4.8pt 0in 4.8pt'>
+   <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+   mso-bidi-font-family:"Times New Roman"'>Expected Result<o:p></o:p></span=
+></p>
+   </td>
+  </tr>
+ </thead>
+ <tr style=3D'mso-yfti-irow:1;page-break-inside:avoid'>
+  <td width=3D74 valign=3Dtop style=3D'width:55.5pt;border:solid windowtext=
+ 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:s=
+olid windowtext .5pt;
+  padding:0in 4.8pt 0in 4.8pt'>
+  <p class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><a
+  name=3DRevisionSheet></a><span style=3D'font-size:10.0pt;font-family:Taho=
+ma;
+  mso-bidi-font-family:"Times New Roman"'>1<o:p></o:p></span></p>
+  </td>
+  <td width=3D312 valign=3Dtop style=3D'width:3.25in;border-top:none;border=
+-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1=
+.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid window=
+text .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 4.8pt 0in 4.8pt'>
+  <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+  mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width=3D180 valign=3Dtop style=3D'width:135.0pt;border-top:none;borde=
+r-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1=
+.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid window=
+text .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 4.8pt 0in 4.8pt'>
+  <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+  mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+ </tr>
+ <tr style=3D'mso-yfti-irow:2;page-break-inside:avoid;height:11.85pt'>
+  <td width=3D74 valign=3Dtop style=3D'width:55.5pt;border:solid windowtext=
+ 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:s=
+olid windowtext .5pt;
+  padding:0in 4.8pt 0in 4.8pt;height:11.85pt'>
+  <p class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><span
+  style=3D'font-size:10.0pt;font-family:Tahoma;mso-bidi-font-family:"Times =
+New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width=3D312 valign=3Dtop style=3D'width:3.25in;border-top:none;border=
+-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1=
+.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid window=
+text .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 4.8pt 0in 4.8pt;height:1=
+1.85pt'>
+  <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+  mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width=3D180 valign=3Dtop style=3D'width:135.0pt;border-top:none;borde=
+r-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1=
+.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid window=
+text .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 4.8pt 0in 4.8pt;height:1=
+1.85pt'>
+  <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+  mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+ </tr>
+ <tr style=3D'mso-yfti-irow:3;mso-yfti-lastrow:yes;page-break-inside:avoid'>
+  <td width=3D74 valign=3Dtop style=3D'width:55.5pt;border:solid windowtext=
+ 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:s=
+olid windowtext .5pt;
+  padding:0in 4.8pt 0in 4.8pt'>
+  <p class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><span
+  style=3D'font-size:10.0pt;font-family:Tahoma;mso-bidi-font-family:"Times =
+New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width=3D312 valign=3Dtop style=3D'width:3.25in;border-top:none;border=
+-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1=
+.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid window=
+text .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 4.8pt 0in 4.8pt'>
+  <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+  mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width=3D180 valign=3Dtop style=3D'width:135.0pt;border-top:none;borde=
+r-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1=
+.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid window=
+text .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 4.8pt 0in 4.8pt'>
+  <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+  mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+ </tr>
+</table>
+
+<h2><span style=3D'font-size:12.0pt;font-family:Tahoma;mso-bidi-font-family=
+:Arial;
+font-weight:normal;mso-bidi-font-weight:bold;font-style:normal;mso-bidi-fon=
+t-style:
+italic'>Revision History<o:p></o:p></span></h2>
+
+<p class=3DMsoNormal><span style=3D'font-size:8.0pt;font-family:Tahoma;mso-=
+bidi-font-family:
+"Times New Roman";background:yellow;mso-highlight:yellow'>(Record the revis=
+ions
+that you and others make to this test.)</span><span style=3D'font-size:8.0p=
+t;
+font-family:Tahoma;mso-bidi-font-family:"Times New Roman"'><o:p></o:p></spa=
+n></p>
+
+<table class=3DMsoNormalTable border=3D1 cellspacing=3D0 cellpadding=3D0
+ style=3D'margin-left:7.1pt;border-collapse:collapse;border:none;mso-border=
+-alt:
+ solid windowtext .5pt;mso-padding-alt:0in 4.8pt 0in 4.8pt;mso-border-insid=
+eh:
+ .5pt solid windowtext;mso-border-insidev:.5pt solid windowtext'>
+ <thead>
+  <tr style=3D'mso-yfti-irow:0;mso-yfti-firstrow:yes;page-break-inside:avoi=
+d'>
+   <td width=3D74 style=3D'width:55.5pt;border:solid windowtext 1.0pt;mso-b=
+order-alt:
+   solid windowtext .5pt;background:#E5E5E5;mso-shading:windowtext;mso-patt=
+ern:
+   gray-10 auto;padding:0in 4.8pt 0in 4.8pt'>
+   <p class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><span
+   style=3D'font-size:10.0pt;font-family:Tahoma;mso-bidi-font-family:"Times=
+ New Roman"'>Author<o:p></o:p></span></p>
+   </td>
+   <td width=3D312 style=3D'width:3.25in;border:solid windowtext 1.0pt;bord=
+er-left:
+   none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid wind=
+owtext .5pt;
+   background:#E5E5E5;mso-shading:windowtext;mso-pattern:gray-10 auto;
+   padding:0in 4.8pt 0in 4.8pt'>
+   <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+   mso-bidi-font-family:"Times New Roman"'>Change Description<o:p></o:p></s=
+pan></p>
+   </td>
+   <td width=3D180 style=3D'width:135.0pt;border:solid windowtext 1.0pt;bor=
+der-left:
+   none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:solid wind=
+owtext .5pt;
+   background:#E5E5E5;mso-shading:windowtext;mso-pattern:gray-10 auto;
+   padding:0in 4.8pt 0in 4.8pt'>
+   <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+   mso-bidi-font-family:"Times New Roman"'>Time/Date modified<o:p></o:p></s=
+pan></p>
+   </td>
+  </tr>
+ </thead>
+ <tr style=3D'mso-yfti-irow:1;page-break-inside:avoid'>
+  <td width=3D74 valign=3Dtop style=3D'width:55.5pt;border:solid windowtext=
+ 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:s=
+olid windowtext .5pt;
+  padding:0in 4.8pt 0in 4.8pt'>
+  <p class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><span
+  style=3D'font-size:10.0pt;font-family:Tahoma;mso-bidi-font-family:"Times =
+New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width=3D312 valign=3Dtop style=3D'width:3.25in;border-top:none;border=
+-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1=
+.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid window=
+text .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 4.8pt 0in 4.8pt'>
+  <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+  mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width=3D180 valign=3Dtop style=3D'width:135.0pt;border-top:none;borde=
+r-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1=
+.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid window=
+text .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 4.8pt 0in 4.8pt'>
+  <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+  mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+ </tr>
+ <tr style=3D'mso-yfti-irow:2;page-break-inside:avoid;height:11.85pt'>
+  <td width=3D74 valign=3Dtop style=3D'width:55.5pt;border:solid windowtext=
+ 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:s=
+olid windowtext .5pt;
+  padding:0in 4.8pt 0in 4.8pt;height:11.85pt'>
+  <p class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><span
+  style=3D'font-size:10.0pt;font-family:Tahoma;mso-bidi-font-family:"Times =
+New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width=3D312 valign=3Dtop style=3D'width:3.25in;border-top:none;border=
+-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1=
+.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid window=
+text .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 4.8pt 0in 4.8pt;height:1=
+1.85pt'>
+  <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+  mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width=3D180 valign=3Dtop style=3D'width:135.0pt;border-top:none;borde=
+r-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1=
+.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid window=
+text .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 4.8pt 0in 4.8pt;height:1=
+1.85pt'>
+  <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+  mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+ </tr>
+ <tr style=3D'mso-yfti-irow:3;mso-yfti-lastrow:yes;page-break-inside:avoid'>
+  <td width=3D74 valign=3Dtop style=3D'width:55.5pt;border:solid windowtext=
+ 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:s=
+olid windowtext .5pt;
+  padding:0in 4.8pt 0in 4.8pt'>
+  <p class=3DMsoNormal align=3Dcenter style=3D'text-align:center'><span
+  style=3D'font-size:10.0pt;font-family:Tahoma;mso-bidi-font-family:"Times =
+New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width=3D312 valign=3Dtop style=3D'width:3.25in;border-top:none;border=
+-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1=
+.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid window=
+text .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 4.8pt 0in 4.8pt'>
+  <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+  mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+  <td width=3D180 valign=3Dtop style=3D'width:135.0pt;border-top:none;borde=
+r-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1=
+.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid window=
+text .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 4.8pt 0in 4.8pt'>
+  <p class=3DMsoNormal><span style=3D'font-size:10.0pt;font-family:Tahoma;
+  mso-bidi-font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=3DMsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=3DMsoNormal><span style=3D'mso-bidi-font-size:8.0pt'><o:p>&nbsp;</=
+o:p></span></p>
+
+</div>
+
+</body>
+
+</html>
