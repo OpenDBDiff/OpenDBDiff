@@ -8,6 +8,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff", "DBDiff\DBDiff.csproj", "{99A26820-E71D-4E01-ADF2-E6AB25B03FA0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F1EDEC7-018C-479A-A89F-C35DC1780708} = {4F1EDEC7-018C-479A-A89F-C35DC1780708}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.Schema", "DBDiff.Schema\DBDiff.Schema.csproj", "{406558A0-1B98-4D0E-B8B6-2013700B065A}"
 EndProject
@@ -17,7 +20,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.Front", "DBDiff.Fron
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.OCDB", "DBDiffCmd\DBDiff.OCDB.csproj", "{E794AA28-EE68-44BD-827B-1BFD9C106B65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.ScintillaNET", "DBDiff.Scintilla NET-2.0\ScintillaNET\DBDiff.ScintillaNET.csproj", "{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{1704FA7C-5E57-458D-BDE4-5B008A9DB5E1}"
+	ProjectSection(SolutionItems) = preProject
+		References\Ascend.dll = References\Ascend.dll
+		References\Ascend.Resources.dll = References\Ascend.Resources.dll
+		References\Ascend.Windows.Forms.dll = References\Ascend.Windows.Forms.dll
+		References\DBDiff.SciLexer32.dll = References\DBDiff.SciLexer32.dll
+		References\System.Data.SQLite.dll = References\System.Data.SQLite.dll
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBDiff.SciLexer", "DBDiff.Scintilla NET-2.0\SciLexter\vcbuild\SciLexer.vcproj", "{4F1EDEC7-018C-479A-A89F-C35DC1780708}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -40,9 +52,9 @@ Global
 		SccProjectUniqueName5 = DBDiffCmd\\DBDiff.OCDB.csproj
 		SccProjectName5 = DBDiffCmd
 		SccLocalPath5 = DBDiffCmd
-		SccProjectUniqueName6 = DBDiff.Scintilla\u0020NET-2.0\\ScintillaNET\\DBDiff.ScintillaNET.csproj
-		SccProjectName6 = DBDiff.Scintilla\u0020NET-2.0/ScintillaNET
-		SccLocalPath6 = DBDiff.Scintilla\u0020NET-2.0\\ScintillaNET
+		SccProjectUniqueName6 = DBDiff.Scintilla\u0020NET-2.0\\SciLexter\\vcbuild\\SciLexer.vcproj
+		SccProjectName6 = DBDiff.Scintilla\u0020NET-2.0/SciLexter/vcbuild
+		SccLocalPath6 = DBDiff.Scintilla\u0020NET-2.0\\SciLexter\\vcbuild
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,18 +115,21 @@ Global
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65}.Release|Win32.ActiveCfg = Release|Any CPU
-		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Release|Win32.ActiveCfg = Release|Any CPU
+		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Debug|Win32.Build.0 = Debug|Win32
+		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Release|Any CPU.ActiveCfg = Release|Win32
+		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Release|Win32.ActiveCfg = Release|Win32
+		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1704FA7C-5E57-458D-BDE4-5B008A9DB5E1} = {DBEC6CD3-5B8F-427C-8304-9BFD223C8B1D}
 	EndGlobalSection
 EndGlobal

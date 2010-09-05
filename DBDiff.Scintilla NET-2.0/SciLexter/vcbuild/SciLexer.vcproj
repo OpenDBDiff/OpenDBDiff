@@ -81,7 +81,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="imm32.lib comctl32.lib"
-				OutputFile=".\../bin/DBDiff.SciLexer.dll"
+				OutputFile=".\../bin/DBDiff.SciLexer32.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
@@ -176,7 +176,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="imm32.lib comctl32.lib"
-				OutputFile=".\../bin/DBDiff.SciLexer.dll"
+				OutputFile=".\../bin/DBDiff.SciLexer32.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				GenerateMapFile="true"
