@@ -46,6 +46,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -54,11 +55,13 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ascend, Version=1.0.0.6, Culture=neutral, PublicKeyToken=25c7a393ba3f37cd, processorArchitecture=MSIL" />
     <Reference Include="Ascend.Windows.Forms, Version=1.0.0.6, Culture=neutral, PublicKeyToken=ecd86ece2d3eb46d, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -66,6 +69,9 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -135,6 +141,70 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Scintilla\CallTip.cs" />
+    <Compile Include="Scintilla\Caret.cs" />
+    <Compile Include="Scintilla\Clipboard.cs" />
+    <Compile Include="Scintilla\Commands.cs" />
+    <Compile Include="Scintilla\Configuration\CommandConfig.cs" />
+    <Compile Include="Scintilla\Configuration\Configuration.cs" />
+    <Compile Include="Scintilla\Configuration\ConfigurationManager.cs" />
+    <Compile Include="Scintilla\Configuration\IndicatorsConfig.cs" />
+    <Compile Include="Scintilla\Configuration\KeyWordConfigList.cs" />
+    <Compile Include="Scintilla\Configuration\LexerProperties.cs" />
+    <Compile Include="Scintilla\Configuration\MarginConfig.cs" />
+    <Compile Include="Scintilla\Configuration\MarkersConfig.cs" />
+    <Compile Include="Scintilla\Configuration\StyleConfig.cs" />
+    <Compile Include="Scintilla\Constants.cs" />
+    <Compile Include="Scintilla\Document.cs" />
+    <Compile Include="Scintilla\DocumentNavigation.cs" />
+    <Compile Include="Scintilla\DropMarker.cs" />
+    <Compile Include="Scintilla\EndOfLine.cs" />
+    <Compile Include="Scintilla\Enums.cs" />
+    <Compile Include="Scintilla\EventArgs.cs" />
+    <Compile Include="Scintilla\FlagsDesigner.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scintilla\GoTo.cs" />
+    <Compile Include="Scintilla\GoToDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scintilla\GoToDialog.Designer.cs">
+      <DependentUpon>GoToDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scintilla\HotspotStyle.cs" />
+    <Compile Include="Scintilla\INativeScintilla.cs" />
+    <Compile Include="Scintilla\Indentation.cs" />
+    <Compile Include="Scintilla\Indicator.cs" />
+    <Compile Include="Scintilla\Lexing.cs" />
+    <Compile Include="Scintilla\Line.cs" />
+    <Compile Include="Scintilla\LinesCollection.cs" />
+    <Compile Include="Scintilla\LineWrap.cs" />
+    <Compile Include="Scintilla\LongLines.cs" />
+    <Compile Include="Scintilla\Margins.cs" />
+    <Compile Include="Scintilla\NativeMethods.cs" />
+    <Compile Include="Scintilla\NativeStructs.cs" />
+    <Compile Include="Scintilla\Printing\PageInformation.cs" />
+    <Compile Include="Scintilla\Printing\PageSettings.cs" />
+    <Compile Include="Scintilla\Printing\PrintDocument.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scintilla\Printing\Printing.cs" />
+    <Compile Include="Scintilla\Range.cs" />
+    <Compile Include="Scintilla\ScintillaContro.INativeScintilla.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scintilla\ScintillaControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scintilla\ScintillaHelperBase.cs" />
+    <Compile Include="Scintilla\Scrolling.cs" />
+    <Compile Include="Scintilla\Selection.cs" />
+    <Compile Include="Scintilla\Style.cs" />
+    <Compile Include="Scintilla\UndoRedo.cs" />
+    <Compile Include="Scintilla\Utils.cs" />
+    <Compile Include="Scintilla\WhiteSpace.cs" />
+    <Compile Include="Scintilla\WhiteSpaceStringConverter.cs" />
+    <Compile Include="Scintilla\XpmAdapter.cs" />
     <Compile Include="XmlConfig\ConfigProvider.cs" />
     <Compile Include="XmlConfig\ConfigProviders.cs" />
   </ItemGroup>
@@ -150,10 +220,6 @@
     <ProjectReference Include="..\DBDiff.Schema\DBDiff.Schema.csproj">
       <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
       <Name>DBDiff.Schema</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DBDiff.Scintilla NET-2.0\ScintillaNET\DBDiff.ScintillaNET.csproj">
-      <Project>{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}</Project>
-      <Name>DBDiff.ScintillaNET</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +250,25 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
+    <None Include="Scintilla\Resources\LineColorHS.png" />
+    <None Include="Scintilla\Resources\GoToPreviousMessage.png" />
+    <None Include="Scintilla\Resources\GoToNextMessage.png" />
+    <None Include="Scintilla\Resources\GoToNextMessage - Copy.png" />
+    <None Include="Scintilla\Resources\DeleteHS.png" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\xml.xml" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\mssql.xml" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\xml.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\sql.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\mssql.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\xml.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\sql.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\mssql.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\conf.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\default.xml" />
+    <EmbeddedResource Include="Scintilla\GoToDialog.resx">
+      <DependentUpon>GoToDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Resources\Database.ico" />
     <None Include="Resources\Folder.ico" />
     <None Include="Resources\Image1.bmp" />

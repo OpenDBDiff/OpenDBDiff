@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ScintillaNET>
+	<Language Name="xml">
+
+		<!-- 
+			This is a bit of a hack that I picked up from SciTE, We keep the Stream 
+			Comments as HTML Style and the Line Comments JavaScript Style. The better
+			way to do it would be to change the comment strings whenever the selection
+			changes based on if the current style is HTML or JavaScript (or VBScript,
+			PHP, etc)			
+		 -->
+		<Lexer LineCommentPrefix="//" StreamCommentPrefix="&lt;!-- " StreamCommentSuffix=" --&gt;" />
+			
+
+		<!-- 
+			Additionally the HTML comment scheme lends itself better to having CTRL+Q toggle
+			Line comments and CTRL+SHIFT+Q add Stream comments rather than having VS style
+			comments.			
+		-->
+		<Commands Inherit="True">
+			<Binding Key="Q" Modifier="Control" Command="ToggleLineComment" ReplaceCurrent="True"/>
+			<Binding Key="Q" Modifier="Shift Control" Command="StreamComment" ReplaceCurrent="True"/>
+		</Commands>
+
+		<!-- 
+			I saved the best for last. Styles, yeck. This is why the HTML config
+			is so damned complicated.
+			
+			In order for any of the SubLangage Styles to inherit from the default config
+			they have to be declared here even if they don't have any values set.
+		-->
+		<Styles Inherit="True">
+		
+			<!--
+				As sort of a neat side-effect of how the SubLanguage inheritance works
+				any styles declared here will be inherited by the sublanguage styles.
+				Note that they have to be decalared before any of the sublanguages for
+				it to work.
+			-->
+
+			<Style Name="DOUBLESTRING" ForeColor="Orchid" />
+			<Style Name="SINGLESTRING" ForeColor="Orchid" />
+
+			<SubLanguage Name="HTML">
+				<Style Name="DEFAULT" />
+				<Style Name="TAG" />
+				<Style Name="TAGUNKNOWN" />
+				<Style Name="ATTRIBUTE" />
+				<Style Name="ATTRIBUTEUNKNOWN" />
+				<Style Name="NUMBER" />
+				<Style Name="DOUBLESTRING"  />
+				<Style Name="SINGLESTRING"  />
+				<Style Name="OTHER" />
+				<Style Name="COMMENT" />
+				<Style Name="ENTITY" />
+				<Style Name="TAGEND" />
+				<Style Name="XMLSTART" />
+				<Style Name="XMLEND" />
+				<Style Name="SCRIPT" />
+				<Style Name="ASP" />
+				<Style Name="ASPAT" />
+				<Style Name="CDATA" />
+				<Style Name="QUESTION" />
+				<Style Name="VALUE" />
+				<Style Name="XCCOMMENT" />
+			</SubLanguage>
+			
+		</Styles>
+	</Language>
+</ScintillaNET>

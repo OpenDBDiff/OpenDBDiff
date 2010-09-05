@@ -77,6 +77,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compare\CompareCLRFunction.cs" />
     <Compile Include="Compare\CompareCLRTriggers.cs" />
     <Compile Include="Compare\CompareDDLTriggers.cs" />
     <Compile Include="Compare\CompareAssemblies.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Compare\CompareDatabase.cs" />
     <Compile Include="Compare\CompareFileGroups.cs" />
     <Compile Include="Compare\CompareFullText.cs" />
+    <Compile Include="Compare\CompareFullTextIndex.cs" />
     <Compile Include="Compare\CompareFunctions.cs" />
     <Compile Include="Compare\CompareIndexes.cs" />
     <Compile Include="Compare\ComparePartitionFunction.cs" />
@@ -127,7 +129,11 @@
     <Compile Include="Front\Util\SqlServerList.cs" />
     <Compile Include="Generates\Generate.cs" />
     <Compile Include="Generates\GenerateFullText.cs" />
+    <Compile Include="Generates\GenerateFullTextIndex.cs" />
     <Compile Include="Generates\GenerateTextObjects.cs" />
+    <Compile Include="Generates\SQLCommands\DatabaseSQLCommand.cs" />
+    <Compile Include="Generates\SQLCommands\FullTextIndexSQLCommand.cs" />
+    <Compile Include="Generates\SQLCommands\FunctionSQLCommand.cs" />
     <Compile Include="Generates\Util\Constants.cs" />
     <Compile Include="Generates\GenerateDefaults.cs" />
     <Compile Include="Generates\GenerateExtendedProperties.cs" />
@@ -157,12 +163,14 @@
     <Compile Include="Generates\Util\ConvertType.cs" />
     <Compile Include="Model\AssemblyFile.cs" />
     <Compile Include="Model\CLRCode.cs" />
+    <Compile Include="Model\CLRFunction.cs" />
     <Compile Include="Model\CLRStoreProcedure.cs" />
     <Compile Include="Model\CLRTrigger.cs" />
     <Compile Include="Model\Code.cs" />
-    <Compile Include="Model\Defaults.cs" />
     <Compile Include="Model\ExtendedProperty.cs" />
     <Compile Include="Model\FullText.cs" />
+    <Compile Include="Model\FullTextIndex.cs" />
+    <Compile Include="Model\FullTextIndexColumn.cs" />
     <Compile Include="Model\Interfaces\ICode.cs" />
     <Compile Include="Model\Interfaces\ISQLServerSchemaBase.cs" />
     <Compile Include="Model\ITableType.cs" />
@@ -174,14 +182,12 @@
     <Compile Include="Model\Util\FormatCode.cs" />
     <Compile Include="Model\Assembly.cs" />
     <Compile Include="Model\ColumnConstraint.cs" />
-    <Compile Include="Model\ColumnConstraints.cs" />
     <Compile Include="Model\ConstraintColumn.cs" />
     <Compile Include="Model\ConstraintColumns.cs" />
     <Compile Include="Model\DatabaseInfo.cs" />
     <Compile Include="Model\Default.cs" />
     <Compile Include="Model\Dependence.cs" />
     <Compile Include="Model\Dependencies.cs" />
-    <Compile Include="Model\Constraints.cs" />
     <Compile Include="Model\Column.cs" />
     <Compile Include="Model\Columns.cs" />
     <Compile Include="Model\Constraint.cs" />
@@ -193,7 +199,6 @@
     <Compile Include="Model\IndexColumn.cs" />
     <Compile Include="Model\IndexColumns.cs" />
     <Compile Include="Model\Role.cs" />
-    <Compile Include="Model\Roles.cs" />
     <Compile Include="Model\Rule.cs" />
     <Compile Include="Model\Schema.cs" />
     <Compile Include="Model\SQLServerSchemaBase.cs" />

@@ -34,9 +34,9 @@ namespace DBDiff
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.txtNewObject = new ScintillaNet.Scintilla();
+            this.txtNewObject = new DBDiff.Scintilla.Scintilla();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.txtOldObject = new ScintillaNet.Scintilla();
+            this.txtOldObject = new DBDiff.Scintilla.Scintilla();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -48,7 +48,7 @@ namespace DBDiff
             this.schemaTreeView1 = new DBDiff.Front.SchemaTreeView();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.txtDiferencias = new ScintillaNet.Scintilla();
+            this.txtDiferencias = new DBDiff.Scintilla.Scintilla();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.GroupDb = new System.Windows.Forms.GroupBox();
@@ -495,7 +495,7 @@ namespace DBDiff
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Open DBDiff Beta 7";
+            this.Text = "Open DBDiff Beta 8";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
@@ -543,7 +543,7 @@ namespace DBDiff
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Panel panel1;
-        private ScintillaNet.Scintilla txtDiferencias;
+        private DBDiff.Scintilla.Scintilla txtDiferencias;
         private System.Windows.Forms.Panel PanelGlobal;
         private System.Windows.Forms.Panel panel2;
         private Ascend.Windows.Forms.GradientPanel PanelSource;
@@ -558,8 +558,8 @@ namespace DBDiff
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.TabPage tabPage5;
-        private ScintillaNet.Scintilla txtNewObject;
-        private ScintillaNet.Scintilla txtOldObject;
+        private DBDiff.Scintilla.Scintilla txtNewObject;
+        private DBDiff.Scintilla.Scintilla txtOldObject;
     }
 }
 

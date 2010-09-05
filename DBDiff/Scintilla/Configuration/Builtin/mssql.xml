@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ScintillaNET>
+	<Language Name="mssql">
+		<Lexer LineCommentPrefix="--" StreamCommentPrefix="/* " StreamCommentSuffix=" /*" >
+			<Properties>
+				<Property Name="fold.comment" Value="1" />
+			</Properties>
+
+			<Keywords List="0">
+        accent_sensitivity action add after all alter allow_row_locks allow_page_locks any application as asc assembly authorization backup begin
+        break browse bulk by caller catalog cascade case catch change_tracking check checkpoint close clustered
+        coalesce collate column collection commit committed compute confirm constraint
+        contains containstable continue controlrow convert create cross current
+        current_date current_time current_timestamp current_user cursor database
+        dbcc deallocate declare default default_schema deadlock_priority delete deny desc disable disk distinct
+        distributed double drop drop_existing dummy dump else enable end errlvl errorexit
+        escape except exec execute external external_access exists exit fetch file filegroup filestream fillfactor floppy for
+        foreign forward_only freetext freetexttable from full fulltext function geometry geography go goto
+        grant group hash having hierarchyid holdlock identity identity_insert identitycol if in
+        ignore_dup_key include index instead inner insert intersect into is isolation key kill left level
+        lineno load lock_escalation login mirrorexit merge move national name next no nocheck nocount nonclustered nolock
+        nounload nullif of off offsets on once only online open opendatasource
+        openquery openrowset option  order outer output over pad_index partition path percent perm
+        persisted permanent pipe plan permission_set precision prepare primary print privileges proc
+        procedure processexit public raiserror range read readtext read_only rebuild
+        reconfigure recovery references repeatable repeatableread replication restore restrict
+        return returns revoke role right rollback rowlock rowcount rowguidcol rule safe save
+        schema scheme schemabinding select serializable session_user set setuser snapshot shutdown some
+        statistics statistics_norecompute stats synonym system_user sort_in_tempdb table tablock tape temp temporary textsize textimage_on
+        then to top track_columns_updated tran transaction trigger truncate try tsequal type uncommitted  unique
+        update updlock updatetext uniqueidentifier union unsafe use user values varying view xlock xml waitfor when where while
+        with without work writetext
+      </Keywords>
+			
+			<Keywords List="1">
+        bigint binary bit char character date datetime datetime2 datetimeoffset dec decimal float image int
+        integer money nchar ntext numeric nvarchar real rowversion smalldatetime smallint
+        smallmoney sql_variant sysname text time timestamp tinyint uniqueidentifier
+        varbinary varchar
+      </Keywords>
+			<Keywords List="2">
+				deleted inserted sysallocations sysalternates sysaltfiles
+				syscacheobjects syscharsets syscolumns syscomments sysconfigures
+				sysconstraints syscurconfigs syscursorcolumns syscursorrefs syscursors
+				syscursortables sysdatabases sysdepends sysdevices sysfilegroups
+				sysfiles sysfiles1 sysforeignkeys sysfulltextcatalogs sysindexes
+				sysindexkeys syslanguages syslockinfo syslocks syslogins sysmembers
+				sysmessages sysobjects sysoledbusers sysperfinfo syspermissions
+				sysprocesses sysprotects sysreferences sysremote_catalogs
+				sysremote_column_privileges sysremote_columns sysremote_foreign_keys
+				sysremote_indexes sysremote_primary_keys sysremote_provider_types
+				sysremote_schemata sysremote_statistics sysremote_table_privileges
+				sysremote_tables sysremote_views sysremotelogins syssegments sysservers
+				systypes sysusers sysxlogins sys.tables sys.objects sys.columns sys.indexes sys.views
+			</Keywords>
+
+			<Keywords List="3">
+				connections cpu_busy cursor_rows datefirst dbts error fetch_status
+				identity idle io_busy langid language lock_timeout max_connections
+				max_precision nestlevel options pack_received pack_sent packet_errors
+				procid remserver rowcount servername servicename spid textsize
+				timetickstotal_errors total_read total_write trancount version
+			</Keywords>
+
+			<Keywords List="4">
+        abs acos app_name ascii asin atan atn2 avg binary_checksum case cast
+        ceiling char charindex checksum checksum_agg coalesce collationproperty
+        col_length col_name columns_updated columnproperty convert cos cot count
+        count_big current_timestamp current_user cursor_status databaseproperty
+        databasepropertyex datalength dateadd datediff datename datepart day
+        db_id db_name degrees difference exp eventdata file_id file_name filegroup_id
+        filegroup_name filegroupproperty fileproperty floor fn_helpcollations
+        fn_listextendedproperty fn_servershareddrives fn_trace_geteventinfo
+        fn_trace_getfilterinfo fn_trace_getinfo fn_trace_gettable
+        fn_virtualfilestats formatmessage fulltextcatalogproperty
+        fulltextserviceproperty getansinull getdate getutcdate grouping
+        has_dbaccess host_id host_name ident_current ident_incr ident_seed
+        index_col indexkey_property indexproperty is_member is_srvrolemember
+        isdate isnull isnumeric left len log log10 lower ltrim max min month
+        nchar newid newsequentialid nullif object_id object_name objectproperty parsename
+        patindex permissions pi power quotename radians rand replace replicate
+        reverse right round rowcount_big rtrim scope_identity serverproperty
+        sessionproperty session_user sign sin soundex space sqare
+        sql_variant_property sqrt stats_date stdev stdevp str stuff substring
+        sum suser_sid suser_sname system_user tan textptr typeproperty unicode upper
+        user_id user_name var varp year
+      </Keywords>
+			<Keywords List="5">
+        sp_ActiveDirectory_Obj sp_ActiveDirectory_SCP sp_ActiveDirectory_Start sp_add_agent_parameter sp_add_agent_profile sp_add_data_file_recover_suspect_db
+        sp_add_log_file_recover_suspect_db sp_add_log_shipping_alert_job sp_add_log_shipping_primary_database sp_add_log_shipping_primary_secondary
+        sp_add_log_shipping_secondary_database sp_add_log_shipping_secondary_primary sp_addalias sp_addapprole sp_addarticle sp_adddatatype
+        sp_adddatatypemapping sp_adddistpublisher sp_adddistributiondb sp_adddistributor sp_adddynamicsnapshot_job sp_addextendedproc sp_addextendedproperty
+        sp_addgroup sp_addlinkedserver sp_addlinkedsrvlogin sp_addlogin sp_addlogreader_agent sp_addmergealternatepublisher sp_addmergearticle
+        sp_addmergefilter sp_addmergelogsettings sp_addmergepartition sp_addmergepublication sp_addmergepullsubscription sp_addmergepullsubscription_agent
+        sp_addmergepushsubscription_agent sp_addmergesubscription sp_addmessage sp_addpublication sp_addpublication_snapshot sp_addpullsubscription
+        sp_addpullsubscription_agent sp_addpushsubscription_agent sp_addqreader_agent sp_addqueued_artinfo sp_addremotelogin sp_addrole sp_addrolemember
+        sp_addscriptexec sp_addserver sp_addsrvrolemember sp_addsubscriber sp_addsubscriber_schedule sp_addsubscription sp_addsynctriggers
+        sp_addsynctriggerscore sp_addtabletocontents sp_addtype sp_addumpdevice sp_adduser sp_adjustpublisheridentityrange sp_altermessage sp_approlepassword
+        sp_article_validation sp_articlecolumn sp_articlefilter sp_articleview sp_assemblies_rowset sp_assemblies_rowset_rmt sp_assemblies_rowset2
+        sp_assembly_dependencies_rowset sp_assembly_dependencies_rowset_rmt sp_assembly_dependencies_rowset2 sp_attach_db sp_attach_single_file_db
+        sp_attachsubscription sp_autostats sp_bcp_dbcmptlevel sp_bindefault sp_bindrule sp_browsemergesnapshotfolder sp_browsereplcmds sp_browsesnapshotfolder
+        sp_can_tlog_be_applied sp_catalogs sp_catalogs_rowset sp_catalogs_rowset_rmt sp_catalogs_rowset2 sp_certify_removable sp_change_agent_parameter
+        sp_change_agent_profile sp_change_log_shipping_primary_database sp_change_log_shipping_secondary_database sp_change_log_shipping_secondary_primary
+        sp_change_subscription_properties sp_change_users_login sp_changearticle sp_changearticlecolumndatatype sp_changedbowner sp_changedistpublisher
+        sp_changedistributiondb sp_changedistributor_password sp_changedistributor_property sp_changedynamicsnapshot_job sp_changegroup
+        sp_changelogreader_agent sp_changemergearticle sp_changemergefilter sp_changemergelogsettings sp_changemergepublication sp_changemergepullsubscription
+        sp_changemergesubscription sp_changeobjectowner sp_changepublication sp_changepublication_snapshot sp_changeqreader_agent
+        sp_changereplicationserverpasswords sp_changesubscriber sp_changesubscriber_schedule sp_changesubscription sp_changesubscriptiondtsinfo
+        sp_changesubstatus sp_check_constbytable_rowset sp_check_constbytable_rowset2 sp_check_constraints_rowset sp_check_constraints_rowset2
+        sp_check_dynamic_filters sp_check_for_sync_trigger sp_check_join_filter sp_check_log_shipping_monitor_alert sp_check_publication_access
+        sp_check_removable sp_check_subset_filter sp_check_sync_trigger sp_checkinvalidivarticle sp_checkOraclepackageversion sp_cleanmergelogfiles
+        sp_cleanup_log_shipping_history sp_cleanupdbreplication sp_cleanupwebtask sp_column_privileges sp_column_privileges_ex sp_column_privileges_rowset
+        sp_column_privileges_rowset_rmt sp_column_privileges_rowset2 sp_columns sp_columns_90 sp_columns_90_rowset sp_columns_90_rowset_rmt
+        sp_columns_90_rowset2 sp_columns_ex sp_columns_ex_90 sp_columns_rowset sp_columns_rowset_rmt sp_columns_rowset2 sp_configure
+        sp_constr_col_usage_rowset sp_constr_col_usage_rowset2 sp_convertwebtasks sp_copymergesnapshot sp_copysnapshot sp_copysubscription sp_create_removable
+        sp_createmergepalrole sp_createstats sp_createtranpalrole sp_cursor_list sp_cycle_errorlog sp_databases sp_datatype_info sp_datatype_info_90
+        sp_db_vardecimal_storage_format sp_dbcmptlevel sp_dbfixedrolepermission sp_dbmmonitoraddmonitoring sp_dbmmonitorchangealert
+        sp_dbmmonitorchangemonitoring sp_dbmmonitordropalert sp_dbmmonitordropmonitoring sp_dbmmonitorhelpalert sp_dbmmonitorhelpmonitoring
+        sp_dbmmonitorresults sp_dbmmonitorupdate sp_dboption sp_dbremove sp_ddopen sp_defaultdb sp_defaultlanguage sp_delete_log_shipping_alert_job
+        sp_delete_log_shipping_primary_database sp_delete_log_shipping_primary_secondary sp_delete_log_shipping_secondary_database
+        sp_delete_log_shipping_secondary_primary sp_deletemergeconflictrow sp_deletepeerrequesthistory sp_deletetracertokenhistory sp_denylogin sp_depends
+        sp_describe_cursor sp_describe_cursor_columns sp_describe_cursor_tables sp_detach_db sp_disableagentoffload sp_distcounters sp_drop_agent_parameter
+        sp_drop_agent_profile sp_dropalias sp_dropanonymousagent sp_dropanonymoussubscription sp_dropapprole sp_droparticle sp_dropdatatypemapping
+        sp_dropdevice sp_dropdistpublisher sp_dropdistributiondb sp_dropdistributor sp_dropdynamicsnapshot_job sp_dropextendedproc sp_dropextendedproperty
+        sp_dropgroup sp_droplinkedsrvlogin sp_droplogin sp_dropmergealternatepublisher sp_dropmergearticle sp_dropmergefilter sp_dropmergelogsettings
+        sp_dropmergepartition sp_dropmergepublication sp_dropmergepullsubscription sp_dropmergesubscription sp_dropmessage sp_droppublication sp_droppublisher
+        sp_droppullsubscription sp_dropremotelogin sp_dropreplsymmetrickey sp_droprole sp_droprolemember sp_dropserver sp_dropsrvrolemember sp_dropsubscriber
+        sp_dropsubscription sp_droptype sp_dropuser sp_dropwebtask sp_dsninfo sp_enable_heterogeneous_subscription sp_enableagentoffload
+        sp_enum_oledb_providers sp_enumcodepages sp_enumcustomresolvers sp_enumdsn sp_enumeratependingschemachanges sp_enumerrorlogs sp_enumfullsubscribers
+        sp_enumoledbdatasources sp_estimated_rowsize_reduction_for_vardecimal sp_expired_subscription_cleanup sp_firstonly_bitmap sp_fkeys
+        sp_foreign_keys_rowset sp_foreign_keys_rowset_rmt sp_foreign_keys_rowset2 sp_foreign_keys_rowset3 sp_foreignkeys sp_fulltext_catalog
+        sp_fulltext_column sp_fulltext_database sp_fulltext_querytimeout sp_fulltext_recycle_crawl_log sp_fulltext_service sp_fulltext_table
+        sp_generate_agent_parameter sp_generatefilters sp_get_distributor sp_get_job_status_mergesubscription_agent sp_get_mergepublishedarticleproperties
+        sp_get_Oracle_publisher_metadata sp_getagentparameterlist sp_getapplock sp_getdefaultdatatypemapping sp_getmergedeletetype sp_getpublisherlink
+        sp_getqueuedarticlesynctraninfo sp_getqueuedrows sp_getsqlqueueversion sp_getsubscription_status_hsnapshot sp_getsubscriptiondtspackagename
+        sp_grant_publication_access sp_grantdbaccess sp_grantlogin sp_help sp_help_agent_default sp_help_agent_parameter sp_help_agent_profile
+        sp_help_datatype_mapping sp_help_fulltext_catalog_components sp_help_fulltext_catalogs sp_help_fulltext_catalogs_cursor sp_help_fulltext_columns
+        sp_help_fulltext_columns_cursor sp_help_fulltext_system_components sp_help_fulltext_tables sp_help_fulltext_tables_cursor
+        sp_help_log_shipping_alert_job sp_help_log_shipping_monitor sp_help_log_shipping_monitor_primary sp_help_log_shipping_monitor_secondary
+        sp_help_log_shipping_primary_database sp_help_log_shipping_primary_secondary sp_help_log_shipping_secondary_database
+        sp_help_log_shipping_secondary_primary sp_help_publication_access sp_helpallowmerge_publication sp_helparticle sp_helparticlecolumns sp_helparticledts
+        sp_helpconstraint sp_helpdatatypemap sp_helpdb sp_helpdbfixedrole sp_helpdevice sp_helpdistpublisher sp_helpdistributiondb sp_helpdistributor
+        sp_helpdistributor_properties sp_helpdynamicsnapshot_job sp_helpextendedproc sp_helpfile sp_helpfilegroup sp_helpgroup sp_helpindex sp_helplanguage
+        sp_helplinkedsrvlogin sp_helplogins sp_helplogreader_agent sp_helpmergealternatepublisher sp_helpmergearticle sp_helpmergearticlecolumn
+        sp_helpmergearticleconflicts sp_helpmergeconflictrows sp_helpmergedeleteconflictrows sp_helpmergefilter sp_helpmergelogfiles
+        sp_helpmergelogfileswithdata sp_helpmergelogsettings sp_helpmergepartition sp_helpmergepublication sp_helpmergepullsubscription
+        sp_helpmergesubscription sp_helpntgroup sp_helppeerrequests sp_helppeerresponses sp_helppublication sp_helppublication_snapshot sp_helppublicationsync
+        sp_helppullsubscription sp_helpqreader_agent sp_helpremotelogin sp_helpreplfailovermode sp_helpreplicationdb sp_helpreplicationdboption
+        sp_helpreplicationoption sp_helprole sp_helprolemember sp_helprotect sp_helpserver sp_helpsort sp_helpsrvrole sp_helpsrvrolemember sp_helpstats
+        sp_helpsubscriberinfo sp_helpsubscription sp_helpsubscription_properties sp_helpsubscriptionerrors sp_helptext sp_helptracertokenhistory
+        sp_helptracertokens sp_helptrigger sp_helpuser sp_helpxactsetjob sp_http_generate_wsdl_defaultcomplexorsimple
+        sp_http_generate_wsdl_defaultsimpleorcomplex sp_identitycolumnforreplication sp_IH_LR_GetCacheData sp_IHadd_sync_command sp_IHarticlecolumn
+        sp_IHget_loopback_detection sp_IHScriptIdxFile sp_IHScriptSchFile sp_IHValidateRowFilter sp_IHXactSetJob sp_indexes sp_indexes_90_rowset
+        sp_indexes_90_rowset_rmt sp_indexes_90_rowset2 sp_indexes_rowset sp_indexes_rowset_rmt sp_indexes_rowset2 sp_indexoption sp_invalidate_textptr
+        sp_ivindexhasnullcols sp_lightweightmergemetadataretentioncleanup sp_link_publication sp_linkedservers sp_linkedservers_rowset
+        sp_linkedservers_rowset2 sp_lock sp_logshippinginstallmetadata sp_lookupcustomresolver sp_makewebtask sp_mapdown_bitmap sp_markpendingschemachange
+        sp_marksubscriptionvalidation sp_mergearticlecolumn sp_mergecleanupmetadata sp_mergedummyupdate sp_mergemetadataretentioncleanup
+        sp_mergesubscription_cleanup sp_mergesubscriptionsummary sp_monitor sp_MS_replication_installed sp_MSacquireHeadofQueueLock
+        sp_MSacquireserverresourcefordynamicsnapshot sp_MSacquireSlotLock sp_MSacquiresnapshotdeliverysessionlock sp_MSactivate_auto_sub
+        sp_MSactivatelogbasedarticleobject sp_MSactivateprocedureexecutionarticleobject sp_MSadd_anonymous_agent sp_MSadd_article sp_MSadd_compensating_cmd
+        sp_MSadd_distribution_agent sp_MSadd_distribution_history sp_MSadd_dynamic_snapshot_location sp_MSadd_filteringcolumn
+        sp_MSadd_log_shipping_error_detail sp_MSadd_log_shipping_history_detail sp_MSadd_logreader_agent sp_MSadd_logreader_history sp_MSadd_merge_agent
+        sp_MSadd_merge_anonymous_agent sp_MSadd_merge_history sp_MSadd_merge_history90 sp_MSadd_merge_subscription sp_MSadd_mergereplcommand
+        sp_MSadd_mergesubentry_indistdb sp_MSadd_publication sp_MSadd_qreader_agent sp_MSadd_qreader_history sp_MSadd_repl_alert sp_MSadd_repl_command
+        sp_MSadd_repl_commands27hp sp_MSadd_repl_error sp_MSadd_replcmds_mcit sp_MSadd_replmergealert sp_MSadd_snapshot_agent sp_MSadd_snapshot_history
+        sp_MSadd_subscriber_info sp_MSadd_subscriber_schedule sp_MSadd_subscription sp_MSadd_subscription_3rd sp_MSadd_tracer_history sp_MSadd_tracer_token
+        sp_MSaddanonymousreplica sp_MSadddynamicsnapshotjobatdistributor sp_MSaddguidcolumn sp_MSaddguidindex sp_MSaddinitialarticle
+        sp_MSaddinitialpublication sp_MSaddinitialschemaarticle sp_MSaddinitialsubscription sp_MSaddlightweightmergearticle sp_MSaddmergedynamicsnapshotjob
+        sp_MSaddmergetriggers sp_MSaddmergetriggers_from_template sp_MSaddmergetriggers_internal sp_MSaddpeerlsn sp_MSaddsubscriptionarticles
+        sp_MSadjust_pub_identity sp_MSagent_retry_stethoscope sp_MSagent_stethoscope sp_MSallocate_new_identity_range sp_MSalreadyhavegeneration
+        sp_MSanonymous_status sp_MSarticlecleanup sp_MSbrowsesnapshotfolder sp_MScache_agent_parameter sp_MSchange_article
+        sp_MSchange_distribution_agent_properties sp_MSchange_logreader_agent_properties sp_MSchange_merge_agent_properties sp_MSchange_mergearticle
+        sp_MSchange_mergepublication sp_MSchange_priority sp_MSchange_publication sp_MSchange_retention sp_MSchange_retention_period_unit
+        sp_MSchange_snapshot_agent_properties sp_MSchange_subscription_dts_info sp_MSchangearticleresolver sp_MSchangedynamicsnapshotjobatdistributor
+        sp_MSchangedynsnaplocationatdistributor sp_MSchangeobjectowner sp_MScheck_agent_instance sp_MScheck_Jet_Subscriber
+        sp_MScheck_logicalrecord_metadatamatch sp_MScheck_merge_subscription_count sp_MScheck_pub_identity sp_MScheck_pull_access sp_MScheck_snapshot_agent
+        sp_MScheck_subscription sp_MScheck_subscription_expiry sp_MScheck_subscription_partition sp_MScheck_tran_retention sp_MScheckexistsgeneration
+        sp_MScheckexistsrecguid sp_MScheckidentityrange sp_MSchecksharedagentforpublication sp_MSchecksnapshotstatus sp_MScleanup_agent_entry
+        sp_MScleanup_conflict sp_MScleanup_publication_ADinfo sp_MScleanup_subscription_distside_entry sp_MScleanupdynamicsnapshotfolder
+        sp_MScleanupdynsnapshotvws sp_MSCleanupForPullReinit sp_MScleanupmergepublisher sp_MScleanupmergepublisher_internal
+        sp_MSclear_dynamic_snapshot_location sp_MSclearresetpartialsnapshotprogressbit sp_MScomputelastsentgen sp_MScomputemergearticlescreationorder
+        sp_MScomputemergeunresolvedrefs sp_MSconflicttableexists sp_MScreate_all_article_repl_views sp_MScreate_article_repl_views sp_MScreate_dist_tables
+        sp_MScreate_logical_record_views sp_MScreate_sub_tables sp_MScreatedisabledmltrigger sp_MScreatedummygeneration sp_MScreateglobalreplica
+        sp_MScreatelightweightinsertproc sp_MScreatelightweightmultipurposeproc sp_MScreatelightweightprocstriggersconstraints
+        sp_MScreatelightweightupdateproc sp_MScreatemergedynamicsnapshot sp_MScreateretry sp_MSdbuseraccess sp_MSdbuserpriv sp_MSdefer_check
+        sp_MSdelete_tracer_history sp_MSdeletefoldercontents sp_MSdeletemetadataactionrequest sp_MSdeleteretry sp_MSdeletetranconflictrow sp_MSdelgenzero
+        sp_MSdelrow sp_MSdelrowsbatch sp_MSdelrowsbatch_downloadonly sp_MSdelsubrows sp_MSdelsubrowsbatch sp_MSdependencies sp_MSdetect_nonlogged_shutdown
+        sp_MSdetectinvalidpeerconfiguration sp_MSdetectinvalidpeersubscription sp_MSdist_activate_auto_sub sp_MSdist_adjust_identity
+        sp_MSdistpublisher_cleanup sp_MSdistribution_counters sp_MSdistributoravailable sp_MSdodatabasesnapshotinitiation
+        sp_MSdopartialdatabasesnapshotinitiation sp_MSdrop_6x_publication sp_MSdrop_6x_replication_agent sp_MSdrop_anonymous_entry sp_MSdrop_article
+        sp_MSdrop_distribution_agent sp_MSdrop_distribution_agentid_dbowner_proxy sp_MSdrop_dynamic_snapshot_agent sp_MSdrop_logreader_agent
+        sp_MSdrop_merge_agent sp_MSdrop_merge_subscription sp_MSdrop_publication sp_MSdrop_qreader_history sp_MSdrop_snapshot_agent sp_MSdrop_snapshot_dirs
+        sp_MSdrop_subscriber_info sp_MSdrop_subscription sp_MSdrop_subscription_3rd sp_MSdroparticleconstraints sp_MSdroparticletombstones
+        sp_MSdropconstraints sp_MSdropdynsnapshotvws sp_MSdropfkreferencingarticle sp_MSdropmergearticle sp_MSdropmergedynamicsnapshotjob sp_MSdropretry
+        sp_MSdroptemptable sp_MSdummyupdate sp_MSdummyupdate_logicalrecord sp_MSdummyupdate90 sp_MSdummyupdatelightweight
+        sp_MSdynamicsnapshotjobexistsatdistributor sp_MSenable_publication_for_het_sub sp_MSensure_single_instance sp_MSenum_distribution
+        sp_MSenum_distribution_s sp_MSenum_distribution_sd sp_MSenum_logicalrecord_changes sp_MSenum_logreader sp_MSenum_logreader_s sp_MSenum_logreader_sd
+        sp_MSenum_merge sp_MSenum_merge_agent_properties sp_MSenum_merge_s sp_MSenum_merge_sd sp_MSenum_merge_subscriptions
+        sp_MSenum_merge_subscriptions_90_publication sp_MSenum_merge_subscriptions_90_publisher sp_MSenum_metadataaction_requests sp_MSenum_qreader
+        sp_MSenum_qreader_s sp_MSenum_qreader_sd sp_MSenum_replication_agents sp_MSenum_replication_job sp_MSenum_replqueues sp_MSenum_replsqlqueues
+        sp_MSenum_snapshot sp_MSenum_snapshot_s sp_MSenum_snapshot_sd sp_MSenum_subscriptions sp_MSenumallpublications sp_MSenumallsubscriptions
+        sp_MSenumarticleslightweight sp_MSenumchanges sp_MSenumchanges_belongtopartition sp_MSenumchanges_notbelongtopartition sp_MSenumchangesdirect
+        sp_MSenumchangeslightweight sp_MSenumcolumns sp_MSenumcolumnslightweight sp_MSenumdeletes_forpartition sp_MSenumdeleteslightweight
+        sp_MSenumdeletesmetadata sp_MSenumdistributionagentproperties sp_MSenumerate_PAL sp_MSenumgenerations sp_MSenumgenerations90 sp_MSenumpartialchanges
+        sp_MSenumpartialchangesdirect sp_MSenumpartialdeletes sp_MSenumpubreferences sp_MSenumreplicas sp_MSenumreplicas90 sp_MSenumretries
+        sp_MSenumschemachange sp_MSenumsubscriptions sp_MSenumthirdpartypublicationvendornames sp_MSestimatemergesnapshotworkload
+        sp_MSestimatesnapshotworkload sp_MSevalsubscriberinfo sp_MSevaluate_change_membership_for_all_articles_in_pubid
+        sp_MSevaluate_change_membership_for_pubid sp_MSevaluate_change_membership_for_row sp_MSexecwithlsnoutput sp_MSfast_delete_trans
+        sp_MSfetchAdjustidentityrange sp_MSfetchidentityrange sp_MSfillupmissingcols sp_MSfilterclause sp_MSfix_6x_tasks sp_MSfixlineageversions
+        sp_MSFixSubColumnBitmaps sp_MSfixupbeforeimagetables sp_MSflush_access_cache sp_MSforce_drop_distribution_jobs sp_MSforcereenumeration
+        sp_MSforeach_worker sp_MSforeachdb sp_MSforeachtable sp_MSgenerateexpandproc sp_MSget_agent_names sp_MSget_attach_state
+        sp_MSget_DDL_after_regular_snapshot sp_MSget_dynamic_snapshot_location sp_MSget_identity_range_info sp_MSget_jobstate sp_MSget_last_transaction
+        sp_MSget_load_hint sp_MSget_log_shipping_new_sessionid sp_MSget_logicalrecord_lineage sp_MSget_max_used_identity sp_MSget_MSmerge_rowtrack_colinfo
+        sp_MSget_new_xact_seqno sp_MSget_oledbinfo sp_MSget_partitionid_eval_proc sp_MSget_publication_from_taskname sp_MSget_publisher_rpc
+        sp_MSget_repl_cmds_anonymous sp_MSget_repl_commands sp_MSget_repl_error sp_MSget_session_statistics sp_MSget_shared_agent sp_MSget_snapshot_history
+        sp_MSget_subscriber_partition_id sp_MSget_subscription_dts_info sp_MSget_subscription_guid sp_MSget_synctran_commands sp_MSget_type_wrapper
+        sp_MSgetagentoffloadinfo sp_MSgetalertinfo sp_MSgetalternaterecgens sp_MSgetarticlereinitvalue sp_MSgetchangecount sp_MSgetconflictinsertproc
+        sp_MSgetconflicttablename sp_MSGetCurrentPrincipal sp_MSgetdatametadatabatch sp_MSgetdbversion sp_MSgetdynamicsnapshotapplock
+        sp_MSgetdynsnapvalidationtoken sp_MSgetisvalidwindowsloginfromdistributor sp_MSgetlastrecgen sp_MSgetlastsentgen sp_MSgetlastsentrecgens
+        sp_MSgetlastupdatedtime sp_MSgetlightweightmetadatabatch sp_MSgetmakegenerationapplock sp_MSgetmakegenerationapplock_90 sp_MSgetmaxbcpgen
+        sp_MSgetmaxsnapshottimestamp sp_MSgetmergeadminapplock sp_MSgetmetadata_changedlogicalrecordmembers sp_MSgetmetadatabatch sp_MSgetmetadatabatch90
+        sp_MSgetmetadatabatch90new sp_MSgetonerow sp_MSgetonerowlightweight sp_MSgetpeerlsns sp_MSgetpeertopeercommands sp_MSgetpubinfo sp_MSgetreplicainfo
+        sp_MSgetreplicastate sp_MSgetrowmetadata sp_MSgetrowmetadatalightweight sp_MSGetServerProperties sp_MSgetsetupbelong_cost sp_MSgetsubscriberinfo
+        sp_MSgetsupportabilitysettings sp_MSgettrancftsrcrow sp_MSgettranconflictrow sp_MSgrantconnectreplication sp_MShaschangeslightweight sp_MShasdbaccess
+        sp_MShelp_article sp_MShelp_distdb sp_MShelp_distribution_agentid sp_MShelp_identity_property sp_MShelp_logreader_agentid sp_MShelp_merge_agentid
+        sp_MShelp_profile sp_MShelp_profilecache sp_MShelp_publication sp_MShelp_repl_agent sp_MShelp_replication_status sp_MShelp_replication_table
+        sp_MShelp_snapshot_agent sp_MShelp_snapshot_agentid sp_MShelp_subscriber_info sp_MShelp_subscription sp_MShelp_subscription_status sp_MShelpcolumns
+        sp_MShelpconflictpublications sp_MShelpcreatebeforetable sp_MShelpdestowner sp_MShelpdynamicsnapshotjobatdistributor sp_MShelpfulltextindex
+        sp_MShelpfulltextscript sp_MShelpindex sp_MShelplogreader_agent sp_MShelpmergearticles sp_MShelpmergeconflictcounts sp_MShelpmergedynamicsnapshotjob
+        sp_MShelpmergeidentity sp_MShelpmergeschemaarticles sp_MShelpobjectpublications sp_MShelpreplicationtriggers sp_MShelpsnapshot_agent
+        sp_MShelpsummarypublication sp_MShelptracertokenhistory sp_MShelptracertokens sp_MShelptranconflictcounts sp_MShelptype sp_MShelpvalidationdate
+        sp_MSIfExistsSubscription sp_MSindexspace sp_MSinit_publication_access sp_MSinit_subscription_agent sp_MSinitdynamicsubscriber sp_MSinsert_identity
+        sp_MSinsertdeleteconflict sp_MSinserterrorlineage sp_MSinsertgenerationschemachanges sp_MSinsertgenhistory sp_MSinsertlightweightschemachange
+        sp_MSinsertschemachange sp_MSinvalidate_snapshot sp_MSisnonpkukupdateinconflict sp_MSispeertopeeragent sp_MSispkupdateinconflict
+        sp_MSispublicationqueued sp_MSisreplmergeagent sp_MSissnapshotitemapplied sp_MSkilldb sp_MSlock_auto_sub sp_MSlock_distribution_agent sp_MSlocktable
+        sp_MSloginmappings sp_MSmakearticleprocs sp_MSmakebatchinsertproc sp_MSmakebatchupdateproc sp_MSmakeconflictinsertproc sp_MSmakectsview
+        sp_MSmakedeleteproc sp_MSmakedynsnapshotvws sp_MSmakeexpandproc sp_MSmakegeneration sp_MSmakeinsertproc sp_MSmakemetadataselectproc
+        sp_MSmakeselectproc sp_MSmakesystableviews sp_MSmakeupdateproc sp_MSmap_partitionid_to_generations sp_MSmarkreinit sp_MSmatchkey
+        sp_MSmerge_alterschemaonly sp_MSmerge_altertrigger sp_MSmerge_alterview sp_MSmerge_ddldispatcher sp_MSmerge_getgencur_public
+        sp_MSmerge_is_snapshot_required sp_MSmerge_log_identity_range_allocations sp_MSmerge_upgrade_subscriber sp_MSmergesubscribedb
+        sp_MSmergeupdatelastsyncinfo sp_MSneedmergemetadataretentioncleanup sp_MSNonSQLDDL sp_MSNonSQLDDLForSchemaDDL sp_MSobjectprivs sp_MSpeerapplyresponse
+        sp_MSpeerdbinfo sp_MSpeersendresponse sp_MSpeertopeerfwdingexec sp_MSpost_auto_proc sp_MSpostapplyscript_forsubscriberprocs sp_MSprep_exclusive
+        sp_MSprepare_mergearticle sp_MSprofile_in_use sp_MSproxiedmetadata sp_MSproxiedmetadatabatch sp_MSproxiedmetadatalightweight sp_MSpub_adjust_identity
+        sp_MSpublication_access sp_MSpublicationcleanup sp_MSpublicationview sp_MSquery_syncstates sp_MSquerysubtype sp_MSrecordsnapshotdeliveryprogress
+        sp_MSreenable_check sp_MSrefresh_anonymous sp_MSrefresh_publisher_idrange sp_MSregenerate_mergetriggersprocs sp_MSregisterdynsnapseqno
+        sp_MSregistermergesnappubid sp_MSregistersubscription sp_MSreinit_failed_subscriptions sp_MSreinit_hub sp_MSreinit_subscription
+        sp_MSreinitoverlappingmergepublications sp_MSreleasedynamicsnapshotapplock sp_MSreleasemakegenerationapplock sp_MSreleasemergeadminapplock
+        sp_MSreleaseSlotLock sp_MSreleasesnapshotdeliverysessionlock sp_MSremove_mergereplcommand sp_MSremoveoffloadparameter sp_MSrepl_agentstatussummary
+        sp_MSrepl_backup_complete sp_MSrepl_backup_start sp_MSrepl_check_publisher sp_MSrepl_createdatatypemappings sp_MSrepl_distributionagentstatussummary
+        sp_MSrepl_dropdatatypemappings sp_MSrepl_enumarticlecolumninfo sp_MSrepl_enumpublications sp_MSrepl_enumpublishertables sp_MSrepl_enumsubscriptions
+        sp_MSrepl_enumtablecolumninfo sp_MSrepl_FixPALRole sp_MSrepl_getdistributorinfo sp_MSrepl_getpkfkrelation sp_MSrepl_gettype_mappings
+        sp_MSrepl_helparticlermo sp_MSrepl_init_backup_lsns sp_MSrepl_isdbowner sp_MSrepl_IsLastPubInSharedSubscription sp_MSrepl_IsUserInAnyPAL
+        sp_MSrepl_linkedservers_rowset sp_MSrepl_mergeagentstatussummary sp_MSrepl_PAL_rolecheck sp_MSrepl_raiserror sp_MSrepl_schema sp_MSrepl_setNFR
+        sp_MSrepl_snapshot_helparticlecolumns sp_MSrepl_snapshot_helppublication sp_MSrepl_startup sp_MSrepl_startup_internal sp_MSrepl_subscription_rowset
+        sp_MSrepl_testadminconnection sp_MSrepl_testconnection sp_MSreplagentjobexists sp_MSreplcheck_permission sp_MSreplcheck_pull sp_MSreplcheck_subscribe
+        sp_MSreplcheck_subscribe_withddladmin sp_MSreplcheckoffloadserver sp_MSreplcopyscriptfile sp_MSreplraiserror sp_MSreplremoveuncdir
+        sp_MSreplupdateschema sp_MSrequestreenumeration sp_MSrequestreenumeration_lightweight sp_MSreset_attach_state sp_MSreset_queued_reinit
+        sp_MSreset_subscription sp_MSreset_subscription_seqno sp_MSreset_synctran_bit sp_MSreset_transaction sp_MSresetsnapshotdeliveryprogress
+        sp_MSrestoresavedforeignkeys sp_MSretrieve_publication_attributes sp_MSscript_article_view sp_MSscript_dri sp_MSscript_pub_upd_trig
+        sp_MSscript_sync_del_proc sp_MSscript_sync_del_trig sp_MSscript_sync_ins_proc sp_MSscript_sync_ins_trig sp_MSscript_sync_upd_proc
+        sp_MSscript_sync_upd_trig sp_MSscriptcustomdelproc sp_MSscriptcustominsproc sp_MSscriptcustomupdproc sp_MSscriptdatabase sp_MSscriptdb_worker
+        sp_MSscriptforeignkeyrestore sp_MSscriptsubscriberprocs sp_MSscriptviewproc sp_MSsendtosqlqueue sp_MSset_dynamic_filter_options
+        sp_MSset_logicalrecord_metadata sp_MSset_new_identity_range sp_MSset_oledb_prop sp_MSset_snapshot_xact_seqno sp_MSset_sub_guid
+        sp_MSset_subscription_properties sp_MSsetaccesslist sp_MSsetalertinfo sp_MSsetartprocs sp_MSsetbit sp_MSsetconflictscript sp_MSsetconflicttable
+        sp_MSsetcontext_bypasswholeddleventbit sp_MSsetcontext_replagent sp_MSsetgentozero sp_MSsetlastrecgen sp_MSsetlastsentgen sp_MSsetreplicainfo
+        sp_MSsetreplicaschemaversion sp_MSsetreplicastatus sp_MSsetrowmetadata sp_MSSetServerProperties sp_MSsetsubscriberinfo sp_MSsettopology
+        sp_MSsetup_identity_range sp_MSsetup_partition_groups sp_MSsetup_use_partition_groups sp_MSsetupbelongs sp_MSsetupnosyncsubwithlsnatdist
+        sp_MSSharedFixedDisk sp_MSSQLDMO70_version sp_MSSQLDMO80_version sp_MSSQLDMO90_version sp_MSSQLOLE_version sp_MSSQLOLE65_version
+        sp_MSstartdistribution_agent sp_MSstartmerge_agent sp_MSstartsnapshot_agent sp_MSstopdistribution_agent sp_MSstopmerge_agent sp_MSstopsnapshot_agent
+        sp_MSsub_check_identity sp_MSsub_set_identity sp_MSsubscription_status sp_MSsubscriptionvalidated sp_MStablechecks sp_MStablekeys sp_MStablerefs
+        sp_MStablespace sp_MStestbit sp_MStran_ddlrepl sp_MStran_is_snapshot_required sp_MStrypurgingoldsnapshotdeliveryprogress sp_MSuniquename
+        sp_MSunmarkifneeded sp_MSunmarkreplinfo sp_MSunmarkschemaobject sp_MSunregistersubscription sp_MSupdate_agenttype_default
+        sp_MSupdate_singlelogicalrecordmetadata sp_MSupdate_subscriber_info sp_MSupdate_subscriber_schedule sp_MSupdate_subscriber_tracer_history
+        sp_MSupdate_subscription sp_MSupdate_tracer_history sp_MSupdatecachedpeerlsn sp_MSupdategenhistory sp_MSupdateinitiallightweightsubscription
+        sp_MSupdatelastsyncinfo sp_MSupdatepeerlsn sp_MSupdaterecgen sp_MSupdatereplicastate sp_MSupdatesysmergearticles sp_MSuplineageversion
+        sp_MSuploadsupportabilitydata sp_MSuselightweightreplication sp_MSvalidate_dest_recgen sp_MSvalidate_subscription
+        sp_MSvalidate_wellpartitioned_articles sp_MSvalidatearticle sp_MSwritemergeperfcounter sp_objectfilegroup sp_oledb_database sp_oledb_defdb
+        sp_oledb_deflang sp_oledb_language sp_oledb_ro_usrname sp_oledbinfo sp_ORbitmap sp_password sp_pkeys sp_posttracertoken sp_primary_keys_rowset
+        sp_primary_keys_rowset_rmt sp_primary_keys_rowset2 sp_primarykeys sp_procedure_params_90_rowset sp_procedure_params_90_rowset2
+        sp_procedure_params_managed sp_procedure_params_rowset sp_procedure_params_rowset2 sp_procedures_rowset sp_procedures_rowset2
+        sp_processlogshippingmonitorhistory sp_processlogshippingmonitorprimary sp_processlogshippingmonitorsecondary sp_processlogshippingretentioncleanup
+        sp_processmail sp_procoption sp_prop_oledb_provider sp_provider_types_90_rowset sp_provider_types_rowset sp_publication_validation
+        sp_publicationsummary sp_publishdb sp_publisherproperty sp_readerrorlog sp_readwebtask sp_recompile sp_refresh_heterogeneous_publisher
+        sp_refresh_log_shipping_monitor sp_refreshsqlmodule sp_refreshsubscriptions sp_register_custom_scripting sp_registercustomresolver
+        sp_reinitmergepullsubscription sp_reinitmergesubscription sp_reinitpullsubscription sp_reinitsubscription sp_releaseapplock sp_remoteoption
+        sp_removedbreplication sp_removedistpublisherdbreplication sp_removesrvreplication sp_rename sp_renamedb sp_repladdcolumn sp_replcleanupccsprocs
+        sp_repldeletequeuedtran sp_repldropcolumn sp_replgetparsedddlcmd sp_replica sp_replication_agent_checkup sp_replicationdboption sp_replincrementlsn
+        sp_replmonitorchangepublicationthreshold sp_replmonitorhelpmergesession sp_replmonitorhelpmergesessiondetail
+        sp_replmonitorhelpmergesubscriptionmoreinfo sp_replmonitorhelppublication sp_replmonitorhelppublicationthresholds sp_replmonitorhelppublisher
+        sp_replmonitorhelpsubscription sp_replmonitorrefreshjob sp_replmonitorsubscriptionpendingcmds sp_replpostsyncstatus sp_replqueuemonitor sp_replrestart
+        sp_replsetoriginator sp_replshowcmds sp_replsqlqgetrows sp_replsync sp_requestpeerresponse sp_resetsnapshotdeliveryprogress sp_resetstatus
+        sp_resign_database sp_resolve_logins sp_restoredbreplication sp_restoremergeidentityrange sp_resyncmergesubscription sp_revoke_publication_access
+        sp_revokedbaccess sp_revokelogin sp_runwebtask sp_schemafilter sp_schemata_rowset sp_script_reconciliation_delproc sp_script_reconciliation_insproc
+        sp_script_reconciliation_sinsproc sp_script_reconciliation_vdelproc sp_script_reconciliation_xdelproc sp_script_synctran_commands sp_scriptdelproc
+        sp_scriptdynamicupdproc sp_scriptinsproc sp_scriptmappedupdproc sp_scriptpublicationcustomprocs sp_scriptsinsproc sp_scriptsubconflicttable
+        sp_scriptsupdproc sp_scriptupdproc sp_scriptvdelproc sp_scriptvupdproc sp_scriptxdelproc sp_scriptxupdproc sp_server_info sp_serveroption
+        sp_setapprole sp_SetAutoSAPasswordAndDisable sp_setdefaultdatatypemapping sp_setnetname sp_setOraclepackageversion sp_setreplfailovermode
+        sp_setsubscriptionxactseqno sp_settriggerorder sp_showcolv sp_showlineage sp_showpendingchanges sp_showrowreplicainfo sp_spaceused sp_special_columns
+        sp_special_columns_90 sp_sproc_columns sp_sproc_columns_90 sp_sqlexec sp_srvrolepermission sp_startmergepullsubscription_agent
+        sp_startmergepushsubscription_agent sp_startpublication_snapshot sp_startpullsubscription_agent sp_startpushsubscription_agent sp_statistics
+        sp_statistics_rowset sp_statistics_rowset2 sp_stopmergepullsubscription_agent sp_stopmergepushsubscription_agent sp_stoppublication_snapshot
+        sp_stoppullsubscription_agent sp_stoppushsubscription_agent sp_stored_procedures sp_subscribe sp_subscription_cleanup sp_subscriptionsummary
+        sp_table_constraints_rowset sp_table_constraints_rowset2 sp_table_privileges sp_table_privileges_ex sp_table_privileges_rowset
+        sp_table_privileges_rowset_rmt sp_table_privileges_rowset2 sp_table_statistics_rowset sp_table_statistics2_rowset sp_table_validation
+        sp_tablecollations sp_tablecollations_90 sp_tableoption sp_tables sp_tables_ex sp_tables_info_90_rowset sp_tables_info_90_rowset_64
+        sp_tables_info_90_rowset2 sp_tables_info_90_rowset2_64 sp_tables_info_rowset sp_tables_info_rowset_64 sp_tables_info_rowset2 sp_tables_info_rowset2_64
+        sp_tables_rowset sp_tables_rowset_rmt sp_tables_rowset2 sp_tableswc sp_trace_getdata sp_unbindefault sp_unbindrule sp_unregister_custom_scripting
+        sp_unregistercustomresolver sp_unsetapprole sp_unsubscribe sp_update_agent_profile sp_updateextendedproperty sp_updatestats sp_upgrade_log_shipping
+        sp_user_counter1 sp_user_counter10 sp_user_counter2 sp_user_counter3 sp_user_counter4 sp_user_counter5 sp_user_counter6 sp_user_counter7
+        sp_user_counter8 sp_user_counter9 sp_usertypes_rowset sp_usertypes_rowset_rmt sp_usertypes_rowset2 sp_validatecache sp_validatelogins
+        sp_validatemergepublication sp_validatemergepullsubscription sp_validatemergesubscription sp_validlang sp_validname sp_verifypublisher sp_verify_job_identifiers sp_views_rowset
+        sp_views_rowset2 sp_vupgrade_mergeobjects sp_vupgrade_mergetables sp_vupgrade_replication sp_vupgrade_replsecurity_metadata sp_who sp_who2
+        sp_xml_schema_rowset sp_xml_schema_rowset2 xp_grantlogin xp_logininfo xp_repl_convert_encrypt_sysadmin_wrapper xp_revokelogin
+        sys.sp_addextendedproperty
+      </Keywords>
+			<Keywords List="6">
+				between and or like not null join pivot apply in
+			</Keywords>
+		</Lexer>
+		<Styles>
+			<Style Name="DOCUMENT_DEFAULT"  />
+			<Style Name="STATEMENT" ForeColor="Blue" />
+      <Style Name="STORED_PROCEDURE"	ForeColor="DarkRed" />
+
+      <Style Name="DEFAULT_PREF_DATATYPE"	ForeColor="Black" />
+      <Style Name="DATATYPE"	ForeColor="Blue" />
+      <Style Name="SYSTABLE"	ForeColor="Black" />
+      <Style Name="GLOBAL_VARIABLE"	ForeColor="#ff00ff" />
+      <Style Name="FUNCTION"	ForeColor="#ff00ff" />
+      <Style Name="COLUMN_NAME_2"	ForeColor="Black" />
+      <Style Name="NUMBER"	ForeColor="Black" />
+      <Style Name="OPERATOR"	ForeColor="Gray" />
+      
+    </Styles>		
+	</Language>
+</ScintillaNET>
+
