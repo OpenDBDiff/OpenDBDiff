@@ -7,7 +7,7 @@
     <ProjectGuid>{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ScintillaNet</RootNamespace>
+    <RootNamespace>DBDiff.Scintilla</RootNamespace>
     <AssemblyName>DBDiff.ScintillaNET</AssemblyName>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>

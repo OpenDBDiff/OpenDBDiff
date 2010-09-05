@@ -16,6 +16,9 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ApplicationIcon>App.ico</ApplicationIcon>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -27,12 +30,9 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ApplicationVersion>0.8.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ApplicationIcon>App.ico</ApplicationIcon>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
@@ -66,6 +66,10 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Componentes\System.Data.SQLite.DLL</HintPath>
+    </Reference>
     <Reference Include="System.Deployment" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
@@ -82,6 +86,12 @@
     </Compile>
     <Compile Include="Front\DatabaseProgressControl.Designer.cs">
       <DependentUpon>DatabaseProgressControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Front\ListProjectsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Front\ListProjectsForm.Designer.cs">
+      <DependentUpon>ListProjectsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Front\OptionForm.cs">
       <SubType>Form</SubType>
@@ -205,6 +215,7 @@
     <Compile Include="Scintilla\WhiteSpace.cs" />
     <Compile Include="Scintilla\WhiteSpaceStringConverter.cs" />
     <Compile Include="Scintilla\XpmAdapter.cs" />
+    <Compile Include="Settings\Project.cs" />
     <Compile Include="XmlConfig\ConfigProvider.cs" />
     <Compile Include="XmlConfig\ConfigProviders.cs" />
   </ItemGroup>
@@ -223,6 +234,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
       <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
@@ -238,6 +254,11 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Compare.ico" />
@@ -250,11 +271,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
+    <None Include="Resources\NewProject.ico" />
+    <None Include="Resources\SaveProject1.ico" />
+    <None Include="Resources\Open1.ico" />
+    <None Include="Resources\Database1.ico" />
+    <None Include="Resources\SaveProject.ico" />
+    <None Include="Resources\Open.ico" />
+    <None Include="Resources\OpenP.bmp" />
     <None Include="Scintilla\Resources\LineColorHS.png" />
     <None Include="Scintilla\Resources\GoToPreviousMessage.png" />
     <None Include="Scintilla\Resources\GoToNextMessage.png" />
     <None Include="Scintilla\Resources\GoToNextMessage - Copy.png" />
     <None Include="Scintilla\Resources\DeleteHS.png" />
+    <EmbeddedResource Include="Front\ListProjectsForm.resx">
+      <DependentUpon>ListProjectsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scintilla\Configuration\Builtin\xml.xml" />
     <EmbeddedResource Include="Scintilla\Configuration\Builtin\mssql.xml" />
     <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\xml.txt" />
@@ -274,6 +305,9 @@
     <None Include="Resources\Image1.bmp" />
     <None Include="Resources\Control panel 2.ico" />
     <None Include="Resources\Control panel 1.ico" />
+    <None Include="Settings.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

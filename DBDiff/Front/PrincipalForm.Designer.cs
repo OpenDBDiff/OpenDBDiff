@@ -1,4 +1,4 @@
-namespace DBDiff
+namespace DBDiff.Front
 {
     partial class Form1
     {
@@ -34,9 +34,7 @@ namespace DBDiff
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.txtNewObject = new DBDiff.Scintilla.Scintilla();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.txtOldObject = new DBDiff.Scintilla.Scintilla();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -45,10 +43,8 @@ namespace DBDiff
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.schemaTreeView1 = new DBDiff.Front.SchemaTreeView();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.txtDiferencias = new DBDiff.Scintilla.Scintilla();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.GroupDb = new System.Windows.Forms.GroupBox();
@@ -61,25 +57,32 @@ namespace DBDiff
             this.btnSaveAs = new System.Windows.Forms.Button();
             this.btnCompare = new System.Windows.Forms.Button();
             this.PanelGlobal = new System.Windows.Forms.Panel();
+            this.btnNewProject = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.PanelDestination = new Ascend.Windows.Forms.GradientPanel();
             this.PanelSource = new Ascend.Windows.Forms.GradientPanel();
+            this.btnSaveProject = new System.Windows.Forms.Button();
+            this.btnProject = new System.Windows.Forms.Button();
+            this.txtNewObject = new DBDiff.Scintilla.Scintilla();
+            this.txtOldObject = new DBDiff.Scintilla.Scintilla();
+            this.schemaTreeView1 = new DBDiff.Front.SchemaTreeView();
+            this.txtDiferencias = new DBDiff.Scintilla.Scintilla();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtNewObject)).BeginInit();
             this.tabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtOldObject)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtDiferencias)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.GroupDb.SuspendLayout();
             this.PanelGlobal.SuspendLayout();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtNewObject)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtOldObject)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtDiferencias)).BeginInit();
             this.SuspendLayout();
             // 
             // lblMessage
@@ -143,16 +146,6 @@ namespace DBDiff
             this.tabPage4.Text = "New object";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // txtNewObject
-            // 
-            this.txtNewObject.CurrentPos = 0;
-            this.txtNewObject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtNewObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNewObject.Location = new System.Drawing.Point(3, 3);
-            this.txtNewObject.Name = "txtNewObject";
-            this.txtNewObject.Size = new System.Drawing.Size(450, 378);
-            this.txtNewObject.TabIndex = 0;
-            // 
             // tabPage5
             // 
             this.tabPage5.Controls.Add(this.txtOldObject);
@@ -163,16 +156,6 @@ namespace DBDiff
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Old object";
             this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // txtOldObject
-            // 
-            this.txtOldObject.CurrentPos = 0;
-            this.txtOldObject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtOldObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtOldObject.Location = new System.Drawing.Point(3, 3);
-            this.txtOldObject.Name = "txtOldObject";
-            this.txtOldObject.Size = new System.Drawing.Size(450, 378);
-            this.txtOldObject.TabIndex = 0;
             // 
             // groupBox2
             // 
@@ -255,20 +238,6 @@ namespace DBDiff
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             // 
-            // schemaTreeView1
-            // 
-            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.schemaTreeView1.DatabaseDestination = null;
-            this.schemaTreeView1.DatabaseSource = null;
-            this.schemaTreeView1.FilterDiferentObjects = true;
-            this.schemaTreeView1.FilterMissingObjects = true;
-            this.schemaTreeView1.FilterNewObjects = true;
-            this.schemaTreeView1.Location = new System.Drawing.Point(7, 10);
-            this.schemaTreeView1.Name = "schemaTreeView1";
-            this.schemaTreeView1.Size = new System.Drawing.Size(322, 437);
-            this.schemaTreeView1.TabIndex = 0;
-            // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.panel1);
@@ -292,18 +261,6 @@ namespace DBDiff
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(806, 453);
             this.panel1.TabIndex = 6;
-            // 
-            // txtDiferencias
-            // 
-            this.txtDiferencias.CurrentPos = 0;
-            this.txtDiferencias.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtDiferencias.IsReadOnly = true;
-            this.txtDiferencias.Location = new System.Drawing.Point(0, 0);
-            this.txtDiferencias.Name = "txtDiferencias";
-            this.txtDiferencias.Size = new System.Drawing.Size(802, 449);
-            this.txtDiferencias.Styles.LineNumber.BackColor = System.Drawing.Color.Transparent;
-            this.txtDiferencias.Styles.LineNumber.IsVisible = false;
-            this.txtDiferencias.TabIndex = 0;
             // 
             // tabPage3
             // 
@@ -446,20 +403,36 @@ namespace DBDiff
             this.PanelGlobal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.PanelGlobal.BackColor = System.Drawing.Color.White;
+            this.PanelGlobal.Controls.Add(this.btnNewProject);
             this.PanelGlobal.Controls.Add(this.panel2);
+            this.PanelGlobal.Controls.Add(this.btnSaveProject);
+            this.PanelGlobal.Controls.Add(this.btnProject);
             this.PanelGlobal.Location = new System.Drawing.Point(0, 0);
             this.PanelGlobal.Name = "PanelGlobal";
             this.PanelGlobal.Size = new System.Drawing.Size(937, 159);
             this.PanelGlobal.TabIndex = 10;
+            // 
+            // btnNewProject
+            // 
+            this.btnNewProject.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.btnNewProject.Image = global::DBDiff.Properties.Resources.NewProject;
+            this.btnNewProject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnNewProject.Location = new System.Drawing.Point(7, 60);
+            this.btnNewProject.Name = "btnNewProject";
+            this.btnNewProject.Size = new System.Drawing.Size(113, 33);
+            this.btnNewProject.TabIndex = 15;
+            this.btnNewProject.Text = "New Project";
+            this.btnNewProject.UseVisualStyleBackColor = false;
+            this.btnNewProject.Click += new System.EventHandler(this.btnNewProject_Click);
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Transparent;
             this.panel2.Controls.Add(this.PanelDestination);
             this.panel2.Controls.Add(this.PanelSource);
-            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Location = new System.Drawing.Point(126, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(875, 159);
+            this.panel2.Size = new System.Drawing.Size(808, 159);
             this.panel2.TabIndex = 10;
             this.panel2.Resize += new System.EventHandler(this.panel2_Resize);
             // 
@@ -467,19 +440,91 @@ namespace DBDiff
             // 
             this.PanelDestination.Border = new Ascend.Border(1);
             this.PanelDestination.BorderColor = new Ascend.BorderColor(System.Drawing.Color.Gray);
-            this.PanelDestination.Location = new System.Drawing.Point(442, 0);
+            this.PanelDestination.Location = new System.Drawing.Point(399, 0);
             this.PanelDestination.Name = "PanelDestination";
-            this.PanelDestination.Size = new System.Drawing.Size(432, 159);
+            this.PanelDestination.Size = new System.Drawing.Size(386, 159);
             this.PanelDestination.TabIndex = 11;
             // 
             // PanelSource
             // 
             this.PanelSource.Border = new Ascend.Border(1);
             this.PanelSource.BorderColor = new Ascend.BorderColor(System.Drawing.Color.Gray);
-            this.PanelSource.Location = new System.Drawing.Point(0, 0);
+            this.PanelSource.Location = new System.Drawing.Point(4, 0);
             this.PanelSource.Name = "PanelSource";
-            this.PanelSource.Size = new System.Drawing.Size(432, 159);
+            this.PanelSource.Size = new System.Drawing.Size(386, 159);
             this.PanelSource.TabIndex = 10;
+            // 
+            // btnSaveProject
+            // 
+            this.btnSaveProject.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.btnSaveProject.Image = global::DBDiff.Properties.Resources.SaveProject;
+            this.btnSaveProject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSaveProject.Location = new System.Drawing.Point(7, 99);
+            this.btnSaveProject.Name = "btnSaveProject";
+            this.btnSaveProject.Size = new System.Drawing.Size(113, 33);
+            this.btnSaveProject.TabIndex = 13;
+            this.btnSaveProject.Text = "Save Project";
+            this.btnSaveProject.UseVisualStyleBackColor = false;
+            this.btnSaveProject.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // btnProject
+            // 
+            this.btnProject.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.btnProject.Image = global::DBDiff.Properties.Resources.Open;
+            this.btnProject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnProject.Location = new System.Drawing.Point(7, 21);
+            this.btnProject.Name = "btnProject";
+            this.btnProject.Size = new System.Drawing.Size(113, 33);
+            this.btnProject.TabIndex = 12;
+            this.btnProject.Text = "Open Project";
+            this.btnProject.UseVisualStyleBackColor = false;
+            this.btnProject.Click += new System.EventHandler(this.btnProject_Click);
+            // 
+            // txtNewObject
+            // 
+            this.txtNewObject.CurrentPos = 0;
+            this.txtNewObject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtNewObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNewObject.Location = new System.Drawing.Point(3, 3);
+            this.txtNewObject.Name = "txtNewObject";
+            this.txtNewObject.Size = new System.Drawing.Size(450, 378);
+            this.txtNewObject.TabIndex = 0;
+            // 
+            // txtOldObject
+            // 
+            this.txtOldObject.CurrentPos = 0;
+            this.txtOldObject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtOldObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtOldObject.Location = new System.Drawing.Point(3, 3);
+            this.txtOldObject.Name = "txtOldObject";
+            this.txtOldObject.Size = new System.Drawing.Size(450, 378);
+            this.txtOldObject.TabIndex = 0;
+            // 
+            // schemaTreeView1
+            // 
+            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.schemaTreeView1.DatabaseDestination = null;
+            this.schemaTreeView1.DatabaseSource = null;
+            this.schemaTreeView1.FilterDiferentObjects = true;
+            this.schemaTreeView1.FilterMissingObjects = true;
+            this.schemaTreeView1.FilterNewObjects = true;
+            this.schemaTreeView1.Location = new System.Drawing.Point(7, 10);
+            this.schemaTreeView1.Name = "schemaTreeView1";
+            this.schemaTreeView1.Size = new System.Drawing.Size(322, 437);
+            this.schemaTreeView1.TabIndex = 0;
+            // 
+            // txtDiferencias
+            // 
+            this.txtDiferencias.CurrentPos = 0;
+            this.txtDiferencias.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtDiferencias.IsReadOnly = true;
+            this.txtDiferencias.Location = new System.Drawing.Point(0, 0);
+            this.txtDiferencias.Name = "txtDiferencias";
+            this.txtDiferencias.Size = new System.Drawing.Size(802, 449);
+            this.txtDiferencias.Styles.LineNumber.BackColor = System.Drawing.Color.Transparent;
+            this.txtDiferencias.Styles.LineNumber.IsVisible = false;
+            this.txtDiferencias.TabIndex = 0;
             // 
             // Form1
             // 
@@ -495,7 +540,7 @@ namespace DBDiff
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Open DBDiff Beta 8";
+            this.Text = "Open DBDiff Beta 8.5";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
@@ -503,22 +548,22 @@ namespace DBDiff
             this.tabPage2.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.txtNewObject)).EndInit();
             this.tabPage5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.txtOldObject)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.txtDiferencias)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.GroupDb.ResumeLayout(false);
             this.GroupDb.PerformLayout();
             this.PanelGlobal.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtNewObject)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtOldObject)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtDiferencias)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -560,6 +605,8 @@ namespace DBDiff
         private System.Windows.Forms.TabPage tabPage5;
         private DBDiff.Scintilla.Scintilla txtNewObject;
         private DBDiff.Scintilla.Scintilla txtOldObject;
+        private System.Windows.Forms.Button btnSaveProject;
+        private System.Windows.Forms.Button btnProject;
+        private System.Windows.Forms.Button btnNewProject;
     }
 }
-
