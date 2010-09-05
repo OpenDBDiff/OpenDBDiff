@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DBDiff.Schema.SQLServer.Model.SQLServerSchemaBase">
+    <Position X="16" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Model\SQLServerSchemaBase.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="ExtendedProperties" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.Code" Collapsed="true">
+    <Position X="15" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SCAAAAADAAAQAwAAAAAAAEEAQEAAAGgIACBQiCgCBAA=</HashCode>
+      <FileName>Model\Code.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.CLRCode" Collapsed="true">
+    <Position X="11.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AiIAAAAAAAAAAAAAAAIAgAACAAAAAAAAAEAAgAJgAIA=</HashCode>
+      <FileName>Model\CLRCode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.CLRStoreProcedure">
+    <Position X="10.5" Y="7.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAEAAAAAAAIBAAACAAAA=</HashCode>
+      <FileName>Model\CLRStoreProcedure.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Parameters" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.CLRTrigger" Collapsed="true">
+    <Position X="12.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAgQAgAAAAAAAAAAAEAAAEAJAABACQAAAAA=</HashCode>
+      <FileName>Model\CLRTrigger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.Table">
+    <Position X="6" Y="4.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AEEAAgABAAQAggQYAEAIAABACEACcBUKCgARwClRBBo=</HashCode>
+      <FileName>Model\Table.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Columns" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Constraints" />
+      <Property Name="Indexes" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.Constraint">
+    <Position X="3.75" Y="4.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="DBDiff.Schema.SQLServer.Model.Constraint.ConstraintType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Model\Constraint.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAkAAIAAAQCgCAAkAAABAAAEARAEEQCQFBkBgBBJQ=</HashCode>
+      <FileName>Model\Constraint.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Columns" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.Columns">
+    <Position X="8" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAQAAEABA=</HashCode>
+      <FileName>Model\Columns.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.ConstraintColumns" Collapsed="true">
+    <Position X="0.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAABA=</HashCode>
+      <FileName>Model\ConstraintColumns.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.View" Collapsed="true">
+    <Position X="17.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAgAAAAAAAgAAAAAAAAAAAAAAAAAAAABAAQAAABI=</HashCode>
+      <FileName>Model\View.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.Trigger" Collapsed="true">
+    <Position X="19.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgIAAAIAIAAAAiAAAAAAABAAAAAAAAEACABBkAAAABA=</HashCode>
+      <FileName>Model\Trigger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.StoreProcedure" Collapsed="true">
+    <Position X="15" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAgAAAAAAAAAAAEAAAAAAAABAAQAAABA=</HashCode>
+      <FileName>Model\StoreProcedure.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.Database">
+    <Position X="28.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IkAEACKAAQAAggHhAgBCSQYAAkgICAAAQAjAgkpAhAI=</HashCode>
+      <FileName>Model\Database.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Tables" />
+      <Property Name="CLRProcedures" />
+      <Property Name="DDLTriggers" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.Index">
+    <Position X="24" Y="4.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="DBDiff.Schema.SQLServer.Model.Index.IndexTypeEnum" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Model\Index.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>gBABAEAACQAQBgACAIQAAAAAAFAjAEGACxRBoAkQBBA=</HashCode>
+      <FileName>Model\Index.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Columns" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.IndexColumn" Collapsed="true">
+    <Position X="26.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAEAABAAAIAAQBCAAAAQAAAEAAAAAAAABAgAAABBA=</HashCode>
+      <FileName>Model\IndexColumn.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.Parameter" Collapsed="true">
+    <Position X="10.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAIIIAAQCCEAFAAAAAQAQAAAAEAA=</HashCode>
+      <FileName>Model\Parameter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.Synonym" Collapsed="true">
+    <Position X="21.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAEAAACAAAABggAAABBA=</HashCode>
+      <FileName>Model\Synonym.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.UserDataType" Collapsed="true">
+    <Position X="8.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BjgAQAABAEAQowAAAIIAIAACAEQBAmAAAUJQgCJgFBA=</HashCode>
+      <FileName>Model\UserDataType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBDiff.Schema.SQLServer.Model.ExtendedProperty" Collapsed="true">
+    <Position X="16" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAEAAAQAIAAAAAAAEQAAABEAGAAAAAggQAABAE=</HashCode>
+      <FileName>Model\ExtendedProperty.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
