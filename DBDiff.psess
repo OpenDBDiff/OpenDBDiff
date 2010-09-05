@@ -1,0 +1,71 @@
+<VSPerformanceSession Version="1.00">
+  <Options>
+    <Solution>DBDiff.sln</Solution>
+    <CollectionMethod>Instrumentation</CollectionMethod>
+    <AllocationMethod>None</AllocationMethod>
+    <AddReport>true</AddReport>
+    <UniqueReport>Timestamp</UniqueReport>
+    <SamplingMethod>Cycles</SamplingMethod>
+    <CycleCount>10000000</CycleCount>
+    <PageFaultCount>10</PageFaultCount>
+    <SysCallCount>10</SysCallCount>
+    <SamplingCounter PlatformID="00000000" CounterID="0000000000000000" ReloadValue="00000000000f4240" />
+    <RelocateBinaries>false</RelocateBinaries>
+    <HardwareCounters EnableHWCounters="false" />
+    <EtwSettings />
+  </Options>
+  <PreinstrumentEvent>
+    <InstrEventExclude>false</InstrEventExclude>
+  </PreinstrumentEvent>
+  <PostinstrumentEvent>
+    <InstrEventExclude>false</InstrEventExclude>
+  </PostinstrumentEvent>
+  <Binaries>
+    <ProjBinary>
+      <Path>DBLibrary\DBLibrarySQLServer2000\obj\Debug\DBDiff.DBLibrary.SQLServer2000.dll</Path>
+      <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
+      <Instrument>true</Instrument>
+      <LaunchProject>true</LaunchProject>
+      <LaunchMethod>Executable</LaunchMethod>
+      <StartupDirectory>DBLibrary\DBLibrarySQLServer2000\bin\Debug\</StartupDirectory>
+      <Arguments />
+      <NetAppHost>IIS</NetAppHost>
+      <PreinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PreinstrumentEvent>
+      <PostinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PostinstrumentEvent>
+      <ProjRef>{3CB847CA-F518-4CBC-A161-30EC969EAFD0}|DBLibrary\DBLibrarySQLServer2000\DBDiff.DBLibrary.SQLServer2000.csproj</ProjRef>
+      <ProjPath>DBLibrary\DBLibrarySQLServer2000\DBDiff.DBLibrary.SQLServer2000.csproj</ProjPath>
+      <ProjName>DBDiff.DBLibrary.SQLServer2000</ProjName>
+    </ProjBinary>
+    <ProjBinary>
+      <Path>DBDiff.Schema\obj\Debug\DBDiff.Schema.dll</Path>
+      <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
+      <Instrument>true</Instrument>
+      <LaunchProject>true</LaunchProject>
+      <LaunchMethod>Executable</LaunchMethod>
+      <StartupDirectory>DBDiff.Schema\bin\Debug\</StartupDirectory>
+      <Arguments />
+      <NetAppHost>IIS</NetAppHost>
+      <PreinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PreinstrumentEvent>
+      <PostinstrumentEvent>
+        <InstrEventExclude>false</InstrEventExclude>
+      </PostinstrumentEvent>
+      <ProjRef>{FDCD8DA2-9CBE-45FD-920B-10E8B802FD13}|DBDiff.Schema\DBDiff.Schema.csproj</ProjRef>
+      <ProjPath>DBDiff.Schema\DBDiff.Schema.csproj</ProjPath>
+      <ProjName>DBDiff.Schema</ProjName>
+    </ProjBinary>
+  </Binaries>
+  <Reports>
+    <Report>
+      <Path>DBDiff070322.vsp</Path>
+    </Report>
+    <Report>
+      <Path>DBDiff070323.vsp</Path>
+    </Report>
+  </Reports>
+</VSPerformanceSession>
