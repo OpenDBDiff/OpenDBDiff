@@ -1,0 +1,110 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DBEC6CD3-5B8F-427C-8304-9BFD223C8B1D}"
+	ProjectSection(SolutionItems) = preProject
+		DBDiff.vsmdi = DBDiff.vsmdi
+		localtestrun.testrunconfig = localtestrun.testrunconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff", "DBDiff\DBDiff.csproj", "{99A26820-E71D-4E01-ADF2-E6AB25B03FA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.SchemaAttributes", "DBDiff.SchemaAttributes\DBDiff.SchemaAttributes.csproj", "{C0AEE851-3671-48D9-BBCE-9557EE7F7F93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.Schema", "DBDiff.Schema\DBDiff.Schema.csproj", "{406558A0-1B98-4D0E-B8B6-2013700B065A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.Schema.SQLServer2000", "DBDiff.Schema.SQLServer2000\DBDiff.Schema.SQLServer2000.csproj", "{3CB847CA-F518-4CBC-A161-30EC969EAFD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.Schema.SQLServer", "DBDiff.Schema.SQLServer2005\DBDiff.Schema.SQLServer.csproj", "{EF2F571E-A7AD-40BE-8500-50A039159FC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.Schema.MySQL", "DBDiff.Schema.MySQL5\DBDiff.Schema.MySQL.csproj", "{2271A792-4B10-4EC6-A636-EFF834241A60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.Test", "DBDiff.Test\DBDiff.Test.csproj", "{75EBA48E-0CE4-404C-AE0A-9CDDD2DE1176}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SQLDisplayControl", "SQLDisplayControl\SQLDisplayControl.vbproj", "{5C0E8315-AE46-4A45-A18C-7CFA0C0B4212}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.Front", "DBDiff.Front\DBDiff.Front.csproj", "{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 10
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/TFS04
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = DBDiff.Front\\DBDiff.Front.csproj
+		SccProjectName1 = DBDiff.Front
+		SccLocalPath1 = DBDiff.Front
+		SccProjectUniqueName2 = DBDiff.Schema.MySQL5\\DBDiff.Schema.MySQL.csproj
+		SccProjectName2 = DBDiff.Schema.MySQL5
+		SccLocalPath2 = DBDiff.Schema.MySQL5
+		SccProjectUniqueName3 = DBDiff.Schema.SQLServer2000\\DBDiff.Schema.SQLServer2000.csproj
+		SccProjectName3 = DBDiff.Schema.SQLServer2000
+		SccLocalPath3 = DBDiff.Schema.SQLServer2000
+		SccProjectUniqueName4 = DBDiff.Schema.SQLServer2005\\DBDiff.Schema.SQLServer.csproj
+		SccProjectName4 = DBDiff.Schema.SQLServer2005
+		SccLocalPath4 = DBDiff.Schema.SQLServer2005
+		SccProjectUniqueName5 = DBDiff.Schema\\DBDiff.Schema.csproj
+		SccProjectName5 = DBDiff.Schema
+		SccLocalPath5 = DBDiff.Schema
+		SccProjectUniqueName6 = DBDiff.SchemaAttributes\\DBDiff.SchemaAttributes.csproj
+		SccProjectName6 = DBDiff.SchemaAttributes
+		SccLocalPath6 = DBDiff.SchemaAttributes
+		SccProjectUniqueName7 = DBDiff.Test\\DBDiff.Test.csproj
+		SccProjectName7 = DBDiff.Test
+		SccLocalPath7 = DBDiff.Test
+		SccProjectUniqueName8 = DBDiff\\DBDiff.csproj
+		SccProjectName8 = DBDiff
+		SccLocalPath8 = DBDiff
+		SccProjectUniqueName9 = SQLDisplayControl\\SQLDisplayControl.vbproj
+		SccProjectName9 = SQLDisplayControl
+		SccLocalPath9 = SQLDisplayControl
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = DBDiff.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99A26820-E71D-4E01-ADF2-E6AB25B03FA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99A26820-E71D-4E01-ADF2-E6AB25B03FA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99A26820-E71D-4E01-ADF2-E6AB25B03FA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99A26820-E71D-4E01-ADF2-E6AB25B03FA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0AEE851-3671-48D9-BBCE-9557EE7F7F93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0AEE851-3671-48D9-BBCE-9557EE7F7F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0AEE851-3671-48D9-BBCE-9557EE7F7F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0AEE851-3671-48D9-BBCE-9557EE7F7F93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{406558A0-1B98-4D0E-B8B6-2013700B065A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{406558A0-1B98-4D0E-B8B6-2013700B065A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{406558A0-1B98-4D0E-B8B6-2013700B065A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{406558A0-1B98-4D0E-B8B6-2013700B065A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CB847CA-F518-4CBC-A161-30EC969EAFD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CB847CA-F518-4CBC-A161-30EC969EAFD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CB847CA-F518-4CBC-A161-30EC969EAFD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CB847CA-F518-4CBC-A161-30EC969EAFD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF2F571E-A7AD-40BE-8500-50A039159FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF2F571E-A7AD-40BE-8500-50A039159FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF2F571E-A7AD-40BE-8500-50A039159FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF2F571E-A7AD-40BE-8500-50A039159FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2271A792-4B10-4EC6-A636-EFF834241A60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2271A792-4B10-4EC6-A636-EFF834241A60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2271A792-4B10-4EC6-A636-EFF834241A60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2271A792-4B10-4EC6-A636-EFF834241A60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75EBA48E-0CE4-404C-AE0A-9CDDD2DE1176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75EBA48E-0CE4-404C-AE0A-9CDDD2DE1176}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75EBA48E-0CE4-404C-AE0A-9CDDD2DE1176}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75EBA48E-0CE4-404C-AE0A-9CDDD2DE1176}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C0E8315-AE46-4A45-A18C-7CFA0C0B4212}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C0E8315-AE46-4A45-A18C-7CFA0C0B4212}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C0E8315-AE46-4A45-A18C-7CFA0C0B4212}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C0E8315-AE46-4A45-A18C-7CFA0C0B4212}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
