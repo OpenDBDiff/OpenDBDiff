@@ -1,0 +1,653 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="TestConstraintFKTree1" xml:space="preserve">
+    <value>USE TestConstraintFKTree1
+GO
+
+ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [FK_Tabla2_Tabla3]
+GO
+ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Tabla2]
+GO
+ALTER TABLE [dbo].[Table7] DROP CONSTRAINT [FK_Table7_Tabla2]
+GO
+ALTER TABLE [dbo].[Tabla5] DROP CONSTRAINT [FK_Tabla5_Tabla6]
+GO
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [FK_Tabla1_Tabla2]
+GO
+ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Tabla1]
+GO
+ALTER TABLE [dbo].[Table7] DROP CONSTRAINT [FK_Table7_Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [FK_Tabla3_Tabla32]
+GO
+ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [FK_Tabla3_Tabla3]
+GO
+ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Tabla3]
+GO
+ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Table7]
+GO
+ALTER TABLE [dbo].[Table7] DROP CONSTRAINT [FK_Table7_Tabla3]
+GO
+ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [FK_Tabla3_Tabla5]
+GO
+ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [FK_Tabla3_Tabla6]
+GO
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [PK_Tabla2]
+GO
+ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [PK_Tabla3]
+GO
+ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [PK_Tabla4]
+GO
+ALTER TABLE [dbo].[Table7] ADD 
+[ID8] [int] NULL
+GO
+CREATE TABLE [dbo].[Tabla8]
+(
+	[ID8] [int] NOT NULL,
+	[Descripcion] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	CONSTRAINT [PK_Tabla8] PRIMARY KEY CLUSTERED
+	(
+		[ID8] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE TABLE [dbo].[TempTabla1]
+(
+	[ID] [int] IDENTITY (2,2) NOT NULL,
+	[ID2] [int] NOT NULL,
+	[Descripcion] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTabla1] ON
+INSERT INTO [dbo].[TempTabla1] ([ID],[ID2],[Descripcion]) SELECT [ID],[ID2],[Descripcion] FROM [dbo].[Tabla1]
+SET IDENTITY_INSERT [dbo].[TempTabla1] OFF
+GO
+
+DROP TABLE [dbo].[Tabla1]
+GO
+EXEC sp_rename N'[dbo].[TempTabla1]',N'Tabla1', 'OBJECT'
+GO
+
+CREATE TABLE [dbo].[TempTabla2]
+(
+	[ID2] [int] IDENTITY (2,2) NOT NULL,
+	[Descripcion] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[ID3] [int] NULL
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTabla2] ON
+INSERT INTO [dbo].[TempTabla2] ([ID2],[Descripcion],[ID3]) SELECT [ID2],[Descripcion],[ID3] FROM [dbo].[Tabla2]
+SET IDENTITY_INSERT [dbo].[TempTabla2] OFF
+GO
+
+DROP TABLE [dbo].[Tabla2]
+GO
+EXEC sp_rename N'[dbo].[TempTabla2]',N'Tabla2', 'OBJECT'
+GO
+
+CREATE TABLE [dbo].[TempTabla3]
+(
+	[ID3] [int] IDENTITY (2,2) NOT NULL,
+	[Descripcion] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[ParentID3] [int] NULL,
+	[ParentParentID3] [int] NULL,
+	[ID5] [int] NULL,
+	[ID6] [int] NULL
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTabla3] ON
+INSERT INTO [dbo].[TempTabla3] ([ID3],[Descripcion],[ParentID3],[ParentParentID3],[ID5],[ID6]) SELECT [ID3],[Descripcion],[ParentID3],[ParentParentID3],[ID5],[ID6] FROM [dbo].[Tabla3]
+SET IDENTITY_INSERT [dbo].[TempTabla3] OFF
+GO
+
+DROP TABLE [dbo].[Tabla3]
+GO
+EXEC sp_rename N'[dbo].[TempTabla3]',N'Tabla3', 'OBJECT'
+GO
+
+CREATE TABLE [dbo].[TempTabla4]
+(
+	[ID4] [int] IDENTITY (1,1) NOT NULL,
+	[ID1] [int] NOT NULL,
+	[ID2] [int] NOT NULL,
+	[ID3] [int] NOT NULL,
+	[ID7] [int] NULL
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTabla4] ON
+INSERT INTO [dbo].[TempTabla4] ([ID4],[ID1],[ID2],[ID3],[ID7]) SELECT [ID4],[ID1],[ID2],[ID3],[ID7] FROM [dbo].[Tabla4]
+SET IDENTITY_INSERT [dbo].[TempTabla4] OFF
+GO
+
+DROP TABLE [dbo].[Tabla4]
+GO
+EXEC sp_rename N'[dbo].[TempTabla4]',N'Tabla4', 'OBJECT'
+GO
+
+ALTER TABLE [dbo].[Tabla2] ADD CONSTRAINT [PK_Tabla2] PRIMARY KEY CLUSTERED
+	(
+		[ID2] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Tabla4] ADD CONSTRAINT [PK_Tabla4] PRIMARY KEY CLUSTERED
+	(
+		[ID4] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [PK_Tabla3] PRIMARY KEY CLUSTERED
+	(
+		[ID3] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Tabla4] ADD CONSTRAINT [FK_Tabla4_Tabla2] FOREIGN KEY
+	(
+		[ID2]
+	)
+	REFERENCES [dbo].[Tabla2]
+	(
+		[ID2]
+	)
+GO
+ALTER TABLE [dbo].[Table7] ADD CONSTRAINT [FK_Table7_Tabla2] FOREIGN KEY
+	(
+		[ID2]
+	)
+	REFERENCES [dbo].[Tabla2]
+	(
+		[ID2]
+	)
+GO
+ALTER TABLE [dbo].[Tabla5] ADD CONSTRAINT [FK_Tabla5_Tabla6] FOREIGN KEY
+	(
+		[ID6]
+	)
+	REFERENCES [dbo].[Tabla6]
+	(
+		[ID6]
+	)
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [FK_Tabla1_Tabla2] FOREIGN KEY
+	(
+		[ID2]
+	)
+	REFERENCES [dbo].[Tabla2]
+	(
+		[ID2]
+	)
+GO
+ALTER TABLE [dbo].[Tabla4] ADD CONSTRAINT [FK_Tabla4_Tabla1] FOREIGN KEY
+	(
+		[ID1]
+	)
+	REFERENCES [dbo].[Tabla1]
+	(
+		[ID]
+	)
+GO
+ALTER TABLE [dbo].[Table7] ADD CONSTRAINT [FK_Table7_Tabla1] FOREIGN KEY
+	(
+		[ID1]
+	)
+	REFERENCES [dbo].[Tabla1]
+	(
+		[ID]
+	)
+GO
+ALTER TABLE [dbo].[Tabla2] ADD CONSTRAINT [FK_Tabla2_Tabla3] FOREIGN KEY
+	(
+		[ID3]
+	)
+	REFERENCES [dbo].[Tabla3]
+	(
+		[ID3]
+	)
+GO
+ALTER TABLE [dbo].[Tabla4] ADD CONSTRAINT [FK_Tabla4_Table7] FOREIGN KEY
+	(
+		[ID7]
+	)
+	REFERENCES [dbo].[Table7]
+	(
+		[ID7]
+	)
+GO
+ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [FK_Tabla3_Tabla32] FOREIGN KEY
+	(
+		[ParentParentID3]
+	)
+	REFERENCES [dbo].[Tabla3]
+	(
+		[ID3]
+	)
+GO
+ALTER TABLE [dbo].[Tabla4] ADD CONSTRAINT [FK_Tabla4_Tabla3] FOREIGN KEY
+	(
+		[ID3]
+	)
+	REFERENCES [dbo].[Tabla3]
+	(
+		[ID3]
+	)
+GO
+ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [FK_Tabla3_Tabla6] FOREIGN KEY
+	(
+		[ID6]
+	)
+	REFERENCES [dbo].[Tabla6]
+	(
+		[ID6]
+	)
+GO
+ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [FK_Tabla3_Tabla5] FOREIGN KEY
+	(
+		[ID5]
+	)
+	REFERENCES [dbo].[Tabla5]
+	(
+		[ID5]
+	)
+GO
+ALTER TABLE [dbo].[Table7] ADD CONSTRAINT [FK_Table7_Tabla3] FOREIGN KEY
+	(
+		[ID3]
+	)
+	REFERENCES [dbo].[Tabla3]
+	(
+		[ID3]
+	)
+GO
+ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [FK_Tabla3_Tabla3] FOREIGN KEY
+	(
+		[ParentID3]
+	)
+	REFERENCES [dbo].[Tabla3]
+	(
+		[ID3]
+	)
+GO
+ALTER TABLE [dbo].[Table7] ADD CONSTRAINT [FK_Table7_Tabla8] FOREIGN KEY
+	(
+		[ID8]
+	)
+	REFERENCES [dbo].[Tabla8]
+	(
+		[ID8]
+	)
+GO</value>
+  </data>
+  <data name="TestIndexEnabled" xml:space="preserve">
+    <value>USE TestIndexEnabled1
+GO
+
+DROP INDEX [IX_Tabla1_2] ON [dbo].[Tabla1]
+GO
+ALTER INDEX [IX_Tabla1_1] ON [dbo].[Tabla1] DISABLE
+GO
+ALTER INDEX [IX_Tabla1] ON [dbo].[Tabla1] REBUILD
+GO
+CREATE NONCLUSTERED INDEX [IX_Tabla1_2] ON [dbo].[Tabla1]
+(
+	[ID] ASC,
+	[Campo1] ASC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX3] ON [dbo].[Tabla1]
+(
+	[ID] ASC,
+	[Campo1] ASC,
+	[Campo2] ASC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER INDEX [IX3] ON [dbo].[Tabla1] DISABLE
+GO</value>
+  </data>
+  <data name="TestIndexSimple" xml:space="preserve">
+    <value>USE TestIndexSimple1
+GO
+
+DROP INDEX [IX_Tabla1_Includes] ON [dbo].[Tabla1]
+GO
+DROP INDEX [IX_Table1_FillFactor] ON [dbo].[Tabla1]
+GO
+DROP INDEX [IX_Tabla1] ON [dbo].[Tabla1]
+GO
+DROP INDEX [IX_Sort_DB] ON [dbo].[Tabla1]
+GO
+CREATE NONCLUSTERED INDEX [IX DROP] ON [dbo].[Tabla1]
+(
+	[ID] ASC,
+	[ID2] ASC,
+	[ID3] ASC,
+	[ID4] ASC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_Tabla1] ON [dbo].[Tabla1]
+(
+	[ID2] ASC,
+	[ID3] DESC,
+	[ID4] DESC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_Table1_FillFactor] ON [dbo].[Tabla1]
+(
+	[ID] ASC,
+	[ID3] ASC
+) WITH (PAD_INDEX = ON, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 60) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_Tabla1_Includes] ON [dbo].[Tabla1]
+(
+	[ID2] ASC
+) INCLUDE ([ID]) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX_Sort_DB] ON [dbo].[Tabla1]
+(
+	[ID4] ASC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE = ON, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS  = OFF, ALLOW_PAGE_LOCKS  = OFF, FILLFACTOR = 100) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestIndexuserType" xml:space="preserve">
+    <value>USE TestIndexUserType1
+GO
+
+DROP INDEX [IX3] ON [dbo].[Tabla1]
+GO
+DROP INDEX [IX2] ON [dbo].[Tabla1]
+GO
+DROP INDEX [IX1] ON [dbo].[Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ValorId] [int] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Valor2Id] [money] NULL
+GO
+DROP TYPE [dbo].[Tipo1]
+GO
+CREATE TYPE [dbo].[Tipo1] FROM [int] NOT NULL
+GO
+DROP TYPE [dbo].[Tipo2]
+GO
+CREATE TYPE [dbo].[Tipo2] FROM [money] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ValorId] [Tipo1] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Valor2Id] [Tipo2] NULL
+GO
+CREATE NONCLUSTERED INDEX [IX2] ON [dbo].[Tabla1]
+(
+	[Valor2Id] ASC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX3] ON [dbo].[Tabla1]
+(
+	[ValorId] DESC,
+	[Valor2Id] DESC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX1] ON [dbo].[Tabla1]
+(
+	[ValorId] ASC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestIndexXML" xml:space="preserve">
+    <value>USE TestIndexXML1
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Tabla1] ON [dbo].[Tabla1]
+(
+	[ID] ASC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE PRIMARY XML INDEX [XML_IX_Tabla1] ON [dbo].[Tabla1]
+(
+	[Campo1]
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO</value>
+  </data>
+  <data name="TestSynonyms" xml:space="preserve">
+    <value>USE TestSinonimos1
+GO
+
+DROP SYNONYM [dbo].[Tabla5]
+GO
+DROP SYNONYM [dbo].[Tabla2]
+GO
+CREATE SYNONYM [dbo].[Tabla4] FOR [TestSinonimos1].[dbo].[Tabla1]
+GO
+CREATE SYNONYM [dbo].[Tabla2] FOR [TestSinonimos1].[dbo].[Tabla3]
+GO</value>
+  </data>
+  <data name="TestViewSchemaBinding" xml:space="preserve">
+    <value>USE TestView1
+GO
+
+DROP VIEW [dbo].[Vista1]
+GO
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+GO
+CREATE TABLE [dbo].[Tabla2]
+(
+	[ID] [int] NOT NULL,
+	[Campo2] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	CONSTRAINT [PK_Tabla2] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE TABLE [dbo].[TempTabla1]
+(
+	[ID] [int] IDENTITY (1,1) NOT NULL,
+	[ID2] [int] NOT NULL,
+	[Valor] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTabla1] ON
+INSERT INTO [dbo].[TempTabla1] ([ID],[ID2],[Valor]) SELECT [ID],[ID2],[Valor] FROM [dbo].[Tabla1]
+SET IDENTITY_INSERT [dbo].[TempTabla1] OFF
+GO
+
+DROP TABLE [dbo].[Tabla1]
+GO
+EXEC sp_rename N'[dbo].[TempTabla1]',N'Tabla1', 'OBJECT'
+GO
+
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE VIEW [dbo].[Vista1]  WITH SCHEMABINDING 
+AS
+SELECT     T1.ID, Valor + 'H' AS Valor, T2.Campo2
+FROM         dbo.Tabla1 T1
+INNER JOIN dbo.Tabla2 T2 ON T2.ID = T1.ID
+
+GO</value>
+  </data>
+  <data name="TestViewComun" xml:space="preserve">
+    <value>USE TestViewComun1
+GO
+
+DROP VIEW [dbo].[Vista2]
+GO
+DROP VIEW [dbo].[Vista1]
+GO
+CREATE VIEW [dbo].[Vista3]
+AS
+SELECT     1 AS Test1, 2 AS Test2, 3 AS Test3
+
+GO
+CREATE VIEW dbo.Vista1
+AS
+SELECT     1 AS Test1, 2 AS Test2
+GO</value>
+  </data>
+  <data name="TestConstraintFKRemove" xml:space="preserve">
+    <value>USE TestConstraintFKRemoveTable1
+GO
+
+ALTER TABLE [dbo].[Child] DROP CONSTRAINT [FK_Child_Parent]
+GO
+ALTER TABLE [dbo].[ChildChild] DROP CONSTRAINT [FK_ChildChild_Child]
+GO
+ALTER TABLE [dbo].[Child] DROP CONSTRAINT [PK_Child]
+GO
+DROP TABLE [dbo].[ChildChild]
+GO
+DROP TABLE [dbo].[Parent]
+GO
+CREATE TABLE [dbo].[TempChild]
+(
+	[ID] [int] IDENTITY (2,2) NOT NULL,
+	[ParentId] [int] NOT NULL,
+	[Campo2] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[Campo3] AS ([Campo2]+'Hola'),
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempChild] ON
+INSERT INTO [dbo].[TempChild] ([ID],[ParentId],[Campo2]) SELECT [ID],[ParentId],[Campo2] FROM [dbo].[Child]
+SET IDENTITY_INSERT [dbo].[TempChild] OFF
+GO
+
+DROP TABLE [dbo].[Child]
+GO
+EXEC sp_rename N'[dbo].[TempChild]',N'Child', 'OBJECT'
+GO
+
+ALTER TABLE [dbo].[Child] ADD CONSTRAINT [PK_Child] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO</value>
+  </data>
+</root>
