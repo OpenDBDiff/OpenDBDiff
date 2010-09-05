@@ -5,16 +5,15 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Model
 {
-    public class Trigger : SQLServerSchemaBase
+    public class Trigger : Code
     {        
-        private string text;
         private Boolean isDisabled;
         private Boolean insteadOf;
         private Boolean notForReplication;
         private Boolean isDDLTrigger;
 
         public Trigger(ISchemaBase parent)
-            : base(StatusEnum.ObjectTypeEnum.Trigger)
+            : base(parent, Enums.ObjectType.Trigger)
         {
             this.Parent = parent;
         }
@@ -62,22 +61,9 @@ namespace DBDiff.Schema.SQLServer.Model
             set { notForReplication = value; }
         }
 
-        public string Text
+        public override Boolean IsCodeType
         {
-            get { return text; }
-            set { text = value; }
-        }
-
-        /// <summary>
-        /// Convierte el schema del trigger en XML.
-        /// </summary>        
-        public string ToXML()
-        {
-            string xml = "";
-            xml += "<TRIGGER name=\"" + Name + "\">\r\n";
-            xml += "<CODE>" + text + "</CODE>";
-            xml += "</TRIGGER>r\n";
-            return xml;
+            get { return true; }
         }
 
         /// <summary>
@@ -94,17 +80,7 @@ namespace DBDiff.Schema.SQLServer.Model
             return true;
         }
 
-        public string ToSQL()
-        {
-            return text+"GO\r\n";
-        }
-
-        public override string ToSQLAdd()
-        {
-            return ToSQL();
-        }
-
-        public override string ToSQLDrop()
+        public override string ToSqlDrop()
         {
             if (!IsDDLTrigger)
                 return "DROP TRIGGER " + FullName + "\r\nGO\r\n";
@@ -133,17 +109,17 @@ namespace DBDiff.Schema.SQLServer.Model
         public SQLScriptList ToSQLDiff()
         {
             SQLScriptList list = new SQLScriptList();
-            if (this.Status == StatusEnum.ObjectStatusType.DropStatus)
-                list.Add(this.ToSQLDrop(), 0, StatusEnum.ScripActionType.DropTrigger);
-            if (this.Status == StatusEnum.ObjectStatusType.CreateStatus)
-                list.Add(this.ToSQL(), 0, StatusEnum.ScripActionType.AddTrigger);
-            if (this.HasState(StatusEnum.ObjectStatusType.AlterStatus))
+            if (this.Status == Enums.ObjectStatusType.DropStatus)
+                list.Add(this.ToSqlDrop(), 0, Enums.ScripActionType.DropTrigger);
+            if (this.Status == Enums.ObjectStatusType.CreateStatus)
+                list.Add(this.ToSql(), 0, Enums.ScripActionType.AddTrigger);
+            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
             {
-                list.Add(this.ToSQLDrop(), 0, StatusEnum.ScripActionType.DropTrigger);
-                list.Add(this.ToSQL(), 0, StatusEnum.ScripActionType.AddTrigger);
+                list.Add(this.ToSqlDrop(), 0, Enums.ScripActionType.DropTrigger);
+                list.Add(this.ToSql(), 0, Enums.ScripActionType.AddTrigger);
             }
-            if (this.HasState(StatusEnum.ObjectStatusType.DisabledStatus))
-                list.Add(this.ToSQLEnabledDisabled(), 0, StatusEnum.ScripActionType.EnabledTrigger);
+            if (this.HasState(Enums.ObjectStatusType.DisabledStatus))
+                list.Add(this.ToSQLEnabledDisabled(), 0, Enums.ScripActionType.EnabledTrigger);
             return list;
         }
     }

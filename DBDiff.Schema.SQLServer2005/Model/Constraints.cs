@@ -8,22 +8,27 @@ namespace DBDiff.Schema.SQLServer.Model
 {
     public class Constraints : FindBaseList<Constraint,Table> 
     {
+        public Constraints()
+            : base(null)
+        {
+        }
+
         public Constraints(Table parent)
-            : base(parent)
+            : base(parent, ((parent == null || parent.Parent == null)?null:((Database)parent.Parent).AllObjects))
         {
         }
 
         public new Constraint this[string name]
         {
             get 
-            { 
-                return Find(delegate(Constraint item) { return item.FullName.Equals(name); }); 
+            {
+                return Find(delegate(Constraint item) { return item.FullName.Equals(name, base.Comparion); }); 
             }
             set
             {
                 for (int index = 0; index < base.Count; index++)
                 {
-                    if (((Constraint)base[index]).FullName.Equals(name))
+                    if (((Constraint)base[index]).FullName.Equals(name, base.Comparion))
                     {
                         if (Parent != null)
                         {
@@ -66,34 +71,32 @@ namespace DBDiff.Schema.SQLServer.Model
             }
         }
 
-        public string ToSQL()
+        public string ToSQL(Constraint.ConstraintType type)
         {
             StringBuilder sql = new StringBuilder();
             for (int index = 0; index < this.Count; index++)
             {
-                if (this[index].Type != Constraint.ConstraintType.Check)
+                if (this[index].Type == type)
                 {
-                    sql.Append("\t" + this[index].ToSQL());
+                    sql.Append("\t" + this[index].ToSql());
                     if (index != this.Count - 1)
                         sql.Append(",");
                     sql.Append("\r\n");
                 }
-
             }
             return sql.ToString();
         }
 
-        public string ToSQLCheck()
+        public string ToSQLAdd(Constraint.ConstraintType type)
         {
             StringBuilder sql = new StringBuilder();
             for (int index = 0; index < this.Count; index++)
             {
-                if (this[index].Type == Constraint.ConstraintType.Check)
+                if (this[index].Type == type)
                 {
-                    sql.Append(this[index].ToSQLAdd());
+                    sql.Append(this[index].ToSqlAdd());
                     sql.Append("\r\n");
                 }
-
             }
             return sql.ToString();
         }
@@ -101,7 +104,7 @@ namespace DBDiff.Schema.SQLServer.Model
         public SQLScriptList ToSQLDiff()
         {
             SQLScriptList listDiff = new SQLScriptList();
-            this.ForEach(item => listDiff.Add(item.ToSQLDiff()));
+            this.ForEach(item => listDiff.AddRange(item.ToSQLDiff()));
 
             return listDiff;
         }

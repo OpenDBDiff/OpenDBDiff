@@ -10,7 +10,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private string vale;
 
         public TableOption(ISchemaBase parent)
-            : base(StatusEnum.ObjectTypeEnum.TableOption)
+            : base(Enums.ObjectType.TableOption)
         {
             this.Parent = parent ;
         }
@@ -44,7 +44,7 @@ namespace DBDiff.Schema.SQLServer.Model
             return true;
         }
 
-        public override string ToSQLDrop()
+        public override string ToSqlDrop()
         {
             if (this.Name.Equals("TextInRow"))
                 return "EXEC sp_tableoption " + Parent.Name + ", 'text in row','off'\r\nGO\r\n";
@@ -55,7 +55,7 @@ namespace DBDiff.Schema.SQLServer.Model
             return "";
         }
 
-        public string ToSQL()
+        public override string ToSql()
         {
             if (this.Name.Equals("TextInRow"))
                 return "EXEC sp_tableoption " + Parent.Name + ", 'text in row'," + vale + "\r\nGO\r\n";
@@ -66,9 +66,9 @@ namespace DBDiff.Schema.SQLServer.Model
             return "";
         }
 
-        public override string ToSQLAdd()
+        public override string ToSqlAdd()
         {
-            return ToSQL();
+            return ToSql();
         }
     }
 }

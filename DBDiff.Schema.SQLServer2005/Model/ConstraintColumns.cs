@@ -5,13 +5,11 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Model
 {
-    public class ConstraintColumns:List<ConstraintColumn>
+    public class ConstraintColumns:FindBaseList<ConstraintColumn, Constraint>
     {
-        private Constraint parent;
-
-        internal ConstraintColumns(Constraint parent)
+        public ConstraintColumns(Constraint parent)
+            : base(parent)
         {
-            this.parent = parent;
         }
 
         /// <summary>
@@ -19,20 +17,12 @@ namespace DBDiff.Schema.SQLServer.Model
         /// </summary>
         public ConstraintColumns Clone()
         {
-            ConstraintColumns columns = new ConstraintColumns(parent);
+            ConstraintColumns columns = new ConstraintColumns(this.Parent);
             for (int index = 0; index < this.Count; index++)
             {
                 columns.Add(this[index].Clone());
             }
             return columns;
-        }
-
-        public ConstraintColumn this[string name]
-        {
-            get
-            {
-                return Find(delegate(ConstraintColumn item) { return item.FullName.Equals(name); });
-            }
         }
 
         /// <summary>

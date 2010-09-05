@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EF2F571E-A7AD-40BE-8500-50A039159FC1}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -32,10 +32,6 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,7 +41,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRules>-Microsoft.Naming#CA1718;-Microsoft.Naming#CA1720;-Microsoft.Naming#CA1700;-Microsoft.Naming#CA1712;-Microsoft.Naming#CA1713;-Microsoft.Naming#CA1709;-Microsoft.Naming#CA1708;-Microsoft.Naming#CA1715;-Microsoft.Naming#CA1710;-Microsoft.Naming#CA1707;-Microsoft.Naming#CA1722;-Microsoft.Naming#CA1711;-Microsoft.Naming#CA1716;-Microsoft.Naming#CA1705;-Microsoft.Naming#CA1725;-Microsoft.Naming#CA1719;-Microsoft.Naming#CA1721;-Microsoft.Naming#CA1706;-Microsoft.Naming#CA1724;-Microsoft.Naming#CA1726</CodeAnalysisRules>
+    <CodeAnalysisRules>-Microsoft.Naming#CA1702;-Microsoft.Naming#CA1700;-Microsoft.Naming#CA1712;-Microsoft.Naming#CA1713;-Microsoft.Naming#CA1714;-Microsoft.Naming#CA1709;-Microsoft.Naming#CA1704;-Microsoft.Naming#CA1708;-Microsoft.Naming#CA1715;-Microsoft.Naming#CA1710;-Microsoft.Naming#CA1720;-Microsoft.Naming#CA1707;-Microsoft.Naming#CA1722;-Microsoft.Naming#CA1711;-Microsoft.Naming#CA1716;-Microsoft.Naming#CA1717;-Microsoft.Naming#CA1725;-Microsoft.Naming#CA1719;-Microsoft.Naming#CA1721;-Microsoft.Naming#CA1701;-Microsoft.Naming#CA1703;-Microsoft.Naming#CA1724;-Microsoft.Naming#CA1726</CodeAnalysisRules>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -54,6 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRules>-Microsoft.Naming#CA1702;-Microsoft.Naming#CA1700;-Microsoft.Naming#CA1712;-Microsoft.Naming#CA1713;-Microsoft.Naming#CA1714;-Microsoft.Naming#CA1709;-Microsoft.Naming#CA1704;-Microsoft.Naming#CA1708;-Microsoft.Naming#CA1715;-Microsoft.Naming#CA1710;-Microsoft.Naming#CA1720;-Microsoft.Naming#CA1707;-Microsoft.Naming#CA1722;-Microsoft.Naming#CA1711;-Microsoft.Naming#CA1716;-Microsoft.Naming#CA1717;-Microsoft.Naming#CA1725;-Microsoft.Naming#CA1719;-Microsoft.Naming#CA1721;-Microsoft.Naming#CA1701;-Microsoft.Naming#CA1703;-Microsoft.Naming#CA1724;-Microsoft.Naming#CA1726</CodeAnalysisRules>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -76,7 +73,9 @@
     <Compile Include="Compare\CompareConstraints.cs" />
     <Compile Include="Compare\CompareDatabase.cs" />
     <Compile Include="Compare\CompareFileGroups.cs" />
+    <Compile Include="Compare\CompareFunctions.cs" />
     <Compile Include="Compare\CompareIndexes.cs" />
+    <Compile Include="Compare\CompareRoles.cs" />
     <Compile Include="Compare\CompareRules.cs" />
     <Compile Include="Compare\CompareSchemas.cs" />
     <Compile Include="Compare\CompareStoreProcedures.cs" />
@@ -85,8 +84,16 @@
     <Compile Include="Compare\CompareTablesOptions.cs" />
     <Compile Include="Compare\CompareTriggers.cs" />
     <Compile Include="Compare\CompareUserDataTypes.cs" />
+    <Compile Include="Compare\CompareUsers.cs" />
     <Compile Include="Compare\CompareXMLSchemas.cs" />
     <Compile Include="Compare\CompareViews.cs" />
+    <Compile Include="Front\AddItem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Front\AddItem.Designer.cs">
+      <DependentUpon>AddItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Front\HandlerHelper.cs" />
     <Compile Include="Front\SqlOptionsFront.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -106,6 +113,9 @@
       <DependentUpon>SqlServerPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Generate.cs" />
+    <Compile Include="Generates\GenerateDefaults.cs" />
+    <Compile Include="Generates\GenerateFunctions.cs" />
+    <Compile Include="Generates\GenerateUsers.cs" />
     <Compile Include="Generates\GenerateViews.cs" />
     <Compile Include="Generates\GenerateAssemblies.cs" />
     <Compile Include="Generates\GenerateSynonyms.cs" />
@@ -123,6 +133,14 @@
     <Compile Include="Generates\GenerateUserDataTypes.cs" />
     <Compile Include="Generates\GenerateConstraint.cs" />
     <Compile Include="Generates\GenerateXMLSchemas.cs" />
+    <Compile Include="Generates\Util\ConvertType.cs" />
+    <Compile Include="Model\AssemblyFile.cs" />
+    <Compile Include="Model\Code.cs" />
+    <Compile Include="Model\Defaults.cs" />
+    <Compile Include="Model\FullText.cs" />
+    <Compile Include="Model\FullTexts.cs" />
+    <Compile Include="Model\ICode.cs" />
+    <Compile Include="Model\Util\FormatCode.cs" />
     <Compile Include="Model\Assembly.cs" />
     <Compile Include="Model\Assemblys.cs" />
     <Compile Include="Model\ColumnConstraint.cs" />
@@ -141,10 +159,14 @@
     <Compile Include="Model\FileGroupFile.cs" />
     <Compile Include="Model\FileGroupFiles.cs" />
     <Compile Include="Model\FileGroups.cs" />
+    <Compile Include="Model\Function.cs" />
+    <Compile Include="Model\Functions.cs" />
     <Compile Include="Model\Index.cs" />
     <Compile Include="Model\IndexColumn.cs" />
     <Compile Include="Model\IndexColumns.cs" />
     <Compile Include="Model\Indexes.cs" />
+    <Compile Include="Model\Role.cs" />
+    <Compile Include="Model\Roles.cs" />
     <Compile Include="Model\Rule.cs" />
     <Compile Include="Model\Rules.cs" />
     <Compile Include="Model\Schema.cs" />
@@ -154,6 +176,9 @@
     <Compile Include="Model\StoreProcedures.cs" />
     <Compile Include="Model\Synonym.cs" />
     <Compile Include="Model\Synonyms.cs" />
+    <Compile Include="Model\User.cs" />
+    <Compile Include="Model\ObjectDependency.cs" />
+    <Compile Include="Model\Users.cs" />
     <Compile Include="Model\View.cs" />
     <Compile Include="Model\Views.cs" />
     <Compile Include="Model\XMLSchema.cs" />
@@ -161,6 +186,9 @@
     <Compile Include="Options\SqlOption.cs" />
     <Compile Include="Options\SqlOptionDefault.cs" />
     <Compile Include="Options\SqlOptionFilter.cs" />
+    <Compile Include="Options\SqlOptionFilterItem.cs" />
+    <Compile Include="Options\SqlOptionIgnore.cs" />
+    <Compile Include="Options\SqlOptionScript.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Database.cs" />
     <Compile Include="Model\Table.cs" />
@@ -204,6 +232,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Front\AddItem.resx">
+      <DependentUpon>AddItem.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Front\SqlOptionsFront.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SqlOptionsFront.cs</DependentUpon>
@@ -241,6 +273,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Test.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Database.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

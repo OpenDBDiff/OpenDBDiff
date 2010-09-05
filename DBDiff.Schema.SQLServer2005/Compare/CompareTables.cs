@@ -19,7 +19,7 @@ namespace DBDiff.Schema.SQLServer.Compare
         /// <param name="tablasDestino">
         /// Tablas comparativas, que se usa para comparar con la base original.
         /// </param>
-        public static Tables GenerateDiferences(Tables tablasOrigen, Tables tablasDestino)
+        public static void GenerateDiferences(Tables tablasOrigen, Tables tablasDestino)
         {
             MarkDrop(tablasOrigen, tablasDestino);
 
@@ -27,36 +27,35 @@ namespace DBDiff.Schema.SQLServer.Compare
             {
                 if (!tablasOrigen.Exists(node.FullName))
                 {
-                    node.Status = StatusEnum.ObjectStatusType.CreateStatus;
+                    node.Status = Enums.ObjectStatusType.CreateStatus;
                     tablasOrigen.Add(node);
                 }
                 else
                 {
-                    if (node.Status != StatusEnum.ObjectStatusType.DropStatus)
+                    if (node.Status != Enums.ObjectStatusType.DropStatus)
                     {
                         Table tablaOriginal = tablasOrigen[node.FullName];
                         tablaOriginal.OriginalTable = tablasOrigen[node.FullName].Clone((Database)tablaOriginal.Parent);
-                        tablaOriginal.Columns = CompareColumns.GenerateDiferences(tablaOriginal.Columns, node.Columns);
-                        tablaOriginal.Constraints = CompareConstraints.GenerateDiferences(tablaOriginal.Constraints, node.Constraints);
-                        tablaOriginal.Indexes = CompareIndexes.GenerateDiferences(tablaOriginal.Indexes, node.Indexes);
-                        tablaOriginal.Options = CompareTablesOptions.GenerateDiferences(tablaOriginal.Options, node.Options);
-                        tablaOriginal.Triggers = CompareTriggers.GenerateDiferences(tablaOriginal.Triggers, node.Triggers);
+                        CompareColumns.GenerateDiferences(tablaOriginal.Columns, node.Columns);
+                        CompareConstraints.GenerateDiferences(tablaOriginal.Constraints, node.Constraints);
+                        CompareIndexes.GenerateDiferences(tablaOriginal.Indexes, node.Indexes);
+                        CompareTablesOptions.GenerateDiferences(tablaOriginal.Options, node.Options);
+                        CompareTriggers.GenerateDiferences(tablaOriginal.Triggers, node.Triggers);
                         if (!Table.CompareFileGroup(tablaOriginal, node))
                         {
                             tablaOriginal.FileGroup = node.FileGroup;
                             /*Esto solo aplica a las tablas heap, el resto hace el campo en el filegroup del indice clustered*/
                             if (!tablaOriginal.HasClusteredIndex)
-                                tablaOriginal.Status = StatusEnum.ObjectStatusType.AlterRebuildStatus;
+                                tablaOriginal.Status = Enums.ObjectStatusType.AlterRebuildStatus;
                         }
                         if (!Table.CompareFileGroupText(tablaOriginal, node))
                         {
                             tablaOriginal.FileGroupText = node.FileGroupText;
-                            tablaOriginal.Status = StatusEnum.ObjectStatusType.AlterRebuildStatus;
+                            tablaOriginal.Status = Enums.ObjectStatusType.AlterRebuildStatus;
                         }
                     }
                 }
-            }            
-            return tablasOrigen;
+            }                       
         }
     }
 }

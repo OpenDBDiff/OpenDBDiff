@@ -37,7 +37,8 @@ namespace DBDiff.Schema.SQLServer.Generates
             sql += "is_disabled, ";
             sql += "is_not_trusted AS WithCheck, ";
             sql += "is_not_for_replication, ";
-            sql += "0 ";
+            sql += "0, ";
+            sql += "schema_name(schema_id) AS Owner ";
             sql += "FROM sys.check_constraints ORDER BY parent_object_id,name";
             return sql;
         }
@@ -67,14 +68,15 @@ namespace DBDiff.Schema.SQLServer.Generates
                             if (cons == null) cons = new Constraints(table);
                             con = new Constraint(table);
                             con.Id = (int)reader["id"];
-                            con.NotForReplication = (bool)reader["is_not_for_replication"];
                             con.Name = reader["Name"].ToString();
                             con.Type = Constraint.ConstraintType.Check;
                             con.Definition = reader["Definition"].ToString();
                             con.WithNoCheck = (bool)reader["WithCheck"];
                             con.IsDisabled = (bool)reader["is_disabled"];
+                            con.Owner = reader["Owner"].ToString();
+                            if (!constraintFilter.Ignore.FilterIgnoreNotForReplication)
+                                con.NotForReplication = (bool)reader["is_not_for_replication"];
                             cons.Add(con);
-                            //((Database)table.Parent).ConstraintDependencies.Add(table.Id, 0, table.Id, con);
                         }
                     }
                 }
@@ -103,7 +105,7 @@ namespace DBDiff.Schema.SQLServer.Generates
 
         private Constraints GetForeignKey()
         {
-            Constraints cons = new Constraints(null);
+            Constraints cons = new Constraints();
             string last = "";
             int parentId = 0;
             Table table = null;
@@ -129,7 +131,6 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 //if (!String.IsNullOrEmpty(last)) cons.Add(con);
                                 con = new Constraint(table);
                                 con.Id = (int)reader["object_id"];
-                                con.NotForReplication = (bool)reader["is_not_for_replication"];
                                 con.Name = reader["Name"].ToString();
                                 con.Type = Constraint.ConstraintType.ForeignKey;
                                 con.WithNoCheck = (bool)reader["is_not_trusted"];
@@ -139,6 +140,8 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 con.IsDisabled = (bool)reader["is_disabled"];
                                 con.OnDeleteCascade = (byte)reader["delete_referential_action"];
                                 con.OnUpdateCascade = (byte)reader["update_referential_action"];
+                                if (!constraintFilter.Ignore.FilterIgnoreNotForReplication)
+                                    con.NotForReplication = (bool)reader["is_not_for_replication"];
                                 last = reader["Name"].ToString();
                                 cons.Add(con);
                             }
@@ -175,7 +178,7 @@ namespace DBDiff.Schema.SQLServer.Generates
 
         private Constraints GetUniqueKey()
         {
-            Constraints cons = new Constraints(null);
+            Constraints cons = new Constraints();
             string last = "";
             int parentId = 0;
             Table table = null;
@@ -214,7 +217,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 con.Index.IsUniqueKey = true;
                                 con.Index.Type = (Index.IndexTypeEnum)(byte)reader["type"];
                                 con.Index.Name = con.Name;
-                                if (constraintFilter.OptionFilter.FilterTableFileGroup)
+                                if (constraintFilter.Ignore.FilterTableFileGroup)
                                     con.Index.FileGroup = reader["FileGroup"].ToString();
                                 last = con.Name;
                                 cons.Add(con);
@@ -237,7 +240,7 @@ namespace DBDiff.Schema.SQLServer.Generates
         #region PrimaryKey Functions...
         private Constraints GetPrimaryKey(Database database)
         {
-            Constraints cons = new Constraints(null);            
+            Constraints cons = new Constraints();            
             string last = "";
             int parentId = 0;
             Table table = null;
@@ -276,7 +279,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 con.Index.IsUniqueKey = false;
                                 con.Index.Type = (Index.IndexTypeEnum)(byte)reader["type"];
                                 con.Index.Name = con.Name;
-                                if (constraintFilter.OptionFilter.FilterTableFileGroup)
+                                if (constraintFilter.Ignore.FilterTableFileGroup)
                                     con.Index.FileGroup = reader["FileGroup"].ToString();
                                 last = con.Name;
                                 cons.Add(con);
@@ -299,7 +302,7 @@ namespace DBDiff.Schema.SQLServer.Generates
 
         public Constraints Get(Database database)
         {
-            Constraints constraints = new Constraints(null);
+            Constraints constraints = new Constraints();
             constraints.AddRange(GetPrimaryKey(database));
             constraints.AddRange(GetForeignKey());
             constraints.AddRange(GetUniqueKey());

@@ -26,29 +26,17 @@ namespace DBDiff.Schema.SQLServer.Model
             return options;
         }
 
-        public string ToXML()
-        {
-            StringBuilder xml = new StringBuilder();
-            xml.Append("<TRIGGERS>\n");
-            for (int index = 0; index < this.Count; index++)
-            {
-                xml.Append(this[index].ToXML() + "\n");
-            }
-            xml.Append("</TRIGGERS>\n");
-            return xml.ToString();
-        }
-
         public string ToSQL()
         {
             StringBuilder sql = new StringBuilder();
-            this.ForEach(item => sql.Append(item.ToSQL() + "\r\n"));
+            this.ForEach(item => sql.Append(item.ToSql() + "\r\n"));
             return sql.ToString();
         }
 
         public SQLScriptList ToSQLDiff()
         {
             SQLScriptList listDiff = new SQLScriptList();
-            this.ForEach(item => listDiff.Add(item.ToSQLDiff()));
+            this.ForEach(item => listDiff.AddRange(item.ToSQLDiff()));
 
             return listDiff;
         }

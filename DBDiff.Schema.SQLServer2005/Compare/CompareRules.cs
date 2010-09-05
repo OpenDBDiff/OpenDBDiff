@@ -7,14 +7,14 @@ namespace DBDiff.Schema.SQLServer.Compare
 {
     internal class CompareRules:CompareBase<Rule>
     {
-        public static Rules GenerateDiferences(Rules CamposOrigen, Rules CamposDestino)
+        public static void GenerateDiferences(Rules CamposOrigen, Rules CamposDestino)
         {
             foreach (Rule node in CamposDestino)
             {
                 if (!CamposOrigen.Exists(node.FullName))
                 {
                     Rule newNode = node.Clone(CamposOrigen.Parent);
-                    newNode.Status = StatusEnum.ObjectStatusType.CreateStatus;
+                    newNode.Status = Enums.ObjectStatusType.CreateStatus;
                     CamposOrigen.Add(newNode);
                 }
                 else
@@ -22,15 +22,13 @@ namespace DBDiff.Schema.SQLServer.Compare
                     if (!Rule.Compare(node, CamposOrigen[node.FullName]))
                     {
                         Rule newNode = node.Clone(CamposOrigen.Parent);
-                        newNode.Status = StatusEnum.ObjectStatusType.AlterStatus;
+                        newNode.Status = Enums.ObjectStatusType.AlterStatus;
                         CamposOrigen[node.FullName] = newNode;
                     }
                 }
             }
             
             MarkDrop(CamposOrigen, CamposDestino);
-
-            return CamposOrigen;
         }
     }
 }

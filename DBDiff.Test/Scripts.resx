@@ -121,41 +121,41 @@
     <value>USE TestConstraintFKTree1
 GO
 
-ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [FK_Tabla2_Tabla3]
+ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Tabla1]
 GO
 ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Tabla2]
 GO
-ALTER TABLE [dbo].[Table7] DROP CONSTRAINT [FK_Table7_Tabla2]
-GO
-ALTER TABLE [dbo].[Tabla5] DROP CONSTRAINT [FK_Tabla5_Tabla6]
-GO
-ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [FK_Tabla1_Tabla2]
-GO
-ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Tabla1]
-GO
-ALTER TABLE [dbo].[Table7] DROP CONSTRAINT [FK_Table7_Tabla1]
-GO
-ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [FK_Tabla3_Tabla32]
-GO
-ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [FK_Tabla3_Tabla3]
+ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Table7]
 GO
 ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Tabla3]
 GO
-ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Table7]
+ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [FK_Tabla3_Tabla3]
+GO
+ALTER TABLE [dbo].[Table7] DROP CONSTRAINT [FK_Table7_Tabla2]
+GO
+ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [FK_Tabla3_Tabla32]
 GO
 ALTER TABLE [dbo].[Table7] DROP CONSTRAINT [FK_Table7_Tabla3]
 GO
+ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [FK_Tabla3_Tabla6]
+GO
 ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [FK_Tabla3_Tabla5]
 GO
-ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [FK_Tabla3_Tabla6]
+ALTER TABLE [dbo].[Table7] DROP CONSTRAINT [FK_Table7_Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [FK_Tabla1_Tabla2]
+GO
+ALTER TABLE [dbo].[Tabla5] DROP CONSTRAINT [FK_Tabla5_Tabla6]
+GO
+ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [FK_Tabla2_Tabla3]
+GO
+ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [PK_Tabla4]
+GO
+ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [PK_Tabla3]
 GO
 ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
 GO
 ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [PK_Tabla2]
-GO
-ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [PK_Tabla3]
-GO
-ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [PK_Tabla4]
 GO
 ALTER TABLE [dbo].[Table7] ADD 
 [ID8] [int] NULL
@@ -170,6 +170,47 @@ CREATE TABLE [dbo].[Tabla8]
 	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+CREATE TABLE [dbo].[TempTabla4]
+(
+	[ID4] [int] IDENTITY (1,1) NOT NULL,
+	[ID1] [int] NOT NULL,
+	[ID2] [int] NOT NULL,
+	[ID3] [int] NOT NULL,
+	[ID7] [int] NULL
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTabla4] ON
+INSERT INTO [dbo].[TempTabla4] ([ID4],[ID1],[ID2],[ID3],[ID7]) SELECT [ID4],[ID1],[ID2],[ID3],[ID7] FROM [dbo].[Tabla4]
+SET IDENTITY_INSERT [dbo].[TempTabla4] OFF
+GO
+
+DROP TABLE [dbo].[Tabla4]
+GO
+EXEC sp_rename N'[dbo].[TempTabla4]',N'Tabla4', 'OBJECT'
+GO
+
+CREATE TABLE [dbo].[TempTabla3]
+(
+	[ID3] [int] IDENTITY (2,2) NOT NULL,
+	[Descripcion] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[ParentID3] [int] NULL,
+	[ParentParentID3] [int] NULL,
+	[ID5] [int] NULL,
+	[ID6] [int] NULL
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTabla3] ON
+INSERT INTO [dbo].[TempTabla3] ([ID3],[Descripcion],[ParentID3],[ParentParentID3],[ID5],[ID6]) SELECT [ID3],[Descripcion],[ParentID3],[ParentParentID3],[ID5],[ID6] FROM [dbo].[Tabla3]
+SET IDENTITY_INSERT [dbo].[TempTabla3] OFF
+GO
+
+DROP TABLE [dbo].[Tabla3]
+GO
+EXEC sp_rename N'[dbo].[TempTabla3]',N'Tabla3', 'OBJECT'
+GO
+
 CREATE TABLE [dbo].[TempTabla1]
 (
 	[ID] [int] IDENTITY (2,2) NOT NULL,
@@ -206,57 +247,6 @@ GO
 EXEC sp_rename N'[dbo].[TempTabla2]',N'Tabla2', 'OBJECT'
 GO
 
-CREATE TABLE [dbo].[TempTabla3]
-(
-	[ID3] [int] IDENTITY (2,2) NOT NULL,
-	[Descripcion] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
-	[ParentID3] [int] NULL,
-	[ParentParentID3] [int] NULL,
-	[ID5] [int] NULL,
-	[ID6] [int] NULL
-) ON [PRIMARY]
-GO
-
-SET IDENTITY_INSERT [dbo].[TempTabla3] ON
-INSERT INTO [dbo].[TempTabla3] ([ID3],[Descripcion],[ParentID3],[ParentParentID3],[ID5],[ID6]) SELECT [ID3],[Descripcion],[ParentID3],[ParentParentID3],[ID5],[ID6] FROM [dbo].[Tabla3]
-SET IDENTITY_INSERT [dbo].[TempTabla3] OFF
-GO
-
-DROP TABLE [dbo].[Tabla3]
-GO
-EXEC sp_rename N'[dbo].[TempTabla3]',N'Tabla3', 'OBJECT'
-GO
-
-CREATE TABLE [dbo].[TempTabla4]
-(
-	[ID4] [int] IDENTITY (1,1) NOT NULL,
-	[ID1] [int] NOT NULL,
-	[ID2] [int] NOT NULL,
-	[ID3] [int] NOT NULL,
-	[ID7] [int] NULL
-) ON [PRIMARY]
-GO
-
-SET IDENTITY_INSERT [dbo].[TempTabla4] ON
-INSERT INTO [dbo].[TempTabla4] ([ID4],[ID1],[ID2],[ID3],[ID7]) SELECT [ID4],[ID1],[ID2],[ID3],[ID7] FROM [dbo].[Tabla4]
-SET IDENTITY_INSERT [dbo].[TempTabla4] OFF
-GO
-
-DROP TABLE [dbo].[Tabla4]
-GO
-EXEC sp_rename N'[dbo].[TempTabla4]',N'Tabla4', 'OBJECT'
-GO
-
-ALTER TABLE [dbo].[Tabla2] ADD CONSTRAINT [PK_Tabla2] PRIMARY KEY CLUSTERED
-	(
-		[ID2] ASC
-	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
-	(
-		[ID] ASC
-	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
 ALTER TABLE [dbo].[Tabla4] ADD CONSTRAINT [PK_Tabla4] PRIMARY KEY CLUSTERED
 	(
 		[ID4] ASC
@@ -267,34 +257,17 @@ ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [PK_Tabla3] PRIMARY KEY CLUSTERED
 		[ID3] ASC
 	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Tabla2] ADD CONSTRAINT [PK_Tabla2] PRIMARY KEY CLUSTERED
+	(
+		[ID2] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
 ALTER TABLE [dbo].[Tabla4] ADD CONSTRAINT [FK_Tabla4_Tabla2] FOREIGN KEY
-	(
-		[ID2]
-	)
-	REFERENCES [dbo].[Tabla2]
-	(
-		[ID2]
-	)
-GO
-ALTER TABLE [dbo].[Table7] ADD CONSTRAINT [FK_Table7_Tabla2] FOREIGN KEY
-	(
-		[ID2]
-	)
-	REFERENCES [dbo].[Tabla2]
-	(
-		[ID2]
-	)
-GO
-ALTER TABLE [dbo].[Tabla5] ADD CONSTRAINT [FK_Tabla5_Tabla6] FOREIGN KEY
-	(
-		[ID6]
-	)
-	REFERENCES [dbo].[Tabla6]
-	(
-		[ID6]
-	)
-GO
-ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [FK_Tabla1_Tabla2] FOREIGN KEY
 	(
 		[ID2]
 	)
@@ -312,16 +285,7 @@ ALTER TABLE [dbo].[Tabla4] ADD CONSTRAINT [FK_Tabla4_Tabla1] FOREIGN KEY
 		[ID]
 	)
 GO
-ALTER TABLE [dbo].[Table7] ADD CONSTRAINT [FK_Table7_Tabla1] FOREIGN KEY
-	(
-		[ID1]
-	)
-	REFERENCES [dbo].[Tabla1]
-	(
-		[ID]
-	)
-GO
-ALTER TABLE [dbo].[Tabla2] ADD CONSTRAINT [FK_Tabla2_Tabla3] FOREIGN KEY
+ALTER TABLE [dbo].[Tabla4] ADD CONSTRAINT [FK_Tabla4_Tabla3] FOREIGN KEY
 	(
 		[ID3]
 	)
@@ -348,13 +312,31 @@ ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [FK_Tabla3_Tabla32] FOREIGN KEY
 		[ID3]
 	)
 GO
-ALTER TABLE [dbo].[Tabla4] ADD CONSTRAINT [FK_Tabla4_Tabla3] FOREIGN KEY
+ALTER TABLE [dbo].[Table7] ADD CONSTRAINT [FK_Table7_Tabla2] FOREIGN KEY
 	(
-		[ID3]
+		[ID2]
 	)
-	REFERENCES [dbo].[Tabla3]
+	REFERENCES [dbo].[Tabla2]
 	(
-		[ID3]
+		[ID2]
+	)
+GO
+ALTER TABLE [dbo].[Table7] ADD CONSTRAINT [FK_Table7_Tabla8] FOREIGN KEY
+	(
+		[ID8]
+	)
+	REFERENCES [dbo].[Tabla8]
+	(
+		[ID8]
+	)
+GO
+ALTER TABLE [dbo].[Table7] ADD CONSTRAINT [FK_Table7_Tabla1] FOREIGN KEY
+	(
+		[ID1]
+	)
+	REFERENCES [dbo].[Tabla1]
+	(
+		[ID]
 	)
 GO
 ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [FK_Tabla3_Tabla6] FOREIGN KEY
@@ -366,15 +348,6 @@ ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [FK_Tabla3_Tabla6] FOREIGN KEY
 		[ID6]
 	)
 GO
-ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [FK_Tabla3_Tabla5] FOREIGN KEY
-	(
-		[ID5]
-	)
-	REFERENCES [dbo].[Tabla5]
-	(
-		[ID5]
-	)
-GO
 ALTER TABLE [dbo].[Table7] ADD CONSTRAINT [FK_Table7_Tabla3] FOREIGN KEY
 	(
 		[ID3]
@@ -382,6 +355,15 @@ ALTER TABLE [dbo].[Table7] ADD CONSTRAINT [FK_Table7_Tabla3] FOREIGN KEY
 	REFERENCES [dbo].[Tabla3]
 	(
 		[ID3]
+	)
+GO
+ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [FK_Tabla3_Tabla5] FOREIGN KEY
+	(
+		[ID5]
+	)
+	REFERENCES [dbo].[Tabla5]
+	(
+		[ID5]
 	)
 GO
 ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [FK_Tabla3_Tabla3] FOREIGN KEY
@@ -393,13 +375,31 @@ ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [FK_Tabla3_Tabla3] FOREIGN KEY
 		[ID3]
 	)
 GO
-ALTER TABLE [dbo].[Table7] ADD CONSTRAINT [FK_Table7_Tabla8] FOREIGN KEY
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [FK_Tabla1_Tabla2] FOREIGN KEY
 	(
-		[ID8]
+		[ID2]
 	)
-	REFERENCES [dbo].[Tabla8]
+	REFERENCES [dbo].[Tabla2]
 	(
-		[ID8]
+		[ID2]
+	)
+GO
+ALTER TABLE [dbo].[Tabla5] ADD CONSTRAINT [FK_Tabla5_Tabla6] FOREIGN KEY
+	(
+		[ID6]
+	)
+	REFERENCES [dbo].[Tabla6]
+	(
+		[ID6]
+	)
+GO
+ALTER TABLE [dbo].[Tabla2] ADD CONSTRAINT [FK_Tabla2_Tabla3] FOREIGN KEY
+	(
+		[ID3]
+	)
+	REFERENCES [dbo].[Tabla3]
+	(
+		[ID3]
 	)
 GO</value>
   </data>
@@ -413,12 +413,6 @@ ALTER INDEX [IX_Tabla1_1] ON [dbo].[Tabla1] DISABLE
 GO
 ALTER INDEX [IX_Tabla1] ON [dbo].[Tabla1] REBUILD
 GO
-CREATE NONCLUSTERED INDEX [IX_Tabla1_2] ON [dbo].[Tabla1]
-(
-	[ID] ASC,
-	[Campo1] ASC
-) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
 CREATE NONCLUSTERED INDEX [IX3] ON [dbo].[Tabla1]
 (
 	[ID] ASC,
@@ -427,6 +421,12 @@ CREATE NONCLUSTERED INDEX [IX3] ON [dbo].[Tabla1]
 ) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 ALTER INDEX [IX3] ON [dbo].[Tabla1] DISABLE
+GO
+CREATE NONCLUSTERED INDEX [IX_Tabla1_2] ON [dbo].[Tabla1]
+(
+	[ID] ASC,
+	[Campo1] ASC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO</value>
   </data>
   <data name="TestIndexSimple" xml:space="preserve">
@@ -441,6 +441,12 @@ DROP INDEX [IX_Tabla1] ON [dbo].[Tabla1]
 GO
 DROP INDEX [IX_Sort_DB] ON [dbo].[Tabla1]
 GO
+CREATE NONCLUSTERED INDEX [IX_Table1_FillFactor] ON [dbo].[Tabla1]
+(
+	[ID] ASC,
+	[ID3] ASC
+) WITH (PAD_INDEX = ON, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 60) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [IX DROP] ON [dbo].[Tabla1]
 (
 	[ID] ASC,
@@ -449,6 +455,11 @@ CREATE NONCLUSTERED INDEX [IX DROP] ON [dbo].[Tabla1]
 	[ID4] ASC
 ) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
+CREATE NONCLUSTERED INDEX [IX_Sort_DB] ON [dbo].[Tabla1]
+(
+	[ID4] ASC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE = ON, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS  = OFF, ALLOW_PAGE_LOCKS  = OFF, FILLFACTOR = 100) ON [PRIMARY]
+GO
 CREATE NONCLUSTERED INDEX [IX_Tabla1] ON [dbo].[Tabla1]
 (
 	[ID2] ASC,
@@ -456,36 +467,27 @@ CREATE NONCLUSTERED INDEX [IX_Tabla1] ON [dbo].[Tabla1]
 	[ID4] DESC
 ) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-CREATE NONCLUSTERED INDEX [IX_Table1_FillFactor] ON [dbo].[Tabla1]
-(
-	[ID] ASC,
-	[ID3] ASC
-) WITH (PAD_INDEX = ON, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 60) ON [PRIMARY]
-GO
 CREATE NONCLUSTERED INDEX [IX_Tabla1_Includes] ON [dbo].[Tabla1]
 (
 	[ID2] ASC
 ) INCLUDE ([ID]) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-CREATE NONCLUSTERED INDEX [IX_Sort_DB] ON [dbo].[Tabla1]
-(
-	[ID4] ASC
-) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE = ON, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS  = OFF, ALLOW_PAGE_LOCKS  = OFF, FILLFACTOR = 100) ON [PRIMARY]
 GO</value>
   </data>
   <data name="TestIndexuserType" xml:space="preserve">
     <value>USE TestIndexUserType1
 GO
 
-DROP INDEX [IX3] ON [dbo].[Tabla1]
-GO
-DROP INDEX [IX2] ON [dbo].[Tabla1]
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
 GO
 DROP INDEX [IX1] ON [dbo].[Tabla1]
 GO
-ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ValorId] [int] NOT NULL
+DROP INDEX [IX2] ON [dbo].[Tabla1]
+GO
+DROP INDEX [IX3] ON [dbo].[Tabla1]
 GO
 ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Valor2Id] [money] NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ValorId] [int] NOT NULL
 GO
 DROP TYPE [dbo].[Tipo1]
 GO
@@ -499,11 +501,6 @@ ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ValorId] [Tipo1] NOT NULL
 GO
 ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Valor2Id] [Tipo2] NULL
 GO
-CREATE NONCLUSTERED INDEX [IX2] ON [dbo].[Tabla1]
-(
-	[Valor2Id] ASC
-) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
 CREATE NONCLUSTERED INDEX [IX3] ON [dbo].[Tabla1]
 (
 	[ValorId] DESC,
@@ -514,21 +511,31 @@ CREATE NONCLUSTERED INDEX [IX1] ON [dbo].[Tabla1]
 (
 	[ValorId] ASC
 ) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [IX2] ON [dbo].[Tabla1]
+(
+	[Valor2Id] ASC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO</value>
   </data>
   <data name="TestIndexXML" xml:space="preserve">
     <value>USE TestIndexXML1
 GO
 
-CREATE NONCLUSTERED INDEX [IX_Tabla1] ON [dbo].[Tabla1]
-(
-	[ID] ASC
-) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
 CREATE PRIMARY XML INDEX [XML_IX_Tabla1] ON [dbo].[Tabla1]
 (
 	[Campo1]
 ) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+CREATE NONCLUSTERED INDEX [IX_Tabla1] ON [dbo].[Tabla1]
+(
+	[ID] ASC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO</value>
   </data>
   <data name="TestSynonyms" xml:space="preserve">
@@ -548,8 +555,6 @@ GO</value>
     <value>USE TestView1
 GO
 
-DROP VIEW [dbo].[Vista1]
-GO
 ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
 GO
 CREATE TABLE [dbo].[Tabla2]
@@ -580,17 +585,16 @@ GO
 EXEC sp_rename N'[dbo].[TempTabla1]',N'Tabla1', 'OBJECT'
 GO
 
-ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
-	(
-		[ID] ASC
-	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
 CREATE VIEW [dbo].[Vista1]  WITH SCHEMABINDING 
 AS
 SELECT     T1.ID, Valor + 'H' AS Valor, T2.Campo2
 FROM         dbo.Tabla1 T1
 INNER JOIN dbo.Tabla2 T2 ON T2.ID = T1.ID
-
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO</value>
   </data>
   <data name="TestViewComun" xml:space="preserve">
@@ -599,25 +603,22 @@ GO
 
 DROP VIEW [dbo].[Vista2]
 GO
-DROP VIEW [dbo].[Vista1]
+ALTER VIEW [dbo].[Vista1]
+AS
+SELECT     1 AS Test1, 2 AS Test2
 GO
 CREATE VIEW [dbo].[Vista3]
 AS
 SELECT     1 AS Test1, 2 AS Test2, 3 AS Test3
-
-GO
-CREATE VIEW dbo.Vista1
-AS
-SELECT     1 AS Test1, 2 AS Test2
 GO</value>
   </data>
   <data name="TestConstraintFKRemove" xml:space="preserve">
     <value>USE TestConstraintFKRemoveTable1
 GO
 
-ALTER TABLE [dbo].[Child] DROP CONSTRAINT [FK_Child_Parent]
-GO
 ALTER TABLE [dbo].[ChildChild] DROP CONSTRAINT [FK_ChildChild_Child]
+GO
+ALTER TABLE [dbo].[Child] DROP CONSTRAINT [FK_Child_Parent]
 GO
 ALTER TABLE [dbo].[Child] DROP CONSTRAINT [PK_Child]
 GO
@@ -648,6 +649,1665 @@ ALTER TABLE [dbo].[Child] ADD CONSTRAINT [PK_Child] PRIMARY KEY CLUSTERED
 	(
 		[ID] ASC
 	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestDataTypeDropTable" xml:space="preserve">
+    <value>USE TestDataTypeDropTable1
+GO
+
+DROP TABLE [dbo].[Tabla1]
+GO
+DROP TYPE [dbo].[NOMBRE]
+GO
+CREATE TYPE [dbo].[NOMBRE] FROM [char](50) NOT NULL
+GO
+CREATE TABLE [dbo].[Tabla2]
+(
+	[ID] [int] NOT NULL,
+	[Campo] [NOMBRE] NOT NULL,
+	[Campo2] [NOMBRE] NOT NULL CONSTRAINT [DF_Tabla1_Campo2] DEFAULT ('HOLA'),
+	CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestConstraintFKDisable" xml:space="preserve">
+    <value>USE TestConstraintFKDisable1
+GO
+
+ALTER TABLE [dbo].[TablaHija] DROP CONSTRAINT [FK_TablaHija_Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [FK_Habilitar]
+GO
+ALTER TABLE [dbo].[TablaHija] WITH NOCHECK ADD CONSTRAINT [FK_TablaHija_Tabla1] FOREIGN KEY
+	(
+		[Tabla1Id]
+	)
+	REFERENCES [dbo].[Tabla1]
+	(
+		[ID]
+	) NOT FOR REPLICATION
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [FK_Habilitar] FOREIGN KEY
+	(
+		[ID3]
+	)
+	REFERENCES [dbo].[Tabla1]
+	(
+		[ID]
+	)
+GO
+ALTER TABLE [dbo].[TablaHija] NOCHECK CONSTRAINT [FK_TablaHija_Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla1] CHECK CONSTRAINT [FK_Habilitar]
+GO
+ALTER TABLE [dbo].[Tabla1] NOCHECK CONSTRAINT [FK_Deshabilitar]
+GO</value>
+  </data>
+  <data name="TestDataTypeDeleteColumn" xml:space="preserve">
+    <value>USE TestDataTypeDeleteColumn1
+GO
+
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [varchar] (80) NOT NULL
+GO
+DROP TYPE [dbo].[NOMBRE]
+GO
+CREATE TYPE [dbo].[NOMBRE] FROM [varchar](80) NOT NULL
+GO
+CREATE TABLE [dbo].[TempTabla1]
+(
+	[ID] [int] NOT NULL,
+	[Campo1] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[Campo3] [NOMBRE] NOT NULL,
+) ON [PRIMARY]
+GO
+
+INSERT INTO [dbo].[TempTabla1] ([ID],[Campo1],[Campo3]) SELECT [ID],[Campo1],'' FROM [dbo].[Tabla1]
+DROP TABLE [dbo].[Tabla1]
+GO
+EXEC sp_rename N'[dbo].[TempTabla1]',N'Tabla1', 'OBJECT'
+GO
+
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestDataTypePK" xml:space="preserve">
+    <value>USE TestDataTypePK1
+GO
+
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ID] [int] NOT NULL
+GO
+DROP TYPE [dbo].[PepeKey]
+GO
+CREATE TYPE [dbo].[PepeKey] FROM [int] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ID] [PepeKey] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestDataTypeUsed" xml:space="preserve">
+    <value>USE TestDataTypeUseTable1
+GO
+
+ALTER TABLE [dbo].[TablaChange2] DROP CONSTRAINT [DF_TablaChange2_Campo2]
+GO
+ALTER TABLE [dbo].[TablaChangeRebuild1] DROP CONSTRAINT [PK_TablaChangeRebuild1]
+GO
+ALTER TABLE [dbo].[TablaChange2] ALTER COLUMN [Campo1] [varchar] (50) NOT NULL
+GO
+ALTER TABLE [dbo].[TablaChange2] ALTER COLUMN [Campo2] [varchar] (50) NOT NULL
+GO
+ALTER TABLE [dbo].[TablaChangeRebuild1] ALTER COLUMN [ID] [int] NOT NULL
+GO
+ALTER TABLE [dbo].[TablaChangeRebuild1] ALTER COLUMN [Campo3] [varchar] (50) NOT NULL
+GO
+ALTER TABLE [dbo].[TablaChange1] ALTER COLUMN [Campo2] [varchar] (50) NULL
+GO
+DROP TYPE [dbo].[Primario]
+GO
+CREATE TYPE [dbo].[Primario] FROM [int] NULL
+GO
+DROP TYPE [dbo].[Tipo1]
+GO
+CREATE TYPE [dbo].[Tipo1] FROM [varchar](50) NOT NULL
+GO
+ALTER TABLE [dbo].[TablaChangeRebuild1] ALTER COLUMN [Campo3] [Tipo1] NOT NULL
+GO
+ALTER TABLE [dbo].[TablaChange2] ALTER COLUMN [Campo1] [Tipo1] NOT NULL
+GO
+ALTER TABLE [dbo].[TablaChangeRebuild1] ALTER COLUMN [ID] [Primario] NOT NULL
+GO
+ALTER TABLE [dbo].[TablaChange1] ALTER COLUMN [Campo2] [Tipo1] NULL
+GO
+ALTER TABLE [dbo].[TablaChange2] ALTER COLUMN [Campo2] [Tipo1] NOT NULL
+GO
+ALTER TABLE [dbo].[TablaChange2] ADD CONSTRAINT [DF_TablaChange2_Campo2] DEFAULT ('Hola') FOR [Campo2]
+GO
+ALTER TABLE [dbo].[TablaChangeRebuild1] ADD CONSTRAINT [PK_TablaChangeRebuild1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC,
+		[Campo2] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestDataTypeFormula" xml:space="preserve">
+    <value>USE TestDataTypeFormula1
+GO
+
+ALTER TABLE [dbo].[Tabla1] DROP COLUMN [CampoFormula]
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [varchar] (100) NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [char] (10) NOT NULL
+GO
+DROP TYPE [dbo].[Tipo1]
+GO
+CREATE TYPE [dbo].[Tipo1] FROM [varchar](100) NOT NULL
+GO
+DROP TYPE [dbo].[Tipo2]
+GO
+CREATE TYPE [dbo].[Tipo2] FROM [char](10) NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [Tipo2] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [Tipo1] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ADD [CampoFormula] AS ([Campo1]+[Campo2]) PERSISTED
+GO</value>
+  </data>
+  <data name="TestConstraintFKType" xml:space="preserve">
+    <value>USE TestConstraintFKType1
+GO
+
+ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [FK_Tabla2_Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [FK_Tabla2_Tabla2]
+GO
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [IX_Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla1] DROP COLUMN [Campo2]
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ID] [smallint] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Tabla1Id] [smallint] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Tabla1IdFormula] [smallint] NOT NULL
+GO
+DROP TYPE [dbo].[MyInt]
+GO
+CREATE TYPE [dbo].[MyInt] FROM [smallint] NOT NULL
+GO
+CREATE TABLE [dbo].[TempTabla1]
+(
+	[ID] [MyInt] NOT NULL,
+	[Campo1] [smallint] NOT NULL,
+	[Campo2] AS ([ID]+[Campo1]) PERSISTED
+) ON [PRIMARY]
+GO
+
+INSERT INTO [dbo].[TempTabla1] ([ID],[Campo1]) SELECT [ID],[Campo1] FROM [dbo].[Tabla1]
+DROP TABLE [dbo].[Tabla1]
+GO
+EXEC sp_rename N'[dbo].[TempTabla1]',N'Tabla1', 'OBJECT'
+GO
+
+ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Tabla1Id] [MyInt] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Tabla1IdFormula] [MyInt] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [IX_Tabla1] UNIQUE NONCLUSTERED
+	(
+		[Campo2] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Tabla2] ADD CONSTRAINT [FK_Tabla2_Tabla2] FOREIGN KEY
+	(
+		[Tabla1IdFormula]
+	)
+	REFERENCES [dbo].[Tabla1]
+	(
+		[Campo2]
+	)
+GO
+ALTER TABLE [dbo].[Tabla2] ADD CONSTRAINT [FK_Tabla2_Tabla1] FOREIGN KEY
+	(
+		[Tabla1Id]
+	)
+	REFERENCES [dbo].[Tabla1]
+	(
+		[ID]
+	)
+GO</value>
+  </data>
+  <data name="TestColumnIdentity" xml:space="preserve">
+    <value>USE TestColumnIdentity1
+GO
+
+ALTER TABLE [dbo].[TablaAlterIdentityNotForReplication] DROP CONSTRAINT [PK_TablaAlterIdentityNotForReplication]
+GO
+ALTER TABLE [dbo].[TablaDropIdentity1] DROP CONSTRAINT [PK_TablaDropIdentity]
+GO
+ALTER TABLE [dbo].[TablaAddIdentity1] DROP CONSTRAINT [PK_TablaAddIdentity1]
+GO
+ALTER TABLE [dbo].[TablaDropColumnIdentity1] DROP COLUMN [ID]
+GO
+CREATE TABLE [dbo].[TempTablaAlterIdentityNotForReplication]
+(
+	[ID] [int] IDENTITY (1,1) NOT FOR REPLICATION NOT NULL,
+	[Campo2] [varchar] (50) COLLATE Modern_Spanish_CI_AS NULL,
+	[Campo3] [varchar] (50) COLLATE Modern_Spanish_CI_AS NULL
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTablaAlterIdentityNotForReplication] ON
+INSERT INTO [dbo].[TempTablaAlterIdentityNotForReplication] ([ID],[Campo2],[Campo3]) SELECT [ID],[Campo2],[Campo3] FROM [dbo].[TablaAlterIdentityNotForReplication]
+SET IDENTITY_INSERT [dbo].[TempTablaAlterIdentityNotForReplication] OFF
+GO
+
+DROP TABLE [dbo].[TablaAlterIdentityNotForReplication]
+GO
+EXEC sp_rename N'[dbo].[TempTablaAlterIdentityNotForReplication]',N'TablaAlterIdentityNotForReplication', 'OBJECT'
+GO
+
+CREATE TABLE [dbo].[TempTablaAddColumnIdentity1]
+(
+	[ID] [int] IDENTITY (1,1) NOT NULL,
+	[Campo2] [varchar] (50) COLLATE Modern_Spanish_CI_AS NULL
+) ON [PRIMARY]
+GO
+
+INSERT INTO [dbo].[TempTablaAddColumnIdentity1] ([Campo2]) SELECT [Campo2] FROM [dbo].[TablaAddColumnIdentity1]
+DROP TABLE [dbo].[TablaAddColumnIdentity1]
+GO
+EXEC sp_rename N'[dbo].[TempTablaAddColumnIdentity1]',N'TablaAddColumnIdentity1', 'OBJECT'
+GO
+
+CREATE TABLE [dbo].[TempTablaAddIdentity1]
+(
+	[ID] [int] IDENTITY (1,1) NOT NULL,
+	[Campo2] [varchar] (50) COLLATE Modern_Spanish_CI_AS NULL
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTablaAddIdentity1] ON
+INSERT INTO [dbo].[TempTablaAddIdentity1] ([ID],[Campo2]) SELECT [ID],[Campo2] FROM [dbo].[TablaAddIdentity1]
+SET IDENTITY_INSERT [dbo].[TempTablaAddIdentity1] OFF
+GO
+
+DROP TABLE [dbo].[TablaAddIdentity1]
+GO
+EXEC sp_rename N'[dbo].[TempTablaAddIdentity1]',N'TablaAddIdentity1', 'OBJECT'
+GO
+
+CREATE TABLE [dbo].[TempTablaDropIdentity1]
+(
+	[ID] [int] NOT NULL,
+	[Campo] [varchar] (50) COLLATE Modern_Spanish_CI_AS NULL
+) ON [PRIMARY]
+GO
+
+INSERT INTO [dbo].[TempTablaDropIdentity1] ([ID],[Campo]) SELECT [ID],[Campo] FROM [dbo].[TablaDropIdentity1]
+DROP TABLE [dbo].[TablaDropIdentity1]
+GO
+EXEC sp_rename N'[dbo].[TempTablaDropIdentity1]',N'TablaDropIdentity1', 'OBJECT'
+GO
+
+ALTER TABLE [dbo].[TablaAlterIdentityNotForReplication] ADD CONSTRAINT [PK_TablaAlterIdentityNotForReplication] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[TablaDropIdentity1] ADD CONSTRAINT [PK_TablaDropIdentity] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[TablaAddIdentity1] ADD CONSTRAINT [PK_TablaAddIdentity1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestColumnFormula" xml:space="preserve">
+    <value>USE TestColumnFormula1
+GO
+
+ALTER TABLE [dbo].[TablaFormulaPersisted] DROP CONSTRAINT [PK_TablaFormulaPersisted]
+GO
+ALTER TABLE [dbo].[TablaFormula4] DROP CONSTRAINT [PK_TablaFormula4]
+GO
+ALTER TABLE [dbo].[TablaFormula2] ADD 
+[CampoFormula1] AS (([Campo1]+[Campo2])+'d') PERSISTED,
+[CampoFormula2] AS ([ID]+(1))
+GO
+ALTER TABLE [dbo].[TablaDropFormula1] DROP COLUMN [CampoFormula1],[CampoFormula2]
+GO
+CREATE TABLE [dbo].[TempTablaFormulaPersisted]
+(
+	[ID] [int] IDENTITY (1,1) NOT NULL,
+	[Campo1] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[Campo2] AS ([Campo1]+(1)) PERSISTED
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTablaFormulaPersisted] ON
+INSERT INTO [dbo].[TempTablaFormulaPersisted] ([ID],[Campo1]) SELECT [ID],[Campo1] FROM [dbo].[TablaFormulaPersisted]
+SET IDENTITY_INSERT [dbo].[TempTablaFormulaPersisted] OFF
+GO
+
+DROP TABLE [dbo].[TablaFormulaPersisted]
+GO
+EXEC sp_rename N'[dbo].[TempTablaFormulaPersisted]',N'TablaFormulaPersisted', 'OBJECT'
+GO
+
+CREATE TABLE [dbo].[TempTablaFormula4]
+(
+	[ID] [int] NOT NULL,
+	[Campo1] [char] (10) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[Campo2] AS ([Campo1]+(1))
+) ON [PRIMARY]
+GO
+
+INSERT INTO [dbo].[TempTablaFormula4] ([ID],[Campo1]) SELECT [ID],[Campo1] FROM [dbo].[TablaFormula4]
+DROP TABLE [dbo].[TablaFormula4]
+GO
+EXEC sp_rename N'[dbo].[TempTablaFormula4]',N'TablaFormula4', 'OBJECT'
+GO
+
+CREATE TABLE [dbo].[TempTablaFormula3]
+(
+	[ID] [int] NOT NULL,
+	[Campo1] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[Campo2] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[CampoFormula1] AS (([Campo1]+[Campo2])+'d') PERSISTED,
+	[CampoFormula2] AS ([ID]+(2))
+) ON [PRIMARY]
+GO
+
+INSERT INTO [dbo].[TempTablaFormula3] ([ID],[Campo1],[Campo2]) SELECT [ID],[Campo1],[Campo2] FROM [dbo].[TablaFormula3]
+DROP TABLE [dbo].[TablaFormula3]
+GO
+EXEC sp_rename N'[dbo].[TempTablaFormula3]',N'TablaFormula3', 'OBJECT'
+GO
+
+ALTER TABLE [dbo].[TablaFormula4] ADD CONSTRAINT [PK_TablaFormula4] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[TablaFormulaPersisted] ADD CONSTRAINT [PK_TablaFormulaPersisted] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestConstratinFKCircular" xml:space="preserve">
+    <value>USE TestConstraintFKCircular1
+GO
+
+CREATE TABLE [dbo].[TablaPadre]
+(
+	[ID] [int] IDENTITY (2,2) NOT NULL,
+	[Campo1] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[IDHijo] [int] NOT NULL,
+	CONSTRAINT [PK_TablaPadre] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+) ON [PRIMARY]
+GO
+CREATE TABLE [dbo].[TablaHija]
+(
+	[ID] [int] IDENTITY (2,2) NOT NULL,
+	[IDPadre] [int] NOT NULL,
+	CONSTRAINT [PK_TablaHija] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[TablaPadre] ADD CONSTRAINT [FK_TablaPadre_TablaHija] FOREIGN KEY
+	(
+		[IDHijo]
+	)
+	REFERENCES [dbo].[TablaHija]
+	(
+		[ID]
+	)
+GO
+
+ALTER TABLE [dbo].[TablaHija] ADD CONSTRAINT [FK_TablaHija_TablaPadre] FOREIGN KEY
+	(
+		[IDPadre]
+	)
+	REFERENCES [dbo].[TablaPadre]
+	(
+		[ID]
+	)
+GO</value>
+  </data>
+  <data name="TestTableAdd" xml:space="preserve">
+    <value>USE TestTableAdd1
+GO
+
+DROP TABLE [dbo].[TablaDelete]
+GO
+CREATE TABLE [dbo].[TablaAdd]
+(
+	[ID] [int] IDENTITY (2,2) NOT NULL,
+	[Campo1] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL CONSTRAINT [DF_TablaAdd_Campo1] DEFAULT ('Hola'),
+	[ParentId] [int] NOT NULL,
+	[CampoF] AS ([ID]*(0.2)),
+	CONSTRAINT [PK_TablaAdd] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[TablaAdd] ADD CONSTRAINT [FK_TablaAdd_TablaAdd1] FOREIGN KEY
+	(
+		[ParentId]
+	)
+	REFERENCES [dbo].[TablaAdd]
+	(
+		[ID]
+	)
+GO</value>
+  </data>
+  <data name="TestSchema" xml:space="preserve">
+    <value>USE TestSchema1
+GO
+
+DROP TABLE [SchemaCrear].[Tabla1]
+GO
+CREATE SCHEMA [SchemaBorrar] AUTHORIZATION [dbo]
+GO
+CREATE TABLE [SchemaBorrar].[Tabla1]
+(
+	[ID] [int] NOT NULL,
+	CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+DROP SCHEMA [SchemaCrear]
+GO</value>
+  </data>
+  <data name="TestFunctionSimple" xml:space="preserve">
+    <value>USE TestFunctionSimple1
+GO
+
+DROP FUNCTION [dbo].[FuncionDrop]
+GO
+ALTER FUNCTION [dbo].[FuncionAlter]
+(
+	@ID	int
+)
+RETURNS int
+AS
+BEGIN
+	RETURN @ID + 3
+END
+GO
+CREATE FUNCTION [dbo].[FuncionCrear]
+(
+	@ID	int
+)
+RETURNS int
+AS
+BEGIN
+	RETURN @ID + 1
+END
+GO</value>
+  </data>
+  <data name="TestFunctionSchemaBound1" xml:space="preserve">
+    <value>USE TestFunctionSchemaBound1
+GO
+
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+GO
+DROP FUNCTION [dbo].[FuncionAlter]
+GO
+CREATE TABLE [dbo].[TempTabla1]
+(
+	[ID] [int] IDENTITY (2,2) NOT NULL,
+	[Campo1] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTabla1] ON
+INSERT INTO [dbo].[TempTabla1] ([ID],[Campo1]) SELECT [ID],[Campo1] FROM [dbo].[Tabla1]
+SET IDENTITY_INSERT [dbo].[TempTabla1] OFF
+GO
+
+DROP TABLE [dbo].[Tabla1]
+GO
+EXEC sp_rename N'[dbo].[TempTabla1]',N'Tabla1', 'OBJECT'
+GO
+
+CREATE FUNCTION [dbo].[FuncionAlter] 
+(
+	@ID	int
+)
+RETURNS int
+WITH SCHEMABINDING 
+AS
+BEGIN
+	DECLARE @ID2 int
+	SELECT @ID2 = ID FROM dbo.Tabla1 WHERE ID = @ID
+
+	RETURN @ID2
+END
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestFunctionSchemaBoundChange1" xml:space="preserve">
+    <value>USE TestFunctionSchemaBoundChange1
+GO
+
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+GO
+ALTER FUNCTION [dbo].[FuncionAlter] 
+(
+	@ID	int
+)
+RETURNS int
+ 
+AS
+BEGIN
+	DECLARE @ID2 int
+	SELECT @ID2 = ID +1 FROM dbo.Tabla1 WHERE ID = @ID
+
+	RETURN @ID2
+END
+GO
+CREATE TABLE [dbo].[TempTabla1]
+(
+	[ID] [int] IDENTITY (1,2) NOT NULL,
+	[Campo1] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTabla1] ON
+INSERT INTO [dbo].[TempTabla1] ([ID],[Campo1]) SELECT [ID],[Campo1] FROM [dbo].[Tabla1]
+SET IDENTITY_INSERT [dbo].[TempTabla1] OFF
+GO
+
+DROP TABLE [dbo].[Tabla1]
+GO
+EXEC sp_rename N'[dbo].[TempTabla1]',N'Tabla1', 'OBJECT'
+GO
+
+ALTER FUNCTION [dbo].[FuncionAlter] 
+(
+	@ID	int
+)
+RETURNS int
+WITH SCHEMABINDING 
+AS
+BEGIN
+	DECLARE @ID2 int
+	SELECT @ID2 = ID +1 FROM dbo.Tabla1 WHERE ID = @ID
+
+	RETURN @ID2
+END
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestTableChangeAll" xml:space="preserve">
+    <value>USE TestTableChangeAll1
+GO
+
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+GO
+CREATE TABLE [dbo].[TempUsuarios]
+(
+	[UsuarioId] [int] IDENTITY (1,1) NOT NULL,
+	[nombre] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[apellido] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[password] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[ADM_AgenciaID] [int] NOT NULL,
+	[WEB] [bit] NOT NULL,
+	[Master] [bit] NULL,
+	[Carrito] [bit] NOT NULL CONSTRAINT [DF_Usuarios_Carrito] DEFAULT ((0)),
+	[Sexo] [varchar] (20) COLLATE Modern_Spanish_CI_AS NULL,
+	[LugarTrabajo] [bit] NOT NULL CONSTRAINT [DF_Usuarios_LugarTrabajoID] DEFAULT ((1)),
+	[SucursalID] [int] NOT NULL CONSTRAINT [DF_Usuarios_SucursalID] DEFAULT ((0)),
+	[SectorID] [int] NOT NULL CONSTRAINT [DF_Usuarios_SectorID] DEFAULT ((0)),
+	[CargoID] [int] NOT NULL CONSTRAINT [DF_Usuarios_CargoID] DEFAULT ((0)),
+	[Medio1ID] [int] NOT NULL CONSTRAINT [DF_Usuarios_Medio1ID] DEFAULT ((0)),
+	[Dato1] [varchar] (200) COLLATE Modern_Spanish_CI_AS NULL,
+	[Medio2ID] [int] NOT NULL CONSTRAINT [DF_Usuarios_Medio2ID] DEFAULT ((0)),
+	[Dato2] [varchar] (200) COLLATE Modern_Spanish_CI_AS NULL,
+	[Medio3ID] [int] NOT NULL CONSTRAINT [DF_Usuarios_Medio3ID] DEFAULT ((0)),
+	[Dato3] [varchar] (200) COLLATE Modern_Spanish_CI_AS NULL,
+	[Medio4ID] [int] NOT NULL CONSTRAINT [DF_Usuarios_Medio4ID] DEFAULT ((0)),
+	[Dato4] [varchar] (200) COLLATE Modern_Spanish_CI_AS NULL,
+	[Administrador] [bit] NOT NULL CONSTRAINT [DF_Usuarios_Administrador] DEFAULT ((0)),
+	[EnLinea] [bit] NOT NULL CONSTRAINT [DF_Usuarios_EnLinea] DEFAULT ((0)),
+	[Foto] [varchar] (200) COLLATE Modern_Spanish_CI_AS NOT NULL CONSTRAINT [DF_Usuarios_Foto] DEFAULT (''),
+	[ExtraNet] [bit] NOT NULL CONSTRAINT [DF_Usuarios_ExtraNet] DEFAULT ((0)),
+	[AteCliente] [bit] NOT NULL CONSTRAINT [DF_Usuarios_AteCliente] DEFAULT ((0))
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempUsuarios] ON
+INSERT INTO [dbo].[TempUsuarios] ([UsuarioId],[nombre],[password],[apellido],[ADM_AgenciaID],[WEB],[Carrito],[LugarTrabajo],[SucursalID],[SectorID],[CargoID],[Medio1ID],[Medio2ID],[Medio3ID],[Medio4ID],[Administrador],[EnLinea],[Foto],[ExtraNet],[AteCliente]) SELECT [UsuarioId],ISNULL([nombre],''),ISNULL([password],''),'',0,0,((0)),((1)),((0)),((0)),((0)),((0)),((0)),((0)),((0)),((0)),((0)),(''),((0)),((0)) FROM [dbo].[Usuarios]
+SET IDENTITY_INSERT [dbo].[TempUsuarios] OFF
+GO
+
+DROP TABLE [dbo].[Usuarios]
+GO
+EXEC sp_rename N'[dbo].[TempUsuarios]',N'Usuarios', 'OBJECT'
+GO
+
+CREATE TABLE [dbo].[TempTabla1]
+(
+	[ID1] [int] NOT NULL,
+	[Campo3] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[Campo4] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+) ON [PRIMARY]
+GO
+
+INSERT INTO [dbo].[TempTabla1] ([ID1],[Campo3],[Campo4]) SELECT [ID1],'','' FROM [dbo].[Tabla1]
+DROP TABLE [dbo].[Tabla1]
+GO
+EXEC sp_rename N'[dbo].[TempTabla1]',N'Tabla1', 'OBJECT'
+GO
+
+ALTER TABLE [dbo].[Usuarios] ADD CONSTRAINT [PK_Usuarios] PRIMARY KEY CLUSTERED
+	(
+		[UsuarioID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestFunctionOwner" xml:space="preserve">
+    <value>USE TestFunctionOwner1
+GO
+
+DROP FUNCTION [dbo].[Funcion2]
+GO
+CREATE SCHEMA [Test] AUTHORIZATION [dbo]
+GO
+CREATE FUNCTION [dbo].[Funcion1]
+(
+	@ID	int
+)
+RETURNS int
+AS
+BEGIN
+	RETURN @ID +1
+END
+GO
+CREATE FUNCTION [Test].[Funcion1]
+(
+	@ID	int
+)
+RETURNS int
+AS
+BEGIN
+	RETURN @ID +1
+END
+GO</value>
+  </data>
+  <data name="TestFuncionEnter" xml:space="preserve">
+    <value>USE TestFunctionEnter1
+GO
+
+ALTER FUNCTION [Nuevo].[Test12]
+(
+	@ID	int
+)
+RETURNS int
+AS
+BEGIN
+	RETURN @ID + 2
+END
+GO
+ALTER FUNCTION [dbo].[Test11]
+(
+	@ID	int
+)
+RETURNS int
+AS
+BEGIN
+	RETURN @ID + 1
+END
+GO
+--CREATE FUNCTION [Nuevo].[Test13]*/
+/*CREATE FUNCTION [Nuevo].[Test13]*/
+/*CREATE FUNCTION [Nuevo].[Test13]*/
+ALTER FUNCTION [Nuevo].[Test13]
+/*CREATE FUNCTION [Nuevo].[Test13]*/
+(
+	@ID	int
+)
+RETURNS int
+AS
+BEGIN
+	--EXEC 'CREATE FUNCTION [Nuevo].[Test13]'
+
+	RETURN @ID + 2
+/*DD*/
+END
+/*END*/
+GO
+/********************************************************************
+ * Name          : dbo.StpSelEstadisticaVuelo
+ * Description   : Permite extraer los valores para estadistica de vuelo.
+ * Table name    : reservaPasajeroVuelo,Aero_Disponibles_Fechas
+ * Company       : Aladia
+ * Author        : Adrian Torres Martinez
+ * Version       : 1.0
+ * Last Modified : 18/04/2007
+ ********************************************************************/
+CREATE FUNCTION [dbo].[Test22]
+(
+	@ID	int
+)
+RETURNS int
+AS
+BEGIN
+	RETURN @ID + 1
+END
+GO</value>
+  </data>
+  <data name="TestNombreLargo" xml:space="preserve">
+    <value>USE [Test Nombre Largo1]
+GO
+
+CREATE RULE [dbo].[Mi Nueva Rule] 
+AS
+	@value &gt; 1
+GO
+ALTER TABLE [dbo].[Tabla Test 1] DROP CONSTRAINT [CK_Tabla Test 1]
+GO
+ALTER TABLE [dbo].[Tabla Test 1] DROP CONSTRAINT [DF_Tabla Test 1_Campo Descripcion]
+GO
+DROP TRIGGER [dbo].[Lindo Trig]
+GO
+DROP INDEX [IX_Tabla Test 1] ON [dbo].[Tabla Test 1]
+GO
+CREATE TYPE [dbo].[Mi Nuevo Tipo] FROM [bigint] NOT NULL
+GO
+EXEC sp_bindrule N'Mi Nueva Rule', N'Mi Nuevo Tipo','futureonly'
+GO
+ALTER TABLE [dbo].[Tabla Test 1] ALTER COLUMN [Campo Indice] [Mi Nuevo Tipo] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla Test 1] ADD 
+[Parent Id] [int] NULL
+GO
+EXEC sp_bindrule N'Mi Nueva Rule', N'[Tabla Test 1].[Campo Indice]','futureonly'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [ID Test 2] ON [dbo].[Tabla Test 1]
+(
+	[ID Tabla 1] ASC,
+	[Parent Id] ASC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Tabla Test 1] ADD CONSTRAINT [CK_Tabla Test 1] CHECK  (([ID Tabla 1]&gt;(0)))
+GO
+ALTER TABLE [dbo].[Tabla Test 1] ADD CONSTRAINT [DF_Tabla Test 1_Campo Descripcion] DEFAULT ('Hola Mundo!!!!!') FOR [Campo Descripcion]
+GO
+ALTER TABLE [dbo].[Tabla Test 1] ADD CONSTRAINT [FK_Tabla Test 1_Tabla Test 1] FOREIGN KEY
+	(
+		[Parent Id]
+	)
+	REFERENCES [dbo].[Tabla Test 1]
+	(
+		[ID Tabla 1]
+	)
+GO</value>
+  </data>
+  <data name="TestFunctionSchemaBoundMultiple1" xml:space="preserve">
+    <value>USE TestFunctionSchemaBoundMultiple1
+GO
+
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+GO
+DROP FUNCTION [dbo].[FuncionAlterT4]
+GO
+DROP FUNCTION [dbo].[FuncionAlterT3]
+GO
+DROP FUNCTION [dbo].[FuncionAlter4]
+GO
+DROP FUNCTION [dbo].[FuncionAlter3]
+GO
+DROP FUNCTION [dbo].[FuncionAlterT2]
+GO
+DROP FUNCTION [dbo].[FuncionAlter2]
+GO
+ALTER FUNCTION [dbo].[FuncionAlter] 
+(
+	@ID	int
+)
+RETURNS int
+ 
+AS
+BEGIN
+	DECLARE @ID2 int
+	SELECT @ID2 = ID +2 FROM dbo.Tabla1 WHERE ID = @ID
+
+	RETURN @ID2
+END
+GO
+CREATE TABLE [dbo].[TempTabla1]
+(
+	[ID] [int] IDENTITY (1,1) NOT NULL,
+	[Campo1] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+	[Campo2] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTabla1] ON
+INSERT INTO [dbo].[TempTabla1] ([ID],[Campo1],[Campo2]) SELECT [ID],[Campo1],'' FROM [dbo].[Tabla1]
+SET IDENTITY_INSERT [dbo].[TempTabla1] OFF
+GO
+
+DROP TABLE [dbo].[Tabla1]
+GO
+EXEC sp_rename N'[dbo].[TempTabla1]',N'Tabla1', 'OBJECT'
+GO
+
+ALTER FUNCTION [dbo].[FuncionAlterS1]
+(
+	@ID	int
+)
+RETURNS int
+AS
+BEGIN
+	DECLARE @ID2 int
+	SELECT @ID2 = ID +2 FROM dbo.Tabla1 WHERE ID = @ID
+
+	RETURN @ID2
+END
+GO
+ALTER FUNCTION [dbo].[FuncionAlterT1] 
+(
+	@ID	int
+)
+RETURNS int
+WITH SCHEMABINDING 
+AS
+BEGIN
+	DECLARE @ID2 int
+	SELECT @ID2 = ID +2 FROM dbo.Tabla2 WHERE ID = @ID
+
+	RETURN @ID2
+END
+GO
+ALTER FUNCTION [dbo].[FuncionAlter] 
+(
+	@ID	int
+)
+RETURNS int
+WITH SCHEMABINDING 
+AS
+BEGIN
+	DECLARE @ID2 int
+	SELECT @ID2 = ID +2 FROM dbo.Tabla1 WHERE ID = @ID
+
+	RETURN @ID2
+END
+GO
+CREATE FUNCTION [dbo].[FuncionAlter2] 
+(
+	@ID	int
+)
+RETURNS int
+WITH SCHEMABINDING 
+AS
+BEGIN
+	DECLARE @ID2 int
+	SELECT @ID2 = ID +2 FROM dbo.Tabla1 WHERE dbo.FuncionAlter(ID) = @ID
+
+	RETURN @ID2
+END
+GO
+CREATE FUNCTION [dbo].[FuncionAlter3] 
+(
+	@ID	int
+)
+RETURNS int
+WITH SCHEMABINDING 
+AS
+BEGIN
+	RETURN dbo.FuncionAlter2(@ID)
+END
+GO
+CREATE FUNCTION [dbo].[FuncionAlterT2] 
+(
+	@ID	int
+)
+RETURNS int
+WITH SCHEMABINDING 
+AS
+BEGIN
+	DECLARE @ID2 int
+	SELECT @ID2 = ID +2 FROM dbo.Tabla2 WHERE dbo.FuncionAlterT1(ID) = @ID + 1
+
+	RETURN @ID2
+END
+GO
+CREATE FUNCTION [dbo].[FuncionAlterT3] 
+(
+	@ID	int
+)
+RETURNS int
+WITH SCHEMABINDING 
+AS
+BEGIN
+	DECLARE @ID2 int
+	SELECT @ID2 = ID +2 FROM dbo.Tabla2 WHERE dbo.FuncionAlterT2(ID) = @ID + 1
+
+	RETURN @ID2
+END
+GO
+CREATE FUNCTION [dbo].[FuncionAlter4] 
+(
+	@ID	int
+)
+RETURNS int
+WITH SCHEMABINDING 
+AS
+BEGIN
+	RETURN dbo.FuncionAlter3(@ID) + dbo.FuncionAlter2(@ID)
+END
+GO
+CREATE FUNCTION [dbo].[FuncionAlter5] 
+(
+	@ID	int
+)
+RETURNS int
+WITH SCHEMABINDING 
+AS
+BEGIN
+	RETURN dbo.FuncionAlter4(@ID) + dbo.FuncionAlter2(@ID) + 1
+END
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestXMLSchema" xml:space="preserve">
+    <value>USE TestXMLSchema1
+GO
+
+DROP XML SCHEMA COLLECTION [dbo].[DropSchema]
+GO
+DROP XML SCHEMA COLLECTION [dbo].[RebuildSchema]
+GO
+DROP XML SCHEMA COLLECTION [dbo].[AdditionalContactInfoSchemaCollection]
+GO
+CREATE XML SCHEMA COLLECTION [dbo].[AddSchema] AS N'&lt;xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo"&gt;&lt;xsd:element name="AdditionalContactInfo"&gt;&lt;xsd:complexType mixed="true"&gt;&lt;xsd:complexContent mixed="true"&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:any namespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactRecord http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" minOccurs="0" maxOccurs="unbounded" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;/xsd:element&gt;&lt;/xsd:schema&gt;&lt;xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactRecord" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactRecord"&gt;&lt;xsd:element name="ContactRecord"&gt;&lt;xsd:complexType mixed="true"&gt;&lt;xsd:complexContent mixed="true"&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xsd:any namespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" /&gt;&lt;/xsd:choice&gt;&lt;xsd:attribute name="date" type="xsd:date" /&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;/xsd:element&gt;&lt;/xsd:schema&gt;&lt;xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" elementFormDefault="qualified"&gt;&lt;xsd:element name="eMail" type="t:eMailType" /&gt;&lt;xsd:element name="facsimileTelephoneNumber" type="t:phoneNumberType" /&gt;&lt;xsd:element name="homePostalAddress" type="t:addressType" /&gt;&lt;xsd:element name="internationaliSDNNumber" type="t:phoneNumberType" /&gt;&lt;xsd:element name="mobile" type="t:phoneNumberType" /&gt;&lt;xsd:element name="pager" type="t:phoneNumberType" /&gt;&lt;xsd:element name="physicalDeliveryOfficeName" type="t:addressType" /&gt;&lt;xsd:element name="registeredAddress" type="t:addressType" /&gt;&lt;xsd:element name="telephoneNumber" type="t:phoneNumberType" /&gt;&lt;xsd:element name="telexNumber" type="t:phoneNumberType" /&gt;&lt;xsd:complexType name="addressType"&gt;&lt;xsd:complexContent&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:element name="Street" type="xsd:string" maxOccurs="2" /&gt;&lt;xsd:element name="City" type="xsd:string" /&gt;&lt;xsd:element name="StateProvince" type="xsd:string" /&gt;&lt;xsd:element name="PostalCode" type="xsd:string" minOccurs="0" /&gt;&lt;xsd:element name="CountryRegion" type="xsd:string" /&gt;&lt;xsd:element name="SpecialInstructions" type="t:specialInstructionsType" minOccurs="0" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;xsd:complexType name="eMailType"&gt;&lt;xsd:complexContent&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:element name="eMailAddress" type="xsd:string" /&gt;&lt;xsd:element name="SpecialInstructions" type="t:specialInstructionsType" minOccurs="0" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;xsd:complexType name="phoneNumberType"&gt;&lt;xsd:complexContent&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:element name="number"&gt;&lt;xsd:simpleType&gt;&lt;xsd:restriction base="xsd:string"&gt;&lt;xsd:pattern value="[0-9\(\)\-]*" /&gt;&lt;/xsd:restriction&gt;&lt;/xsd:simpleType&gt;&lt;/xsd:element&gt;&lt;xsd:element name="SpecialInstructions" type="t:specialInstructionsType" minOccurs="0" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;xsd:complexType name="specialInstructionsType" mixed="true"&gt;&lt;xsd:complexContent mixed="true"&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:any namespace="http://schemas.microsoft.com/sqlserver/2004/06/adventure-works/ContactTypes" maxOccurs="unbounded" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;/xsd:schema&gt;'
+GO
+CREATE XML SCHEMA COLLECTION [dbo].[RebuildSchema] AS N'&lt;xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo"&gt;&lt;xsd:element name="AdditionalContactInfo"&gt;&lt;xsd:complexType mixed="true"&gt;&lt;xsd:complexContent mixed="true"&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:any namespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactRecord http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" minOccurs="0" maxOccurs="unbounded" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;/xsd:element&gt;&lt;/xsd:schema&gt;&lt;xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactRecord" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactRecord"&gt;&lt;xsd:element name="ContactRecord"&gt;&lt;xsd:complexType mixed="true"&gt;&lt;xsd:complexContent mixed="true"&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xsd:any namespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" /&gt;&lt;/xsd:choice&gt;&lt;xsd:attribute name="date" type="xsd:date" /&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;/xsd:element&gt;&lt;/xsd:schema&gt;&lt;xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" elementFormDefault="qualified"&gt;&lt;xsd:element name="eMail" type="t:eMailType" /&gt;&lt;xsd:element name="facsimileTelephoneNumber" type="t:phoneNumberType" /&gt;&lt;xsd:element name="homePostalAddress" type="t:addressType" /&gt;&lt;xsd:element name="internationaliSDNNumber" type="t:phoneNumberType" /&gt;&lt;xsd:element name="mobile" type="t:phoneNumberType" /&gt;&lt;xsd:element name="pager" type="t:phoneNumberType" /&gt;&lt;xsd:element name="physicalDeliveryOfficeName" type="t:addressType" /&gt;&lt;xsd:element name="registeredAddress" type="t:addressType" /&gt;&lt;xsd:element name="telephoneNumber" type="t:phoneNumberType" /&gt;&lt;xsd:element name="telexNumber" type="t:phoneNumberType" /&gt;&lt;xsd:complexType name="addressType"&gt;&lt;xsd:complexContent&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:element name="Street" type="xsd:string" maxOccurs="2" /&gt;&lt;xsd:element name="City" type="xsd:string" /&gt;&lt;xsd:element name="StateProvince" type="xsd:string" /&gt;&lt;xsd:element name="PostalCode" type="xsd:string" minOccurs="0" /&gt;&lt;xsd:element name="CountryRegion" type="xsd:string" /&gt;&lt;xsd:element name="SpecialInstructions" type="t:specialInstructionsType" minOccurs="0" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;xsd:complexType name="eMailType"&gt;&lt;xsd:complexContent&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:element name="eMailAddress" type="xsd:string" /&gt;&lt;xsd:element name="SpecialInstructions" type="t:specialInstructionsType" minOccurs="0" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;xsd:complexType name="phoneNumberType"&gt;&lt;xsd:complexContent&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:element name="number"&gt;&lt;xsd:simpleType&gt;&lt;xsd:restriction base="xsd:string"&gt;&lt;xsd:pattern value="[0-9\(\)\-]*" /&gt;&lt;/xsd:restriction&gt;&lt;/xsd:simpleType&gt;&lt;/xsd:element&gt;&lt;xsd:element name="SpecialInstructions" type="t:specialInstructionsType" minOccurs="0" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;xsd:complexType name="specialInstructionsType" mixed="true"&gt;&lt;xsd:complexContent mixed="true"&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:any namespace="http://schemas.microsoft.com/sqlserver/2004/06/adventure-works/ContactTypes" minOccurs="12" maxOccurs="unbounded" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;/xsd:schema&gt;'
+GO
+CREATE XML SCHEMA COLLECTION [dbo].[AdditionalContactInfoSchemaCollection] AS N'&lt;xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo"&gt;&lt;xsd:element name="AdditionalContactInfo"&gt;&lt;xsd:complexType mixed="true"&gt;&lt;xsd:complexContent mixed="true"&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:any namespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactRecord http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" minOccurs="0" maxOccurs="unbounded" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;/xsd:element&gt;&lt;/xsd:schema&gt;&lt;xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactRecord" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactRecord"&gt;&lt;xsd:element name="ContactRecord"&gt;&lt;xsd:complexType mixed="true"&gt;&lt;xsd:complexContent mixed="true"&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xsd:any namespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" /&gt;&lt;/xsd:choice&gt;&lt;xsd:attribute name="date" type="xsd:date" /&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;/xsd:element&gt;&lt;/xsd:schema&gt;&lt;xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:t="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes" elementFormDefault="qualified"&gt;&lt;xsd:element name="eMail" type="t:eMailType" /&gt;&lt;xsd:element name="facsimileTelephoneNumber" type="t:phoneNumberType" /&gt;&lt;xsd:element name="homePostalAddress" type="t:addressType" /&gt;&lt;xsd:element name="internationaliSDNNumber" type="t:phoneNumberType" /&gt;&lt;xsd:element name="mobile" type="t:phoneNumberType" /&gt;&lt;xsd:element name="pager" type="t:phoneNumberType" /&gt;&lt;xsd:element name="physicalDeliveryOfficeName" type="t:addressType" /&gt;&lt;xsd:element name="registeredAddress" type="t:addressType" /&gt;&lt;xsd:element name="telephoneNumber" type="t:phoneNumberType" /&gt;&lt;xsd:element name="telexNumber" type="t:phoneNumberType" /&gt;&lt;xsd:complexType name="addressType"&gt;&lt;xsd:complexContent&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:element name="Street" type="xsd:string" maxOccurs="2" /&gt;&lt;xsd:element name="City" type="xsd:string" /&gt;&lt;xsd:element name="StateProvince" type="xsd:string" /&gt;&lt;xsd:element name="PostalCode" type="xsd:string" minOccurs="0" /&gt;&lt;xsd:element name="CountryRegion" type="xsd:string" /&gt;&lt;xsd:element name="SpecialInstructions" type="t:specialInstructionsType" minOccurs="0" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;xsd:complexType name="eMailType"&gt;&lt;xsd:complexContent&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:element name="eMailAddress" type="xsd:string" /&gt;&lt;xsd:element name="SpecialInstructions" type="t:specialInstructionsType" minOccurs="0" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;xsd:complexType name="phoneNumberType"&gt;&lt;xsd:complexContent&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:element name="number"&gt;&lt;xsd:simpleType&gt;&lt;xsd:restriction base="xsd:string"&gt;&lt;xsd:pattern value="[0-9\(\)\-]*" /&gt;&lt;/xsd:restriction&gt;&lt;/xsd:simpleType&gt;&lt;/xsd:element&gt;&lt;xsd:element name="SpecialInstructions" type="t:specialInstructionsType" minOccurs="0" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;xsd:complexType name="specialInstructionsType" mixed="true"&gt;&lt;xsd:complexContent mixed="true"&gt;&lt;xsd:restriction base="xsd:anyType"&gt;&lt;xsd:sequence&gt;&lt;xsd:any namespace="http://schemas.microsoft.com/sqlserver/2004/06/adventure-works/ContactTypes" maxOccurs="unbounded" /&gt;&lt;/xsd:sequence&gt;&lt;/xsd:restriction&gt;&lt;/xsd:complexContent&gt;&lt;/xsd:complexType&gt;&lt;/xsd:schema&gt;'
+GO</value>
+  </data>
+  <data name="TestDataTypeView" xml:space="preserve">
+    <value>USE TestDataTypeView1
+GO
+
+DROP VIEW [dbo].[Vista2]
+GO
+DROP VIEW [dbo].[Vista1]
+GO
+DROP VIEW [dbo].[Vista]
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo] [int] NOT NULL
+GO
+DROP TYPE [dbo].[PepeKey]
+GO
+CREATE TYPE [dbo].[PepeKey] FROM [int] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo] [PepeKey] NOT NULL
+GO
+CREATE VIEW [dbo].[Vista]
+WITH SCHEMABINDING
+AS
+SELECT     Campo, ID
+FROM         dbo.Tabla1
+GO
+CREATE VIEW [dbo].[Vista1]
+WITH SCHEMABINDING
+AS
+SELECT     T.Campo, T.ID
+FROM         dbo.Tabla1 T CROSS JOIN dbo.Vista
+GO
+CREATE VIEW [dbo].[Vista3]
+WITH SCHEMABINDING
+AS
+SELECT     T.Campo, T.ID
+FROM         dbo.Tabla1 T CROSS JOIN dbo.Vista1
+GO</value>
+  </data>
+  <data name="TestDataTypeFunction" xml:space="preserve">
+    <value>USE TestDataTypeFunction1
+GO
+
+DROP FUNCTION [dbo].[Funcion3]
+GO
+DROP FUNCTION [dbo].[Funcion1]
+GO
+DROP FUNCTION [dbo].[Funcion]
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo] [int] NOT NULL
+GO
+DROP TYPE [dbo].[PepeKey]
+GO
+CREATE TYPE [dbo].[PepeKey] FROM [int] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo] [PepeKey] NOT NULL
+GO
+CREATE FUNCTION [dbo].[Funcion]
+(	
+	@ID	int
+)
+RETURNS TABLE 
+WITH SCHEMABINDING
+AS
+RETURN 
+(	
+	SELECT Campo FROM dbo.Tabla1 WHERE ID =@ID
+)
+GO
+CREATE FUNCTION [dbo].[Funcion2]
+(	
+	@ID	int
+)
+RETURNS TABLE 
+WITH SCHEMABINDING
+AS
+RETURN 
+(	
+	SELECT Campo FROM dbo.Funcion(@ID)
+)
+GO
+CREATE FUNCTION [dbo].[Funcion1]
+(	
+	@ID	int
+)
+RETURNS TABLE 
+WITH SCHEMABINDING
+AS
+RETURN 
+(	
+	SELECT Campo FROM dbo.Funcion(@ID)
+)
+GO</value>
+  </data>
+  <data name="TestDataTypeRebuild" xml:space="preserve">
+    <value>USE TestDataTypeRebuild1
+GO
+
+ALTER TABLE [dbo].[Tabla] DROP CONSTRAINT [PK_Tabla]
+GO
+ALTER TABLE [dbo].[Tabla] ALTER COLUMN [Campo1] [int] NOT NULL
+GO
+DROP TYPE [dbo].[Tipo]
+GO
+CREATE TYPE [dbo].[Tipo] FROM [int] NOT NULL
+GO
+CREATE TABLE [dbo].[TempTabla]
+(
+	[ID] [int] IDENTITY (2,2) NOT NULL,
+	[Campo1] [Tipo] NOT NULL
+) ON [PRIMARY]
+GO
+
+SET IDENTITY_INSERT [dbo].[TempTabla] ON
+INSERT INTO [dbo].[TempTabla] ([ID],[Campo1]) SELECT [ID],[Campo1] FROM [dbo].[Tabla]
+SET IDENTITY_INSERT [dbo].[TempTabla] OFF
+GO
+
+DROP TABLE [dbo].[Tabla]
+GO
+EXEC sp_rename N'[dbo].[TempTabla]',N'Tabla', 'OBJECT'
+GO
+
+ALTER TABLE [dbo].[Tabla] ADD CONSTRAINT [PK_Tabla] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestConstraintCheckAlterColumn" xml:space="preserve">
+    <value>USE TestConstraintCheckAlterColumn1
+GO
+
+ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [CK_Tabla2_1]
+GO
+ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [CK_Tabla2]
+GO
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [CK_Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [PK_Tabla2]
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [smallint] NOT NULL
+GO
+CREATE TABLE [dbo].[TempTabla2]
+(
+	[ID] [int] NOT NULL,
+	[Campo1] [smallint] NOT NULL,
+	[Campo2] [int] NOT NULL,
+	[Campo3] AS (([Campo1]+[Campo2])+(1)) PERSISTED
+) ON [PRIMARY]
+GO
+
+INSERT INTO [dbo].[TempTabla2] ([ID],[Campo1],[Campo2]) SELECT [ID],[Campo1],[Campo2] FROM [dbo].[Tabla2]
+DROP TABLE [dbo].[Tabla2]
+GO
+EXEC sp_rename N'[dbo].[TempTabla2]',N'Tabla2', 'OBJECT'
+GO
+
+ALTER TABLE [dbo].[Tabla2] ADD CONSTRAINT [CK_Tabla2_1] CHECK  (([Campo3]&gt;(9)))
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [CK_Tabla1] CHECK  (([Campo1]&gt;(3)))
+GO
+ALTER TABLE [dbo].[Tabla2] ADD CONSTRAINT [CK_Tabla2] CHECK  (([Campo1]&gt;(4)))
+GO
+ALTER TABLE [dbo].[Tabla2] ADD CONSTRAINT [PK_Tabla2] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO</value>
+  </data>
+  <data name="TestColumnNotNullDate1" xml:space="preserve">
+    <value>USE TestColumnNotNullDate1
+GO
+
+UPDATE [dbo].[Tabla1] SET [Campo2] = getdate() WHERE [Campo2] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo1] = getdate() WHERE [Campo1] IS NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [datetime] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [smalldatetime] NOT NULL
+GO</value>
+  </data>
+  <data name="TestColumnNotNullEntero1" xml:space="preserve">
+    <value>USE TestColumnNotNullEntero1
+GO
+
+UPDATE [dbo].[Tabla1] SET [Campo5] = 0 WHERE [Campo5] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo3] = 0 WHERE [Campo3] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo4] = 0 WHERE [Campo4] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo2] = 0 WHERE [Campo2] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo1] = 0 WHERE [Campo1] IS NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo5] [bit] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo3] [smallint] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [int] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [tinyint] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo4] [bigint] NOT NULL
+GO</value>
+  </data>
+  <data name="TestColumnNotNullReal1" xml:space="preserve">
+    <value>USE TestColumnNotNullReal1
+GO
+
+UPDATE [dbo].[Tabla1] SET [Campo4] = 0.0 WHERE [Campo4] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo3] = 0.0 WHERE [Campo3] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo6] = 0.0 WHERE [Campo6] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo5] = 0.0 WHERE [Campo5] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo1] = 0.0 WHERE [Campo1] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo2] = 0.0 WHERE [Campo2] IS NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [float] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo6] [decimal] (18,0) NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo5] [numeric] (18,0) NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo3] [money] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo4] [smallmoney] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [real] NOT NULL
+GO</value>
+  </data>
+  <data name="TestColumnNotNullText1" xml:space="preserve">
+    <value>USE TestColumnNotNullText1
+GO
+
+UPDATE [dbo].[Tabla1] SET [Campo5] = N'' WHERE [Campo5] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo4] = '' WHERE [Campo4] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo6] = N'' WHERE [Campo6] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo8] = N'' WHERE [Campo8] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo7] = N'' WHERE [Campo7] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo3] = '' WHERE [Campo3] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo2] = '' WHERE [Campo2] IS NULL
+GO
+UPDATE [dbo].[Tabla1] SET [Campo1] = '' WHERE [Campo1] IS NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo7] [nvarchar] (max) COLLATE Modern_Spanish_CI_AS NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo8] [ntext] COLLATE Modern_Spanish_CI_AS NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [char] (10) COLLATE Modern_Spanish_CI_AS NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo3] [varchar] (max) COLLATE Modern_Spanish_CI_AS NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo4] [text] COLLATE Modern_Spanish_CI_AS NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo6] [nvarchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo5] [nchar] (10) COLLATE Modern_Spanish_CI_AS NOT NULL
+GO</value>
+  </data>
+  <data name="TestConstraintDefaultAlterColumnSimple1" xml:space="preserve">
+    <value>USE TestConstraintDefaultAlterColumnSimple1
+GO
+
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [DF_Tabla1_Campo1]
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [smallint] NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [DF_Tabla1_Campo1] DEFAULT ((2)) FOR [Campo1]
+GO</value>
+  </data>
+  <data name="TestConstraintDefaultAlterColumn" xml:space="preserve">
+    <value>USE TestConstraintDefaultAlterColumn1
+GO
+
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [DF_Tabla1_CampoD]
+GO
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [DF_Tabla1_Campo2]
+GO
+UPDATE [dbo].[Tabla1] SET [Campo2] = (N'Pepa') WHERE [Campo2] IS NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [nchar] (10) COLLATE Modern_Spanish_CI_AS NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [CampoD] [char] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [DF_Tabla1_Campo2] DEFAULT (N'Pepa') FOR [Campo2]
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [DF_Tabla1_CampoD] DEFAULT ('Holas') FOR [CampoD]
+GO</value>
+  </data>
+  <data name="TestDataTypeDefaultSimple" xml:space="preserve">
+    <value>USE TestDataTypeDefaultSimple1
+GO
+
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [DF_Tabla1_Campo1]
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [bigint] NULL
+GO
+DROP TYPE [dbo].[Tipo1]
+GO
+CREATE TYPE [dbo].[Tipo1] FROM [bigint] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [Tipo1] NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [DF_Tabla1_Campo1] DEFAULT ((2)) FOR [Campo1]
+GO</value>
+  </data>
+  <data name="TestDataTypeDefaultComplex" xml:space="preserve">
+    <value>USE TestDataTypeDefaultComplex1
+GO
+
+ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [FK_Tabla2_Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [DF_Tabla1_Campo1]
+GO
+ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [DF_Tabla2_Campo4]
+GO
+ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [DF_Tabla3_Campo1]
+GO
+ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [DF_Tabla1_Campo2]
+GO
+ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [DF_Tabla3_Campo2]
+GO
+ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [DF_Tabla2_Campo2]
+GO
+ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [PK_Tabla3]
+GO
+DROP PROCEDURE [dbo].[Insert_Qry3]
+GO
+DROP PROCEDURE [dbo].[Insert_Qry]
+GO
+DROP PROCEDURE [dbo].[Insert_Qry2]
+GO
+DROP TRIGGER [dbo].[Tr2]
+GO
+DROP TRIGGER [dbo].[Tr1]
+GO
+DROP FUNCTION [dbo].[Test2]
+GO
+DROP INDEX [IX_Tabla3] ON [dbo].[Tabla3]
+GO
+DROP INDEX [IX_Tabla1] ON [dbo].[Tabla1]
+GO
+ALTER TABLE [dbo].[Tabla1] DROP COLUMN [Campo3]
+GO
+ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Campo2] [int] NULL
+GO
+ALTER TABLE [dbo].[Tabla3] ALTER COLUMN [Campo1] [int] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla3] ALTER COLUMN [Campo2] [int] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Campo4] [int] NULL
+GO
+ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Campo1] [int] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [int] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [int] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Campo3FK] [int] NOT NULL
+GO
+DROP TYPE [dbo].[Tipo2]
+GO
+CREATE TYPE [dbo].[Tipo2] FROM [int] NOT NULL
+GO
+DROP TYPE [dbo].[Tipo1]
+GO
+CREATE TYPE [dbo].[Tipo1] FROM [int] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla2] DROP COLUMN [Campo2]
+GO
+ALTER TABLE [dbo].[Tabla3] ALTER COLUMN [Campo1] [Tipo1] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Campo4] [Tipo2] NULL
+GO
+ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Campo3FK] [Tipo1] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla3] ALTER COLUMN [Campo2] [Tipo2] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Campo1] [Tipo1] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [Tipo2] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [Tipo1] NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ADD [Campo3] AS ([Campo1]+[Campo2]) PERSISTED
+GO
+CREATE NONCLUSTERED INDEX [IX_Tabla3] ON [dbo].[Tabla3]
+(
+	[Campo1] ASC
+) INCLUDE ([Campo2]) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Tabla1] ON [dbo].[Tabla1]
+(
+	[Campo3] ASC
+) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE TRIGGER [dbo].[Tr1]
+   ON  [dbo].[Tabla3]
+   AFTER INSERT,UPDATE
+AS 
+BEGIN
+	INSERT INTO dbo.Tabla1 (Campo1,Campo2) VALUES (10,10)
+END
+GO
+CREATE TRIGGER [dbo].[Tr2]
+   ON  [dbo].[Tabla3]
+   AFTER INSERT,UPDATE
+AS 
+BEGIN
+	INSERT INTO dbo.Tabla1 (Campo1,Campo2) VALUES (10,dbo.Test(10))
+END
+GO
+ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [DF_Tabla3_Campo2] DEFAULT ([dbo].[Test1]((2))) FOR [Campo2]
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [DF_Tabla1_Campo2] DEFAULT ([dbo].[Test1]((2))) FOR [Campo2]
+GO
+ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [DF_Tabla3_Campo1] DEFAULT ((4)) FOR [Campo1]
+GO
+ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [DF_Tabla1_Campo1] DEFAULT ((5)) FOR [Campo1]
+GO
+ALTER TABLE [dbo].[Tabla3] ADD CONSTRAINT [PK_Tabla3] PRIMARY KEY CLUSTERED
+	(
+		[ID] ASC
+	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Tabla2] ADD CONSTRAINT [FK_Tabla2_Tabla1] FOREIGN KEY
+	(
+		[Campo3FK]
+	)
+	REFERENCES [dbo].[Tabla1]
+	(
+		[Campo3]
+	)
+GO
+CREATE PROCEDURE [dbo].[Insert_Qry4]
+(
+	@Tip Tipo1
+)
+AS
+BEGIN
+	SELECT 2 FROM Tabla3 WHERE ID = @Tip
+END
+GO
+CREATE PROCEDURE [dbo].[Insert_Qry2]
+(
+	@Tip Tipo1
+)
+AS
+BEGIN
+	SELECT 2 FROM Tabla1 WHERE ID = @Tip
+END
+GO
+CREATE PROCEDURE [dbo].[Insert_Qry3]
+(
+	@Tip Tipo1
+)
+AS
+BEGIN
+	SELECT 2 FROM Tabla3 WHERE ID = @Tip
+END
+GO
+CREATE PROCEDURE [dbo].[Insert_Qry]
+(
+	@Tip Tipo1
+)
+AS
+BEGIN
+	SELECT dbo.Test1(2) FROM Tabla1 WHERE ID = @Tip
+END
+GO</value>
+  </data>
+  <data name="TestFunctionConstraintCheck" xml:space="preserve">
+    <value>USE TestFunctionConstraintCheck1
+GO
+
+ALTER TABLE [dbo].[Tabla] DROP CONSTRAINT [CK_Tabla]
+GO
+ALTER TABLE [dbo].[Tabla] DROP CONSTRAINT [CK_Tabla2]
+GO
+ALTER FUNCTION [dbo].[Test]
+(
+	@ID	int
+)
+RETURNS int
+WITH SCHEMABINDING
+AS
+BEGIN
+	DECLARE @MAX int
+
+	SELECT @MAX = MAX(ID) FROM dbo.Tabla
+
+	-- Return the result of the function
+	RETURN @MAX+@ID+1
+
+END
+GO
+ALTER TABLE [dbo].[Tabla] ADD CONSTRAINT [CK_Tabla3] CHECK  (([dbo].[Test]([ID])&gt;(1)))
+GO
+ALTER TABLE [dbo].[Tabla] ADD CONSTRAINT [CK_Tabla] CHECK  (([dbo].[Test]([ID])&gt;(1)))
+GO</value>
+  </data>
+  <data name="TestFunctionSchemaBoundTable" xml:space="preserve">
+    <value>USE TestFunctionSchemaBoundTable1
+GO
+
+DROP FUNCTION [dbo].[Funcion5]
+GO
+DROP FUNCTION [dbo].[Funcion6]
+GO
+DROP FUNCTION [dbo].[Funcion9]
+GO
+DROP FUNCTION [dbo].[Funcion2]
+GO
+DROP FUNCTION [dbo].[Funcion1]
+GO
+DROP FUNCTION [dbo].[Funcion8]
+GO
+ALTER TABLE [dbo].[Tabla3] ALTER COLUMN [Tabla2] [nvarchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Tabla2] [nvarchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+GO
+ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [datetime] NOT NULL
+GO
+CREATE FUNCTION [dbo].[Funcion1]
+(
+	@ID	int
+)
+RETURNS INT
+WITH SCHEMABINDING
+AS
+BEGIN	
+	DECLARE @Result int	
+	SELECT @Result = ID FROM dbo.Tabla1 WHERE Campo1 = '01/01/2008'	
+	RETURN @Result
+END
+GO
+CREATE FUNCTION [dbo].[Funcion4]
+(
+	@ID	int
+)
+RETURNS INT
+WITH SCHEMABINDING
+AS
+BEGIN	
+	DECLARE @Result int	
+	SELECT @Result = ID FROM dbo.Tabla3 WHERE Tabla2 = '01/01/2008'	
+	RETURN @Result
+END
+GO
+CREATE FUNCTION [dbo].[Funcion7]
+(
+	@ID	int
+)
+RETURNS INT
+WITH SCHEMABINDING
+AS
+BEGIN	
+	DECLARE @Result int	
+	
+	SELECT @Result = ID FROM dbo.Tabla2 WHERE ID = dbo.Funcion1(@ID)
+	
+	RETURN @Result
+END
+GO
+CREATE FUNCTION [dbo].[Funcion5]
+(
+	@ID	int
+)
+RETURNS INT
+WITH SCHEMABINDING
+AS
+BEGIN	
+	DECLARE @Result int	
+	
+	SELECT @Result = ID FROM dbo.Tabla2 WHERE ID = dbo.Funcion1(@ID)
+	
+	RETURN @Result
+END
+GO
+CREATE FUNCTION [dbo].[Funcion3]
+(
+	@ID	int
+)
+RETURNS INT
+WITH SCHEMABINDING
+AS
+BEGIN	
+	DECLARE @Result int	
+	SELECT @Result = ID FROM dbo.Tabla2 WHERE Tabla2 = '01/01/2008'	
+	RETURN @Result
+END
+GO</value>
+  </data>
+  <data name="TestUDT" xml:space="preserve">
+    <value>USE TestUDT1
+GO
+
+CREATE ASSEMBLY [TestAlter]
+AUTHORIZATION dbo
+FROM 0x4D5A90000300000004000000FFFF0000B800000000000000400000000000000000000000000000000000000000000000000000000000000000000000800000000E1FBA0E00B409CD21B8014CCD21546869732070726F6772616D2063616E6E6F742062652072756E20696E20444F53206D6F64652E0D0D0A2400000000000000504500004C0103002BBF18480000000000000000E0000E210B010800001000000020000000000000AE2900000020000000400000000040000020000000100000040000000000000004000000000000000080000000100000000000000300400500001000001000000000100000100000000000001000000000000000000000005429000057000000004000008003000000000000000000000000000000000000006000000C000000B82800001C0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000080000000000000000000000082000004800000000000000000000002E74657874000000B4090000002000000010000000100000000000000000000000000000200000602E7273726300000080030000004000000010000000200000000000000000000000000000400000402E72656C6F6300000C00000000600000001000000030000000000000000000000000000040000042000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000902900000000000048000000020005003C2100007C0700000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000133001000C0000000100001100027B010000040A2B00062A13300100170000000200001100027C01000004FE16030000016F1100000A0A2B00062A0013300100110000000300001100027C01000004281200000A0A2B00062A000000133001001C00000004000011001200FE150200000212007C01000004FE1503000001060B2B00072A133004005C00000005000011000F00281300000A16FE010D092D0828040000060C2B431200FE15020000020F00FE16040000016F1100000A178D1900000113041104161F7C9D11046F1400000A0B120007169A281500000A731600000A7D01000004060C2B00082A42534A4201000100000000000C00000076322E302E35303732370000000005006C000000B0020000237E00001C0300003C03000023537472696E67730000000058060000080000002355530060060000100000002347554944000000700600000C01000023426C6F6200000000000000020000015717A2010900000000FA013300160000010000001B0000000200000001000000050000000100000001000000160000000C00000005000000010000000300000003000000010000000200000000000A0001000000000006002E0027000A00590044000A00630044000A00A60044000600E000CE0006001E01FF0006003201CE0006004B01CE0006006601CE0006008101CE0006009A01CE000600B301CE000600D201CE000600EF01CE000600190206023F002D02000006005C023C0206007C023C020600A40227000A00D502BA020A00F102BA020600F802FF0006000E03FF000600190327000600220327000600270327000600340327000000000001000000000001000100092110001800000005000100010001006D000A00502000000000860879000E000100682000000000C6008900130001008C2000000000E609920017000100AC200000000096089D001B000100D420000000009600B00020000100000001002003020009002900F90035003100F9003A003900F90035004100F90035004900F90035005100F90035005900F90035006100F90035006900F90035007100F90035007900F9003F008900F90045009100F9004A009900F9004A00A100F9004E00B100F9005D00C10089001300190092001700210092001700D1002E037700D900B0007E001900F90083002E003B00CA002E00130094002E00230094002E002B009A002E003300BB002E005300BB002E006B00EB002E004B0094002E00430094002E005B00D9002E006300E20043007B005400630068006C0070008800020001000000B60027000000C2002C000000C90030000200010003000200030005000200040007000480000001000000E20B3D6F0000000000009A02000002000000000000000000000001001E000000000002000000000000000000000001003800000000000000003C4D6F64756C653E0054657374416C7465722E646C6C005469706F31006D73636F726C69620053797374656D0056616C7565547970650053797374656D2E446174610053797374656D2E446174612E53716C547970657300494E756C6C61626C650053716C446F75626C65006465736372697063696F6E006765745F4465736372697063696F6E00546F537472696E67006765745F49734E756C6C006765745F4E756C6C0053716C537472696E67005061727365004465736372697063696F6E0049734E756C6C004E756C6C0053797374656D2E5265666C656374696F6E00417373656D626C7956657273696F6E417474726962757465002E63746F720053797374656D2E52756E74696D652E496E7465726F70536572766963657300436F6D56697369626C6541747472696275746500417373656D626C7943756C7475726541747472696275746500417373656D626C7954726164656D61726B41747472696275746500417373656D626C79436F7079726967687441747472696275746500417373656D626C7950726F6475637441747472696275746500417373656D626C79436F6D70616E7941747472696275746500417373656D626C79436F6E66696775726174696F6E41747472696275746500417373656D626C794465736372697074696F6E41747472696275746500417373656D626C795469746C654174747269627574650053797374656D2E446961676E6F73746963730044656275676761626C6541747472696275746500446562756767696E674D6F6465730053797374656D2E52756E74696D652E436F6D70696C6572536572766963657300436F6D70696C6174696F6E52656C61786174696F6E734174747269627574650052756E74696D65436F6D7061746962696C6974794174747269627574650054657374416C7465720053657269616C697A61626C65417474726962757465004D6963726F736F66742E53716C5365727665722E5365727665720053716C55736572446566696E65645479706541747472696275746500466F726D6174005374727563744C61796F7574417474726962757465004C61796F75744B696E64004F626A6563740073004368617200537472696E670053706C697400446F75626C650000000320000000000053CF336C4649DA48A9863B21759BA9860008B77A5C561934E0890306110D042000110D0320000E03200002040000110806000111081111042800110D032800020408001108042001010E042001010205200101114104200101080320000105200101115508010001000000000005200101115D040701110D0307010E03070102060702110811080620011D0E1D030400010D0E042001010D0B070511081D0E1108021D030501000000002001001B436F7079726967687420C2A9204D6963726F736F6674203230303800000E01000954657374416C74657200000E0100094D6963726F736F667400000801000701000000000801000800000000001E01000100540216577261704E6F6E457863657074696F6E5468726F7773010000000000002BBF184800000000020000007D000000D4280000D418000052534453859A13458636AC48B4B93B4621FE5ADF01000000433A5C55736572735C6573746562616E5C446F63756D656E74735C54524142414A4F535C54726162616A6F73204D696F735C546573745573657244617461547970655C54657374416C7465725C6F626A5C44656275675C54657374416C7465722E706462000000007C29000000000000000000009E290000002000000000000000000000000000000000000000000000902900000000000000000000000000000000000000005F436F72446C6C4D61696E006D73636F7265652E646C6C0000000000FF25002040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100100000001800008000000000000000000000000000000100010000003000008000000000000000000000000000000100000000004800000058400000280300000000000000000000280334000000560053005F00560045005200530049004F004E005F0049004E0046004F0000000000BD04EFFE00000100000001003D6FE20B000001003D6FE20B3F000000000000000400000002000000000000000000000000000000440000000100560061007200460069006C00650049006E0066006F00000000002400040000005400720061006E0073006C006100740069006F006E00000000000000B00488020000010053007400720069006E006700460069006C00650049006E0066006F00000064020000010030003000300030003000340062003000000034000A00010043006F006D00700061006E0079004E0061006D006500000000004D006900630072006F0073006F006600740000003C000A000100460069006C0065004400650073006300720069007000740069006F006E0000000000540065007300740041006C00740065007200000040000F000100460069006C006500560065007200730069006F006E000000000031002E0030002E0033003000340032002E0032003800340037003700000000003C000E00010049006E007400650072006E0061006C004E0061006D0065000000540065007300740041006C007400650072002E0064006C006C0000005C001B0001004C006500670061006C0043006F007000790072006900670068007400000043006F0070007900720069006700680074002000A90020004D006900630072006F0073006F0066007400200032003000300038000000000044000E0001004F0072006900670069006E0061006C00460069006C0065006E0061006D0065000000540065007300740041006C007400650072002E0064006C006C00000034000A000100500072006F0064007500630074004E0061006D00650000000000540065007300740041006C00740065007200000044000F000100500072006F006400750063007400560065007200730069006F006E00000031002E0030002E0033003000340032002E00320038003400370037000000000048000F00010041007300730065006D0062006C0079002000560065007200730069006F006E00000031002E0030002E0033003000340032002E0032003800340037003700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000C000000B039000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+WITH PERMISSION_SET = SAFE
+GO
+DROP TYPE [dbo].[TipoC2]
+GO
+DROP ASSEMBLY [Test2]
+GO
+CREATE ASSEMBLY [Test2]
+AUTHORIZATION dbo
+FROM 0x4D5A90000300000004000000FFFF0000B800000000000000400000000000000000000000000000000000000000000000000000000000000000000000800000000E1FBA0E00B409CD21B8014CCD21546869732070726F6772616D2063616E6E6F742062652072756E20696E20444F53206D6F64652E0D0D0A2400000000000000504500004C010300FADC18480000000000000000E0000E210B0108000010000000200000000000008E2A0000002000000040000000004000002000000010000004000000000000000400000000000000008000000010000000000000030040050000100000100000000010000010000000000000100000000000000000000000342A000057000000004000006003000000000000000000000000000000000000006000000C000000A02900001C0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000080000000000000000000000082000004800000000000000000000002E74657874000000940A0000002000000010000000100000000000000000000000000000200000602E7273726300000060030000004000000010000000200000000000000000000000000000400000402E72656C6F6300000C00000000600000001000000030000000000000000000000000000040000042000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000702A0000000000004800000002000500B0210000F00700000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000133001000C0000000100001100027B010000040A2B00062A133001000C0000000100001100027B020000040A2B00062A133001000C0000000100001100027B030000040A2B00062A13300100170000000200001100027C02000004FE16030000016F1100000A0A2B00062A0013300100110000000300001100027C02000004281200000A0A2B00062A000000133001003600000004000011001200FE150200000212007C02000004FE150300000112007C01000004FE150300000112007C03000004FE1503000001060B2B00072A0000133004008400000005000011000F00281300000A16FE010D092D0828060000060C2B6B1200FE15020000020F00FE16040000016F1100000A178D1900000113041104161F7C9D11046F1400000A0B120007169A281500000A731600000A7D02000004120007179A281500000A731600000A7D01000004120007189A281500000A731600000A7D03000004060C2B00082A42534A4201000100000000000C00000076322E302E35303732370000000005006C000000F0020000237E00005C0300007403000023537472696E677300000000D00600000800000023555300D8060000100000002347554944000000E80600000801000023426C6F6200000000000000020000015717A2010900000000FA013300160000010000001B0000000200000003000000070000000100000001000000160000000C00000005000000010000000500000005000000010000000200000000000A0001000000000006002A0023000A00550040000A005F0040000A00D000400006001D010B0106005B013C0106006F010B01060088010B010600A3010B010600BE010B010600D7010B010600F0010B0106000F020B0106002C020B010600560243023F006A0200000600990279020600B90279020600DD0223000A000E03F3020A002A03F302060031033C01060047033C0106005203230006005B03230006006003230006006D03230000000000010000000000010001000921100014000000050001000100010069000A0001006F000A0001007B000A00502000000000860888000E000100682000000000860892000E0001008020000000008608A2000E000100982000000000C600B30013000100BC2000000000E609BC0017000100DC20000000009608C7001B0001002021000000009600DA002000010000000100590302000900290036013500310036013A00390036013500410036013500490036013500510036013500590036013500610036013500690036013500710036013500790036013F00890036014500910036014A00990036014A00A10036014E00B10036015D00C100B30013001900BC0017002100BC001700D10067037700D900DA007E001900360183002E003B00C6002E00130094002E00230094002E002B009A002E003300BB002E005300BB002E006B00E7002E004B0094002E00430094002E005B00D5002E006300DE0043007B005400630068006C0070008800020001000000E00027000000E60027000000F20027000000FF002C00000006013000020001000300020002000500020003000700020005000900020006000B000480000001000000E20B257E000000000000D702000002000000000000000000000001001A000000000002000000000000000000000001003400000000000000003C4D6F64756C653E0054657374322E646C6C005469706F31006D73636F726C69620053797374656D0056616C7565547970650053797374656D2E446174610053797374656D2E446174612E53716C547970657300494E756C6C61626C650053716C446F75626C6500746F74616C006465736372697063696F6E006465736372697063696F6E32006765745F546F74616C006765745F4465736372697063696F6E006765745F4465736372697063696F6E3200546F537472696E67006765745F49734E756C6C006765745F4E756C6C0053716C537472696E6700506172736500546F74616C004465736372697063696F6E004465736372697063696F6E320049734E756C6C004E756C6C0053797374656D2E5265666C656374696F6E00417373656D626C7956657273696F6E417474726962757465002E63746F720053797374656D2E52756E74696D652E496E7465726F70536572766963657300436F6D56697369626C6541747472696275746500417373656D626C7943756C7475726541747472696275746500417373656D626C7954726164656D61726B41747472696275746500417373656D626C79436F7079726967687441747472696275746500417373656D626C7950726F6475637441747472696275746500417373656D626C79436F6D70616E7941747472696275746500417373656D626C79436F6E66696775726174696F6E41747472696275746500417373656D626C794465736372697074696F6E41747472696275746500417373656D626C795469746C654174747269627574650053797374656D2E446961676E6F73746963730044656275676761626C6541747472696275746500446562756767696E674D6F6465730053797374656D2E52756E74696D652E436F6D70696C6572536572766963657300436F6D70696C6174696F6E52656C61786174696F6E734174747269627574650052756E74696D65436F6D7061746962696C6974794174747269627574650054657374320053657269616C697A61626C65417474726962757465004D6963726F736F66742E53716C5365727665722E5365727665720053716C55736572446566696E65645479706541747472696275746500466F726D6174005374727563744C61796F7574417474726962757465004C61796F75744B696E64004F626A6563740073004368617200537472696E670053706C697400446F75626C6500000320000000000014BF18CF204FF54AB12824F1361214780008B77A5C561934E0890306110D042000110D0320000E03200002040000110806000111081111042800110D032800020408001108042001010E042001010205200101114104200101080320000105200101115508010001000000000005200101115D040701110D0307010E03070102060702110811080620011D0E1D030400010D0E042001010D0B070511081D0E1108021D030501000000002001001B436F7079726967687420C2A9204D6963726F736F6674203230303800000A010005546573743200000E0100094D6963726F736F667400000801000701000000000801000800000000001E01000100540216577261704E6F6E457863657074696F6E5468726F777301000000000000FADC1848000000000200000075000000BC290000BC19000052534453515E8045EDFFAA4A88263F2831563BC001000000433A5C55736572735C6573746562616E5C446F63756D656E74735C54524142414A4F535C54726162616A6F73204D696F735C546573745573657244617461547970655C54657374325C6F626A5C44656275675C54657374322E706462000000005C2A000000000000000000007E2A0000002000000000000000000000000000000000000000000000702A00000000000000000000000000000000000000005F436F72446C6C4D61696E006D73636F7265652E646C6C0000000000FF2500204000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100100000001800008000000000000000000000000000000100010000003000008000000000000000000000000000000100000000004800000058400000080300000000000000000000080334000000560053005F00560045005200530049004F004E005F0049004E0046004F0000000000BD04EFFE0000010000000100257EE20B00000100257EE20B3F000000000000000400000002000000000000000000000000000000440000000100560061007200460069006C00650049006E0066006F00000000002400040000005400720061006E0073006C006100740069006F006E00000000000000B00468020000010053007400720069006E006700460069006C00650049006E0066006F00000044020000010030003000300030003000340062003000000034000A00010043006F006D00700061006E0079004E0061006D006500000000004D006900630072006F0073006F00660074000000340006000100460069006C0065004400650073006300720069007000740069006F006E000000000054006500730074003200000040000F000100460069006C006500560065007200730069006F006E000000000031002E0030002E0033003000340032002E00330032003200390033000000000034000A00010049006E007400650072006E0061006C004E0061006D0065000000540065007300740032002E0064006C006C0000005C001B0001004C006500670061006C0043006F007000790072006900670068007400000043006F0070007900720069006700680074002000A90020004D006900630072006F0073006F006600740020003200300030003800000000003C000A0001004F0072006900670069006E0061006C00460069006C0065006E0061006D0065000000540065007300740032002E0064006C006C0000002C0006000100500072006F0064007500630074004E0061006D0065000000000054006500730074003200000044000F000100500072006F006400750063007400560065007200730069006F006E00000031002E0030002E0033003000340032002E00330032003200390033000000000048000F00010041007300730065006D0062006C0079002000560065007200730069006F006E00000031002E0030002E0033003000340032002E00330032003200390033000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000C000000903A000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+WITH PERMISSION_SET = SAFE
+GO
+DROP TYPE [dbo].[TipoCreateDrop]
+GO
+CREATE TYPE [dbo].[TipoCreate2] EXTERNAL NAME [TestAlter].[Tipo1]
+GO
+CREATE TYPE [dbo].[TipoC2] EXTERNAL NAME [Test2].[Tipo1]
+GO
+CREATE TYPE [dbo].[TipoCreate] EXTERNAL NAME [TestUserDataType].[TipoCreate]
 GO</value>
   </data>
 </root>

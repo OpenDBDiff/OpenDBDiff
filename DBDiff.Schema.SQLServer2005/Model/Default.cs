@@ -9,7 +9,7 @@ namespace DBDiff.Schema.SQLServer.Model
     {
         private string value;
 
-        public Default(ISchemaBase parent):base(StatusEnum.ObjectTypeEnum.Default)
+        public Default(ISchemaBase parent):base(Enums.ObjectType.Default)
         {
             this.Parent = parent;            
         }
@@ -44,14 +44,42 @@ namespace DBDiff.Schema.SQLServer.Model
             return sql;
         }
 
-        public override string ToSQLAdd()
+        public override string ToSqlAdd()
+        {
+            return ToSql();
+        }
+
+        public override string ToSqlDrop()
+        {
+            return "DROP DEFAULT " + FullName + "\r\nGO\r\n";
+        }
+
+        public override string ToSql()
         {
             return "";
         }
 
-        public override string ToSQLDrop()
+        /// <summary>
+        /// Devuelve el schema de diferencias del Schema en formato SQL.
+        /// </summary>
+        public SQLScriptList ToSQLDiff()
         {
-            return "";
+            SQLScriptList listDiff = new SQLScriptList();
+
+            if (this.Status == Enums.ObjectStatusType.DropStatus)
+            {
+                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropRule);
+            }
+            if (this.Status == Enums.ObjectStatusType.CreateStatus)
+            {
+                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddRule);
+            }
+            if (this.Status == Enums.ObjectStatusType.AlterStatus)
+            {
+                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropRule);
+                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddRule);
+            }
+            return listDiff;
         }
     }
 }

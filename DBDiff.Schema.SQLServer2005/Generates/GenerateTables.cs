@@ -10,43 +10,24 @@ using DBDiff.Schema.Events;
 using DBDiff.Schema.SQLServer.Options;
 using DBDiff.Schema.SQLServer.Model;
 using DBDiff.Schema.SQLServer.Generates.SQLCommands;
+using DBDiff.Schema.Misc;
 
 namespace DBDiff.Schema.SQLServer.Generates
 {
-    public class GenerateTables
-    {        
-        private string connectioString;
-        private SqlOption objectFilter;
-        //public event Progress.ProgressHandler OnTableProgress;
-
-        /// <summary>
-        /// Constructor de la clase.
-        /// </summary>
-        /// <param name="connectioString">Connection string de la base</param>
-        public GenerateTables(string connectioString, SqlOption filter)
-        {
-            this.connectioString = connectioString;
-            this.objectFilter = filter;
-        }
-
-        private int GetTablesCount(Database database)
-        {
-            using (SqlConnection conn = new SqlConnection(connectioString))
-            {
-                conn.Open();
-                using (SqlCommand command = new SqlCommand(TableSQLCommand.GetTableCount(database.Info.Version), conn))
-                {
-                    return (int)command.ExecuteScalar();
-                }
-            }
-        }
-     
-        private Column AddColumns(SqlDataReader reader, Table table)
+    public static class GenerateTables
+    {             
+        private static void FillColumn(Table table, SqlDataReader reader)
         {
             Column col = new Column(table);
             col.Id = (int)reader["ID"];
+            if (!((Database)table.Parent).Options.Ignore.FilterIgnoreColumnOrder)
+                col.Position = table.Columns.Count + 1;
+            if (!((Database)table.Parent).Options.Ignore.FilterIgnoreNotForReplication)
+                col.IsIdentityForReplication = ((int)reader["IsIdentityRepl"] == 1);
+            if (!((Database)table.Parent).Options.Ignore.FilterIgnoreColumnCollation)
+                col.Collation = reader["Collation"].ToString();
+
             col.IsIdentity = (bool)reader["IsIdentity"];
-            col.IsIdentityForReplication = ((int)reader["IsIdentityRepl"] == 1);
             if ((col.IsIdentity) || (col.IsIdentityForReplication))
             {
                 if (!reader.IsDBNull(reader.GetOrdinal("IdentSeed")))
@@ -59,11 +40,12 @@ namespace DBDiff.Schema.SQLServer.Generates
                     col.IdentityIncrement = 1;
             }
             col.Name = reader["Name"].ToString();
+            col.Owner = table.Owner;
             col.ComputedFormula = reader["formula"].ToString();
             col.IsPersisted = (bool)reader["FormulaPersisted"];
             col.IsComputed = (bool)reader["IsComputed"];
             col.Nullable = (bool)reader["IsNullable"];
-            col.Collation = reader["Collation"].ToString();
+            
             col.XmlSchema = reader["XMLSchema"].ToString();
             col.IsXmlDocument = (bool)reader["Is_xml_document"];
             col.Precision = (byte)reader["Precision"];
@@ -76,89 +58,41 @@ namespace DBDiff.Schema.SQLServer.Generates
             col.HasComputedDependencies = ((int)reader["HasComputedFormula"] == 1);
             col.IsRowGuid = (bool)reader["IsRowGuid"];
             col.Type = reader["Type"].ToString();
-            if (objectFilter.OptionFilter.FilterColumnPosition)
-                col.Position = table.Columns.Count + 1;
-            else
-                col.Position = 0;
 
             ColumnConstraint cc = new ColumnConstraint(col);
             cc.Id = (int)reader["DefaultId"];
             if (cc.Id != 0)
             {
+                cc.Owner = table.Owner;
                 cc.Name = reader["DefaultName"].ToString();
                 cc.Type = Constraint.ConstraintType.Default;
                 cc.Definition = reader["DefaultDefinition"].ToString();
                 col.Constraints.Add(cc);
             }
-            return col;
+            if ((int)reader["rule_object_id"] != 0)
+                col.Rule = ((Database)table.Parent).Rules.Find((int)reader["rule_object_id"]);
+            table.Columns.Add(col);
         }
 
-        public Tables Get(Database database)
+        public static void Fill(Database database, string connectionString)
         {
-            Tables tables = null;
+            string error = "";
             Triggers triggers = null;
             Indexes indexes = null;
             Constraints constraints = null;
-            string error = "";
             try
             {
-                Thread t1 = new Thread(delegate()
-                {
-                    try
-                    {
-                        tables = GetTables(database);
-                    }
-                    catch (Exception ex)
-                    {
-                        error = ex.StackTrace;
-                    }
-                });
-                Thread t2 = new Thread(delegate()
-                {
-                    try
-                    {
-                        if (objectFilter.OptionFilter.FilterTrigger)
-                            triggers = (new GenerateTriggers(connectioString, objectFilter).Get());
-                    }
-                    catch (Exception ex)
-                    {
-                        error = ex.StackTrace;
-                    }
-                });
-                Thread t3 = new Thread(delegate()
-                {
-                    try
-                    {
-                        if (objectFilter.OptionFilter.FilterIndex)
-                            indexes = (new GenerateIndex(connectioString, objectFilter)).Get("U");
-                    }
-                    catch (Exception ex)
-                    {
-                        error = ex.StackTrace;
-                    }
-                });
-                Thread t4 = new Thread(delegate()
-                {
-                    try
-                    {
-                        if (objectFilter.OptionFilter.FilterConstraint)
-                            constraints = (new GenerateConstraint(connectioString, objectFilter)).Get(database);
-                    }
-                    catch (Exception ex)
-                    {
-                        error = ex.StackTrace;
-                    }
-                });
-                t1.Start();
-                t2.Start();
-                t3.Start();
-                t4.Start();
-                t1.Join();
-                t2.Join();
-                t3.Join();
-                t4.Join();
-
-                return Merge(tables, triggers, indexes, constraints);
+                FillTables(database, connectionString);
+                if (database.Options.Ignore.FilterTrigger)
+                    triggers = (new GenerateTriggers(connectionString, database.Options).Get());
+                if (database.Options.Ignore.FilterIndex)
+                    indexes = (new GenerateIndex(connectionString, database.Options)).Get("U");
+                if (database.Options.Ignore.FilterConstraint)
+                    constraints = (new GenerateConstraint(connectionString, database.Options)).Get(database);
+                if (String.IsNullOrEmpty(error))
+                    Merge(database.Tables, triggers, indexes, constraints);
+                else
+                    throw new SchemaException(error);                
             }
             catch
             {
@@ -166,20 +100,17 @@ namespace DBDiff.Schema.SQLServer.Generates
             }
         }
 
-        private Tables GetTables(Database database)
+        public static void FillTables(Database database, string connectionString)
         {
             try
             {
-                Tables tables = new Tables(database);
-                double tableCount = GetTablesCount(database);
-                double tableIndex = 0;
                 int textInRow;
                 Boolean largeValues;
                 Boolean varDecimal;
                 int lastObjectId = 0;
                 Table item = null;
 
-                using (SqlConnection conn = new SqlConnection(connectioString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     using (SqlCommand command = new SqlCommand(TableSQLCommand.GetTableDetail(database.Info.Version), conn))
                     {
@@ -199,31 +130,26 @@ namespace DBDiff.Schema.SQLServer.Generates
                                     textInRow = (int)reader["Text_In_Row_limit"];
                                     largeValues = (Boolean)reader["large_value_types_out_of_row"];
                                     varDecimal = ((int)reader["HasVarDecimal"]) == 1;
-                                    if (objectFilter.OptionFilter.FilterTableFileGroup)
+                                    if (database.Options.Ignore.FilterTableFileGroup)
                                     {
                                         item.FileGroup = reader["FileGroup"].ToString();
                                         item.FileGroupText = reader["FileGroupText"].ToString();
                                     }
-                                    if (objectFilter.OptionFilter.FilterTableOption)
+                                    if (database.Options.Ignore.FilterTableOption)
                                     {
                                         if (textInRow > 0) item.Options.Add("TextInRow", textInRow.ToString(CultureInfo.InvariantCulture));
                                         if (largeValues) item.Options.Add("LargeValues", "1");
                                         if (varDecimal) item.Options.Add("VarDecimal", "1");
                                     }
-                                    tables.Add(item);
-                                    tableIndex++;
+                                    database.Tables.Add(item);
                                 }
-                                if (objectFilter.OptionFilter.FilterTable)
-                                    item.Columns.Add(AddColumns(reader, item));
-                                //OnTableProgress(this,new ProgressEventArgs((tableIndex / tableCount) * 100));
+                                if (database.Options.Ignore.FilterTable)
+                                    FillColumn(item, reader);
                             }
                         }
                     }
                 }
-
-                //tables.Sort();
-                tables.ToSQL();
-                return tables;
+                //tables.ToSQL();
             }
             catch
             {
@@ -231,7 +157,7 @@ namespace DBDiff.Schema.SQLServer.Generates
             }
         }
 
-        private Tables Merge(Tables tables, Triggers triggers, Indexes indexes, Constraints constraints)
+        private static void Merge(Tables tables, Triggers triggers, Indexes indexes, Constraints constraints)
         {
             if (triggers != null)
             {
@@ -277,7 +203,6 @@ namespace DBDiff.Schema.SQLServer.Generates
                         ((Database)table.Parent).Dependencies.Add(table.Id, 0, table.Id, 0, con);
                 }
             }
-            return tables;
         }
     }
 }

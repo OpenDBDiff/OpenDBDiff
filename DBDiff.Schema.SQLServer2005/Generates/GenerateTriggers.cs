@@ -23,7 +23,7 @@ namespace DBDiff.Schema.SQLServer.Generates
             this.objectFilter = filter;
         }
 
-        private static string GetSQLTrigger()
+        private static string GetSQL()
         {
             string sql = "";
             sql += "SELECT T.parent_id, OBJECT_DEFINITION(t.object_id) AS Text, S.name AS Owner,T.name,is_disabled,is_not_for_replication,is_instead_of_trigger ";
@@ -42,7 +42,7 @@ namespace DBDiff.Schema.SQLServer.Generates
             using (SqlConnection conn = new SqlConnection(connectioString))
             {
                 conn.Open();
-                using (SqlCommand command = new SqlCommand(GetSQLTrigger(), conn))
+                using (SqlCommand command = new SqlCommand(GetSQL(), conn))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -59,9 +59,10 @@ namespace DBDiff.Schema.SQLServer.Generates
                             trigger.InsteadOf = (bool)reader["is_instead_of_trigger"];
                             trigger.IsDisabled = (bool)reader["is_disabled"];
                             trigger.IsDDLTrigger = false;
-                            trigger.NotForReplication = (bool)reader["is_not_for_replication"];
                             trigger.Owner = reader["Owner"].ToString();
                             trigger.Text = reader["Text"].ToString();
+                            if (!objectFilter.Ignore.FilterIgnoreNotForReplication)
+                                trigger.NotForReplication = (bool)reader["is_not_for_replication"];
                             triggers.Add(trigger);
                         }
                     }

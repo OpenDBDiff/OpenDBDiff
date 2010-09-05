@@ -34,14 +34,14 @@ namespace DBDiff.Schema.SQLServer.Model
             TableOption prop = new TableOption(Parent);
             prop.Name = name;
             prop.Value = value;
-            prop.Status = StatusEnum.ObjectStatusType.OriginalStatus;
+            prop.Status = Enums.ObjectStatusType.OriginalStatus;
             base.Add(prop);
         }
 
         public string ToSQL()
         {
             StringBuilder sql = new StringBuilder();
-            this.ForEach(item => sql.Append(item.ToSQL() + "\r\n"));
+            this.ForEach(item => sql.Append(item.ToSql() + "\r\n"));
             return sql.ToString();
         }
 
@@ -55,15 +55,15 @@ namespace DBDiff.Schema.SQLServer.Model
             int index;
             for (index = 0; index < this.Count; index++)
             {
-                if (this[index].Status == StatusEnum.ObjectStatusType.DropStatus)
-                    sqlDrop += this[index].ToSQLDrop();
-                if (this[index].Status == StatusEnum.ObjectStatusType.CreateStatus)
-                    sqlAdd += this[index].ToSQL();
-                if (this[index].Status == StatusEnum.ObjectStatusType.AlterStatus)
-                    sqlAlter += this[index].ToSQLDrop() + this[index].ToSQL();
+                if (this[index].Status == Enums.ObjectStatusType.DropStatus)
+                    sqlDrop += this[index].ToSqlDrop();
+                if (this[index].Status == Enums.ObjectStatusType.CreateStatus)
+                    sqlAdd += this[index].ToSql();
+                if (this[index].Status == Enums.ObjectStatusType.AlterStatus)
+                    sqlAlter += this[index].ToSqlDrop() + this[index].ToSql();
             }
             if (!String.IsNullOrEmpty(sqlAlter + sqlDrop + sqlAdd))
-                list.Add(sqlAlter + sqlDrop + sqlAdd, ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.AlterOptions);
+                list.Add(sqlAlter + sqlDrop + sqlAdd, ((Table)Parent).DependenciesCount, Enums.ScripActionType.AlterOptions);
             return list;
         }
     }

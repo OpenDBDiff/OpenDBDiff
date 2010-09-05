@@ -7,21 +7,8 @@ using DBDiff.Schema.SQLServer.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates
 {
-    public class GenerateFileGroups
+    public static class GenerateFileGroups
     {
-        private string connectioString;
-        private SqlOption objectFilter;
-
-        /// <summary>
-        /// Constructor de la clase.
-        /// </summary>
-        /// <param name="connectioString">Connection string de la base</param>
-        public GenerateFileGroups(string connectioString, SqlOption filter)
-        {
-            this.connectioString = connectioString;
-            this.objectFilter = filter;
-        }
-
         private static string GetSQLFile(FileGroup filegroup)
         {
             string sql;
@@ -38,10 +25,9 @@ namespace DBDiff.Schema.SQLServer.Generates
             return sql;
         }
 
-        private FileGroupFiles GetFile(FileGroup filegroup)
+        private static void FillFiles(FileGroup filegroup, string connectionString)
         {
-            FileGroupFiles items = new FileGroupFiles(filegroup);
-            using (SqlConnection conn = new SqlConnection(connectioString))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand(GetSQLFile(filegroup), conn))
                 {
@@ -61,12 +47,11 @@ namespace DBDiff.Schema.SQLServer.Generates
                             item.PhysicalName = reader["physical_name"].ToString();
                             item.Size = (int)reader["size"];
                             item.Type = (byte)reader["type"];
-                            items.Add(item);
+                            filegroup.Files.Add(item);
                         }
                     }
                 }
             }
-            return items;
         }
 
         private static string GetSQL()
@@ -81,14 +66,13 @@ namespace DBDiff.Schema.SQLServer.Generates
             return sql;
         }
 
-        public FileGroups Get(Database database)
+        public static void Fill(Database database, string connectionString)
         {
             try
             {
-                FileGroups items = new FileGroups(database);
-                if (objectFilter.OptionFilter.FilterTableFileGroup)
+                if (database.Options.Ignore.FilterTableFileGroup)
                 {
-                    using (SqlConnection conn = new SqlConnection(connectioString))
+                    using (SqlConnection conn = new SqlConnection(connectionString))
                     {
                         using (SqlCommand command = new SqlCommand(GetSQL(), conn))
                         {
@@ -103,14 +87,13 @@ namespace DBDiff.Schema.SQLServer.Generates
                                     item.Owner = "";
                                     item.IsDefaultFileGroup = (bool)reader["is_default"];
                                     item.IsReadOnly = (bool)reader["is_read_only"];
-                                    item.Files = GetFile(item);
-                                    items.Add(item);
+                                    FillFiles(item,connectionString);
+                                    database.FileGroups.Add(item);
                                 }
                             }
                         }
                     }
                 }
-                return items;
             }
             catch
             {

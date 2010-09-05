@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using DBDiff.Schema.Model;
+using DBDiff.Schema.Attributes;
 
 namespace DBDiff.Schema.SQLServer.Model
 {
@@ -18,17 +19,16 @@ namespace DBDiff.Schema.SQLServer.Model
         private string fileGroup;
         private string fileGroupText;
         private List<ISchemaBase> dependencis = null;
-        private Dictionary<int, bool> depencyTracker = new Dictionary<int, bool>();
 
-        public Table(Database parent):base(StatusEnum.ObjectTypeEnum.Table)
+        public Table(Database parent):base(Enums.ObjectType.Table)
         {
+            this.Parent = parent;
             dependenciesCount = -1;
             columns = new Columns(this);
             constraints = new Constraints(this);
             options = new TableOptions(this);
             triggers = new Triggers(this);
-            indexes = new Indexes(this);
-            this.Parent = parent;
+            indexes = new Indexes(this);            
         }
 
         /// <summary>
@@ -45,24 +45,12 @@ namespace DBDiff.Schema.SQLServer.Model
             table.FileGroup = this.FileGroup;
             table.FileGroupText = this.FileGroupText;
             table.HasClusteredIndex = this.HasClusteredIndex;
-            table.DependenciesCount = this.DependenciesCount;
+            table.dependenciesCount = this.DependenciesCount;
             table.Columns = this.Columns.Clone(table);
             table.Options = this.Options.Clone(table);
-            table.Triggers = this.Triggers.Clone(table);
-            table.Indexes = this.Indexes.Clone(table);
+            table.triggers = this.Triggers.Clone(table);
+            table.indexes = this.Indexes.Clone(table);
             return table;
-        }
-
-        public Indexes Indexes
-        {
-            get { return indexes; }
-            set { indexes = value; }
-        }
-
-        public Triggers Triggers
-        {
-            get { return triggers; }
-            set { triggers = value; }
         }
 
         public TableOptions Options
@@ -93,9 +81,21 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             get 
             {
-                foreach (Column col in this.Columns)
+                foreach (Column col in Columns)
+                { 
+                    if (col.IsIdentity) return true; 
+                }
+                return false;
+            }
+        }
+
+        public Boolean HasBlobColumn
+        {
+            get
+            {
+                foreach (Column col in Columns)
                 {
-                    if (col.IsIdentity) return true;
+                    if (col.IsBLOB) return true;
                 }
                 return false;
             }
@@ -113,19 +113,32 @@ namespace DBDiff.Schema.SQLServer.Model
         /// <summary>
         /// Colecion de constraints de la tabla.
         /// </summary>
+        [ShowItemAttribute("Constraints")]
         public Constraints Constraints
         {
             get { return constraints; }
-            set { constraints = value; }
         }
 
         /// <summary>
         /// Coleccion de campos de la tabla.
         /// </summary>
+        [ShowItemAttribute("Columns","Column")]
         public Columns Columns
         {
             get { return columns; }
             set { columns = value; }
+        }
+
+        [ShowItemAttribute("Indexes","Index")]
+        public Indexes Indexes
+        {
+            get { return indexes; }
+        }
+
+        [ShowItemAttribute("Triggers")]
+        public Triggers Triggers
+        {
+            get { return triggers; }
         }
 
         /// <summary>
@@ -137,56 +150,55 @@ namespace DBDiff.Schema.SQLServer.Model
             set { fileGroup = value; }
         }
 
-        public Boolean HasBlobColumn
+        public override string ToSql()
         {
-            get
-            {
-                foreach (Column col in this.Columns)
-                {
-                    if (col.IsBLOB) return true;
-                }
-                return false;
-            }
+            return ToSQL(true);
         }
 
         /// <summary>
         /// Devuelve el schema de la tabla en formato SQL.
         /// </summary>
-        public string ToSQL()
+        public string ToSQL(Boolean showFK)
         {
             string sql = "";
-            sql += "CREATE TABLE " + FullName + "\r\n(\r\n";
-            sql += columns.ToSQL();
-            if (constraints.Count > 0)
+            if (columns.Count > 0)
             {
-                sql += ",\r\n";
-                sql += constraints.ToSQL();
-            }
-            else
+                sql += "CREATE TABLE " + FullName + "\r\n(\r\n";
+                sql += columns.ToSQL();
+                if (constraints.Count > 0)
+                {
+                    sql += ",\r\n";
+                    sql += constraints.ToSQL(Constraint.ConstraintType.PrimaryKey);
+                    sql += constraints.ToSQL(Constraint.ConstraintType.Unique);
+                    if (showFK)
+                        sql += constraints.ToSQL(Constraint.ConstraintType.ForeignKey);
+                }
+                else
+                    sql += "\r\n";
+                sql += ")";
+                if (!String.IsNullOrEmpty(FileGroup)) sql += " ON [" + FileGroup + "]";
+                if (!String.IsNullOrEmpty(FileGroupText))
+                {
+                    if (this.HasBlobColumn)
+                        sql += " TEXTIMAGE_ON [" + FileGroupText + "]";
+                }
                 sql += "\r\n";
-            sql += ")";
-            if (!String.IsNullOrEmpty(FileGroup)) sql+= " ON [" + FileGroup + "]";
-            if (!String.IsNullOrEmpty(FileGroupText))
-            {
-                if (this.HasBlobColumn)
-                    sql += " TEXTIMAGE_ON [" + FileGroupText + "]";
+                sql += "GO\r\n";
+                sql += constraints.ToSQLAdd(Constraint.ConstraintType.Check);
+                sql += indexes.ToSQL();
+                sql += options.ToSQL();
+                sql += triggers.ToSQL();
             }
-            sql += "\r\n";
-            sql += "GO\r\n";
-            sql += constraints.ToSQLCheck();
-            sql += indexes.ToSQL();
-            sql += options.ToSQL();
-            sql += triggers.ToSQL();
             return sql;
 
         }
 
-        public override string ToSQLAdd()
+        public override string ToSqlAdd()
         {
-            return ToSQL();
+            return ToSql();
         }
 
-        public override string ToSQLDrop()
+        public override string ToSqlDrop()
         {
             return "DROP TABLE " + FullName + "\r\nGO\r\n";
         }
@@ -203,21 +215,21 @@ namespace DBDiff.Schema.SQLServer.Model
                 {
                     if (cons.Index.Type == Index.IndexTypeEnum.Clustered)
                     {
-                        listDiff.Add(cons.ToSQLDrop(FileGroup), dependenciesCount, StatusEnum.ScripActionType.DropConstraint);
-                        listDiff.Add(cons.ToSQLAdd(), dependenciesCount, StatusEnum.ScripActionType.AddConstraint);
+                        listDiff.Add(cons.ToSQLDrop(FileGroup), dependenciesCount, Enums.ScripActionType.DropConstraint);
+                        listDiff.Add(cons.ToSqlAdd(), dependenciesCount, Enums.ScripActionType.AddConstraint);
                         found = true;
                     }
                 }
                 if (!found)
                 {
-                    this.Status = StatusEnum.ObjectStatusType.AlterRebuildStatus;
+                    this.Status = Enums.ObjectStatusType.AlterRebuildStatus;
                     listDiff = ToSQLDiff();
                 }
             }
             else
             {
-                listDiff.Add(clustered.ToSQLDrop(FileGroup), dependenciesCount, StatusEnum.ScripActionType.DropIndex);
-                listDiff.Add(clustered.ToSQLAdd(), dependenciesCount, StatusEnum.ScripActionType.AddIndex);
+                listDiff.Add(clustered.ToSqlDrop(FileGroup), dependenciesCount, Enums.ScripActionType.DropIndex);
+                listDiff.Add(clustered.ToSqlAdd(), dependenciesCount, Enums.ScripActionType.AddIndex);
             }
             return listDiff;
         }
@@ -229,44 +241,48 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == StatusEnum.ObjectStatusType.DropStatus)
+            if (this.Status == Enums.ObjectStatusType.DropStatus)
             {
-                listDiff.Add(ToSQLDrop(), dependenciesCount, StatusEnum.ScripActionType.DropTable);
-                listDiff.Add(ToSQLDropFKBelow());
+                if (((Database)Parent).Options.Ignore.FilterTable)
+                {
+                    listDiff.Add(ToSqlDrop(), dependenciesCount, Enums.ScripActionType.DropTable);
+                    listDiff.AddRange(ToSQLDropFKBelow());
+                }
             }
-            if (this.Status == StatusEnum.ObjectStatusType.CreateStatus)
+            if (this.Status == Enums.ObjectStatusType.CreateStatus)
             {
-                listDiff.Add(ToSQL(), dependenciesCount, StatusEnum.ScripActionType.AddTable);
+                listDiff.Add(ToSQL(false), dependenciesCount, Enums.ScripActionType.AddTable);
+                listDiff.Add(Constraints.ToSQLAdd(Constraint.ConstraintType.ForeignKey), dependenciesCount, Enums.ScripActionType.AddConstraintFK);
             }
-            if (this.Status == StatusEnum.ObjectStatusType.AlterRebuildDependeciesStatus)
+            if (this.Status == Enums.ObjectStatusType.AlterRebuildDependenciesStatus)
             {
                 GenerateDependencis();
-                listDiff.Add(ToSQLDropDependencis());
-                listDiff.Add(columns.ToSQLDiff());
-                listDiff.Add(ToSQLCreateDependencis());
-                listDiff.Add(constraints.ToSQLDiff());
-                listDiff.Add(indexes.ToSQLDiff());
-                listDiff.Add(options.ToSQLDiff());
-                listDiff.Add(triggers.ToSQLDiff());
+                listDiff.AddRange(ToSQLDropDependencis());
+                listDiff.AddRange(columns.ToSQLDiff());
+                listDiff.AddRange(ToSQLCreateDependencis());
+                listDiff.AddRange(constraints.ToSQLDiff());
+                listDiff.AddRange(indexes.ToSQLDiff());
+                listDiff.AddRange(options.ToSQLDiff());
+                listDiff.AddRange(triggers.ToSQLDiff());
             }
-            if (this.Status == StatusEnum.ObjectStatusType.AlterStatus)
+            if (this.Status == Enums.ObjectStatusType.AlterStatus)
             {
-                listDiff.Add(columns.ToSQLDiff());
-                listDiff.Add(constraints.ToSQLDiff());
-                listDiff.Add(indexes.ToSQLDiff());
-                listDiff.Add(options.ToSQLDiff());
-                listDiff.Add(triggers.ToSQLDiff());
+                listDiff.AddRange(columns.ToSQLDiff());
+                listDiff.AddRange(constraints.ToSQLDiff());
+                listDiff.AddRange(indexes.ToSQLDiff());
+                listDiff.AddRange(options.ToSQLDiff());
+                listDiff.AddRange(triggers.ToSQLDiff());
             }
-            if (this.Status == StatusEnum.ObjectStatusType.AlterRebuildStatus)
+            if (this.Status == Enums.ObjectStatusType.AlterRebuildStatus)
             {
                 GenerateDependencis();
-                listDiff.Add(ToSQLRebuild());
-                listDiff.Add(columns.ToSQLDiff());
-                listDiff.Add(constraints.ToSQLDiff());
-                listDiff.Add(indexes.ToSQLDiff());
-                listDiff.Add(options.ToSQLDiff());
+                listDiff.AddRange(ToSQLRebuild());
+                listDiff.AddRange(columns.ToSQLDiff());
+                listDiff.AddRange(constraints.ToSQLDiff());
+                listDiff.AddRange(indexes.ToSQLDiff());
+                listDiff.AddRange(options.ToSQLDiff());
                 //Como recrea la tabla, solo pone los nuevos triggers, por eso va ToSQL y no ToSQLDiff
-                listDiff.Add(triggers.ToSQL(), dependenciesCount, StatusEnum.ScripActionType.AddTrigger); 
+                listDiff.Add(triggers.ToSQL(), dependenciesCount, Enums.ScripActionType.AddTrigger); 
             }
             return listDiff;
         }
@@ -277,49 +293,67 @@ namespace DBDiff.Schema.SQLServer.Model
             string tempTable = "Temp" + Name;
             string listColumns = "";
             string listValues = "";
-            foreach (Column column in this.Columns)
+            Boolean IsIdentityNew = false;
+            try
             {
-                if ((column.Status != StatusEnum.ObjectStatusType.DropStatus) && !((column.Status == StatusEnum.ObjectStatusType.CreateStatus) && (column.Nullable == true)))
+                foreach (Column column in this.Columns)
                 {
-                    if ((!column.IsComputed) && (!column.Type.ToLower().Equals("timestamp")))
+                    if ((column.Status != Enums.ObjectStatusType.DropStatus) && !((column.Status == Enums.ObjectStatusType.CreateStatus) && (column.Nullable == true)))
                     {
-                        /*Si la nueva columna a agregar es XML, no se inserta ese campo y debe ir a la coleccion de Warnings*/
-                        if (!((column.Status == StatusEnum.ObjectStatusType.CreateStatus) && (column.Type.ToLower().Equals("xml"))))
+                        if ((!column.IsComputed) && (!column.Type.ToLower().Equals("timestamp")))
                         {
-                            listColumns += "[" + column.Name + "],";
-                            if (column.HasToForceValue)
+                            /*Si la nueva columna a agregar es XML, no se inserta ese campo y debe ir a la coleccion de Warnings*/
+                            /*Si la nueva columna a agregar es Identity, tampoco se debe insertar explicitamente*/
+                            if (!((column.Status == Enums.ObjectStatusType.CreateStatus) && ((column.Type.ToLower().Equals("xml") || (column.IsIdentity)))))
                             {
-                                if (column.Status == StatusEnum.ObjectStatusType.AlterStatusUpdate)
-                                    listValues += "ISNULL([" + column.Name + "]," + column.DefaultForceValue + "),";
+                                listColumns += "[" + column.Name + "],";
+                                if (column.HasToForceValue)
+                                {
+                                    if (column.HasState(Enums.ObjectStatusType.UpdateStatus))
+                                        listValues += "ISNULL([" + column.Name + "]," + column.DefaultForceValue + "),";
+                                    else
+                                        listValues += column.DefaultForceValue + ",";
+                                }
                                 else
-                                    listValues += column.DefaultForceValue + ",";
+                                    listValues += "[" + column.Name + "],";
                             }
                             else
-                                listValues += "[" + column.Name + "],";
+                            {
+                                if (column.IsIdentity) IsIdentityNew = true;
+                            }
                         }
                     }
                 }
+                if (!String.IsNullOrEmpty(listColumns))
+                {
+                    listColumns = listColumns.Substring(0, listColumns.Length - 1);
+                    listValues = listValues.Substring(0, listValues.Length - 1);
+                    sql += ToSQLTemp(tempTable) + "\r\n";
+                    if ((HasIdentityColumn) && (!IsIdentityNew))
+                        sql += "SET IDENTITY_INSERT [" + Owner + "].[" + tempTable + "] ON\r\n";
+                    sql += "INSERT INTO [" + Owner + "].[" + tempTable + "] (" + listColumns + ")" + " SELECT " + listValues + " FROM " + this.FullName + "\r\n";
+                    if ((HasIdentityColumn) && (!IsIdentityNew))
+                        sql += "SET IDENTITY_INSERT [" + Owner + "].[" + tempTable + "] OFF\r\nGO\r\n\r\n";
+                    sql += "DROP TABLE " + this.FullName + "\r\nGO\r\n";
+                    sql += "EXEC sp_rename N'[" + Owner + "].[" + tempTable + "]',N'" + this.Name + "', 'OBJECT'\r\nGO\r\n\r\n";
+                    sql += OriginalTable.Options.ToSQL();
+                }
+                else
+                    sql = "";
+                return sql;
             }
-            listColumns = listColumns.Substring(0, listColumns.Length - 1);
-            listValues = listValues.Substring(0, listValues.Length - 1);
-            sql += ToSQLTemp(tempTable) + "\r\n";
-            if (HasIdentityColumn)
-                sql += "SET IDENTITY_INSERT [" + Owner + "].[" + tempTable + "] ON\r\n";
-            sql += "INSERT INTO [" + Owner + "].[" + tempTable + "] (" + listColumns + ")" + " SELECT " + listValues + " FROM " + this.FullName + "\r\n";
-            if (HasIdentityColumn)
-                sql += "SET IDENTITY_INSERT [" + Owner + "].[" + tempTable + "] OFF\r\nGO\r\n\r\n";
-            sql += "DROP TABLE " + this.FullName + "\r\nGO\r\n";
-            sql += "EXEC sp_rename N'[" + Owner + "].[" + tempTable + "]',N'" + this.Name + "', 'OBJECT'\r\nGO\r\n\r\n";
-            sql += OriginalTable.Options.ToSQL();
-            return sql;
+            catch (Exception ex)
+            {
+                return "";
+            }
         }
 
         private SQLScriptList ToSQLRebuild()
         {
             SQLScriptList listDiff = new SQLScriptList();            
-            listDiff.Add(ToSQLDropDependencis());
-            listDiff.Add(ToSQLTableRebuild(), dependenciesCount, StatusEnum.ScripActionType.RebuildTable);
-            listDiff.Add(ToSQLCreateDependencis());
+            listDiff.AddRange(ToSQLDropDependencis());
+            listDiff.Add(ToSQLTableRebuild(), dependenciesCount, Enums.ScripActionType.RebuildTable);
+            listDiff.AddRange(ToSQLCreateDependencis());
             return listDiff;
         }
 
@@ -332,7 +366,7 @@ namespace DBDiff.Schema.SQLServer.Model
             
             for (int index = 0; index < this.Columns.Count; index++)
             {
-                if (this.Columns[index].Status != StatusEnum.ObjectStatusType.DropStatus)
+                if (this.Columns[index].Status != Enums.ObjectStatusType.DropStatus)
                 {
                     sql += "\t" + this.Columns[index].ToSQL(true);
                     if (index != this.Columns.Count - 1)
@@ -350,56 +384,18 @@ namespace DBDiff.Schema.SQLServer.Model
             sql += "\r\n";
             sql += "GO\r\n";
             return sql;
-        }
-
-        private StatusEnum.ScripActionType GetDropActionConstraint(ISchemaBase cons)
-        {
-            if (cons.ObjectType == StatusEnum.ObjectTypeEnum.Constraint)
-            {
-                StatusEnum.ScripActionType actionDrop = StatusEnum.ScripActionType.DropConstraint;
-                if (((Constraint)cons).Type == Constraint.ConstraintType.ForeignKey)
-                {
-                    actionDrop = StatusEnum.ScripActionType.DropConstraintFK;
-                }
-                if (((Constraint)cons).Type == Constraint.ConstraintType.PrimaryKey)
-                {
-                    actionDrop = StatusEnum.ScripActionType.DropConstraintPK;
-                }
-                return actionDrop;
-            }
-            else
-                return StatusEnum.ScripActionType.DropIndex;
-        }
-
-        private StatusEnum.ScripActionType GetAddActionConstraint(ISchemaBase cons)
-        {
-            if (cons.ObjectType == StatusEnum.ObjectTypeEnum.Constraint)
-            {
-                StatusEnum.ScripActionType actionAdd = StatusEnum.ScripActionType.AddConstraint;
-                if (((Constraint)cons).Type == Constraint.ConstraintType.ForeignKey)
-                {
-                    actionAdd = StatusEnum.ScripActionType.AddConstraintFK;
-                }
-                if (((Constraint)cons).Type == Constraint.ConstraintType.PrimaryKey)
-                {
-                    actionAdd = StatusEnum.ScripActionType.AddConstraintPK;
-                }
-                return actionAdd;
-            }
-            else
-                return StatusEnum.ScripActionType.AddIndex;
-        }
+        }        
 
         private void GenerateDependencis()
         {
             List<ISchemaBase> myDependencis = null;
             /*Si el estado es AlterRebuildDependeciesStatus, busca las dependencias solamente en las columnas que fueron modificadas*/
-            if (this.Status == StatusEnum.ObjectStatusType.AlterRebuildDependeciesStatus)
+            if (this.Status == Enums.ObjectStatusType.AlterRebuildDependenciesStatus)
             {
                 myDependencis = new List<ISchemaBase>();
                 for (int ic = 0; ic < this.Columns.Count; ic++)
                 {
-                    if ((this.Columns[ic].Status == StatusEnum.ObjectStatusType.AlterRebuildDependeciesStatus) || (this.Columns[ic].Status == StatusEnum.ObjectStatusType.AlterStatus))
+                    if ((this.Columns[ic].Status == Enums.ObjectStatusType.AlterRebuildDependenciesStatus) || (this.Columns[ic].Status == Enums.ObjectStatusType.AlterStatus))
                         myDependencis.AddRange(((Database)Parent).Dependencies.Find(this.Id, 0, this.Columns[ic].DataUserTypeId));
                 }
                 /*Si no encuentra ninguna, toma todas las de la tabla*/
@@ -413,19 +409,25 @@ namespace DBDiff.Schema.SQLServer.Model
             for (int j = 0; j < myDependencis.Count; j++)
             {
                 ISchemaBase item = null;
-                if (myDependencis[j].ObjectType == StatusEnum.ObjectTypeEnum.Index)
+                if (myDependencis[j].ObjectType == Enums.ObjectType.Index)
                     item = indexes[myDependencis[j].FullName];
-                if (myDependencis[j].ObjectType == StatusEnum.ObjectTypeEnum.Constraint)
+                if (myDependencis[j].ObjectType == Enums.ObjectType.Constraint)
                     item = ((Database)Parent).Tables[myDependencis[j].Parent.FullName].Constraints[myDependencis[j].FullName];
-                if (myDependencis[j].ObjectType == StatusEnum.ObjectTypeEnum.Default)
+                if (myDependencis[j].ObjectType == Enums.ObjectType.Default)
                     item = columns[myDependencis[j].FullName].Constraints[0];
-                if (myDependencis[j].ObjectType == StatusEnum.ObjectTypeEnum.View)
+                if (myDependencis[j].ObjectType == Enums.ObjectType.View)
                     item = ((Database)Parent).Views[myDependencis[j].FullName];
+                if (myDependencis[j].ObjectType == Enums.ObjectType.Function)
+                    item = ((Database)Parent).Functions[myDependencis[j].FullName];
                 if (item != null)
                     dependencis.Add(item);
             }
         }
 
+        /// <summary>
+        /// Genera una lista de FK que deben ser eliminadas previamente a la eliminacion de la tablas.
+        /// Esto pasa porque para poder eliminar una tabla, hay que eliminar antes todas las constraints asociadas.
+        /// </summary>
         private SQLScriptList ToSQLDropFKBelow()
         {
             SQLScriptList listDiff = new SQLScriptList();
@@ -435,66 +437,59 @@ namespace DBDiff.Schema.SQLServer.Model
                 {
                     /*Si la FK pertenece a la misma tabla, no se debe explicitar el DROP CONSTRAINT antes de hacer el DROP TABLE*/
                     if (constraint.Parent.Id != constraint.RelationalTableId)
-                        listDiff.Add(constraint.ToSQLDrop(), 0, StatusEnum.ScripActionType.DropConstraintFK);
+                    {
+                        listDiff.Add(constraint.Drop());
+                    }
                 }
             });
             return listDiff;
         }
 
+        /// <summary>
+        /// Genera una lista de script de DROPS de todas los constraints dependientes de la tabla.
+        /// Se usa cuando se quiere reconstruir una tabla y todos sus objectos dependientes.
+        /// </summary>
         private SQLScriptList ToSQLDropDependencis()
         {
-            StatusEnum.ScripActionType action;
             SQLScriptList listDiff = new SQLScriptList();           
             //Se buscan todas las table constraints.
             for (int index = 0; index < dependencis.Count; index++)
             {
-                if (dependencis[index].Status == StatusEnum.ObjectStatusType.OriginalStatus)
+                if (dependencis[index].Status == Enums.ObjectStatusType.OriginalStatus)
                 {
-                    action = GetDropActionConstraint(dependencis[index]);
-                    if (!dependencis[index].GetWasInsertInDiffList(action))
-                    {
-                        listDiff.Add(dependencis[index].ToSQLDrop(), dependenciesCount, action);
-                        dependencis[index].SetWasInsertInDiffList(action);
-                    }
+                    listDiff.Add(dependencis[index].Drop());
                 }
             }
             //Se buscan todas las columns constraints.
-            for (int index = 0; index < columns.Count; index++)
+            columns.ForEach(column => 
             {
-                for (int cindex = 0; cindex < columns[index].Constraints.Count; cindex++)
+                if (column.Constraints.Count > 0)
                 {
-                    if ((columns[index].Constraints[cindex].Status != StatusEnum.ObjectStatusType.CreateStatus) && ((columns[index].Constraints[cindex].Status == StatusEnum.ObjectStatusType.OriginalStatus) || (this.Status == StatusEnum.ObjectStatusType.AlterRebuildStatus)))
-                    //if (columns[index].Constraints[cindex].Status == StatusEnum.ObjectStatusType.OriginalStatus) 
-                        listDiff.Add(columns[index].Constraints[cindex].ToSQLDrop(), dependenciesCount, StatusEnum.ScripActionType.DropConstraint);
+                    if ((column.Constraints[0].Status == Enums.ObjectStatusType.OriginalStatus) && (column.Status != Enums.ObjectStatusType.CreateStatus))
+                        listDiff.Add(column.Constraints[0].Drop());
                 }
-            }
+            });
             return listDiff;
         }
 
         private SQLScriptList ToSQLCreateDependencis()
         {
             SQLScriptList listDiff = new SQLScriptList();
-            StatusEnum.ScripActionType action;
             //Las constraints de deben recorrer en el orden inverso.
             for (int index = dependencis.Count - 1; index >= 0; index--)
             {
-                if ((dependencis[index].Status == StatusEnum.ObjectStatusType.OriginalStatus) && (dependencis[index].Parent.Status != StatusEnum.ObjectStatusType.DropStatus))
+                if ((dependencis[index].Status == Enums.ObjectStatusType.OriginalStatus) && (dependencis[index].Parent.Status != Enums.ObjectStatusType.DropStatus))
                 {
-                    action = GetAddActionConstraint(dependencis[index]);
-                    if (!dependencis[index].GetWasInsertInDiffList(action))
-                    {
-                        listDiff.Add(dependencis[index].ToSQLAdd(), dependenciesCount, GetAddActionConstraint(dependencis[index]));
-                        dependencis[index].SetWasInsertInDiffList(action);
-                    }
+                    listDiff.Add(dependencis[index].Create());
                 }
             }
             //Se buscan todas las columns constraints.
             for (int index = columns.Count - 1; index >= 0; index--)
             {
-                for (int cindex = 0; cindex < columns[index].Constraints.Count; cindex++)
+                if (columns[index].Constraints.Count > 0)
                 {
-                    if ((this.Status == StatusEnum.ObjectStatusType.AlterRebuildDependeciesStatus) && (columns[index].Constraints[cindex].Status == StatusEnum.ObjectStatusType.OriginalStatus))
-                        listDiff.Add(columns[index].Constraints[cindex].ToSQLAdd(), dependenciesCount, StatusEnum.ScripActionType.AddConstraint);
+                    if (columns[index].Constraints[0].CanCreate)
+                        listDiff.Add(columns[index].Constraints[0].Create());
                 }
             }
             return listDiff;
@@ -504,39 +499,18 @@ namespace DBDiff.Schema.SQLServer.Model
         /// Indica la cantidad de Constraints dependientes de otra tabla (FK) que tiene
         /// la tabla.
         /// </summary>
-        public int DependenciesCount
+        public override int DependenciesCount
         {
             get 
             {
                 if (dependenciesCount == -1)
-                    dependenciesCount = FindDependenciesCount(this.Id);
+                    dependenciesCount = ((Database)Parent).Dependencies.DependenciesCount(this.Id, Enums.ObjectType.Constraint);
                 return dependenciesCount; 
             }
-            set 
+            /*set 
             { 
                 dependenciesCount = value; 
-            }
-        }
-
-        private int FindDependenciesCount(int tableId)
-        {
-            int count = 0;
-            int relationalTableId;
-            Constraints constraints = ((Database)Parent).Dependencies.FindNotOwner(tableId);
-            for (int index = 0; index < constraints.Count; index++)
-            {
-                Constraint cons = constraints[index];
-                relationalTableId = constraints[index].RelationalTableId; //((Table)constraints[index].Parent).Id;
-                if ((cons.Type == Constraint.ConstraintType.ForeignKey) && (relationalTableId == tableId))
-                {
-                    if (!depencyTracker.ContainsKey(tableId))
-                    {
-                        depencyTracker.Add(tableId, true);
-                        count += 1 + FindDependenciesCount(((Table)cons.Parent).Id);
-                    }
-                }
-            }
-            return count;
+            }*/
         }
 
         /// <summary>

@@ -2,17 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using DBDiff.Schema.Model;
+using DBDiff.Schema.SQLServer.Model.Util;
 
 namespace DBDiff.Schema.SQLServer.Model
 {
-    public class Rule : SQLServerSchemaBase
+    public class Rule : Code
     {
-        private string value;
-
         public Rule(ISchemaBase parent)
-            : base(StatusEnum.ObjectTypeEnum.Rule)
+            : base(parent, Enums.ObjectType.Rule)
         {
-            this.Parent = parent;
         }
 
         public Rule Clone(ISchemaBase parent)
@@ -21,46 +19,28 @@ namespace DBDiff.Schema.SQLServer.Model
             item.Id = this.Id;
             item.Name = this.Name;
             item.Owner = this.Owner;
-            item.Value = this.Value;
+            item.Text = this.Text;
             item.Guid = this.Guid;
             return item;
         }
 
-        public string Value
-        {
-            get { return this.value; }
-            set { this.value = value; }
-        }
-
-        public string ToSQL()
-        {
-            if ((value.Substring(value.Length -1,1).Equals("\n")) || (value.Substring(value.Length -1,1).Equals(" ")))
-                return Value + "GO\r\n";
-            else
-                return Value + "\r\nGO\r\n";
-        }
-
-        public override string ToSQLDrop()
-        {
-            return "DROP RULE " + FullName + "\r\nGO\r\n";
-        }
-
-        public override string ToSQLAdd()
-        {
-            return ToSQL();
-        }
-
         public string ToSQLAddBind()
         {
-            string sql = "";
-            sql += "EXEC sp_bindrule N'" + Name + "', N'" + this.Parent.Name + "','futureonly'\r\nGO\r\n";
+            string sql;
+            if (this.Parent.ObjectType == Enums.ObjectType.Column)
+                sql = String.Format("EXEC sp_bindrule N'{0}', N'[{1}].[{2}]','futureonly'\r\nGO\r\n", Name, this.Parent.Parent.Name,this.Parent.Name);
+            else
+                sql = String.Format("EXEC sp_bindrule N'{0}', N'{1}','futureonly'\r\nGO\r\n", Name, this.Parent.Name);
             return sql;
         }
 
         public string ToSQLAddUnBind()
         {
-            string sql = "";
-            sql += "EXEC sp_unbindrule @objname=N'" + this.Parent.Name + "'\r\nGO\r\n";
+            string sql;
+            if (this.Parent.ObjectType == Enums.ObjectType.Column)
+                sql = String.Format("EXEC sp_unbindrule @objname=N'[{0}].[{1}]'\r\nGO\r\n", this.Parent.Parent.Name, this.Parent.Name);
+            else
+                sql = String.Format("EXEC sp_unbindrule @objname=N'{0}'\r\nGO\r\n", this.Parent.Name);
             return sql;
         }
 
@@ -70,13 +50,14 @@ namespace DBDiff.Schema.SQLServer.Model
             UserDataTypes useDataTypes = ((Database)this.Parent).UserTypes.FindRules(this.FullName);
             foreach (UserDataType item in useDataTypes)
             {
-                foreach (Column column in item.ColumnsDependencies)
+                foreach (ObjectDependency dependency in item.Dependencys)
                 {
+                    Column column = ((Database)this.Parent).Tables[dependency.Name].Columns[dependency.ColumnName];
                     if (!column.IsComputed)
-                        listDiff.Add("EXEC sp_unbindrule '" + column.FullName + "'\r\nGO\r\n", 0, StatusEnum.ScripActionType.UnbindRuleColumn);
+                        listDiff.Add("EXEC sp_unbindrule '" + column.FullName + "'\r\nGO\r\n", 0, Enums.ScripActionType.UnbindRuleColumn);
                 }
-                if (item.Rule.Status != StatusEnum.ObjectStatusType.CreateStatus)
-                    listDiff.Add("EXEC sp_unbindrule '" + item.FullName + "'\r\nGO\r\n", 0, StatusEnum.ScripActionType.UnbindRuleType);
+                if (item.Rule.Status != Enums.ObjectStatusType.CreateStatus)
+                    listDiff.Add("EXEC sp_unbindrule '" + item.FullName + "'\r\nGO\r\n", 0, Enums.ScripActionType.UnbindRuleType);
             }
             return listDiff;
         }
@@ -88,20 +69,20 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == StatusEnum.ObjectStatusType.DropStatus)
+            if (this.Status == Enums.ObjectStatusType.DropStatus)
             {
-                listDiff.Add(ToSQLUnBindAll());
-                listDiff.Add(ToSQLDrop(), 0, StatusEnum.ScripActionType.DropRule);
+                listDiff.AddRange(ToSQLUnBindAll());
+                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropRule);
             }
-            if (this.Status == StatusEnum.ObjectStatusType.CreateStatus)
+            if (this.Status == Enums.ObjectStatusType.CreateStatus)
             {
-                listDiff.Add(ToSQL(), 0, StatusEnum.ScripActionType.AddRule);
+                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddRule);
             }
-            if (this.Status == StatusEnum.ObjectStatusType.AlterStatus)
+            if (this.Status == Enums.ObjectStatusType.AlterStatus)
             {
-                listDiff.Add(ToSQLUnBindAll());
-                listDiff.Add(ToSQLDrop(), 0, StatusEnum.ScripActionType.DropRule);
-                listDiff.Add(ToSQL(), 0, StatusEnum.ScripActionType.AddRule);
+                listDiff.AddRange(ToSQLUnBindAll());
+                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropRule);
+                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddRule);
             }
             return listDiff;
         }
@@ -113,7 +94,7 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             if (destino == null) throw new ArgumentNullException("destino");
             if (origen == null) throw new ArgumentNullException("origen");
-            if (!origen.Value.Equals(destino.Value)) return false;            
+            if (!origen.ToSql().Equals(destino.ToSql())) return false;            
             return true;
         }
     }

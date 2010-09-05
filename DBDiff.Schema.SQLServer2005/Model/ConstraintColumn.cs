@@ -16,7 +16,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private int dataTypeId;
 
         public ConstraintColumn(Constraint parentObject)
-            : base(StatusEnum.ObjectTypeEnum.ConstraintColumn)
+            : base(Enums.ObjectType.ConstraintColumn)
         {
             Parent = parentObject;
         }
@@ -91,12 +91,17 @@ namespace DBDiff.Schema.SQLServer.Model
             set { columnRelationalName = value; }
         }
 
-        public override string ToSQLDrop()
+        public override string ToSqlDrop()
         {
             return "";
         }
 
-        public override string ToSQLAdd()
+        public override string ToSqlAdd()
+        {
+            return "";
+        }
+
+        public override string ToSql()
         {
             return "";
         }

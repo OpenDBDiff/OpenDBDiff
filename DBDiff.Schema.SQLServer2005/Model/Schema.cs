@@ -7,26 +7,26 @@ namespace DBDiff.Schema.SQLServer.Model
 {
     public class Schema : SQLServerSchemaBase
     {
-        public Schema(Database parent):base(StatusEnum.ObjectTypeEnum.Schema)
+        public Schema(Database parent):base(Enums.ObjectType.Schema)
         {
             this.Parent = parent;            
         }
 
-        public string ToSQL()
+        public override string ToSql()
         {
             StringBuilder sql = new StringBuilder();
             sql.Append("CREATE SCHEMA ");
             sql.Append("[" + this.Name + "] AUTHORIZATION [" + Owner + "]");
-            sql.Append("\r\nGO");
+            sql.Append("\r\nGO\r\n");
             return sql.ToString();
         }
 
-        public override string ToSQLAdd()
+        public override string ToSqlAdd()
         {
-            return ToSQL();
+            return ToSql();
         }
 
-        public override string ToSQLDrop()
+        public override string ToSqlDrop()
         {
             return "DROP SCHEMA [" + Name + "]\r\nGO\r\n";
         }
@@ -38,13 +38,13 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == StatusEnum.ObjectStatusType.DropStatus)
+            if (this.Status == Enums.ObjectStatusType.DropStatus)
             {
-                listDiff.Add(ToSQLDrop(), 0, StatusEnum.ScripActionType.DropSchema);
+                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropSchema);
             }
-            if (this.Status == StatusEnum.ObjectStatusType.CreateStatus)
+            if (this.Status == Enums.ObjectStatusType.CreateStatus)
             {
-                listDiff.Add(ToSQL(), 0, StatusEnum.ScripActionType.AddSchema);
+                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddSchema);
             }
             return listDiff;
         }

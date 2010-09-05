@@ -12,6 +12,14 @@ namespace DBDiff.Schema.SQLServer.Model
         {
         }
 
+        public void AddRange(Columns columns)
+        {
+            columns.ForEach(item =>
+            {
+                if (!this.Exists(item.FullName)) this.Add(item);
+            });
+        }
+
         /// <summary>
         /// Clona el objeto Columns en una nueva instancia.
         /// </summary>
@@ -55,34 +63,43 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             string sqlDrop = "";
             string sqlAdd = "";
-            string sqlAlter = "";
-            string sqlCons = "";            
+            string sqlCons = "";
+            string sqlBinds = "";
             SQLScriptList list = new SQLScriptList();
-            if (Parent.Status != StatusEnum.ObjectStatusType.AlterRebuildStatus)
+            if (Parent.Status != Enums.ObjectStatusType.AlterRebuildStatus)
             {
                 this.ForEach(item =>
                 {
-                    if (item.Status == StatusEnum.ObjectStatusType.DropStatus)
+                    if (item.HasState(Enums.ObjectStatusType.DropStatus))
                         sqlDrop += "[" + item.Name + "],";
-                    if (item.Status == StatusEnum.ObjectStatusType.CreateStatus)
+                    if (item.HasState(Enums.ObjectStatusType.CreateStatus))
                         sqlAdd += "\r\n" + item.ToSQL(true) + ",";
-                    if ((item.Status == StatusEnum.ObjectStatusType.AlterStatus) || (item.Status == StatusEnum.ObjectStatusType.AlterRebuildDependeciesStatus))
-                        sqlAlter += "ALTER TABLE " + Parent.FullName + " ALTER COLUMN " + item.ToSQL(false) + "\r\nGO\r\n";
-                    if (item.Status == StatusEnum.ObjectStatusType.AlterStatusUpdate)
+                    if ((item.HasState(Enums.ObjectStatusType.AlterStatus) || (item.HasState(Enums.ObjectStatusType.AlterRebuildDependenciesStatus))))
                     {
-                        sqlAlter += "UPDATE " + Parent.FullName + " SET [" + item.Name + "] = " + item.DefaultForceValue + " WHERE [" + item.Name + "] IS NULL\r\nGO\r\n";
-                        sqlAlter += "ALTER TABLE " + Parent.FullName + " ALTER COLUMN " + item.ToSQL(false) + "\r\nGO\r\n";
+                        if ((!item.Parent.HasState(Enums.ObjectStatusType.AlterRebuildDependenciesStatus) || (!item.Parent.HasState(Enums.ObjectStatusType.AlterRebuildStatus))))
+                            list.AddRange(item.RebuildSchemaBindingDependencies());
+                        list.AddRange(item.RebuildConstraint(false));
+                        list.AddRange(item.Alter(Enums.ScripActionType.AlterTable));
+                    }
+                    if (item.HasState(Enums.ObjectStatusType.UpdateStatus))
+                        list.Add("UPDATE " + Parent.FullName + " SET [" + item.Name + "] = " + item.DefaultForceValue + " WHERE [" + item.Name + "] IS NULL\r\nGO\r\n",0, Enums.ScripActionType.UpdateTable);
+                    if (item.HasState(Enums.ObjectStatusType.BindStatus))
+                    {
+                        if (item.Rule.Id != 0)
+                            sqlBinds += item.Rule.ToSQLAddBind();
+                        if (item.Rule.Id == 0)
+                            sqlBinds += item.Rule.ToSQLAddUnBind();
                     }
                     if (item.Constraints.Count > 0)
-                        list.Add(item.Constraints.ToSQLDiff());
+                        list.AddRange(item.Constraints.ToSQLDiff());
                 });
                 if (!String.IsNullOrEmpty(sqlDrop))
                     sqlDrop = "ALTER TABLE " + Parent.FullName + " DROP COLUMN " + sqlDrop.Substring(0, sqlDrop.Length - 1) + "\r\nGO\r\n";
                 if (!String.IsNullOrEmpty(sqlAdd))
                     sqlAdd = "ALTER TABLE " + Parent.FullName + " ADD " + sqlAdd.Substring(0, sqlAdd.Length - 1) + "\r\nGO\r\n";
 
-                if (!String.IsNullOrEmpty(sqlAlter + sqlDrop + sqlAdd + sqlCons))
-                    list.Add(sqlAlter + sqlDrop + sqlAdd, 0, StatusEnum.ScripActionType.AlterTable);
+                if (!String.IsNullOrEmpty(sqlDrop + sqlAdd + sqlCons + sqlBinds))
+                    list.Add(sqlDrop + sqlAdd + sqlBinds, 0, Enums.ScripActionType.AlterTable);
             }
             return list;
         }

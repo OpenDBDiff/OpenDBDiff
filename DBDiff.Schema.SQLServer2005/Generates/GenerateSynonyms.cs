@@ -9,33 +9,19 @@ using DBDiff.Schema.SQLServer.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates
 {
-    public class GenerateSynonyms
+    public static class GenerateSynonyms
     {
-        private string connectioString;
-        private SqlOption objectFilter;
-
-                /// <summary>
-        /// Constructor de la clase.
-        /// </summary>
-        /// <param name="connectioString">Connection string de la base</param>
-        public GenerateSynonyms(string connectioString, SqlOption filter)
-        {
-            this.connectioString = connectioString;
-            this.objectFilter = filter;
-        }
-
         private static string GetSQL()
         {
             string sql = "SELECT SCHEMA_NAME(schema_id) AS Owner,name,object_id,base_object_name from sys.synonyms ORDER BY Name";
             return sql;
         }
 
-        public Synonyms Get(Database database)
+        public static void Fill(Database database, string connectionString)
         {
-            Synonyms types = new Synonyms(database);
-            if (objectFilter.OptionFilter.FilterSynonyms)
+            if (database.Options.Ignore.FilterSynonyms)
             {
-                using (SqlConnection conn = new SqlConnection(connectioString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     using (SqlCommand command = new SqlCommand(GetSQL(), conn))
                     {
@@ -49,13 +35,12 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 item.Name = reader["Name"].ToString();
                                 item.Owner = reader["Owner"].ToString();
                                 item.Value = reader["base_object_name"].ToString();
-                                types.Add(item);
+                                database.Synonyms.Add(item);
                             }
                         }
                     }
                 }
             }
-            return types;
         }
     }
 }

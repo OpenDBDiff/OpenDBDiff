@@ -7,8 +7,8 @@ namespace DBDiff.Schema.SQLServer.Model
 {
     public abstract class SQLServerSchemaBase:SchemaBase
     {
-        protected SQLServerSchemaBase(StatusEnum.ObjectTypeEnum objectType):base("[", "]", objectType)
-        {
+        protected SQLServerSchemaBase(Enums.ObjectType objectType):base("[", "]", objectType)
+        {            
         }
     }
 }

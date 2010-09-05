@@ -30,7 +30,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private string fileGroup;
 
         public Index(ISchemaBase table)
-            : base(StatusEnum.ObjectTypeEnum.Index)
+            : base(Enums.ObjectType.Index)
         {
             Parent = table;
             columns = new IndexColumns(table);
@@ -247,7 +247,7 @@ namespace DBDiff.Schema.SQLServer.Model
             return true;
         }
 
-        public string ToSQL()
+        public override string ToSql()
         {
             StringBuilder sql = new StringBuilder();
             string includes = "";
@@ -295,57 +295,80 @@ namespace DBDiff.Schema.SQLServer.Model
             return sql.ToString();
         }
 
-        public override string ToSQLAdd()
+        public override string ToSqlAdd()
         {
-            return ToSQL();
+            return ToSql();
         }
 
-        public override string ToSQLDrop()
+        public override string ToSqlDrop()
         {
-            return ToSQLDrop(null);
+            return ToSqlDrop(null);
         }
 
-        public string ToSQLDrop(string FileGroupName)
+        public string ToSqlDrop(string FileGroupName)
         {
-            string sql = "DROP INDEX [" + Name + "] ON " + ((Table)Parent).FullName;
+            string sql = "DROP INDEX [" + Name + "] ON " + Parent.FullName;
             if (!String.IsNullOrEmpty(FileGroupName)) sql += " WITH (MOVE TO [" + FileGroupName + "])";
             sql += "\r\nGO\r\n";
             return sql;
+        }
+
+        public override SQLScript Create()
+        {
+            Enums.ScripActionType action = Enums.ScripActionType.AddIndex;
+            if (!GetWasInsertInDiffList(action))
+            {
+                SetWasInsertInDiffList(action);
+                return new SQLScript(this.ToSqlAdd(), Parent.DependenciesCount, action);
+            }
+            else
+                return null;
+        }
+
+        public override SQLScript Drop()
+        {
+            Enums.ScripActionType action = Enums.ScripActionType.DropIndex;
+            if (!GetWasInsertInDiffList(action))
+            {
+                SetWasInsertInDiffList(action);
+                return new SQLScript(this.ToSqlDrop(), Parent.DependenciesCount, action);
+            }
+            else
+                return null;
         }
 
         public string ToSQLEnabledDisabled()
         {
             StringBuilder sql = new StringBuilder();
             if (this.IsDisabled)
-                return "ALTER INDEX [" + Name + "] ON " + ((Table)Parent).FullName + " DISABLE\r\nGO\r\n";
+                return "ALTER INDEX [" + Name + "] ON " + Parent.FullName + " DISABLE\r\nGO\r\n";
             else
-                return "ALTER INDEX [" + Name + "] ON " + ((Table)Parent).FullName + " REBUILD\r\nGO\r\n";
+                return "ALTER INDEX [" + Name + "] ON " + Parent.FullName + " REBUILD\r\nGO\r\n";
         }
 
         public SQLScriptList ToSQLDiff()
         {
-            SQLScriptList listDiff = new SQLScriptList();
+            SQLScriptList list = new SQLScriptList();
 
-            if (this.Status == StatusEnum.ObjectStatusType.DropStatus)
-                listDiff.Add(this.ToSQLDrop(), ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.DropIndex);
-            if (this.Status == StatusEnum.ObjectStatusType.CreateStatus)
-                listDiff.Add(this.ToSQLAdd(), ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.AddIndex);
-            if (this.Status == StatusEnum.ObjectStatusType.AlterStatus)
+            if (this.HasState(Enums.ObjectStatusType.DropStatus))
+                list.Add(Drop());
+            if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+                list.Add(Create());
+            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
             {
-                listDiff.Add(this.ToSQLDrop(), ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.DropIndex);
-                listDiff.Add(this.ToSQLAdd(), ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.AddIndex);
+                list.Add(Drop());
+                list.Add(Create());
             }
-            if (this.Status == StatusEnum.ObjectStatusType.ChangeFileGroup)
+            if (this.Status == Enums.ObjectStatusType.DisabledStatus)
+            {
+                list.Add(this.ToSQLEnabledDisabled(), Parent.DependenciesCount, Enums.ScripActionType.AlterIndex);
+            }
+            /*if (this.Status == StatusEnum.ObjectStatusType.ChangeFileGroup)
             {
                 listDiff.Add(this.ToSQLDrop(this.FileGroup), ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.DropIndex);
                 listDiff.Add(this.ToSQLAdd(), ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.AddIndex);
-            }
-            if (this.Status == StatusEnum.ObjectStatusType.DisabledStatus)
-            {
-                listDiff.Add(this.ToSQLEnabledDisabled(), ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.AlterIndex);
-            }
-
-            return listDiff;
+            }*/
+            return list;
         }
     }
 }

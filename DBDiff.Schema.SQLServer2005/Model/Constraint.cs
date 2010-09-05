@@ -31,7 +31,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private Boolean isDisabled;
 
         public Constraint(Table parent)
-            : base(StatusEnum.ObjectTypeEnum.Constraint)
+            : base(Enums.ObjectType.Constraint)
         {
             this.Parent = parent;
             this.Columns = new ConstraintColumns(this);
@@ -219,7 +219,7 @@ namespace DBDiff.Schema.SQLServer.Model
                 if (!origen.RelationalTableFullName.Equals(destino.RelationalTableFullName)) return false;
             if ((origen.Definition == null) && (destino.Definition != null)) return false;
             if (origen.Definition != null)
-                if (!origen.Definition.Equals(destino.Definition)) return false;
+                if ((!origen.Definition.Equals(destino.Definition)) && (!origen.Definition.Equals("(" + destino.Definition + ")"))) return false;
             /*Solo si la constraint esta habilitada, se chequea el is_trusted*/
             if (!destino.IsDisabled)
                 if (origen.WithNoCheck != destino.WithNoCheck) return false;
@@ -269,7 +269,7 @@ namespace DBDiff.Schema.SQLServer.Model
         /// <summary>
         /// Devuelve el schema de la tabla en formato SQL.
         /// </summary>
-        public string ToSQL()
+        public override string ToSql()
         {                     
             if (this.Type == ConstraintType.PrimaryKey)
             {
@@ -319,14 +319,46 @@ namespace DBDiff.Schema.SQLServer.Model
             return "";            
         }
 
-        public override string ToSQLAdd()
+        public override string ToSqlAdd()
         {
-            return "ALTER TABLE " + Parent.FullName + (WithNoCheck ? " WITH NOCHECK" : "") + " ADD " + ToSQL() + "\r\nGO\r\n";
+            return "ALTER TABLE " + Parent.FullName + (WithNoCheck ? " WITH NOCHECK" : "") + " ADD " + ToSql() + "\r\nGO\r\n";
         }
 
-        public override string ToSQLDrop()
+        public override string ToSqlDrop()
         {
             return ToSQLDrop(null);
+        }
+
+        public override SQLScript Create()
+        {
+            Enums.ScripActionType action = Enums.ScripActionType.AddConstraint;
+            if (this.Type == Constraint.ConstraintType.ForeignKey)
+                action = Enums.ScripActionType.AddConstraintFK;
+            if (this.Type == Constraint.ConstraintType.PrimaryKey)
+                action = Enums.ScripActionType.AddConstraintPK;
+            if (!GetWasInsertInDiffList(action))
+            {
+                SetWasInsertInDiffList(action);
+                return new SQLScript(this.ToSqlAdd(), ((Table)Parent).DependenciesCount, action);
+            }
+            else
+                return null;
+        }
+
+        public override SQLScript Drop()
+        {
+            Enums.ScripActionType action = Enums.ScripActionType.DropConstraint;
+            if (this.Type == Constraint.ConstraintType.ForeignKey)
+                action = Enums.ScripActionType.DropConstraintFK;
+            if (this.Type == Constraint.ConstraintType.PrimaryKey)
+                action = Enums.ScripActionType.DropConstraintPK;
+            if (!GetWasInsertInDiffList(action))
+            {
+                SetWasInsertInDiffList(action);
+                return new SQLScript(this.ToSqlDrop(), ((Table)Parent).DependenciesCount, action);
+            }
+            else
+                return null;
         }
 
         public string ToSQLDrop(string FileGroupName)
@@ -351,53 +383,24 @@ namespace DBDiff.Schema.SQLServer.Model
         public SQLScriptList ToSQLDiff()
         {
             SQLScriptList list = new SQLScriptList();
-            StatusEnum.ScripActionType actionDrop = StatusEnum.ScripActionType.DropConstraint;
-            StatusEnum.ScripActionType actionAdd = StatusEnum.ScripActionType.AddConstraint;
-
-            if (this.Type == Constraint.ConstraintType.ForeignKey)
+            if (this.HasState(Enums.ObjectStatusType.DropStatus))
+                list.Add(Drop());
+            if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+                list.Add(Create());
+            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
             {
-                actionDrop = StatusEnum.ScripActionType.DropConstraintFK;
-                actionAdd = StatusEnum.ScripActionType.AddConstraintFK;
+                list.Add(Drop());
+                list.Add(Create());
             }
-            if (this.Type == Constraint.ConstraintType.PrimaryKey)
+            if (this.HasState(Enums.ObjectStatusType.DisabledStatus))
             {
-                actionAdd = StatusEnum.ScripActionType.AddConstraintPK;
-                actionDrop = StatusEnum.ScripActionType.DropConstraintPK;
+                list.Add(this.ToSQLEnabledDisabled(), ((Table)Parent).DependenciesCount, Enums.ScripActionType.AlterConstraint);
             }
-
-            if (this.Status == StatusEnum.ObjectStatusType.DropStatus)
-                list.Add(this.ToSQLDrop(), ((Table)Parent).DependenciesCount, actionDrop);
-            if (this.Status == StatusEnum.ObjectStatusType.CreateStatus)
-                list.Add(this.ToSQLAdd(), ((Table)Parent).DependenciesCount, actionAdd);
-            if (this.Status == StatusEnum.ObjectStatusType.AlterStatus)
+            /*if (this.Status == StatusEnum.ObjectStatusType.ChangeFileGroup)
             {
-                /*Si se esta reconstruyendo la tabla, no se deben volver a dropear y agregar los constraints*/
-                /*if (Parent.Status != StatusEnum.ObjectStatusType.AlterRebuildStatus)
-                {*/
-                list.Add(this.ToSQLDrop(), ((Table)Parent).DependenciesCount, actionDrop);
-                list.Add(this.ToSQLAdd(), ((Table)Parent).DependenciesCount, actionAdd);
-                //}
-            }
-            if (this.Status == StatusEnum.ObjectStatusType.ChangeFileGroup)
-            {
-                /*Si se esta reconstruyendo la tabla, no se deben volver a dropear y agregar los constraints*/
-                /*if (Parent.Status != StatusEnum.ObjectStatusType.AlterRebuildStatus)
-                {*/
                 list.Add(this.ToSQLDrop(this.Index.FileGroup), ((Table)Parent).DependenciesCount, actionDrop);
                 list.Add(this.ToSQLAdd(), ((Table)Parent).DependenciesCount, actionAdd);
-                //}
-            }
-            if (this.Status == StatusEnum.ObjectStatusType.DisabledStatus)
-            {
-                list.Add(this.ToSQLEnabledDisabled(), ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.AlterConstraint);
-            }
-            if (this.Status == StatusEnum.ObjectStatusType.AlterDisabledStatus)
-            {
-                list.Add(this.ToSQLDrop(), ((Table)Parent).DependenciesCount, actionDrop);
-                list.Add(this.ToSQLAdd(), ((Table)Parent).DependenciesCount, actionAdd);
-                list.Add(this.ToSQLEnabledDisabled(), ((Table)Parent).DependenciesCount, StatusEnum.ScripActionType.AlterConstraint);
-            }
-
+            }*/
             return list;
         }
     }

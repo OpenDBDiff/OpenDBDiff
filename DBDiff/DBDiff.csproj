@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{99A26820-E71D-4E01-ADF2-E6AB25B03FA0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -33,10 +33,6 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <ApplicationIcon>App.ico</ApplicationIcon>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -80,6 +76,12 @@
     <Compile Include="Front\PrincipalForm.Designer.cs">
       <DependentUpon>PrincipalForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Front\SchemaTreeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Front\SchemaTreeView.Designer.cs">
+      <DependentUpon>SchemaTreeView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Front\OptionForm.resx">
@@ -89,6 +91,10 @@
     <EmbeddedResource Include="Front\PrincipalForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PrincipalForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Front\SchemaTreeView.resx">
+      <DependentUpon>SchemaTreeView.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -108,17 +114,13 @@
     <Compile Include="XmlConfig\ConfigProviders.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SQLRichControl\SQLRichControl\SQLRichControl.csproj">
+      <Project>{C9AC85A9-06F5-4F74-82F7-25993E65BBDA}</Project>
+      <Name>SQLRichControl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DBDiff.Front\DBDiff.Front.csproj">
       <Project>{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}</Project>
       <Name>DBDiff.Front</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DBDiff.Schema.MySQL5\DBDiff.Schema.MySQL.csproj">
-      <Project>{2271A792-4B10-4EC6-A636-EFF834241A60}</Project>
-      <Name>DBDiff.Schema.MySQL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DBDiff.Schema.SQLServer2000\DBDiff.Schema.SQLServer2000.csproj">
-      <Project>{3CB847CA-F518-4CBC-A161-30EC969EAFD0}</Project>
-      <Name>DBDiff.Schema.SQLServer2000</Name>
     </ProjectReference>
     <ProjectReference Include="..\DBDiff.Schema.SQLServer2005\DBDiff.Schema.SQLServer.csproj">
       <Project>{EF2F571E-A7AD-40BE-8500-50A039159FC1}</Project>
@@ -127,10 +129,6 @@
     <ProjectReference Include="..\DBDiff.Schema\DBDiff.Schema.csproj">
       <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
       <Name>DBDiff.Schema</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SQLDisplayControl\SQLDisplayControl.vbproj">
-      <Project>{5C0E8315-AE46-4A45-A18C-7CFA0C0B4212}</Project>
-      <Name>SQLDisplayControl</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +159,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
+    <None Include="Resources\Folder.ico" />
+    <None Include="Resources\Image1.bmp" />
     <None Include="Resources\Control panel 2.ico" />
     <None Include="Resources\Control panel 1.ico" />
   </ItemGroup>

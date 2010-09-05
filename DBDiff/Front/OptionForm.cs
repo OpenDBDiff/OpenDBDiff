@@ -36,5 +36,10 @@ namespace DBDiff.Front
         {
             this.Dispose();
         }
+
+        private void sqlOptionsFront1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

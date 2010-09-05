@@ -8,14 +8,14 @@ namespace DBDiff.Schema.SQLServer.Compare
 {
     internal class CompareSynonyms:CompareBase<Synonym>
     {
-        public static Synonyms GenerateDiferences(Synonyms CamposOrigen, Synonyms CamposDestino)
+        public static void GenerateDiferences(Synonyms CamposOrigen, Synonyms CamposDestino)
         {
             foreach (Synonym node in CamposDestino)
             {
                 if (!CamposOrigen.Exists(node.FullName))
                 {
                     Synonym newNode = node.Clone(CamposOrigen.Parent);
-                    newNode.Status = StatusEnum.ObjectStatusType.CreateStatus;
+                    newNode.Status = Enums.ObjectStatusType.CreateStatus;
                     CamposOrigen.Add(newNode);
                 }
                 else
@@ -23,15 +23,13 @@ namespace DBDiff.Schema.SQLServer.Compare
                     if (!Synonym.Compare(node, CamposOrigen[node.FullName]))
                     {
                         Synonym newNode = node.Clone(CamposOrigen.Parent);
-                        newNode.Status = StatusEnum.ObjectStatusType.AlterStatus;
+                        newNode.Status = Enums.ObjectStatusType.AlterStatus;
                         CamposOrigen[node.FullName] = newNode;
                     }
                 }
             }
 
             MarkDrop(CamposOrigen, CamposDestino);
-
-            return CamposOrigen;
         }
     }
 }

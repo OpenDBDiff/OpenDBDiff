@@ -8,14 +8,14 @@ namespace DBDiff.Schema.SQLServer.Compare
 {
     internal class CompareIndexes:CompareBase<Index>
     {
-        public static Indexes GenerateDiferences(Indexes CamposOrigen, Indexes CamposDestino)
+        public static void GenerateDiferences(Indexes CamposOrigen, Indexes CamposDestino)
         {
             foreach (Index node in CamposDestino)
             {
                 if (!CamposOrigen.Exists(node.FullName))
                 {
                     Index newNode = node.Clone(CamposOrigen.Parent);
-                    newNode.Status = StatusEnum.ObjectStatusType.CreateStatus;
+                    newNode.Status = Enums.ObjectStatusType.CreateStatus;
                     CamposOrigen.Add(newNode);
                 }
                 else
@@ -25,26 +25,24 @@ namespace DBDiff.Schema.SQLServer.Compare
                         Index newNode = node.Clone(CamposOrigen.Parent);
                         if (!Index.CompareExceptIsDisabled(node, CamposOrigen[node.FullName]))
                         {
-                            if (!Index.CompareFileGroup(node,CamposOrigen[node.FullName]))
+                            /*if (!Index.CompareFileGroup(node,CamposOrigen[node.FullName]))
                             {
                                 if (node.Type == Index.IndexTypeEnum.Clustered)
                                     newNode.Status = StatusEnum.ObjectStatusType.ChangeFileGroup;   
                                 else
                                     newNode.Status = StatusEnum.ObjectStatusType.AlterStatus;
                             }
-                            else
-                                newNode.Status = StatusEnum.ObjectStatusType.AlterStatus;
+                            else*/
+                                newNode.Status = Enums.ObjectStatusType.AlterStatus;
                         }
                         else
-                            newNode.Status = StatusEnum.ObjectStatusType.DisabledStatus;
+                            newNode.Status = Enums.ObjectStatusType.DisabledStatus;
                         CamposOrigen[node.FullName] = newNode;
                     }
                 }
             }
 
             MarkDrop(CamposOrigen, CamposDestino);
-
-            return CamposOrigen;
         }
     }
 }

@@ -8,21 +8,8 @@ using DBDiff.Schema.SQLServer.Options;
 
 namespace DBDiff.Schema.SQLServer.Generates
 {
-    public class GenerateStoreProcedures
+    public static class GenerateStoreProcedures
     {
-        private string connectioString;
-        private SqlOption objectFilter;
-
-        /// <summary>
-        /// Constructor de la clase.
-        /// </summary>
-        /// <param name="connectioString">Connection string de la base</param>
-        public GenerateStoreProcedures(string connectioString, SqlOption filter)
-        {
-            this.connectioString = connectioString;
-            this.objectFilter = filter;
-        }
-
         private static string GetSQL()
         {
             string sql = "";
@@ -31,12 +18,11 @@ namespace DBDiff.Schema.SQLServer.Generates
             return sql;
         }
 
-        public StoreProcedures Get(Database database)
+        public static void Fill(Database database, string connectionString)
         {
-            StoreProcedures stores = new StoreProcedures(database);
-            if (objectFilter.OptionFilter.FilterStoreProcedure)
+            if (database.Options.Ignore.FilterStoreProcedure)
             {
-                using (SqlConnection conn = new SqlConnection(connectioString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     using (SqlCommand command = new SqlCommand(GetSQL(), conn))
                     {
@@ -50,13 +36,12 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 item.Name = reader["name"].ToString();
                                 item.Owner = reader["owner"].ToString();
                                 item.Text = reader["text"].ToString();
-                                stores.Add(item);
+                                database.Procedures.Add(item);
                             }
                         }
                     }                    
                 }
             }
-            return stores;
         }
     }
 }

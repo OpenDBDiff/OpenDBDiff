@@ -9,22 +9,8 @@ using DBDiff.Schema.SQLServer.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates
 {
-    public class GenerateRules
+    public static class GenerateRules
     {
-        private string connectioString;
-        private SqlOption objectFilter;
-        //public event ProgressHandler OnTableProgress;
-
-        /// <summary>
-        /// Constructor de la clase.
-        /// </summary>
-        /// <param name="connectioString">Connection string de la base</param>
-        public GenerateRules(string connectioString, SqlOption filter)
-        {
-            this.connectioString = connectioString;
-            this.objectFilter = filter;
-        }
-
         private static string GetSQL()
         {
             string sql = "select obj.object_id, Name, SCHEMA_NAME(obj.schema_id) AS Owner, ISNULL(smobj.definition, ssmobj.definition) AS [Definition] from sys.objects obj  ";
@@ -34,12 +20,11 @@ namespace DBDiff.Schema.SQLServer.Generates
             return sql;
         }
 
-        public Rules Get(Database database)
+        public static void Fill(Database database, string connectionString)
         {
-            Rules types = new Rules(database);
-            if (objectFilter.OptionFilter.FilterRules)
+            if (database.Options.Ignore.FilterRules)
             {
-                using (SqlConnection conn = new SqlConnection(connectioString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     using (SqlCommand command = new SqlCommand(GetSQL(), conn))
                     {
@@ -52,14 +37,13 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 item.Id = (int)reader["object_id"];
                                 item.Name = reader["Name"].ToString();
                                 item.Owner = reader["Owner"].ToString();
-                                item.Value = reader["Definition"].ToString();
-                                types.Add(item);
+                                item.Text = reader["Definition"].ToString();
+                                database.Rules.Add(item);
                             }
                         }
                     }
                 }
             }
-            return types;
         }
     }
 }

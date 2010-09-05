@@ -7,28 +7,16 @@ namespace DBDiff.Schema.SQLServer.Model
 {
     internal class Dependence
     {
-        public enum DependencieTypeEnum
-        {
-            Constraint = 1,
-            Index = 2,
-            Default = 3,
-            View = 4
-        }
-
-        private int tableId;
-        private int columnId;
+        private int objectId;
+        private int subObjectId;
         private int ownerTableId;
-        private Index index;
-        private Constraint constraint;
-        private View view;
-        private ColumnConstraint defaultConstraint;
-        private DependencieTypeEnum type;
+        private ISchemaBase objectSchema;
         private int typeId;
 
-        public View View
+        public ISchemaBase ObjectSchema
         {
-            get { return view; }
-            set { view = value; }
+            get { return objectSchema; }
+            set { objectSchema = value; }
         }
 
         public int DataTypeId
@@ -37,43 +25,24 @@ namespace DBDiff.Schema.SQLServer.Model
             set { typeId = value; }
         }
 
-        public DependencieTypeEnum Type
+        public Enums.ObjectType Type
         {
-            get { return type; }
-            set { type = value; }
+            get { return objectSchema.ObjectType; }
         }
 
-        public ColumnConstraint Default 
+        public int SubObjectId
         {
-            get { return defaultConstraint; }
-            set { defaultConstraint = value; }
-        }
-
-        public Index Index
-        {
-            get { return index; }
-            set { index = value; }
-        }
-
-        public Constraint Constraint
-        {
-            get { return constraint; }
-            set { constraint = value; }
-        }
-
-        public int ColumnId
-        {
-            get { return columnId; }
-            set { columnId = value; }
+            get { return subObjectId; }
+            set { subObjectId = value; }
         }
 
         /// <summary>
         /// ID de la tabla a la que hace referencia la constraint.
         /// </summary>
-        public int TableId
+        public int ObjectId
         {
-            get { return tableId; }
-            set { tableId = value; }
+            get { return objectId; }
+            set { objectId = value; }
         }
 
         /// <summary>

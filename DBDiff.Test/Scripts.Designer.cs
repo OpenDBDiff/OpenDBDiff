@@ -61,12 +61,253 @@ namespace DBDiff.Test {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to USE TestColumnFormula1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[TablaFormulaPersisted] DROP CONSTRAINT [PK_TablaFormulaPersisted]
+        ///GO
+        ///ALTER TABLE [dbo].[TablaFormula4] DROP CONSTRAINT [PK_TablaFormula4]
+        ///GO
+        ///ALTER TABLE [dbo].[TablaFormula2] ADD 
+        ///[CampoFormula1] AS (([Campo1]+[Campo2])+&apos;d&apos;) PERSISTED,
+        ///[CampoFormula2] AS ([ID]+(1))
+        ///GO
+        ///ALTER TABLE [dbo].[TablaDropFormula1] DROP COLUMN [CampoFormula1],[CampoFormula2]
+        ///GO
+        ///CREATE TABLE [dbo].[TempTablaFormulaPersisted]
+        ///(
+        ///	[ID] [int] IDENTITY (1,1) NOT NULL,
+        ///	[Campo1]  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestColumnFormula {
+            get {
+                return ResourceManager.GetString("TestColumnFormula", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestColumnIdentity1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[TablaAlterIdentityNotForReplication] DROP CONSTRAINT [PK_TablaAlterIdentityNotForReplication]
+        ///GO
+        ///ALTER TABLE [dbo].[TablaDropIdentity1] DROP CONSTRAINT [PK_TablaDropIdentity]
+        ///GO
+        ///ALTER TABLE [dbo].[TablaAddIdentity1] DROP CONSTRAINT [PK_TablaAddIdentity1]
+        ///GO
+        ///ALTER TABLE [dbo].[TablaDropColumnIdentity1] DROP COLUMN [ID]
+        ///GO
+        ///CREATE TABLE [dbo].[TempTablaAlterIdentityNotForReplication]
+        ///(
+        ///	[ID] [int] IDENTITY (1,1) NOT FOR REPLICATION NOT NULL,
+        ///	[Campo2 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestColumnIdentity {
+            get {
+                return ResourceManager.GetString("TestColumnIdentity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestColumnNotNullDate1
+        ///GO
+        ///
+        ///UPDATE [dbo].[Tabla1] SET [Campo2] = getdate() WHERE [Campo2] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo1] = getdate() WHERE [Campo1] IS NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [datetime] NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [smalldatetime] NOT NULL
+        ///GO.
+        /// </summary>
+        internal static string TestColumnNotNullDate1 {
+            get {
+                return ResourceManager.GetString("TestColumnNotNullDate1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestColumnNotNullEntero1
+        ///GO
+        ///
+        ///UPDATE [dbo].[Tabla1] SET [Campo5] = 0 WHERE [Campo5] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo3] = 0 WHERE [Campo3] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo4] = 0 WHERE [Campo4] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo2] = 0 WHERE [Campo2] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo1] = 0 WHERE [Campo1] IS NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo5] [bit] NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo3] [smallint] NOT NULL
+        ///GO [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestColumnNotNullEntero1 {
+            get {
+                return ResourceManager.GetString("TestColumnNotNullEntero1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestColumnNotNullReal1
+        ///GO
+        ///
+        ///UPDATE [dbo].[Tabla1] SET [Campo4] = 0.0 WHERE [Campo4] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo3] = 0.0 WHERE [Campo3] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo6] = 0.0 WHERE [Campo6] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo5] = 0.0 WHERE [Campo5] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo1] = 0.0 WHERE [Campo1] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo2] = 0.0 WHERE [Campo2] IS NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [float] NOT NUL [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestColumnNotNullReal1 {
+            get {
+                return ResourceManager.GetString("TestColumnNotNullReal1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestColumnNotNullText1
+        ///GO
+        ///
+        ///UPDATE [dbo].[Tabla1] SET [Campo5] = N&apos;&apos; WHERE [Campo5] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo4] = &apos;&apos; WHERE [Campo4] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo6] = N&apos;&apos; WHERE [Campo6] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo8] = N&apos;&apos; WHERE [Campo8] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo7] = N&apos;&apos; WHERE [Campo7] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo3] = &apos;&apos; WHERE [Campo3] IS NULL
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo2] = &apos;&apos; WHERE [Campo2] IS NULL
+        ///GO [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestColumnNotNullText1 {
+            get {
+                return ResourceManager.GetString("TestColumnNotNullText1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestConstraintCheckAlterColumn1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [CK_Tabla2_1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [CK_Tabla2]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [CK_Tabla1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [PK_Tabla2]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [smallint] NOT NULL
+        ///GO
+        ///CREATE TABLE [dbo].[TempTabla2]
+        ///(
+        ///	[ID] [int] NOT NULL,
+        ///	[Campo1] [smallint] NOT NULL,
+        ///	[Campo2] [int] NOT NULL,
+        ///	[Campo3] AS (([Campo1]+[Campo2])+( [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestConstraintCheckAlterColumn {
+            get {
+                return ResourceManager.GetString("TestConstraintCheckAlterColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestConstraintDefaultAlterColumn1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [DF_Tabla1_CampoD]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [DF_Tabla1_Campo2]
+        ///GO
+        ///UPDATE [dbo].[Tabla1] SET [Campo2] = (N&apos;Pepa&apos;) WHERE [Campo2] IS NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [nchar] (10) COLLATE Modern_Spanish_CI_AS NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [CampoD] [char] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [DF_Tab [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestConstraintDefaultAlterColumn {
+            get {
+                return ResourceManager.GetString("TestConstraintDefaultAlterColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestConstraintDefaultAlterColumnSimple1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [DF_Tabla1_Campo1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [smallint] NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [DF_Tabla1_Campo1] DEFAULT ((2)) FOR [Campo1]
+        ///GO.
+        /// </summary>
+        internal static string TestConstraintDefaultAlterColumnSimple1 {
+            get {
+                return ResourceManager.GetString("TestConstraintDefaultAlterColumnSimple1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestConstraintFKDisable1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[TablaHija] DROP CONSTRAINT [FK_TablaHija_Tabla1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [FK_Habilitar]
+        ///GO
+        ///ALTER TABLE [dbo].[TablaHija] WITH NOCHECK ADD CONSTRAINT [FK_TablaHija_Tabla1] FOREIGN KEY
+        ///	(
+        ///		[Tabla1Id]
+        ///	)
+        ///	REFERENCES [dbo].[Tabla1]
+        ///	(
+        ///		[ID]
+        ///	) NOT FOR REPLICATION
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [FK_Habilitar] FOREIGN KEY
+        ///	(
+        ///		[ID3]
+        ///	)
+        ///	REFERENCES [dbo].[Tabla1]
+        ///	(
+        ///		[ID]
+        ///	)
+        ///GO
+        ///ALTER TABLE [dbo].[Tab [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestConstraintFKDisable {
+            get {
+                return ResourceManager.GetString("TestConstraintFKDisable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to USE TestConstraintFKRemoveTable1
         ///GO
         ///
-        ///ALTER TABLE [dbo].[Child] DROP CONSTRAINT [FK_Child_Parent]
-        ///GO
         ///ALTER TABLE [dbo].[ChildChild] DROP CONSTRAINT [FK_ChildChild_Child]
+        ///GO
+        ///ALTER TABLE [dbo].[Child] DROP CONSTRAINT [FK_Child_Parent]
         ///GO
         ///ALTER TABLE [dbo].[Child] DROP CONSTRAINT [PK_Child]
         ///GO
@@ -92,25 +333,634 @@ namespace DBDiff.Test {
         ///   Looks up a localized string similar to USE TestConstraintFKTree1
         ///GO
         ///
-        ///ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [FK_Tabla2_Tabla3]
+        ///ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Tabla1]
         ///GO
         ///ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Tabla2]
         ///GO
+        ///ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Table7]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Tabla3]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [FK_Tabla3_Tabla3]
+        ///GO
         ///ALTER TABLE [dbo].[Table7] DROP CONSTRAINT [FK_Table7_Tabla2]
         ///GO
-        ///ALTER TABLE [dbo].[Tabla5] DROP CONSTRAINT [FK_Tabla5_Tabla6]
+        ///ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [FK_Tabla3_Tabla32]
         ///GO
-        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [FK_Tabla1_Tabla2]
-        ///GO
-        ///ALTER TABLE [dbo].[Tabla4] DROP CONSTRAINT [FK_Tabla4_Tabla1]
-        ///GO
-        ///ALTER TABLE [dbo].[Table7] DROP CONSTRAINT [FK_Table7_Tabla1]
-        ///GO
-        ///ALTER TABL [rest of string was truncated]&quot;;.
+        ///ALTER TAB [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string TestConstraintFKTree1 {
             get {
                 return ResourceManager.GetString("TestConstraintFKTree1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestConstraintFKType1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [FK_Tabla2_Tabla1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [FK_Tabla2_Tabla2]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [IX_Tabla1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] DROP COLUMN [Campo2]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ID] [smallint] NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Tabla1Id] [smallint] NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla2] [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestConstraintFKType {
+            get {
+                return ResourceManager.GetString("TestConstraintFKType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestConstraintFKCircular1
+        ///GO
+        ///
+        ///CREATE TABLE [dbo].[TablaPadre]
+        ///(
+        ///	[ID] [int] IDENTITY (2,2) NOT NULL,
+        ///	[Campo1] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+        ///	[IDHijo] [int] NOT NULL,
+        ///	CONSTRAINT [PK_TablaPadre] PRIMARY KEY CLUSTERED
+        ///	(
+        ///		[ID] ASC
+        ///	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+        ///) ON [PRIMARY]
+        ///GO
+        ///CREATE TABLE [dbo].[TablaHija]
+        ///(
+        ///	[ID] [int] IDENTITY (2,2) NOT NULL,
+        ///	[IDPadr [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestConstratinFKCircular {
+            get {
+                return ResourceManager.GetString("TestConstratinFKCircular", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestDataTypeDefaultComplex1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [FK_Tabla2_Tabla1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [DF_Tabla1_Campo1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [DF_Tabla2_Campo4]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [DF_Tabla3_Campo1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [DF_Tabla1_Campo2]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla3] DROP CONSTRAINT [DF_Tabla3_Campo2]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla2] DROP CONSTRAINT [DF_Tabla2_Campo2]
+        ///GO
+        ///ALTE [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestDataTypeDefaultComplex {
+            get {
+                return ResourceManager.GetString("TestDataTypeDefaultComplex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestDataTypeDefaultSimple1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [DF_Tabla1_Campo1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [bigint] NULL
+        ///GO
+        ///DROP TYPE [dbo].[Tipo1]
+        ///GO
+        ///CREATE TYPE [dbo].[Tipo1] FROM [bigint] NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [Tipo1] NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [DF_Tabla1_Campo1] DEFAULT ((2)) FOR [Campo1]
+        ///GO.
+        /// </summary>
+        internal static string TestDataTypeDefaultSimple {
+            get {
+                return ResourceManager.GetString("TestDataTypeDefaultSimple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestDataTypeDeleteColumn1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [varchar] (80) NOT NULL
+        ///GO
+        ///DROP TYPE [dbo].[NOMBRE]
+        ///GO
+        ///CREATE TYPE [dbo].[NOMBRE] FROM [varchar](80) NOT NULL
+        ///GO
+        ///CREATE TABLE [dbo].[TempTabla1]
+        ///(
+        ///	[ID] [int] NOT NULL,
+        ///	[Campo1] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+        ///	[Campo3] [NOMBRE] NOT NULL,
+        ///) ON [PRIMARY]
+        ///GO
+        ///
+        ///INSERT INTO [dbo].[TempTabla1] ([ID],[Campo1],[Campo3]) SELECT [ID],[Ca [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestDataTypeDeleteColumn {
+            get {
+                return ResourceManager.GetString("TestDataTypeDeleteColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestDataTypeDropTable1
+        ///GO
+        ///
+        ///DROP TABLE [dbo].[Tabla1]
+        ///GO
+        ///DROP TYPE [dbo].[NOMBRE]
+        ///GO
+        ///CREATE TYPE [dbo].[NOMBRE] FROM [char](50) NOT NULL
+        ///GO
+        ///CREATE TABLE [dbo].[Tabla2]
+        ///(
+        ///	[ID] [int] NOT NULL,
+        ///	[Campo] [NOMBRE] NOT NULL,
+        ///	[Campo2] [NOMBRE] NOT NULL CONSTRAINT [DF_Tabla1_Campo2] DEFAULT (&apos;HOLA&apos;),
+        ///	CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+        ///	(
+        ///		[ID] ASC
+        ///	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMAR [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestDataTypeDropTable {
+            get {
+                return ResourceManager.GetString("TestDataTypeDropTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestDataTypeFormula1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla1] DROP COLUMN [CampoFormula]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo1] [varchar] (100) NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [char] (10) NOT NULL
+        ///GO
+        ///DROP TYPE [dbo].[Tipo1]
+        ///GO
+        ///CREATE TYPE [dbo].[Tipo1] FROM [varchar](100) NOT NULL
+        ///GO
+        ///DROP TYPE [dbo].[Tipo2]
+        ///GO
+        ///CREATE TYPE [dbo].[Tipo2] FROM [char](10) NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo2] [Tipo2] NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tab [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestDataTypeFormula {
+            get {
+                return ResourceManager.GetString("TestDataTypeFormula", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestDataTypeFunction1
+        ///GO
+        ///
+        ///DROP FUNCTION [dbo].[Funcion3]
+        ///GO
+        ///DROP FUNCTION [dbo].[Funcion1]
+        ///GO
+        ///DROP FUNCTION [dbo].[Funcion]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo] [int] NOT NULL
+        ///GO
+        ///DROP TYPE [dbo].[PepeKey]
+        ///GO
+        ///CREATE TYPE [dbo].[PepeKey] FROM [int] NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo] [PepeKey] NOT NULL
+        ///GO
+        ///CREATE FUNCTION [dbo].[Funcion]
+        ///(	
+        ///	@ID	int
+        ///)
+        ///RETURNS TABLE 
+        ///WITH SCHEMABINDING
+        ///AS
+        ///RETURN 
+        ///(	
+        ///	SELECT Campo FROM dbo.Tabla1 WHERE ID =@ID
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestDataTypeFunction {
+            get {
+                return ResourceManager.GetString("TestDataTypeFunction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestDataTypePK1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ID] [int] NOT NULL
+        ///GO
+        ///DROP TYPE [dbo].[PepeKey]
+        ///GO
+        ///CREATE TYPE [dbo].[PepeKey] FROM [int] NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ID] [PepeKey] NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ADD CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+        ///	(
+        ///		[ID] ASC
+        ///	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestDataTypePK {
+            get {
+                return ResourceManager.GetString("TestDataTypePK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestDataTypeRebuild1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla] DROP CONSTRAINT [PK_Tabla]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla] ALTER COLUMN [Campo1] [int] NOT NULL
+        ///GO
+        ///DROP TYPE [dbo].[Tipo]
+        ///GO
+        ///CREATE TYPE [dbo].[Tipo] FROM [int] NOT NULL
+        ///GO
+        ///CREATE TABLE [dbo].[TempTabla]
+        ///(
+        ///	[ID] [int] IDENTITY (2,2) NOT NULL,
+        ///	[Campo1] [Tipo] NOT NULL
+        ///) ON [PRIMARY]
+        ///GO
+        ///
+        ///SET IDENTITY_INSERT [dbo].[TempTabla] ON
+        ///INSERT INTO [dbo].[TempTabla] ([ID],[Campo1]) SELECT [ID],[Campo1] FROM [dbo].[Tabla]
+        ///SET IDENTITY_INSERT [dbo] [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestDataTypeRebuild {
+            get {
+                return ResourceManager.GetString("TestDataTypeRebuild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestDataTypeUseTable1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[TablaChange2] DROP CONSTRAINT [DF_TablaChange2_Campo2]
+        ///GO
+        ///ALTER TABLE [dbo].[TablaChangeRebuild1] DROP CONSTRAINT [PK_TablaChangeRebuild1]
+        ///GO
+        ///ALTER TABLE [dbo].[TablaChange2] ALTER COLUMN [Campo1] [varchar] (50) NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[TablaChange2] ALTER COLUMN [Campo2] [varchar] (50) NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[TablaChangeRebuild1] ALTER COLUMN [ID] [int] NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[TablaChangeRebuild1] ALTER COLUMN [Campo3] [varch [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestDataTypeUsed {
+            get {
+                return ResourceManager.GetString("TestDataTypeUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestDataTypeView1
+        ///GO
+        ///
+        ///DROP VIEW [dbo].[Vista2]
+        ///GO
+        ///DROP VIEW [dbo].[Vista1]
+        ///GO
+        ///DROP VIEW [dbo].[Vista]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo] [int] NOT NULL
+        ///GO
+        ///DROP TYPE [dbo].[PepeKey]
+        ///GO
+        ///CREATE TYPE [dbo].[PepeKey] FROM [int] NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Campo] [PepeKey] NOT NULL
+        ///GO
+        ///CREATE VIEW [dbo].[Vista]
+        ///WITH SCHEMABINDING
+        ///AS
+        ///SELECT     Campo, ID
+        ///FROM         dbo.Tabla1
+        ///GO
+        ///CREATE VIEW [dbo].[Vista1]
+        ///WITH SCHEMABINDING
+        ///AS
+        ///SELECT     T.Cam [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestDataTypeView {
+            get {
+                return ResourceManager.GetString("TestDataTypeView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestFunctionEnter1
+        ///GO
+        ///
+        ///ALTER FUNCTION [Nuevo].[Test12]
+        ///(
+        ///	@ID	int
+        ///)
+        ///RETURNS int
+        ///AS
+        ///BEGIN
+        ///	RETURN @ID + 2
+        ///END
+        ///GO
+        ///ALTER FUNCTION [dbo].[Test11]
+        ///(
+        ///	@ID	int
+        ///)
+        ///RETURNS int
+        ///AS
+        ///BEGIN
+        ///	RETURN @ID + 1
+        ///END
+        ///GO
+        ///--CREATE FUNCTION [Nuevo].[Test13]*/
+        ////*CREATE FUNCTION [Nuevo].[Test13]*/
+        ////*CREATE FUNCTION [Nuevo].[Test13]*/
+        ///ALTER FUNCTION [Nuevo].[Test13]
+        ////*CREATE FUNCTION [Nuevo].[Test13]*/
+        ///(
+        ///	@ID	int
+        ///)
+        ///RETURNS int
+        ///AS
+        ///BEGIN
+        ///	--EXEC &apos;CREATE FUNCTION [Nuevo].[Test13]&apos;
+        ///
+        ///	RETURN @ID + 2 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestFuncionEnter {
+            get {
+                return ResourceManager.GetString("TestFuncionEnter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestFunctionConstraintCheck1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla] DROP CONSTRAINT [CK_Tabla]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla] DROP CONSTRAINT [CK_Tabla2]
+        ///GO
+        ///ALTER FUNCTION [dbo].[Test]
+        ///(
+        ///	@ID	int
+        ///)
+        ///RETURNS int
+        ///WITH SCHEMABINDING
+        ///AS
+        ///BEGIN
+        ///	DECLARE @MAX int
+        ///
+        ///	SELECT @MAX = MAX(ID) FROM dbo.Tabla
+        ///
+        ///	-- Return the result of the function
+        ///	RETURN @MAX+@ID+1
+        ///
+        ///END
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla] ADD CONSTRAINT [CK_Tabla3] CHECK  (([dbo].[Test]([ID])&gt;(1)))
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla] ADD CONSTRAINT [ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestFunctionConstraintCheck {
+            get {
+                return ResourceManager.GetString("TestFunctionConstraintCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestFunctionOwner1
+        ///GO
+        ///
+        ///DROP FUNCTION [dbo].[Funcion2]
+        ///GO
+        ///CREATE SCHEMA [Test] AUTHORIZATION [dbo]
+        ///GO
+        ///CREATE FUNCTION [dbo].[Funcion1]
+        ///(
+        ///	@ID	int
+        ///)
+        ///RETURNS int
+        ///AS
+        ///BEGIN
+        ///	RETURN @ID +1
+        ///END
+        ///GO
+        ///CREATE FUNCTION [Test].[Funcion1]
+        ///(
+        ///	@ID	int
+        ///)
+        ///RETURNS int
+        ///AS
+        ///BEGIN
+        ///	RETURN @ID +1
+        ///END
+        ///GO.
+        /// </summary>
+        internal static string TestFunctionOwner {
+            get {
+                return ResourceManager.GetString("TestFunctionOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestFunctionSchemaBound1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+        ///GO
+        ///DROP FUNCTION [dbo].[FuncionAlter]
+        ///GO
+        ///CREATE TABLE [dbo].[TempTabla1]
+        ///(
+        ///	[ID] [int] IDENTITY (2,2) NOT NULL,
+        ///	[Campo1] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+        ///) ON [PRIMARY]
+        ///GO
+        ///
+        ///SET IDENTITY_INSERT [dbo].[TempTabla1] ON
+        ///INSERT INTO [dbo].[TempTabla1] ([ID],[Campo1]) SELECT [ID],[Campo1] FROM [dbo].[Tabla1]
+        ///SET IDENTITY_INSERT [dbo].[TempTabla1] OFF
+        ///GO
+        ///
+        ///DROP TABLE [dbo].[Tabla1]
+        ///GO
+        ///EXE [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestFunctionSchemaBound1 {
+            get {
+                return ResourceManager.GetString("TestFunctionSchemaBound1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestFunctionSchemaBoundChange1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+        ///GO
+        ///ALTER FUNCTION [dbo].[FuncionAlter] 
+        ///(
+        ///	@ID	int
+        ///)
+        ///RETURNS int
+        /// 
+        ///AS
+        ///BEGIN
+        ///	DECLARE @ID2 int
+        ///	SELECT @ID2 = ID +1 FROM dbo.Tabla1 WHERE ID = @ID
+        ///
+        ///	RETURN @ID2
+        ///END
+        ///GO
+        ///CREATE TABLE [dbo].[TempTabla1]
+        ///(
+        ///	[ID] [int] IDENTITY (1,2) NOT NULL,
+        ///	[Campo1] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+        ///) ON [PRIMARY]
+        ///GO
+        ///
+        ///SET IDENTITY_INSERT [dbo].[TempTabla1] ON
+        ///INSERT INTO [dbo].[TempTabla1 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestFunctionSchemaBoundChange1 {
+            get {
+                return ResourceManager.GetString("TestFunctionSchemaBoundChange1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestFunctionSchemaBoundMultiple1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+        ///GO
+        ///DROP FUNCTION [dbo].[FuncionAlterT4]
+        ///GO
+        ///DROP FUNCTION [dbo].[FuncionAlterT3]
+        ///GO
+        ///DROP FUNCTION [dbo].[FuncionAlter4]
+        ///GO
+        ///DROP FUNCTION [dbo].[FuncionAlter3]
+        ///GO
+        ///DROP FUNCTION [dbo].[FuncionAlterT2]
+        ///GO
+        ///DROP FUNCTION [dbo].[FuncionAlter2]
+        ///GO
+        ///ALTER FUNCTION [dbo].[FuncionAlter] 
+        ///(
+        ///	@ID	int
+        ///)
+        ///RETURNS int
+        /// 
+        ///AS
+        ///BEGIN
+        ///	DECLARE @ID2 int
+        ///	SELECT @ID2 = ID +2 FROM dbo.Tabla1 WHERE ID = @ID
+        ///
+        ///	RET [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestFunctionSchemaBoundMultiple1 {
+            get {
+                return ResourceManager.GetString("TestFunctionSchemaBoundMultiple1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestFunctionSchemaBoundTable1
+        ///GO
+        ///
+        ///DROP FUNCTION [dbo].[Funcion5]
+        ///GO
+        ///DROP FUNCTION [dbo].[Funcion6]
+        ///GO
+        ///DROP FUNCTION [dbo].[Funcion9]
+        ///GO
+        ///DROP FUNCTION [dbo].[Funcion2]
+        ///GO
+        ///DROP FUNCTION [dbo].[Funcion1]
+        ///GO
+        ///DROP FUNCTION [dbo].[Funcion8]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla3] ALTER COLUMN [Tabla2] [nvarchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla2] ALTER COLUMN [Tabla2] [nvarchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestFunctionSchemaBoundTable {
+            get {
+                return ResourceManager.GetString("TestFunctionSchemaBoundTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestFunctionSimple1
+        ///GO
+        ///
+        ///DROP FUNCTION [dbo].[FuncionDrop]
+        ///GO
+        ///ALTER FUNCTION [dbo].[FuncionAlter]
+        ///(
+        ///	@ID	int
+        ///)
+        ///RETURNS int
+        ///AS
+        ///BEGIN
+        ///	RETURN @ID + 3
+        ///END
+        ///GO
+        ///CREATE FUNCTION [dbo].[FuncionCrear]
+        ///(
+        ///	@ID	int
+        ///)
+        ///RETURNS int
+        ///AS
+        ///BEGIN
+        ///	RETURN @ID + 1
+        ///END
+        ///GO.
+        /// </summary>
+        internal static string TestFunctionSimple {
+            get {
+                return ResourceManager.GetString("TestFunctionSimple", resourceCulture);
             }
         }
         
@@ -124,17 +974,16 @@ namespace DBDiff.Test {
         ///GO
         ///ALTER INDEX [IX_Tabla1] ON [dbo].[Tabla1] REBUILD
         ///GO
-        ///CREATE NONCLUSTERED INDEX [IX_Tabla1_2] ON [dbo].[Tabla1]
-        ///(
-        ///	[ID] ASC,
-        ///	[Campo1] ASC
-        ///) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-        ///GO
         ///CREATE NONCLUSTERED INDEX [IX3] ON [dbo].[Tabla1]
         ///(
         ///	[ID] ASC,
         ///	[Campo1] ASC,
-        ///	[Campo2] [rest of string was truncated]&quot;;.
+        ///	[Campo2] ASC
+        ///) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+        ///GO
+        ///ALTER INDEX [IX3] ON [dbo].[Tabla1] DISABLE
+        ///GO
+        ///CREATE NONCLUSTERED INDEX [IX_Tabl [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string TestIndexEnabled {
             get {
@@ -154,15 +1003,13 @@ namespace DBDiff.Test {
         ///GO
         ///DROP INDEX [IX_Sort_DB] ON [dbo].[Tabla1]
         ///GO
-        ///CREATE NONCLUSTERED INDEX [IX DROP] ON [dbo].[Tabla1]
+        ///CREATE NONCLUSTERED INDEX [IX_Table1_FillFactor] ON [dbo].[Tabla1]
         ///(
         ///	[ID] ASC,
-        ///	[ID2] ASC,
-        ///	[ID3] ASC,
-        ///	[ID4] ASC
-        ///) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+        ///	[ID3] ASC
+        ///) WITH (PAD_INDEX = ON, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 60) ON [PRIMARY]
         ///GO
-        ///CREATE NONCLUSTERED INDEX [I [rest of string was truncated]&quot;;.
+        ///CREATE NONCLUSTERED INDEX  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string TestIndexSimple {
             get {
@@ -174,15 +1021,17 @@ namespace DBDiff.Test {
         ///   Looks up a localized string similar to USE TestIndexUserType1
         ///GO
         ///
-        ///DROP INDEX [IX3] ON [dbo].[Tabla1]
-        ///GO
-        ///DROP INDEX [IX2] ON [dbo].[Tabla1]
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
         ///GO
         ///DROP INDEX [IX1] ON [dbo].[Tabla1]
         ///GO
-        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ValorId] [int] NOT NULL
+        ///DROP INDEX [IX2] ON [dbo].[Tabla1]
+        ///GO
+        ///DROP INDEX [IX3] ON [dbo].[Tabla1]
         ///GO
         ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [Valor2Id] [money] NULL
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ValorId] [int] NOT NULL
         ///GO
         ///DROP TYPE [dbo].[Tipo1]
         ///GO
@@ -192,7 +1041,7 @@ namespace DBDiff.Test {
         ///GO
         ///CREATE TYPE [dbo].[Tipo2] FROM [money] NOT NULL
         ///GO
-        ///ALTER TABLE [dbo].[Tabla1] ALTER COLUMN [ValorId] [Tipo1] NOT [rest of string was truncated]&quot;;.
+        ///A [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string TestIndexuserType {
             get {
@@ -204,20 +1053,74 @@ namespace DBDiff.Test {
         ///   Looks up a localized string similar to USE TestIndexXML1
         ///GO
         ///
-        ///CREATE NONCLUSTERED INDEX [IX_Tabla1] ON [dbo].[Tabla1]
-        ///(
-        ///	[ID] ASC
-        ///) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-        ///GO
         ///CREATE PRIMARY XML INDEX [XML_IX_Tabla1] ON [dbo].[Tabla1]
         ///(
         ///	[Campo1]
         ///) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+        ///GO
+        ///CREATE NONCLUSTERED INDEX [IX_Tabla1] ON [dbo].[Tabla1]
+        ///(
+        ///	[ID] ASC
+        ///) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
         ///GO.
         /// </summary>
         internal static string TestIndexXML {
             get {
                 return ResourceManager.GetString("TestIndexXML", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE [Test Nombre Largo1]
+        ///GO
+        ///
+        ///CREATE RULE [dbo].[Mi Nueva Rule] 
+        ///AS
+        ///	@value &gt; 1
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla Test 1] DROP CONSTRAINT [CK_Tabla Test 1]
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla Test 1] DROP CONSTRAINT [DF_Tabla Test 1_Campo Descripcion]
+        ///GO
+        ///DROP TRIGGER [dbo].[Lindo Trig]
+        ///GO
+        ///DROP INDEX [IX_Tabla Test 1] ON [dbo].[Tabla Test 1]
+        ///GO
+        ///CREATE TYPE [dbo].[Mi Nuevo Tipo] FROM [bigint] NOT NULL
+        ///GO
+        ///EXEC sp_bindrule N&apos;Mi Nueva Rule&apos;, N&apos;Mi Nuevo Tipo&apos;,&apos;futureonly&apos;
+        ///GO
+        ///ALTER TABLE [dbo].[Tabla Test 1] A [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestNombreLargo {
+            get {
+                return ResourceManager.GetString("TestNombreLargo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestSchema1
+        ///GO
+        ///
+        ///DROP TABLE [SchemaCrear].[Tabla1]
+        ///GO
+        ///CREATE SCHEMA [SchemaBorrar] AUTHORIZATION [dbo]
+        ///GO
+        ///CREATE TABLE [SchemaBorrar].[Tabla1]
+        ///(
+        ///	[ID] [int] NOT NULL,
+        ///	CONSTRAINT [PK_Tabla1] PRIMARY KEY CLUSTERED
+        ///	(
+        ///		[ID] ASC
+        ///	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+        ///) ON [PRIMARY]
+        ///GO
+        ///DROP SCHEMA [SchemaCrear]
+        ///GO.
+        /// </summary>
+        internal static string TestSchema {
+            get {
+                return ResourceManager.GetString("TestSchema", resourceCulture);
             }
         }
         
@@ -241,21 +1144,79 @@ namespace DBDiff.Test {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to USE TestTableAdd1
+        ///GO
+        ///
+        ///DROP TABLE [dbo].[TablaDelete]
+        ///GO
+        ///CREATE TABLE [dbo].[TablaAdd]
+        ///(
+        ///	[ID] [int] IDENTITY (2,2) NOT NULL,
+        ///	[Campo1] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL CONSTRAINT [DF_TablaAdd_Campo1] DEFAULT (&apos;Hola&apos;),
+        ///	[ParentId] [int] NOT NULL,
+        ///	[CampoF] AS ([ID]*(0.2)),
+        ///	CONSTRAINT [PK_TablaAdd] PRIMARY KEY CLUSTERED
+        ///	(
+        ///		[ID] ASC
+        ///	) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY  = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+        ///)  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestTableAdd {
+            get {
+                return ResourceManager.GetString("TestTableAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestTableChangeAll1
+        ///GO
+        ///
+        ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
+        ///GO
+        ///CREATE TABLE [dbo].[TempUsuarios]
+        ///(
+        ///	[UsuarioId] [int] IDENTITY (1,1) NOT NULL,
+        ///	[nombre] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+        ///	[apellido] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+        ///	[password] [varchar] (50) COLLATE Modern_Spanish_CI_AS NOT NULL,
+        ///	[ADM_AgenciaID] [int] NOT NULL,
+        ///	[WEB] [bit] NOT NULL,
+        ///	[Master] [bit] NULL,
+        ///	[Carrito] [bit] NOT NULL CONSTRAINT [DF_Usuarios_Carrito] [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestTableChangeAll {
+            get {
+                return ResourceManager.GetString("TestTableChangeAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestUDT1
+        ///GO
+        ///
+        ///CREATE ASSEMBLY [TestAlter]
+        ///AUTHORIZATION dbo
+        ///FROM 0x4D5A90000300000004000000FFFF0000B800000000000000400000000000000000000000000000000000000000000000000000000000000000000000800000000E1FBA0E00B409CD21B8014CCD21546869732070726F6772616D2063616E6E6F742062652072756E20696E20444F53206D6F64652E0D0D0A2400000000000000504500004C0103002BBF18480000000000000000E0000E210B010800001000000020000000000000AE290000002000000040000000004000002000000010000004000000000000000400000000000000008000000010000000000 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestUDT {
+            get {
+                return ResourceManager.GetString("TestUDT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to USE TestViewComun1
         ///GO
         ///
         ///DROP VIEW [dbo].[Vista2]
         ///GO
-        ///DROP VIEW [dbo].[Vista1]
+        ///ALTER VIEW [dbo].[Vista1]
+        ///AS
+        ///SELECT     1 AS Test1, 2 AS Test2
         ///GO
         ///CREATE VIEW [dbo].[Vista3]
         ///AS
         ///SELECT     1 AS Test1, 2 AS Test2, 3 AS Test3
-        ///
-        ///GO
-        ///CREATE VIEW dbo.Vista1
-        ///AS
-        ///SELECT     1 AS Test1, 2 AS Test2
         ///GO.
         /// </summary>
         internal static string TestViewComun {
@@ -268,8 +1229,6 @@ namespace DBDiff.Test {
         ///   Looks up a localized string similar to USE TestView1
         ///GO
         ///
-        ///DROP VIEW [dbo].[Vista1]
-        ///GO
         ///ALTER TABLE [dbo].[Tabla1] DROP CONSTRAINT [PK_Tabla1]
         ///GO
         ///CREATE TABLE [dbo].[Tabla2]
@@ -284,11 +1243,30 @@ namespace DBDiff.Test {
         ///GO
         ///CREATE TABLE [dbo].[TempTabla1]
         ///(
-        ///	[ID] [int] IDENTITY ( [rest of string was truncated]&quot;;.
+        ///	[ID] [int] IDENTITY (1,1) NOT NULL,
+        ///	[ID2] [int] N [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string TestViewSchemaBinding {
             get {
                 return ResourceManager.GetString("TestViewSchemaBinding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE TestXMLSchema1
+        ///GO
+        ///
+        ///DROP XML SCHEMA COLLECTION [dbo].[DropSchema]
+        ///GO
+        ///DROP XML SCHEMA COLLECTION [dbo].[RebuildSchema]
+        ///GO
+        ///DROP XML SCHEMA COLLECTION [dbo].[AdditionalContactInfoSchemaCollection]
+        ///GO
+        ///CREATE XML SCHEMA COLLECTION [dbo].[AddSchema] AS N&apos;&lt;xsd:schema xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:t=&quot;http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo&quot; targetNamespace=&quot;http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo&quot;&gt;&lt;xsd:element nam [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TestXMLSchema {
+            get {
+                return ResourceManager.GetString("TestXMLSchema", resourceCulture);
             }
         }
     }

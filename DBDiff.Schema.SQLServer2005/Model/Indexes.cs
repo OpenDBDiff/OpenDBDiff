@@ -34,14 +34,14 @@ namespace DBDiff.Schema.SQLServer.Model
         public string ToSQL()
         {
             StringBuilder sql = new StringBuilder();
-            this.ForEach(item => sql.Append(item.ToSQL()));
+            this.ForEach(item => sql.Append(item.ToSql()));
             return sql.ToString();
         }
 
         public SQLScriptList ToSQLDiff()
         {
             SQLScriptList listDiff = new SQLScriptList();
-            this.ForEach(item => listDiff.Add(item.ToSQLDiff()));
+            this.ForEach(item => listDiff.AddRange(item.ToSQLDiff()));
 
             return listDiff;
         }

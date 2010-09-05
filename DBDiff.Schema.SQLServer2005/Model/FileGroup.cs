@@ -11,7 +11,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private Boolean defaultFileGroup;
         private FileGroupFiles files;
 
-        public FileGroup(Database parent) : base(StatusEnum.ObjectTypeEnum.FileGroup)
+        public FileGroup(Database parent) : base(Enums.ObjectType.FileGroup)
         {
             this.Parent = parent;
             files = new FileGroupFiles(this);
@@ -69,19 +69,19 @@ namespace DBDiff.Schema.SQLServer.Model
             return sql;
         }
 
-        public string ToSQL()
+        public override string ToSql()
         {
             string sql = ToSQL("ADD");
             foreach (FileGroupFile file in this.Files)
-                sql += file.ToSQL();
+                sql += file.ToSql();
             return sql;
         }
 
-        public override string ToSQLAdd()
+        public override string ToSqlAdd()
         {
             string sql = ToSQL("ADD");
             foreach (FileGroupFile file in this.Files)
-                sql += file.ToSQLAdd();
+                sql += file.ToSqlAdd();
             return sql;
         }
 
@@ -90,7 +90,7 @@ namespace DBDiff.Schema.SQLServer.Model
             return ToSQL("MODIFY");
         }
 
-        public override string ToSQLDrop()
+        public override string ToSqlDrop()
         {
             string sql = "";
             sql = Files.ToSQLDrop();
@@ -101,12 +101,12 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == StatusEnum.ObjectStatusType.DropStatus)
-                listDiff.Add(this.ToSQLDrop(), 1, StatusEnum.ScripActionType.DropFileGroup);
-            if (this.Status == StatusEnum.ObjectStatusType.CreateStatus)
-                listDiff.Add(this.ToSQLAdd(), 1, StatusEnum.ScripActionType.AddFileGroup);
-            if (this.Status == StatusEnum.ObjectStatusType.AlterStatus)
-                listDiff.Add(this.ToSQLAlter(), 1, StatusEnum.ScripActionType.AlterFileGroup);
+            if (this.Status == Enums.ObjectStatusType.DropStatus)
+                listDiff.Add(this.ToSqlDrop(), 1, Enums.ScripActionType.DropFileGroup);
+            if (this.Status == Enums.ObjectStatusType.CreateStatus)
+                listDiff.Add(this.ToSqlAdd(), 1, Enums.ScripActionType.AddFileGroup);
+            if (this.Status == Enums.ObjectStatusType.AlterStatus)
+                listDiff.Add(this.ToSQLAlter(), 1, Enums.ScripActionType.AlterFileGroup);
 
             return listDiff;
         }

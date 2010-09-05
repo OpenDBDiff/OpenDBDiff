@@ -9,21 +9,21 @@ namespace DBDiff.Schema.SQLServer.Model
     public class XMLSchemas:FindBaseList<XMLSchema,Database> 
     {
         public XMLSchemas(Database parent)
-            : base(parent)
+            : base(parent, parent.AllObjects)
         {
         }
 
         public string ToSQL()
         {
             StringBuilder sql = new StringBuilder();
-            this.ForEach(item => sql.Append(item.ToSQL() + "\r\n"));
+            this.ForEach(item => sql.Append(item.ToSql() + "\r\n"));
             return sql.ToString();
         }
 
         public SQLScriptList ToSQLDiff()
         {
             SQLScriptList listDiff = new SQLScriptList();
-            this.ForEach(item => listDiff.Add(item.ToSQLDiff()));
+            this.ForEach(item => listDiff.AddRange(item.ToSQLDiff()));
 
             return listDiff;
         }

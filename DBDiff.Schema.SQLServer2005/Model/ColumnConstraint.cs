@@ -17,7 +17,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private Boolean withNoCheck;
 
         public ColumnConstraint(Column parent)
-            : base(StatusEnum.ObjectTypeEnum.Constraint)
+            : base(Enums.ObjectType.Constraint)
         {
             this.Parent = parent;
         }
@@ -33,6 +33,7 @@ namespace DBDiff.Schema.SQLServer.Model
             ccons.Definition = this.Definition;
             ccons.Status = this.Status;
             ccons.Disabled = this.Disabled;
+            ccons.Owner = this.Owner;
             return ccons;
         }
 
@@ -109,14 +110,48 @@ namespace DBDiff.Schema.SQLServer.Model
             if (origen == null) throw new ArgumentNullException("origen");
             if (origen.NotForReplication != destino.NotForReplication) return false;
             if (origen.Disabled != destino.Disabled) return false;
-            if (!origen.Definition.Equals(destino.Definition)) return false;
+            if ((!origen.Definition.Equals(destino.Definition)) && (!origen.Definition.Equals("(" + destino.Definition + ")"))) return false;
             return true;
+        }
+
+        public override SQLScript Create()
+        {
+            Enums.ScripActionType action = Enums.ScripActionType.AddConstraint;
+            if (!GetWasInsertInDiffList(action))
+            {
+                SetWasInsertInDiffList(action);
+                return new SQLScript(this.ToSqlAdd(), 0, action);
+            }
+            else
+                return null;
+
+        }
+
+        public override SQLScript Drop()
+        {
+            Enums.ScripActionType action = Enums.ScripActionType.DropConstraint;
+            if (!GetWasInsertInDiffList(action))
+            {
+                SetWasInsertInDiffList(action);
+                return new SQLScript(this.ToSqlDrop(), 0, action);
+            }
+            else
+                return null;
+        }
+
+        public Boolean CanCreate
+        {
+            get
+            {
+                Enums.ObjectStatusType tableStatus = this.Parent.Parent.Status;
+                return (((tableStatus == Enums.ObjectStatusType.OriginalStatus) || (tableStatus == Enums.ObjectStatusType.AlterRebuildDependenciesStatus)) && (this.Status == Enums.ObjectStatusType.OriginalStatus));
+            }
         }
 
         /// <summary>
         /// Devuelve el schema de la constraint en formato SQL.
         /// </summary>
-        public string ToSQL()
+        public override string ToSql()
         {
             string sql = "";
             if (this.Type == Constraint.ConstraintType.Default)
@@ -128,12 +163,12 @@ namespace DBDiff.Schema.SQLServer.Model
         /// Toes the SQL add.
         /// </summary>
         /// <returns></returns>
-        public override string ToSQLAdd()
+        public override string ToSqlAdd()
         {
             if (this.Type == Constraint.ConstraintType.Default)
-                return "ALTER TABLE " + ((Table)Parent.Parent).FullName + " ADD" + ToSQL() + " FOR [" + Parent.Name + "]\r\nGO\r\n";
+                return "ALTER TABLE " + ((Table)Parent.Parent).FullName + " ADD" + ToSql() + " FOR [" + Parent.Name + "]\r\nGO\r\n";
             if (this.Type == Constraint.ConstraintType.Check)
-                return "ALTER TABLE " + ((Table)Parent.Parent).FullName + " ADD" + ToSQL() + "\r\nGO\r\n";
+                return "ALTER TABLE " + ((Table)Parent.Parent).FullName + " ADD" + ToSql() + "\r\nGO\r\n";
             return "";
         }
 
@@ -141,7 +176,7 @@ namespace DBDiff.Schema.SQLServer.Model
         /// Toes the SQL drop.
         /// </summary>
         /// <returns></returns>
-        public override string ToSQLDrop()
+        public override string ToSqlDrop()
         {
             return "ALTER TABLE " + ((Table)Parent.Parent).FullName + " DROP CONSTRAINT [" + Name + "]\r\nGO\r\n";
         }
@@ -149,14 +184,15 @@ namespace DBDiff.Schema.SQLServer.Model
         public SQLScriptList ToSQLDiff()
         {
             SQLScriptList list = new SQLScriptList();
-            if (this.Status == StatusEnum.ObjectStatusType.DropStatus)
-                list.Add(this.ToSQLDrop(), 0, StatusEnum.ScripActionType.DropConstraint);
-            if (this.Status == StatusEnum.ObjectStatusType.CreateStatus)
-                list.Add(this.ToSQLAdd(), 0, StatusEnum.ScripActionType.AddConstraint);
-            if (this.Status == StatusEnum.ObjectStatusType.AlterStatus)
+            if (this.HasState(Enums.ObjectStatusType.DropStatus))
+                list.Add(Drop());
+            if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+                list.Add(Create()); 
+            
+            if (this.Status == Enums.ObjectStatusType.AlterStatus)
             {
-                list.Add(this.ToSQLDrop(), 0, StatusEnum.ScripActionType.DropConstraint);
-                list.Add(this.ToSQLAdd(), 0, StatusEnum.ScripActionType.AddConstraint);
+                list.Add(Drop());
+                list.Add(Create()); 
             }
             return list;
         }

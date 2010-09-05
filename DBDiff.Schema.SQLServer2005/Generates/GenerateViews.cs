@@ -8,82 +8,76 @@ using DBDiff.Schema.SQLServer.Options;
 
 namespace DBDiff.Schema.SQLServer.Generates
 {
-    public class GenerateViews
+    public static class GenerateViews
     {
-        private string connectioString;
-        private SqlOption objectFilter;
-
-        /// <summary>
-        /// Constructor de la clase.
-        /// </summary>
-        /// <param name="connectioString">Connection string de la base</param>
-        public GenerateViews(string connectioString, SqlOption filter)
-        {
-            this.connectioString = connectioString;
-            this.objectFilter = filter;
-        }
-
         private static string GetSQL()
         {
             string sql = "";
-            sql += "SELECT distinct object_name(referenced_major_id) AS TableName, referenced_major_id, V.Name, OBJECTPROPERTY (V.object_id,'IsSchemaBound') AS IsSchemaBound, SCHEMA_NAME(V.schema_id) AS Owner, OBJECT_DEFINITION(V.object_id) AS Text, V.object_id ";
-            sql += "FROM sys.views V ";
-            sql += "LEFT JOIN sys.sql_dependencies D ON V.object_id = D.object_id ";
-            sql += "ORDER BY V.object_id";
+            sql += "select distinct ISNULL('[' + S3.Name + '].[' + object_name(D2.object_id) + ']','') AS DependOut, '[' + S2.Name + '].[' + object_name(D.referenced_major_id) + ']' AS TableName, D.referenced_major_id, OBJECT_DEFINITION(P.object_id) AS Text, OBJECTPROPERTY (P.object_id,'IsSchemaBound') AS IsSchemaBound, P.object_id, S.name as owner, P.name as name from sys.views P ";
+            sql += "INNER JOIN sys.schemas S ON S.schema_id = P.schema_id ";
+            sql += "LEFT JOIN sys.sql_dependencies D ON P.object_id = D.object_id ";
+            sql += "LEFT JOIN sys.objects O ON O.object_id = D.referenced_major_id ";
+            sql += "LEFT JOIN sys.schemas S2 ON S2.schema_id = O.schema_id ";
+            sql += "LEFT JOIN sys.sql_dependencies D2 ON P.object_id = D2.referenced_major_id ";
+            sql += "LEFT JOIN sys.objects O2 ON O2.object_id = D2.object_id ";
+            sql += "LEFT JOIN sys.schemas S3 ON S3.schema_id = O2.schema_id ";
+            sql += "ORDER BY P.object_id";
             return sql;
         }
-        public Views Get(Database database)
+
+        public static void Fill(Database database, string connectionString)
         {
-            Views views = null;
             Indexes indexes = null;
+            if (database.Options.Ignore.FilterView)
+            {
+                FillView(database,connectionString);                
+                if ((database.Views.Count > 0) && (database.Options.Ignore.FilterIndex))
+                    indexes = (new GenerateIndex(connectionString, database.Options)).Get("V");
 
-            views = GetView(database);
-            
-            if ((views.Count > 0) && (objectFilter.OptionFilter.FilterIndex))
-                indexes = (new GenerateIndex(connectioString, objectFilter)).Get("V");
-
-
-            return Merge(views, null, indexes);
+                Merge(database.Views, null, indexes);
+            }
         }
 
-        public Views GetView(Database database)
+        private static void FillView(Database database, string connectionString)
         {
-            Views stores = new Views(database);
             int lastViewId = 0;
-            if (objectFilter.OptionFilter.FilterView)
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlConnection conn = new SqlConnection(connectioString))
+                using (SqlCommand command = new SqlCommand(GetSQL(), conn))
                 {
-                    using (SqlCommand command = new SqlCommand(GetSQL(), conn))
+                    conn.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        conn.Open();
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        View item = null;
+                        while (reader.Read())
                         {
-                            View item = null;
-                            while (reader.Read())
+                            if (lastViewId != (int)reader["object_id"])
                             {
-                                if (lastViewId != (int)reader["object_id"])
-                                {
-                                    item = new View(database);
-                                    item.Id = (int)reader["object_id"];
-                                    item.Name = reader["name"].ToString();
-                                    item.Owner = reader["owner"].ToString();
-                                    item.Text = reader["text"].ToString();
-                                    item.IsSchemaBinding = reader["IsSchemaBound"].ToString().Equals("1");
-                                    stores.Add(item);
-                                    lastViewId = item.Id;
-                                }
-                                if (item.IsSchemaBinding)
-                                    database.Dependencies.Add((int)reader["referenced_major_id"], 0, (int)reader["referenced_major_id"], 0, item);
+                                item = new View(database);
+                                item.Id = (int)reader["object_id"];
+                                item.Name = reader["name"].ToString();
+                                item.Owner = reader["owner"].ToString();
+                                item.Text = reader["text"].ToString();
+                                item.IsSchemaBinding = reader["IsSchemaBound"].ToString().Equals("1");
+                                database.Views.Add(item);
+                                lastViewId = item.Id;
+                            }
+                            if (item.IsSchemaBinding)
+                            {
+                                if (!reader.IsDBNull(reader.GetOrdinal("referenced_major_id")))
+                                    database.Dependencies.Add((int)reader["referenced_major_id"], item);
+                                if (!String.IsNullOrEmpty(reader["TableName"].ToString()))
+                                    item.DependenciesIn.Add(reader["TableName"].ToString());
+                                if (!String.IsNullOrEmpty(reader["DependOut"].ToString()))
+                                    item.DependenciesOut.Add(reader["DependOut"].ToString());
                             }
                         }
-                    }                    
-                }
+                    }
+                }                    
             }
-            return stores;
         }
 
-        private Views Merge(Views views, Triggers triggers, Indexes indexes)
+        private static void Merge(Views views, Triggers triggers, Indexes indexes)
         {
             /*if (triggers != null)
             {
@@ -107,7 +101,6 @@ namespace DBDiff.Schema.SQLServer.Generates
                     }
                 }
             }
-            return views;
         }
     }
 }

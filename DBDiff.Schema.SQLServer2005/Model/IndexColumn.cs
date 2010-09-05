@@ -12,7 +12,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private int keyOrder;
         private int dataTypeId;
 
-        public IndexColumn(ISchemaBase parentObject):base(StatusEnum.ObjectTypeEnum.IndexColumn)
+        public IndexColumn(ISchemaBase parentObject):base(Enums.ObjectType.IndexColumn)
         {
             Parent = parentObject;
         }
@@ -64,12 +64,17 @@ namespace DBDiff.Schema.SQLServer.Model
             return true;
         }
         
-        public override string ToSQLDrop()
+        public override string ToSqlDrop()
         {
             return "";
         }
 
-        public override string ToSQLAdd()
+        public override string ToSqlAdd()
+        {
+            return "";
+        }
+
+        public override string ToSql()
         {
             return "";
         }

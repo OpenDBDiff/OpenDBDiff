@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using DBDiff.Schema.Model;
+using DBDiff.Schema.SQLServer.Model.Util;
 
 namespace DBDiff.Schema.SQLServer.Model
 {
-    public class StoreProcedure : SQLServerSchemaBase 
+    public class StoreProcedure : Code 
     {
-        private string text;
-
-        public StoreProcedure(ISchemaBase parent):base(StatusEnum.ObjectTypeEnum.StoreProcedure)
+        public StoreProcedure(ISchemaBase parent)
+            : base(parent, Enums.ObjectType.StoreProcedure)
         {
-            this.Parent = parent;            
+
         }
 
         /// <summary>
@@ -29,27 +30,47 @@ namespace DBDiff.Schema.SQLServer.Model
             return item;
         }
 
-        public string Text
+        public override Boolean IsCodeType
         {
-            get { return text; }
-            set { text = value; }
+            get { return true; }
         }
 
-        public string ToSQL()
+        public override string ToSql()
         {
-            return text + "GO\r\n";
+            if (String.IsNullOrEmpty(sql))
+                sql = FormatCode.FormatCreate("PROCEDURE;PROC", Text, this);
+            return sql;
         }
 
-        public override string ToSQLAdd()
+        public string ToSQLAlter()
         {
-            return ToSQL();
+            return FormatCode.FormatAlter("PROCEDURE;PROC", ToSql(), this, false);
         }
 
-        public override string ToSQLDrop()
+        public override SQLScript Create()
         {
-            return "DROP PROCEDURE " + FullName + "\r\nGO\r\n";
+            Enums.ScripActionType action = Enums.ScripActionType.AddStoreProcedure;
+            if (!GetWasInsertInDiffList(action))
+            {
+                SetWasInsertInDiffList(action);
+                return new SQLScript(this.ToSqlAdd(), 0, action);
+            }
+            else
+                return null;
+
         }
 
+        public override SQLScript Drop()
+        {
+            Enums.ScripActionType action = Enums.ScripActionType.DropStoreProcedure;
+            if (!GetWasInsertInDiffList(action))
+            {
+                SetWasInsertInDiffList(action);
+                return new SQLScript(this.ToSqlDrop(), 0, action);
+            }
+            else
+                return null;
+        }
         /// <summary>
         /// Compara dos store procedures y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
@@ -57,7 +78,7 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             if (destino == null) throw new ArgumentNullException("destino");
             if (origen == null) throw new ArgumentNullException("origen");
-            if (!origen.Text.Equals(destino.Text)) return false;
+            if (!origen.ToSql().Equals(destino.ToSql())) return false;
             return true;
         }
 
@@ -66,17 +87,15 @@ namespace DBDiff.Schema.SQLServer.Model
         /// </summary>
         public SQLScriptList ToSQLDiff()
         {
-            SQLScriptList listDiff = new SQLScriptList();
+            SQLScriptList list = new SQLScriptList();
 
-            if (this.Status == StatusEnum.ObjectStatusType.DropStatus)
-            {
-                listDiff.Add(ToSQLDrop(), 0, StatusEnum.ScripActionType.DropStoreProcedure);
-            }
-            if (this.Status == StatusEnum.ObjectStatusType.CreateStatus)
-            {
-                listDiff.Add(ToSQL(), 0, StatusEnum.ScripActionType.AddStoreProcedure);
-            }
-            return listDiff;
+            if (this.HasState(Enums.ObjectStatusType.DropStatus))
+                list.Add(Drop());
+            if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+                list.Add(Create());
+            if (this.Status == Enums.ObjectStatusType.AlterStatus)
+                list.Add(ToSQLAlter(), 0, Enums.ScripActionType.AlterProcedure);
+            return list;
         }
     }
 }

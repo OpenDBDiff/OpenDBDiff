@@ -1,6 +1,7 @@
 using System;
 using System.Data.SqlClient;
 using System.Threading;
+using DBDiff.Schema.Misc;
 using DBDiff.Schema.Events;
 using DBDiff.Schema.SQLServer.Compare;
 using DBDiff.Schema.SQLServer.Model;
@@ -59,10 +60,12 @@ namespace DBDiff.Schema.SQLServer
                 {
                     try
                     {
-                        databaseSchema.Tables = (new GenerateTables(connectionString, filters)).Get(databaseSchema);
-                        databaseSchema.UserTypes = (new GenerateUserDataTypes(connectionString, filters)).Get(databaseSchema);
-                        databaseSchema.XmlSchemas = (new GenerateXMLSchemas(connectionString, filters)).Get(databaseSchema);
-                        databaseSchema.Schemas = (new GenerateSchemas(connectionString, filters)).Get(databaseSchema);
+                        GenerateRules.Fill(databaseSchema, connectionString);
+                        GenerateTables.Fill(databaseSchema, connectionString);
+                        GenerateUserDataTypes.Fill(databaseSchema, connectionString);
+                        GenerateXMLSchemas.Fill(databaseSchema, connectionString);
+                        GenerateSchemas.Fill(databaseSchema, connectionString);
+                        GenerateUsers.Fill(databaseSchema, connectionString);
                     }
                     catch (Exception ex)
                     {
@@ -73,11 +76,10 @@ namespace DBDiff.Schema.SQLServer
                 {
                     try
                     {
-                        databaseSchema.FileGroups = (new GenerateFileGroups(connectionString, filters)).Get(databaseSchema);
-                        databaseSchema.Rules = (new GenerateRules(connectionString, filters)).Get(databaseSchema);
-                        databaseSchema.DDLTriggers = (new GenerateDDLTriggers(connectionString, filters)).Get(databaseSchema);
-                        databaseSchema.Synonyms = (new GenerateSynonyms(connectionString, filters)).Get(databaseSchema);
-                        databaseSchema.Assemblies = (new GenerateAssemblies(connectionString, filters)).Get(databaseSchema);
+                        GenerateFileGroups.Fill(databaseSchema, connectionString);                        
+                        GenerateDDLTriggers.Fill(databaseSchema, connectionString);
+                        GenerateSynonyms.Fill(databaseSchema, connectionString);
+                        GenerateAssemblies.Fill(databaseSchema, connectionString);
                     }
                     catch (Exception ex)
                     {
@@ -88,8 +90,9 @@ namespace DBDiff.Schema.SQLServer
                 {
                     try
                     {
-                        databaseSchema.Procedures = (new GenerateStoreProcedures(connectionString, filters)).Get(databaseSchema);
-                        databaseSchema.Views = (new GenerateViews(connectionString, filters)).Get(databaseSchema);
+                        GenerateStoreProcedures.Fill(databaseSchema, connectionString);
+                        GenerateViews.Fill(databaseSchema, connectionString);
+                        GenerateFunctions.Fill(databaseSchema, connectionString);
                     }
                     catch (Exception ex)
                     {
@@ -105,7 +108,7 @@ namespace DBDiff.Schema.SQLServer
                 if (String.IsNullOrEmpty(error))
                     return databaseSchema;
                 else
-                    throw new Exception(error);
+                    throw new SchemaException(error);
             }
             catch
             {

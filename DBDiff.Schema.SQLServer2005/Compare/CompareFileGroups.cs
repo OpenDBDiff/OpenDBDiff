@@ -7,14 +7,14 @@ namespace DBDiff.Schema.SQLServer.Compare
 {
     internal class CompareFileGroups:CompareBase<FileGroup>
     {
-        public static FileGroups GenerateDiferences(FileGroups CamposOrigen, FileGroups CamposDestino)
+        public static void GenerateDiferences(FileGroups CamposOrigen, FileGroups CamposDestino)
         {
             foreach (FileGroup node in CamposDestino)
             {
                 if (!CamposOrigen.Exists(node.FullName))
                 {
                     FileGroup newNode = node.Clone(CamposOrigen.Parent);
-                    newNode.Status = StatusEnum.ObjectStatusType.CreateStatus;
+                    newNode.Status = Enums.ObjectStatusType.CreateStatus;
                     CamposOrigen.Add(newNode);
                 }
                 else
@@ -22,15 +22,13 @@ namespace DBDiff.Schema.SQLServer.Compare
                     if (!FileGroup.Compare(node, CamposOrigen[node.FullName]))
                     {
                         FileGroup newNode = node.Clone(CamposOrigen.Parent);
-                        newNode.Status = StatusEnum.ObjectStatusType.AlterStatus;
+                        newNode.Status = Enums.ObjectStatusType.AlterStatus;
                         CamposOrigen[node.FullName] = newNode;
                     }
                 }
             }
             
             MarkDrop(CamposOrigen, CamposDestino);
-
-            return CamposOrigen;
         }
     }
 }

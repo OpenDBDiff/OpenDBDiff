@@ -13,9 +13,9 @@ namespace DBDiff.Schema.SQLServer.Compare
             {
                 if (!CamposOrigen.Exists(node.FullName))
                 {
-                    node.Status = StatusEnum.ObjectStatusType.CreateStatus;
-                    CamposOrigen.Parent.Status = StatusEnum.ObjectStatusType.OriginalStatus;
-                    CamposOrigen.Parent.Parent.Status = StatusEnum.ObjectStatusType.AlterStatus;
+                    node.Status = Enums.ObjectStatusType.CreateStatus;
+                    CamposOrigen.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                    CamposOrigen.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
                     CamposOrigen.Add(node);
                 }
                 else
@@ -24,9 +24,9 @@ namespace DBDiff.Schema.SQLServer.Compare
                     {
                         ColumnConstraint newNode = node.Clone(CamposOrigen.Parent);
                         //Indico que hay un ALTER TABLE, pero sobre la columna, no seteo ningun estado.
-                        newNode.Status = StatusEnum.ObjectStatusType.AlterStatus;
-                        newNode.Parent.Status = StatusEnum.ObjectStatusType.OriginalStatus;
-                        newNode.Parent.Parent.Status = StatusEnum.ObjectStatusType.AlterStatus;
+                        newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                        newNode.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                        newNode.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
                         CamposOrigen[node.FullName] = newNode;
                         
                     }
@@ -35,9 +35,9 @@ namespace DBDiff.Schema.SQLServer.Compare
 
             MarkDrop(CamposOrigen, CamposDestino, node => 
             {
-                node.Status = StatusEnum.ObjectStatusType.DropStatus;
-                CamposOrigen.Parent.Status = StatusEnum.ObjectStatusType.OriginalStatus;
-                CamposOrigen.Parent.Parent.Status = StatusEnum.ObjectStatusType.AlterStatus;
+                node.Status = Enums.ObjectStatusType.DropStatus;
+                CamposOrigen.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                CamposOrigen.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
             }
             );
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using System.Globalization;
 using System.Xml.Serialization;
 using DBDiff.Schema.Model;
@@ -31,13 +32,19 @@ namespace DBDiff.Schema.SQLServer.Model
         private Boolean isUserDefinedType;
         private int position;
         private int dataUserTypeId;
+        private Default _default;
+        private Rule rule;
+        //private List<ObjectDependency> dependencys;
 
         public Column(ISchemaBase parent)
-            : base(StatusEnum.ObjectTypeEnum.Column)
+            : base(Enums.ObjectType.Column)
         {
             this.Parent = parent;            
             computedFormula = "";
+            this._default = new Default(this);
+            this.rule = new Rule(this);
             this.constraints = new ColumnConstraints(this);
+            //this.dependencys = new List<ObjectDependency>();
         }
 
         /// <summary>
@@ -54,6 +61,7 @@ namespace DBDiff.Schema.SQLServer.Model
             col.DataUserTypeId = this.DataUserTypeId;
             col.Id = this.Id;
             col.Guid = this.Guid;
+            col.Owner = this.Owner;
             col.IsIdentity = this.IsIdentity;
             col.IsIdentityForReplication = this.IsIdentityForReplication;
             col.IdentityIncrement = this.IdentityIncrement;
@@ -75,9 +83,17 @@ namespace DBDiff.Schema.SQLServer.Model
             col.XmlSchema = this.XmlSchema;
             col.IsXmlDocument = this.IsXmlDocument;
             col.IsUserDefinedType = this.IsUserDefinedType;
+            col.Default = this.Default.Clone(this);
+            col.Rule = this.Rule.Clone(this);
             col.Constraints = this.Constraints.Clone(this);
             return col;
         }
+
+        /*public List<ObjectDependency> Dependencys
+        {
+            get { return dependencys; }
+            set { dependencys = value; }
+        }*/
 
         /// <summary>
         /// Gets or sets the constraints.
@@ -87,6 +103,18 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             get { return constraints; }
             set { constraints = value; }
+        }
+
+        public Rule Rule
+        {
+            get { return rule; }
+            set { rule = value; }
+        }
+
+        public Default Default
+        {
+            get { return _default; }
+            set { _default = value; }
         }
 
         /// <summary>
@@ -404,7 +432,7 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             get
             {
-                return (this.Status == StatusEnum.ObjectStatusType.AlterStatusUpdate) || ((!this.Nullable) && (this.Status == StatusEnum.ObjectStatusType.CreateStatus));
+                return (this.HasState(Enums.ObjectStatusType.UpdateStatus)) || ((!this.Nullable) && (this.Status == Enums.ObjectStatusType.CreateStatus));
             }
         }
 
@@ -416,21 +444,25 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             get
             {
-                string tl = type.ToLower();
-                if ((((Database)Parent.Parent).Options.OptionDefault.UseDefaultValueIfExists) && (this.Constraints.Count > 0))
+                string tl = this.Type;
+                if (this.IsUserDefinedType)
+                {
+                    tl = ((Database)this.Parent.Parent).UserTypes.Find(item => item.Id == dataUserTypeId).Type.ToLower();
+                }
+                if ((((Database)Parent.Parent).Options.Defaults.UseDefaultValueIfExists) && (this.Constraints.Count > 0))
                 {
                     return this.Constraints[0].Definition;
                 }
                 else
                 {
-                    if (tl.Equals("int") || tl.Equals("bit") || tl.Equals("smallint") || tl.Equals("bigint") || tl.Equals("tinyint")) return ((Database)Parent.Parent).Options.OptionDefault.DefaultIntegerValue;
-                    if (tl.Equals("text") || tl.Equals("char") || tl.Equals("varchar") || tl.Equals("varchar(max)")) return ((Database)Parent.Parent).Options.OptionDefault.DefaultTextValue;
-                    if (tl.Equals("ntext") || tl.Equals("nchar") || tl.Equals("nvarchar") || tl.Equals("nvarchar(max)")) return ((Database)Parent.Parent).Options.OptionDefault.DefaultNTextValue;
-                    if (tl.Equals("datetime") || tl.Equals("smalldatetime")) return ((Database)Parent.Parent).Options.OptionDefault.DefaultDateValue;
-                    if (tl.Equals("numeric") || tl.Equals("decimal") || tl.Equals("float") || tl.Equals("money") || tl.Equals("smallmoney") || tl.Equals("real")) return ((Database)Parent.Parent).Options.OptionDefault.DefaultRealValue;
-                    if (tl.Equals("sql_variant")) return ((Database)Parent.Parent).Options.OptionDefault.DefaultVariantValue;
-                    if (tl.Equals("uniqueidentifier")) return ((Database)Parent.Parent).Options.OptionDefault.DefaultUniqueValue;
-                    if (tl.Equals("image") || tl.Equals("binary") || tl.Equals("varbinary")) return ((Database)Parent.Parent).Options.OptionDefault.DefaultBlobValue;
+                    if (tl.Equals("int") || tl.Equals("bit") || tl.Equals("smallint") || tl.Equals("bigint") || tl.Equals("tinyint")) return ((Database)Parent.Parent).Options.Defaults.DefaultIntegerValue;
+                    if (tl.Equals("text") || tl.Equals("char") || tl.Equals("varchar") || tl.Equals("varchar(max)")) return ((Database)Parent.Parent).Options.Defaults.DefaultTextValue;
+                    if (tl.Equals("ntext") || tl.Equals("nchar") || tl.Equals("nvarchar") || tl.Equals("nvarchar(max)")) return ((Database)Parent.Parent).Options.Defaults.DefaultNTextValue;
+                    if (tl.Equals("datetime") || tl.Equals("smalldatetime")) return ((Database)Parent.Parent).Options.Defaults.DefaultDateValue;
+                    if (tl.Equals("numeric") || tl.Equals("decimal") || tl.Equals("float") || tl.Equals("money") || tl.Equals("smallmoney") || tl.Equals("real")) return ((Database)Parent.Parent).Options.Defaults.DefaultRealValue;
+                    if (tl.Equals("sql_variant")) return ((Database)Parent.Parent).Options.Defaults.DefaultVariantValue;
+                    if (tl.Equals("uniqueidentifier")) return ((Database)Parent.Parent).Options.Defaults.DefaultUniqueValue;
+                    if (tl.Equals("image") || tl.Equals("binary") || tl.Equals("varbinary")) return ((Database)Parent.Parent).Options.Defaults.DefaultBlobValue;
                 }
                 return "";
             }
@@ -441,7 +473,7 @@ namespace DBDiff.Schema.SQLServer.Model
         /// Toes the SQL drop.
         /// </summary>
         /// <returns></returns>
-        public override string ToSQLDrop()
+        public override string ToSqlDrop()
         {
             string sql = "ALTER TABLE " + Parent.FullName + " DROP COLUMN [" + Name + "]\r\nGO\r\n";
             return sql;
@@ -451,9 +483,49 @@ namespace DBDiff.Schema.SQLServer.Model
         /// Toes the SQL add.
         /// </summary>
         /// <returns></returns>
-        public override string ToSQLAdd()
+        public override string ToSqlAdd()
         {
-            return "ALTER TABLE " + Parent.FullName + " ADD COLUMN " + ToSQL(false) + "\r\nGO\r\n";
+            return "ALTER TABLE " + Parent.FullName + " ADD " + ToSQL(false) + "\r\nGO\r\n";
+        }
+
+        public override string ToSql()
+        {
+            return ToSQL(true);
+        }
+
+        public string ToSQLRedefine(string type, int size, string xmlSchema)
+        {
+            string originalType = "";
+            int originalSize = 0;
+            string originalXMLSchema = "";
+
+            string sql;
+
+            if (type != null)
+            {
+                originalType = this.Type;
+                this.Type = type;
+            }
+            if (size != 0)
+            {
+                originalSize = this.Size;
+                this.Size = size;
+            }
+            if (xmlSchema != null)
+            {
+                originalXMLSchema = this.XmlSchema;
+                this.XmlSchema = xmlSchema;
+
+            }
+            sql = this.ToSQL(false);
+
+            if (type != null)
+                this.Type = originalType;
+            if (size != 0)
+                this.Size = originalSize;
+            if (xmlSchema != null)
+                this.XmlSchema = originalXMLSchema;
+            return sql;
         }
         /// <summary>
         /// Devuelve el schema de la columna en formato SQL.
@@ -506,6 +578,41 @@ namespace DBDiff.Schema.SQLServer.Model
             return sql;
         }
 
+        public SQLScriptList RebuildConstraint(Boolean Check)
+        {
+            SQLScriptList list = new SQLScriptList();
+            if (constraints.Count > 0)
+            {
+                if ((!Check) || (constraints[0].CanCreate)) list.Add(constraints[0].Create());
+                list.Add(constraints[0].Drop());
+            }
+            return list;
+        }
+
+        public SQLScriptList RebuildSchemaBindingDependencies()
+        {
+            SQLScriptList list = new SQLScriptList();
+            List<ISchemaBase> items = ((Database)this.Parent.Parent).Dependencies.Find(this.Parent.Id, this.Id, 0);
+            items.ForEach(item =>
+            {
+                if ((item.ObjectType == Enums.ObjectType.Function) || (item.ObjectType == Enums.ObjectType.View))
+                {
+                    if (item.Status != Enums.ObjectStatusType.CreateStatus)
+                        list.Add(item.Drop());
+                    if (item.Status != Enums.ObjectStatusType.DropStatus)
+                        list.Add(item.Create());
+                }
+            });
+            return list;
+        }
+
+        public SQLScriptList Alter(Enums.ScripActionType typeStatus)
+        {
+            SQLScriptList list = new SQLScriptList();
+            string sql = "ALTER TABLE " + Parent.FullName + " ALTER COLUMN " + this.ToSQL(false) + "\r\nGO\r\n";
+            list.Add(sql, 0, typeStatus);
+            return list;
+        }
         
         /// <summary>
         /// Compara solo las propiedades de dos campos relacionadas con los Identity. Si existen
@@ -519,6 +626,17 @@ namespace DBDiff.Schema.SQLServer.Model
             if (origen.IsIdentityForReplication != destino.identityForReplication) return false;
             if (origen.IdentityIncrement != destino.IdentityIncrement) return false;
             if (origen.IdentitySeed != destino.IdentitySeed) return false;
+            return true;
+        }
+
+        public static Boolean CompareRule(Column origen, Column destino)
+        {
+            if (destino == null) throw new ArgumentNullException("destino");
+            if (origen == null) throw new ArgumentNullException("origen");
+            if ((origen.Rule.Name != null) && (destino.Rule.Name == null)) return false;
+            if ((origen.Rule.Name == null) && (destino.Rule.Name != null)) return false;
+            if (origen.Rule.Name != null)
+                if (!origen.Rule.Name.Equals(destino.Rule.Name)) return false;
             return true;
         }
 
@@ -555,7 +673,8 @@ namespace DBDiff.Schema.SQLServer.Model
             {
                 if (origen.IsPersisted != destino.IsPersisted) return false;
             }
-            return CompareIdentity(origen, destino);
+            if (!CompareIdentity(origen, destino)) return false;
+            return CompareRule(origen, destino);
         }
 
         public int CompareTo(Column other)

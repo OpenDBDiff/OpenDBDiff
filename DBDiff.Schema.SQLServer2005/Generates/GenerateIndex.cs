@@ -76,14 +76,15 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 con.Id = (int)reader["Index_id"];
                                 con.AllowPageLocks = (bool)reader["allow_page_locks"];
                                 con.AllowRowLocks = (bool)reader["allow_row_locks"];
-                                con.FillFactor = (byte)reader["fill_factor"];
                                 con.IgnoreDupKey = (bool)reader["ignore_dup_key"];
                                 con.IsAutoStatistics = (bool)reader["NoAutomaticRecomputation"];
                                 con.IsDisabled = (bool)reader["is_disabled"];
                                 con.IsPadded = (bool)reader["is_padded"];
                                 con.IsPrimaryKey = (bool)reader["is_primary_key"];
                                 con.IsUniqueKey = (bool)reader["is_unique"];
-                                if ((indexFilter.OptionFilter.FilterTableFileGroup) && (con.Type != Index.IndexTypeEnum.XML))
+                                if (!indexFilter.Ignore.FilterIgnoreFillFactor)
+                                    con.FillFactor = (byte)reader["fill_factor"];
+                                if ((indexFilter.Ignore.FilterTableFileGroup) && (con.Type != Index.IndexTypeEnum.XML))
                                     con.FileGroup = reader["FileGroup"].ToString();
                                 last = reader["Name"].ToString();
                                 cons.Add(con);
@@ -95,7 +96,8 @@ namespace DBDiff.Schema.SQLServer.Generates
                             ccon.Id = (int)reader["column_id"];
                             ccon.KeyOrder = (byte)reader["key_ordinal"];
                             ccon.DataTypeId = (int)reader["user_type_id"];
-                            con.Columns.Add(ccon);
+                            if ((!ccon.IsIncluded) || (ccon.IsIncluded && !indexFilter.Ignore.FilterIgnoreIncludeColumns))
+                                con.Columns.Add(ccon);
                         }
                     }
                 }

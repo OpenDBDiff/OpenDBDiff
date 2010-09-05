@@ -14,7 +14,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private Boolean isPercentGrowth;
         private Boolean isSparse;
 
-        public FileGroupFile(FileGroup parent) : base(StatusEnum.ObjectTypeEnum.File)
+        public FileGroupFile(FileGroup parent) : base(Enums.ObjectType.File)
         {
             this.Parent = parent;            
         }
@@ -115,12 +115,12 @@ namespace DBDiff.Schema.SQLServer.Model
             return true;
         }
 
-        public string ToSQL()
+        public override string ToSql()
         {
             return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD " + ((Type == 0) ? "" : "LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + PhysicalName + "' , SIZE = " + Size * 1000 + "KB , FILEGROWTH = " + growth * 1000 + TypeGrowth + ") TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
         }
 
-        public override string ToSQLAdd()
+        public override string ToSqlAdd()
         {
             return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD " + ((Type == 0) ? "" : "LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + GetNameNewFileGroup(PhysicalName) + "' , SIZE = " + Size * 1000 + "KB , FILEGROWTH = " + growth * 1000 + TypeGrowth + ") TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
         }
@@ -130,7 +130,7 @@ namespace DBDiff.Schema.SQLServer.Model
             return "ALTER DATABASE " + Parent.Parent.FullName + " MODIFY FILE ( NAME = N'" + Name + "', FILENAME = N'" + PhysicalName + "' , SIZE = " + Size * 1000 + "KB , FILEGROWTH = " + growth * 1000 + TypeGrowth + ")";
         }
 
-        public override string ToSQLDrop()
+        public override string ToSqlDrop()
         {
             return "ALTER DATABASE " + Parent.Parent.FullName + " REMOVE FILE " + this.FullName + "\r\nGO\r\n";
         }

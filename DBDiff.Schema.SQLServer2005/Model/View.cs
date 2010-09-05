@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using DBDiff.Schema.Model;
+using DBDiff.Schema.SQLServer.Model.Util;
 
 namespace DBDiff.Schema.SQLServer.Model
 {
-    public class View : SQLServerSchemaBase 
+    public class View : Code 
     {
-        private string text;
-        private Boolean isSchemaBinding;
-        private Dictionary<int, string> dependencies;
         private Indexes indexes;
 
-        public View(ISchemaBase parent) : base(StatusEnum.ObjectTypeEnum.View)
+        public View(ISchemaBase parent)
+            : base(parent, Enums.ObjectType.View)
         {
-            this.Parent = parent;
-            dependencies = new Dictionary<int, string>();
             indexes = new Indexes(this);
         }
 
@@ -33,15 +31,10 @@ namespace DBDiff.Schema.SQLServer.Model
             item.Owner = this.Owner;
             item.Guid = this.Guid;
             item.IsSchemaBinding = this.IsSchemaBinding;
-            item.Dependencies = this.Dependencies;
+            item.DependenciesIn  = this.DependenciesIn;
+            item.DependenciesOut = this.DependenciesOut;
             item.Indexes = this.Indexes.Clone(parent);
             return item;
-        }
-
-        public Dictionary<int, string> Dependencies
-        {
-            get { return dependencies; }
-            set { dependencies = value; }
         }
 
         public Indexes Indexes
@@ -50,31 +43,46 @@ namespace DBDiff.Schema.SQLServer.Model
             set { indexes = value; }
         }
 
-        public Boolean IsSchemaBinding
+        public override Boolean IsCodeType
         {
-            get { return isSchemaBinding; }
-            set { isSchemaBinding = value; }
+            get { return true; }
         }
 
-        public string Text
+        public string ToSQLAlter()
         {
-            get { return text; }
-            set { text = value; }
+            return ToSQLAlter(false);
         }
 
-        public string ToSQL()
+        public string ToSQLAlter(Boolean quitSchemaBinding)
         {
-            return text + "GO\r\n";
+            return FormatCode.FormatAlter("VIEW", ToSql(), this, quitSchemaBinding);
         }
 
-        public override string ToSQLAdd()
-        {
-            return ToSQL();
+        public override SQLScript Create()
+        {            
+            int iCount = DependenciesCount;
+            Enums.ScripActionType action = Enums.ScripActionType.AddView;
+            if (!GetWasInsertInDiffList(action))
+            {
+                SetWasInsertInDiffList(action);
+                return new SQLScript(this.ToSqlAdd() + indexes.ToSQL(), iCount * -1, action);
+            }
+            else
+                return null;
+
         }
 
-        public override string ToSQLDrop()
+        public override SQLScript Drop()
         {
-            return "DROP VIEW " + FullName + "\r\nGO\r\n";
+            int iCount = DependenciesCount;
+            Enums.ScripActionType action = Enums.ScripActionType.DropView;
+            if (!GetWasInsertInDiffList(action))
+            {
+                SetWasInsertInDiffList(action);
+                return new SQLScript(this.ToSqlDrop(), iCount, action);
+            }
+            else
+                return null;
         }
 
         /// <summary>
@@ -84,7 +92,7 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             if (destino == null) throw new ArgumentNullException("destino");
             if (origen == null) throw new ArgumentNullException("origen");
-            if (!origen.Text.Equals(destino.Text)) return false;
+            if (!origen.ToSql().Equals(destino.ToSql())) return false;
             return true;
         }
 
@@ -93,22 +101,32 @@ namespace DBDiff.Schema.SQLServer.Model
         /// </summary>
         public SQLScriptList ToSQLDiff()
         {
-            SQLScriptList listDiff = new SQLScriptList();
+            SQLScriptList list = new SQLScriptList();
+            if (this.HasState(Enums.ObjectStatusType.DropStatus))
+                list.Add(Drop());
+            if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+                list.Add(Create());
 
-            if (this.Status == StatusEnum.ObjectStatusType.DropStatus)
+            if (this.Status == Enums.ObjectStatusType.AlterStatus)
             {
-                listDiff.Add(ToSQLDrop(), 0, StatusEnum.ScripActionType.DropView);
+                if (!HasTableDependencyToRebuild())
+                    list.Add(ToSQLAlter(), 0, Enums.ScripActionType.AlterView);
+                else
+                {
+                    if (((Database)Parent).Options.Script.AlterObjectOnSchemaBinding)
+                    {
+                        list.Add(ToSQLAlter(true), 0, Enums.ScripActionType.DropView);
+                        list.Add(ToSQLAlter(), 0, Enums.ScripActionType.AddView);
+                    }
+                    else
+                    {
+                        list.Add(Drop());
+                        list.Add(Create());
+                    }
+                }
             }
-            if (this.HasState(StatusEnum.ObjectStatusType.AlterStatus))
-            {
-                listDiff.Add(this.ToSQLDrop(), 0, StatusEnum.ScripActionType.DropView);
-                listDiff.Add(this.ToSQL(), 0, StatusEnum.ScripActionType.AddView);
-            }
-            if (this.Status == StatusEnum.ObjectStatusType.CreateStatus)
-            {
-                listDiff.Add(ToSQL(), 0, StatusEnum.ScripActionType.AddView);
-            }
-            return listDiff;
+            list.AddRange(indexes.ToSQLDiff());
+            return list;
         }
     }
 }

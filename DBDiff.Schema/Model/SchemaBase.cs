@@ -2,13 +2,15 @@ using System;
 using System.Collections;
 using System.Text;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace DBDiff.Schema.Model
 {
+    [DebuggerDisplay("Id: {Id} - Name: {Name} - Status: {status}")]
     public abstract class SchemaBase:ISchemaBase
     {
-        private StatusEnum.ObjectStatusType status;
-        private StatusEnum.ObjectTypeEnum objectType;
+        private Enums.ObjectStatusType status;
+        private Enums.ObjectType type;
         private ISchemaBase parent;                
         private int id;
         private string name;
@@ -17,17 +19,18 @@ namespace DBDiff.Schema.Model
         private string nameCharacterOpen;
         private string nameCharacterClose;
         private Hashtable wasInsertInDiffList;
+        private Boolean isSystem;
 
-        public SchemaBase(string nameCharacterOpen, string nameCharacterClose, StatusEnum.ObjectTypeEnum objectType)
+        protected SchemaBase(string nameCharacterOpen, string nameCharacterClose, Enums.ObjectType objectType)
         {
             this.guid = System.Guid.NewGuid().ToString();
-            this.objectType = objectType;
-            this.status = StatusEnum.ObjectStatusType.OriginalStatus;
+            this.type = objectType;
+            this.status = Enums.ObjectStatusType.OriginalStatus;
             this.nameCharacterClose = nameCharacterClose;
             this.nameCharacterOpen = nameCharacterOpen;
         }
         
-        protected object Clone(object vObj, ISchemaBase parentObject)
+        /*protected object Clone(object vObj, ISchemaBase parentObject)
         {
             if (vObj.GetType().IsValueType || vObj.GetType() == Type.GetType("System.String"))
                 return vObj;
@@ -56,7 +59,7 @@ namespace DBDiff.Schema.Model
                 }
                 return newObject;
             }
-         } 
+         } */
 
         /// <summary>
         /// Objeto padre de la instancia.
@@ -67,15 +70,27 @@ namespace DBDiff.Schema.Model
             set { parent = value; }
         }
 
-        public virtual string ToSQLDrop() { return ""; }
+        public abstract string ToSql();
 
-        public virtual string ToSQLAdd() { return ""; }
+        public abstract string ToSqlDrop();
+
+        public abstract string ToSqlAdd();
+
+        public virtual SQLScript Create()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual SQLScript Drop()
+        {
+            throw new NotImplementedException();
+        }
         /// <summary>
         /// Devuelve si el objeto ya fue insertado en la lista de script con diferencias.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public Boolean GetWasInsertInDiffList(StatusEnum.ScripActionType action)
+        public Boolean GetWasInsertInDiffList(Enums.ScripActionType action)
         {
             if (wasInsertInDiffList != null)
                 return (wasInsertInDiffList.ContainsKey(action));
@@ -86,7 +101,7 @@ namespace DBDiff.Schema.Model
         /// <summary>
         /// Setea que el objeto ya fue insertado en la lista de script con diferencias.
         /// </summary>
-        public void SetWasInsertInDiffList(StatusEnum.ScripActionType action)
+        public void SetWasInsertInDiffList(Enums.ScripActionType action)
         {
             if (wasInsertInDiffList == null) wasInsertInDiffList = new Hashtable();
             if (!wasInsertInDiffList.ContainsKey(action))
@@ -105,10 +120,10 @@ namespace DBDiff.Schema.Model
         /// <summary>
         /// Tipo de objeto (Tabla, Column, Vista, etc)
         /// </summary>
-        public StatusEnum.ObjectTypeEnum ObjectType
+        public Enums.ObjectType ObjectType
         {
-            get { return objectType; }
-            set { objectType = value; }
+            get { return type; }
+            set { type = value; }
         }
 
         /// <summary>
@@ -152,36 +167,52 @@ namespace DBDiff.Schema.Model
             set { name = value; }
         }
 
+        public Boolean IsSystem
+        {
+            get { return isSystem; }
+            set { isSystem = value; }
+        }
         /// <summary>
         /// Indica el estado del objeto (si es propio, si debe borrarse o si es nuevo). Es solo valido
         /// para generar el SQL de diferencias entre 2 bases. 
         /// Por defecto es siempre Original.
         /// </summary>
-        public virtual StatusEnum.ObjectStatusType Status
+        public virtual Enums.ObjectStatusType Status
         {
             get { return status; }
             set
             {
-                if ((status != StatusEnum.ObjectStatusType.AlterRebuildStatus) && (status != StatusEnum.ObjectStatusType.AlterRebuildDependeciesStatus)) status = value;
+                if ((status != Enums.ObjectStatusType.AlterRebuildStatus) && (status != Enums.ObjectStatusType.AlterRebuildDependenciesStatus))
+                    status = value;
                 if (Parent != null)
                 {
                     //Si el estado de la tabla era el original, lo cambia, sino deja el actual estado.
-                    if (Parent.Status == StatusEnum.ObjectStatusType.OriginalStatus || value == StatusEnum.ObjectStatusType.AlterRebuildStatus || value == StatusEnum.ObjectStatusType.AlterRebuildDependeciesStatus)
+                    if (Parent.Status == Enums.ObjectStatusType.OriginalStatus || value == Enums.ObjectStatusType.AlterRebuildStatus || value == Enums.ObjectStatusType.AlterRebuildDependenciesStatus)
                     {
-                        if ((value != StatusEnum.ObjectStatusType.OriginalStatus) && (value != StatusEnum.ObjectStatusType.AlterRebuildStatus) && (value != StatusEnum.ObjectStatusType.AlterRebuildDependeciesStatus))
-                            Parent.Status = StatusEnum.ObjectStatusType.AlterStatus;
-                        if (value == StatusEnum.ObjectStatusType.AlterRebuildDependeciesStatus)
-                            Parent.Status = StatusEnum.ObjectStatusType.AlterRebuildDependeciesStatus;
-                        if (value == StatusEnum.ObjectStatusType.AlterRebuildStatus)
-                            Parent.Status = StatusEnum.ObjectStatusType.AlterRebuildStatus;
+                        if ((value != Enums.ObjectStatusType.OriginalStatus) && (value != Enums.ObjectStatusType.AlterRebuildStatus) && (value != Enums.ObjectStatusType.AlterRebuildDependenciesStatus))
+                            Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                        if (value == Enums.ObjectStatusType.AlterRebuildDependenciesStatus)
+                            Parent.Status = Enums.ObjectStatusType.AlterRebuildDependenciesStatus;
+                        if (value == Enums.ObjectStatusType.AlterRebuildStatus)
+                            Parent.Status = Enums.ObjectStatusType.AlterRebuildStatus;
                     }
                 }
             }
         }
 
-        public Boolean HasState(StatusEnum.ObjectStatusType statusFind)
+        public Boolean HasState(Enums.ObjectStatusType statusFind)
         {
             return ((this.Status & statusFind) == statusFind);
+        }
+
+        public virtual Boolean IsCodeType
+        {
+            get { return false; }
+        }
+
+        public virtual int DependenciesCount
+        {
+            get { return 0; }
         }
     }
 }

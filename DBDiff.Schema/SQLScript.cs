@@ -8,9 +8,16 @@ namespace DBDiff.Schema
     {
         private string sql;
         private int dependencies;
-        private StatusEnum.ScripActionType status;
+        private Enums.ScripActionType status;
 
-        public StatusEnum.ScripActionType Status
+        public SQLScript(string sqlScript, int dependenciesCount, Enums.ScripActionType action)
+        {
+            sql = sqlScript;
+            dependencies = dependenciesCount;
+            status = action;
+        }
+
+        public Enums.ScripActionType Status
         {
             get { return status; }
             set { status = value; }
@@ -32,7 +39,7 @@ namespace DBDiff.Schema
         {
             if (this.Status == other.Status)
             {
-                if (this.Status == StatusEnum.ScripActionType.DropTable || this.Status == StatusEnum.ScripActionType.DropConstraint || this.Status == StatusEnum.ScripActionType.DropTrigger)
+                if (this.Status == Enums.ScripActionType.DropTable || this.Status == Enums.ScripActionType.DropConstraint || this.Status == Enums.ScripActionType.DropTrigger)
                     return other.Dependencies.CompareTo(this.Dependencies);
                 else
                     return this.Dependencies.CompareTo(other.Dependencies);

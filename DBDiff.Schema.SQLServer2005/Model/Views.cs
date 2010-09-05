@@ -8,24 +8,21 @@ namespace DBDiff.Schema.SQLServer.Model
 {
     public class Views : FindBaseList<View, Database>
     {
-        public Views(Database parent) : base(parent)
+        public Views(Database parent) : base(parent, parent.AllObjects)
         {
         }
 
         public string ToSQL()
         {
             StringBuilder sql = new StringBuilder();
-            for (int index = 0; index < this.Count; index++)
-            {
-                sql.Append(this[index].ToSQL() + "\r\n");
-            }
+            this.ForEach(item => sql.Append(item.ToSql() + "\r\n"));
             return sql.ToString();
         }
 
         public SQLScriptList ToSQLDiff()
         {
             SQLScriptList listDiff = new SQLScriptList();
-            this.ForEach(item => listDiff.Add(item.ToSQLDiff()));
+            this.ForEach(item => listDiff.AddRange(item.ToSQLDiff()));
 
             return listDiff;
         }

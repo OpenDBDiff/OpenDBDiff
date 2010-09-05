@@ -35,10 +35,10 @@ namespace DBDiff.Schema.SQLServer.Front
             this.cboServer = new System.Windows.Forms.ComboBox();
             this.cboAuthentication = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.btnTest = new System.Windows.Forms.Button();
             this.cboDatabase = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.txtUsername = new System.Windows.Forms.TextBox();
+            this.btnTest = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtPassword
@@ -47,7 +47,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(180, 20);
-            this.txtPassword.TabIndex = 18;
+            this.txtPassword.TabIndex = 3;
             this.txtPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);
             // 
             // label4
@@ -83,7 +83,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.cboServer.Location = new System.Drawing.Point(109, 5);
             this.cboServer.Name = "cboServer";
             this.cboServer.Size = new System.Drawing.Size(180, 21);
-            this.cboServer.TabIndex = 19;
+            this.cboServer.TabIndex = 0;
             this.cboServer.SelectedIndexChanged += new System.EventHandler(this.cboServer_SelectedIndexChanged);
             // 
             // cboAuthentication
@@ -96,7 +96,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.cboAuthentication.Location = new System.Drawing.Point(109, 32);
             this.cboAuthentication.Name = "cboAuthentication";
             this.cboAuthentication.Size = new System.Drawing.Size(180, 21);
-            this.cboAuthentication.TabIndex = 21;
+            this.cboAuthentication.TabIndex = 1;
             this.cboAuthentication.SelectedIndexChanged += new System.EventHandler(this.cboAuthentication_SelectedIndexChanged);
             // 
             // label5
@@ -108,25 +108,13 @@ namespace DBDiff.Schema.SQLServer.Front
             this.label5.TabIndex = 20;
             this.label5.Text = "Authentication";
             // 
-            // btnTest
-            // 
-            this.btnTest.Image = global::DBDiff.Schema.SQLServer.Properties.Resources.Test;
-            this.btnTest.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTest.Location = new System.Drawing.Point(232, 137);
-            this.btnTest.Name = "btnTest";
-            this.btnTest.Size = new System.Drawing.Size(150, 28);
-            this.btnTest.TabIndex = 22;
-            this.btnTest.Text = "Test Connection";
-            this.btnTest.UseVisualStyleBackColor = true;
-            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
-            // 
             // cboDatabase
             // 
             this.cboDatabase.FormattingEnabled = true;
             this.cboDatabase.Location = new System.Drawing.Point(109, 110);
             this.cboDatabase.Name = "cboDatabase";
             this.cboDatabase.Size = new System.Drawing.Size(230, 21);
-            this.cboDatabase.TabIndex = 24;
+            this.cboDatabase.TabIndex = 4;
             this.cboDatabase.Click += new System.EventHandler(this.cboDatabase_Click);
             // 
             // label6
@@ -143,8 +131,20 @@ namespace DBDiff.Schema.SQLServer.Front
             this.txtUsername.Location = new System.Drawing.Point(109, 58);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(180, 20);
-            this.txtUsername.TabIndex = 17;
+            this.txtUsername.TabIndex = 2;
             this.txtUsername.TextChanged += new System.EventHandler(this.txtUsername_TextChanged);
+            // 
+            // btnTest
+            // 
+            this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTest.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTest.Location = new System.Drawing.Point(284, 137);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(103, 28);
+            this.btnTest.TabIndex = 5;
+            this.btnTest.Text = "Test Connection";
+            this.btnTest.UseVisualStyleBackColor = true;
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
             // SqlServerConnectFront
             // 

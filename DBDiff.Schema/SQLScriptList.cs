@@ -13,24 +13,25 @@ namespace DBDiff.Schema
             if (list != null) list.Sort();
         }
 
-        public void Add(SQLScriptList items)
+        public void Add(SQLScript item)
+        {
+            if (list == null) list = new List<SQLScript>();
+            if (item != null) list.Add(item);
+        }
+
+        public void Add(string SQL, int dependencies, Enums.ScripActionType type)
+        {
+            if (list == null) list = new List<SQLScript>();
+            list.Add(new SQLScript(SQL, dependencies, type));
+        }
+
+        public void AddRange(SQLScriptList items)
         {
             for (int j = 0; j < items.Count; j++)
             {
                 if (list == null) list = new List<SQLScript>();
                 list.Add(items[j]);
             }
-        }
-
-        public void Add(string SQL, int dependencies, StatusEnum.ScripActionType type)
-        {
-            SQLScript script;
-            if (list == null) list = new List<SQLScript>();
-            script = new SQLScript();
-            script.Dependencies = dependencies;
-            script.SQL = SQL;
-            script.Status = type;
-            list.Add(script);
         }
 
         public int Count

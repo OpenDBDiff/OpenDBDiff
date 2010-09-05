@@ -10,7 +10,8 @@ using System.IO;
 using DBDiff.XmlConfig;
 using DBDiff.Front;
 using DBDiff.Schema.Events;
-using DBDiff.Schema.SQLServer2000;
+using DBDiff.Schema.Misc;
+/*using DBDiff.Schema.SQLServer2000;
 using DBDiff.Schema.SQLServer2000.Model;
 using DBDiff.Schema.SQLServer2000.Compare;
 /*using DBDiff.Schema.Sybase;
@@ -19,16 +20,16 @@ using DBDiff.Schema.Sybase.Model;*/
 using DBDiff.Schema.SQLServer;
 using DBDiff.Schema.SQLServer.Options;
 using DBDiff.Schema.SQLServer.Model;
-using DBDiff.Schema.MySQL;
+/*using DBDiff.Schema.MySQL;
 using DBDiff.Schema.MySQL.Options;
 using DBDiff.Schema.MySQL.Model;
-
+*/
 namespace DBDiff
 {
     public partial class Form1 : Form
     {
         private SqlOption SqlFilter = new SqlOption();
-        private MySqlOption MySQLfilter = new MySqlOption();
+        //private MySqlOption MySQLfilter = new MySqlOption();
         //private AseOption AseFilter = new AseOption();
 
         private DBDiff.Front.IFront mySqlConnectFront1;
@@ -63,7 +64,7 @@ namespace DBDiff
             //this.txtDiferencias.Text = origen.ToSQLDiff();
         }*/
 
-        private void ProcesarMySQL()
+        /*private void ProcesarMySQL()
         {
             DBDiff.Schema.MySQL.Model.Database origen;
             DBDiff.Schema.MySQL.Model.Database destino;
@@ -80,7 +81,7 @@ namespace DBDiff
             origen = DBDiff.Schema.MySQL.Generate.Compare(origen, destino);
             this.txtDiferencias.Text = origen.ToSQLDiff();
         }
-
+        */
         private void ProcesarSQL2005()
         {
             try
@@ -100,20 +101,27 @@ namespace DBDiff
                     origen = DBDiff.Schema.SQLServer.Generate.Compare(origen, destino);
                     //this.txtScript.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
                     //this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
+                    this.txtDiferencias.Type = SQLRichControl.SQLTextControl.SQLType.SQLServer;
                     this.txtDiferencias.Text = origen.ToSQLDiff();
+                    this.schemaTreeView1.Database = origen;
+
                     btnCopy.Enabled = true;
                     btnSaveAs.Enabled = true;
                 }
                 else
                     MessageBox.Show(Owner, "Please select a valid connection string", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            catch (SchemaException sex)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
-                MessageBox.Show(Owner, "Invalidad database connection. Please check the database connection\r\n" + ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw new SchemaException("Invalid database connection. Please check the database connection\r\n" + ex.Message);
             }
         }
 
-        private void ProcesarSQL2000()
+        /*private void ProcesarSQL2000()
         {
             DBDiff.Schema.SQLServer2000.Model.Database origen;
             DBDiff.Schema.SQLServer2000.Model.Database destino;
@@ -136,7 +144,7 @@ namespace DBDiff
             
 
         }
-
+        */
         private void sql_OnTableProgress(object sender, ProgressEventArgs e)
         {
             Application.DoEvents();
@@ -151,7 +159,7 @@ namespace DBDiff
                 this.Cursor = Cursors.WaitCursor;
                 //if (optSQL2000.Checked) ProcesarSQL2000();
                 if (optSQL2005.Checked) ProcesarSQL2005();
-                if (optMySQL.Checked) ProcesarMySQL();
+                //if (optMySQL.Checked) ProcesarMySQL();
                 //if (optSybase.Checked) ProcesarSybase();                
             }
             catch (Exception ex)
@@ -166,7 +174,7 @@ namespace DBDiff
 
         private void optMySQL_CheckedChanged(object sender, EventArgs e)
         {
-            if (optMySQL.Checked)
+            /*if (optMySQL.Checked)
             {
                 ShowMySQL();
             }
@@ -174,10 +182,10 @@ namespace DBDiff
             {
                 this.groupBox2.Controls.Remove((System.Windows.Forms.Control)this.mySqlConnectFront1);
                 this.groupBox3.Controls.Remove((System.Windows.Forms.Control)this.mySqlConnectFront2);
-            }
+            }*/
         }
 
-        private void ShowMySQL()
+        /*private void ShowMySQL()
         {
             this.mySqlConnectFront2 = new DBDiff.Schema.MySQL.Front.MySqlConnectFront();
             this.mySqlConnectFront1 = new DBDiff.Schema.MySQL.Front.MySqlConnectFront();
@@ -194,18 +202,18 @@ namespace DBDiff
             this.groupBox3.Controls.Add((System.Windows.Forms.Control)this.mySqlConnectFront2);
             this.groupBox2.Controls.Add((System.Windows.Forms.Control)this.mySqlConnectFront1);
         }
-
+        */
         private void ShowSQL2005()
         {
             this.mySqlConnectFront2 = new DBDiff.Schema.SQLServer.Front.SqlServerConnectFront();
             this.mySqlConnectFront1 = new DBDiff.Schema.SQLServer.Front.SqlServerConnectFront();
             this.mySqlConnectFront1.Location = new System.Drawing.Point(5, 19);
             this.mySqlConnectFront1.Name = "mySqlConnectFront1";
-            this.mySqlConnectFront1.Size = new System.Drawing.Size(410, 190);
+            this.mySqlConnectFront1.Dock = DockStyle.Fill;
             this.mySqlConnectFront1.TabIndex = 10;
             this.mySqlConnectFront2.Location = new System.Drawing.Point(5, 19);
             this.mySqlConnectFront2.Name = "mySqlConnectFront2";
-            this.mySqlConnectFront2.Size = new System.Drawing.Size(410, 190);
+            this.mySqlConnectFront2.Dock = DockStyle.Fill;
             this.mySqlConnectFront2.TabIndex = 10;
             this.mySqlConnectFront1.Visible = true;
             this.mySqlConnectFront2.Visible = true;

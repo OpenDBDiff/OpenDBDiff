@@ -10,7 +10,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private string value;
 
         public Synonym(ISchemaBase parent)
-            : base(StatusEnum.ObjectTypeEnum.Synonym)
+            : base(Enums.ObjectType.Synonym)
         {
             this.Parent = parent;
         }
@@ -32,20 +32,20 @@ namespace DBDiff.Schema.SQLServer.Model
             set { this.value = value; }
         }
 
-        public string ToSQL()
+        public override string ToSql()
         {
             string sql = "CREATE SYNONYM " + FullName + " FOR " + value + "\r\nGO\r\n";
             return sql;
         }
 
-        public override string ToSQLDrop()
+        public override string ToSqlDrop()
         {
             return "DROP SYNONYM " + FullName + "\r\nGO\r\n";
         }
 
-        public override string ToSQLAdd()
+        public override string ToSqlAdd()
         {
-            return ToSQL();
+            return ToSql();
         }
 
         /// <summary>
@@ -55,18 +55,18 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == StatusEnum.ObjectStatusType.DropStatus)
+            if (this.Status == Enums.ObjectStatusType.DropStatus)
             {
-                listDiff.Add(ToSQLDrop(), 0, StatusEnum.ScripActionType.DropSynonyms);
+                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropSynonyms);
             }
-            if (this.Status == StatusEnum.ObjectStatusType.CreateStatus)
+            if (this.Status == Enums.ObjectStatusType.CreateStatus)
             {
-                listDiff.Add(ToSQL(), 0, StatusEnum.ScripActionType.AddSynonyms);
+                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddSynonyms);
             }
-            if (this.Status == StatusEnum.ObjectStatusType.AlterStatus)
+            if (this.Status == Enums.ObjectStatusType.AlterStatus)
             {
-                listDiff.Add(ToSQLDrop(), 0, StatusEnum.ScripActionType.DropSynonyms);
-                listDiff.Add(ToSQL(), 0, StatusEnum.ScripActionType.AddSynonyms);
+                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropSynonyms);
+                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddSynonyms);
             }
             return listDiff;
         }

@@ -10,7 +10,7 @@ namespace DBDiff.Schema.SQLServer.Compare
     {
         protected static void MarkDrop(List<T> origen, List<T> destino)
         {
-            MarkDrop(origen, destino, node => node.Status = StatusEnum.ObjectStatusType.DropStatus);
+            MarkDrop(origen, destino, node => node.Status = Enums.ObjectStatusType.DropStatus);
         }
 
         protected static void MarkDrop(List<T> origen, List<T> destino, Action<T> action)

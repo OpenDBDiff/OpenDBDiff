@@ -35,7 +35,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(419, 374);
+            this.btnCancel.Location = new System.Drawing.Point(306, 420);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 5;
@@ -45,7 +45,7 @@
             // 
             // btnApply
             // 
-            this.btnApply.Location = new System.Drawing.Point(500, 374);
+            this.btnApply.Location = new System.Drawing.Point(387, 420);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(75, 23);
             this.btnApply.TabIndex = 4;
@@ -57,14 +57,14 @@
             // 
             this.sqlOptionsFront1.Location = new System.Drawing.Point(3, 3);
             this.sqlOptionsFront1.Name = "sqlOptionsFront1";
-            this.sqlOptionsFront1.Size = new System.Drawing.Size(576, 375);
+            this.sqlOptionsFront1.Size = new System.Drawing.Size(459, 411);
             this.sqlOptionsFront1.TabIndex = 0;
             // 
             // OptionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(581, 401);
+            this.ClientSize = new System.Drawing.Size(466, 446);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.sqlOptionsFront1);

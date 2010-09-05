@@ -71,7 +71,11 @@ namespace DBDiff.Schema.SQLServer.Model
         public new void Add(ColumnConstraint columnConstraint)
         {
             if (columnConstraint != null)
+            {
                 base.Add(columnConstraint);
+                if (!((Database)parent.Parent.Parent).AllObjects.ContainsKey(columnConstraint.FullName))
+                    ((Database)parent.Parent.Parent).AllObjects.Add(columnConstraint.FullName, columnConstraint);
+            }
             else
                 throw new ArgumentNullException("columnConstraint");
         }
@@ -93,7 +97,7 @@ namespace DBDiff.Schema.SQLServer.Model
             StringBuilder sql = new StringBuilder();
             for (int index = 0; index < this.Count; index++)
             {
-                sql.Append("\t" + this[index].ToSQL());
+                sql.Append("\t" + this[index].ToSql());
                 if (index != this.Count - 1)
                     sql.Append(",");
             }
@@ -103,7 +107,7 @@ namespace DBDiff.Schema.SQLServer.Model
         public SQLScriptList ToSQLDiff()
         {
             SQLScriptList listDiff = new SQLScriptList();
-            this.ForEach(item => listDiff.Add(item.ToSQLDiff()));
+            this.ForEach(item => listDiff.AddRange(item.ToSQLDiff()));
 
             return listDiff;
         }

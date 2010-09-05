@@ -8,67 +8,46 @@ namespace DBDiff.Schema.SQLServer.Model
 {
     internal class Dependencies: List<Dependence>
     {
-        public void Add(int tableId, int columnId, int ownerTableId, int typeId, Constraint constraint)
+        public void Add(int tableId, int columnId, int ownerTableId, int typeId, ISchemaBase constraint)
         {
             Dependence depends = new Dependence();
-            depends.ColumnId = columnId;
-            depends.TableId = tableId;
+            depends.SubObjectId = columnId;
+            depends.ObjectId = tableId;
             depends.OwnerTableId = ownerTableId;
-            depends.Constraint = constraint;
+
+            depends.ObjectSchema = constraint;
             depends.DataTypeId = typeId;
-            depends.Type = Dependence.DependencieTypeEnum.Constraint;
             base.Add(depends);
         }
 
-        public void Add(int tableId, int columnId, int ownerTableId, int typeId, Index index)
+        public void Add(int objectId, ISchemaBase objectSchema)
         {
             Dependence depends = new Dependence();
-            depends.ColumnId = columnId;
-            depends.TableId = tableId;
-            depends.OwnerTableId = ownerTableId;
-            depends.Index = index;
-            depends.DataTypeId = typeId;
-            depends.Type = Dependence.DependencieTypeEnum.Index;
-            base.Add(depends);
-        }
-
-        public void Add(int tableId, int columnId, int ownerTableId, int typeId, View view)
-        {
-            Dependence depends = new Dependence();
-            depends.ColumnId = columnId;
-            depends.TableId = tableId;
-            depends.OwnerTableId = ownerTableId;
-            depends.View = view;
-            depends.DataTypeId = typeId;
-            depends.Type = Dependence.DependencieTypeEnum.Default;
-            base.Add(depends);
-        }
-
-        public void Add(int tableId, int columnId, int ownerTableId, int typeId, ColumnConstraint constraint)
-        {
-            Dependence depends = new Dependence();
-            depends.ColumnId = columnId;
-            depends.TableId = tableId;
-            depends.OwnerTableId = ownerTableId;
-            depends.Default = constraint;
-            depends.DataTypeId = typeId;
-            depends.Type = Dependence.DependencieTypeEnum.View;
+            depends.ObjectId = objectId;
+            depends.ObjectSchema = objectSchema;
             base.Add(depends);
         }
 
         /// <summary>
         /// Devuelve todos las constraints dependientes de una tabla.
         /// </summary>
-        public Constraints FindNotOwner(int tableId)
+        public List<ISchemaBase> FindNotOwner(int tableId, Enums.ObjectType type)
         {
-            Constraints cons = new Constraints(null);
+            List<ISchemaBase> cons = new List<ISchemaBase>();
             this.ForEach(depens =>
             {
-                if (depens.Constraint != null)
+                if (depens.Type == type)
                 {
-                    if ((depens.TableId == tableId) && (depens.Constraint.Type == Constraint.ConstraintType.ForeignKey))
-                        cons.Add(depens.Constraint);
+                    if (depens.Type == Enums.ObjectType.Constraint)
+                    {
+                        if ((depens.ObjectId == tableId) && (((Constraint)depens.ObjectSchema).Type == Constraint.ConstraintType.ForeignKey))
+                            cons.Add(depens.ObjectSchema);
+                    }
+                    else
+                        if (depens.ObjectId == tableId)
+                            cons.Add(depens.ObjectSchema);
                 }
+                    
             });
             return cons;
         }
@@ -81,9 +60,9 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             this.ForEach(item =>
             {
-                if (item.Constraint != null)
-                    if ((item.TableId == tableId) && (item.Constraint.Name.Equals(constraint.Name)))
-                        item.Constraint = constraint;
+                if (item.Type == Enums.ObjectType.Constraint)
+                    if ((item.ObjectId == tableId) && (item.ObjectSchema.Name.Equals(constraint.Name)))
+                        item.ObjectSchema = constraint;
             });           
         }
 
@@ -95,6 +74,41 @@ namespace DBDiff.Schema.SQLServer.Model
             return Find(tableId, 0, 0);
         }
 
+        public int DependenciesCount(int objectId, Enums.ObjectType type)
+        {
+            Dictionary<int, bool> depencyTracker = new Dictionary<int, bool>();
+            return DependenciesCount(objectId, type, depencyTracker);
+        }
+
+        private int DependenciesCount(int tableId, Enums.ObjectType type, Dictionary<int, bool> depencyTracker)
+        {
+            int count = 0;
+            bool putItem = false;
+            int relationalTableId;
+            List<ISchemaBase> constraints = this.FindNotOwner(tableId, type);
+            for (int index = 0; index < constraints.Count; index++)
+            {
+                ISchemaBase cons = constraints[index];
+                if (cons.ObjectType == type)
+                {
+                    if (type == Enums.ObjectType.Constraint)
+                    {
+                        relationalTableId = ((Constraint)cons).RelationalTableId;
+                        putItem = (relationalTableId == tableId);
+                    }
+                }
+                if (putItem)
+                {
+                    if (!depencyTracker.ContainsKey(tableId))
+                    {
+                        depencyTracker.Add(tableId, true);
+                        count += 1 + DependenciesCount(cons.Parent.Id, type, depencyTracker);
+                    }
+                }
+            }
+            return count;
+        }
+
         /// <summary>
         /// Devuelve todos las constraints dependientes de una tabla y una columna.
         /// </summary>
@@ -102,17 +116,13 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             List<ISchemaBase> cons = new List<ISchemaBase>();
             cons = (from depends in this
-                    where depends.Type == Dependence.DependencieTypeEnum.Constraint &&
-                    ((depends.DataTypeId == dataTypeId || dataTypeId == 0) && (depends.ColumnId == columnId || columnId == 0) && (depends.TableId == tableId))
-                    select (ISchemaBase)depends.Constraint)
-                    .Concat(from depends in this
-                            where depends.Type == Dependence.DependencieTypeEnum.Index &&
-                            ((depends.DataTypeId == dataTypeId || dataTypeId == 0) && (depends.ColumnId == columnId || columnId == 0) && (depends.TableId == tableId))
-                            select (ISchemaBase)depends.Index)
-                            .Concat(from depends in this
-                                    where depends.Type == Dependence.DependencieTypeEnum.View &&
-                                    (depends.TableId == tableId)
-                                    select (ISchemaBase)depends.View).ToList();            
+                    where (depends.Type == Enums.ObjectType.Constraint || depends.Type == Enums.ObjectType.Index) &&
+                    ((depends.DataTypeId == dataTypeId || dataTypeId == 0) && (depends.SubObjectId == columnId || columnId == 0) && (depends.ObjectId == tableId))
+                    select depends.ObjectSchema)
+                        .Concat(from depends in this
+                                where (depends.Type == Enums.ObjectType.View || depends.Type == Enums.ObjectType.Function) &&
+                                (depends.ObjectId == tableId)
+                                select depends.ObjectSchema).ToList();
             return cons;
         }
     }

@@ -91,7 +91,7 @@ namespace DBDiff.Schema.SQLServer.Model
             StringBuilder sql = new StringBuilder();
             for (int index = 0; index < this.Count; index++)
             {
-                sql.Append(this[index].ToSQL());
+                sql.Append(this[index].ToSql());
             }
             return sql.ToString();
         }
@@ -101,7 +101,7 @@ namespace DBDiff.Schema.SQLServer.Model
             StringBuilder sql = new StringBuilder();
             for (int index = 0; index < this.Count; index++)
             {
-                sql.Append(this[index].ToSQLDrop());
+                sql.Append(this[index].ToSqlDrop());
             }
             return sql.ToString();
         }

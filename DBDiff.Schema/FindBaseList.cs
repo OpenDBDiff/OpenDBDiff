@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using DBDiff.Schema.Model;
+using System.Collections.ObjectModel;
 
 namespace DBDiff.Schema
 {
@@ -10,6 +11,20 @@ namespace DBDiff.Schema
     {
         private P parent;
         private Dictionary<string, int> nameMap = new Dictionary<string, int>();
+        private Dictionary<string, ISchemaBase> allObjects = null;
+        private StringComparison comparion;
+
+        public FindBaseList(P parent, Dictionary<string, ISchemaBase> allObjects)
+        {
+            this.parent = parent;
+            this.allObjects = allObjects;
+            this.comparion = StringComparison.CurrentCultureIgnoreCase;
+        }
+
+        protected StringComparison Comparion
+        {
+            get { return comparion; }
+        }
 
         public FindBaseList(P parent)
         {
@@ -19,8 +34,14 @@ namespace DBDiff.Schema
         public new void Add(T item)
         {
             base.Add(item);
-            if (!nameMap.ContainsKey(item.FullName))
-                nameMap.Add(item.FullName, base.Count-1);
+            if (allObjects != null)
+            {
+                if (allObjects.ContainsKey(item.FullName))
+                    allObjects.Remove(item.FullName);
+                allObjects.Add(item.FullName, item);
+            }
+            if (!nameMap.ContainsKey(item.FullName.ToUpper()))
+                nameMap.Add(item.FullName.ToUpper(), base.Count-1);
         }
         /// <summary>
         /// Devuelve el objecto Padre perteneciente a la coleccion.
@@ -49,18 +70,26 @@ namespace DBDiff.Schema
         /// <returns></returns>
         public Boolean Exists(string name)
         {
-            return nameMap.ContainsKey(name);
+            return nameMap.ContainsKey(name.ToUpper());
         }
 
-        public T this[string name]
+        public virtual T this[string name]
         {
             get
             {
-                return this[nameMap[name]];
+                try
+                {
+                    return this[nameMap[name.ToUpper()]];
+                }
+                catch
+                {
+                    return default(T);
+                }
             }
             set
             {
-                base[nameMap[name]] = value;
+                base[nameMap[name.ToUpper()]] = value;
+                if (allObjects != null) allObjects[name] = value;
             }
         }
     }

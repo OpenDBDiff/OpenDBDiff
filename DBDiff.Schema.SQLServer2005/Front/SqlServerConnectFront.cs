@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Threading;
 using DBDiff.Front;
 
 namespace DBDiff.Schema.SQLServer.Front
@@ -13,6 +14,9 @@ namespace DBDiff.Schema.SQLServer.Front
     {
         private string errorConnection;
         private Boolean isDatabaseFilled = false;
+        private Thread thread = null;
+        private delegate void clearCombo();
+        private delegate void addCombo(string item);
 
         public SqlServerConnectFront()
         {
@@ -25,6 +29,7 @@ namespace DBDiff.Schema.SQLServer.Front
             txtUsername.Enabled = cboAuthentication.SelectedIndex == 1;
             txtPassword.Enabled = cboAuthentication.SelectedIndex == 1;
             isDatabaseFilled = false;
+            ClearDatabase();
         }
 
         public string ErrorConnection
@@ -41,10 +46,6 @@ namespace DBDiff.Schema.SQLServer.Front
             get { return cboDatabase.SelectedIndex; }
             set 
             {
-                if ((!isDatabaseFilled) && (!String.IsNullOrEmpty(ServerName)))
-                {
-                    FillDatabase();
-                }
                 if (cboDatabase.Items.Count > 0)
                     cboDatabase.SelectedIndex = value; 
             }
@@ -128,32 +129,49 @@ namespace DBDiff.Schema.SQLServer.Front
 
         }
 
+        private void AddComboItem(string item)
+        {
+            if (!this.InvokeRequired)
+                cboDatabase.Items.Add(item);
+            else
+            {
+                addCombo add = new addCombo(AddComboItem);
+                this.Invoke(add, new string[] { item });
+            }
+        }
+
+        private void ClearDatabase()
+        {
+            if (!this.InvokeRequired)
+                cboDatabase.Items.Clear();
+            else
+            {
+                clearCombo clear = new clearCombo(ClearDatabase);
+                this.Invoke(clear);
+            }
+        }
+
         private void FillDatabase()
         {
-            try
+            if (!isDatabaseFilled)
             {
-                if (!isDatabaseFilled)
+                String connectionString = this.ConnectionString;
+                ClearDatabase();
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    cboDatabase.Items.Clear();
-                    using (SqlConnection conn = new SqlConnection(this.ConnectionString))
+                    conn.Open();
+                    using (SqlCommand command = new SqlCommand("SELECT name,database_id FROM sys.databases ORDER BY Name", conn))
                     {
-                        conn.Open();
-                        using (SqlCommand command = new SqlCommand("SELECT name,database_id FROM sys.databases ORDER BY Name", conn))
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            using (SqlDataReader reader = command.ExecuteReader())
+                            while (reader.Read())
                             {
-                                while (reader.Read())
-                                {
-                                    cboDatabase.Items.Add(reader["Name"].ToString());
-                                }
-                                isDatabaseFilled = true;
+                                AddComboItem(reader["Name"].ToString());
                             }
+                            isDatabaseFilled = true;
                         }
                     }
                 }
-            }
-            catch
-            {
             }
         }
 
@@ -178,11 +196,13 @@ namespace DBDiff.Schema.SQLServer.Front
         private void txtUsername_TextChanged(object sender, EventArgs e)
         {
             isDatabaseFilled = false;
+            ClearDatabase();
         }
 
         private void txtPassword_TextChanged(object sender, EventArgs e)
         {
             isDatabaseFilled = false;
+            ClearDatabase();
         }
     }
 }
