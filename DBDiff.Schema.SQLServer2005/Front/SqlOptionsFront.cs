@@ -36,7 +36,7 @@ namespace DBDiff.Schema.SQLServer.Front
             };
         }
 
-        public void Load(SqlOption valueOption)
+        public new void Load(SqlOption valueOption)
         {
             this.option = valueOption;
             txtBlob.Text = option.Defaults.DefaultBlobValue;
@@ -52,8 +52,8 @@ namespace DBDiff.Schema.SQLServer.Front
             chkCompExtendedProperties.Checked = option.Ignore.FilterExtendedPropertys;
             chkCompFunciones.Checked = option.Ignore.FilterFunction;
             chkCompIndices.Checked = option.Ignore.FilterIndex;
-            chkIgnoreFillFactor.Checked = option.Ignore.FilterIgnoreFillFactor;
-            chkIgnoreInclude.Checked = option.Ignore.FilterIgnoreIncludeColumns;
+            chkIgnoreFillFactor.Checked = option.Ignore.FilterIndexFillFactor;
+            chkIgnoreInclude.Checked = option.Ignore.FilterIndexIncludeColumns;
             chkCompSchemas.Checked = option.Ignore.FilterSchema;
             chkCompStoreProcedure.Checked = option.Ignore.FilterStoreProcedure;
             chkCompTablaOpciones.Checked = option.Ignore.FilterTableOption;
@@ -93,8 +93,8 @@ namespace DBDiff.Schema.SQLServer.Front
             option.Ignore.FilterConstraint = chkCompConstraints.Checked;
             option.Ignore.FilterFunction = chkCompFunciones.Checked;
             option.Ignore.FilterIndex = chkCompIndices.Checked;
-            option.Ignore.FilterIgnoreFillFactor = chkIgnoreFillFactor.Checked && chkCompIndices.Checked;
-            option.Ignore.FilterIgnoreIncludeColumns = chkIgnoreInclude.Checked && chkCompIndices.Checked;
+            option.Ignore.FilterIndexFillFactor = chkIgnoreFillFactor.Checked && chkCompIndices.Checked;
+            option.Ignore.FilterIndexIncludeColumns = chkIgnoreInclude.Checked && chkCompIndices.Checked;
             option.Ignore.FilterSchema = chkCompSchemas.Checked;
             option.Ignore.FilterStoreProcedure = chkCompStoreProcedure.Checked;
             option.Ignore.FilterTable = chkCompTablas.Checked;

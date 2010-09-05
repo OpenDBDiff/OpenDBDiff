@@ -11,19 +11,7 @@ namespace DBDiff.Schema.SQLServer.Generates
 {
     public class GenerateConstraint
     {
-        private string connectionString;
-        private SqlOption constraintFilter;
-        /// <summary>
-        /// Constructor de la clase.
-        /// </summary>
-        /// <param name="connectioString">Connection string de la base</param>
-        public GenerateConstraint(string connectioString, SqlOption filter)
-        {
-            this.connectionString = connectioString;
-            constraintFilter = filter;
-        }
         #region Check Functions...
-
         private static string GetSQLCheck()
         {
             string sql;
@@ -43,9 +31,8 @@ namespace DBDiff.Schema.SQLServer.Generates
             return sql;
         }
 
-        public Constraints GetCheck()
+        public static void FillCheck(Database database, string connectionString)
         {
-            Constraints cons = null;
             int parentId = 0;
             Table table = null;
 
@@ -54,6 +41,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                 using (SqlCommand command = new SqlCommand(GetSQLCheck(), conn))
                 {
                     conn.Open();
+                    command.CommandTimeout = 0;
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         Constraint con = null;
@@ -62,10 +50,8 @@ namespace DBDiff.Schema.SQLServer.Generates
                             if (parentId != (int)reader["parent_object_id"])
                             {
                                 parentId = (int)reader["parent_object_id"];
-                                table = new Table(null);
-                                table.Id = parentId;
+                                table = database.Tables.Find(parentId);
                             } 
-                            if (cons == null) cons = new Constraints(table);
                             con = new Constraint(table);
                             con.Id = (int)reader["id"];
                             con.Name = reader["Name"].ToString();
@@ -74,14 +60,13 @@ namespace DBDiff.Schema.SQLServer.Generates
                             con.WithNoCheck = (bool)reader["WithCheck"];
                             con.IsDisabled = (bool)reader["is_disabled"];
                             con.Owner = reader["Owner"].ToString();
-                            if (!constraintFilter.Ignore.FilterIgnoreNotForReplication)
+                            if (!database.Options.Ignore.FilterIgnoreNotForReplication)
                                 con.NotForReplication = (bool)reader["is_not_for_replication"];
-                            cons.Add(con);
+                            table.Constraints.Add(con);
                         }
                     }
                 }
             }
-            return cons;
         }
 
         #endregion
@@ -103,9 +88,8 @@ namespace DBDiff.Schema.SQLServer.Generates
             return sql.ToString();
         }
 
-        private Constraints GetForeignKey()
+        private static void FillForeignKey(Database database, string connectionString)
         {
-            Constraints cons = new Constraints();
             string last = "";
             int parentId = 0;
             Table table = null;
@@ -115,6 +99,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                 using (SqlCommand command = new SqlCommand(GetSQLForeignKey(), conn))
                 {
                     conn.Open();
+                    command.CommandTimeout = 0;
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         Constraint con = null;
@@ -123,8 +108,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                             if (parentId != (int)reader["parent_object_id"])
                             {
                                 parentId = (int)reader["parent_object_id"];
-                                table = new Table(null);
-                                table.Id = parentId;
+                                table = database.Tables.Find(parentId);
                             }                            
                             if (!last.Equals(reader["Name"].ToString()))
                             {
@@ -140,10 +124,10 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 con.IsDisabled = (bool)reader["is_disabled"];
                                 con.OnDeleteCascade = (byte)reader["delete_referential_action"];
                                 con.OnUpdateCascade = (byte)reader["update_referential_action"];
-                                if (!constraintFilter.Ignore.FilterIgnoreNotForReplication)
+                                if (!database.Options.Ignore.FilterIgnoreNotForReplication)
                                     con.NotForReplication = (bool)reader["is_not_for_replication"];
                                 last = reader["Name"].ToString();
-                                cons.Add(con);
+                                table.Constraints.Add(con);
                             }
                             ConstraintColumn ccon = new ConstraintColumn(con);
                             ccon.Name = reader["ColumnName"].ToString();
@@ -158,7 +142,6 @@ namespace DBDiff.Schema.SQLServer.Generates
                     }
                 }
             }
-            return cons;
         }
         #endregion
 
@@ -176,9 +159,8 @@ namespace DBDiff.Schema.SQLServer.Generates
             return sql.ToString();
         }
 
-        private Constraints GetUniqueKey()
+        private static void FillUniqueKey(Database database, string connectionString)
         {
-            Constraints cons = new Constraints();
             string last = "";
             int parentId = 0;
             Table table = null;
@@ -188,6 +170,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                 using (SqlCommand command = new SqlCommand(GetSQLUniqueKey(), conn))
                 {
                     conn.Open();
+                    command.CommandTimeout = 0;
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         Constraint con = null;
@@ -196,8 +179,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                             if (parentId != (int)reader["id"])
                             {
                                 parentId = (int)reader["id"];
-                                table = new Table(null);
-                                table.Id = parentId;
+                                table = database.Tables.Find(parentId);
                             } 
                             if (!last.Equals(reader["Name"].ToString()))
                             {
@@ -217,10 +199,10 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 con.Index.IsUniqueKey = true;
                                 con.Index.Type = (Index.IndexTypeEnum)(byte)reader["type"];
                                 con.Index.Name = con.Name;
-                                if (constraintFilter.Ignore.FilterTableFileGroup)
+                                if (database.Options.Ignore.FilterTableFileGroup)
                                     con.Index.FileGroup = reader["FileGroup"].ToString();
                                 last = con.Name;
-                                cons.Add(con);
+                                table.Constraints.Add(con);
                             }
                             ConstraintColumn ccon = new ConstraintColumn(con);
                             ccon.Name = reader["ColumnName"].ToString();
@@ -233,14 +215,12 @@ namespace DBDiff.Schema.SQLServer.Generates
                     }
                 }
             }
-            return cons;
         }
         #endregion
 
         #region PrimaryKey Functions...
-        private Constraints GetPrimaryKey(Database database)
+        private static void FillPrimaryKey(Database database, string connectionString)
         {
-            Constraints cons = new Constraints();            
             string last = "";
             int parentId = 0;
             Table table = null;
@@ -250,6 +230,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                 using (SqlCommand command = new SqlCommand(ConstraintSQLCommand.GetPrimaryKey(database.Info.Version, null), conn))
                 {
                     conn.Open();
+                    command.CommandTimeout = 0;
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         Constraint con = null;
@@ -258,8 +239,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                             if (parentId != (int)reader["ID"])
                             {
                                 parentId = (int)reader["ID"];
-                                table = new Table(null);
-                                table.Id = parentId;
+                                table = database.Tables.Find(parentId);
                             }
                             if (!last.Equals(reader["Name"].ToString()))
                             {
@@ -279,10 +259,10 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 con.Index.IsUniqueKey = false;
                                 con.Index.Type = (Index.IndexTypeEnum)(byte)reader["type"];
                                 con.Index.Name = con.Name;
-                                if (constraintFilter.Ignore.FilterTableFileGroup)
+                                if (database.Options.Ignore.FilterTableFileGroup)
                                     con.Index.FileGroup = reader["FileGroup"].ToString();
                                 last = con.Name;
-                                cons.Add(con);
+                                table.Constraints.Add(con);
                             }
                             ConstraintColumn ccon = new ConstraintColumn(con);
                             ccon.Name = (string)reader["ColumnName"];
@@ -296,18 +276,15 @@ namespace DBDiff.Schema.SQLServer.Generates
                     }
                 }
             }
-            return cons;
         }
         #endregion
 
-        public Constraints Get(Database database)
+        public static void Fill(Database database, string connectionString)
         {
-            Constraints constraints = new Constraints();
-            constraints.AddRange(GetPrimaryKey(database));
-            constraints.AddRange(GetForeignKey());
-            constraints.AddRange(GetUniqueKey());
-            constraints.AddRange(GetCheck());
-            return constraints;
+            FillPrimaryKey(database, connectionString);
+            FillForeignKey(database, connectionString);
+            FillUniqueKey(database, connectionString);
+            FillCheck(database, connectionString);
         }
     }
 }

@@ -51,6 +51,10 @@ namespace DBDiff.Schema.SQLServer.Front
             }
         }
 
+        public string DatabaseName
+        {
+            get { return cboDatabase.Text; }
+        }
         /// <summary>
         /// Gets or sets the name of the user.
         /// </summary>
@@ -203,6 +207,11 @@ namespace DBDiff.Schema.SQLServer.Front
         {
             isDatabaseFilled = false;
             ClearDatabase();
+        }
+
+        private void cboDatabase_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

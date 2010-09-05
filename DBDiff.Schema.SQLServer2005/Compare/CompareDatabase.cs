@@ -21,16 +21,17 @@ namespace DBDiff.Schema.SQLServer.Compare
                 CompareSchemas.GenerateDiferences(Origen.Schemas, Destino.Schemas);
                 CompareFileGroups.GenerateDiferences(Origen.FileGroups, Destino.FileGroups);
                 CompareRules.GenerateDiferences(Origen.Rules, Destino.Rules);
-                CompareTriggers.GenerateDiferences(Origen.DDLTriggers, Destino.DDLTriggers);
+                CompareDDLTriggers.GenerateDiferences(Origen.DDLTriggers, Destino.DDLTriggers);
                 CompareSynonyms.GenerateDiferences(Origen.Synonyms, Destino.Synonyms);
                 CompareUsers.GenerateDiferences(Origen.Users, Destino.Users);
                 CompareStoreProcedures.GenerateDiferences(Origen.Procedures, Destino.Procedures);
+                CompareCLRStoreProcedure.GenerateDiferences(Origen.CLRProcedures, Destino.CLRProcedures);
                 CompareViews.GenerateDiferences(Origen.Views, Destino.Views);
                 CompareFunctions.GenerateDiferences(Origen.Functions, Destino.Functions);
                 CompareRoles.GenerateDiferences(Origen.Roles, Destino.Roles);
                 return data;
             }
-            catch (SchemaException sex)
+            catch (SchemaException)
             {
                 throw;
             }

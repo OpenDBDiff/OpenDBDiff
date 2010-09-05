@@ -15,6 +15,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private Boolean identityForReplication;
         private Boolean isComputed;
         private Boolean isRowGuid;
+        private Boolean isSparse;
         private string computedFormula;
         private string type;
         private int size;
@@ -26,7 +27,6 @@ namespace DBDiff.Schema.SQLServer.Model
         private Boolean isPersisted;
         private Boolean hasComputedDependencies;
         private Boolean hasIndexDependencies;
-        private ColumnConstraints constraints;
         private string xmlSchema;
         private Boolean isXmlDocument;
         private Boolean isUserDefinedType;
@@ -34,6 +34,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private int dataUserTypeId;
         private Default _default;
         private Rule rule;
+        private ColumnConstraint defaultConstraint;
         //private List<ObjectDependency> dependencys;
 
         public Column(ISchemaBase parent)
@@ -41,9 +42,10 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             this.Parent = parent;            
             computedFormula = "";
+            collation = "";
             this._default = new Default(this);
             this.rule = new Rule(this);
-            this.constraints = new ColumnConstraints(this);
+            this.DefaultConstraint = null;
             //this.dependencys = new List<ObjectDependency>();
         }
 
@@ -69,6 +71,7 @@ namespace DBDiff.Schema.SQLServer.Model
             col.IsComputed = this.IsComputed;
             col.IsRowGuid = this.IsRowGuid;
             col.IsPersisted = this.IsPersisted;
+            col.isSparse = this.isSparse;
             col.HasComputedDependencies = this.HasComputedDependencies;
             col.HasIndexDependencies = this.HasIndexDependencies;
             col.Name = this.Name;
@@ -85,7 +88,8 @@ namespace DBDiff.Schema.SQLServer.Model
             col.IsUserDefinedType = this.IsUserDefinedType;
             col.Default = this.Default.Clone(this);
             col.Rule = this.Rule.Clone(this);
-            col.Constraints = this.Constraints.Clone(this);
+            if (this.DefaultConstraint != null)
+                col.DefaultConstraint = this.DefaultConstraint.Clone(this);
             return col;
         }
 
@@ -95,14 +99,10 @@ namespace DBDiff.Schema.SQLServer.Model
             set { dependencys = value; }
         }*/
 
-        /// <summary>
-        /// Gets or sets the constraints.
-        /// </summary>
-        /// <value>The constraints.</value>
-        public ColumnConstraints Constraints
+        public ColumnConstraint DefaultConstraint
         {
-            get { return constraints; }
-            set { constraints = value; }
+            get { return defaultConstraint; }
+            set { defaultConstraint = value; }
         }
 
         public Rule Rule
@@ -139,6 +139,11 @@ namespace DBDiff.Schema.SQLServer.Model
             set { xmlSchema = value; }
         }
 
+        public Boolean IsSparse
+        {
+            get { return isSparse; }
+            set { isSparse = value; }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is user defined type.
@@ -449,9 +454,9 @@ namespace DBDiff.Schema.SQLServer.Model
                 {
                     tl = ((Database)this.Parent.Parent).UserTypes.Find(item => item.Id == dataUserTypeId).Type.ToLower();
                 }
-                if ((((Database)Parent.Parent).Options.Defaults.UseDefaultValueIfExists) && (this.Constraints.Count > 0))
+                if ((((Database)Parent.Parent).Options.Defaults.UseDefaultValueIfExists) && (this.DefaultConstraint != null))
                 {
-                    return this.Constraints[0].Definition;
+                    return this.DefaultConstraint.Definition;
                 }
                 else
                 {
@@ -485,12 +490,12 @@ namespace DBDiff.Schema.SQLServer.Model
         /// <returns></returns>
         public override string ToSqlAdd()
         {
-            return "ALTER TABLE " + Parent.FullName + " ADD " + ToSQL(false) + "\r\nGO\r\n";
+            return "ALTER TABLE " + Parent.FullName + " ADD " + ToSql(false) + "\r\nGO\r\n";
         }
 
         public override string ToSql()
         {
-            return ToSQL(true);
+            return ToSql(true);
         }
 
         public string ToSQLRedefine(string type, int size, string xmlSchema)
@@ -517,7 +522,7 @@ namespace DBDiff.Schema.SQLServer.Model
                 this.XmlSchema = xmlSchema;
 
             }
-            sql = this.ToSQL(false);
+            sql = this.ToSql(false);
 
             if (type != null)
                 this.Type = originalType;
@@ -530,7 +535,7 @@ namespace DBDiff.Schema.SQLServer.Model
         /// <summary>
         /// Devuelve el schema de la columna en formato SQL.
         /// </summary>
-        public string ToSQL(Boolean sqlConstraint)
+        public string ToSql(Boolean sqlConstraint)
         {
             string sql = "";
             sql += "[" + Name + "] ";
@@ -560,9 +565,14 @@ namespace DBDiff.Schema.SQLServer.Model
                     }
                 }
                 if (Type.Equals("numeric") || Type.Equals("decimal")) sql += " (" + Precision.ToString(CultureInfo.InvariantCulture) + "," + Scale.ToString(CultureInfo.InvariantCulture) + ")";
+                if (((Database)Parent.Parent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+                {
+                    if (Type.Equals("datetime2") || Type.Equals("datetimeoffset") || Type.Equals("time")) sql += "(" + Scale.ToString(CultureInfo.InvariantCulture) + ")";
+                }
                 if ((!String.IsNullOrEmpty(Collation)) && (!IsUserDefinedType)) sql += " COLLATE " + Collation;
                 if (IsIdentity) sql += " IDENTITY (" + IdentitySeed.ToString(CultureInfo.InvariantCulture) + "," + IdentityIncrement.ToString(CultureInfo.InvariantCulture) + ")";
                 if (IsIdentityForReplication) sql += " NOT FOR REPLICATION";
+                if (IsSparse) sql += " SPARSE";
                 if (Nullable)
                     sql += " NULL";
                 else
@@ -574,17 +584,21 @@ namespace DBDiff.Schema.SQLServer.Model
                 sql += "AS " + computedFormula;
                 if (IsPersisted) sql += " PERSISTED";
             }
-            if ((sqlConstraint) && (constraints.Count > 0)) sql += " " + constraints.ToSQL().Replace("\t","").Trim();
+            if ((sqlConstraint) && (DefaultConstraint != null))
+            {
+                if (DefaultConstraint.Status != Enums.ObjectStatusType.DropStatus)
+                    sql += " " + DefaultConstraint.ToSql().Replace("\t", "").Trim();
+            }
             return sql;
         }
 
         public SQLScriptList RebuildConstraint(Boolean Check)
         {
             SQLScriptList list = new SQLScriptList();
-            if (constraints.Count > 0)
+            if (DefaultConstraint != null)
             {
-                if ((!Check) || (constraints[0].CanCreate)) list.Add(constraints[0].Create());
-                list.Add(constraints[0].Drop());
+                if ((!Check) || (DefaultConstraint.CanCreate)) list.Add(DefaultConstraint.Create());
+                list.Add(DefaultConstraint.Drop());
             }
             return list;
         }
@@ -609,7 +623,7 @@ namespace DBDiff.Schema.SQLServer.Model
         public SQLScriptList Alter(Enums.ScripActionType typeStatus)
         {
             SQLScriptList list = new SQLScriptList();
-            string sql = "ALTER TABLE " + Parent.FullName + " ALTER COLUMN " + this.ToSQL(false) + "\r\nGO\r\n";
+            string sql = "ALTER TABLE " + Parent.FullName + " ALTER COLUMN " + this.ToSql(false) + "\r\nGO\r\n";
             list.Add(sql, 0, typeStatus);
             return list;
         }
@@ -657,6 +671,7 @@ namespace DBDiff.Schema.SQLServer.Model
                 if (origen.XmlSchema != null)
                     if (!origen.XmlSchema.Equals(destino.XmlSchema)) return false;
                 if (origen.Nullable != destino.nullable) return false;
+                if (origen.IsSparse != destino.IsSparse) return false;
                 if (!origen.Collation.Equals(destino.Collation)) return false;                
                 if (!origen.Type.Equals(destino.type)) return false;
                 //Si el tipo de campo es custom, no compara size del campo.

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Data.SqlClient;
 using DBDiff.Schema.SQLServer.Model;
 using DBDiff.Schema.SQLServer.Options;
+using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates
 {
@@ -27,14 +28,11 @@ namespace DBDiff.Schema.SQLServer.Generates
 
         public static void Fill(Database database, string connectionString)
         {
-            Indexes indexes = null;
             if (database.Options.Ignore.FilterView)
             {
-                FillView(database,connectionString);                
+                FillView(database,connectionString);
                 if ((database.Views.Count > 0) && (database.Options.Ignore.FilterIndex))
-                    indexes = (new GenerateIndex(connectionString, database.Options)).Get("V");
-
-                Merge(database.Views, null, indexes);
+                    GenerateIndex.Fill(database, connectionString, "V");                
             }
         }
 
@@ -46,6 +44,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                 using (SqlCommand command = new SqlCommand(GetSQL(), conn))
                 {
                     conn.Open();
+                    command.CommandTimeout = 0;
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         View item = null;
@@ -74,32 +73,6 @@ namespace DBDiff.Schema.SQLServer.Generates
                         }
                     }
                 }                    
-            }
-        }
-
-        private static void Merge(Views views, Triggers triggers, Indexes indexes)
-        {
-            /*if (triggers != null)
-            {
-                foreach (Trigger trigger in triggers)
-                {
-                    Table table = tables.Find(trigger.Parent.Id);
-                    trigger.Parent = table;
-                    table.Triggers.Add(trigger);
-                }
-            }*/
-            if (indexes != null)
-            {
-                foreach (Index index in indexes)
-                {
-                    View parent = views.Find(index.Parent.Id);
-                    index.Parent = parent;
-                    parent.Indexes.Add(index);
-                    foreach (IndexColumn icolumn in index.Columns)
-                    {
-                        ((Database)parent.Parent).Dependencies.Add(parent.Id, icolumn.Id, parent.Id, icolumn.DataTypeId, index);
-                    }
-                }
             }
         }
     }

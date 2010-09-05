@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Text;
 using System.Data.SqlClient;
 using System.Threading;
+using DBDiff.Schema.Errors;
 using DBDiff.Schema.Model;
 using DBDiff.Schema.Events;
 using DBDiff.Schema.SQLServer.Options;
@@ -58,49 +59,46 @@ namespace DBDiff.Schema.SQLServer.Generates
             col.HasComputedDependencies = ((int)reader["HasComputedFormula"] == 1);
             col.IsRowGuid = (bool)reader["IsRowGuid"];
             col.Type = reader["Type"].ToString();
-
-            ColumnConstraint cc = new ColumnConstraint(col);
-            cc.Id = (int)reader["DefaultId"];
-            if (cc.Id != 0)
+            if (((Database)table.Parent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
             {
-                cc.Owner = table.Owner;
-                cc.Name = reader["DefaultName"].ToString();
-                cc.Type = Constraint.ConstraintType.Default;
-                cc.Definition = reader["DefaultDefinition"].ToString();
-                col.Constraints.Add(cc);
+                col.IsSparse = (bool)reader["is_sparse"];
+            }
+            if ((int)reader["DefaultId"] != 0)
+            {
+                col.DefaultConstraint = new ColumnConstraint(col);
+                col.DefaultConstraint.Id = (int)reader["DefaultId"];
+                col.DefaultConstraint.Owner = table.Owner;
+                col.DefaultConstraint.Name = reader["DefaultName"].ToString();
+                col.DefaultConstraint.Type = Constraint.ConstraintType.Default;
+                col.DefaultConstraint.Definition = reader["DefaultDefinition"].ToString();
             }
             if ((int)reader["rule_object_id"] != 0)
                 col.Rule = ((Database)table.Parent).Rules.Find((int)reader["rule_object_id"]);
             table.Columns.Add(col);
         }
 
-        public static void Fill(Database database, string connectionString)
+        public static void Fill(Database database, string connectionString, List<MessageLog> messages)
         {
-            string error = "";
-            Triggers triggers = null;
-            Indexes indexes = null;
-            Constraints constraints = null;
             try
             {
                 FillTables(database, connectionString);
-                if (database.Options.Ignore.FilterTrigger)
-                    triggers = (new GenerateTriggers(connectionString, database.Options).Get());
-                if (database.Options.Ignore.FilterIndex)
-                    indexes = (new GenerateIndex(connectionString, database.Options)).Get("U");
-                if (database.Options.Ignore.FilterConstraint)
-                    constraints = (new GenerateConstraint(connectionString, database.Options)).Get(database);
-                if (String.IsNullOrEmpty(error))
-                    Merge(database.Tables, triggers, indexes, constraints);
-                else
-                    throw new SchemaException(error);                
+                if (database.Tables.Count > 0)
+                {
+                    if (database.Options.Ignore.FilterTrigger)
+                        GenerateTriggers.Fill(database, connectionString, messages);
+                    if (database.Options.Ignore.FilterIndex)
+                        GenerateIndex.Fill(database, connectionString, "U");
+                    if (database.Options.Ignore.FilterConstraint)
+                        GenerateConstraint.Fill(database, connectionString);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                messages.Add(new MessageLog(ex.Message,ex.StackTrace, MessageLog.LogType.Error));
             }
         }
 
-        public static void FillTables(Database database, string connectionString)
+        private static void FillTables(Database database, string connectionString)
         {
             try
             {
@@ -115,6 +113,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                     using (SqlCommand command = new SqlCommand(TableSQLCommand.GetTableDetail(database.Info.Version), conn))
                     {
                         conn.Open();
+                        command.CommandTimeout = 0;
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
@@ -157,52 +156,6 @@ namespace DBDiff.Schema.SQLServer.Generates
             }
         }
 
-        private static void Merge(Tables tables, Triggers triggers, Indexes indexes, Constraints constraints)
-        {
-            if (triggers != null)
-            {
-                foreach (Trigger trigger in triggers)
-                {
-                    Table table = tables.Find(trigger.Parent.Id);
-                    trigger.Parent = table;
-                    table.Triggers.Add(trigger);
-                }
-            }
-            if (indexes != null)
-            {
-                foreach (Index index in indexes)
-                {
-                    Table parent = tables.Find(index.Parent.Id);
-                    index.Parent = parent;
-                    parent.Indexes.Add(index);
-                    foreach (IndexColumn icolumn in index.Columns)
-                    {
-                        ((Database)parent.Parent).Dependencies.Add(parent.Id, icolumn.Id, parent.Id, icolumn.DataTypeId, index);
-                    }
-                }
-            }
-            if (constraints != null)
-            {
-                foreach (Constraint con in constraints)
-                {
-                    Table table = tables.Find(con.Parent.Id);
-                    con.Parent = table;
-                    table.Constraints.Add(con);
-                    if (con.Type != Constraint.ConstraintType.Check)
-                    {
-                        foreach (ConstraintColumn ccolumn in con.Columns)
-                        {
-                            ((Database)table.Parent).Dependencies.Add(table.Id, ccolumn.Id, table.Id, ccolumn.DataTypeId, con);
-                            if (con.Type == Constraint.ConstraintType.ForeignKey)
-                            {
-                                ((Database)table.Parent).Dependencies.Add(con.RelationalTableId, ccolumn.ColumnRelationalId, table.Id, ccolumn.ColumnRelationalDataTypeId , con);
-                            }
-                        }
-                    }
-                    else
-                        ((Database)table.Parent).Dependencies.Add(table.Id, 0, table.Id, 0, con);
-                }
-            }
-        }
+
     }
 }

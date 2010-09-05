@@ -63,9 +63,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Errors\MessageLog.cs" />
     <Compile Include="Events\Progress.cs" />
     <Compile Include="Events\ProgressEventArgs.cs" />
-    <Compile Include="FindBaseList.cs" />
+    <Compile Include="Model\SchemaList.cs" />
     <Compile Include="Misc\SchemaException.cs" />
     <Compile Include="Model\ISchemaBase.cs" />
     <Compile Include="Model\SchemaBase.cs" />

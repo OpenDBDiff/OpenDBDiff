@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Model
 {
@@ -14,12 +15,12 @@ namespace DBDiff.Schema.SQLServer.Model
         private Boolean isPercentGrowth;
         private Boolean isSparse;
 
-        public FileGroupFile(FileGroup parent) : base(Enums.ObjectType.File)
+        public FileGroupFile(ISchemaBase parent) : base(Enums.ObjectType.File)
         {
             this.Parent = parent;            
         }
 
-        public FileGroupFile Clone(FileGroup parent)
+        public override ISchemaBase Clone(ISchemaBase parent)
         {
             FileGroupFile file = new FileGroupFile(parent);
             file.Growth = this.Growth;
@@ -134,6 +135,5 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             return "ALTER DATABASE " + Parent.Parent.FullName + " REMOVE FILE " + this.FullName + "\r\nGO\r\n";
         }
-
     }
 }

@@ -27,7 +27,7 @@ namespace DBDiff.Schema.SQLServer.Compare
                 if (!CamposOrigen.Exists(node.FullName))
                 {
                     Column newNode = node.Clone(CamposOrigen.Parent);
-                    if ((newNode.Position == 1) || ((newNode.Constraints.Count == 0) && (!newNode.Nullable) && (!newNode.IsComputed) && (!newNode.IsIdentity) && (!newNode.IsIdentityForReplication)))
+                    if ((newNode.Position == 1) || ((newNode.DefaultConstraint == null) && (!newNode.Nullable) && (!newNode.IsComputed) && (!newNode.IsIdentity) && (!newNode.IsIdentityForReplication)))
                     {
                         newNode.Status = Enums.ObjectStatusType.CreateStatus;
                         newNode.Parent.Status = Enums.ObjectStatusType.AlterRebuildStatus;
@@ -40,7 +40,9 @@ namespace DBDiff.Schema.SQLServer.Compare
                 else
                 {
                     Column campoOrigen = CamposOrigen[node.FullName];
-                    ColumnConstraints oldDefault = campoOrigen.Constraints.Clone(campoOrigen);
+                    ColumnConstraint oldDefault = null;
+                    if (campoOrigen.DefaultConstraint != null)
+                        oldDefault = campoOrigen.DefaultConstraint.Clone(campoOrigen);
                     if (!Column.Compare(campoOrigen, node))
                     {
                         if (Column.CompareIdentity(campoOrigen, node))
@@ -78,7 +80,7 @@ namespace DBDiff.Schema.SQLServer.Compare
                         }                        
                         CamposOrigen[node.FullName] = node.Clone(CamposOrigen.Parent);
                     }
-                    CamposOrigen[node.FullName].Constraints = CompareColumnsConstraints.GenerateDiferences(oldDefault, node.Constraints);
+                    CamposOrigen[node.FullName].DefaultConstraint = CompareColumnsConstraints.GenerateDiferences(oldDefault, node.DefaultConstraint);
                 }
             }
         }

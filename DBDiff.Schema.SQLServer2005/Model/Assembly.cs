@@ -5,49 +5,41 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Model
 {
-    public class Assembly : SQLServerSchemaBase
+    public class Assembly : Code
     {
         private string permissionSet;
-        private string content;
         private bool visible;
         private string clrName;
-        private List<ObjectDependency> dependencys;
-        private List<AssemblyFile> files;
+        private SchemaList<AssemblyFile,Assembly> files;
 
         public Assembly(ISchemaBase parent)
-            : base(Enums.ObjectType.Assembly)
+            : base(parent, Enums.ObjectType.Assembly, Enums.ScripActionType.AddAssembly, Enums.ScripActionType.DropAssembly)
         {
             this.Parent = parent;
-            this.dependencys = new List<ObjectDependency>();
-            this.Files = new List<AssemblyFile>();
+            this.Files = new SchemaList<AssemblyFile,Assembly>(this);
         }
 
-        public Assembly Clone(ISchemaBase parent)
+        public override ISchemaBase Clone(ISchemaBase parent)
         {
             Assembly item = new Assembly(parent);
             item.Id = this.Id;
             item.Name = this.Name;
             item.Owner = this.Owner;
             item.Visible = this.Visible;
-            item.Content = this.Content;
+            item.Text = this.Text;
             item.PermissionSet = this.PermissionSet;
             item.CLRName = this.CLRName;
             item.Guid = this.Guid;
-            item.Dependencys = this.Dependencys;
+            this.DependenciesOut.ForEach(dep => item.DependenciesOut.Add(dep));
+            this.ExtendedProperties.ForEach(ep => item.ExtendedProperties.Add(ep));
             item.Files = this.Files;
             return item;
         }
 
-        public List<AssemblyFile> Files
+        public SchemaList<AssemblyFile, Assembly> Files
         {
             get { return files; }
             set { files = value; }
-        }
-
-        public List<ObjectDependency> Dependencys
-        {
-            get { return dependencys; }
-            set { dependencys = value; }
         }
 
         public override string FullName
@@ -67,12 +59,6 @@ namespace DBDiff.Schema.SQLServer.Model
             set { visible = value; }
         }
 
-        public string Content
-        {
-            get { return content; }
-            set { content = value; }
-        }
-
         public string PermissionSet
         {
             get { return permissionSet; }
@@ -81,23 +67,17 @@ namespace DBDiff.Schema.SQLServer.Model
 
         public override string ToSql()
         {
+            string access = PermissionSet;
+            if (PermissionSet.Equals("UNSAFE_ACCESS")) access = "UNSAFE";
+            if (PermissionSet.Equals("SAFE_ACCESS")) access = "SAFE";
             string sql = "CREATE ASSEMBLY ";
             sql += FullName + "\r\n";
             sql += "AUTHORIZATION " + Owner + "\r\n";
-            sql += "FROM " + content + "\r\n";
-            sql += "WITH PERMISSION_SET = " + permissionSet.Replace("_ACCESS", "") +"\r\n";
+            sql += "FROM " + Text + "\r\n";
+            sql += "WITH PERMISSION_SET = " + access + "\r\n";
             sql += "GO\r\n";
-            files.ForEach(item => sql += ToSqlFile(item));
+            files.ForEach(item => sql += item.ToSql());
             return sql;
-        }
-
-        private string ToSqlFile(AssemblyFile file)
-        {
-            string sql = "ALTER ASSEMBLY ";
-            sql += FullName + "\r\n";
-            sql += "ADD FILE FROM " + file.Content + "\r\n";
-            sql += "AS N'" + file.File + "'\r\n";
-            return sql + "GO\r\n";
         }
 
         public override string ToSqlDrop()
@@ -112,7 +92,10 @@ namespace DBDiff.Schema.SQLServer.Model
 
         public string ToSQLAlter()
         {
-            return "ALTER ASSEMBLY " + FullName + " WITH PERMISSION_SET = " + PermissionSet + "\r\nGO\r\n";
+            string access = PermissionSet;
+            if (PermissionSet.Equals("UNSAFE_ACCESS")) access = "UNSAFE";
+            if (PermissionSet.Equals("SAFE_ACCESS")) access = "SAFE";
+            return "ALTER ASSEMBLY " + FullName + " WITH PERMISSION_SET = " + access + "\r\nGO\r\n";
         }
 
         public string ToSQLAlterOwner()
@@ -120,49 +103,48 @@ namespace DBDiff.Schema.SQLServer.Model
             return "ALTER AUTHORIZATION ON ASSEMBLY::" + FullName + " TO " + Owner + "\r\nGO\r\n";
         }
 
-        public SQLScriptList ToSQLDiff()
+        public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList listDiff = new SQLScriptList();
 
             if (this.Status == Enums.ObjectStatusType.DropStatus)
             {
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropAssembly);
+                listDiff.AddRange(RebuildDependencys());
+                listDiff.Add(Drop());
             }
             if (this.Status == Enums.ObjectStatusType.CreateStatus)
             {
-                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddAssembly);
-            }
-            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
-            {
-                listDiff.Add(ToSQLAlter(), 0, Enums.ScripActionType.AlterAssembly);
+                listDiff.Add(Create());
+                ExtendedProperties.ForEach(item => listDiff.Add(item.Create()));
             }
             if (this.HasState(Enums.ObjectStatusType.AlterRebuildStatus))
-            {
-                string sql = "";
-                dependencys.ForEach(item =>
-                {
-                    ((Database)Parent).UserTypes[item.Name].Status = Enums.ObjectStatusType.AlterRebuildStatus;
-                    ((Database)Parent).UserTypes[item.Name].SetWasInsertInDiffList(Enums.ScripActionType.DropUserDataType);
-                    sql += ((Database)Parent).UserTypes[item.Name].ToSqlDrop();
-                });
-                listDiff.Add(sql + ToSqlDrop() + ToSql(), 0, Enums.ScripActionType.AddAssembly);
-            }
+                listDiff.AddRange(Rebuild());
             if (this.HasState(Enums.ObjectStatusType.ChangeOwner))
-            {
                 listDiff.Add(ToSQLAlterOwner(), 0, Enums.ScripActionType.AlterAssembly);
-            }
+            if (this.HasState(Enums.ObjectStatusType.PermisionSet))
+                listDiff.Add(ToSQLAlter(), 0, Enums.ScripActionType.AlterAssembly);
+            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
+                listDiff.AddRange(Files.ToSqlDiff());
+            listDiff.AddRange(this.ToSqlDiffExtendedProperties());
             return listDiff;
         }
 
-        public static Boolean Compare(Assembly origen, Assembly destino)
+        public bool Compare(Assembly obj)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (!origen.CLRName.Equals(destino.CLRName)) return false;
-            if (!origen.PermissionSet.Equals(destino.PermissionSet)) return false;
-            if (!origen.Owner.Equals(destino.Owner)) return false;
-            if (!origen.Content.Equals(destino.Content)) return false;
-            return true;
+            if (obj == null) throw new ArgumentNullException("obj");            
+            if (!this.CLRName.Equals(obj.CLRName)) return false;
+            if (!this.PermissionSet.Equals(obj.PermissionSet)) return false;
+            if (!this.Owner.Equals(obj.Owner)) return false;
+            if (!this.Text.Equals(obj.Text)) return false;
+            if (this.Files.Count != obj.Files.Count) return false;
+            for (int j = 0; j < this.Files.Count; j++)
+                if (!this.Files[j].Content.Equals(obj.Files[j].Content)) return false;
+            return true;            
+        }
+
+        public override Boolean IsCodeType
+        {
+            get { return true; }
         }
     }
 }

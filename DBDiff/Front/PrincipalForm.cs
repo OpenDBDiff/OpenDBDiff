@@ -89,7 +89,7 @@ namespace DBDiff
                 DBDiff.Schema.SQLServer.Model.Database origen;
                 DBDiff.Schema.SQLServer.Model.Database destino;
 
-                if ((!String.IsNullOrEmpty(mySqlConnectFront1.ConnectionString) && (!String.IsNullOrEmpty(mySqlConnectFront2.ConnectionString))))
+                if ((!String.IsNullOrEmpty(mySqlConnectFront1.DatabaseName) && (!String.IsNullOrEmpty(mySqlConnectFront2.DatabaseName))))
                 {
                     DBDiff.Schema.SQLServer.Generate sql = new DBDiff.Schema.SQLServer.Generate();
                     sql.ConnectionString = mySqlConnectFront1.ConnectionString;
@@ -102,7 +102,7 @@ namespace DBDiff
                     //this.txtScript.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
                     //this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
                     this.txtDiferencias.Type = SQLRichControl.SQLTextControl.SQLType.SQLServer;
-                    this.txtDiferencias.Text = origen.ToSQLDiff();
+                    this.txtDiferencias.Text = origen.ToSqlDiff().ToSQL();
                     this.schemaTreeView1.Database = origen;
 
                     btnCopy.Enabled = true;
@@ -111,7 +111,7 @@ namespace DBDiff
                 else
                     MessageBox.Show(Owner, "Please select a valid connection string", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (SchemaException sex)
+            catch (SchemaException)
             {
                 throw;
             }

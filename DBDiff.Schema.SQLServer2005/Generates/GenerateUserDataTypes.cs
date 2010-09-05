@@ -7,6 +7,7 @@ using DBDiff.Schema.Events;
 using DBDiff.Schema.SQLServer.Options;
 using DBDiff.Schema.SQLServer.Model;
 using DBDiff.Schema.SQLServer.Generates.Util;
+using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates
 {
@@ -58,13 +59,14 @@ namespace DBDiff.Schema.SQLServer.Generates
             return sql;
         }
 
-        private static void FillColumnsDependencies(UserDataTypes types, string connectionString)
+        private static void FillColumnsDependencies(SchemaList<UserDataType, Database> types, string connectionString)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand(GetSQLColumnsDependencis(), conn))
                 {
                     conn.Open();
+                    command.CommandTimeout = 0;
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -85,6 +87,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                     using (SqlCommand command = new SqlCommand(GetSQL(), conn))
                     {
                         conn.Open();
+                        command.CommandTimeout = 0;
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())

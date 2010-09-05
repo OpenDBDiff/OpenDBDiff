@@ -97,7 +97,7 @@ namespace DBDiff.Schema.SQLServer.Model
             return sql + "ALTER DATABASE [" + Parent.Name + "] REMOVE FILEGROUP [" + Name + "]\r\nGO\r\n\r\n";
         }
 
-        public SQLScriptList ToSQLDiff()
+        public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList listDiff = new SQLScriptList();
 

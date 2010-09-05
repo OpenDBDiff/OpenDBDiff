@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Compare
 {
     internal class CompareRules:CompareBase<Rule>
     {
-        public static void GenerateDiferences(Rules CamposOrigen, Rules CamposDestino)
+        public static void GenerateDiferences(SchemaList<Rule, Database> CamposOrigen, SchemaList<Rule, Database> CamposDestino)
         {
             foreach (Rule node in CamposDestino)
             {
@@ -19,7 +20,7 @@ namespace DBDiff.Schema.SQLServer.Compare
                 }
                 else
                 {
-                    if (!Rule.Compare(node, CamposOrigen[node.FullName]))
+                    if (!node.Compare(CamposOrigen[node.FullName]))
                     {
                         Rule newNode = node.Clone(CamposOrigen.Parent);
                         newNode.Status = Enums.ObjectStatusType.AlterStatus;

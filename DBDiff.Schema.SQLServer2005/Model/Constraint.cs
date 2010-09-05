@@ -55,7 +55,7 @@ namespace DBDiff.Schema.SQLServer.Model
             col.OnUpdateCascade = this.OnUpdateCascade;
             col.Owner = this.Owner;
             col.Columns = this.Columns.Clone();
-            col.Index = this.Index.Clone(parent);
+            col.Index = (Index)this.Index.Clone(parent);
             col.IsDisabled = this.IsDisabled;
             col.Definition = this.Definition;
             col.Guid = this.Guid;
@@ -326,7 +326,7 @@ namespace DBDiff.Schema.SQLServer.Model
 
         public override string ToSqlDrop()
         {
-            return ToSQLDrop(null);
+            return ToSqlDrop(null);
         }
 
         public override SQLScript Create()
@@ -361,7 +361,7 @@ namespace DBDiff.Schema.SQLServer.Model
                 return null;
         }
 
-        public string ToSQLDrop(string FileGroupName)
+        public string ToSqlDrop(string FileGroupName)
         {
             string sql = "ALTER TABLE " + ((Table)Parent).FullName + " DROP CONSTRAINT [" + Name + "]";
             if (!String.IsNullOrEmpty(FileGroupName)) sql += " WITH (MOVE TO [" + FileGroupName + "])";
@@ -380,7 +380,7 @@ namespace DBDiff.Schema.SQLServer.Model
             }
         }
 
-        public SQLScriptList ToSQLDiff()
+        public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList list = new SQLScriptList();
             if (this.HasState(Enums.ObjectStatusType.DropStatus))

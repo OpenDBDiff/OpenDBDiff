@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Compare
 {
     internal class CompareFileGroups:CompareBase<FileGroup>
     {
-        public static void GenerateDiferences(FileGroups CamposOrigen, FileGroups CamposDestino)
+        public static void GenerateDiferences(SchemaList<FileGroup, Database> CamposOrigen, SchemaList<FileGroup, Database> CamposDestino)
         {
             foreach (FileGroup node in CamposDestino)
             {

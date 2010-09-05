@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Compare
 {
@@ -19,7 +20,7 @@ namespace DBDiff.Schema.SQLServer.Compare
         /// <param name="tablasDestino">
         /// Tablas comparativas, que se usa para comparar con la base original.
         /// </param>
-        public static void GenerateDiferences(Tables tablasOrigen, Tables tablasDestino)
+        public static void GenerateDiferences(SchemaList<Table, Database> tablasOrigen, SchemaList<Table, Database> tablasDestino)
         {
             MarkDrop(tablasOrigen, tablasDestino);
 
@@ -41,6 +42,7 @@ namespace DBDiff.Schema.SQLServer.Compare
                         CompareIndexes.GenerateDiferences(tablaOriginal.Indexes, node.Indexes);
                         CompareTablesOptions.GenerateDiferences(tablaOriginal.Options, node.Options);
                         CompareTriggers.GenerateDiferences(tablaOriginal.Triggers, node.Triggers);
+                        CompareCLRTriggers.GenerateDiferences(tablaOriginal.CLRTriggers, node.CLRTriggers);
                         if (!Table.CompareFileGroup(tablaOriginal, node))
                         {
                             tablaOriginal.FileGroup = node.FileGroup;

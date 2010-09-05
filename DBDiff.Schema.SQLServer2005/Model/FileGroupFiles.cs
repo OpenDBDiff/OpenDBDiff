@@ -30,7 +30,7 @@ namespace DBDiff.Schema.SQLServer.Model
             FileGroupFiles columns = new FileGroupFiles(parentObject);
             for (int index = 0; index < this.Count; index++)
             {
-                columns.Add(this[index].Clone(parentObject));
+                columns.Add((FileGroupFile)this[index].Clone(parentObject));
             }
             return columns;
         }

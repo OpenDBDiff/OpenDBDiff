@@ -118,7 +118,7 @@
     <Compile Include="XmlConfig\ConfigProviders.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SQLRichControl\SQLRichControl\SQLRichControl.csproj">
+    <ProjectReference Include="..\SQLRichControl\SQLRichControl.csproj">
       <Project>{C9AC85A9-06F5-4F74-82F7-25993E65BBDA}</Project>
       <Name>SQLRichControl</Name>
     </ProjectReference>

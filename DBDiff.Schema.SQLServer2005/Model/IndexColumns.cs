@@ -5,7 +5,7 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Model
 {
-    public class IndexColumns : FindBaseList<IndexColumn,ISchemaBase>
+    public class IndexColumns : SchemaList<IndexColumn,ISchemaBase>
     {
         public IndexColumns(ISchemaBase parent)
             : base(parent)

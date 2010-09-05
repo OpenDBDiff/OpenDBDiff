@@ -76,6 +76,16 @@ namespace DBDiff.Schema.Model
 
         public abstract string ToSqlAdd();
 
+        public virtual ISchemaBase Clone(ISchemaBase parent)
+        {
+            return null;
+        }
+
+        public virtual SQLScriptList ToSqlDiff()
+        {
+            return null;
+        }
+
         public virtual SQLScript Create()
         {
             throw new NotImplementedException();

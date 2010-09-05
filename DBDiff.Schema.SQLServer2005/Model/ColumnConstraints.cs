@@ -103,13 +103,5 @@ namespace DBDiff.Schema.SQLServer.Model
             }
             return sql.ToString();
         }
-
-        public SQLScriptList ToSQLDiff()
-        {
-            SQLScriptList listDiff = new SQLScriptList();
-            this.ForEach(item => listDiff.AddRange(item.ToSQLDiff()));
-
-            return listDiff;
-        }
     }
 }

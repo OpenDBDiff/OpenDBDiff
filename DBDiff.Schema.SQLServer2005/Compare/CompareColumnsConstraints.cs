@@ -7,9 +7,33 @@ namespace DBDiff.Schema.SQLServer.Compare
 {
     internal class CompareColumnsConstraints:CompareBase<ColumnConstraint>
     {
-        public static ColumnConstraints GenerateDiferences(ColumnConstraints CamposOrigen, ColumnConstraints CamposDestino)
+        public static ColumnConstraint GenerateDiferences(ColumnConstraint CamposOrigen, ColumnConstraint CamposDestino)
         {
-            foreach (ColumnConstraint node in CamposDestino)
+            if ((CamposOrigen == null) && (CamposDestino != null))
+            {
+                CamposOrigen = CamposDestino;//.Clone((Column)CamposOrigen.Parent);
+                CamposOrigen.Status = Enums.ObjectStatusType.CreateStatus;
+                CamposOrigen.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                CamposOrigen.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;                
+            }
+            if ((CamposOrigen != null) && (CamposDestino != null))
+            {
+                if (!ColumnConstraint.Compare(CamposOrigen, CamposDestino))
+                {
+                    CamposOrigen = CamposDestino.Clone((Column)CamposOrigen.Parent);
+                    //Indico que hay un ALTER TABLE, pero sobre la columna, no seteo ningun estado.
+                    CamposOrigen.Status = Enums.ObjectStatusType.AlterStatus;
+                    CamposOrigen.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                    CamposOrigen.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                }
+            }
+            if ((CamposOrigen != null) && (CamposDestino == null))
+            {
+                CamposOrigen.Status = Enums.ObjectStatusType.DropStatus;
+                CamposOrigen.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                CamposOrigen.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+            }
+            /*foreach (ColumnConstraint node in CamposDestino)
             {
                 if (!CamposOrigen.Exists(node.FullName))
                 {
@@ -40,7 +64,7 @@ namespace DBDiff.Schema.SQLServer.Compare
                 CamposOrigen.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
             }
             );
-
+            */
             return CamposOrigen;
         }
     }

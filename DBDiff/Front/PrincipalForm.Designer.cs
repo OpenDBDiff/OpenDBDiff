@@ -34,6 +34,7 @@ namespace DBDiff
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.schemaTreeView1 = new DBDiff.Front.SchemaTreeView();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.txtDiferencias = new SQLRichControl.SQLTextControl();
             this.GroupDb = new System.Windows.Forms.GroupBox();
@@ -47,7 +48,6 @@ namespace DBDiff
             this.btnCopy = new System.Windows.Forms.Button();
             this.btnSaveAs = new System.Windows.Forms.Button();
             this.btnCompare = new System.Windows.Forms.Button();
-            this.schemaTreeView1 = new DBDiff.Front.SchemaTreeView();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -108,6 +108,19 @@ namespace DBDiff
             this.groupBox1.Size = new System.Drawing.Size(335, 382);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
+            // 
+            // schemaTreeView1
+            // 
+            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.schemaTreeView1.Database = null;
+            this.schemaTreeView1.FilterDiferentObjects = true;
+            this.schemaTreeView1.FilterMissingObjects = true;
+            this.schemaTreeView1.FilterNewObjects = true;
+            this.schemaTreeView1.Location = new System.Drawing.Point(7, 10);
+            this.schemaTreeView1.Name = "schemaTreeView1";
+            this.schemaTreeView1.Size = new System.Drawing.Size(322, 366);
+            this.schemaTreeView1.TabIndex = 0;
             // 
             // tabPage1
             // 
@@ -264,19 +277,6 @@ namespace DBDiff
             this.btnCompare.UseVisualStyleBackColor = true;
             this.btnCompare.Click += new System.EventHandler(this.button1_Click);
             // 
-            // schemaTreeView1
-            // 
-            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.schemaTreeView1.Database = null;
-            this.schemaTreeView1.FilterDiferentObjects = true;
-            this.schemaTreeView1.FilterMissingObjects = true;
-            this.schemaTreeView1.FilterNewObjects = true;
-            this.schemaTreeView1.Location = new System.Drawing.Point(7, 10);
-            this.schemaTreeView1.Name = "schemaTreeView1";
-            this.schemaTreeView1.Size = new System.Drawing.Size(322, 366);
-            this.schemaTreeView1.TabIndex = 0;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -292,7 +292,7 @@ namespace DBDiff
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Open DBDiff Beta 3";
+            this.Text = "Open DBDiff Beta 5";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);

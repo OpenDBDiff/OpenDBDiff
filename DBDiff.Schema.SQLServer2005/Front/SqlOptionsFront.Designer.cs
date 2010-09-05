@@ -29,6 +29,12 @@ namespace DBDiff.Schema.SQLServer.Front
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.chkCompCLRTrigger = new System.Windows.Forms.CheckBox();
+            this.chkCompCLRStore = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.chkCompFullText = new System.Windows.Forms.CheckBox();
             this.chkCompRules = new System.Windows.Forms.CheckBox();
             this.chkCompRoles = new System.Windows.Forms.CheckBox();
@@ -103,6 +109,12 @@ namespace DBDiff.Schema.SQLServer.Front
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBox4);
+            this.groupBox1.Controls.Add(this.checkBox3);
+            this.groupBox1.Controls.Add(this.checkBox2);
+            this.groupBox1.Controls.Add(this.chkCompCLRTrigger);
+            this.groupBox1.Controls.Add(this.chkCompCLRStore);
+            this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Controls.Add(this.chkCompFullText);
             this.groupBox1.Controls.Add(this.chkCompRules);
             this.groupBox1.Controls.Add(this.chkCompRoles);
@@ -133,7 +145,85 @@ namespace DBDiff.Schema.SQLServer.Front
             this.groupBox1.Size = new System.Drawing.Size(440, 298);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Objects";
+            this.groupBox1.Text = "Filters Objects";
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Checked = true;
+            this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox4.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.checkBox4.Location = new System.Drawing.Point(298, 129);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(104, 17);
+            this.checkBox4.TabIndex = 41;
+            this.checkBox4.Text = "CLR Aggregates";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Checked = true;
+            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox3.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.checkBox3.Location = new System.Drawing.Point(298, 106);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(130, 17);
+            this.checkBox3.TabIndex = 40;
+            this.checkBox3.Text = "CLR User Data Types";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Checked = true;
+            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.checkBox2.Location = new System.Drawing.Point(298, 83);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(96, 17);
+            this.checkBox2.TabIndex = 39;
+            this.checkBox2.Text = "CLR Functions";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // chkCompCLRTrigger
+            // 
+            this.chkCompCLRTrigger.AutoSize = true;
+            this.chkCompCLRTrigger.Checked = true;
+            this.chkCompCLRTrigger.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCompCLRTrigger.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkCompCLRTrigger.Location = new System.Drawing.Point(298, 61);
+            this.chkCompCLRTrigger.Name = "chkCompCLRTrigger";
+            this.chkCompCLRTrigger.Size = new System.Drawing.Size(88, 17);
+            this.chkCompCLRTrigger.TabIndex = 38;
+            this.chkCompCLRTrigger.Text = "CLR Triggers";
+            this.chkCompCLRTrigger.UseVisualStyleBackColor = true;
+            // 
+            // chkCompCLRStore
+            // 
+            this.chkCompCLRStore.AutoSize = true;
+            this.chkCompCLRStore.Checked = true;
+            this.chkCompCLRStore.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCompCLRStore.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkCompCLRStore.Location = new System.Drawing.Point(298, 39);
+            this.chkCompCLRStore.Name = "chkCompCLRStore";
+            this.chkCompCLRStore.Size = new System.Drawing.Size(132, 17);
+            this.chkCompCLRStore.TabIndex = 37;
+            this.chkCompCLRStore.Text = "CLR Store Procedures";
+            this.chkCompCLRStore.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.checkBox1.Location = new System.Drawing.Point(30, 149);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(80, 17);
+            this.checkBox1.TabIndex = 36;
+            this.checkBox1.Text = "Row Locks";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // chkCompFullText
             // 
@@ -141,11 +231,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompFullText.Checked = true;
             this.chkCompFullText.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompFullText.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompFullText.Location = new System.Drawing.Point(10, 126);
+            this.chkCompFullText.Location = new System.Drawing.Point(10, 105);
             this.chkCompFullText.Name = "chkCompFullText";
-            this.chkCompFullText.Size = new System.Drawing.Size(108, 17);
+            this.chkCompFullText.Size = new System.Drawing.Size(63, 17);
             this.chkCompFullText.TabIndex = 35;
-            this.chkCompFullText.Text = "Compare FullText";
+            this.chkCompFullText.Text = "FullText";
             this.chkCompFullText.UseVisualStyleBackColor = true;
             // 
             // chkCompRules
@@ -154,11 +244,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompRules.Checked = true;
             this.chkCompRules.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompRules.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompRules.Location = new System.Drawing.Point(250, 38);
+            this.chkCompRules.Location = new System.Drawing.Point(163, 38);
             this.chkCompRules.Name = "chkCompRules";
-            this.chkCompRules.Size = new System.Drawing.Size(98, 17);
+            this.chkCompRules.Size = new System.Drawing.Size(53, 17);
             this.chkCompRules.TabIndex = 34;
-            this.chkCompRules.Text = "Compare Rules";
+            this.chkCompRules.Text = "Rules";
             this.chkCompRules.UseVisualStyleBackColor = true;
             // 
             // chkCompRoles
@@ -167,11 +257,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompRoles.Checked = true;
             this.chkCompRoles.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompRoles.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompRoles.Location = new System.Drawing.Point(250, 16);
+            this.chkCompRoles.Location = new System.Drawing.Point(163, 16);
             this.chkCompRoles.Name = "chkCompRoles";
-            this.chkCompRoles.Size = new System.Drawing.Size(98, 17);
+            this.chkCompRoles.Size = new System.Drawing.Size(53, 17);
             this.chkCompRoles.TabIndex = 33;
-            this.chkCompRoles.Text = "Compare Roles";
+            this.chkCompRoles.Text = "Roles";
             this.chkCompRoles.UseVisualStyleBackColor = true;
             // 
             // chkCompUsers
@@ -180,11 +270,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompUsers.Checked = true;
             this.chkCompUsers.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompUsers.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompUsers.Location = new System.Drawing.Point(250, 193);
+            this.chkCompUsers.Location = new System.Drawing.Point(163, 193);
             this.chkCompUsers.Name = "chkCompUsers";
-            this.chkCompUsers.Size = new System.Drawing.Size(98, 17);
+            this.chkCompUsers.Size = new System.Drawing.Size(53, 17);
             this.chkCompUsers.TabIndex = 32;
-            this.chkCompUsers.Text = "Compare Users";
+            this.chkCompUsers.Text = "Users";
             this.chkCompUsers.UseVisualStyleBackColor = true;
             // 
             // chkIgnoreInclude
@@ -195,9 +285,9 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkIgnoreInclude.ForeColor = System.Drawing.SystemColors.ControlText;
             this.chkIgnoreInclude.Location = new System.Drawing.Point(30, 192);
             this.chkIgnoreInclude.Name = "chkIgnoreInclude";
-            this.chkIgnoreInclude.Size = new System.Drawing.Size(137, 17);
+            this.chkIgnoreInclude.Size = new System.Drawing.Size(104, 17);
             this.chkIgnoreInclude.TabIndex = 31;
-            this.chkIgnoreInclude.Text = "Ignore Include Columns";
+            this.chkIgnoreInclude.Text = "Include Columns";
             this.chkIgnoreInclude.UseVisualStyleBackColor = true;
             // 
             // chkCompTriggersDDL
@@ -206,11 +296,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompTriggersDDL.Checked = true;
             this.chkCompTriggersDDL.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompTriggersDDL.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompTriggersDDL.Location = new System.Drawing.Point(250, 105);
+            this.chkCompTriggersDDL.Location = new System.Drawing.Point(163, 105);
             this.chkCompTriggersDDL.Name = "chkCompTriggersDDL";
-            this.chkCompTriggersDDL.Size = new System.Drawing.Size(134, 17);
+            this.chkCompTriggersDDL.Size = new System.Drawing.Size(89, 17);
             this.chkCompTriggersDDL.TabIndex = 30;
-            this.chkCompTriggersDDL.Text = "Compare DDL Triggers";
+            this.chkCompTriggersDDL.Text = "DDL Triggers";
             this.chkCompTriggersDDL.UseVisualStyleBackColor = true;
             // 
             // chkIgnoreFillFactor
@@ -221,9 +311,9 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkIgnoreFillFactor.ForeColor = System.Drawing.SystemColors.ControlText;
             this.chkIgnoreFillFactor.Location = new System.Drawing.Point(30, 170);
             this.chkIgnoreFillFactor.Name = "chkIgnoreFillFactor";
-            this.chkIgnoreFillFactor.Size = new System.Drawing.Size(101, 17);
+            this.chkIgnoreFillFactor.Size = new System.Drawing.Size(71, 17);
             this.chkIgnoreFillFactor.TabIndex = 29;
-            this.chkIgnoreFillFactor.Text = "Ignore FillFactor";
+            this.chkIgnoreFillFactor.Text = "Fill Factor";
             this.chkIgnoreFillFactor.UseVisualStyleBackColor = true;
             // 
             // chkColumnOrder
@@ -232,9 +322,9 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkColumnOrder.ForeColor = System.Drawing.SystemColors.ControlText;
             this.chkColumnOrder.Location = new System.Drawing.Point(30, 275);
             this.chkColumnOrder.Name = "chkColumnOrder";
-            this.chkColumnOrder.Size = new System.Drawing.Size(123, 17);
+            this.chkColumnOrder.Size = new System.Drawing.Size(90, 17);
             this.chkColumnOrder.TabIndex = 28;
-            this.chkColumnOrder.Text = "Ignore Column Order";
+            this.chkColumnOrder.Text = "Column Order";
             this.chkColumnOrder.UseVisualStyleBackColor = true;
             // 
             // chkCompAssemblys
@@ -243,11 +333,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompAssemblys.Checked = true;
             this.chkCompAssemblys.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompAssemblys.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompAssemblys.Location = new System.Drawing.Point(10, 16);
+            this.chkCompAssemblys.Location = new System.Drawing.Point(298, 16);
             this.chkCompAssemblys.Name = "chkCompAssemblys";
-            this.chkCompAssemblys.Size = new System.Drawing.Size(120, 17);
+            this.chkCompAssemblys.Size = new System.Drawing.Size(75, 17);
             this.chkCompAssemblys.TabIndex = 27;
-            this.chkCompAssemblys.Text = "Compare Assemblys";
+            this.chkCompAssemblys.Text = "Assemblys";
             this.chkCompAssemblys.UseVisualStyleBackColor = true;
             // 
             // chkFileGroups
@@ -256,11 +346,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkFileGroups.Checked = true;
             this.chkFileGroups.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkFileGroups.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkFileGroups.Location = new System.Drawing.Point(10, 82);
+            this.chkFileGroups.Location = new System.Drawing.Point(10, 61);
             this.chkFileGroups.Name = "chkFileGroups";
-            this.chkFileGroups.Size = new System.Drawing.Size(124, 17);
+            this.chkFileGroups.Size = new System.Drawing.Size(79, 17);
             this.chkFileGroups.TabIndex = 26;
-            this.chkFileGroups.Text = "Compare File Groups";
+            this.chkFileGroups.Text = "File Groups";
             this.chkFileGroups.UseVisualStyleBackColor = true;
             // 
             // chkColumnIdentity
@@ -269,9 +359,9 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkColumnIdentity.ForeColor = System.Drawing.SystemColors.ControlText;
             this.chkColumnIdentity.Location = new System.Drawing.Point(30, 255);
             this.chkColumnIdentity.Name = "chkColumnIdentity";
-            this.chkColumnIdentity.Size = new System.Drawing.Size(130, 17);
+            this.chkColumnIdentity.Size = new System.Drawing.Size(97, 17);
             this.chkColumnIdentity.TabIndex = 25;
-            this.chkColumnIdentity.Text = "Ignore Identity options";
+            this.chkColumnIdentity.Text = "Identity options";
             this.chkColumnIdentity.UseVisualStyleBackColor = true;
             // 
             // chkColumnCollation
@@ -280,9 +370,9 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkColumnCollation.ForeColor = System.Drawing.SystemColors.ControlText;
             this.chkColumnCollation.Location = new System.Drawing.Point(30, 236);
             this.chkColumnCollation.Name = "chkColumnCollation";
-            this.chkColumnCollation.Size = new System.Drawing.Size(137, 17);
+            this.chkColumnCollation.Size = new System.Drawing.Size(104, 17);
             this.chkColumnCollation.TabIndex = 24;
-            this.chkColumnCollation.Text = "Ignore Column Collation";
+            this.chkColumnCollation.Text = "Column Collation";
             this.chkColumnCollation.UseVisualStyleBackColor = true;
             // 
             // chkCompExtendedProperties
@@ -291,11 +381,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompExtendedProperties.Checked = true;
             this.chkCompExtendedProperties.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompExtendedProperties.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompExtendedProperties.Location = new System.Drawing.Point(10, 60);
+            this.chkCompExtendedProperties.Location = new System.Drawing.Point(10, 39);
             this.chkCompExtendedProperties.Name = "chkCompExtendedProperties";
-            this.chkCompExtendedProperties.Size = new System.Drawing.Size(166, 17);
+            this.chkCompExtendedProperties.Size = new System.Drawing.Size(121, 17);
             this.chkCompExtendedProperties.TabIndex = 23;
-            this.chkCompExtendedProperties.Text = "Compare Extended Properties";
+            this.chkCompExtendedProperties.Text = "Extended Properties";
             this.chkCompExtendedProperties.UseVisualStyleBackColor = true;
             // 
             // chkCompConstraints
@@ -304,11 +394,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompConstraints.Checked = true;
             this.chkCompConstraints.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompConstraints.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompConstraints.Location = new System.Drawing.Point(10, 38);
+            this.chkCompConstraints.Location = new System.Drawing.Point(10, 17);
             this.chkCompConstraints.Name = "chkCompConstraints";
-            this.chkCompConstraints.Size = new System.Drawing.Size(123, 17);
+            this.chkCompConstraints.Size = new System.Drawing.Size(78, 17);
             this.chkCompConstraints.TabIndex = 14;
-            this.chkCompConstraints.Text = "Compare Constraints";
+            this.chkCompConstraints.Text = "Constraints";
             this.chkCompConstraints.UseVisualStyleBackColor = true;
             // 
             // chkCompSchemas
@@ -317,11 +407,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompSchemas.Checked = true;
             this.chkCompSchemas.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompSchemas.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompSchemas.Location = new System.Drawing.Point(250, 127);
+            this.chkCompSchemas.Location = new System.Drawing.Point(163, 127);
             this.chkCompSchemas.Name = "chkCompSchemas";
-            this.chkCompSchemas.Size = new System.Drawing.Size(115, 17);
+            this.chkCompSchemas.Size = new System.Drawing.Size(70, 17);
             this.chkCompSchemas.TabIndex = 17;
-            this.chkCompSchemas.Text = "Compare Schemas";
+            this.chkCompSchemas.Text = "Schemas";
             this.chkCompSchemas.UseVisualStyleBackColor = true;
             // 
             // chkCompUDT
@@ -330,11 +420,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompUDT.Checked = true;
             this.chkCompUDT.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompUDT.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompUDT.Location = new System.Drawing.Point(250, 171);
+            this.chkCompUDT.Location = new System.Drawing.Point(163, 171);
             this.chkCompUDT.Name = "chkCompUDT";
-            this.chkCompUDT.Size = new System.Drawing.Size(151, 17);
+            this.chkCompUDT.Size = new System.Drawing.Size(106, 17);
             this.chkCompUDT.TabIndex = 22;
-            this.chkCompUDT.Text = "Compare User Data Types";
+            this.chkCompUDT.Text = "User Data Types";
             this.chkCompUDT.UseVisualStyleBackColor = true;
             // 
             // chkCompIndices
@@ -343,11 +433,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompIndices.Checked = true;
             this.chkCompIndices.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompIndices.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompIndices.Location = new System.Drawing.Point(10, 148);
+            this.chkCompIndices.Location = new System.Drawing.Point(10, 127);
             this.chkCompIndices.Name = "chkCompIndices";
-            this.chkCompIndices.Size = new System.Drawing.Size(108, 17);
+            this.chkCompIndices.Size = new System.Drawing.Size(63, 17);
             this.chkCompIndices.TabIndex = 15;
-            this.chkCompIndices.Text = "Compare Indexes";
+            this.chkCompIndices.Text = "Indexes";
             this.chkCompIndices.UseVisualStyleBackColor = true;
             this.chkCompIndices.CheckedChanged += new System.EventHandler(this.chkCompIndices_CheckedChanged);
             // 
@@ -357,11 +447,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompTablaOpciones.Checked = true;
             this.chkCompTablaOpciones.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompTablaOpciones.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompTablaOpciones.Location = new System.Drawing.Point(250, 61);
+            this.chkCompTablaOpciones.Location = new System.Drawing.Point(163, 61);
             this.chkCompTablaOpciones.Name = "chkCompTablaOpciones";
-            this.chkCompTablaOpciones.Size = new System.Drawing.Size(137, 17);
+            this.chkCompTablaOpciones.Size = new System.Drawing.Size(92, 17);
             this.chkCompTablaOpciones.TabIndex = 16;
-            this.chkCompTablaOpciones.Text = "Compare Table Options";
+            this.chkCompTablaOpciones.Text = "Table Options";
             this.chkCompTablaOpciones.UseVisualStyleBackColor = true;
             // 
             // chkCompXMLSchemas
@@ -370,11 +460,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompXMLSchemas.Checked = true;
             this.chkCompXMLSchemas.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompXMLSchemas.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompXMLSchemas.Location = new System.Drawing.Point(250, 237);
+            this.chkCompXMLSchemas.Location = new System.Drawing.Point(163, 237);
             this.chkCompXMLSchemas.Name = "chkCompXMLSchemas";
-            this.chkCompXMLSchemas.Size = new System.Drawing.Size(140, 17);
+            this.chkCompXMLSchemas.Size = new System.Drawing.Size(95, 17);
             this.chkCompXMLSchemas.TabIndex = 18;
-            this.chkCompXMLSchemas.Text = "Compare XML Schemas";
+            this.chkCompXMLSchemas.Text = "XML Schemas";
             this.chkCompXMLSchemas.UseVisualStyleBackColor = true;
             // 
             // chkCompFunciones
@@ -383,11 +473,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompFunciones.Checked = true;
             this.chkCompFunciones.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompFunciones.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompFunciones.Location = new System.Drawing.Point(10, 104);
+            this.chkCompFunciones.Location = new System.Drawing.Point(10, 83);
             this.chkCompFunciones.Name = "chkCompFunciones";
-            this.chkCompFunciones.Size = new System.Drawing.Size(117, 17);
+            this.chkCompFunciones.Size = new System.Drawing.Size(72, 17);
             this.chkCompFunciones.TabIndex = 21;
-            this.chkCompFunciones.Text = "Compare Functions";
+            this.chkCompFunciones.Text = "Functions";
             this.chkCompFunciones.UseVisualStyleBackColor = true;
             // 
             // chkCompStoreProcedure
@@ -396,11 +486,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompStoreProcedure.Checked = true;
             this.chkCompStoreProcedure.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompStoreProcedure.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompStoreProcedure.Location = new System.Drawing.Point(250, 149);
+            this.chkCompStoreProcedure.Location = new System.Drawing.Point(163, 149);
             this.chkCompStoreProcedure.Name = "chkCompStoreProcedure";
-            this.chkCompStoreProcedure.Size = new System.Drawing.Size(153, 17);
+            this.chkCompStoreProcedure.Size = new System.Drawing.Size(108, 17);
             this.chkCompStoreProcedure.TabIndex = 19;
-            this.chkCompStoreProcedure.Text = "Compare Store Procedures";
+            this.chkCompStoreProcedure.Text = "Store Procedures";
             this.chkCompStoreProcedure.UseVisualStyleBackColor = true;
             // 
             // chkCompTablas
@@ -411,9 +501,9 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompTablas.ForeColor = System.Drawing.SystemColors.ControlText;
             this.chkCompTablas.Location = new System.Drawing.Point(10, 214);
             this.chkCompTablas.Name = "chkCompTablas";
-            this.chkCompTablas.Size = new System.Drawing.Size(103, 17);
+            this.chkCompTablas.Size = new System.Drawing.Size(58, 17);
             this.chkCompTablas.TabIndex = 12;
-            this.chkCompTablas.Text = "Compare Tables";
+            this.chkCompTablas.Text = "Tables";
             this.chkCompTablas.UseVisualStyleBackColor = true;
             this.chkCompTablas.CheckedChanged += new System.EventHandler(this.chkCompTablas_CheckedChanged);
             // 
@@ -423,11 +513,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompTriggers.Checked = true;
             this.chkCompTriggers.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompTriggers.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompTriggers.Location = new System.Drawing.Point(250, 83);
+            this.chkCompTriggers.Location = new System.Drawing.Point(163, 83);
             this.chkCompTriggers.Name = "chkCompTriggers";
-            this.chkCompTriggers.Size = new System.Drawing.Size(109, 17);
+            this.chkCompTriggers.Size = new System.Drawing.Size(64, 17);
             this.chkCompTriggers.TabIndex = 13;
-            this.chkCompTriggers.Text = "Compare Triggers";
+            this.chkCompTriggers.Text = "Triggers";
             this.chkCompTriggers.UseVisualStyleBackColor = true;
             // 
             // chkCompVistas
@@ -436,11 +526,11 @@ namespace DBDiff.Schema.SQLServer.Front
             this.chkCompVistas.Checked = true;
             this.chkCompVistas.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCompVistas.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompVistas.Location = new System.Drawing.Point(250, 215);
+            this.chkCompVistas.Location = new System.Drawing.Point(163, 215);
             this.chkCompVistas.Name = "chkCompVistas";
-            this.chkCompVistas.Size = new System.Drawing.Size(99, 17);
+            this.chkCompVistas.Size = new System.Drawing.Size(54, 17);
             this.chkCompVistas.TabIndex = 20;
-            this.chkCompVistas.Text = "Compare Views";
+            this.chkCompVistas.Text = "Views";
             this.chkCompVistas.UseVisualStyleBackColor = true;
             // 
             // groupBox2
@@ -463,7 +553,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.groupBox2.Location = new System.Drawing.Point(6, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(440, 365);
+            this.groupBox2.Size = new System.Drawing.Size(441, 365);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Default Values";
@@ -614,7 +704,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(466, 410);
+            this.tabControl1.Size = new System.Drawing.Size(461, 410);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -624,7 +714,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(458, 384);
+            this.tabPage1.Size = new System.Drawing.Size(453, 384);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Objects";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -657,7 +747,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(458, 384);
+            this.tabPage4.Size = new System.Drawing.Size(453, 384);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Filters";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -670,7 +760,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.groupBox5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.groupBox5.Location = new System.Drawing.Point(6, 6);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(440, 372);
+            this.groupBox5.Size = new System.Drawing.Size(441, 372);
             this.groupBox5.TabIndex = 3;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Filters Objects";
@@ -678,7 +768,7 @@ namespace DBDiff.Schema.SQLServer.Front
             // btnAdd
             // 
             this.btnAdd.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAdd.Location = new System.Drawing.Point(312, 342);
+            this.btnAdd.Location = new System.Drawing.Point(313, 342);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(58, 23);
             this.btnAdd.TabIndex = 3;
@@ -689,7 +779,7 @@ namespace DBDiff.Schema.SQLServer.Front
             // btnApply
             // 
             this.btnApply.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnApply.Location = new System.Drawing.Point(376, 342);
+            this.btnApply.Location = new System.Drawing.Point(377, 342);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(58, 23);
             this.btnApply.TabIndex = 2;
@@ -706,7 +796,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.columnHeader4});
             this.lstFilters.Location = new System.Drawing.Point(6, 19);
             this.lstFilters.Name = "lstFilters";
-            this.lstFilters.Size = new System.Drawing.Size(428, 317);
+            this.lstFilters.Size = new System.Drawing.Size(429, 317);
             this.lstFilters.TabIndex = 0;
             this.lstFilters.UseCompatibleStateImageBehavior = false;
             this.lstFilters.View = System.Windows.Forms.View.Details;
@@ -735,7 +825,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(458, 384);
+            this.tabPage2.Size = new System.Drawing.Size(453, 384);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Defaults";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -745,7 +835,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.tabPage3.Controls.Add(this.groupBox3);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(458, 384);
+            this.tabPage3.Size = new System.Drawing.Size(453, 384);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Script";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -756,7 +846,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.groupBox3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.groupBox3.Location = new System.Drawing.Point(6, 6);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(440, 365);
+            this.groupBox3.Size = new System.Drawing.Size(444, 365);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Advanced Script Options";
@@ -767,7 +857,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.groupBox4.Controls.Add(this.optScriptSchemaDrop);
             this.groupBox4.Location = new System.Drawing.Point(6, 19);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(297, 66);
+            this.groupBox4.Size = new System.Drawing.Size(432, 66);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "When rebuild a View WITH SCHEMABINDING";
@@ -776,7 +866,7 @@ namespace DBDiff.Schema.SQLServer.Front
             // 
             this.optScriptSchemaBindingAlter.AutoSize = true;
             this.optScriptSchemaBindingAlter.Checked = true;
-            this.optScriptSchemaBindingAlter.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.optScriptSchemaBindingAlter.ForeColor = System.Drawing.SystemColors.ControlText;
             this.optScriptSchemaBindingAlter.Location = new System.Drawing.Point(18, 42);
             this.optScriptSchemaBindingAlter.Name = "optScriptSchemaBindingAlter";
             this.optScriptSchemaBindingAlter.Size = new System.Drawing.Size(120, 17);
@@ -788,7 +878,7 @@ namespace DBDiff.Schema.SQLServer.Front
             // optScriptSchemaDrop
             // 
             this.optScriptSchemaDrop.AutoSize = true;
-            this.optScriptSchemaDrop.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.optScriptSchemaDrop.ForeColor = System.Drawing.SystemColors.ControlText;
             this.optScriptSchemaDrop.Location = new System.Drawing.Point(18, 19);
             this.optScriptSchemaDrop.Name = "optScriptSchemaDrop";
             this.optScriptSchemaDrop.Size = new System.Drawing.Size(136, 17);
@@ -803,7 +893,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl1);
             this.Name = "SqlOptionsFront";
-            this.Size = new System.Drawing.Size(466, 410);
+            this.Size = new System.Drawing.Size(461, 410);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -885,5 +975,11 @@ namespace DBDiff.Schema.SQLServer.Front
         private System.Windows.Forms.CheckBox chkIgnoreNotForReplication;
         private System.Windows.Forms.CheckBox chkCompRules;
         private System.Windows.Forms.CheckBox chkCompFullText;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chkCompCLRStore;
+        private System.Windows.Forms.CheckBox chkCompCLRTrigger;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBox4;
     }
 }

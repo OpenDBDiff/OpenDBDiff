@@ -6,14 +6,15 @@ namespace DBDiff.Schema.Model
 {
     public interface ISchemaBase
     {
-        ISchemaBase Parent { get; set;}
-        Enums.ObjectStatusType Status { get; set;}
-        Boolean HasState(Enums.ObjectStatusType statusFind);
-        string Name { get; set;}
-        string Owner { get; set; }
-        string FullName { get; }
-        int Id { get; set;}
+        ISchemaBase Clone(ISchemaBase parent);
         int DependenciesCount { get; }
+        string FullName { get; }
+        int Id { get; set; }
+        Boolean HasState(Enums.ObjectStatusType statusFind);
+        string Name { get; set; }
+        string Owner { get; set; }
+        ISchemaBase Parent { get; set;}
+        Enums.ObjectStatusType Status { get; set;}                                             
         Boolean IsSystem { get; set; }
         Enums.ObjectType ObjectType { get; set;}
         Boolean GetWasInsertInDiffList(Enums.ScripActionType action);
@@ -21,8 +22,10 @@ namespace DBDiff.Schema.Model
         string ToSqlDrop();
         string ToSqlAdd();
         string ToSql();
+        SQLScriptList ToSqlDiff();
         SQLScript Create();
         SQLScript Drop();
-        Boolean IsCodeType { get; }        
+        Boolean IsCodeType { get; }
+        
     }
 }

@@ -70,8 +70,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compare\CompareCLRTriggers.cs" />
+    <Compile Include="Compare\CompareDDLTriggers.cs" />
     <Compile Include="Compare\CompareAssemblies.cs" />
     <Compile Include="Compare\CompareBase.cs" />
+    <Compile Include="Compare\CompareCLRStoreProcedure.cs" />
     <Compile Include="Compare\CompareColumns.cs" />
     <Compile Include="Compare\CompareColumnsConstraints.cs" />
     <Compile Include="Compare\CompareConstraints.cs" />
@@ -118,6 +121,7 @@
     </Compile>
     <Compile Include="Generate.cs" />
     <Compile Include="Generates\GenerateDefaults.cs" />
+    <Compile Include="Generates\GenerateExtendedProperties.cs" />
     <Compile Include="Generates\GenerateFunctions.cs" />
     <Compile Include="Generates\GenerateUsers.cs" />
     <Compile Include="Generates\GenerateViews.cs" />
@@ -125,6 +129,7 @@
     <Compile Include="Generates\GenerateSynonyms.cs" />
     <Compile Include="Generates\GenerateTriggers.cs" />
     <Compile Include="Generates\SQLCommands\ConstraintSQLCommand.cs" />
+    <Compile Include="Generates\SQLCommands\IndexSQLCommand.cs" />
     <Compile Include="Generates\SQLCommands\TableSQLCommand.cs" />
     <Compile Include="Generates\GenerateDatabase.cs" />
     <Compile Include="Generates\GenerateFileGroups.cs" />
@@ -139,14 +144,19 @@
     <Compile Include="Generates\GenerateXMLSchemas.cs" />
     <Compile Include="Generates\Util\ConvertType.cs" />
     <Compile Include="Model\AssemblyFile.cs" />
+    <Compile Include="Model\CLRCode.cs" />
+    <Compile Include="Model\CLRStoreProcedure.cs" />
+    <Compile Include="Model\CLRTrigger.cs" />
     <Compile Include="Model\Code.cs" />
     <Compile Include="Model\Defaults.cs" />
+    <Compile Include="Model\ExtendedProperty.cs" />
     <Compile Include="Model\FullText.cs" />
     <Compile Include="Model\FullTexts.cs" />
     <Compile Include="Model\ICode.cs" />
+    <Compile Include="Model\ISQLServerSchemaBase.cs" />
+    <Compile Include="Model\Parameter.cs" />
     <Compile Include="Model\Util\FormatCode.cs" />
     <Compile Include="Model\Assembly.cs" />
-    <Compile Include="Model\Assemblys.cs" />
     <Compile Include="Model\ColumnConstraint.cs" />
     <Compile Include="Model\ColumnConstraints.cs" />
     <Compile Include="Model\ConstraintColumn.cs" />
@@ -162,31 +172,21 @@
     <Compile Include="Model\FileGroup.cs" />
     <Compile Include="Model\FileGroupFile.cs" />
     <Compile Include="Model\FileGroupFiles.cs" />
-    <Compile Include="Model\FileGroups.cs" />
     <Compile Include="Model\Function.cs" />
-    <Compile Include="Model\Functions.cs" />
     <Compile Include="Model\Index.cs" />
     <Compile Include="Model\IndexColumn.cs" />
     <Compile Include="Model\IndexColumns.cs" />
-    <Compile Include="Model\Indexes.cs" />
     <Compile Include="Model\Role.cs" />
     <Compile Include="Model\Roles.cs" />
     <Compile Include="Model\Rule.cs" />
-    <Compile Include="Model\Rules.cs" />
     <Compile Include="Model\Schema.cs" />
-    <Compile Include="Model\Schemas.cs" />
     <Compile Include="Model\SQLServerSchemaBase.cs" />
     <Compile Include="Model\StoreProcedure.cs" />
-    <Compile Include="Model\StoreProcedures.cs" />
     <Compile Include="Model\Synonym.cs" />
-    <Compile Include="Model\Synonyms.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\ObjectDependency.cs" />
-    <Compile Include="Model\Users.cs" />
     <Compile Include="Model\View.cs" />
-    <Compile Include="Model\Views.cs" />
     <Compile Include="Model\XMLSchema.cs" />
-    <Compile Include="Model\XMLSchemas.cs" />
     <Compile Include="Options\SqlOption.cs" />
     <Compile Include="Options\SqlOptionDefault.cs" />
     <Compile Include="Options\SqlOptionFilter.cs" />
@@ -198,11 +198,8 @@
     <Compile Include="Model\Table.cs" />
     <Compile Include="Model\TableOption.cs" />
     <Compile Include="Model\TableOptions.cs" />
-    <Compile Include="Model\Tables.cs" />
     <Compile Include="Model\Trigger.cs" />
-    <Compile Include="Model\Triggers.cs" />
     <Compile Include="Model\UserDataType.cs" />
-    <Compile Include="Model\UserDataTypes.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -279,6 +276,7 @@
     <None Include="Resources\Test.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="DiagramaClases.cd" />
     <None Include="Resources\Database.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -134,26 +134,6 @@ namespace DBDiff.Schema.SQLServer.Model
             set { type = value; }
         }
 
-        /// <summary>
-        /// Compara dos indices y devuelve true si son iguales, caso contrario, devuelve false.
-        /// </summary>
-        public static Boolean Compare(UserDataType origen, UserDataType destino)
-        {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (origen.Scale != destino.Scale) return false;
-            if (origen.Precision != destino.Precision) return false;
-            if (origen.AllowNull != destino.AllowNull) return false;
-            if (origen.Size != destino.Size) return false;
-            if (!origen.Type.Equals(destino.Type)) return false;
-            if (origen.IsAssembly != destino.IsAssembly) return false;
-            if (!origen.AssemblyClass.Equals(destino.AssemblyClass)) return false;
-            if (!origen.AssemblyName.Equals(destino.AssemblyName)) return false;
-            if (!CompareDefault(origen, destino)) return false;
-            if (!CompareRule(origen, destino)) return false;
-            return true;
-        }
-
         public static Boolean CompareRule(UserDataType origen, UserDataType destino)
         {
             if (destino == null) throw new ArgumentNullException("destino");
@@ -229,7 +209,7 @@ namespace DBDiff.Schema.SQLServer.Model
             return list;
         }
 
-        private SQLScriptList ToSQLChangeColumns()
+        private SQLScriptList  ToSQLChangeColumns()
         {
             Hashtable fields = new Hashtable();
             SQLScriptList list = new SQLScriptList();
@@ -263,19 +243,23 @@ namespace DBDiff.Schema.SQLServer.Model
                                 }
                                 else
                                 {
-                                    if (!column.GetWasInsertInDiffList(Enums.ScripActionType.AlterColumnFormula))
+                                    if (column.Status != Enums.ObjectStatusType.CreateStatus)
                                     {
-                                        column.SetWasInsertInDiffList(Enums.ScripActionType.AlterColumnFormula);
-                                        list.Add(column.ToSqlDrop(), 0, Enums.ScripActionType.AlterColumnFormula);
-                                        List<ISchemaBase> drops = ((Database)column.Parent.Parent).Dependencies.Find(column.Parent.Id, column.Id, 0);
-                                        drops.ForEach(item =>
+                                        if (!column.GetWasInsertInDiffList(Enums.ScripActionType.AlterColumnFormula))
                                         {
-                                            list.Add(item.Drop());
-                                            list.Add(item.Create());
-                                        });
-                                        /*Si la columna va a ser eliminada o la tabla va a ser reconstruida, no restaura la columna*/
-                                        if ((column.Status != Enums.ObjectStatusType.DropStatus) && (column.Parent.Status != Enums.ObjectStatusType.AlterRebuildStatus))
-                                            list.Add(column.ToSqlAdd(), 0, Enums.ScripActionType.AlterColumnFormulaRestore);
+                                            column.SetWasInsertInDiffList(Enums.ScripActionType.AlterColumnFormula);
+                                            list.Add(column.ToSqlDrop(), 0, Enums.ScripActionType.AlterColumnFormula);
+                                            List<ISchemaBase> drops = ((Database)column.Parent.Parent).Dependencies.Find(column.Parent.Id, column.Id, 0);
+                                            drops.ForEach(item =>
+                                            {
+                                                ISchemaBase realItem = ((Database)this.Parent).Find(item.FullName);
+                                                list.Add(realItem.Drop());
+                                                list.Add(realItem.Create());
+                                            });
+                                            /*Si la columna va a ser eliminada o la tabla va a ser reconstruida, no restaura la columna*/
+                                            if ((column.Status != Enums.ObjectStatusType.DropStatus) && (column.Parent.Status != Enums.ObjectStatusType.AlterRebuildStatus))
+                                                list.Add(column.ToSqlAdd(), 0, Enums.ScripActionType.AlterColumnFormulaRestore);
+                                        }
                                     }
                                 }
                                 fields.Add(column.FullName, column.FullName);
@@ -330,7 +314,7 @@ namespace DBDiff.Schema.SQLServer.Model
 
         public override SQLScript Drop()
         {
-            Enums.ScripActionType action = Enums.ScripActionType.DropUser;
+            Enums.ScripActionType action = Enums.ScripActionType.DropUserDataType;
             if (!GetWasInsertInDiffList(action))
             {
                 SetWasInsertInDiffList(action);
@@ -340,7 +324,7 @@ namespace DBDiff.Schema.SQLServer.Model
                 return null;
         }
 
-        public SQLScriptList ToSQLDiff()
+        public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList list = new SQLScriptList();
             if (this.Status == Enums.ObjectStatusType.DropStatus)
@@ -378,6 +362,22 @@ namespace DBDiff.Schema.SQLServer.Model
                 list.Add(this.SQLDropOlder(), 0, Enums.ScripActionType.AddUserDataType);
             }
             return list;
+        }
+
+        public bool Compare(UserDataType obj)
+        {
+            if (obj == null) throw new ArgumentNullException("obj");
+            if (this.Scale != obj.Scale) return false;
+            if (this.Precision != obj.Precision) return false;
+            if (this.AllowNull != obj.AllowNull) return false;
+            if (this.Size != obj.Size) return false;
+            if (!this.Type.Equals(obj.Type)) return false;
+            if (this.IsAssembly != obj.IsAssembly) return false;
+            if (!this.AssemblyClass.Equals(obj.AssemblyClass)) return false;
+            if (!this.AssemblyName.Equals(obj.AssemblyName)) return false;
+            if (!CompareDefault(this, obj)) return false;
+            if (!CompareRule(this, obj)) return false;
+            return true;
         }
     }
 }

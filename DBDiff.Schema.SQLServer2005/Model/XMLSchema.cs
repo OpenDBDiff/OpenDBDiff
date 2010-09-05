@@ -66,17 +66,6 @@ namespace DBDiff.Schema.SQLServer.Model
             return "DROP XML SCHEMA COLLECTION " + FullName + "\r\nGO\r\n";
         }
 
-        /// <summary>
-        /// Compara dos store procedures y devuelve true si son iguales, caso contrario, devuelve false.
-        /// </summary>
-        public static Boolean Compare(XMLSchema origen, XMLSchema destino)
-        {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (!origen.Text.Equals(destino.Text)) return false;
-            return true;
-        }
-
         private SQLScriptList ToSQLChangeColumns()
         {
             Hashtable fields = new Hashtable();
@@ -116,7 +105,7 @@ namespace DBDiff.Schema.SQLServer.Model
         /// <summary>
         /// Devuelve el schema de diferencias del Schema en formato SQL.
         /// </summary>
-        public SQLScriptList ToSQLDiff()
+        public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList list = new SQLScriptList();
 
@@ -135,6 +124,13 @@ namespace DBDiff.Schema.SQLServer.Model
                 list.Add(ToSql(), 0, Enums.ScripActionType.AddXMLSchema);
             }
             return list;
+        }
+
+        public bool Compare(XMLSchema obj)
+        {
+            if (obj == null) throw new ArgumentNullException("obj");
+            if (!this.Text.Equals(obj.Text)) return false;
+            return true;
         }
     }
 }

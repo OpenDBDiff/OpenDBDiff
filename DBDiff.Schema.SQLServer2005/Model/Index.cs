@@ -12,7 +12,8 @@ namespace DBDiff.Schema.SQLServer.Model
             Heap = 0,
             Clustered = 1,
             Nonclustered = 2,
-            XML = 3
+            XML = 3,
+            GEO = 4
         }
 
         private Boolean allow_row_locks;
@@ -28,6 +29,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private Boolean sortInTempDb;
         private IndexColumns columns;
         private string fileGroup;
+        private string filterDefintion;
 
         public Index(ISchemaBase table)
             : base(Enums.ObjectType.Index)
@@ -36,7 +38,7 @@ namespace DBDiff.Schema.SQLServer.Model
             columns = new IndexColumns(table);
         }
 
-        public Index Clone(ISchemaBase parent)
+        public override ISchemaBase Clone(ISchemaBase parent)
         {
             Index index = new Index(parent);
             index.AllowPageLocks = this.AllowPageLocks;
@@ -57,6 +59,7 @@ namespace DBDiff.Schema.SQLServer.Model
             index.Type = this.Type;
             index.Owner = this.Owner;
             index.Guid = this.Guid;
+            index.FilterDefintion = this.FilterDefintion;
             return index;
         }
 
@@ -78,6 +81,12 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             get { return sortInTempDb; }
             set { sortInTempDb = value; }
+        }
+
+        public string FilterDefintion
+        {
+            get { return filterDefintion; }
+            set { filterDefintion = value; }
         }
 
         public IndexColumns Columns
@@ -279,7 +288,9 @@ namespace DBDiff.Schema.SQLServer.Model
             }
             if (!String.IsNullOrEmpty(includes)) includes = includes.Substring(0, includes.Length - 1);
             sql.Append(includes);
-            sql.Append(") WITH (");            
+            sql.Append(")");
+            if (!String.IsNullOrEmpty(filterDefintion)) sql.Append("\r\n WHERE " + filterDefintion + "\r\n");
+            sql.Append(" WITH (");            
             if (IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");
             if (IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON, "); else sql.Append("STATISTICS_NORECOMPUTE  = OFF, ");
             if (Type != IndexTypeEnum.XML)
@@ -346,7 +357,7 @@ namespace DBDiff.Schema.SQLServer.Model
                 return "ALTER INDEX [" + Name + "] ON " + Parent.FullName + " REBUILD\r\nGO\r\n";
         }
 
-        public SQLScriptList ToSQLDiff()
+        public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList list = new SQLScriptList();
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DBDiff.Schema.Model;
+using DBDiff.Schema.SQLServer.Model;
 
 namespace DBDiff.Schema.SQLServer.Compare
 {
@@ -19,6 +20,19 @@ namespace DBDiff.Schema.SQLServer.Compare
                                 where !destino.Exists(item => item.FullName.Equals(node.FullName))
                                 select node).ToList<T>();
             dropList.ForEach(action);
+        }
+
+        protected static void CompareExtendedProperties(ISQLServerSchemaBase origen, ISQLServerSchemaBase destino)
+        {
+            List<ExtendedProperty> dropList = (from node in origen.ExtendedProperties
+                                               where !destino.ExtendedProperties.Exists(item => item.Name.Equals(node.Name))
+                                               select node).ToList<ExtendedProperty>();
+            List<ExtendedProperty> addList = (from node in destino.ExtendedProperties
+                                               where !origen.ExtendedProperties.Exists(item => item.Name.Equals(node.Name))
+                                               select node).ToList<ExtendedProperty>();
+            dropList.ForEach(item => { item.Status = Enums.ObjectStatusType.DropStatus;} );
+            addList.ForEach(item => { item.Status = Enums.ObjectStatusType.CreateStatus; });
+            origen.ExtendedProperties.AddRange(addList);
         }
     }
 }

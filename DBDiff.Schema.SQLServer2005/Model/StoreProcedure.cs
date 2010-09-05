@@ -10,7 +10,7 @@ namespace DBDiff.Schema.SQLServer.Model
     public class StoreProcedure : Code 
     {
         public StoreProcedure(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.StoreProcedure)
+            : base(parent, Enums.ObjectType.StoreProcedure, Enums.ScripActionType.AddStoreProcedure, Enums.ScripActionType.DropStoreProcedure)
         {
 
         }
@@ -47,45 +47,10 @@ namespace DBDiff.Schema.SQLServer.Model
             return FormatCode.FormatAlter("PROCEDURE;PROC", ToSql(), this, false);
         }
 
-        public override SQLScript Create()
-        {
-            Enums.ScripActionType action = Enums.ScripActionType.AddStoreProcedure;
-            if (!GetWasInsertInDiffList(action))
-            {
-                SetWasInsertInDiffList(action);
-                return new SQLScript(this.ToSqlAdd(), 0, action);
-            }
-            else
-                return null;
-
-        }
-
-        public override SQLScript Drop()
-        {
-            Enums.ScripActionType action = Enums.ScripActionType.DropStoreProcedure;
-            if (!GetWasInsertInDiffList(action))
-            {
-                SetWasInsertInDiffList(action);
-                return new SQLScript(this.ToSqlDrop(), 0, action);
-            }
-            else
-                return null;
-        }
-        /// <summary>
-        /// Compara dos store procedures y devuelve true si son iguales, caso contrario, devuelve false.
-        /// </summary>
-        public static Boolean Compare(StoreProcedure origen, StoreProcedure destino)
-        {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (!origen.ToSql().Equals(destino.ToSql())) return false;
-            return true;
-        }
-
         /// <summary>
         /// Devuelve el schema de diferencias del Schema en formato SQL.
         /// </summary>
-        public SQLScriptList ToSQLDiff()
+        public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList list = new SQLScriptList();
 

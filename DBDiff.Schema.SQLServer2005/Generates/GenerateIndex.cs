@@ -6,54 +6,24 @@ using System.Globalization;
 using DBDiff.Schema.Model;
 using DBDiff.Schema.SQLServer.Model;
 using DBDiff.Schema.SQLServer.Options;
+using DBDiff.Schema.SQLServer.Generates.SQLCommands;
 
 namespace DBDiff.Schema.SQLServer.Generates
 {
     public class GenerateIndex
     {
-        private string connectioString;
-        private SqlOption indexFilter;
-
-        /// <summary>
-        /// Constructor de la clase.
-        /// </summary>
-        /// <param name="connectioString">Connection string de la base</param>
-        public GenerateIndex(string connectioString, SqlOption filter)
+        public static void Fill(Database database, string connectionString, string type)
         {
-            this.connectioString = connectioString;
-            this.indexFilter = filter;
-        }
-
-        private static string GetSQLIndex(string type)
-        {
-            StringBuilder sql = new StringBuilder();
-            sql.Append("SELECT OO.type AS ObjectType, IC.key_ordinal, C.user_type_id, I.object_id, dsidx.Name as FileGroup, C.column_id,C.Name AS ColumnName, I.Name, I.index_id, I.type, is_unique, ignore_dup_key, is_primary_key, is_unique_constraint, fill_factor, is_padded, is_disabled, allow_row_locks, allow_page_locks, IC.is_descending_key, IC.is_included_column, ISNULL(ST.no_recompute,0) AS NoAutomaticRecomputation ");
-            sql.Append("FROM sys.indexes I ");
-            sql.Append("INNER JOIN sys.objects OO ON OO.object_id = I.object_id ");
-            sql.Append("INNER JOIN sys.index_columns IC ON IC.index_id = I.index_id AND IC.object_id = I.object_id ");
-            sql.Append("INNER JOIN sys.data_spaces AS dsidx ON dsidx.data_space_id = I.data_space_id ");
-            sql.Append("INNER JOIN sys.columns C ON C.column_id = IC.column_id AND IC.object_id = C.object_id ");
-            sql.Append("LEFT JOIN sys.stats AS ST ON ST.stats_id = I.index_id AND ST.object_id = I.object_id ");
-            sql.Append("WHERE I.type IN (1,2,3) ");
-            sql.Append("AND is_unique_constraint = 0 AND is_primary_key = 0 "); //AND I.object_id = " + table.Id.ToString(CultureInfo.InvariantCulture) + " ");
-            sql.Append("AND objectproperty(I.object_id, 'IsMSShipped') <> 1 ");
-            sql.Append("AND OO.Type = '" + type + "' ");
-            sql.Append("ORDER BY I.object_id, I.Name");
-            return sql.ToString();
-        }
-
-        public Indexes Get(string type)
-        {
-            Indexes cons = new Indexes(null);
             string last = "";
             int parentId = 0;
             ISchemaBase parent = null;
 
-            using (SqlConnection conn = new SqlConnection(connectioString))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(GetSQLIndex(type), conn))
+                using (SqlCommand command = new SqlCommand(IndexSQLCommand.Get(database.Info.Version,type), conn))
                 {
                     conn.Open();
+                    command.CommandTimeout = 0;
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         Index con = null;
@@ -62,11 +32,10 @@ namespace DBDiff.Schema.SQLServer.Generates
                             if (parentId != (int)reader["object_id"])
                             {
                                 parentId = (int)reader["object_id"];
-                                if (reader["object_id"].ToString().Equals("V"))
-                                    parent = new View(null);
+                                if (type.Equals("V"))
+                                    parent = database.Views.Find(parentId);
                                 else
-                                    parent = new Table(null);
-                                parent.Id = parentId;
+                                    parent = database.Tables.Find(parentId);
                             }                            
                             if (!last.Equals(reader["Name"].ToString()))
                             {
@@ -82,12 +51,19 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 con.IsPadded = (bool)reader["is_padded"];
                                 con.IsPrimaryKey = (bool)reader["is_primary_key"];
                                 con.IsUniqueKey = (bool)reader["is_unique"];
-                                if (!indexFilter.Ignore.FilterIgnoreFillFactor)
+                                if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+                                {
+                                    con.FilterDefintion = reader["FilterDefinition"].ToString();
+                                }
+                                if (!database.Options.Ignore.FilterIndexFillFactor)
                                     con.FillFactor = (byte)reader["fill_factor"];
-                                if ((indexFilter.Ignore.FilterTableFileGroup) && (con.Type != Index.IndexTypeEnum.XML))
+                                if ((database.Options.Ignore.FilterTableFileGroup) && (con.Type != Index.IndexTypeEnum.XML))
                                     con.FileGroup = reader["FileGroup"].ToString();
                                 last = reader["Name"].ToString();
-                                cons.Add(con);
+                                if (type.Equals("V"))
+                                    ((View)parent).Indexes.Add(con);
+                                else
+                                    ((Table)parent).Indexes.Add(con);
                             }
                             IndexColumn ccon = new IndexColumn((Table)con.Parent);
                             ccon.Name = reader["ColumnName"].ToString();
@@ -96,13 +72,12 @@ namespace DBDiff.Schema.SQLServer.Generates
                             ccon.Id = (int)reader["column_id"];
                             ccon.KeyOrder = (byte)reader["key_ordinal"];
                             ccon.DataTypeId = (int)reader["user_type_id"];
-                            if ((!ccon.IsIncluded) || (ccon.IsIncluded && !indexFilter.Ignore.FilterIgnoreIncludeColumns))
+                            if ((!ccon.IsIncluded) || (ccon.IsIncluded && !database.Options.Ignore.FilterIndexIncludeColumns))
                                 con.Columns.Add(ccon);
                         }
                     }
                 }
             }
-            return cons;
         }
     }
 }

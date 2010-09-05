@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Compare
 {
     internal class CompareUserDataTypes:CompareBase<UserDataType>
     {
-        public static void GenerateDiferences(UserDataTypes CamposOrigen, UserDataTypes CamposDestino)
+        public static void GenerateDiferences(SchemaList<UserDataType, Database> CamposOrigen, SchemaList<UserDataType, Database> CamposDestino)
         {
             foreach (UserDataType node in CamposDestino)
             {
@@ -15,13 +16,14 @@ namespace DBDiff.Schema.SQLServer.Compare
                 {
                     UserDataType newNode = node.Clone(CamposOrigen.Parent);
                     newNode.Status = Enums.ObjectStatusType.CreateStatus;
-                    if (CamposOrigen.ExistsAssembly(node.AssemblyFullName))
+                    Boolean HasAssembly = CamposOrigen.Exists(item => item.AssemblyFullName.Equals(node.AssemblyFullName) && item.IsAssembly);
+                    if (HasAssembly)
                         newNode.Status += (int)Enums.ObjectStatusType.DropOlderStatus;
                     CamposOrigen.Add(newNode);
                 }
                 else
                 {
-                    if (!UserDataType.Compare(node, CamposOrigen[node.FullName]))
+                    if (!node.Compare(CamposOrigen[node.FullName]))
                     {
                         UserDataType newNode = node.Clone(CamposOrigen.Parent);
                         newNode.Dependencys.AddRange(CamposOrigen[node.FullName].Dependencys);

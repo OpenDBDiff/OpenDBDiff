@@ -13,7 +13,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private Boolean isDDLTrigger;
 
         public Trigger(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.Trigger)
+            : base(parent, Enums.ObjectType.Trigger, Enums.ScripActionType.AddTrigger, Enums.ScripActionType.DropTrigger)
         {
             this.Parent = parent;
         }
@@ -66,20 +66,6 @@ namespace DBDiff.Schema.SQLServer.Model
             get { return true; }
         }
 
-        /// <summary>
-        /// Compara dos triggers y devuelve true si son iguales, caso contrario, devuelve false.
-        /// </summary>
-        public static Boolean Compare(Trigger origen, Trigger destino)
-        {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (!origen.Text.Equals(destino.Text)) return false;
-            if (origen.InsteadOf != destino.InsteadOf) return false;
-            if (origen.IsDisabled != destino.IsDisabled) return false;
-            if (origen.NotForReplication != destino.NotForReplication) return false;
-            return true;
-        }
-
         public override string ToSqlDrop()
         {
             if (!IsDDLTrigger)
@@ -106,21 +92,28 @@ namespace DBDiff.Schema.SQLServer.Model
             }
         }
 
-        public SQLScriptList ToSQLDiff()
+        public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList list = new SQLScriptList();
             if (this.Status == Enums.ObjectStatusType.DropStatus)
-                list.Add(this.ToSqlDrop(), 0, Enums.ScripActionType.DropTrigger);
+                list.Add(Drop());
             if (this.Status == Enums.ObjectStatusType.CreateStatus)
-                list.Add(this.ToSql(), 0, Enums.ScripActionType.AddTrigger);
+                list.Add(Create());
             if (this.HasState(Enums.ObjectStatusType.AlterStatus))
-            {
-                list.Add(this.ToSqlDrop(), 0, Enums.ScripActionType.DropTrigger);
-                list.Add(this.ToSql(), 0, Enums.ScripActionType.AddTrigger);
-            }
+                list.AddRange(Rebuild());
             if (this.HasState(Enums.ObjectStatusType.DisabledStatus))
                 list.Add(this.ToSQLEnabledDisabled(), 0, Enums.ScripActionType.EnabledTrigger);
             return list;
+        }
+
+        public override bool Compare(ICode obj)
+        {
+            if (obj == null) throw new ArgumentNullException("obj");
+            if (!this.ToSql().Equals(obj.ToSql())) return false;
+            if (this.InsteadOf != ((Trigger)obj).InsteadOf) return false;
+            if (this.IsDisabled != ((Trigger)obj).IsDisabled) return false;
+            if (this.NotForReplication != ((Trigger)obj).NotForReplication) return false;
+            return true;
         }
     }
 }

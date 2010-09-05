@@ -15,6 +15,11 @@ namespace DBDiff.Schema.SQLServer.Model
 
         private float versionNumber;
         private VersionTypeEnum version;
+        
+        public DatabaseInfo()
+        {
+            version = VersionTypeEnum.SQLServer2005;
+        }
 
         public VersionTypeEnum Version
         {

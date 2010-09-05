@@ -31,7 +31,9 @@ namespace DBDiff.Schema.SQLServer.Options
             [Description("User Data Type")]
             UserDataType = 15,
             View = 16,
-            XMLSchema = 17
+            XMLSchema = 17,
+            [Description("CLR Store Procedure")]
+            CLRStoreProcedure = 18
         }
 
         private Collection<SqlOptionFilterItem> items;

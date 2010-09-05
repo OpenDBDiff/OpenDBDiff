@@ -17,5 +17,6 @@ namespace DBDiff.Front
         Boolean TestConnection();
         string ConnectionString { get; }
         string ErrorConnection { get; }
+        string DatabaseName { get; }
     }
 }

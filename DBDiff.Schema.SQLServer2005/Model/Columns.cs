@@ -6,18 +6,10 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Model
 {
-    public class Columns : FindBaseList<Column,Table>
+    public class Columns : SchemaList<Column,Table>
     {
         public Columns(Table parent):base(parent)
         {
-        }
-
-        public void AddRange(Columns columns)
-        {
-            columns.ForEach(item =>
-            {
-                if (!this.Exists(item.FullName)) this.Add(item);
-            });
         }
 
         /// <summary>
@@ -33,23 +25,12 @@ namespace DBDiff.Schema.SQLServer.Model
             return columns;
         }
 
-        public Columns GetComputedColumns()
-        {
-            Columns columns = new Columns(Parent);
-            foreach (Column col in this)
-            {
-                if (col.IsComputed)
-                    columns.Add(col);
-            }
-            return columns;
-        }
-
-        public string ToSQL()
+        public override string ToSQL()
         {
             StringBuilder sql = new StringBuilder();
             for (int index = 0; index < this.Count; index++)
             {
-                sql.Append("\t" + this[index].ToSQL(true));
+                sql.Append("\t" + this[index].ToSql(true));
                 if (index != this.Count - 1)
                 {
                     sql.Append(",");
@@ -59,7 +40,7 @@ namespace DBDiff.Schema.SQLServer.Model
             return sql.ToString();
         }
 
-        public SQLScriptList ToSQLDiff()
+        public override SQLScriptList  ToSqlDiff()
         {
             string sqlDrop = "";
             string sqlAdd = "";
@@ -71,9 +52,13 @@ namespace DBDiff.Schema.SQLServer.Model
                 this.ForEach(item =>
                 {
                     if (item.HasState(Enums.ObjectStatusType.DropStatus))
+                    {
+                        if (item.DefaultConstraint != null)
+                            list.Add(item.DefaultConstraint.Drop());
                         sqlDrop += "[" + item.Name + "],";
+                    }
                     if (item.HasState(Enums.ObjectStatusType.CreateStatus))
-                        sqlAdd += "\r\n" + item.ToSQL(true) + ",";
+                        sqlAdd += "\r\n" + item.ToSql(true) + ",";
                     if ((item.HasState(Enums.ObjectStatusType.AlterStatus) || (item.HasState(Enums.ObjectStatusType.AlterRebuildDependenciesStatus))))
                     {
                         if ((!item.Parent.HasState(Enums.ObjectStatusType.AlterRebuildDependenciesStatus) || (!item.Parent.HasState(Enums.ObjectStatusType.AlterRebuildStatus))))
@@ -90,8 +75,8 @@ namespace DBDiff.Schema.SQLServer.Model
                         if (item.Rule.Id == 0)
                             sqlBinds += item.Rule.ToSQLAddUnBind();
                     }
-                    if (item.Constraints.Count > 0)
-                        list.AddRange(item.Constraints.ToSQLDiff());
+                    if (item.DefaultConstraint != null)
+                        list.AddRange(item.DefaultConstraint.ToSqlDiff());
                 });
                 if (!String.IsNullOrEmpty(sqlDrop))
                     sqlDrop = "ALTER TABLE " + Parent.FullName + " DROP COLUMN " + sqlDrop.Substring(0, sqlDrop.Length - 1) + "\r\nGO\r\n";

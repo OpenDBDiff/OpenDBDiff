@@ -9,7 +9,7 @@ namespace DBDiff.Schema.SQLServer.Model
     public class Rule : Code
     {
         public Rule(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.Rule)
+            : base(parent, Enums.ObjectType.Rule, Enums.ScripActionType.AddRule, Enums.ScripActionType.DropRule)
         {
         }
 
@@ -47,7 +47,8 @@ namespace DBDiff.Schema.SQLServer.Model
         private SQLScriptList ToSQLUnBindAll()
         {
             SQLScriptList listDiff = new SQLScriptList();
-            UserDataTypes useDataTypes = ((Database)this.Parent).UserTypes.FindRules(this.FullName);
+            //UserDataTypes useDataTypes = ((Database)this.Parent).UserTypes.FindRules(this.FullName);
+            List<UserDataType> useDataTypes = ((Database)this.Parent).UserTypes.FindAll(item => { return item.Rule.FullName.Equals(this.FullName); });
             foreach (UserDataType item in useDataTypes)
             {
                 foreach (ObjectDependency dependency in item.Dependencys)
@@ -65,37 +66,23 @@ namespace DBDiff.Schema.SQLServer.Model
         /// <summary>
         /// Devuelve el schema de diferencias del Schema en formato SQL.
         /// </summary>
-        public SQLScriptList ToSQLDiff()
+        public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList listDiff = new SQLScriptList();
 
             if (this.Status == Enums.ObjectStatusType.DropStatus)
             {
                 listDiff.AddRange(ToSQLUnBindAll());
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropRule);
+                listDiff.Add(Drop());
             }
             if (this.Status == Enums.ObjectStatusType.CreateStatus)
-            {
-                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddRule);
-            }
+                listDiff.Add(Create());
             if (this.Status == Enums.ObjectStatusType.AlterStatus)
             {
                 listDiff.AddRange(ToSQLUnBindAll());
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropRule);
-                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddRule);
+                listDiff.AddRange(Rebuild());
             }
             return listDiff;
-        }
-
-        /// <summary>
-        /// Compara dos Rules y devuelve true si son iguales, caso contrario, devuelve false.
-        /// </summary>
-        public static Boolean Compare(Rule origen, Rule destino)
-        {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (!origen.ToSql().Equals(destino.ToSql())) return false;            
-            return true;
         }
     }
 }

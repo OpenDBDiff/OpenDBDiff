@@ -5,70 +5,91 @@ using System.Data.SqlClient;
 using DBDiff.Schema.Events;
 using DBDiff.Schema.SQLServer.Options;
 using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.Errors;
 
 namespace DBDiff.Schema.SQLServer.Generates
 {
-    internal class GenerateTriggers
+    public static class GenerateTriggers
     {
-        private string connectioString;
-        private SqlOption objectFilter;
-
-                /// <summary>
-        /// Constructor de la clase.
-        /// </summary>
-        /// <param name="connectioString">Connection string de la base</param>
-        public GenerateTriggers(string connectioString, SqlOption filter)
-        {
-            this.connectioString = connectioString;
-            this.objectFilter = filter;
-        }
-
         private static string GetSQL()
         {
             string sql = "";
-            sql += "SELECT T.parent_id, OBJECT_DEFINITION(t.object_id) AS Text, S.name AS Owner,T.name,is_disabled,is_not_for_replication,is_instead_of_trigger ";
+            sql += "SELECT ISNULL(CONVERT(varchar,AM.execute_as_principal_id),'CALLER') as ExecuteAs, AF.name AS assembly_name, AM.assembly_class, AM.assembly_id, AM.assembly_method, T.type, CAST(ISNULL(tei.object_id,0) AS bit) AS IsInsert, CAST(ISNULL(teu.object_id,0) AS bit) AS IsUpdate, CAST(ISNULL(ted.object_id,0) AS bit) AS IsDelete, T.parent_id, OBJECT_DEFINITION(t.object_id) AS Text, S.name AS Owner,T.name,is_disabled,is_not_for_replication,is_instead_of_trigger ";
             sql += "FROM sys.triggers T ";
             sql += "INNER JOIN sys.objects O ON O.object_id = T.parent_id ";
-            sql += "INNER JOIN sys.schemas S ON S.schema_id = O.schema_id ORDER BY T.parent_id";
+            sql += "INNER JOIN sys.schemas S ON S.schema_id = O.schema_id ";
+            sql += "LEFT JOIN sys.trigger_events AS tei ON tei.object_id = t.object_id and tei.type=1 ";
+            sql += "LEFT JOIN sys.trigger_events AS teu ON teu.object_id = t.object_id and teu.type=2 ";
+            sql += "LEFT JOIN sys.trigger_events AS ted ON ted.object_id = t.object_id and ted.type=3 ";
+            sql += "LEFT JOIN sys.assembly_modules AM ON AM.object_id = T.object_id ";
+            sql += "LEFT JOIN sys.assemblies AF ON AF.assembly_id = AM.assembly_id ";
+            sql += "ORDER BY T.parent_id ";
+
             return sql;
         }
 
-        public Triggers Get()
+        public static void Fill(Database database, string connectionString, List<MessageLog> messages)
         {
-            Triggers triggers = new Triggers(null);
             int parentId = 0;
             Table table = null;
-
-            using (SqlConnection conn = new SqlConnection(connectioString))
+            try
             {
-                conn.Open();
-                using (SqlCommand command = new SqlCommand(GetSQL(), conn))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    using (SqlCommand command = new SqlCommand(GetSQL(), conn))
                     {
-                        while (reader.Read())
+                        conn.Open();
+                        command.CommandTimeout = 0;
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            if (parentId != (int)reader["parent_id"])
+                            while (reader.Read())
                             {
-                                parentId = (int)reader["parent_id"];
-                                table = new Table(null);
-                                table.Id = parentId;                                
+                                if (parentId != (int)reader["parent_id"])
+                                {
+                                    parentId = (int)reader["parent_id"];
+                                    table = database.Tables.Find(parentId);
+                                }
+                                if (reader["type"].Equals("TR"))
+                                {
+                                    Trigger trigger = new Trigger(table);
+                                    trigger.Name = reader["Name"].ToString();
+                                    trigger.InsteadOf = (bool)reader["is_instead_of_trigger"];
+                                    trigger.IsDisabled = (bool)reader["is_disabled"];
+                                    trigger.IsDDLTrigger = false;
+                                    trigger.Owner = reader["Owner"].ToString();
+                                    trigger.Text = reader["Text"].ToString();
+                                    if (!database.Options.Ignore.FilterIgnoreNotForReplication)
+                                        trigger.NotForReplication = (bool)reader["is_not_for_replication"];
+                                    table.Triggers.Add(trigger);
+                                }
+                                else
+                                {
+                                    CLRTrigger trigger = new CLRTrigger(table);
+                                    trigger.Name = reader["Name"].ToString();
+                                    trigger.IsDelete = (bool)reader["IsDelete"];
+                                    trigger.IsUpdate = (bool)reader["IsUpdate"];
+                                    trigger.IsInsert = (bool)reader["IsInsert"];
+                                    trigger.Owner = reader["Owner"].ToString();
+                                    trigger.IsAssembly = true;
+                                    trigger.AssemblyId = (int)reader["assembly_id"];
+                                    trigger.AssemblyName = reader["assembly_name"].ToString();
+                                    trigger.AssemblyClass = reader["assembly_class"].ToString();
+                                    trigger.AssemblyExecuteAs = reader["ExecuteAs"].ToString();
+                                    trigger.AssemblyMethod = reader["assembly_method"].ToString();
+                                    table.CLRTriggers.Add(trigger);
+                                    /*if (!database.Options.Ignore.FilterIgnoreNotForReplication)
+                                        trigger.NotForReplication = (bool)reader["is_not_for_replication"];*/
+
+                                }
                             }
-                            Trigger trigger = new Trigger(table);
-                            trigger.Name = reader["Name"].ToString();
-                            trigger.InsteadOf = (bool)reader["is_instead_of_trigger"];
-                            trigger.IsDisabled = (bool)reader["is_disabled"];
-                            trigger.IsDDLTrigger = false;
-                            trigger.Owner = reader["Owner"].ToString();
-                            trigger.Text = reader["Text"].ToString();
-                            if (!objectFilter.Ignore.FilterIgnoreNotForReplication)
-                                trigger.NotForReplication = (bool)reader["is_not_for_replication"];
-                            triggers.Add(trigger);
                         }
                     }
                 }
             }
-            return triggers;
+            catch (Exception ex)
+            {
+                messages.Add(new MessageLog(ex.Message, ex.StackTrace, MessageLog.LogType.Error));
+            }
         }
     }
 }

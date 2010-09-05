@@ -13,6 +13,16 @@ namespace DBDiff.Schema
             if (list != null) list.Sort();
         }
 
+        public void Add(SQLScript item, int deep)
+        {
+            if (list == null) list = new List<SQLScript>();
+            if (item != null)
+            {
+                item.Deep = deep;
+                list.Add(item);
+            }
+        }
+
         public void Add(SQLScript item)
         {
             if (list == null) list = new List<SQLScript>();

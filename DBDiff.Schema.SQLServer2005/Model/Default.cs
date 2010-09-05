@@ -62,7 +62,7 @@ namespace DBDiff.Schema.SQLServer.Model
         /// <summary>
         /// Devuelve el schema de diferencias del Schema en formato SQL.
         /// </summary>
-        public SQLScriptList ToSQLDiff()
+        public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList listDiff = new SQLScriptList();
 

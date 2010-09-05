@@ -6,16 +6,11 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Model
 {
-    public class Constraints : FindBaseList<Constraint,Table> 
+    public class Constraints : SchemaList<Constraint,Table> 
     {
-        public Constraints()
-            : base(null)
-        {
-        }
-
         public Constraints(Table parent)
             : base(parent, ((parent == null || parent.Parent == null)?null:((Database)parent.Parent).AllObjects))
-        {
+        {            
         }
 
         public new Constraint this[string name]
@@ -37,36 +32,6 @@ namespace DBDiff.Schema.SQLServer.Model
                         base[index] = value;
                         break;
                     }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Devuelve una coleccion de objetos Index asociados a la constraint.
-        /// </summary>
-        public Indexes Indexes
-        {
-            get
-            {
-                Indexes lista = new Indexes(this.Parent);
-                for (int index = 0; index < this.Count; index++)
-                {
-                    if (this[index].Index != null)
-                    {
-                        lista.Add(this[index].Index);
-                    }
-                }
-                return lista;
-            }
-        }
-
-        public void AddRange(Constraints constraints)
-        {
-            if (constraints != null)
-            {
-                foreach (Constraint con in constraints)
-                {
-                    this.Add(con);
                 }
             }
         }
@@ -99,14 +64,6 @@ namespace DBDiff.Schema.SQLServer.Model
                 }
             }
             return sql.ToString();
-        }
-
-        public SQLScriptList ToSQLDiff()
-        {
-            SQLScriptList listDiff = new SQLScriptList();
-            this.ForEach(item => listDiff.AddRange(item.ToSQLDiff()));
-
-            return listDiff;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace DBDiff.Schema.SQLServer.Generates
         private static string GetSQL()
         {
             string sql;
-            sql = "SELECT SUBSTRING(CONVERT(varchar,SERVERPROPERTY('productversion')),1,PATINDEX('.',CONVERT(varchar,SERVERPROPERTY('productversion')))+1) AS Version";
+            sql = "SELECT SUBSTRING(CONVERT(varchar,SERVERPROPERTY('productversion')),1,PATINDEX('.',CONVERT(varchar,SERVERPROPERTY('productversion')))+2) AS Version";
             return sql;
         }
 
@@ -41,7 +41,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                     {
                         if (reader.Read())
                         {
-                            item.VersionNumber = float.Parse(reader["Version"].ToString());
+                            item.VersionNumber = float.Parse(reader["Version"].ToString().Replace(".",""));
                         }
                     }
                 }

@@ -26,6 +26,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                     using (SqlCommand command = new SqlCommand(GetSQL(), conn))
                     {
                         conn.Open();
+                        command.CommandTimeout = 0;
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())

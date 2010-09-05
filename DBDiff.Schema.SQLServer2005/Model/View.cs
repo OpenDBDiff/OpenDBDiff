@@ -10,18 +10,18 @@ namespace DBDiff.Schema.SQLServer.Model
 {
     public class View : Code 
     {
-        private Indexes indexes;
+        private SchemaList<Index, View> indexes;
 
         public View(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.View)
+            : base(parent, Enums.ObjectType.View, Enums.ScripActionType.AddView, Enums.ScripActionType.DropView)
         {
-            indexes = new Indexes(this);
+            indexes = new SchemaList<Index, View>(this, ((Database)parent).AllObjects);
         }
 
         /// <summary>
         /// Clona el objeto en una nueva instancia.
         /// </summary>
-        public View Clone(ISchemaBase parent)
+        public override ISchemaBase Clone(ISchemaBase parent)
         {
             View item = new View(parent);
             item.Text = this.Text;
@@ -33,11 +33,11 @@ namespace DBDiff.Schema.SQLServer.Model
             item.IsSchemaBinding = this.IsSchemaBinding;
             item.DependenciesIn  = this.DependenciesIn;
             item.DependenciesOut = this.DependenciesOut;
-            item.Indexes = this.Indexes.Clone(parent);
+            item.Indexes = this.Indexes.Clone(item);
             return item;
         }
 
-        public Indexes Indexes
+        public SchemaList<Index, View> Indexes
         {
             get { return indexes; }
             set { indexes = value; }
@@ -58,48 +58,10 @@ namespace DBDiff.Schema.SQLServer.Model
             return FormatCode.FormatAlter("VIEW", ToSql(), this, quitSchemaBinding);
         }
 
-        public override SQLScript Create()
-        {            
-            int iCount = DependenciesCount;
-            Enums.ScripActionType action = Enums.ScripActionType.AddView;
-            if (!GetWasInsertInDiffList(action))
-            {
-                SetWasInsertInDiffList(action);
-                return new SQLScript(this.ToSqlAdd() + indexes.ToSQL(), iCount * -1, action);
-            }
-            else
-                return null;
-
-        }
-
-        public override SQLScript Drop()
-        {
-            int iCount = DependenciesCount;
-            Enums.ScripActionType action = Enums.ScripActionType.DropView;
-            if (!GetWasInsertInDiffList(action))
-            {
-                SetWasInsertInDiffList(action);
-                return new SQLScript(this.ToSqlDrop(), iCount, action);
-            }
-            else
-                return null;
-        }
-
-        /// <summary>
-        /// Compara dos store procedures y devuelve true si son iguales, caso contrario, devuelve false.
-        /// </summary>
-        public static Boolean Compare(View origen, View destino)
-        {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (!origen.ToSql().Equals(destino.ToSql())) return false;
-            return true;
-        }
-
         /// <summary>
         /// Devuelve el schema de diferencias del Schema en formato SQL.
         /// </summary>
-        public SQLScriptList ToSQLDiff()
+        public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList list = new SQLScriptList();
             if (this.HasState(Enums.ObjectStatusType.DropStatus))
@@ -125,7 +87,7 @@ namespace DBDiff.Schema.SQLServer.Model
                     }
                 }
             }
-            list.AddRange(indexes.ToSQLDiff());
+            list.AddRange(indexes.ToSqlDiff());
             return list;
         }
     }

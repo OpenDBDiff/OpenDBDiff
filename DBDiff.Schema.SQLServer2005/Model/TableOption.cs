@@ -70,5 +70,21 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             return ToSql();
         }
+
+        public override SQLScriptList ToSqlDiff()
+        {
+            SQLScriptList listDiff = new SQLScriptList();
+
+            if (this.Status == Enums.ObjectStatusType.DropStatus)
+                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.AddOptions);
+            if (this.Status == Enums.ObjectStatusType.CreateStatus)
+                listDiff.Add(ToSql(), 0, Enums.ScripActionType.DropOptions);
+            if (this.Status == Enums.ObjectStatusType.AlterStatus)
+            {
+                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropOptions);
+                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddOptions);
+            }
+            return listDiff;
+        }
     }
 }
