@@ -11,33 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.Front", "DBDiff.Fron
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.OCDB", "DBDiffCmd\DBDiff.OCDB.csproj", "{E794AA28-EE68-44BD-827B-1BFD9C106B65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLRichControl", "SQLRichControl\SQLRichControl.csproj", "{C9AC85A9-06F5-4F74-82F7-25993E65BBDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.ScintillaNET", "DBDiff.Scintilla NET-2.0\ScintillaNET\DBDiff.ScintillaNET.csproj", "{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/TFS04
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = DBDiff\\DBDiff.csproj
-		SccProjectName1 = DBDiff
-		SccLocalPath1 = DBDiff
-		SccProjectUniqueName2 = DBDiff.Schema\\DBDiff.Schema.csproj
-		SccProjectName2 = DBDiff.Schema
-		SccLocalPath2 = DBDiff.Schema
-		SccProjectUniqueName3 = DBDiff.Schema.SQLServer2005\\DBDiff.Schema.SQLServer.csproj
-		SccProjectName3 = DBDiff.Schema.SQLServer2005
-		SccLocalPath3 = DBDiff.Schema.SQLServer2005
-		SccProjectUniqueName4 = DBDiff.Front\\DBDiff.Front.csproj
-		SccProjectName4 = DBDiff.Front
-		SccLocalPath4 = DBDiff.Front
-		SccProjectUniqueName5 = DBDiffCmd\\DBDiff.OCDB.csproj
-		SccProjectName5 = DBDiffCmd
-		SccLocalPath5 = DBDiffCmd
-		SccProjectUniqueName6 = SQLRichControl\\SQLRichControl.csproj
-		SccProjectName6 = SQLRichControl
-		SccLocalPath6 = SQLRichControl
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -63,10 +39,10 @@ Global
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9AC85A9-06F5-4F74-82F7-25993E65BBDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9AC85A9-06F5-4F74-82F7-25993E65BBDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9AC85A9-06F5-4F74-82F7-25993E65BBDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9AC85A9-06F5-4F74-82F7-25993E65BBDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

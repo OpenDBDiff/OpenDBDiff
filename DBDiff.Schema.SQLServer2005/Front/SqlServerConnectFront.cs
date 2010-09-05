@@ -7,13 +7,15 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Threading;
 using DBDiff.Front;
+using DBDiff.Schema.SQLServer.Generates.Front.Util;
 
-namespace DBDiff.Schema.SQLServer.Front
+namespace DBDiff.Schema.SQLServer.Generates.Front
 {
     public partial class SqlServerConnectFront : UserControl, IFront 
     {
         private string errorConnection;
         private Boolean isDatabaseFilled = false;
+        private Boolean isServerFilled = false;
         private Thread thread = null;
         private delegate void clearCombo();
         private delegate void addCombo(string item);
@@ -70,6 +72,13 @@ namespace DBDiff.Schema.SQLServer.Front
             get { return txtPassword.Text; }
             set { txtPassword.Text = value; }
         }
+
+        public override string Text
+        {
+            get { return lblName.Text; }
+            set { lblName.Text = value; }
+        }
+
         /// <summary>
         /// Gets or sets the name of the server.
         /// </summary>
@@ -179,19 +188,6 @@ namespace DBDiff.Schema.SQLServer.Front
             }
         }
 
-        private void cboDatabase_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                FillDatabase();
-            }
-            catch (Exception ex)
-            {
-                cboDatabase.Items.Clear();
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void cboServer_SelectedIndexChanged(object sender, EventArgs e)
         {
             isDatabaseFilled = false;
@@ -209,9 +205,44 @@ namespace DBDiff.Schema.SQLServer.Front
             ClearDatabase();
         }
 
-        private void cboDatabase_SelectedIndexChanged(object sender, EventArgs e)
+        private void cboServer_DropDown(object sender, EventArgs e)
         {
+            try
+            {
+                if (!isServerFilled)
+                {
+                    this.Cursor = Cursors.WaitCursor;
+                    SqlServerList.Get().ForEach(item => cboServer.Items.Add(item));
+                    isServerFilled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
 
+        private void cboDatabase_DropDown(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                FillDatabase();
+            }
+            catch (Exception ex)
+            {
+                this.Cursor = Cursors.Default;
+                cboDatabase.Items.Clear();
+                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
     }
 }

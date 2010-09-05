@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using DBDiff.Schema.SQLServer.Options;
+using DBDiff.Schema.SQLServer.Generates.Options;
 
 namespace DBDiff.Front
 {

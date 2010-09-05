@@ -6,9 +6,9 @@ using System.Data;
 using System.Text;
 using System.Linq;
 using System.Windows.Forms;
-using DBDiff.Schema.SQLServer.Options;
+using DBDiff.Schema.SQLServer.Generates.Options;
 
-namespace DBDiff.Schema.SQLServer.Front
+namespace DBDiff.Schema.SQLServer.Generates.Front
 {
     public partial class SqlOptionsFront : UserControl
     {
@@ -46,22 +46,28 @@ namespace DBDiff.Schema.SQLServer.Front
             txtNText.Text = option.Defaults.DefaultNTextValue;
             txtText.Text = option.Defaults.DefaultTextValue;
             txtVariant.Text = option.Defaults.DefaultVariantValue;
+            txtTime.Text = option.Defaults.DefaultTime;
+            txtXML.Text = option.Defaults.DefaultXml;
 
             chkCompAssemblys.Checked = option.Ignore.FilterAssemblies;
-            chkCompConstraints.Checked = option.Ignore.FilterConstraint;
+            chkConstraints.Checked = option.Ignore.FilterConstraint;
             chkCompExtendedProperties.Checked = option.Ignore.FilterExtendedPropertys;
             chkCompFunciones.Checked = option.Ignore.FilterFunction;
-            chkCompIndices.Checked = option.Ignore.FilterIndex;
-            chkIgnoreFillFactor.Checked = option.Ignore.FilterIndexFillFactor;
-            chkIgnoreInclude.Checked = option.Ignore.FilterIndexIncludeColumns;
+            chkIndex.Checked = option.Ignore.FilterIndex;
+            chkIndexFillFactor.Checked = option.Ignore.FilterIndexFillFactor;
+            chkIndexIncludeColumns.Checked = option.Ignore.FilterIndexIncludeColumns;
+            chkIndexFilter.Checked = option.Ignore.FilterIndexFilter;
+            chkFullText.Checked = option.Ignore.FilterFullText;
+            chkFullTextPath.Checked = option.Ignore.FilterFullTextPath;
+
             chkCompSchemas.Checked = option.Ignore.FilterSchema;
             chkCompStoreProcedure.Checked = option.Ignore.FilterStoreProcedure;
-            chkCompTablaOpciones.Checked = option.Ignore.FilterTableOption;
-            chkCompTablas.Checked = option.Ignore.FilterTable;
-            chkColumnIdentity.Checked = option.Ignore.FilterIgnoreColumnIdentity;
-            chkColumnCollation.Checked = option.Ignore.FilterIgnoreColumnCollation;
-            chkColumnOrder.Checked = option.Ignore.FilterIgnoreColumnOrder;
-            chkIgnoreNotForReplication.Checked = option.Ignore.FilterIgnoreNotForReplication;
+            chkTableOption.Checked = option.Ignore.FilterTableOption;
+            chkTables.Checked = option.Ignore.FilterTable;
+            chkTablesColumnIdentity.Checked = option.Ignore.FilterColumnIdentity;
+            chkTablesColumnCollation.Checked = option.Ignore.FilterColumnCollation;
+            chkTablesColumnOrder.Checked = option.Ignore.FilterColumnOrder;
+            chkIgnoreNotForReplication.Checked = option.Ignore.FilterNotForReplication;
 
             chkCompTriggersDDL.Checked = option.Ignore.FilterDDLTriggers;
             chkCompTriggers.Checked = option.Ignore.FilterTrigger;
@@ -96,21 +102,28 @@ namespace DBDiff.Schema.SQLServer.Front
             option.Defaults.DefaultRealValue = txtDefaultReal.Text;
             option.Defaults.DefaultTextValue = txtText.Text;
             option.Defaults.DefaultVariantValue = txtVariant.Text;
+            option.Defaults.DefaultTime = txtTime.Text;
+            option.Defaults.DefaultXml = txtXML.Text;
 
             option.Ignore.FilterAssemblies = chkCompAssemblys.Checked;
-            option.Ignore.FilterConstraint = chkCompConstraints.Checked;
+            option.Ignore.FilterConstraint = chkConstraints.Checked;
             option.Ignore.FilterFunction = chkCompFunciones.Checked;
-            option.Ignore.FilterIndex = chkCompIndices.Checked;
-            option.Ignore.FilterIndexFillFactor = chkIgnoreFillFactor.Checked && chkCompIndices.Checked;
-            option.Ignore.FilterIndexIncludeColumns = chkIgnoreInclude.Checked && chkCompIndices.Checked;
+            
+            option.Ignore.FilterIndex = chkIndex.Checked;
+            option.Ignore.FilterIndexFillFactor = chkIndexFillFactor.Checked && chkIndex.Checked;
+            option.Ignore.FilterIndexIncludeColumns = chkIndexIncludeColumns.Checked && chkIndex.Checked;
+            option.Ignore.FilterIndexFilter = chkIndexFilter.Checked && chkIndex.Checked;
+
             option.Ignore.FilterSchema = chkCompSchemas.Checked;
             option.Ignore.FilterStoreProcedure = chkCompStoreProcedure.Checked;
-            option.Ignore.FilterTable = chkCompTablas.Checked;
-            option.Ignore.FilterIgnoreColumnIdentity = chkColumnIdentity.Checked && chkCompTablas.Checked;
-            option.Ignore.FilterIgnoreColumnCollation = chkColumnCollation.Checked && chkCompTablas.Checked;
-            option.Ignore.FilterIgnoreColumnOrder = chkColumnOrder.Checked && chkCompTablas.Checked;
-            option.Ignore.FilterTableFileGroup = chkFileGroups.Checked;
-            option.Ignore.FilterTableOption = chkCompTablaOpciones.Checked;
+
+            option.Ignore.FilterTable = chkTables.Checked;
+            option.Ignore.FilterColumnIdentity = chkTablesColumnIdentity.Checked && chkTables.Checked;
+            option.Ignore.FilterColumnCollation = chkTablesColumnCollation.Checked && chkTables.Checked;
+            option.Ignore.FilterColumnOrder = chkTablesColumnOrder.Checked && chkTables.Checked;
+            option.Ignore.FilterTableOption = chkTableOption.Checked && chkTables.Checked; ;
+
+            option.Ignore.FilterTableFileGroup = chkFileGroups.Checked;            
             option.Ignore.FilterTrigger = chkCompTriggers.Checked;
             option.Ignore.FilterDDLTriggers = chkCompTriggersDDL.Checked;
             option.Ignore.FilterUserDataType = chkCompUDT.Checked;
@@ -120,7 +133,10 @@ namespace DBDiff.Schema.SQLServer.Front
             option.Ignore.FilterUsers = chkCompUsers.Checked;
             option.Ignore.FilterRoles = chkCompRoles.Checked;
             option.Ignore.FilterRules = chkCompRules.Checked;
-            option.Ignore.FilterIgnoreNotForReplication = chkIgnoreNotForReplication.Checked;
+            option.Ignore.FilterFullText = chkFullText.Checked;
+            option.Ignore.FilterFullTextPath = chkFullTextPath.Checked;
+
+            option.Ignore.FilterNotForReplication = chkIgnoreNotForReplication.Checked;
             option.Script.AlterObjectOnSchemaBinding = optScriptSchemaBindingAlter.Checked;
 
             if (rdoCaseAutomatic.Checked)
@@ -133,15 +149,17 @@ namespace DBDiff.Schema.SQLServer.Front
 
         private void chkCompIndices_CheckedChanged(object sender, EventArgs e)
         {
-            chkIgnoreFillFactor.Enabled = chkCompIndices.Checked;
-            chkIgnoreInclude.Enabled = chkCompIndices.Checked;
+            chkIndexFillFactor.Enabled = chkIndex.Checked;
+            chkIndexIncludeColumns.Enabled = chkIndex.Checked;
+            chkIndexFilter.Enabled = chkIndex.Checked;
+            chkIndexRowLock.Enabled = chkIndex.Checked; 
         }
 
         private void chkCompTablas_CheckedChanged(object sender, EventArgs e)
         {
-            chkColumnCollation.Enabled = chkCompTablas.Checked;
-            chkColumnIdentity.Enabled = chkCompTablas.Checked;
-            chkColumnOrder.Enabled = chkCompTablas.Checked;
+            chkTablesColumnCollation.Enabled = chkTables.Checked;
+            chkTablesColumnIdentity.Enabled = chkTables.Checked;
+            chkTablesColumnOrder.Enabled = chkTables.Checked;
         }
 
         private void btnApply_Click(object sender, EventArgs e)
@@ -157,6 +175,19 @@ namespace DBDiff.Schema.SQLServer.Front
         {
             AddItem itemForm = new AddItem(option, -1);
             itemForm.Show(this);
+        }
+
+        private void chkConstraints_CheckedChanged(object sender, EventArgs e)
+        {
+            chkConstraintsFK.Enabled = chkConstraints.Checked;
+            chkConstraintsPK.Enabled = chkConstraints.Checked;
+            chkConstraintsUK.Enabled = chkConstraints.Checked;
+            chkConstraintsCheck.Enabled = chkConstraints.Checked;
+        }
+
+        private void chkFullText_CheckedChanged(object sender, EventArgs e)
+        {
+            chkFullTextPath.Enabled = chkFullText.Checked;
         }
     }
 }

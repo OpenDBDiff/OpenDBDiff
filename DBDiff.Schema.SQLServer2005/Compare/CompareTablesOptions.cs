@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Compare
+namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareTablesOptions:CompareBase<TableOption>
     {

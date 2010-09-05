@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Compare
+namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareAssemblies : CompareBase<Assembly>
     {
-        private static void DoUpdate(SchemaList<Assembly, Database> CamposOrigen, Assembly node)
+        protected override void DoUpdate<Root>(SchemaList<Assembly, Root> CamposOrigen, Assembly node)
         {
             if (!node.Compare(CamposOrigen[node.FullName]))
             {
@@ -45,54 +45,11 @@ namespace DBDiff.Schema.SQLServer.Compare
             }
         }
 
-        private static void DoNew(SchemaList<Assembly, Database> CamposOrigen, Assembly node)
+        protected override void DoNew<Root>(SchemaList<Assembly, Root> CamposOrigen, Assembly node)
         {
             Assembly newNode = (Assembly)node.Clone(CamposOrigen.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
             CamposOrigen.Add(newNode);
-        }
-
-
-        private static void DoDelete(Assembly node)
-        {
-            node.Status = Enums.ObjectStatusType.DropStatus;
-        }
-
-
-        public static void GenerateDiferences(SchemaList<Assembly, Database> CamposOrigen, SchemaList<Assembly, Database> CamposDestino)
-        {
-            bool has = true;
-            int DestinoIndex = 0;
-            int OrigenIndex = 0;
-            int DestinoCount = CamposDestino.Count;
-            int OrigenCount = CamposOrigen.Count;
-            Assembly node;
-
-            while (has)
-            {
-                has = false;
-                if (DestinoCount > DestinoIndex)
-                {
-                    node = CamposDestino[DestinoIndex];
-                    if (!CamposOrigen.Exists(node.FullName))
-                        DoNew(CamposOrigen, node);
-                    else
-                        DoUpdate(CamposOrigen, node);
-
-                    DestinoIndex++;
-                    has = true;
-                }
-
-                if (OrigenCount > OrigenIndex)
-                {
-                    node = CamposOrigen[OrigenIndex];
-                    if (!CamposDestino.Exists(node.FullName))
-                        DoDelete(node);
-
-                    OrigenIndex++;
-                    has = true;
-                }
-            }
         }
     }
 }

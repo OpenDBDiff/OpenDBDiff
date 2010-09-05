@@ -1,20 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Compare
+namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
-    internal class CompareViews
+    internal class CompareViews : CompareBase<View>
     {
-        private static void DoUpdate(SchemaList<View, Database> CamposOrigen, View node)
+        protected override void DoUpdate<Root>(SchemaList<View, Root> CamposOrigen, View node)
         {
-            if (!node.Compare(CamposOrigen[node.FullName]))
+            View original = CamposOrigen[node.FullName];
+            if (!node.Compare(original))
             {
                 View newNode = (View)node.Clone(CamposOrigen.Parent);
-                newNode.DependenciesOut.AddRange(CamposOrigen[node.FullName].DependenciesOut);
-                newNode.DependenciesIn.AddRange(CamposOrigen[node.FullName].DependenciesIn);
+                newNode.DependenciesOut.AddRange(original.DependenciesOut);
+                newNode.DependenciesIn.AddRange(original.DependenciesIn);
 
                 newNode.Status = Enums.ObjectStatusType.AlterStatus;
 
@@ -27,17 +28,18 @@ namespace DBDiff.Schema.SQLServer.Compare
 
                 CamposOrigen[node.FullName] = newNode;
             }
-            CompareIndexes.GenerateDiferences(CamposOrigen[node.FullName].Indexes, node.Indexes);
+            CompareIndexes.GenerateDiferences(original.Indexes, node.Indexes);
+            (new CompareTriggers()).GenerateDiferences<View>(original.Triggers, node.Triggers);
         }
 
-        private static void DoNew(SchemaList<View, Database> CamposOrigen, View node)
+        protected override void DoNew<Root>(SchemaList<View, Root> CamposOrigen, View node)
         {
             View newNode = (View)node.Clone(CamposOrigen.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
             CamposOrigen.Add(newNode);
             newNode.DependenciesIn.ForEach(dep =>
             {
-                ISchemaBase item = CamposOrigen.Parent.Find(dep);
+                ISchemaBase item = ((Database)((ISchemaBase)CamposOrigen.Parent)).Find(dep);
                 if (item != null)
                 {
                     if (item.IsCodeType)
@@ -45,47 +47,6 @@ namespace DBDiff.Schema.SQLServer.Compare
                 }
             }
             );
-        }
-
-        private static void DoDelete(View node)
-        {
-            node.Status = Enums.ObjectStatusType.DropStatus;
-        }
-
-        public static void GenerateDiferences(SchemaList<View, Database> CamposOrigen, SchemaList<View, Database> CamposDestino)
-        {
-            bool has = true;
-            int DestinoIndex = 0;
-            int OrigenIndex = 0;
-            int DestinoCount = CamposDestino.Count;
-            int OrigenCount = CamposOrigen.Count;
-            View node;
-
-            while (has)
-            {
-                has = false;
-                if (DestinoCount > DestinoIndex)
-                {
-                    node = CamposDestino[DestinoIndex];
-                    if (!CamposOrigen.Exists(node.FullName))
-                        DoNew(CamposOrigen, node);
-                    else
-                        DoUpdate(CamposOrigen, node);
-
-                    DestinoIndex++;
-                    has = true;
-                }
-
-                if (OrigenCount > OrigenIndex)
-                {
-                    node = CamposOrigen[OrigenIndex];
-                    if (!CamposDestino.Exists(node.FullName))
-                        DoDelete(node);
-
-                    OrigenIndex++;
-                    has = true;
-                }
-            }
         }
     }
 }

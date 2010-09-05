@@ -4,20 +4,27 @@ using System.Collections;
 using System.Text;
 using System.Data.SqlClient;
 using DBDiff.Schema.Events;
-using DBDiff.Schema.SQLServer.Options;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Options;
+using DBDiff.Schema.SQLServer.Generates.Model;
 
-namespace DBDiff.Schema.SQLServer.Generates
+namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
-    public static class GenerateSynonyms
+    public class GenerateSynonyms
     {
+        private Generate root;
+
+        public GenerateSynonyms(Generate root)
+        {
+            this.root = root;
+        }
+
         private static string GetSQL()
         {
             string sql = "SELECT SCHEMA_NAME(schema_id) AS Owner,name,object_id,base_object_name from sys.synonyms ORDER BY Name";
             return sql;
         }
 
-        public static void Fill(Database database, string connectionString)
+        public void Fill(Database database, string connectionString)
         {
             if (database.Options.Ignore.FilterSynonyms)
             {

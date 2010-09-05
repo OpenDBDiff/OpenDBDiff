@@ -1,38 +1,31 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Compare
+namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareTriggers:CompareBase<Trigger>
     {
-        public static void GenerateDiferences(SchemaList<Trigger, Table> CamposOrigen, SchemaList<Trigger, Table> CamposDestino)
+        protected override void DoNew<Root>(SchemaList<Trigger, Root> CamposOrigen, Trigger node)
         {
-            foreach (Trigger node in CamposDestino)
+            Trigger newNode = (Trigger)node.Clone(CamposOrigen.Parent);
+            newNode.Status = Enums.ObjectStatusType.CreateStatus;
+            CamposOrigen.Add(newNode);
+        }
+
+        protected override void DoUpdate<Root>(SchemaList<Trigger, Root> CamposOrigen, Trigger node)
+        {
+            if (!node.Compare(CamposOrigen[node.FullName]))
             {
-                if (!CamposOrigen.Exists(node.FullName))
-                {
-                    Trigger newNode = node.Clone(CamposOrigen.Parent);
-                    newNode.Status = Enums.ObjectStatusType.CreateStatus;
-                    CamposOrigen.Add(newNode);
-                }
-                else
-                {
-                    if (!node.Compare(CamposOrigen[node.FullName]))
-                    {
-                        Trigger newNode = node.Clone(CamposOrigen.Parent);
-                        if (!newNode.Text.Equals(CamposOrigen[node.FullName].Text))
-                            newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                        if (node.IsDisabled != CamposOrigen[node.FullName].IsDisabled)
-                            newNode.Status = newNode.Status + (int)Enums.ObjectStatusType.DisabledStatus;
-                        CamposOrigen[node.FullName] = newNode;
-                    }
-                }
+                Trigger newNode = (Trigger)node.Clone(CamposOrigen.Parent);
+                if (!newNode.Text.Equals(CamposOrigen[node.FullName].Text))
+                    newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                if (node.IsDisabled != CamposOrigen[node.FullName].IsDisabled)
+                    newNode.Status = newNode.Status + (int)Enums.ObjectStatusType.DisabledStatus;
+                CamposOrigen[node.FullName] = newNode;
             }
-            
-            MarkDrop(CamposOrigen, CamposDestino);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     /// <summary>
     /// Clase de constraints de Columnas (Default Constraint y Check Constraint)

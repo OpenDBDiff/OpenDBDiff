@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using System.Text;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class Constraints : SchemaList<Constraint,Table> 
+    public class Constraints<T> : SchemaList<Constraint,T> where T:ISchemaBase
     {
-        public Constraints(Table parent)
+        public Constraints(T parent)
             : base(parent, ((parent == null || parent.Parent == null)?null:((Database)parent.Parent).AllObjects))
         {            
         }
 
-        public string ToSQL(Constraint.ConstraintType type)
+        public string ToSql(Constraint.ConstraintType type)
         {
             StringBuilder sql = new StringBuilder();
             for (int index = 0; index < this.Count; index++)

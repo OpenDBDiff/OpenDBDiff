@@ -4,9 +4,9 @@ using System.Text;
 using System.Linq;
 using DBDiff.Schema.Model;
 using DBDiff.Schema.Attributes;
-using DBDiff.Schema.SQLServer.Options;
+using DBDiff.Schema.SQLServer.Generates.Options;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class Database : SQLServerSchemaBase, IDatabase
     {
@@ -27,16 +27,21 @@ namespace DBDiff.Schema.SQLServer.Model
         private SchemaList<Rule, Database> rules;
         private SchemaList<Synonym, Database> synonyms;
         private SchemaList<Table, Database> tables;
+        private SchemaList<TableType, Database> tablesTypes;
         private SchemaList<User, Database> users;
         private SchemaList<View, Database> views;
+        private SchemaList<FullText, Database> fullText;
         private SchemaList<PartitionFunction, Database> partitionFunctions;
+        private SchemaList<PartitionScheme, Database> partitionScheme;
         private Roles roles;
         private SearchSchemaBase allObjects;
+        private SqlAction actionMessage;
 
         public Database():base(null, Enums.ObjectType.Database)
         {
             allObjects = new SearchSchemaBase();
             constraintDependencies = new Dependencies();
+            tablesTypes = new SchemaList<TableType, Database>(this, this.allObjects);
             userTypes = new SchemaList<UserDataType, Database>(this, this.allObjects);
             xmlSchemas = new SchemaList<XMLSchema, Database>(this, this.allObjects);
             schemas = new SchemaList<Schema, Database>(this, this.allObjects);
@@ -49,16 +54,60 @@ namespace DBDiff.Schema.SQLServer.Model
             assemblies = new SchemaList<Assembly, Database>(this,this.allObjects);
             views = new SchemaList<View, Database>(this, this.allObjects);
             users = new SchemaList<User, Database>(this, this.allObjects);
+            fullText = new SchemaList<FullText, Database>(this, this.allObjects);
             functions = new SchemaList<Function, Database>(this,this.allObjects);
             partitionFunctions = new SchemaList<PartitionFunction, Database>(this, this.allObjects);
+            partitionScheme = new SchemaList<PartitionScheme, Database>(this, this.allObjects);
             roles = new Roles(this);
             tables = new SchemaList<Table, Database>(this, this.allObjects);
-            defaults = new Defaults(this);            
+            defaults = new Defaults(this);
+            actionMessage = new SqlAction(this);
+        }
+
+        public override ISchemaBase Clone(ISchemaBase parent)
+        {
+            Database item = new Database();
+            item.assemblies = this.Assemblies.Clone(this);
+            item.tables = this.Tables.Clone(this);
+            item.procedures = this.Procedures.Clone(this);
+            item.functions = this.Functions.Clone(this);
+            item.views = this.Views.Clone(this);
+            item.allObjects = this.AllObjects;
+            return item;
+        }
+
+        public SqlAction ActionMessage 
+        { 
+            get
+            {
+                return actionMessage;
+            } 
         }
 
         internal SearchSchemaBase AllObjects
         {
             get { return allObjects; }            
+        }
+
+        [ShowItemAttribute("Full Text Catalog", "FullText")]
+        public SchemaList<FullText, Database> FullText
+        {
+            get { return fullText; }
+            set { fullText = value; }
+        }
+
+        [ShowItemAttribute("Table Type", "Table")]
+        public SchemaList<TableType, Database> TablesTypes
+        {
+            get { return tablesTypes; }
+            set { tablesTypes = value; }
+        }
+
+        [ShowItemAttribute("Partition Scheme", "PartitionScheme")]
+        public SchemaList<PartitionScheme, Database> PartitionSchemes
+        {
+            get { return partitionScheme; }
+            set { partitionScheme = value; }
         }
 
         [ShowItemAttribute("Partition Functions", "PartitionFunction")]
@@ -227,16 +276,16 @@ namespace DBDiff.Schema.SQLServer.Model
                 if (!String.IsNullOrEmpty(info.Collation))
                     isCS = info.Collation.IndexOf("_CS_") != -1;
 
-                if (this.Options.Comparison.CaseSensityType == DBDiff.Schema.SQLServer.Options.SqlOptionComparison.CaseSensityOptions.Automatic)
+                if (this.Options.Comparison.CaseSensityType == DBDiff.Schema.SQLServer.Generates.Options.SqlOptionComparison.CaseSensityOptions.Automatic)
                 {
                     if (isCS)
                         return true;
                     else
                         return false;
                 }
-                if (this.Options.Comparison.CaseSensityType == DBDiff.Schema.SQLServer.Options.SqlOptionComparison.CaseSensityOptions.CaseSensity)
+                if (this.Options.Comparison.CaseSensityType == DBDiff.Schema.SQLServer.Generates.Options.SqlOptionComparison.CaseSensityOptions.CaseSensity)
                     return true;
-                if (this.Options.Comparison.CaseSensityType == DBDiff.Schema.SQLServer.Options.SqlOptionComparison.CaseSensityOptions.CaseInsensity)
+                if (this.Options.Comparison.CaseSensityType == DBDiff.Schema.SQLServer.Generates.Options.SqlOptionComparison.CaseSensityOptions.CaseInsensity)
                     return false;
 
                 return false;
@@ -261,6 +310,7 @@ namespace DBDiff.Schema.SQLServer.Model
             sql += views.ToSql();
             sql += users.ToSql();
             sql += partitionFunctions.ToSql();
+            sql += fullText.ToSql();
             return sql;
         }
 
@@ -268,6 +318,19 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             this.t
         }*/
+
+        public ISchemaBase Find(int id)
+        {
+            try
+            {
+                string full = allObjects.GetFullName(id);
+                return Find(full);
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         public ISchemaBase Find(String FullName)
         {
@@ -290,30 +353,50 @@ namespace DBDiff.Schema.SQLServer.Model
                         return assemblies[FullName];
                     case Enums.ObjectType.UserDataType:
                         return userTypes[FullName];
+                    case Enums.ObjectType.TableType:
+                        return tablesTypes[FullName];
                     case Enums.ObjectType.XMLSchema:
                         return xmlSchemas[FullName];
                     case Enums.ObjectType.CLRStoreProcedure:
                         return CLRProcedures[FullName];
                     case Enums.ObjectType.Synonym:
                         return synonyms[FullName];
+                    case Enums.ObjectType.FullText:
+                        return fullText[FullName];
                     case Enums.ObjectType.Rule:
                         return rules[FullName];
                     case Enums.ObjectType.PartitionFunction:
                         return partitionFunctions[FullName];
+                    case Enums.ObjectType.PartitionScheme:
+                        return partitionScheme[FullName];
                     case Enums.ObjectType.Role:
                         return roles[FullName];
+                    case Enums.ObjectType.Schema:
+                        return schemas[FullName];
                     case Enums.ObjectType.Constraint:
                         parentName = allObjects.GetParentName(FullName);
                         return tables[parentName].Constraints[FullName];
                     case Enums.ObjectType.Index:
                         parentName = allObjects.GetParentName(FullName);
-                        return tables[parentName].Indexes[FullName];
+                        type = allObjects.GetType(parentName);
+                        if (type == Enums.ObjectType.Table)
+                            return tables[parentName].Indexes[FullName];
+                        else
+                            return views[parentName].Indexes[FullName];
                     case Enums.ObjectType.Trigger:
                         parentName = allObjects.GetParentName(FullName);
-                        return tables[parentName].Triggers[FullName];
+                        type = allObjects.GetType(parentName);
+                        if (type == Enums.ObjectType.Table)
+                            return tables[parentName].Triggers[FullName];
+                        else
+                            return views[parentName].Triggers[FullName];
                     case Enums.ObjectType.CLRTrigger:
                         parentName = allObjects.GetParentName(FullName);
-                        return tables[parentName].CLRTriggers[FullName];
+                        type = allObjects.GetType(parentName);
+                        if (type == Enums.ObjectType.Table)
+                            return tables[parentName].CLRTriggers[FullName];
+                        else
+                            return views[parentName].CLRTriggers[FullName];
                 }
                 return null;
             }
@@ -339,6 +422,7 @@ namespace DBDiff.Schema.SQLServer.Model
             listDiff.Add("USE " + Name + "\r\nGO\r\n\r\n", 0, Enums.ScripActionType.UseDatabase);
             listDiff.AddRange(assemblies.ToSqlDiff());
             listDiff.AddRange(userTypes.ToSqlDiff());
+            listDiff.AddRange(tablesTypes.ToSqlDiff());
             listDiff.AddRange(tables.ToSqlDiff());            
             listDiff.AddRange(rules.ToSqlDiff());
             listDiff.AddRange(schemas.ToSqlDiff());
@@ -353,6 +437,8 @@ namespace DBDiff.Schema.SQLServer.Model
             listDiff.AddRange(functions.ToSqlDiff());
             listDiff.AddRange(roles.ToSqlDiff());
             listDiff.AddRange(partitionFunctions.ToSqlDiff());
+            listDiff.AddRange(partitionScheme.ToSqlDiff());
+            listDiff.AddRange(fullText.ToSqlDiff());
             return listDiff;
         }
 
@@ -370,7 +456,7 @@ namespace DBDiff.Schema.SQLServer.Model
         {
             ISchemaBase schema;
             List<Index> indexes = new List<Index>();
-            Constraints constraints = new Constraints(null);
+            Constraints<Table> constraints = new Constraints<Table>(null);
 
             this.Tables.ForEach(item => { indexes.AddRange(item.Indexes); });
             this.Views.ForEach(item => { indexes.AddRange(item.Indexes); });

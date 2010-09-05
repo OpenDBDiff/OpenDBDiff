@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DBDiff.Schema.SQLServer.Options
+namespace DBDiff.Schema.SQLServer.Generates.Options
 {
     public class SqlOptionDefault
     {
@@ -15,6 +15,20 @@ namespace DBDiff.Schema.SQLServer.Options
         private string defaultBlobValue = "0x";
         private string defaultUniqueValue = "NEWID()";
         private Boolean useDefaultValueIfExists = true;
+        private string defaultTime = "00:00:00";
+        private string defaultXml = "";
+
+        public string DefaultXml
+        {
+            get { return defaultXml; }
+            set { defaultXml = value; }
+        }
+
+        public string DefaultTime
+        {
+            get { return defaultTime; }
+            set { defaultTime = value; }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether use default value if exists.

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
 
-namespace DBDiff.Schema.SQLServer.Compare
+namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareColumnsConstraints:CompareBase<ColumnConstraint>
     {

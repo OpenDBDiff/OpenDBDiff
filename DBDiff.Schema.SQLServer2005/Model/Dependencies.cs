@@ -4,7 +4,7 @@ using System.Text;
 using System.Linq;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     internal class Dependencies: List<Dependence>
     {

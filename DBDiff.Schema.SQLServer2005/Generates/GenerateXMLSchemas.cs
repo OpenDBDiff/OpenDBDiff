@@ -2,15 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data.SqlClient;
-using DBDiff.Schema.SQLServer.Options;
-using DBDiff.Schema.SQLServer.Model;
-using DBDiff.Schema.SQLServer.Generates.Util;
+using DBDiff.Schema.SQLServer.Generates.Options;
+using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.SQLServer.Generates.Generates.Util;
 using DBDiff.Schema.Model;
+using DBDiff.Schema.Events;
 
-namespace DBDiff.Schema.SQLServer.Generates
+namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
-    public static class GenerateXMLSchemas
+    public class GenerateXMLSchemas
     {
+        private Generate root;
+
+        public GenerateXMLSchemas(Generate root)
+        {
+            this.root = root;
+        }
+
         private static string GetSQLColumnsDependencis()
         {
             string sql;
@@ -56,7 +64,7 @@ namespace DBDiff.Schema.SQLServer.Generates
             }
         }
 
-        public static void Fill(Database database, string connectionString)
+        public void Fill(Database database, string connectionString)
         {
             if (database.Options.Ignore.FilterXMLSchema)
             {
@@ -76,6 +84,8 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 item.Owner = reader["owner"].ToString();
                                 item.Text = reader["Text"].ToString();
                                 database.XmlSchemas.Add(item);
+                                root.RaiseOnReading(new ProgressEventArgs("Reading XML Schema " + item.Name + "...", Constants.READING_XMLSCHEMAS));
+
                             }
                         }
                     }

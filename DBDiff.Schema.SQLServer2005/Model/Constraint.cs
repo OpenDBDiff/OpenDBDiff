@@ -4,7 +4,7 @@ using System.Text;
 using System.Globalization;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class Constraint : SQLServerSchemaBase
     {
@@ -30,7 +30,7 @@ namespace DBDiff.Schema.SQLServer.Model
         private Index index;
         private Boolean isDisabled;
 
-        public Constraint(Table parent)
+        public Constraint(ISchemaBase parent)
             : base(parent,Enums.ObjectType.Constraint)
         {
             this.Columns = new ConstraintColumns(this);
@@ -40,7 +40,7 @@ namespace DBDiff.Schema.SQLServer.Model
         /// <summary>
         /// Clona el objeto Column en una nueva instancia.
         /// </summary>
-        public Constraint Clone(Table parent)
+        public override ISchemaBase Clone(ISchemaBase parent)
         {
             Constraint col = new Constraint(parent);
             col.Id = this.Id;
@@ -238,10 +238,14 @@ namespace DBDiff.Schema.SQLServer.Model
             if (Index.Type == Index.IndexTypeEnum.Nonclustered) typeConstraint = "NONCLUSTERED";
             if (Index.Type == Index.IndexTypeEnum.XML) typeConstraint = "XML";
             if (Index.Type == Index.IndexTypeEnum.Heap) typeConstraint = "HEAP";
-            if (consType == ConstraintType.PrimaryKey)
-                sql.Append("CONSTRAINT [" + Name + "] PRIMARY KEY " + typeConstraint + "\r\n\t(\r\n");
+            if (Parent.ObjectType != Enums.ObjectType.TableType)
+                sql.Append("CONSTRAINT [" + Name + "] ");
             else
-                sql.Append("CONSTRAINT [" + Name + "] UNIQUE " + typeConstraint + "\r\n\t(\r\n");
+                sql.Append("\t");
+            if (consType == ConstraintType.PrimaryKey)
+                sql.Append("PRIMARY KEY " + typeConstraint + "\r\n\t(\r\n");
+            else
+                sql.Append("UNIQUE " + typeConstraint + "\r\n\t(\r\n");
             
             this.Columns.Sort();
             
@@ -254,12 +258,17 @@ namespace DBDiff.Schema.SQLServer.Model
             }
             sql.Append("\t)");
             sql.Append(" WITH (");
-            if (Index.IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");
-            if (Index.IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON, "); else sql.Append("STATISTICS_NORECOMPUTE  = OFF, ");
-            if (Index.IgnoreDupKey) sql.Append("IGNORE_DUP_KEY = ON, "); else sql.Append("IGNORE_DUP_KEY  = OFF, ");
-            if (Index.AllowRowLocks) sql.Append("ALLOW_ROW_LOCKS = ON, "); else sql.Append("ALLOW_ROW_LOCKS  = OFF, ");
-            if (Index.AllowPageLocks) sql.Append("ALLOW_PAGE_LOCKS = ON"); else sql.Append("ALLOW_PAGE_LOCKS  = OFF");
-            if (Index.FillFactor != 0) sql.Append(", FILLFACTOR = " + Index.FillFactor.ToString(CultureInfo.InvariantCulture));
+            if (Parent.ObjectType == Enums.ObjectType.TableType)
+                if (Index.IgnoreDupKey) sql.Append("IGNORE_DUP_KEY = ON "); else sql.Append("IGNORE_DUP_KEY  = OFF ");
+            else
+            {
+                if (Index.IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");
+                if (Index.IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON, "); else sql.Append("STATISTICS_NORECOMPUTE  = OFF, ");
+                if (Index.IgnoreDupKey) sql.Append("IGNORE_DUP_KEY = ON, "); else sql.Append("IGNORE_DUP_KEY  = OFF, ");
+                if (Index.AllowRowLocks) sql.Append("ALLOW_ROW_LOCKS = ON, "); else sql.Append("ALLOW_ROW_LOCKS  = OFF, ");
+                if (Index.AllowPageLocks) sql.Append("ALLOW_PAGE_LOCKS = ON"); else sql.Append("ALLOW_PAGE_LOCKS  = OFF");
+                if (Index.FillFactor != 0) sql.Append(", FILLFACTOR = " + Index.FillFactor.ToString(CultureInfo.InvariantCulture));
+            }
             sql.Append(")");
             if (!String.IsNullOrEmpty(Index.FileGroup)) sql.Append(" ON [" + Index.FileGroup + "]");
             return sql.ToString();
@@ -313,7 +322,11 @@ namespace DBDiff.Schema.SQLServer.Model
             }
             if (this.Type == Constraint.ConstraintType.Check)
             {
-                return "CONSTRAINT [" + Name + "] CHECK " + (NotForReplication ? "NOT FOR REPLICATION" : "") + " (" + definition + ")";
+                string sqlcheck = "";
+                if (Parent.ObjectType != Enums.ObjectType.TableType)
+                    sqlcheck = "CONSTRAINT [" + Name + "] ";
+
+                return sqlcheck + "CHECK " + (NotForReplication ? "NOT FOR REPLICATION" : "") + " (" + definition + ")";
             }
             return "";            
         }
@@ -382,8 +395,14 @@ namespace DBDiff.Schema.SQLServer.Model
         public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList list = new SQLScriptList();
+            if (this.Status != Enums.ObjectStatusType.OriginalStatus)
+                RootParent.ActionMessage[Parent.FullName].Add(this);
+
             if (this.HasState(Enums.ObjectStatusType.DropStatus))
-                list.Add(Drop());
+            {
+                if (this.Parent.Status != Enums.ObjectStatusType.RebuildStatus)
+                    list.Add(Drop());
+            }
             if (this.HasState(Enums.ObjectStatusType.CreateStatus))
                 list.Add(Create());
             if (this.HasState(Enums.ObjectStatusType.AlterStatus))

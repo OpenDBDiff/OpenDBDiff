@@ -4,13 +4,20 @@ using System.Collections;
 using System.Text;
 using System.Data.SqlClient;
 using DBDiff.Schema.Events;
-using DBDiff.Schema.SQLServer.Options;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Options;
+using DBDiff.Schema.SQLServer.Generates.Model;
 
-namespace DBDiff.Schema.SQLServer.Generates
+namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
-    public static class GenerateAssemblies
+    public class GenerateAssemblies
     {
+        private Generate root;
+
+        public GenerateAssemblies(Generate root)
+        {
+            this.root = root;
+        }
+
         private static string GetSQLFiles()
         {
             string sql = "select '[' + A.Name + ']' AS Name, AF.content AS FileContent, AF.File_Id AS FileId, AF.Name AS FileName ";
@@ -75,7 +82,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                 }
             }
         }
-        public static void Fill(Database database, string connectionString)
+        public void Fill(Database database, string connectionString)
         {
             int lastViewId = 0;
             if (database.Options.Ignore.FilterAssemblies)

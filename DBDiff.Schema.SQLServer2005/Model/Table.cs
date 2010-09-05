@@ -4,12 +4,12 @@ using System.Text;
 using DBDiff.Schema.Model;
 using DBDiff.Schema.Attributes;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class Table : SQLServerSchemaBase, IComparable<Table>
+    public class Table : SQLServerSchemaBase, IComparable<Table>,ITable<Table>
     {
-        private Columns columns;
-        private Constraints constraints;        
+        private Columns<Table> columns;
+        private Constraints<Table> constraints;        
         private Table originalTable;
         private SchemaList<TableOption, Table> options;
         private SchemaList<Trigger, Table> triggers;
@@ -23,24 +23,25 @@ namespace DBDiff.Schema.SQLServer.Model
         private string fileGroupStream;
         private List<ISchemaBase> dependencis = null;
         private string compressType;
+        private Boolean? hasFileStream = null;
 
-        public Table(Database parent)
+        public Table(ISchemaBase parent)
             : base(parent, Enums.ObjectType.Table)
         {
             dependenciesCount = -1;
-            columns = new Columns(this);
-            constraints = new Constraints(this);
+            columns = new Columns<Table>(this);
+            constraints = new Constraints<Table>(this);
             options = new SchemaList<TableOption, Table>(this);
-            triggers = new SchemaList<Trigger, Table>(this, parent.AllObjects);
-            clrtriggers = new SchemaList<CLRTrigger, Table>(this, parent.AllObjects);
-            indexes = new SchemaList<Index, Table>(this, parent.AllObjects);
-            partitions = new SchemaList<TablePartition, Table>(this, parent.AllObjects);
+            triggers = new SchemaList<Trigger, Table>(this, ((Database)parent).AllObjects);
+            clrtriggers = new SchemaList<CLRTrigger, Table>(this, ((Database)parent).AllObjects);
+            indexes = new SchemaList<Index, Table>(this, ((Database)parent).AllObjects);
+            partitions = new SchemaList<TablePartition, Table>(this, ((Database)parent).AllObjects);
         }
 
         /// <summary>
         /// Clona el objeto Table en una nueva instancia.
         /// </summary>
-        public Table Clone(Database objectParent)
+        public override ISchemaBase Clone(ISchemaBase objectParent)
         {
             Table table = new Table(objectParent);
             table.Owner = this.Owner;
@@ -56,7 +57,7 @@ namespace DBDiff.Schema.SQLServer.Model
             table.Columns = this.Columns.Clone(table);
             table.Options = this.Options.Clone(table);
             table.CompressType = this.CompressType;
-            //table.triggers = this.Triggers.Clone(table);
+            table.triggers = this.Triggers.Clone(table);
             table.indexes = this.Indexes.Clone(table);
             table.partitions = this.Partitions.Clone(table);
             return table;
@@ -116,6 +117,22 @@ namespace DBDiff.Schema.SQLServer.Model
             }
         }
 
+        public Boolean HasFileStream
+        {
+            get
+            {
+                if (hasFileStream == null)
+                {
+                    hasFileStream = false;
+                    foreach (Column col in Columns)
+                    {                     
+                        if (col.IsFileStream) hasFileStream = true;
+                    }
+                }
+                return hasFileStream.Value;
+            }
+        }
+
         public Boolean HasBlobColumn
         {
             get
@@ -141,7 +158,7 @@ namespace DBDiff.Schema.SQLServer.Model
         /// Colecion de constraints de la tabla.
         /// </summary>
         [ShowItemAttribute("Constraints")]
-        public Constraints Constraints
+        public Constraints<Table> Constraints
         {
             get { return constraints; }
         }
@@ -150,7 +167,7 @@ namespace DBDiff.Schema.SQLServer.Model
         /// Coleccion de campos de la tabla.
         /// </summary>
         [ShowItemAttribute("Columns","Column")]
-        public Columns Columns
+        public Columns<Table> Columns
         {
             get { return columns; }
             set { columns = value; }
@@ -202,10 +219,10 @@ namespace DBDiff.Schema.SQLServer.Model
                 if (constraints.Count > 0)
                 {
                     sql += ",\r\n";
-                    sql += constraints.ToSQL(Constraint.ConstraintType.PrimaryKey);
-                    sql += constraints.ToSQL(Constraint.ConstraintType.Unique);
+                    sql += constraints.ToSql(Constraint.ConstraintType.PrimaryKey);
+                    sql += constraints.ToSql(Constraint.ConstraintType.Unique);
                     if (showFK)
-                        sql += constraints.ToSQL(Constraint.ConstraintType.ForeignKey);
+                        sql += constraints.ToSql(Constraint.ConstraintType.ForeignKey);
                 }
                 else
                 {
@@ -220,10 +237,8 @@ namespace DBDiff.Schema.SQLServer.Model
                     if (this.HasBlobColumn)
                         sql += " TEXTIMAGE_ON [" + FileGroupText + "]";
                 }
-                if (!String.IsNullOrEmpty(FileGroupStream))
-                {
+                if ((!String.IsNullOrEmpty(FileGroupStream)) && (this.HasFileStream))
                     sql += " FILESTREAM_ON [" + FileGroupStream + "]";
-                }
 
                 sql += "\r\n";
                 sql += "GO\r\n";
@@ -283,6 +298,12 @@ namespace DBDiff.Schema.SQLServer.Model
         public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList listDiff = new SQLScriptList();
+
+            if (this.Status != Enums.ObjectStatusType.OriginalStatus)
+            {
+                if (((Database)Parent).Options.Ignore.FilterTable)
+                    RootParent.ActionMessage.Add(this);
+            }
 
             if (this.Status == Enums.ObjectStatusType.DropStatus)
             {
@@ -381,6 +402,17 @@ namespace DBDiff.Schema.SQLServer.Model
                     if ((HasIdentityColumn) && (!IsIdentityNew))
                         sql += "SET IDENTITY_INSERT [" + Owner + "].[" + tempTable + "] OFF\r\nGO\r\n\r\n";
                     sql += "DROP TABLE " + this.FullName + "\r\nGO\r\n";
+
+                    if (this.HasFileStream)
+                    {
+                        constraints.ForEach(item =>
+                        {
+                            if ((item.Type == Constraint.ConstraintType.Unique) && (item.Status != Enums.ObjectStatusType.DropStatus))
+                            {
+                                sql += "EXEC sp_rename N'[" + Owner + "].[Temp_XX_" + item.Name + "]',N'" + item.Name + "', 'OBJECT'\r\nGO\r\n";
+                            }
+                        });
+                    }
                     sql += "EXEC sp_rename N'[" + Owner + "].[" + tempTable + "]',N'" + this.Name + "', 'OBJECT'\r\nGO\r\n\r\n";
                     sql += OriginalTable.Options.ToSql();
                 }
@@ -388,9 +420,9 @@ namespace DBDiff.Schema.SQLServer.Model
                     sql = "";
                 return sql;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return "";
+                throw ex;
             }
         }
 
@@ -420,6 +452,28 @@ namespace DBDiff.Schema.SQLServer.Model
                     sql += "\r\n";
                 }
             }
+            if (this.HasFileStream)
+            {
+                sql = sql.Substring(0, sql.Length - 2);
+                sql += ",\r\n";
+                constraints.ForEach(item =>
+                    {
+                        if ((item.Type == Constraint.ConstraintType.Unique) && (item.Status != Enums.ObjectStatusType.DropStatus))
+                        {
+                            item.Name = "Temp_XX_" + item.Name;
+                            sql += "\t" + item.ToSql() + ",\r\n";
+                            item.SetWasInsertInDiffList(Enums.ScripActionType.AddConstraint);
+                            item.Name = item.Name.Substring(8, item.Name.Length - 8);
+                        }
+                    });
+                sql = sql.Substring(0, sql.Length - 3) + "\r\n";
+            }
+            else
+            {
+                sql += "\r\n";
+                if (!String.IsNullOrEmpty(compressType))
+                    sql += "WITH (DATA_COMPRESSION = " + compressType + ")\r\n";
+            }
             sql += ")";
             if (!String.IsNullOrEmpty(this.FileGroup)) sql += " ON [" + this.FileGroup + "]";
             if (!String.IsNullOrEmpty(FileGroupText))
@@ -427,10 +481,9 @@ namespace DBDiff.Schema.SQLServer.Model
                 if (this.HasBlobColumn)
                     sql += " TEXTIMAGE_ON [" + FileGroupText + "]";
             }
-            if (!String.IsNullOrEmpty(FileGroupStream))
-            {
+            if ((!String.IsNullOrEmpty(FileGroupStream)) && (this.HasFileStream))
                 sql += " FILESTREAM_ON [" + FileGroupStream + "]";
-            }
+
             sql += "\r\n";
             sql += "GO\r\n";
             return sql;
@@ -501,13 +554,23 @@ namespace DBDiff.Schema.SQLServer.Model
         /// </summary>
         private SQLScriptList ToSQLDropDependencis()
         {
+            bool addDependencie = true;
             SQLScriptList listDiff = new SQLScriptList();           
             //Se buscan todas las table constraints.
             for (int index = 0; index < dependencis.Count; index++)
             {
-                if (dependencis[index].Status == Enums.ObjectStatusType.OriginalStatus)
+                if ((dependencis[index].Status == Enums.ObjectStatusType.OriginalStatus) || (dependencis[index].Status == Enums.ObjectStatusType.DropStatus))
                 {
-                    listDiff.Add(dependencis[index].Drop());
+                    addDependencie = true;
+                    if (dependencis[index].ObjectType == Enums.ObjectType.Constraint)
+                    {
+                        if ((((Constraint)dependencis[index]).Type == Constraint.ConstraintType.Unique) && ((this.HasFileStream) || (this.OriginalTable.HasFileStream)))
+                            addDependencie = false;
+                        if ((((Constraint)dependencis[index]).Type != Constraint.ConstraintType.ForeignKey) && (dependencis[index].Status == Enums.ObjectStatusType.DropStatus))
+                            addDependencie = false;
+                    }
+                    if (addDependencie)
+                        listDiff.Add(dependencis[index].Drop());
                 }
             }
             //Se buscan todas las columns constraints.
@@ -524,13 +587,21 @@ namespace DBDiff.Schema.SQLServer.Model
 
         private SQLScriptList ToSQLCreateDependencis()
         {
+            bool addDependencie = true;
             SQLScriptList listDiff = new SQLScriptList();
             //Las constraints de deben recorrer en el orden inverso.
             for (int index = dependencis.Count - 1; index >= 0; index--)
             {
                 if ((dependencis[index].Status == Enums.ObjectStatusType.OriginalStatus) && (dependencis[index].Parent.Status != Enums.ObjectStatusType.DropStatus))
                 {
-                    listDiff.Add(dependencis[index].Create());
+                    addDependencie = true;
+                    if (dependencis[index].ObjectType == Enums.ObjectType.Constraint)
+                    {
+                        if ((((Constraint)dependencis[index]).Type == Constraint.ConstraintType.Unique) && (this.HasFileStream))
+                            addDependencie = false;
+                    }
+                    if (addDependencie)
+                        listDiff.Add(dependencis[index].Create());
                 }
             }
             //Se buscan todas las columns constraints.

@@ -33,10 +33,6 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <ApplicationIcon>App.ico</ApplicationIcon>
-    <SccProjectName>%24/OpenDBiff/DBDiff</SccProjectName>
-    <SccLocalPath>.</SccLocalPath>
-    <SccAuxPath>https://tfs.codeplex.com/tfs/TFS04</SccAuxPath>
-    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,18 +52,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ascend, Version=1.0.0.6, Culture=neutral, PublicKeyToken=25c7a393ba3f37cd, processorArchitecture=MSIL" />
+    <Reference Include="Ascend.Windows.Forms, Version=1.0.0.6, Culture=neutral, PublicKeyToken=ecd86ece2d3eb46d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionsSettings\ConnectionResource.cs" />
+    <Compile Include="Front\DatabaseProgressControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Front\DatabaseProgressControl.Designer.cs">
+      <DependentUpon>DatabaseProgressControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Front\OptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +85,12 @@
     <Compile Include="Front\PrincipalForm.Designer.cs">
       <DependentUpon>PrincipalForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Front\ProgressForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Front\ProgressForm.Designer.cs">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Front\SchemaTreeView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -88,6 +99,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Front\DatabaseProgressControl.resx">
+      <DependentUpon>DatabaseProgressControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Front\OptionForm.resx">
       <DependentUpon>OptionForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -95,6 +109,9 @@
     <EmbeddedResource Include="Front\PrincipalForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PrincipalForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Front\ProgressForm.resx">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Front\SchemaTreeView.resx">
       <DependentUpon>SchemaTreeView.cs</DependentUpon>
@@ -118,10 +135,6 @@
     <Compile Include="XmlConfig\ConfigProviders.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SQLRichControl\SQLRichControl.csproj">
-      <Project>{C9AC85A9-06F5-4F74-82F7-25993E65BBDA}</Project>
-      <Name>SQLRichControl</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DBDiff.Front\DBDiff.Front.csproj">
       <Project>{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}</Project>
       <Name>DBDiff.Front</Name>
@@ -133,6 +146,10 @@
     <ProjectReference Include="..\DBDiff.Schema\DBDiff.Schema.csproj">
       <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
       <Name>DBDiff.Schema</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DBDiff.Scintilla NET-2.0\ScintillaNET\DBDiff.ScintillaNET.csproj">
+      <Project>{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}</Project>
+      <Name>DBDiff.ScintillaNET</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
+    <None Include="Resources\Database.ico" />
     <None Include="Resources\Folder.ico" />
     <None Include="Resources\Image1.bmp" />
     <None Include="Resources\Control panel 2.ico" />

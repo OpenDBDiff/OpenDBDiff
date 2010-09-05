@@ -30,7 +30,7 @@ namespace DBDiff.Schema.Model
             this.nameCharacterClose = nameCharacterClose;
             this.nameCharacterOpen = nameCharacterOpen;
         }
-        
+
         /*protected object Clone(object vObj, ISchemaBase parentObject)
         {
             if (vObj.GetType().IsValueType || vObj.GetType() == Type.GetType("System.String"))
@@ -68,7 +68,11 @@ namespace DBDiff.Schema.Model
         public ISchemaBase Parent
         {
             get { return parent; }
-            set { parent = value; }
+            set 
+            {
+                rootParent = null;
+                parent = value; 
+            }
         }
 
         public IDatabase RootParent

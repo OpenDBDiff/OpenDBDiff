@@ -3,66 +3,64 @@ using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
 using System.Data.SqlClient;
-using DBDiff.Schema.SQLServer.Model;
-using DBDiff.Schema.SQLServer.Options;
-using DBDiff.Schema.SQLServer.Generates.SQLCommands;
+using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.SQLServer.Generates.Options;
+using DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
+using DBDiff.Schema.Model;
+using DBDiff.Schema.Events;
+using DBDiff.Schema.SQLServer.Generates.Generates.Util;
 
-namespace DBDiff.Schema.SQLServer.Generates
+namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
     public class GenerateConstraint
     {
-        #region Check Functions...
-        private static string GetSQLCheck()
+        private Generate root;
+
+        public GenerateConstraint(Generate root)
         {
-            string sql;
-            sql = "SELECT  ";
-            sql += "parent_object_id, ";
-            sql += "object_id AS ID, ";
-            sql += "parent_column_id, ";
-            sql += "name, ";
-            sql += "type, ";
-            sql += "definition, ";
-            sql += "is_disabled, ";
-            sql += "is_not_trusted AS WithCheck, ";
-            sql += "is_not_for_replication, ";
-            sql += "0, ";
-            sql += "schema_name(schema_id) AS Owner ";
-            sql += "FROM sys.check_constraints ORDER BY parent_object_id,name";
-            return sql;
+            this.root = root;
         }
 
-        public static void FillCheck(Database database, string connectionString)
+        #region Check Functions...
+        public void FillCheck(Database database, string connectionString)
         {
             int parentId = 0;
-            Table table = null;
+            ISchemaBase table = null;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(GetSQLCheck(), conn))
+                using (SqlCommand command = new SqlCommand(ConstraintSQLCommand.GetCheck(database.Info.Version), conn))
                 {
+                    root.RaiseOnReading(new ProgressEventArgs("Reading constraint...", Constants.READING_CONSTRAINTS));
                     conn.Open();
                     command.CommandTimeout = 0;
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        Constraint con = null;
+                        Constraint item = null;
                         while (reader.Read())
                         {
                             if (parentId != (int)reader["parent_object_id"])
                             {
                                 parentId = (int)reader["parent_object_id"];
-                                table = database.Tables.Find(parentId);
+                                if (reader["ObjectType"].ToString().Trim().Equals("U"))
+                                    table = database.Tables.Find(parentId);
+                                else
+                                    table = database.TablesTypes.Find(parentId);
                             } 
-                            con = new Constraint(table);
-                            con.Id = (int)reader["id"];
-                            con.Name = reader["Name"].ToString();
-                            con.Type = Constraint.ConstraintType.Check;
-                            con.Definition = reader["Definition"].ToString();
-                            con.WithNoCheck = (bool)reader["WithCheck"];
-                            con.IsDisabled = (bool)reader["is_disabled"];
-                            con.Owner = reader["Owner"].ToString();
-                            if (!database.Options.Ignore.FilterIgnoreNotForReplication)
-                                con.NotForReplication = (bool)reader["is_not_for_replication"];
-                            table.Constraints.Add(con);
+                            item = new Constraint(table);
+                            item.Id = (int)reader["id"];
+                            item.Name = reader["Name"].ToString();
+                            item.Type = Constraint.ConstraintType.Check;
+                            item.Definition = reader["Definition"].ToString();
+                            item.WithNoCheck = (bool)reader["WithCheck"];
+                            item.IsDisabled = (bool)reader["is_disabled"];
+                            item.Owner = reader["Owner"].ToString();
+                            if (database.Options.Ignore.FilterNotForReplication)
+                                item.NotForReplication = (bool)reader["is_not_for_replication"];
+                            if (reader["ObjectType"].ToString().Trim().Equals("U"))
+                                ((Table)table).Constraints.Add(item);
+                            else
+                                ((TableType)table).Constraints.Add(item);
                         }
                     }
                 }
@@ -124,7 +122,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 con.IsDisabled = (bool)reader["is_disabled"];
                                 con.OnDeleteCascade = (byte)reader["delete_referential_action"];
                                 con.OnUpdateCascade = (byte)reader["update_referential_action"];
-                                if (!database.Options.Ignore.FilterIgnoreNotForReplication)
+                                if (database.Options.Ignore.FilterNotForReplication)
                                     con.NotForReplication = (bool)reader["is_not_for_replication"];
                                 lastid = (int)reader["object_id"];
                                 table.Constraints.Add(con);
@@ -146,31 +144,16 @@ namespace DBDiff.Schema.SQLServer.Generates
         #endregion
 
         #region UniqueKey Functions...
-
-        private static string GetSQLUniqueKey()
-        {
-            StringBuilder sql = new StringBuilder();
-            sql.Append("SELECT S.Name as Owner, I.object_Id AS id,dsidx.Name as FileGroup, C.user_type_id, C.column_id, I.Index_id, C.Name AS ColumnName, I.Name, I.type, I.fill_factor, I.is_padded, I.allow_row_locks, I.allow_page_locks, I.ignore_dup_key, I.is_disabled, IC.is_descending_key, IC.is_included_column ");
-            sql.Append("FROM sys.indexes I ");
-            sql.Append("INNER JOIN sys.objects O ON O.object_id = I.object_id ");
-            sql.Append("INNER JOIN sys.schemas S ON S.schema_id = O.schema_id ");
-            sql.Append("INNER JOIN sys.index_columns IC ON IC.index_id = I.index_id AND IC.object_id = I.object_id ");
-            sql.Append("INNER JOIN sys.columns C ON C.column_id = IC.column_id AND IC.object_id = C.object_id ");
-            sql.Append("INNER JOIN sys.data_spaces AS dsidx ON dsidx.data_space_id = I.data_space_id ");
-            sql.Append("WHERE is_unique_constraint = 1 ORDER BY I.object_id,I.Name");
-            return sql.ToString();
-        }
-
         private static void FillUniqueKey(Database database, string connectionString)
         {
             int lastId = 0;
             int parentId = 0;
             bool change = false;
-            Table table = null;
+            ISchemaBase table = null;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(GetSQLUniqueKey(), conn))
+                using (SqlCommand command = new SqlCommand(ConstraintSQLCommand.GetUniqueKey(database.Info.Version), conn))
                 {
                     conn.Open();
                     command.CommandTimeout = 0;
@@ -182,7 +165,10 @@ namespace DBDiff.Schema.SQLServer.Generates
                             if (parentId != (int)reader["ID"])
                             {
                                 parentId = (int)reader["ID"];
-                                table = database.Tables.Find(parentId);
+                                if (reader["ObjectType"].ToString().Trim().Equals("U"))
+                                    table = database.Tables.Find(parentId);
+                                else
+                                    table = database.TablesTypes.Find(parentId);
                                 change = true;
                             }
                             else
@@ -209,7 +195,10 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 if (database.Options.Ignore.FilterTableFileGroup)
                                     con.Index.FileGroup = reader["FileGroup"].ToString();
                                 lastId = (int)reader["Index_id"];
-                                table.Constraints.Add(con);
+                                if (reader["ObjectType"].ToString().Trim().Equals("U"))
+                                    ((Table)table).Constraints.Add(con);
+                                else
+                                    ((TableType)table).Constraints.Add(con);
                             }
                             ConstraintColumn ccon = new ConstraintColumn(con);
                             ccon.Name = reader["ColumnName"].ToString();
@@ -231,7 +220,7 @@ namespace DBDiff.Schema.SQLServer.Generates
             int lastId = 0;
             int parentId = 0;
             bool change = false;
-            Table table = null;
+            ISchemaBase table = null;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -247,7 +236,10 @@ namespace DBDiff.Schema.SQLServer.Generates
                             if (parentId != (int)reader["ID"])
                             {
                                 parentId = (int)reader["ID"];
-                                table = database.Tables.Find(parentId);
+                                if (reader["ObjectType"].ToString().Trim().Equals("U"))
+                                    table = database.Tables.Find(parentId);
+                                else
+                                    table = database.TablesTypes.Find(parentId);
                                 change = true;
                             }
                             else
@@ -274,7 +266,10 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 if (database.Options.Ignore.FilterTableFileGroup)
                                     con.Index.FileGroup = reader["FileGroup"].ToString();
                                 lastId = (int)reader["Index_id"];
-                                table.Constraints.Add(con);
+                                if (reader["ObjectType"].ToString().Trim().Equals("U"))
+                                    ((Table)table).Constraints.Add(con);
+                                else
+                                    ((TableType)table).Constraints.Add(con);
                             }
                             ConstraintColumn ccon = new ConstraintColumn(con);
                             ccon.Name = (string)reader["ColumnName"];
@@ -291,7 +286,7 @@ namespace DBDiff.Schema.SQLServer.Generates
         }
         #endregion
 
-        public static void Fill(Database database, string connectionString)
+        public void Fill(Database database, string connectionString)
         {
             FillPrimaryKey(database, connectionString);
             FillForeignKey(database, connectionString);

@@ -5,7 +5,7 @@ using System.Text;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 
-namespace DBDiff.Schema.SQLServer.Options
+namespace DBDiff.Schema.SQLServer.Generates.Options
 {
     public class SqlOptionFilter
     {

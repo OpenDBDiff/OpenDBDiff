@@ -3,18 +3,28 @@ using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
 using System.Data.SqlClient;
-using DBDiff.Schema.SQLServer.Model;
-using DBDiff.Schema.SQLServer.Options;
+using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.SQLServer.Generates.Options;
 using DBDiff.Schema.Model;
+using DBDiff.Schema.Errors;
+using DBDiff.Schema.SQLServer.Generates.Generates.Util;
+using DBDiff.Schema.Events;
 
-namespace DBDiff.Schema.SQLServer.Generates
+namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
-    public static class GenerateViews
+    public class GenerateViews
     {
+        private Generate root;
+
+        public GenerateViews(Generate root)
+        {
+            this.root = root;
+        }
+
         private static string GetSQL()
         {
             string sql = "";
-            sql += "select distinct ISNULL('[' + S3.Name + '].[' + object_name(D2.object_id) + ']','') AS DependOut, '[' + S2.Name + '].[' + object_name(D.referenced_major_id) + ']' AS TableName, D.referenced_major_id, OBJECT_DEFINITION(P.object_id) AS Text, OBJECTPROPERTY (P.object_id,'IsSchemaBound') AS IsSchemaBound, P.object_id, S.name as owner, P.name as name from sys.views P ";
+            sql += "select distinct ISNULL('[' + S3.Name + '].[' + object_name(D2.object_id) + ']','') AS DependOut, '[' + S2.Name + '].[' + object_name(D.referenced_major_id) + ']' AS TableName, D.referenced_major_id, OBJECTPROPERTY (P.object_id,'IsSchemaBound') AS IsSchemaBound, P.object_id, S.name as owner, P.name as name from sys.views P ";
             sql += "INNER JOIN sys.schemas S ON S.schema_id = P.schema_id ";
             sql += "LEFT JOIN sys.sql_dependencies D ON P.object_id = D.object_id ";
             sql += "LEFT JOIN sys.objects O ON O.object_id = D.referenced_major_id ";
@@ -26,17 +36,23 @@ namespace DBDiff.Schema.SQLServer.Generates
             return sql;
         }
 
-        public static void Fill(Database database, string connectionString)
+        public void Fill(Database database, string connectionString, List<MessageLog> messages)
         {
-            if (database.Options.Ignore.FilterView)
+            try
             {
-                FillView(database,connectionString);
-                if ((database.Views.Count > 0) && (database.Options.Ignore.FilterIndex))
-                    GenerateIndex.Fill(database, connectionString, "V");                
+                root.RaiseOnReading(new ProgressEventArgs("Reading views...", Constants.READING_VIEWS));
+                if (database.Options.Ignore.FilterView)
+                {
+                    FillView(database,connectionString);
+                }
+            }
+            catch (Exception ex)
+            {
+                messages.Add(new MessageLog(ex.Message, ex.StackTrace, MessageLog.LogType.Error));
             }
         }
 
-        private static void FillView(Database database, string connectionString)
+        private void FillView(Database database, string connectionString)
         {
             int lastViewId = 0;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -47,7 +63,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                     command.CommandTimeout = 0;
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        View item = null;
+                        View item = null;                        
                         while (reader.Read())
                         {
                             if (lastViewId != (int)reader["object_id"])
@@ -56,7 +72,6 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 item.Id = (int)reader["object_id"];
                                 item.Name = reader["name"].ToString();
                                 item.Owner = reader["owner"].ToString();
-                                item.Text = reader["text"].ToString();
                                 item.IsSchemaBinding = reader["IsSchemaBound"].ToString().Equals("1");
                                 database.Views.Add(item);
                                 lastViewId = item.Id;
@@ -69,7 +84,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                                     item.DependenciesIn.Add(reader["TableName"].ToString());
                                 if (!String.IsNullOrEmpty(reader["DependOut"].ToString()))
                                     item.DependenciesOut.Add(reader["DependOut"].ToString());
-                            }
+                            }                            
                         }
                     }
                 }                    

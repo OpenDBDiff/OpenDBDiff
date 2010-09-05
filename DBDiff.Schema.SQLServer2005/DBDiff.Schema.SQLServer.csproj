@@ -7,7 +7,7 @@
     <ProjectGuid>{EF2F571E-A7AD-40BE-8500-50A039159FC1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DBDiff.Schema.SQLServer</RootNamespace>
+    <RootNamespace>DBDiff.Schema.SQLServer.Generates</RootNamespace>
     <AssemblyName>DBDiff.Schema.SQLServer</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>DBDiff.Schema.SQLServer.snk</AssemblyOriginatorKeyFile>
@@ -32,10 +32,6 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <SccProjectName>%24/OpenDBiff/DBDiff.Schema.SQLServer2005</SccProjectName>
-    <SccLocalPath>.</SccLocalPath>
-    <SccAuxPath>https://tfs.codeplex.com/tfs/TFS04</SccAuxPath>
-    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -57,6 +53,9 @@
     <CodeAnalysisRules>-Microsoft.Naming#CA1702;-Microsoft.Naming#CA1700;-Microsoft.Naming#CA1712;-Microsoft.Naming#CA1713;-Microsoft.Naming#CA1714;-Microsoft.Naming#CA1709;-Microsoft.Naming#CA1704;-Microsoft.Naming#CA1708;-Microsoft.Naming#CA1715;-Microsoft.Naming#CA1710;-Microsoft.Naming#CA1720;-Microsoft.Naming#CA1707;-Microsoft.Naming#CA1722;-Microsoft.Naming#CA1711;-Microsoft.Naming#CA1716;-Microsoft.Naming#CA1717;-Microsoft.Naming#CA1725;-Microsoft.Naming#CA1719;-Microsoft.Naming#CA1721;-Microsoft.Naming#CA1701;-Microsoft.Naming#CA1703;-Microsoft.Naming#CA1724;-Microsoft.Naming#CA1726</CodeAnalysisRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ascend, Version=1.0.0.6, Culture=neutral, PublicKeyToken=25c7a393ba3f37cd" />
+    <Reference Include="Ascend.Resources, Version=1.0.0.6, Culture=neutral, PublicKeyToken=9c9aecb37b1e03b6" />
+    <Reference Include="Ascend.Windows.Forms, Version=1.0.0.6, Culture=neutral, PublicKeyToken=ecd86ece2d3eb46d" />
     <Reference Include="C5, Version=1.1.0.0, Culture=neutral, PublicKeyToken=06a1b38866503b69, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Componentes\C5.dll</HintPath>
@@ -84,9 +83,11 @@
     <Compile Include="Compare\CompareConstraints.cs" />
     <Compile Include="Compare\CompareDatabase.cs" />
     <Compile Include="Compare\CompareFileGroups.cs" />
+    <Compile Include="Compare\CompareFullText.cs" />
     <Compile Include="Compare\CompareFunctions.cs" />
     <Compile Include="Compare\CompareIndexes.cs" />
     <Compile Include="Compare\ComparePartitionFunction.cs" />
+    <Compile Include="Compare\ComparePartitionSchemes.cs" />
     <Compile Include="Compare\CompareRoles.cs" />
     <Compile Include="Compare\CompareRules.cs" />
     <Compile Include="Compare\CompareSchemas.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Compare\CompareSynonyms.cs" />
     <Compile Include="Compare\CompareTables.cs" />
     <Compile Include="Compare\CompareTablesOptions.cs" />
+    <Compile Include="Compare\CompareTableType.cs" />
     <Compile Include="Compare\CompareTriggers.cs" />
     <Compile Include="Compare\CompareUserDataTypes.cs" />
     <Compile Include="Compare\CompareUsers.cs" />
@@ -118,17 +120,16 @@
     <Compile Include="Front\SqlServerConnectFront.Designer.cs">
       <DependentUpon>SqlServerConnectFront.cs</DependentUpon>
     </Compile>
-    <Compile Include="Front\SqlServerPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Front\SqlServerPanel.Designer.cs">
-      <DependentUpon>SqlServerPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Generate.cs" />
+    <Compile Include="Front\Util\SqlServerList.cs" />
+    <Compile Include="Generates\Generate.cs" />
+    <Compile Include="Generates\GenerateFullText.cs" />
+    <Compile Include="Generates\GenerateTextObjects.cs" />
+    <Compile Include="Generates\Util\Constants.cs" />
     <Compile Include="Generates\GenerateDefaults.cs" />
     <Compile Include="Generates\GenerateExtendedProperties.cs" />
     <Compile Include="Generates\GenerateFunctions.cs" />
-    <Compile Include="Generates\GeneratePartionFunctions.cs" />
+    <Compile Include="Generates\GeneratePartitionFunctions.cs" />
+    <Compile Include="Generates\GeneratePartitionScheme.cs" />
     <Compile Include="Generates\GenerateUsers.cs" />
     <Compile Include="Generates\GenerateViews.cs" />
     <Compile Include="Generates\GenerateAssemblies.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="Generates\GenerateUserDataTypes.cs" />
     <Compile Include="Generates\GenerateConstraint.cs" />
     <Compile Include="Generates\GenerateXMLSchemas.cs" />
+    <Compile Include="Generates\SQLCommands\UserDataTypeCommand.cs" />
     <Compile Include="Generates\Util\ConvertType.cs" />
     <Compile Include="Model\AssemblyFile.cs" />
     <Compile Include="Model\CLRCode.cs" />
@@ -157,12 +159,14 @@
     <Compile Include="Model\Defaults.cs" />
     <Compile Include="Model\ExtendedProperty.cs" />
     <Compile Include="Model\FullText.cs" />
-    <Compile Include="Model\FullTexts.cs" />
-    <Compile Include="Model\ICode.cs" />
-    <Compile Include="Model\ISQLServerSchemaBase.cs" />
+    <Compile Include="Model\Interfaces\ICode.cs" />
+    <Compile Include="Model\Interfaces\ISQLServerSchemaBase.cs" />
+    <Compile Include="Model\ITableType.cs" />
     <Compile Include="Model\Parameter.cs" />
     <Compile Include="Model\PartitionFunction.cs" />
+    <Compile Include="Model\PartitionScheme.cs" />
     <Compile Include="Model\TablePartition.cs" />
+    <Compile Include="Model\TableType.cs" />
     <Compile Include="Model\Util\FormatCode.cs" />
     <Compile Include="Model\Assembly.cs" />
     <Compile Include="Model\ColumnConstraint.cs" />
@@ -252,10 +256,6 @@
     <EmbeddedResource Include="Front\SqlServerConnectFront.resx">
       <DependentUpon>SqlServerConnectFront.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Front\SqlServerPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>SqlServerPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

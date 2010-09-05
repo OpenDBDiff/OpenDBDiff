@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Text;
 using DBDiff.Schema.Model;
-using DBDiff.Schema.SQLServer.Model.Util;
+using DBDiff.Schema.SQLServer.Generates.Model.Util;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class Rule : Code
     {

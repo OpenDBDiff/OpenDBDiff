@@ -2,12 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
 
-namespace DBDiff.Schema.SQLServer.Generates.SQLCommands
+namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 {
     internal static class ConstraintSQLCommand
     {
+        public static string GetUniqueKey(DatabaseInfo.VersionTypeEnum version)
+        {
+            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return GetUniqueKey2005();
+            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return GetUniqueKey2008();
+            return "";
+        }
+
+        public static string GetCheck(DatabaseInfo.VersionTypeEnum version)
+        {
+            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return GetCheck2005();
+            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return GetCheck2008();
+            return "";
+        }
+
         public static string GetPrimaryKey(DatabaseInfo.VersionTypeEnum version, Table table)
         {
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2000) return GetPrimaryKey2000(table);
@@ -16,16 +30,88 @@ namespace DBDiff.Schema.SQLServer.Generates.SQLCommands
             return "";
         }
 
-        private static string GetPrimaryKey2008()
+        private static string GetUniqueKey2008()
         {
             StringBuilder sql = new StringBuilder();
-            sql.Append("SELECT S.Name as Owner, IC.key_ordinal, C.user_type_id, I.object_id AS ID, dsidx.Name AS FileGroup, C.column_id, I.Index_id, C.Name AS ColumnName, I.Name, I.type, I.fill_factor, I.is_padded, I.allow_row_locks, I.allow_page_locks, I.ignore_dup_key, I.is_disabled, IC.is_descending_key, IC.is_included_column, CONVERT(bit,INDEXPROPERTY(I.object_id,I.name,'IsAutoStatistics')) AS IsAutoStatistics ");
+            sql.Append("SELECT O.type as ObjectType, S.Name as Owner, I.object_Id AS id,dsidx.Name as FileGroup, C.user_type_id, C.column_id, I.Index_id, C.Name AS ColumnName, I.Name, I.type, I.fill_factor, I.is_padded, I.allow_row_locks, I.allow_page_locks, I.ignore_dup_key, I.is_disabled, IC.is_descending_key, IC.is_included_column ");
             sql.Append("FROM sys.indexes I ");
             sql.Append("INNER JOIN sys.objects O ON O.object_id = I.object_id ");
             sql.Append("INNER JOIN sys.schemas S ON S.schema_id = O.schema_id ");
             sql.Append("INNER JOIN sys.index_columns IC ON IC.index_id = I.index_id AND IC.object_id = I.object_id ");
             sql.Append("INNER JOIN sys.columns C ON C.column_id = IC.column_id AND IC.object_id = C.object_id ");
-            sql.Append("INNER JOIN sys.data_spaces AS dsidx ON dsidx.data_space_id = I.data_space_id ");
+            sql.Append("LEFT JOIN sys.data_spaces AS dsidx ON dsidx.data_space_id = I.data_space_id ");
+            sql.Append("WHERE is_unique_constraint = 1 ORDER BY I.object_id,I.Name");
+            return sql.ToString();
+        }
+
+        private static string GetUniqueKey2005()
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.Append("SELECT O.type as ObjectType, S.Name as Owner, I.object_Id AS id,dsidx.Name as FileGroup, C.user_type_id, C.column_id, I.Index_id, C.Name AS ColumnName, I.Name, I.type, I.fill_factor, I.is_padded, I.allow_row_locks, I.allow_page_locks, I.ignore_dup_key, I.is_disabled, IC.is_descending_key, IC.is_included_column ");
+            sql.Append("FROM sys.indexes I ");
+            sql.Append("INNER JOIN sys.objects O ON O.object_id = I.object_id ");
+            sql.Append("INNER JOIN sys.schemas S ON S.schema_id = O.schema_id ");
+            sql.Append("INNER JOIN sys.index_columns IC ON IC.index_id = I.index_id AND IC.object_id = I.object_id ");
+            sql.Append("INNER JOIN sys.columns C ON C.column_id = IC.column_id AND IC.object_id = C.object_id ");
+            sql.Append("LEFT JOIN sys.data_spaces AS dsidx ON dsidx.data_space_id = I.data_space_id ");
+            sql.Append("WHERE is_unique_constraint = 1 ORDER BY I.object_id,I.Name");
+            return sql.ToString();
+        }
+
+        private static string GetCheck2008()
+        {
+            string sql;
+            sql = "SELECT  ";
+            sql += "CC.parent_object_id, ";
+            sql += "O.type as ObjectType, ";
+            sql += "CC.object_id AS ID, ";
+            sql += "CC.parent_column_id, ";
+            sql += "CC.name, ";
+            sql += "CC.type, ";
+            sql += "CC.definition, ";
+            sql += "CC.is_disabled, ";
+            sql += "CC.is_not_trusted AS WithCheck, ";
+            sql += "CC.is_not_for_replication, ";
+            sql += "0, ";
+            sql += "schema_name(CC.schema_id) AS Owner ";
+            sql += "FROM sys.check_constraints CC ";
+            sql += "INNER JOIN sys.objects O ON O.object_id = CC.parent_object_id ";
+            sql += "ORDER BY CC.parent_object_id,CC.name";
+            return sql;
+        }
+
+        private static string GetCheck2005()
+        {
+            string sql;
+            sql = "SELECT  ";
+            sql += "CC.parent_object_id, ";
+            sql += "O.Type as ObjectType, ";
+            sql += "CC.object_id AS ID, ";
+            sql += "CC.parent_column_id, ";
+            sql += "CC.name, ";
+            sql += "CC.type, ";
+            sql += "CC.definition, ";
+            sql += "CC.is_disabled, ";
+            sql += "CC.is_not_trusted AS WithCheck, ";
+            sql += "CC.is_not_for_replication, ";
+            sql += "0, ";
+            sql += "schema_name(CC.schema_id) AS Owner ";
+            sql += "FROM sys.check_constraints CC ";
+            sql += "INNER JOIN sys.objects O ON O.object_id = CC.parent_object_id ";
+            sql += "ORDER BY CC.parent_object_id,CC.name";
+            return sql;
+        }
+
+        private static string GetPrimaryKey2008()
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.Append("SELECT O.type as ObjectType, S.Name as Owner, IC.key_ordinal, C.user_type_id, I.object_id AS ID, dsidx.Name AS FileGroup, C.column_id, I.Index_id, C.Name AS ColumnName, I.Name, I.type, I.fill_factor, I.is_padded, I.allow_row_locks, I.allow_page_locks, I.ignore_dup_key, I.is_disabled, IC.is_descending_key, IC.is_included_column, CONVERT(bit,INDEXPROPERTY(I.object_id,I.name,'IsAutoStatistics')) AS IsAutoStatistics ");
+            sql.Append("FROM sys.indexes I ");
+            sql.Append("INNER JOIN sys.objects O ON O.object_id = I.object_id ");
+            sql.Append("INNER JOIN sys.schemas S ON S.schema_id = O.schema_id ");
+            sql.Append("INNER JOIN sys.index_columns IC ON IC.index_id = I.index_id AND IC.object_id = I.object_id ");
+            sql.Append("INNER JOIN sys.columns C ON C.column_id = IC.column_id AND IC.object_id = C.object_id ");
+            sql.Append("LEFT JOIN sys.data_spaces AS dsidx ON dsidx.data_space_id = I.data_space_id ");
             sql.Append("WHERE is_primary_key = 1 ORDER BY I.object_id");
             return sql.ToString();
         }
@@ -33,7 +119,7 @@ namespace DBDiff.Schema.SQLServer.Generates.SQLCommands
         private static string GetPrimaryKey2005()
         {
             StringBuilder sql = new StringBuilder();
-            sql.Append("SELECT S.Name as Owner, IC.key_ordinal, C.user_type_id, I.object_id AS ID, dsidx.Name AS FileGroup, C.column_id, I.Index_id, C.Name AS ColumnName, I.Name, I.type, I.fill_factor, I.is_padded, I.allow_row_locks, I.allow_page_locks, I.ignore_dup_key, I.is_disabled, IC.is_descending_key, IC.is_included_column, CONVERT(bit,INDEXPROPERTY(I.object_id,I.name,'IsAutoStatistics')) AS IsAutoStatistics ");
+            sql.Append("SELECT O.type as ObjectType, S.Name as Owner, IC.key_ordinal, C.user_type_id, I.object_id AS ID, dsidx.Name AS FileGroup, C.column_id, I.Index_id, C.Name AS ColumnName, I.Name, I.type, I.fill_factor, I.is_padded, I.allow_row_locks, I.allow_page_locks, I.ignore_dup_key, I.is_disabled, IC.is_descending_key, IC.is_included_column, CONVERT(bit,INDEXPROPERTY(I.object_id,I.name,'IsAutoStatistics')) AS IsAutoStatistics ");
             sql.Append("FROM sys.indexes I ");
             sql.Append("INNER JOIN sys.objects O ON O.object_id = I.object_id ");
             sql.Append("INNER JOIN sys.schemas S ON S.schema_id = O.schema_id ");

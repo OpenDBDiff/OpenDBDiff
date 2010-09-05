@@ -18,5 +18,7 @@ namespace DBDiff.Front
         string ConnectionString { get; }
         string ErrorConnection { get; }
         string DatabaseName { get; }
+        string Text { get; set; }
+        AnchorStyles Anchor { get; set; }
     }
 }

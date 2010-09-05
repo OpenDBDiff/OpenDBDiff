@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.Misc;
 
-namespace DBDiff.Schema.SQLServer.Compare
+namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal static class CompareDatabase
     {        
@@ -15,21 +15,24 @@ namespace DBDiff.Schema.SQLServer.Compare
             {
                 Database data = Origen;
                 CompareTables.GenerateDiferences(Origen.Tables, Destino.Tables);
-                CompareAssemblies.GenerateDiferences(Origen.Assemblies, Destino.Assemblies);
-                CompareUserDataTypes.GenerateDiferences(Origen.UserTypes, Destino.UserTypes);
-                CompareXMLSchemas.GenerateDiferences(Origen.XmlSchemas, Destino.XmlSchemas);
-                CompareSchemas.GenerateDiferences(Origen.Schemas, Destino.Schemas);
+                (new CompareAssemblies()).GenerateDiferences(Origen.Assemblies, Destino.Assemblies);
+                (new CompareUserDataTypes()).GenerateDiferences(Origen.UserTypes, Destino.UserTypes);
+                (new CompareXMLSchemas()).GenerateDiferences(Origen.XmlSchemas, Destino.XmlSchemas);
+                (new CompareSchemas()).GenerateDiferences(Origen.Schemas, Destino.Schemas);
                 CompareFileGroups.GenerateDiferences(Origen.FileGroups, Destino.FileGroups);
-                CompareRules.GenerateDiferences(Origen.Rules, Destino.Rules);
-                CompareDDLTriggers.GenerateDiferences(Origen.DDLTriggers, Destino.DDLTriggers);
-                CompareSynonyms.GenerateDiferences(Origen.Synonyms, Destino.Synonyms);
-                CompareUsers.GenerateDiferences(Origen.Users, Destino.Users);
-                CompareStoreProcedures.GenerateDiferences(Origen.Procedures, Destino.Procedures);
-                CompareCLRStoreProcedure.GenerateDiferences(Origen.CLRProcedures, Destino.CLRProcedures);
-                CompareViews.GenerateDiferences(Origen.Views, Destino.Views);
-                CompareFunctions.GenerateDiferences(Origen.Functions, Destino.Functions);
+                (new CompareRules()).GenerateDiferences(Origen.Rules, Destino.Rules);
+                (new CompareDDLTriggers()).GenerateDiferences(Origen.DDLTriggers, Destino.DDLTriggers);
+                (new CompareSynonyms()).GenerateDiferences(Origen.Synonyms, Destino.Synonyms);
+                (new CompareUsers()).GenerateDiferences(Origen.Users, Destino.Users);
+                (new CompareStoreProcedures()).GenerateDiferences(Origen.Procedures, Destino.Procedures);
+                (new CompareCLRStoreProcedure()).GenerateDiferences(Origen.CLRProcedures, Destino.CLRProcedures);
+                (new CompareViews()).GenerateDiferences(Origen.Views, Destino.Views);
+                (new CompareFunctions()).GenerateDiferences(Origen.Functions, Destino.Functions);
                 CompareRoles.GenerateDiferences(Origen.Roles, Destino.Roles);
-                ComparePartitionFunction.GenerateDiferences(Origen.PartitionFunctions, Destino.PartitionFunctions); 
+                (new ComparePartitionFunction()).GenerateDiferences(Origen.PartitionFunctions, Destino.PartitionFunctions);
+                (new ComparePartitionSchemes()).GenerateDiferences(Origen.PartitionSchemes, Destino.PartitionSchemes);
+                CompareTableType.GenerateDiferences(Origen.TablesTypes, Destino.TablesTypes);
+                (new CompareFullText()).GenerateDiferences(Origen.FullText, Destino.FullText);
                 return data;
             }
             catch (SchemaException)

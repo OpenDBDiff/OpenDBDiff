@@ -5,13 +5,20 @@ using System.Globalization;
 using System.Text;
 using System.Data.SqlClient;
 using DBDiff.Schema.Events;
-using DBDiff.Schema.SQLServer.Options;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Options;
+using DBDiff.Schema.SQLServer.Generates.Model;
 
-namespace DBDiff.Schema.SQLServer.Generates
+namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
-    public static class GenerateDDLTriggers
+    public class GenerateDDLTriggers
     {
+        private Generate root;
+
+        public GenerateDDLTriggers(Generate root)
+        {
+            this.root = root;
+        }
+
         private static string GetSQL()
         {
             string sql = "";
@@ -21,7 +28,7 @@ namespace DBDiff.Schema.SQLServer.Generates
             return sql;
         }
 
-        public static void Fill(Database database, string connectionString)
+        public void Fill(Database database, string connectionString)
         {
             if (database.Options.Ignore.FilterDDLTriggers)
             {

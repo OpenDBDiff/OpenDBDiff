@@ -1,4 +1,4 @@
-namespace DBDiff.Schema.SQLServer.Front
+namespace DBDiff.Schema.SQLServer.Generates.Front
 {
     partial class SqlServerConnectFront
     {
@@ -39,11 +39,16 @@ namespace DBDiff.Schema.SQLServer.Front
             this.label6 = new System.Windows.Forms.Label();
             this.txtUsername = new System.Windows.Forms.TextBox();
             this.btnTest = new System.Windows.Forms.Button();
+            this.lblName = new System.Windows.Forms.Label();
+            this.gradientPanel1 = new Ascend.Windows.Forms.GradientPanel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.gradientPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(109, 84);
+            this.txtPassword.Location = new System.Drawing.Point(82, 107);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(180, 20);
@@ -53,7 +58,7 @@ namespace DBDiff.Schema.SQLServer.Front
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(5, 87);
+            this.label4.Location = new System.Drawing.Point(3, 110);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(56, 13);
             this.label4.TabIndex = 16;
@@ -62,7 +67,7 @@ namespace DBDiff.Schema.SQLServer.Front
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 61);
+            this.label3.Location = new System.Drawing.Point(3, 84);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(58, 13);
             this.label3.TabIndex = 15;
@@ -71,7 +76,7 @@ namespace DBDiff.Schema.SQLServer.Front
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(5, 8);
+            this.label2.Location = new System.Drawing.Point(3, 31);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(66, 13);
             this.label2.TabIndex = 14;
@@ -80,11 +85,14 @@ namespace DBDiff.Schema.SQLServer.Front
             // cboServer
             // 
             this.cboServer.FormattingEnabled = true;
-            this.cboServer.Location = new System.Drawing.Point(109, 5);
+            this.cboServer.Items.AddRange(new object[] {
+            "(local)"});
+            this.cboServer.Location = new System.Drawing.Point(82, 28);
             this.cboServer.Name = "cboServer";
             this.cboServer.Size = new System.Drawing.Size(180, 21);
             this.cboServer.TabIndex = 0;
             this.cboServer.SelectedIndexChanged += new System.EventHandler(this.cboServer_SelectedIndexChanged);
+            this.cboServer.DropDown += new System.EventHandler(this.cboServer_DropDown);
             // 
             // cboAuthentication
             // 
@@ -93,7 +101,7 @@ namespace DBDiff.Schema.SQLServer.Front
             this.cboAuthentication.Items.AddRange(new object[] {
             "Windows Authentication",
             "SQL Server Authentication"});
-            this.cboAuthentication.Location = new System.Drawing.Point(109, 32);
+            this.cboAuthentication.Location = new System.Drawing.Point(82, 55);
             this.cboAuthentication.Name = "cboAuthentication";
             this.cboAuthentication.Size = new System.Drawing.Size(180, 21);
             this.cboAuthentication.TabIndex = 1;
@@ -102,7 +110,7 @@ namespace DBDiff.Schema.SQLServer.Front
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(5, 35);
+            this.label5.Location = new System.Drawing.Point(3, 58);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(75, 13);
             this.label5.TabIndex = 20;
@@ -111,17 +119,16 @@ namespace DBDiff.Schema.SQLServer.Front
             // cboDatabase
             // 
             this.cboDatabase.FormattingEnabled = true;
-            this.cboDatabase.Location = new System.Drawing.Point(109, 110);
+            this.cboDatabase.Location = new System.Drawing.Point(82, 133);
             this.cboDatabase.Name = "cboDatabase";
-            this.cboDatabase.Size = new System.Drawing.Size(230, 21);
+            this.cboDatabase.Size = new System.Drawing.Size(223, 21);
             this.cboDatabase.TabIndex = 4;
-            this.cboDatabase.SelectedIndexChanged += new System.EventHandler(this.cboDatabase_SelectedIndexChanged);
-            this.cboDatabase.Click += new System.EventHandler(this.cboDatabase_Click);
+            this.cboDatabase.DropDown += new System.EventHandler(this.cboDatabase_DropDown);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(5, 113);
+            this.label6.Location = new System.Drawing.Point(3, 136);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(56, 13);
             this.label6.TabIndex = 23;
@@ -129,7 +136,7 @@ namespace DBDiff.Schema.SQLServer.Front
             // 
             // txtUsername
             // 
-            this.txtUsername.Location = new System.Drawing.Point(109, 58);
+            this.txtUsername.Location = new System.Drawing.Point(82, 81);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(180, 20);
             this.txtUsername.TabIndex = 2;
@@ -138,19 +145,53 @@ namespace DBDiff.Schema.SQLServer.Front
             // btnTest
             // 
             this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTest.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnTest.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTest.Location = new System.Drawing.Point(284, 137);
+            this.btnTest.Location = new System.Drawing.Point(335, 127);
             this.btnTest.Name = "btnTest";
-            this.btnTest.Size = new System.Drawing.Size(103, 28);
+            this.btnTest.Size = new System.Drawing.Size(93, 28);
             this.btnTest.TabIndex = 5;
             this.btnTest.Text = "Test Connection";
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
+            // lblName
+            // 
+            this.lblName.AutoSize = true;
+            this.lblName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblName.Location = new System.Drawing.Point(17, 5);
+            this.lblName.Name = "lblName";
+            this.lblName.Size = new System.Drawing.Size(105, 13);
+            this.lblName.TabIndex = 24;
+            this.lblName.Text = "Source Database";
+            // 
+            // gradientPanel1
+            // 
+            this.gradientPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gradientPanel1.Controls.Add(this.pictureBox1);
+            this.gradientPanel1.Controls.Add(this.lblName);
+            this.gradientPanel1.Location = new System.Drawing.Point(0, 0);
+            this.gradientPanel1.Name = "gradientPanel1";
+            this.gradientPanel1.Size = new System.Drawing.Size(430, 24);
+            this.gradientPanel1.TabIndex = 26;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.Image = global::DBDiff.Schema.SQLServer.Generates.Properties.Resources.Database;
+            this.pictureBox1.Location = new System.Drawing.Point(2, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(15, 18);
+            this.pictureBox1.TabIndex = 27;
+            this.pictureBox1.TabStop = false;
+            // 
             // SqlServerConnectFront
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.gradientPanel1);
             this.Controls.Add(this.cboDatabase);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.btnTest);
@@ -163,7 +204,10 @@ namespace DBDiff.Schema.SQLServer.Front
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Name = "SqlServerConnectFront";
-            this.Size = new System.Drawing.Size(390, 168);
+            this.Size = new System.Drawing.Size(430, 156);
+            this.gradientPanel1.ResumeLayout(false);
+            this.gradientPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -182,5 +226,8 @@ namespace DBDiff.Schema.SQLServer.Front
         private System.Windows.Forms.Button btnTest;
         private System.Windows.Forms.ComboBox cboDatabase;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblName;
+        private Ascend.Windows.Forms.GradientPanel gradientPanel1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

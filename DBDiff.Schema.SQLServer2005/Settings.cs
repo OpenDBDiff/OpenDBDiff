@@ -1,4 +1,4 @@
-﻿namespace DBDiff.Schema.SQLServer.Properties {
+﻿namespace DBDiff.Schema.SQLServer.Generates.Properties {
     
     
     // This class allows you to handle specific events on the settings class:

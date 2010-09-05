@@ -8,14 +8,15 @@ using System.Threading;
 using DBDiff.Schema.Errors;
 using DBDiff.Schema.Model;
 using DBDiff.Schema.Events;
-using DBDiff.Schema.SQLServer.Options;
-using DBDiff.Schema.SQLServer.Model;
-using DBDiff.Schema.SQLServer.Generates.SQLCommands;
+using DBDiff.Schema.SQLServer.Generates.Options;
+using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
+using DBDiff.Schema.SQLServer.Generates.Generates.Util;
 using DBDiff.Schema.Misc;
 
-namespace DBDiff.Schema.SQLServer.Generates
+namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
-    public static class GenerateTables
+    public class GenerateTables
     {
         private static int colIDIndex = -1;
         private static int colNameIndex = -1;
@@ -56,6 +57,13 @@ namespace DBDiff.Schema.SQLServer.Generates
         private static int FileGroupIndex = -1;
         private static int FileGroupTextIndex = -1;
         private static int FileGroupStreamIndex = -1;
+
+        private Generate root;
+
+        public GenerateTables(Generate root)
+        {
+            this.root = root;
+        }
 
         private static void InitTableIndex(Database database, SqlDataReader reader)
         {
@@ -116,29 +124,35 @@ namespace DBDiff.Schema.SQLServer.Generates
             }
         }
 
-        private static void FillColumn(Table table, SqlDataReader reader)
+        private static void FillColumn<T>(ITable<T> table, SqlDataReader reader) where T:ISchemaBase
         {
-            InitColIndex((Database)table.Parent, reader);
-            Column col = new Column(table);
+            Database database = (Database)table.Parent;
+
+            InitColIndex(database, reader);
+            Column col = new Column((ISchemaBase)table);
             col.Id = (int)reader[colIDIndex];
-            if (!((Database)table.Parent).Options.Ignore.FilterIgnoreColumnOrder)
+            if (database.Options.Ignore.FilterColumnOrder)
                 col.Position = table.Columns.Count + 1;
-            if (!((Database)table.Parent).Options.Ignore.FilterIgnoreNotForReplication)
-                col.IsIdentityForReplication = ((int)reader[colIsIdentityReplIndex] == 1);
-            if (!((Database)table.Parent).Options.Ignore.FilterIgnoreColumnCollation)
+            
+            if (database.Options.Ignore.FilterColumnCollation)
                 col.Collation = (string)reader[colCollationIndex];
 
-            col.IsIdentity = (bool)reader[colIsIdentityIndex];
-            if ((col.IsIdentity) || (col.IsIdentityForReplication))
+            if (database.Options.Ignore.FilterColumnIdentity)
             {
-                if (!reader.IsDBNull(colIdentSeedIndex))
-                    col.IdentitySeed = (int)(decimal)reader[colIdentSeedIndex];
-                else
-                    col.IdentitySeed = 1;
-                if (!reader.IsDBNull(colIdentIncrementIndex))
-                    col.IdentityIncrement = (int)(decimal)reader[colIdentIncrementIndex];
-                else
-                    col.IdentityIncrement = 1;
+                col.IsIdentity = (bool)reader[colIsIdentityIndex];
+                if ((col.IsIdentity) || (col.IsIdentityForReplication))
+                {
+                    if (!reader.IsDBNull(colIdentSeedIndex))
+                        col.IdentitySeed = (int)(decimal)reader[colIdentSeedIndex];
+                    else
+                        col.IdentitySeed = 1;
+                    if (!reader.IsDBNull(colIdentIncrementIndex))
+                        col.IdentityIncrement = (int)(decimal)reader[colIdentIncrementIndex];
+                    else
+                        col.IdentityIncrement = 1;
+                }
+                if (database.Options.Ignore.FilterNotForReplication)
+                    col.IsIdentityForReplication = ((int)reader[colIsIdentityReplIndex] == 1);
             }
             col.Name = (string)reader[colNameIndex];
             col.Owner = table.Owner;
@@ -180,19 +194,16 @@ namespace DBDiff.Schema.SQLServer.Generates
             table.Columns.Add(col);
         }
 
-        public static void Fill(Database database, string connectionString, List<MessageLog> messages)
+        public void Fill(Database database, string connectionString, List<MessageLog> messages)
         {
             try
             {
+                root.RaiseOnReading(new ProgressEventArgs("Reading tables...",Constants.READING_TABLES));
                 FillTables(database, connectionString);
-                if (database.Tables.Count > 0)
+                if ((database.Tables.Count > 0) || (database.TablesTypes.Count > 0))
                 {
-                    if (database.Options.Ignore.FilterTrigger)
-                        GenerateTriggers.Fill(database, connectionString, messages);
-                    if (database.Options.Ignore.FilterIndex)
-                        GenerateIndex.Fill(database, connectionString, "U");
                     if (database.Options.Ignore.FilterConstraint)
-                        GenerateConstraint.Fill(database, connectionString);
+                        (new GenerateConstraint(root)).Fill(database, connectionString);
                 }
             }
             catch (Exception ex)
@@ -201,7 +212,7 @@ namespace DBDiff.Schema.SQLServer.Generates
             }
         }
 
-        private static void FillTables(Database database, string connectionString)
+        private void FillTables(Database database, string connectionString)
         {
             try
             {
@@ -209,7 +220,8 @@ namespace DBDiff.Schema.SQLServer.Generates
                 Boolean largeValues;
                 Boolean varDecimal;
                 int lastObjectId = 0;
-                Table item = null;
+                bool isTable = true;
+                ISchemaBase item = null;
 
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -225,33 +237,53 @@ namespace DBDiff.Schema.SQLServer.Generates
                                 if (lastObjectId != (int)reader[TableIdIndex])
                                 {
                                     lastObjectId = (int)reader[TableIdIndex];
-                                    item = new Table(database);
-                                    item.Id = (int)reader[TableIdIndex];
-                                    item.Name = (string)reader[TableNameIndex];
-                                    item.Owner = (string)reader[TableOwnerIndex];
-                                    item.HasClusteredIndex = (int)reader[HasClusteredIndexIndex] == 1;
-                                    textInRow = (int)reader[Text_In_Row_limitIndex];
-                                    largeValues = (Boolean)reader[large_value_types_out_of_rowIndex];
-                                    varDecimal = ((int)reader[HasVarDecimalIndex]) == 1;
-                                    if (database.Options.Ignore.FilterTableFileGroup)
+                                    isTable = reader["ObjectType"].ToString().Trim().Equals("U");
+                                    if (isTable)
                                     {
-                                        item.FileGroup = (string)reader[FileGroupIndex];
-                                        item.FileGroupText = (string)reader[FileGroupTextIndex];
-                                        if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+                                        item = new Table(database);
+                                        item.Id = (int)reader[TableIdIndex];
+                                        item.Name = (string)reader[TableNameIndex];
+                                        item.Owner = (string)reader[TableOwnerIndex];
+                                        ((Table)item).HasClusteredIndex = (int)reader[HasClusteredIndexIndex] == 1;
+                                        textInRow = (int)reader[Text_In_Row_limitIndex];
+                                        largeValues = (Boolean)reader[large_value_types_out_of_rowIndex];
+                                        varDecimal = ((int)reader[HasVarDecimalIndex]) == 1;
+                                        if (database.Options.Ignore.FilterTableFileGroup)
                                         {
-                                            item.FileGroupStream = (string)reader[FileGroupStreamIndex];
+                                            ((Table)item).FileGroup = (string)reader[FileGroupIndex];
+                                            ((Table)item).FileGroupText = (string)reader[FileGroupTextIndex];
+                                            if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+                                            {
+                                                ((Table)item).FileGroupStream = (string)reader[FileGroupStreamIndex];
+                                            }
                                         }
+                                        if (database.Options.Ignore.FilterTableOption)
+                                        {
+                                            if (textInRow > 0) ((Table)item).Options.Add(new TableOption("TextInRow", textInRow.ToString(CultureInfo.InvariantCulture), item));
+                                            if (largeValues) ((Table)item).Options.Add(new TableOption("LargeValues", "1", item));
+                                            if (varDecimal) ((Table)item).Options.Add(new TableOption("VarDecimal", "1", item));
+                                        }
+                                        database.Tables.Add((Table)item);
                                     }
-                                    if (database.Options.Ignore.FilterTableOption)
+                                    else
                                     {
-                                        if (textInRow > 0) item.Options.Add(new TableOption("TextInRow", textInRow.ToString(CultureInfo.InvariantCulture),item));
-                                        if (largeValues) item.Options.Add(new TableOption("LargeValues", "1",item));
-                                        if (varDecimal) item.Options.Add(new TableOption("VarDecimal", "1",item));
+                                        item = new TableType(database);
+                                        item.Id = (int)reader[TableIdIndex];
+                                        item.Name = (string)reader[TableNameIndex];
+                                        item.Owner = (string)reader[TableOwnerIndex];
+                                        database.TablesTypes.Add((TableType)item);
                                     }
-                                    database.Tables.Add(item);
                                 }
-                                if (database.Options.Ignore.FilterTable)
-                                    FillColumn(item, reader);
+                                if (isTable)
+                                {
+                                    if (database.Options.Ignore.FilterTable)
+                                        FillColumn<Table>((ITable<Table>)item, reader);
+                                }
+                                else
+                                {
+                                    if (database.Options.Ignore.FilterUserDataType)
+                                        FillColumn<TableType>((ITable<TableType>)item, reader);
+                                }                                
                             }
                         }
                     }

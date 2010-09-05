@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Xml.Serialization;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class Column : SQLServerSchemaBase, IComparable<Column>
     {
@@ -62,15 +62,17 @@ namespace DBDiff.Schema.SQLServer.Model
             col.Id = this.Id;
             col.Guid = this.Guid;
             col.Owner = this.Owner;
-            col.IsIdentity = this.IsIdentity;
-            col.IsIdentityForReplication = this.IsIdentityForReplication;
             col.IdentityIncrement = this.IdentityIncrement;
             col.IdentitySeed = this.IdentitySeed;
+            col.IsIdentity = this.IsIdentity;
+            col.IsIdentityForReplication = this.IsIdentityForReplication;
             col.IsComputed = this.IsComputed;
             col.IsRowGuid = this.IsRowGuid;
             col.IsPersisted = this.IsPersisted;
             col.IsFileStream = this.IsFileStream;
-            col.isSparse = this.isSparse;
+            col.IsSparse = this.IsSparse;
+            col.IsXmlDocument = this.IsXmlDocument;
+            col.IsUserDefinedType = this.IsUserDefinedType;
             col.HasComputedDependencies = this.HasComputedDependencies;
             col.HasIndexDependencies = this.HasIndexDependencies;
             col.Name = this.Name;
@@ -83,8 +85,6 @@ namespace DBDiff.Schema.SQLServer.Model
             col.Status = this.Status;
             col.Type = this.Type;
             col.XmlSchema = this.XmlSchema;
-            col.IsXmlDocument = this.IsXmlDocument;
-            col.IsUserDefinedType = this.IsUserDefinedType;
             col.Default = this.Default.Clone(this);
             col.Rule = this.Rule.Clone(this);
             if (this.DefaultConstraint != null)
@@ -287,11 +287,12 @@ namespace DBDiff.Schema.SQLServer.Model
         /// <value>
         /// 	<c>true</c> if this instance has to rebuild; otherwise, <c>false</c>.
         /// </value>
-        public Boolean HasToRebuild(int newPosition, string newType)
+        public Boolean HasToRebuild(int newPosition, string newType, bool isFileStream)
         {
             if (newType.Equals("text") && (!this.IsText)) return true;
             if (newType.Equals("ntext") && (!this.IsText)) return true;
             if (newType.Equals("image") && (!this.IsBinary)) return true;
+            if (isFileStream != this.isFileStream) return true;
             return ((Position != newPosition) || HasComputedDependencies || HasIndexDependencies || IsComputed || type.ToLower().Equals("timestamp"));
         }
 
@@ -450,19 +451,19 @@ namespace DBDiff.Schema.SQLServer.Model
             {
                 string tl = this.Type;
                 if (this.IsUserDefinedType)
-                {
-                    tl = ((Database)this.Parent.Parent).UserTypes.Find(item => item.Id == dataUserTypeId).Type.ToLower();
-                }
+                    tl = ((Database)this.Parent.Parent).UserTypes[type].Type.ToLower();
+
                 if ((((Database)Parent.Parent).Options.Defaults.UseDefaultValueIfExists) && (this.DefaultConstraint != null))
                 {
                     return this.DefaultConstraint.Definition;
                 }
                 else
                 {
+                    if (tl.Equals("time")) return ((Database)Parent.Parent).Options.Defaults.DefaultTime;
                     if (tl.Equals("int") || tl.Equals("bit") || tl.Equals("smallint") || tl.Equals("bigint") || tl.Equals("tinyint")) return ((Database)Parent.Parent).Options.Defaults.DefaultIntegerValue;
                     if (tl.Equals("text") || tl.Equals("char") || tl.Equals("varchar") || tl.Equals("varchar(max)")) return ((Database)Parent.Parent).Options.Defaults.DefaultTextValue;
                     if (tl.Equals("ntext") || tl.Equals("nchar") || tl.Equals("nvarchar") || tl.Equals("nvarchar(max)")) return ((Database)Parent.Parent).Options.Defaults.DefaultNTextValue;
-                    if (tl.Equals("datetime") || tl.Equals("smalldatetime")) return ((Database)Parent.Parent).Options.Defaults.DefaultDateValue;
+                    if (tl.Equals("date") || tl.Equals("datetimeoffset") || tl.Equals("datetime2") || tl.Equals("datetime") || tl.Equals("smalldatetime")) return ((Database)Parent.Parent).Options.Defaults.DefaultDateValue;
                     if (tl.Equals("numeric") || tl.Equals("decimal") || tl.Equals("float") || tl.Equals("money") || tl.Equals("smallmoney") || tl.Equals("real")) return ((Database)Parent.Parent).Options.Defaults.DefaultRealValue;
                     if (tl.Equals("sql_variant")) return ((Database)Parent.Parent).Options.Defaults.DefaultVariantValue;
                     if (tl.Equals("uniqueidentifier")) return ((Database)Parent.Parent).Options.Defaults.DefaultUniqueValue;
@@ -611,8 +612,8 @@ namespace DBDiff.Schema.SQLServer.Model
                 ConstraintColumn ic = item.Columns.Find(this.Id);
                 if (ic != null)
                 {
-                    if (ic.Status != Enums.ObjectStatusType.CreateStatus) list.Add(item.Drop());
-                    if (ic.Status != Enums.ObjectStatusType.DropStatus) list.Add(item.Create());
+                    if (item.Status != Enums.ObjectStatusType.CreateStatus) list.Add(item.Drop());
+                    if (item.Status != Enums.ObjectStatusType.DropStatus) list.Add(item.Create());
                 }
             });
             return list;
@@ -628,8 +629,8 @@ namespace DBDiff.Schema.SQLServer.Model
                         IndexColumn ic = item.Columns.Find(this.Id);
                         if (ic != null)
                         {
-                            if (ic.Status != Enums.ObjectStatusType.CreateStatus) list.Add(item.Drop());
-                            if (ic.Status != Enums.ObjectStatusType.DropStatus) list.Add(item.Create());
+                            if (item.Status != Enums.ObjectStatusType.CreateStatus) list.Add(item.Drop());
+                            if (item.Status != Enums.ObjectStatusType.DropStatus) list.Add(item.Create());
                         }
                     });
             }

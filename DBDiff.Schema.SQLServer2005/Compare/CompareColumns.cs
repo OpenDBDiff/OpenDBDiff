@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Compare
+namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal static class CompareColumns
     {
-        public static void GenerateDiferences(Columns CamposOrigen, Columns CamposDestino)
+        public static void GenerateDiferences<T>(Columns<T> CamposOrigen, Columns<T> CamposDestino) where T:ISchemaBase
         {
             int restPosition = 0;
             int sumPosition = 0;
@@ -56,7 +57,7 @@ namespace DBDiff.Schema.SQLServer.Compare
                             }
                             else
                             {
-                                if (node.HasToRebuild(campoOrigen.Position + sumPosition, campoOrigen.Type))
+                                if (node.HasToRebuild(campoOrigen.Position + sumPosition, campoOrigen.Type, campoOrigen.IsFileStream))
                                     node.Status = Enums.ObjectStatusType.RebuildStatus;
                                 else
                                 {

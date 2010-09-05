@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class Index : SQLServerSchemaBase
     {
@@ -303,14 +303,21 @@ namespace DBDiff.Schema.SQLServer.Model
             sql.Append(includes);
             sql.Append(")");
             if (!String.IsNullOrEmpty(filterDefintion)) sql.Append("\r\n WHERE " + filterDefintion + "\r\n");
-            sql.Append(" WITH (");            
-            if (IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");
-            if (IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON, "); else sql.Append("STATISTICS_NORECOMPUTE  = OFF, ");
-            if (Type != IndexTypeEnum.XML)
-                if ((IgnoreDupKey) && (IsUniqueKey)) sql.Append("IGNORE_DUP_KEY = ON, "); else sql.Append("IGNORE_DUP_KEY  = OFF, ");
-            if (AllowRowLocks) sql.Append("ALLOW_ROW_LOCKS = ON, "); else sql.Append("ALLOW_ROW_LOCKS  = OFF, ");
-            if (AllowPageLocks) sql.Append("ALLOW_PAGE_LOCKS = ON"); else sql.Append("ALLOW_PAGE_LOCKS  = OFF");
-            if (FillFactor != 0) sql.Append(", FILLFACTOR = " + FillFactor.ToString());
+            sql.Append(" WITH (");
+            if (Parent.ObjectType == Enums.ObjectType.TableType)
+            {
+                if ((IgnoreDupKey) && (IsUniqueKey)) sql.Append("IGNORE_DUP_KEY = ON "); else sql.Append("IGNORE_DUP_KEY  = OFF ");
+            }
+            else
+            {
+                if (IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");
+                if (IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON, "); else sql.Append("STATISTICS_NORECOMPUTE  = OFF, ");
+                if (Type != IndexTypeEnum.XML)
+                    if ((IgnoreDupKey) && (IsUniqueKey)) sql.Append("IGNORE_DUP_KEY = ON, "); else sql.Append("IGNORE_DUP_KEY  = OFF, ");
+                if (AllowRowLocks) sql.Append("ALLOW_ROW_LOCKS = ON, "); else sql.Append("ALLOW_ROW_LOCKS  = OFF, ");
+                if (AllowPageLocks) sql.Append("ALLOW_PAGE_LOCKS = ON"); else sql.Append("ALLOW_PAGE_LOCKS  = OFF");
+                if (FillFactor != 0) sql.Append(", FILLFACTOR = " + FillFactor.ToString());
+            }
             sql.Append(")");
             if (!String.IsNullOrEmpty(FileGroup)) sql.Append(" ON [" + FileGroup + "]");
             sql.Append("\r\nGO\r\n");
@@ -375,6 +382,8 @@ namespace DBDiff.Schema.SQLServer.Model
         public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList list = new SQLScriptList();
+            if (this.Status != Enums.ObjectStatusType.OriginalStatus)
+                RootParent.ActionMessage[Parent.FullName].Add(this);
 
             if (this.HasState(Enums.ObjectStatusType.DropStatus))
                 list.Add(Drop());

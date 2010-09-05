@@ -2,34 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Compare
+namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareXMLSchemas:CompareBase<XMLSchema>
     {
-        public static void GenerateDiferences(SchemaList<XMLSchema, Database> CamposOrigen, SchemaList<XMLSchema, Database> CamposDestino)
+        protected override void DoUpdate<Root>(SchemaList<XMLSchema, Root> CamposOrigen, XMLSchema node)
         {
-            foreach (XMLSchema node in CamposDestino)
+            if (!node.Compare(CamposOrigen[node.FullName]))
             {
-                if (!CamposOrigen.Exists(node.FullName))
-                {
-                    node.Status = Enums.ObjectStatusType.CreateStatus;
-                    CamposOrigen.Add(node);
-                }
-                else
-                {
-                    if (!node.Compare(CamposOrigen[node.FullName]))
-                    {
-                        XMLSchema newNode = node.Clone(CamposOrigen.Parent);
-                        newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                        CamposOrigen[node.FullName] = newNode;
-                    }
-                }
+                XMLSchema newNode = node.Clone(CamposOrigen.Parent);
+                newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                CamposOrigen[node.FullName] = newNode;
             }
-
-            MarkDrop(CamposOrigen, CamposDestino);
         }
     }
 }

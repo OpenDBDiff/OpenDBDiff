@@ -4,7 +4,7 @@ using System.Text;
 using DBDiff.Schema.Model;
 using System.Collections;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class XMLSchema : SQLServerSchemaBase
     {

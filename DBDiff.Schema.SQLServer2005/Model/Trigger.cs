@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class Trigger : Code
     {        
@@ -21,7 +21,7 @@ namespace DBDiff.Schema.SQLServer.Model
         /// <summary>
         /// Clona el objeto en una nueva instancia.
         /// </summary>
-        public Trigger Clone(ISchemaBase parent)
+        public override ISchemaBase Clone(ISchemaBase parent)
         {
             Trigger trigger = new Trigger(parent);
             trigger.Text = this.Text;
@@ -79,9 +79,9 @@ namespace DBDiff.Schema.SQLServer.Model
             if (!IsDDLTrigger)
             {
                 if (IsDisabled)
-                    return "ALTER TABLE " + Parent.FullName + " DISABLE TRIGGER [" + Name + "]\r\nGO\r\n";
+                    return "DISABLE TRIGGER [" + Name + "] ON " + Parent.FullName + "\r\nGO\r\n";
                 else
-                    return "ALTER TABLE " + Parent.FullName + " ENABLE TRIGGER [" + Name + "]\r\nGO\r\n";
+                    return "ENABLE TRIGGER [" + Name + "] ON " + Parent.FullName + "\r\nGO\r\n";
             }
             else
             {

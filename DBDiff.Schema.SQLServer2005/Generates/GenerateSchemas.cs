@@ -2,23 +2,29 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data.SqlClient;
-using DBDiff.Schema.SQLServer.Model;
-using DBDiff.Schema.SQLServer.Options;
+using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.SQLServer.Generates.Options;
 
-namespace DBDiff.Schema.SQLServer.Generates
+namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
-    public static class GenerateSchemas
+    public class GenerateSchemas
     {
+        private Generate root;
+
+        public GenerateSchemas(Generate root)
+        {
+            this.root = root;
+        }
+        
         private static string GetSQL()
         {
             string sql;
             sql = "select S1.name,S1.schema_id, S2.name AS Owner from sys.schemas S1 ";
-            sql += "INNER JOIN sys.schemas S2 ON S2.schema_id = S1.principal_id ";
-            //sql += "WHERE S1.schema_id <> S1.principal_id";
+            sql += "INNER JOIN sys.database_principals S2 ON S2.principal_id = S1.principal_id ";
             return sql;
         }
 
-        public static void Fill(Database database, string connectioString)
+        public void Fill(Database database, string connectioString)
         {
             if (database.Options.Ignore.FilterSchema)
             {

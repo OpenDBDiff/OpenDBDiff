@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Xml;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Compare
+namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareTables:CompareBase<Table>
     {
@@ -29,6 +29,7 @@ namespace DBDiff.Schema.SQLServer.Compare
                 if (!tablasOrigen.Exists(node.FullName))
                 {
                     node.Status = Enums.ObjectStatusType.CreateStatus;
+                    node.Parent = tablasOrigen.Parent; 
                     tablasOrigen.Add(node);
                 }
                 else
@@ -36,12 +37,12 @@ namespace DBDiff.Schema.SQLServer.Compare
                     if (node.Status != Enums.ObjectStatusType.DropStatus)
                     {
                         Table tablaOriginal = tablasOrigen[node.FullName];
-                        tablaOriginal.OriginalTable = tablasOrigen[node.FullName].Clone((Database)tablaOriginal.Parent);
-                        CompareColumns.GenerateDiferences(tablaOriginal.Columns, node.Columns);
-                        CompareConstraints.GenerateDiferences(tablaOriginal.Constraints, node.Constraints);
+                        tablaOriginal.OriginalTable = (Table)tablasOrigen[node.FullName].Clone((Database)tablaOriginal.Parent);
+                        CompareColumns.GenerateDiferences<Table>(tablaOriginal.Columns, node.Columns);
+                        CompareConstraints.GenerateDiferences<Table>(tablaOriginal.Constraints, node.Constraints);
                         CompareIndexes.GenerateDiferences(tablaOriginal.Indexes, node.Indexes);
                         CompareTablesOptions.GenerateDiferences(tablaOriginal.Options, node.Options);
-                        CompareTriggers.GenerateDiferences(tablaOriginal.Triggers, node.Triggers);
+                        (new CompareTriggers()).GenerateDiferences<Table>(tablaOriginal.Triggers, node.Triggers);
                         CompareCLRTriggers.GenerateDiferences(tablaOriginal.CLRTriggers, node.CLRTriggers);
                         if (!Table.CompareFileGroup(tablaOriginal, node))
                         {

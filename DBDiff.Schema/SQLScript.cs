@@ -10,8 +10,6 @@ namespace DBDiff.Schema
         private int dependencies;
         private Enums.ScripActionType status;
         private int deep;
-        //private SQLScriptList childs;
-        private bool isDrop = false;
 
         public SQLScript(int deepvalue, string sqlScript, int dependenciesCount, Enums.ScripActionType action)
         {

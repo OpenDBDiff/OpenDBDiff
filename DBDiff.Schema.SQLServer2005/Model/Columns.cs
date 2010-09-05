@@ -4,20 +4,20 @@ using System.Collections.Generic;
 using System.Text;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class Columns : SchemaList<Column,Table>
+    public class Columns<T> : SchemaList<Column, T> where T : ISchemaBase
     {
-        public Columns(Table parent):base(parent)
+        public Columns(T parent):base(parent)
         {
         }
 
         /// <summary>
         /// Clona el objeto Columns en una nueva instancia.
         /// </summary>
-        public new Columns Clone(Table parentObject)
+        public new Columns<T> Clone(T parentObject)
         {
-            Columns columns = new Columns(parentObject);
+            Columns<T> columns = new Columns<T>(parentObject);
             for (int index = 0; index < this.Count; index++)
             {
                 columns.Add(this[index].Clone(parentObject));
@@ -71,7 +71,7 @@ namespace DBDiff.Schema.SQLServer.Model
                         list.AddRange(item.Alter(Enums.ScripActionType.AlterTable));
                     }
                     if (item.HasState(Enums.ObjectStatusType.UpdateStatus))
-                        list.Add("UPDATE " + Parent.FullName + " SET [" + item.Name + "] = " + item.DefaultForceValue + " WHERE [" + item.Name + "] IS NULL\r\nGO\r\n",0, Enums.ScripActionType.UpdateTable);
+                        list.Add("UPDATE " + Parent.FullName + " SET [" + item.Name + "] = " + item.DefaultForceValue + " WHERE [" + item.Name + "] IS NULL\r\nGO\r\n", 0, Enums.ScripActionType.UpdateTable);
                     if (item.HasState(Enums.ObjectStatusType.BindStatus))
                     {
                         if (item.Rule.Id != 0)
@@ -89,6 +89,14 @@ namespace DBDiff.Schema.SQLServer.Model
 
                 if (!String.IsNullOrEmpty(sqlDrop + sqlAdd + sqlCons + sqlBinds))
                     list.Add(sqlDrop + sqlAdd + sqlBinds, 0, Enums.ScripActionType.AlterTable);
+            }
+            else
+            {
+                this.ForEach(item =>
+                {
+                    if (item.Status != Enums.ObjectStatusType.OriginalStatus)
+                        item.RootParent.ActionMessage[item.Parent.FullName].Add(item);
+                });
             }
             return list;
         }

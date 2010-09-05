@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Compare
+namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareConstraints:CompareBase<Constraint>
     {
-        private static void DoUpdate(Constraints CamposOrigen, Constraint node)
+        private static void DoUpdate<T>(Constraints<T> CamposOrigen, Constraint node) where T:ISchemaBase
         {
             Constraint origen = CamposOrigen[node.FullName];
             if (!Constraint.Compare(origen, node))
             {
-                Constraint newNode = node.Clone(CamposOrigen.Parent);
+                Constraint newNode = (Constraint)node.Clone(CamposOrigen.Parent);
                 if (node.IsDisabled == origen.IsDisabled)
                 {
                     newNode.Status = Enums.ObjectStatusType.AlterStatus;
@@ -25,16 +26,16 @@ namespace DBDiff.Schema.SQLServer.Compare
             {
                 if (node.IsDisabled != origen.IsDisabled)
                 {
-                    Constraint newNode = node.Clone(CamposOrigen.Parent);
+                    Constraint newNode = (Constraint)node.Clone(CamposOrigen.Parent);
                     newNode.Status = Enums.ObjectStatusType.DisabledStatus;
                     CamposOrigen[node.FullName] = newNode;
                 }
             }
         }
 
-        private static void DoNew(Constraints CamposOrigen, Constraint node)
+        private static void DoNew<T>(Constraints<T> CamposOrigen, Constraint node) where T:ISchemaBase
         {
-            Constraint newNode = node.Clone(CamposOrigen.Parent);
+            Constraint newNode = (Constraint)node.Clone(CamposOrigen.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
             CamposOrigen.Add(newNode);
         }
@@ -45,7 +46,7 @@ namespace DBDiff.Schema.SQLServer.Compare
             node.Status = Enums.ObjectStatusType.DropStatus;
         }
 
-        public static void GenerateDiferences(Constraints CamposOrigen, Constraints CamposDestino)
+        public static void GenerateDiferences<T>(Constraints<T> CamposOrigen, Constraints<T> CamposDestino) where T:ISchemaBase
         {
             bool has = true;
             int DestinoIndex = 0;
@@ -61,9 +62,9 @@ namespace DBDiff.Schema.SQLServer.Compare
                 {
                     node = CamposDestino[DestinoIndex];
                     if (!CamposOrigen.Exists(node.FullName))
-                        DoNew(CamposOrigen, node);
+                        DoNew<T>(CamposOrigen, node);
                     else
-                        DoUpdate(CamposOrigen, node);
+                        DoUpdate<T>(CamposOrigen, node);
 
                     DestinoIndex++;
                     has = true;

@@ -3,18 +3,26 @@ using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
 using System.Data.SqlClient;
-using DBDiff.Schema.SQLServer.Model;
-using DBDiff.Schema.SQLServer.Options;
+using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.SQLServer.Generates.Options;
+using DBDiff.Schema.SQLServer.Generates.Generates.Util;
+using DBDiff.Schema.Events;
 
-namespace DBDiff.Schema.SQLServer.Generates
+namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
-    public static class GenerateStoreProcedures
+    public class GenerateStoreProcedures
     {
         private static int NameIndex = -1;
         private static int object_idIndex = -1;
         private static int ownerIndex = -1;
-        private static int textIndex = -1;
         private static int typeIndex = -1;
+
+        private Generate root;
+
+        public GenerateStoreProcedures(Generate root)
+        {
+            this.root = root;
+        }
 
         private static void InitIndex(SqlDataReader reader)
         {
@@ -23,7 +31,6 @@ namespace DBDiff.Schema.SQLServer.Generates
                 object_idIndex = reader.GetOrdinal("object_id");
                 NameIndex = reader.GetOrdinal("Name");
                 ownerIndex = reader.GetOrdinal("owner");
-                textIndex = reader.GetOrdinal("text");
                 typeIndex = reader.GetOrdinal("type");
             }
         }
@@ -41,7 +48,7 @@ namespace DBDiff.Schema.SQLServer.Generates
         private static string GetSQL()
         {
             string sql = "";
-            sql += "select ISNULL(CONVERT(varchar,AM.execute_as_principal_id),'CALLER') as ExecuteAs, P.type, AF.name AS assembly_name, AM.assembly_class, AM.assembly_id, AM.assembly_method, OBJECT_DEFINITION(P.object_id) AS Text, P.object_id, S.name as owner, P.name as name from sys.procedures P ";
+            sql += "select ISNULL(CONVERT(varchar,AM.execute_as_principal_id),'CALLER') as ExecuteAs, P.type, AF.name AS assembly_name, AM.assembly_class, AM.assembly_id, AM.assembly_method, P.object_id, S.name as owner, P.name as name from sys.procedures P ";
             sql += "INNER JOIN sys.schemas S ON S.schema_id = P.schema_id ";
             sql += "LEFT JOIN sys.assembly_modules AM ON AM.object_id = P.object_id ";
             sql += "LEFT JOIN sys.assemblies AF ON AF.assembly_id = AM.assembly_id";
@@ -79,10 +86,11 @@ namespace DBDiff.Schema.SQLServer.Generates
             }
         }
 
-        public static void Fill(Database database, string connectionString)
+        public void Fill(Database database, string connectionString)
         {
             if ((database.Options.Ignore.FilterStoreProcedure) || (database.Options.Ignore.FilterCLRStoreProcedure))
             {
+                root.RaiseOnReading(new ProgressEventArgs("Reading Store Procedures...", Constants.READING_PROCEDURES));
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     using (SqlCommand command = new SqlCommand(GetSQL(), conn))
@@ -99,8 +107,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                                     item.Id = (int)reader[object_idIndex];
                                     item.Name = (string)reader[NameIndex];
                                     item.Owner = (string)reader[ownerIndex];
-                                    item.Text = (string)reader[textIndex];
-                                    database.Procedures.Add(item);
+                                    database.Procedures.Add(item);                                    
                                 }
                                 if ((reader[typeIndex].ToString().Trim().Equals("PC")) && (database.Options.Ignore.FilterCLRStoreProcedure))
                                 {
@@ -115,7 +122,7 @@ namespace DBDiff.Schema.SQLServer.Generates
                                     item.AssemblyExecuteAs = reader["ExecuteAs"].ToString();
                                     item.AssemblyMethod = reader["assembly_method"].ToString();
                                     database.CLRProcedures.Add(item);
-                                }
+                                }                                
                             }
                         }
                     }                    

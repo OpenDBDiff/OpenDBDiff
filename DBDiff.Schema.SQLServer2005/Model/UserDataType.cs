@@ -5,7 +5,7 @@ using System.Text;
 using System.Globalization;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class UserDataType : SQLServerSchemaBase
     {
@@ -24,7 +24,7 @@ namespace DBDiff.Schema.SQLServer.Model
 
         public UserDataType(ISchemaBase parent)
             : base(parent, Enums.ObjectType.UserDataType)
-        {          
+        {
             this._default = new Default(this);
             this.rule = new Rule(this);
             this.dependencys = new List<ObjectDependency>();

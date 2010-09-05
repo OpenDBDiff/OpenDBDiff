@@ -2,13 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data.SqlClient;
-using DBDiff.Schema.SQLServer.Options;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Options;
+using DBDiff.Schema.SQLServer.Generates.Model;
 
-namespace DBDiff.Schema.SQLServer.Generates
+namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
-    public static class GenerateFileGroups
+    public class GenerateFileGroups
     {
+        private Generate root;
+
+        public GenerateFileGroups(Generate root)
+        {
+            this.root = root;
+        }
+
         private static string GetSQLFile(FileGroup filegroup)
         {
             string sql;
@@ -67,7 +74,7 @@ namespace DBDiff.Schema.SQLServer.Generates
             return sql;
         }
 
-        public static void Fill(Database database, string connectionString)
+        public void Fill(Database database, string connectionString)
         {
             try
             {

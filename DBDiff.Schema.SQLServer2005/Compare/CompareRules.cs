@@ -1,35 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Compare
+namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareRules:CompareBase<Rule>
     {
-        public static void GenerateDiferences(SchemaList<Rule, Database> CamposOrigen, SchemaList<Rule, Database> CamposDestino)
+        protected override void DoUpdate<Root>(SchemaList<Rule, Root> CamposOrigen, Rule node)
         {
-            foreach (Rule node in CamposDestino)
+            if (!node.Compare(CamposOrigen[node.FullName]))
             {
-                if (!CamposOrigen.Exists(node.FullName))
-                {
-                    Rule newNode = node.Clone(CamposOrigen.Parent);
-                    newNode.Status = Enums.ObjectStatusType.CreateStatus;
-                    CamposOrigen.Add(newNode);
-                }
-                else
-                {
-                    if (!node.Compare(CamposOrigen[node.FullName]))
-                    {
-                        Rule newNode = node.Clone(CamposOrigen.Parent);
-                        newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                        CamposOrigen[node.FullName] = newNode;
-                    }
-                }
+                Rule newNode = node.Clone(CamposOrigen.Parent);
+                newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                CamposOrigen[node.FullName] = newNode;
             }
-            
-            MarkDrop(CamposOrigen, CamposDestino);
+        }
+
+        protected override void DoNew<Root>(SchemaList<Rule, Root> CamposOrigen, Rule node)
+        {
+            Rule newNode = node.Clone(CamposOrigen.Parent);
+            newNode.Status = Enums.ObjectStatusType.CreateStatus;
+            CamposOrigen.Add(newNode);
         }
     }
 }

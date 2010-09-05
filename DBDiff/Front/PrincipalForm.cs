@@ -17,9 +17,9 @@ using DBDiff.Schema.SQLServer2000.Compare;
 /*using DBDiff.Schema.Sybase;
 using DBDiff.Schema.Sybase.Options;
 using DBDiff.Schema.Sybase.Model;*/
-using DBDiff.Schema.SQLServer;
-using DBDiff.Schema.SQLServer.Options;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates;
+using DBDiff.Schema.SQLServer.Generates.Options;
+using DBDiff.Schema.SQLServer.Generates.Model;
 /*using DBDiff.Schema.MySQL;
 using DBDiff.Schema.MySQL.Options;
 using DBDiff.Schema.MySQL.Model;
@@ -39,6 +39,14 @@ namespace DBDiff
         {
             InitializeComponent();
             ShowSQL2005();
+            this.txtNewObject.ConfigurationManager.Language = "mssql";
+            this.txtNewObject.IsReadOnly = false;
+            this.txtNewObject.Styles.LineNumber.BackColor = Color.White;
+            this.txtNewObject.Styles.LineNumber.IsVisible = false;
+            this.txtOldObject.ConfigurationManager.Language = "mssql";
+            this.txtOldObject.IsReadOnly = false;
+            this.txtOldObject.Styles.LineNumber.BackColor = Color.White;
+            this.txtOldObject.Styles.LineNumber.IsVisible = false;
         }
 
         /*private void ProcesarSybase()
@@ -86,24 +94,35 @@ namespace DBDiff
         {
             try
             {
-                DBDiff.Schema.SQLServer.Model.Database origen;
-                DBDiff.Schema.SQLServer.Model.Database destino;
+                DBDiff.Schema.SQLServer.Generates.Model.Database origen;
+                DBDiff.Schema.SQLServer.Generates.Model.Database destino;
 
                 if ((!String.IsNullOrEmpty(mySqlConnectFront1.DatabaseName) && (!String.IsNullOrEmpty(mySqlConnectFront2.DatabaseName))))
                 {
-                    DBDiff.Schema.SQLServer.Generate sql = new DBDiff.Schema.SQLServer.Generate();
-                    sql.ConnectionString = mySqlConnectFront1.ConnectionString;
-                    origen = sql.Process(SqlFilter);
+                    DBDiff.Schema.SQLServer.Generates.Generate sql1 = new DBDiff.Schema.SQLServer.Generates.Generate();
+                    DBDiff.Schema.SQLServer.Generates.Generate sql2 = new DBDiff.Schema.SQLServer.Generates.Generate();
+                    
+                    sql1.ConnectionString = mySqlConnectFront1.ConnectionString;
+                    sql1.Options = SqlFilter;
 
-                    sql.ConnectionString = mySqlConnectFront2.ConnectionString;
-                    destino = sql.Process(SqlFilter);
+                    sql2.ConnectionString = mySqlConnectFront2.ConnectionString;
+                    sql2.Options = SqlFilter;
 
-                    origen = DBDiff.Schema.SQLServer.Generate.Compare(origen, destino);
-                    //this.txtScript.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
-                    //this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
-                    this.txtDiferencias.Type = SQLRichControl.SQLTextControl.SQLType.SQLServer;
-                    this.txtDiferencias.Text = origen.ToSqlDiff().ToSQL();
-                    this.schemaTreeView1.Database = origen;
+                    ProgressForm progres = new ProgressForm("Source Database", "Destination Database", sql2, sql1);
+                    progres.ShowDialog(this);
+                    origen = progres.Source;
+                    destino = progres.Destination;
+                    
+                    this.txtDiferencias.ConfigurationManager.Language = "mssql";
+                    this.txtDiferencias.IsReadOnly = false;
+                    this.txtDiferencias.Styles.LineNumber.BackColor = Color.White;
+                    this.txtDiferencias.Styles.LineNumber.IsVisible = false;
+                    this.txtDiferencias.Text = destino.ToSqlDiff().ToSQL();
+                    this.txtDiferencias.IsReadOnly = true;
+                    this.schemaTreeView1.DatabaseSource = destino;
+                    this.schemaTreeView1.DatabaseDestination = origen;
+                    this.schemaTreeView1.OnSelectItem += new SchemaTreeView.SchemaHandler(schemaTreeView1_OnSelectItem);
+                    this.textBox1.Text = origen.ActionMessage.Message;
 
                     btnCopy.Enabled = true;
                     btnSaveAs.Enabled = true;
@@ -119,6 +138,31 @@ namespace DBDiff
             {
                 throw new SchemaException("Invalid database connection. Please check the database connection\r\n" + ex.Message);
             }
+        }
+
+        private void schemaTreeView1_OnSelectItem(string ObjectFullName)
+        {
+            this.txtNewObject.IsReadOnly = false;
+            this.txtOldObject.IsReadOnly = false;
+            txtNewObject.Text = "";
+            txtOldObject.Text = "";
+
+            DBDiff.Schema.SQLServer.Generates.Model.Database database;
+            database = (DBDiff.Schema.SQLServer.Generates.Model.Database)schemaTreeView1.DatabaseSource;
+            if (database.Find(ObjectFullName) != null)
+            {
+                if (database.Find(ObjectFullName).Status != DBDiff.Schema.Enums.ObjectStatusType.DropStatus) 
+                    txtNewObject.Text = database.Find(ObjectFullName).ToSql();
+            }
+
+            database = (DBDiff.Schema.SQLServer.Generates.Model.Database)schemaTreeView1.DatabaseDestination;
+            if (database.Find(ObjectFullName) != null)
+            {
+                if (database.Find(ObjectFullName).Status != DBDiff.Schema.Enums.ObjectStatusType.CreateStatus) 
+                    txtOldObject.Text = database.Find(ObjectFullName).ToSql();
+            }
+            this.txtNewObject.IsReadOnly = true;
+            this.txtOldObject.IsReadOnly = true;
         }
 
         /*private void ProcesarSQL2000()
@@ -148,8 +192,6 @@ namespace DBDiff
         private void sql_OnTableProgress(object sender, ProgressEventArgs e)
         {
             Application.DoEvents();
-            progressBar1.Value = (int)e.Progress;
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -205,28 +247,31 @@ namespace DBDiff
         */
         private void ShowSQL2005()
         {
-            this.mySqlConnectFront2 = new DBDiff.Schema.SQLServer.Front.SqlServerConnectFront();
-            this.mySqlConnectFront1 = new DBDiff.Schema.SQLServer.Front.SqlServerConnectFront();
-            this.mySqlConnectFront1.Location = new System.Drawing.Point(5, 19);
+            this.mySqlConnectFront2 = new DBDiff.Schema.SQLServer.Generates.Front.SqlServerConnectFront();
+            this.mySqlConnectFront1 = new DBDiff.Schema.SQLServer.Generates.Front.SqlServerConnectFront();
+            this.mySqlConnectFront1.Location = new System.Drawing.Point(1, 1);
             this.mySqlConnectFront1.Name = "mySqlConnectFront1";
-            this.mySqlConnectFront1.Dock = DockStyle.Fill;
+            this.mySqlConnectFront1.Anchor = (AnchorStyles)((int)AnchorStyles.Bottom + (int)AnchorStyles.Left + (int)AnchorStyles.Right);
+
             this.mySqlConnectFront1.TabIndex = 10;
-            this.mySqlConnectFront2.Location = new System.Drawing.Point(5, 19);
+            this.mySqlConnectFront1.Text = "Source Database:";
+            this.mySqlConnectFront2.Location = new System.Drawing.Point(1, 1);
             this.mySqlConnectFront2.Name = "mySqlConnectFront2";
-            this.mySqlConnectFront2.Dock = DockStyle.Fill;
+            this.mySqlConnectFront2.Anchor = (AnchorStyles)((int)AnchorStyles.Bottom + (int)AnchorStyles.Left + (int)AnchorStyles.Right);
             this.mySqlConnectFront2.TabIndex = 10;
             this.mySqlConnectFront1.Visible = true;
             this.mySqlConnectFront2.Visible = true;
-            ((DBDiff.Schema.SQLServer.Front.SqlServerConnectFront)this.mySqlConnectFront1).UserName = "sa";
-            ((DBDiff.Schema.SQLServer.Front.SqlServerConnectFront)this.mySqlConnectFront1).Password = "";
-            ((DBDiff.Schema.SQLServer.Front.SqlServerConnectFront)this.mySqlConnectFront1).ServerName = ".";
-            ((DBDiff.Schema.SQLServer.Front.SqlServerConnectFront)this.mySqlConnectFront2).UserName = "sa";
-            ((DBDiff.Schema.SQLServer.Front.SqlServerConnectFront)this.mySqlConnectFront2).Password = "";
-            ((DBDiff.Schema.SQLServer.Front.SqlServerConnectFront)this.mySqlConnectFront2).ServerName = ".";
-            ((DBDiff.Schema.SQLServer.Front.SqlServerConnectFront)this.mySqlConnectFront1).DatabaseIndex = 1;
-            ((DBDiff.Schema.SQLServer.Front.SqlServerConnectFront)this.mySqlConnectFront2).DatabaseIndex = 2;
-            this.groupBox3.Controls.Add((System.Windows.Forms.Control)this.mySqlConnectFront2);
-            this.groupBox2.Controls.Add((System.Windows.Forms.Control)this.mySqlConnectFront1);
+            this.mySqlConnectFront2.Text = "Destination Database:";
+            ((DBDiff.Schema.SQLServer.Generates.Front.SqlServerConnectFront)this.mySqlConnectFront1).UserName = "sa";
+            ((DBDiff.Schema.SQLServer.Generates.Front.SqlServerConnectFront)this.mySqlConnectFront1).Password = "";
+            ((DBDiff.Schema.SQLServer.Generates.Front.SqlServerConnectFront)this.mySqlConnectFront1).ServerName = "(local)";
+            ((DBDiff.Schema.SQLServer.Generates.Front.SqlServerConnectFront)this.mySqlConnectFront2).UserName = "sa";
+            ((DBDiff.Schema.SQLServer.Generates.Front.SqlServerConnectFront)this.mySqlConnectFront2).Password = "";
+            ((DBDiff.Schema.SQLServer.Generates.Front.SqlServerConnectFront)this.mySqlConnectFront2).ServerName = "(local)";
+            ((DBDiff.Schema.SQLServer.Generates.Front.SqlServerConnectFront)this.mySqlConnectFront1).DatabaseIndex = 1;
+            ((DBDiff.Schema.SQLServer.Generates.Front.SqlServerConnectFront)this.mySqlConnectFront2).DatabaseIndex = 2;
+            this.PanelDestination.Controls.Add((System.Windows.Forms.Control)this.mySqlConnectFront2);
+            this.PanelSource.Controls.Add((System.Windows.Forms.Control)this.mySqlConnectFront1);
         }
 
         private void optSQL2005_CheckedChanged(object sender, EventArgs e)
@@ -237,8 +282,8 @@ namespace DBDiff
             }
             else
             {
-                this.groupBox2.Controls.Remove((System.Windows.Forms.Control)this.mySqlConnectFront1);
-                this.groupBox3.Controls.Remove((System.Windows.Forms.Control)this.mySqlConnectFront2);
+                this.PanelSource.Controls.Remove((System.Windows.Forms.Control)this.mySqlConnectFront1);
+                this.PanelDestination.Controls.Remove((System.Windows.Forms.Control)this.mySqlConnectFront2);
             }
 
         }
@@ -294,6 +339,21 @@ namespace DBDiff
         {
             OptionForm form = new OptionForm();
             form.Show(this.Owner, SqlFilter);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            txtDiferencias.Text = "";
+        }
+
+        private void panel2_Resize(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            panel2.Left = (this.Width - panel2.Width) / 2;
         }
     }
 }

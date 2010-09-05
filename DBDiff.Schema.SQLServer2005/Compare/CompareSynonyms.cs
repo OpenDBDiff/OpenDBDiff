@@ -2,35 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DBDiff.Schema.SQLServer.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.Model;
 
-namespace DBDiff.Schema.SQLServer.Compare
+namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareSynonyms:CompareBase<Synonym>
     {
-        public static void GenerateDiferences(SchemaList<Synonym, Database> CamposOrigen, SchemaList<Synonym, Database> CamposDestino)
+        protected override void DoUpdate<Root>(SchemaList<Synonym, Root> CamposOrigen, Synonym node)
         {
-            foreach (Synonym node in CamposDestino)
+            if (!Synonym.Compare(node, CamposOrigen[node.FullName]))
             {
-                if (!CamposOrigen.Exists(node.FullName))
-                {
-                    Synonym newNode = (Synonym)node.Clone(CamposOrigen.Parent);
-                    newNode.Status = Enums.ObjectStatusType.CreateStatus;
-                    CamposOrigen.Add(newNode);
-                }
-                else
-                {
-                    if (!Synonym.Compare(node, CamposOrigen[node.FullName]))
-                    {
-                        Synonym newNode = (Synonym)node.Clone(CamposOrigen.Parent);
-                        newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                        CamposOrigen[node.FullName] = newNode;
-                    }
-                }
+                Synonym newNode = node;//.Clone(CamposOrigen.Parent);
+                newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                CamposOrigen[node.FullName] = newNode;
             }
-
-            MarkDrop(CamposOrigen, CamposDestino);
         }
     }
 }

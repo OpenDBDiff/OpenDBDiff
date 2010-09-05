@@ -4,20 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using DBDiff.Schema.Model;
-using DBDiff.Schema.SQLServer.Model.Util;
+using DBDiff.Schema.SQLServer.Generates.Model.Util;
+using DBDiff.Schema.Attributes;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class View : Code 
     {
         private SchemaList<Index, View> indexes;
         private SchemaList<Trigger, View> triggers;
+        private SchemaList<CLRTrigger, View> clrtriggers;
 
         public View(ISchemaBase parent)
             : base(parent, Enums.ObjectType.View, Enums.ScripActionType.AddView, Enums.ScripActionType.DropView)
         {
             indexes = new SchemaList<Index, View>(this, ((Database)parent).AllObjects);
             triggers = new SchemaList<Trigger, View>(this, ((Database)parent).AllObjects);
+            clrtriggers = new SchemaList<CLRTrigger, View>(this, ((Database)parent).AllObjects);
         }
 
         /// <summary>
@@ -37,6 +40,13 @@ namespace DBDiff.Schema.SQLServer.Model
             item.Indexes = this.Indexes.Clone(item);
             item.Triggers = this.Triggers.Clone(item);
             return item;
+        }
+
+        [ShowItemAttribute("CLR Triggers")]
+        public SchemaList<CLRTrigger, View> CLRTriggers
+        {
+            get { return clrtriggers; }
+            set { clrtriggers = value; }
         }
 
         public SchemaList<Trigger, View> Triggers
@@ -62,9 +72,22 @@ namespace DBDiff.Schema.SQLServer.Model
             this.Indexes.ForEach(item =>
                 {
                     if (item.Status != Enums.ObjectStatusType.DropStatus)
+                    {
+                        item.SetWasInsertInDiffList(Enums.ScripActionType.AddIndex); 
                         sql += item.ToSql();
+                    }
                 }
             );
+            this.Triggers.ForEach(item =>
+                {
+                    if (item.Status != Enums.ObjectStatusType.DropStatus)
+                    {
+                        item.SetWasInsertInDiffList(Enums.ScripActionType.AddTrigger); 
+                        sql += item.ToSql();
+                    }
+                }
+            );
+
             sql += this.ExtendedProperties.ToSql();
             return sql;
         }
@@ -85,6 +108,9 @@ namespace DBDiff.Schema.SQLServer.Model
         public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList list = new SQLScriptList();
+            if (this.Status != Enums.ObjectStatusType.OriginalStatus)
+                RootParent.ActionMessage.Add(this);
+
             if (this.HasState(Enums.ObjectStatusType.DropStatus))
                 list.Add(Drop());
             if (this.HasState(Enums.ObjectStatusType.CreateStatus))
@@ -106,6 +132,8 @@ namespace DBDiff.Schema.SQLServer.Model
                 }
                 if (!this.GetWasInsertInDiffList(Enums.ScripActionType.DropFunction) && (!this.GetWasInsertInDiffList(Enums.ScripActionType.AddFunction)))
                     list.AddRange(indexes.ToSqlDiff());
+
+                list.AddRange(triggers.ToSqlDiff());
             }
             return list;
         }

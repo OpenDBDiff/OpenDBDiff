@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using DBDiff.Schema.Model;
-using DBDiff.Schema.SQLServer.Model.Util;
+using DBDiff.Schema.SQLServer.Generates.Model.Util;
 
-namespace DBDiff.Schema.SQLServer.Model
+namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class StoreProcedure : Code 
     {
@@ -18,7 +18,7 @@ namespace DBDiff.Schema.SQLServer.Model
         /// <summary>
         /// Clona el objeto en una nueva instancia.
         /// </summary>
-        public StoreProcedure Clone(ISchemaBase parent)
+        public override ISchemaBase Clone(ISchemaBase parent)
         {
             StoreProcedure item = new StoreProcedure(parent);
             item.Text = this.Text;
@@ -53,6 +53,8 @@ namespace DBDiff.Schema.SQLServer.Model
         public override SQLScriptList ToSqlDiff()
         {
             SQLScriptList list = new SQLScriptList();
+            if (this.Status != Enums.ObjectStatusType.OriginalStatus)
+                RootParent.ActionMessage.Add(this);
 
             if (this.HasState(Enums.ObjectStatusType.DropStatus))
                 list.Add(Drop());
