@@ -1,0 +1,167 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ScintillaNet</RootNamespace>
+    <AssemblyName>DBDiff.ScintillaNET</AssemblyName>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>ScintillaNET.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CallTip.cs" />
+    <Compile Include="Caret.cs" />
+    <Compile Include="Clipboard.cs" />
+    <Compile Include="Commands.cs" />
+    <Compile Include="Configuration\CommandConfig.cs" />
+    <Compile Include="Configuration\Configuration.cs" />
+    <Compile Include="Configuration\ConfigurationManager.cs" />
+    <Compile Include="Configuration\IndicatorsConfig.cs" />
+    <Compile Include="Configuration\KeyWordConfigList.cs" />
+    <Compile Include="Configuration\LexerProperties.cs" />
+    <Compile Include="Configuration\MarginConfig.cs" />
+    <Compile Include="Configuration\MarkersConfig.cs" />
+    <Compile Include="Configuration\StyleConfig.cs" />
+    <Compile Include="Document.cs" />
+    <Compile Include="DocumentNavigation.cs" />
+    <Compile Include="EndOfLine.cs" />
+    <Compile Include="FlagsDesigner.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GoTo.cs" />
+    <Compile Include="GoToDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GoToDialog.Designer.cs">
+      <DependentUpon>GoToDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HotspotStyle.cs" />
+    <Compile Include="Indentation.cs" />
+    <Compile Include="Lexing.cs" />
+    <Compile Include="LineWrap.cs" />
+    <Compile Include="LongLines.cs" />
+    <Compile Include="Margins.cs" />
+    <Compile Include="NativeMethods.cs" />
+    <Compile Include="NativeStructs.cs" />
+    <Compile Include="Printing\PageInformation.cs" />
+    <Compile Include="Printing\PageSettings.cs" />
+    <Compile Include="Printing\PrintDocument.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Printing\Printing.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ScintillaContro.INativeScintilla.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Constants.cs" />
+    <Compile Include="DropMarker.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="EventArgs.cs" />
+    <Compile Include="INativeScintilla.cs" />
+    <Compile Include="Indicator.cs" />
+    <Compile Include="Line.cs" />
+    <Compile Include="LinesCollection.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Range.cs" />
+    <Compile Include="ScintillaControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ScintillaHelperBase.cs" />
+    <Compile Include="Scrolling.cs" />
+    <Compile Include="Selection.cs" />
+    <Compile Include="Style.cs" />
+    <Compile Include="UndoRedo.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="WhiteSpace.cs" />
+    <Compile Include="WhiteSpaceStringConverter.cs" />
+    <Compile Include="XpmAdapter.cs" />
+    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\Builtin\LexerKeywordListNames\mssql.txt" />
+    <EmbeddedResource Include="Configuration\Builtin\LexerStyleNames\mssql.txt" />
+    <EmbeddedResource Include="Configuration\Builtin\mssql.xml" />
+    <EmbeddedResource Include="Configuration\Builtin\default.xml" />
+    <EmbeddedResource Include="GoToDialog.resx">
+      <DependentUpon>GoToDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Resources\GoToPreviousMessage.png" />
+    <None Include="Resources\GoToNextMessage.png" />
+    <None Include="Resources\GoToNextMessage - Copy.png" />
+    <None Include="Resources\LineColorHS.png" />
+    <None Include="Resources\DeleteHS.png" />
+    <None Include="ScintillaNET.snk" />
+    <EmbeddedResource Include="Configuration\Builtin\LexerKeywordListNames\conf.txt" />
+    <EmbeddedResource Include="Configuration\Builtin\LexerKeywordListNames\sql.txt" />
+    <EmbeddedResource Include="Configuration\Builtin\LexerKeywordListNames\xml.txt" />
+    <EmbeddedResource Include="Configuration\Builtin\LexerStyleNames\sql.txt" />
+    <EmbeddedResource Include="Configuration\Builtin\LexerStyleNames\xml.txt" />
+    <EmbeddedResource Include="Configuration\Builtin\xml.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+</Project>

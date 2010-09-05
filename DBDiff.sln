@@ -14,6 +14,30 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.ScintillaNET", "DBDiff.Scintilla NET-2.0\ScintillaNET\DBDiff.ScintillaNET.csproj", "{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/TFS04
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = DBDiff\\DBDiff.csproj
+		SccProjectName1 = DBDiff
+		SccLocalPath1 = DBDiff
+		SccProjectUniqueName2 = DBDiff.Schema\\DBDiff.Schema.csproj
+		SccProjectName2 = DBDiff.Schema
+		SccLocalPath2 = DBDiff.Schema
+		SccProjectUniqueName3 = DBDiff.Schema.SQLServer2005\\DBDiff.Schema.SQLServer.csproj
+		SccProjectName3 = DBDiff.Schema.SQLServer2005
+		SccLocalPath3 = DBDiff.Schema.SQLServer2005
+		SccProjectUniqueName4 = DBDiff.Front\\DBDiff.Front.csproj
+		SccProjectName4 = DBDiff.Front
+		SccLocalPath4 = DBDiff.Front
+		SccProjectUniqueName5 = DBDiffCmd\\DBDiff.OCDB.csproj
+		SccProjectName5 = DBDiffCmd
+		SccLocalPath5 = DBDiffCmd
+		SccProjectUniqueName6 = DBDiff.Scintilla\u0020NET-2.0\\ScintillaNET\\DBDiff.ScintillaNET.csproj
+		SccProjectName6 = DBDiff.Scintilla\u0020NET-2.0/ScintillaNET
+		SccLocalPath6 = DBDiff.Scintilla\u0020NET-2.0\\ScintillaNET
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
