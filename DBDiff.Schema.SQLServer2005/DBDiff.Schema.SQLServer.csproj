@@ -1,0 +1,253 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EF2F571E-A7AD-40BE-8500-50A039159FC1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DBDiff.Schema.SQLServer</RootNamespace>
+    <AssemblyName>DBDiff.Schema.SQLServer</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>DBDiff.Schema.SQLServer.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRules>-Microsoft.Naming#CA1718;-Microsoft.Naming#CA1720;-Microsoft.Naming#CA1700;-Microsoft.Naming#CA1712;-Microsoft.Naming#CA1713;-Microsoft.Naming#CA1709;-Microsoft.Naming#CA1708;-Microsoft.Naming#CA1715;-Microsoft.Naming#CA1710;-Microsoft.Naming#CA1707;-Microsoft.Naming#CA1722;-Microsoft.Naming#CA1711;-Microsoft.Naming#CA1716;-Microsoft.Naming#CA1705;-Microsoft.Naming#CA1725;-Microsoft.Naming#CA1719;-Microsoft.Naming#CA1721;-Microsoft.Naming#CA1706;-Microsoft.Naming#CA1724;-Microsoft.Naming#CA1726</CodeAnalysisRules>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Compare\CompareAssemblies.cs" />
+    <Compile Include="Compare\CompareBase.cs" />
+    <Compile Include="Compare\CompareColumns.cs" />
+    <Compile Include="Compare\CompareColumnsConstraints.cs" />
+    <Compile Include="Compare\CompareConstraints.cs" />
+    <Compile Include="Compare\CompareDatabase.cs" />
+    <Compile Include="Compare\CompareFileGroups.cs" />
+    <Compile Include="Compare\CompareIndexes.cs" />
+    <Compile Include="Compare\CompareRules.cs" />
+    <Compile Include="Compare\CompareSchemas.cs" />
+    <Compile Include="Compare\CompareStoreProcedures.cs" />
+    <Compile Include="Compare\CompareSynonyms.cs" />
+    <Compile Include="Compare\CompareTables.cs" />
+    <Compile Include="Compare\CompareTablesOptions.cs" />
+    <Compile Include="Compare\CompareTriggers.cs" />
+    <Compile Include="Compare\CompareUserDataTypes.cs" />
+    <Compile Include="Compare\CompareXMLSchemas.cs" />
+    <Compile Include="Compare\CompareViews.cs" />
+    <Compile Include="Front\SqlOptionsFront.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Front\SqlOptionsFront.Designer.cs">
+      <DependentUpon>SqlOptionsFront.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Front\SqlServerConnectFront.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Front\SqlServerConnectFront.Designer.cs">
+      <DependentUpon>SqlServerConnectFront.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Front\SqlServerPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Front\SqlServerPanel.Designer.cs">
+      <DependentUpon>SqlServerPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Generate.cs" />
+    <Compile Include="Generates\GenerateViews.cs" />
+    <Compile Include="Generates\GenerateAssemblies.cs" />
+    <Compile Include="Generates\GenerateSynonyms.cs" />
+    <Compile Include="Generates\GenerateTriggers.cs" />
+    <Compile Include="Generates\SQLCommands\ConstraintSQLCommand.cs" />
+    <Compile Include="Generates\SQLCommands\TableSQLCommand.cs" />
+    <Compile Include="Generates\GenerateDatabase.cs" />
+    <Compile Include="Generates\GenerateFileGroups.cs" />
+    <Compile Include="Generates\GenerateIndex.cs" />
+    <Compile Include="Generates\GenerateRules.cs" />
+    <Compile Include="Generates\GenerateSchemas.cs" />
+    <Compile Include="Generates\GenerateStoreProcedures.cs" />
+    <Compile Include="Generates\GenerateTables.cs" />
+    <Compile Include="Generates\GenerateDDLTriggers.cs" />
+    <Compile Include="Generates\GenerateUserDataTypes.cs" />
+    <Compile Include="Generates\GenerateConstraint.cs" />
+    <Compile Include="Generates\GenerateXMLSchemas.cs" />
+    <Compile Include="Model\Assembly.cs" />
+    <Compile Include="Model\Assemblys.cs" />
+    <Compile Include="Model\ColumnConstraint.cs" />
+    <Compile Include="Model\ColumnConstraints.cs" />
+    <Compile Include="Model\ConstraintColumn.cs" />
+    <Compile Include="Model\ConstraintColumns.cs" />
+    <Compile Include="Model\DatabaseInfo.cs" />
+    <Compile Include="Model\Default.cs" />
+    <Compile Include="Model\Dependence.cs" />
+    <Compile Include="Model\Dependencies.cs" />
+    <Compile Include="Model\Constraints.cs" />
+    <Compile Include="Model\Column.cs" />
+    <Compile Include="Model\Columns.cs" />
+    <Compile Include="Model\Constraint.cs" />
+    <Compile Include="Model\FileGroup.cs" />
+    <Compile Include="Model\FileGroupFile.cs" />
+    <Compile Include="Model\FileGroupFiles.cs" />
+    <Compile Include="Model\FileGroups.cs" />
+    <Compile Include="Model\Index.cs" />
+    <Compile Include="Model\IndexColumn.cs" />
+    <Compile Include="Model\IndexColumns.cs" />
+    <Compile Include="Model\Indexes.cs" />
+    <Compile Include="Model\Rule.cs" />
+    <Compile Include="Model\Rules.cs" />
+    <Compile Include="Model\Schema.cs" />
+    <Compile Include="Model\Schemas.cs" />
+    <Compile Include="Model\SQLServerSchemaBase.cs" />
+    <Compile Include="Model\StoreProcedure.cs" />
+    <Compile Include="Model\StoreProcedures.cs" />
+    <Compile Include="Model\Synonym.cs" />
+    <Compile Include="Model\Synonyms.cs" />
+    <Compile Include="Model\View.cs" />
+    <Compile Include="Model\Views.cs" />
+    <Compile Include="Model\XMLSchema.cs" />
+    <Compile Include="Model\XMLSchemas.cs" />
+    <Compile Include="Options\SqlOption.cs" />
+    <Compile Include="Options\SqlOptionDefault.cs" />
+    <Compile Include="Options\SqlOptionFilter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Model\Database.cs" />
+    <Compile Include="Model\Table.cs" />
+    <Compile Include="Model\TableOption.cs" />
+    <Compile Include="Model\TableOptions.cs" />
+    <Compile Include="Model\Tables.cs" />
+    <Compile Include="Model\Trigger.cs" />
+    <Compile Include="Model\Triggers.cs" />
+    <Compile Include="Model\UserDataType.cs" />
+    <Compile Include="Model\UserDataTypes.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DBDiff.Front\DBDiff.Front.csproj">
+      <Project>{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}</Project>
+      <Name>DBDiff.Front</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DBDiff.Schema\DBDiff.Schema.csproj">
+      <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
+      <Name>DBDiff.Schema</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DBDiff.Schema.SQLServer.snk" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Front\SqlOptionsFront.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SqlOptionsFront.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Front\SqlServerConnectFront.resx">
+      <DependentUpon>SqlServerConnectFront.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Front\SqlServerPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SqlServerPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Test.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
