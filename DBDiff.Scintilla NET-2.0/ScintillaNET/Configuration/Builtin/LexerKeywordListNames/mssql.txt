@@ -1,7 +1,0 @@
-Statements
-Data Types
-System tables
-Global variables
-Functions
-System Stored Procedures
-Operators
