@@ -5,10 +5,6 @@
 	Name="DBDiff.SciLexer"
 	ProjectGUID="{4F1EDEC7-018C-479A-A89F-C35DC1780708}"
 	RootNamespace="DBDiff.SciLexer"
-	SccProjectName="SAK"
-	SccAuxPath="SAK"
-	SccLocalPath="SAK"
-	SccProvider="SAK"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
