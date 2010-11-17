@@ -37,21 +37,6 @@ namespace DBDiff.Front
         public Form1()
         {
             InitializeComponent();
-            ShowSQL2005();
-            txtNewObject.ConfigurationManager.Language = "mssql";
-            txtNewObject.IsReadOnly = false;
-            txtNewObject.Styles.LineNumber.BackColor = Color.White;
-            txtNewObject.Styles.LineNumber.IsVisible = false;
-            txtOldObject.ConfigurationManager.Language = "mssql";
-            txtOldObject.IsReadOnly = false;
-            txtOldObject.Styles.LineNumber.BackColor = Color.White;
-            txtOldObject.Styles.LineNumber.IsVisible = false;
-            Project LastConfiguration = Project.GetLastConfiguration();
-            if (LastConfiguration != null)
-            {
-                mySqlConnectFront1.ConnectionString = LastConfiguration.ConnectionStringSource;
-                mySqlConnectFront2.ConnectionString = LastConfiguration.ConnectionStringDestination;
-            }
         }
 
         /*private void ProcesarSybase()
@@ -352,6 +337,22 @@ namespace DBDiff.Front
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            ShowSQL2005();
+            txtNewObject.ConfigurationManager.Language = "mssql";
+            txtNewObject.IsReadOnly = false;
+            txtNewObject.Styles.LineNumber.BackColor = Color.White;
+            txtNewObject.Styles.LineNumber.IsVisible = false;
+            txtOldObject.ConfigurationManager.Language = "mssql";
+            txtOldObject.IsReadOnly = false;
+            txtOldObject.Styles.LineNumber.BackColor = Color.White;
+            txtOldObject.Styles.LineNumber.IsVisible = false;
+            Project LastConfiguration = Project.GetLastConfiguration();
+            if (LastConfiguration != null)
+            {
+                mySqlConnectFront1.ConnectionString = LastConfiguration.ConnectionStringSource;
+                mySqlConnectFront2.ConnectionString = LastConfiguration.ConnectionStringDestination;
+            }
+
             txtDiferencias.Text = "";
         }
 
