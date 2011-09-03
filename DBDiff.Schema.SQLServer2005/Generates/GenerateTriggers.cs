@@ -38,10 +38,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             }
             else
             {
-                sql += "LEFT JOIN sys.assembly_modules AM ON AM.object_id = P.object_id ";
+                sql += "LEFT JOIN sys.assembly_modules AM ON AM.object_id = T.object_id ";
                 sql += "LEFT JOIN sys.assemblies AF ON AF.assembly_id = AM.assembly_id";
             } 
-            sql += "ORDER BY T.parent_id ";
+            sql += " ORDER BY T.parent_id";
 
             return sql;
         }
