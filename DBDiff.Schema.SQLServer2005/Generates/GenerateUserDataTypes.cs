@@ -75,6 +75,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         public void Fill(Database database, string connectionString, List<MessageLog> messages)
         {
+            //not supported in azure yet http://msdn.microsoft.com/en-us/library/ee336233.aspx
+            if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerDenali) return;
+            
             try
             {
                 if (database.Options.Ignore.FilterUserDataType)

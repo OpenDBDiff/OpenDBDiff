@@ -142,6 +142,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public override string ToSql()
         {
+            Database database = null;
+            ISchemaBase current = this;
+            while (database == null && current.Parent != null )
+            {
+                database = current.Parent as Database;
+                current = current.Parent;
+            }
+            var isDenali = database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerDenali;
+
             StringBuilder sql = new StringBuilder();
             string includes = "";
             if ((Type == IndexTypeEnum.Clustered) && (IsUniqueKey)) sql.Append("CREATE UNIQUE CLUSTERED ");
@@ -181,16 +190,25 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             }
             else
             {
-                if (IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");
-                if (IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON, "); else sql.Append("STATISTICS_NORECOMPUTE  = OFF, ");
+                if (!isDenali){
+                    if (IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");}
+                
+                if (IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON"); else sql.Append("STATISTICS_NORECOMPUTE  = OFF");
                 if (Type != IndexTypeEnum.XML)
-                    if ((IgnoreDupKey) && (IsUniqueKey)) sql.Append("IGNORE_DUP_KEY = ON, "); else sql.Append("IGNORE_DUP_KEY  = OFF, ");
-                if (AllowRowLocks) sql.Append("ALLOW_ROW_LOCKS = ON, "); else sql.Append("ALLOW_ROW_LOCKS  = OFF, ");
-                if (AllowPageLocks) sql.Append("ALLOW_PAGE_LOCKS = ON"); else sql.Append("ALLOW_PAGE_LOCKS  = OFF");
-                if (FillFactor != 0) sql.Append(", FILLFACTOR = " + FillFactor.ToString());
+                    if ((IgnoreDupKey) && (IsUniqueKey)) sql.Append("IGNORE_DUP_KEY = ON, "); else sql.Append(", IGNORE_DUP_KEY  = OFF");
+                
+                if (!isDenali)
+                {
+                    if (AllowRowLocks) sql.Append(", ALLOW_ROW_LOCKS = ON"); else sql.Append(", ALLOW_ROW_LOCKS  = OFF");
+                    if (AllowPageLocks) sql.Append(", ALLOW_PAGE_LOCKS = ON"); else sql.Append(", ALLOW_PAGE_LOCKS  = OFF");
+                    if (FillFactor != 0) sql.Append(", FILLFACTOR = " + FillFactor.ToString());
+                }
             }
             sql.Append(")");
-            if (!String.IsNullOrEmpty(FileGroup)) sql.Append(" ON [" + FileGroup + "]");
+            if (!isDenali)
+            {
+                if (!String.IsNullOrEmpty(FileGroup)) sql.Append(" ON [" + FileGroup + "]");
+            }
             sql.Append("\r\nGO\r\n");
             if (IsDisabled)
                 sql.Append("ALTER INDEX [" + Name + "] ON " + ((Table)Parent).FullName + " DISABLE\r\nGO\r\n");

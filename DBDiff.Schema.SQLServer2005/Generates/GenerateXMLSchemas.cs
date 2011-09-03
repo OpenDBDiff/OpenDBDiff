@@ -33,16 +33,16 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQLXMLSchema()
         {
-            string sql;
-            sql = "SELECT  ";
-            sql += "xsc.name, ";
-            sql += "xsc.xml_collection_id AS [ID], ";
-            sql += "sch.name AS Owner, ";
-            sql += "XML_SCHEMA_NAMESPACE(sch.Name, xsc.name) AS Text ";
-            sql += "FROM sys.xml_schema_collections AS xsc ";
-            sql += "INNER JOIN sys.schemas AS sch ON xsc.schema_id = sch.schema_id ";
-            sql += "WHERE xsc.schema_id <> 4";
-            return sql;
+            var sql = new StringBuilder();
+            sql.AppendLine("SELECT  ");
+            sql.AppendLine("xsc.name, ");
+            sql.AppendLine("xsc.xml_collection_id AS [ID], ");
+            sql.AppendLine("sch.name AS Owner, ");
+            sql.AppendLine("XML_SCHEMA_NAMESPACE(sch.Name, xsc.name) AS Text ");
+            sql.AppendLine("FROM sys.xml_schema_collections AS xsc ");
+            sql.AppendLine("INNER JOIN sys.schemas AS sch ON xsc.schema_id = sch.schema_id ");
+            sql.AppendLine("WHERE xsc.schema_id <> 4");
+            return sql.ToString();
         }
 
         private static void FillColumnsDependencies(SchemaList<XMLSchema, Database> items, string connectionString)
@@ -66,6 +66,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         public void Fill(Database database, string connectionString)
         {
+            //TODO XML_SCHEMA_NAMESPACE function not supported in Azure, is there a workaround?
+            //not supported in azure yet
+            if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerDenali) return;
+            
+
             if (database.Options.Ignore.FilterXMLSchema)
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))

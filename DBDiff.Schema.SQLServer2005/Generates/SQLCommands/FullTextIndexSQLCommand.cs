@@ -11,8 +11,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
         public static string Get(DatabaseInfo.VersionTypeEnum version)
         {
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return Get2005();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return Get2008();
-            return "";
+            //Fall back to highest compatible version
+            return Get2008();
+            
         }
 
         private static string Get2005()

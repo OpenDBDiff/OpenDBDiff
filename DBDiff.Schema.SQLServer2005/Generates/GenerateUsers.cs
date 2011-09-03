@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
 using DBDiff.Schema.SQLServer.Generates.Options;
 using DBDiff.Schema.SQLServer.Generates.Model;
 using System.Data.SqlClient;
@@ -17,14 +18,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             this.root = root;
         }
 
-        private static string GetSQL()
-        {
-            string sql = "select is_fixed_role, type, ISNULL(suser_sname(sid),'') AS Login,Name,principal_id, ISNULL(default_schema_name,'') AS default_schema_name from sys.database_principals ";
-            sql += "WHERE type IN ('S','U','A','R') ";
-            sql += "ORDER BY Name";
-            return sql;
-        }
-
         public void Fill(Database database, string connectioString)
         {
             string type;
@@ -32,7 +25,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             {
                 using (SqlConnection conn = new SqlConnection(connectioString))
                 {
-                    using (SqlCommand command = new SqlCommand(GetSQL(), conn))
+                    using (SqlCommand command = new SqlCommand(UserSQLCommand.Get(database.Info.Version), conn))
                     {
                         conn.Open();
                         command.CommandTimeout = 0;

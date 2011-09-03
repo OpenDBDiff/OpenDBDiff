@@ -99,13 +99,24 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                 {
                     try
                     {*/
-            (new GeneratePartitionFunctions(this)).Fill(databaseSchema, connectionString);
-            (new GeneratePartitionScheme(this)).Fill(databaseSchema, connectionString);
-            (new GenerateFileGroups(this)).Fill(databaseSchema, connectionString);
+
+            //not supported in azure yet
+            if (databaseSchema.Info.Version != DatabaseInfo.VersionTypeEnum.SQLServerDenali)
+            {
+                (new GeneratePartitionFunctions(this)).Fill(databaseSchema, connectionString);
+                (new GeneratePartitionScheme(this)).Fill(databaseSchema, connectionString);
+                (new GenerateFileGroups(this)).Fill(databaseSchema, connectionString);
+            }
+            
             (new GenerateDDLTriggers(this)).Fill(databaseSchema, connectionString);
             (new GenerateSynonyms(this)).Fill(databaseSchema, connectionString);
-            (new GenerateAssemblies(this)).Fill(databaseSchema, connectionString);
-            (new GenerateFullText(this)).Fill(databaseSchema, connectionString);
+            
+            //not supported in azure yet
+            if (databaseSchema.Info.Version != DatabaseInfo.VersionTypeEnum.SQLServerDenali)
+            {
+                (new GenerateAssemblies(this)).Fill(databaseSchema, connectionString);
+                (new GenerateFullText(this)).Fill(databaseSchema, connectionString);
+            }
             /*}
                     catch (Exception ex)
                     {

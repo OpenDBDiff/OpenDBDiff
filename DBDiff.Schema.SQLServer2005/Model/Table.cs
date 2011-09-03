@@ -191,6 +191,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// </summary>
         public string ToSql(Boolean showFK)
         {
+            Database database = null;
+            ISchemaBase current = this;
+            while (database == null && current.Parent != null)
+            {
+                database = current.Parent as Database;
+                current = current.Parent;
+            }
+            var isDenali = database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerDenali;
+                
             string sql = "";
             string sqlPK = "";
             string sqlUC = "";
@@ -222,15 +231,19 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                         sql += "WITH (DATA_COMPRESSION = " + CompressType + ")\r\n";
                 }
                 sql += ")";
-                if (!String.IsNullOrEmpty(FileGroup)) sql += " ON [" + FileGroup + "]";
-                if (!String.IsNullOrEmpty(FileGroupText))
+                
+                if (!isDenali)
                 {
-                    if (HasBlobColumn)
-                        sql += " TEXTIMAGE_ON [" + FileGroupText + "]";
+                    if (!String.IsNullOrEmpty(FileGroup)) sql += " ON [" + FileGroup + "]";
+                
+                    if (!String.IsNullOrEmpty(FileGroupText))
+                    {
+                        if (HasBlobColumn)
+                            sql += " TEXTIMAGE_ON [" + FileGroupText + "]";
+                    }
+                    if ((!String.IsNullOrEmpty(FileGroupStream)) && (HasFileStream))
+                        sql += " FILESTREAM_ON [" + FileGroupStream + "]";
                 }
-                if ((!String.IsNullOrEmpty(FileGroupStream)) && (HasFileStream))
-                    sql += " FILESTREAM_ON [" + FileGroupStream + "]";
-
                 sql += "\r\n";
                 sql += "GO\r\n";
                 Constraints.ForEach(item =>

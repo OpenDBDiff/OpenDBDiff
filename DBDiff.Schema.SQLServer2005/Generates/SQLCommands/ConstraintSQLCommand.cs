@@ -11,23 +11,43 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
         public static string GetUniqueKey(DatabaseInfo.VersionTypeEnum version)
         {
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return GetUniqueKey2005();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return GetUniqueKey2008();
-            return "";
+            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008 ||
+                version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2) return GetUniqueKey2008();
+            //Fall back to highest compatible version
+            return GetUniqueKeyDenali();
         }
 
         public static string GetCheck(DatabaseInfo.VersionTypeEnum version)
         {
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return GetCheck2005();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return GetCheck2008();
-            return "";
+            //Fall back to highest compatible version            
+            return GetCheck2008();
         }
 
         public static string GetPrimaryKey(DatabaseInfo.VersionTypeEnum version, Table table)
         {
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2000) return GetPrimaryKey2000(table);
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return GetPrimaryKey2005();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return GetPrimaryKey2008();
-            return "";
+            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008 ||
+                version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2)
+                return GetPrimaryKey2008();
+            //Fall back to highest compatible version            
+            return GetPrimaryKeyDenali();
+        }
+
+        private static string GetUniqueKeyDenali()
+        {
+            //File Groups not supported in Azure
+            StringBuilder sql = new StringBuilder();
+            sql.Append("SELECT O.type as ObjectType, S.Name as Owner, I.object_Id AS id,'' as FileGroup, C.user_type_id, C.column_id, I.Index_id, C.Name AS ColumnName, I.Name, I.type, I.fill_factor, I.is_padded, I.allow_row_locks, I.allow_page_locks, I.ignore_dup_key, I.is_disabled, IC.is_descending_key, IC.is_included_column ");
+            sql.Append("FROM sys.indexes I ");
+            sql.Append("INNER JOIN sys.objects O ON O.object_id = I.object_id ");
+            sql.Append("INNER JOIN sys.schemas S ON S.schema_id = O.schema_id ");
+            sql.Append("INNER JOIN sys.index_columns IC ON IC.index_id = I.index_id AND IC.object_id = I.object_id ");
+            sql.Append("INNER JOIN sys.columns C ON C.column_id = IC.column_id AND IC.object_id = C.object_id ");
+            //sql.Append("LEFT JOIN sys.data_spaces AS dsidx ON dsidx.data_space_id = I.data_space_id ");
+            sql.Append("WHERE is_unique_constraint = 1 AND O.type <> 'TF' ORDER BY I.object_id,I.Name");
+            return sql.ToString();
         }
 
         private static string GetUniqueKey2008()
@@ -100,6 +120,21 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             sql += "INNER JOIN sys.objects O ON O.object_id = CC.parent_object_id ";
             sql += "ORDER BY CC.parent_object_id,CC.name";
             return sql;
+        }
+
+        private static string GetPrimaryKeyDenali()
+        {
+            //File Groups not supported in Azure
+            StringBuilder sql = new StringBuilder();
+            sql.Append("SELECT O.type as ObjectType, S.Name as Owner, IC.key_ordinal, C.user_type_id, I.object_id AS ID, '' AS FileGroup, C.column_id, I.Index_id, C.Name AS ColumnName, I.Name, I.type, I.fill_factor, I.is_padded, I.allow_row_locks, I.allow_page_locks, I.ignore_dup_key, I.is_disabled, IC.is_descending_key, IC.is_included_column, CONVERT(bit,INDEXPROPERTY(I.object_id,I.name,'IsAutoStatistics')) AS IsAutoStatistics ");
+            sql.Append("FROM sys.indexes I ");
+            sql.Append("INNER JOIN sys.objects O ON O.object_id = I.object_id ");
+            sql.Append("INNER JOIN sys.schemas S ON S.schema_id = O.schema_id ");
+            sql.Append("INNER JOIN sys.index_columns IC ON IC.index_id = I.index_id AND IC.object_id = I.object_id ");
+            sql.Append("INNER JOIN sys.columns C ON C.column_id = IC.column_id AND IC.object_id = C.object_id ");
+            //sql.Append("LEFT JOIN sys.data_spaces AS dsidx ON dsidx.data_space_id = I.data_space_id ");
+            sql.Append("WHERE is_primary_key = 1 AND O.type <> 'TF' ORDER BY I.object_id");
+            return sql.ToString();
         }
 
         private static string GetPrimaryKey2008()

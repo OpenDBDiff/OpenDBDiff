@@ -21,6 +21,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         public void Fill(Database database, string connectionString)
         {
+            //not supported in azure yet
+            if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerDenali) return;
+            
             int parentId = 0;
             bool change = false;
             Table parent = null;

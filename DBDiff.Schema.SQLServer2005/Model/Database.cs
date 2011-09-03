@@ -194,19 +194,27 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 		}
         public override SQLScriptList ToSqlDiff(List<ISchemaBase> schemas)
         {
+            var isDenali = this.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerDenali;
+
             var listDiff = new SQLScriptList();
-            listDiff.Add("USE [" + Name + "]\r\nGO\r\n\r\n", 0, Enums.ScripActionType.UseDatabase);
-			listDiff.AddRange(Assemblies.ToSqlDiff(schemas));
-			listDiff.AddRange(UserTypes.ToSqlDiff(schemas));
+            if (!isDenali)
+            {
+                listDiff.Add("USE [" + Name + "]\r\nGO\r\n\r\n", 0, Enums.ScripActionType.UseDatabase);
+                listDiff.AddRange(Assemblies.ToSqlDiff(schemas));
+                listDiff.AddRange(UserTypes.ToSqlDiff(schemas));
+            }
 			listDiff.AddRange(TablesTypes.ToSqlDiff(schemas));
 			listDiff.AddRange(Tables.ToSqlDiff(schemas));
 			listDiff.AddRange(Rules.ToSqlDiff(schemas));
 			listDiff.AddRange(Schemas.ToSqlDiff(schemas));
 			listDiff.AddRange(XmlSchemas.ToSqlDiff(schemas));
 			listDiff.AddRange(Procedures.ToSqlDiff(schemas));
-			listDiff.AddRange(CLRProcedures.ToSqlDiff(schemas));
-			listDiff.AddRange(CLRFunctions.ToSqlDiff(schemas));
-			listDiff.AddRange(FileGroups.ToSqlDiff(schemas));
+            if (!isDenali)
+            {
+                listDiff.AddRange(CLRProcedures.ToSqlDiff(schemas));
+                listDiff.AddRange(CLRFunctions.ToSqlDiff(schemas));
+                listDiff.AddRange(FileGroups.ToSqlDiff(schemas));
+            }
 			listDiff.AddRange(DDLTriggers.ToSqlDiff(schemas));
 			listDiff.AddRange(Synonyms.ToSqlDiff(schemas));
 			listDiff.AddRange(Views.ToSqlDiff(schemas));
@@ -215,7 +223,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 			listDiff.AddRange(Roles.ToSqlDiff(schemas));
 			listDiff.AddRange(PartitionFunctions.ToSqlDiff(schemas));
 			listDiff.AddRange(PartitionSchemes.ToSqlDiff(schemas));
-			listDiff.AddRange(FullText.ToSqlDiff(schemas));
+            if (!isDenali)
+            {
+                listDiff.AddRange(FullText.ToSqlDiff(schemas));
+            }
             return listDiff;
         }
 

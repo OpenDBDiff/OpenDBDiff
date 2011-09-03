@@ -11,7 +11,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
         public static string GetVersion(Database databaseSchema)
         {
             string sql;
-            sql = "SELECT SUBSTRING(CONVERT(varchar,SERVERPROPERTY('productversion')),1,PATINDEX('.',CONVERT(varchar,SERVERPROPERTY('productversion')))+2) AS Version";
+            sql = "SELECT SUBSTRING(CONVERT(varchar,SERVERPROPERTY('productversion')),1,PATINDEX('.',CONVERT(varchar,SERVERPROPERTY('productversion')))+5) AS Version";
             return sql;
         }
 
@@ -19,6 +19,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
         {
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return Get2005(databaseSchema);
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return Get2008(databaseSchema);
+            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2) return Get2008R2(databaseSchema);
+            if (version == DatabaseInfo.VersionTypeEnum.SQLServerDenali) return GetDenali(databaseSchema);
             return "";
         }
 
@@ -33,6 +35,21 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
         {
             string sql;
             sql = "SELECT DATABASEPROPERTYEX('" + databaseSchema.Name + "','IsFulltextEnabled') AS IsFullTextEnabled, DATABASEPROPERTYEX('" + databaseSchema.Name + "','Collation') AS Collation";
+            return sql;
+        }
+
+        private static string Get2008R2(Database databaseSchema)
+        {
+            string sql;
+            sql = "SELECT DATABASEPROPERTYEX('" + databaseSchema.Name + "','IsFulltextEnabled') AS IsFullTextEnabled, DATABASEPROPERTYEX('" + databaseSchema.Name + "','Collation') AS Collation";
+            return sql;
+        }
+
+        private static string GetDenali(Database databaseSchema)
+        {
+            string sql;
+            //DATABASEPROPERTYEX('IsFullTextEnabled') is deprecated http://technet.microsoft.com/en-us/library/cc646010(SQL.110).aspx
+            sql = "SELECT 0 AS IsFullTextEnabled, DATABASEPROPERTYEX('" + databaseSchema.Name + "','Collation') AS Collation";
             return sql;
         }
     }

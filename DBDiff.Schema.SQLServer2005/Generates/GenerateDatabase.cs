@@ -35,7 +35,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                     {
                         if (reader.Read())
                         {
-                            item.VersionNumber = float.Parse(reader["Version"].ToString().Replace(".",""));
+                            //we must compare the decimal as well as Azure is 10.25
+                            item.VersionNumber = float.Parse(reader["Version"].ToString());
                         }
                     }
                 }

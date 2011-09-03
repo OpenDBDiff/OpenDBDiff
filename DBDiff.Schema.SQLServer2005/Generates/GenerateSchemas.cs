@@ -19,7 +19,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         private static string GetSQL()
         {
             string sql;
-            sql = "select S1.name,S1.schema_id, S2.name AS Owner from sys.schemas S1 ";
+            sql = "SELECT S1.name,S1.schema_id, S2.name AS Owner FROM sys.schemas S1 ";
             sql += "INNER JOIN sys.database_principals S2 ON S2.principal_id = S1.principal_id ";
             return sql;
         }

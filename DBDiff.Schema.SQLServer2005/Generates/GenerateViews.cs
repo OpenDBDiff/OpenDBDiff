@@ -9,6 +9,7 @@ using DBDiff.Schema.Model;
 using DBDiff.Schema.Errors;
 using DBDiff.Schema.SQLServer.Generates.Generates.Util;
 using DBDiff.Schema.Events;
+using DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
 
 namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
@@ -19,21 +20,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         public GenerateViews(Generate root)
         {
             this.root = root;
-        }
-
-        private static string GetSQL()
-        {
-            string sql = "";
-            sql += "select distinct ISNULL('[' + S3.Name + '].[' + object_name(D2.object_id) + ']','') AS DependOut, '[' + S2.Name + '].[' + object_name(D.referenced_major_id) + ']' AS TableName, D.referenced_major_id, OBJECTPROPERTY (P.object_id,'IsSchemaBound') AS IsSchemaBound, P.object_id, S.name as owner, P.name as name from sys.views P ";
-            sql += "INNER JOIN sys.schemas S ON S.schema_id = P.schema_id ";
-            sql += "LEFT JOIN sys.sql_dependencies D ON P.object_id = D.object_id ";
-            sql += "LEFT JOIN sys.objects O ON O.object_id = D.referenced_major_id ";
-            sql += "LEFT JOIN sys.schemas S2 ON S2.schema_id = O.schema_id ";
-            sql += "LEFT JOIN sys.sql_dependencies D2 ON P.object_id = D2.referenced_major_id ";
-            sql += "LEFT JOIN sys.objects O2 ON O2.object_id = D2.object_id ";
-            sql += "LEFT JOIN sys.schemas S3 ON S3.schema_id = O2.schema_id ";
-            sql += "ORDER BY P.object_id";
-            return sql;
         }
 
         public void Fill(Database database, string connectionString, List<MessageLog> messages)
@@ -57,7 +43,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             int lastViewId = 0;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(GetSQL(), conn))
+                using (SqlCommand command = new SqlCommand(ViewSQLCommand.GetView(database.Info.Version), conn))
                 {
                     conn.Open();
                     command.CommandTimeout = 0;

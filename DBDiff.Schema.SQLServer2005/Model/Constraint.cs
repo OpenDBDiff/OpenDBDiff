@@ -206,6 +206,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         private string ToSQLGeneric(ConstraintType consType)
         {
+            Database database = null;
+            ISchemaBase current = this;
+            while (database == null && current.Parent != null)
+            {
+                database = current.Parent as Database;
+                current = current.Parent;
+            }
+            var isDenali = database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerDenali;
             string typeConstraint = "";
             StringBuilder sql = new StringBuilder();
             if (Index.Type == Index.IndexTypeEnum.Clustered) typeConstraint = "CLUSTERED";
@@ -233,18 +241,27 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             sql.Append("\t)");
             sql.Append(" WITH (");
             if (Parent.ObjectType == Enums.ObjectType.TableType)
-                if (Index.IgnoreDupKey) sql.Append("IGNORE_DUP_KEY = ON "); else sql.Append("IGNORE_DUP_KEY  = OFF ");
+                if (Index.IgnoreDupKey) sql.Append("IGNORE_DUP_KEY = ON"); else sql.Append("IGNORE_DUP_KEY  = OFF");
             else
             {
-                if (Index.IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");
-                if (Index.IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON, "); else sql.Append("STATISTICS_NORECOMPUTE  = OFF, ");
-                if (Index.IgnoreDupKey) sql.Append("IGNORE_DUP_KEY = ON, "); else sql.Append("IGNORE_DUP_KEY  = OFF, ");
-                if (Index.AllowRowLocks) sql.Append("ALLOW_ROW_LOCKS = ON, "); else sql.Append("ALLOW_ROW_LOCKS  = OFF, ");
-                if (Index.AllowPageLocks) sql.Append("ALLOW_PAGE_LOCKS = ON"); else sql.Append("ALLOW_PAGE_LOCKS  = OFF");
-                if (Index.FillFactor != 0) sql.Append(", FILLFACTOR = " + Index.FillFactor.ToString(CultureInfo.InvariantCulture));
+                if (!isDenali)
+                {
+                    if (Index.IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");
+                }
+                if (Index.IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON"); else sql.Append("STATISTICS_NORECOMPUTE  = OFF");
+                if (Index.IgnoreDupKey) sql.Append(", IGNORE_DUP_KEY = ON"); else sql.Append(", IGNORE_DUP_KEY  = OFF");
+                if (!isDenali)
+                {
+                    if (Index.AllowRowLocks) sql.Append(", ALLOW_ROW_LOCKS = ON"); else sql.Append(", ALLOW_ROW_LOCKS  = OFF");
+                    if (Index.AllowPageLocks) sql.Append(", ALLOW_PAGE_LOCKS = ON"); else sql.Append(", ALLOW_PAGE_LOCKS  = OFF");
+                    if (Index.FillFactor != 0) sql.Append(", FILLFACTOR = " + Index.FillFactor.ToString(CultureInfo.InvariantCulture));
+                }
             }
             sql.Append(")");
-            if (!String.IsNullOrEmpty(Index.FileGroup)) sql.Append(" ON [" + Index.FileGroup + "]");
+            if (!isDenali)
+            {
+                if (!String.IsNullOrEmpty(Index.FileGroup)) sql.Append(" ON [" + Index.FileGroup + "]");
+            }
             return sql.ToString();
         }
 
@@ -252,7 +269,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// Devuelve el schema de la tabla en formato SQL.
         /// </summary>
         public override string ToSql()
-        {                     
+        {
             if (this.Type == ConstraintType.PrimaryKey)
             {
                 return ToSQLGeneric(ConstraintType.PrimaryKey);
