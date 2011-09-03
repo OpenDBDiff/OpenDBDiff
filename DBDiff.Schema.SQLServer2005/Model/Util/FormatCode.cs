@@ -20,6 +20,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Model.Util
         /// </summary>
         private static string CleanLast(string body)
         {
+            if (String.IsNullOrEmpty(body))
+            {
+                return String.Empty;
+            }
+
             for (int i = body.Length - 1; i >= 0; i--)
             {
                 if ((body[i] == '\r') || (body[i] == '\n') || (body[i] == '\t'))
@@ -35,8 +40,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model.Util
         /// </summary>
         private static string SmartGO(string code)
         {
-            string prevText;
-            prevText = code;
+            string prevText = code;
             try
             {
                 if (!prevText.Substring(prevText.Length - 2, 2).Equals("\r\n"))
@@ -98,9 +102,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Model.Util
 
         public static string FormatCreate(string ObjectType, string body, ISchemaBase item)
         {
-            string prevText = (string)body.Clone();            
             try
             {
+                string prevText = (string)body.Clone();
                 prevText = FindCreate(ObjectType, item, prevText).Body;
                 if (String.IsNullOrEmpty(prevText))
                     prevText = body;
@@ -115,9 +119,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model.Util
 
         public static string FormatAlter(string ObjectType, string body, ISchemaBase item, Boolean quitSchemaBinding)
         {
-            string prevText = (string)body.Clone();
+            string prevText = null;
             try
             {
+                prevText = (string)body.Clone();
                 SearchItem sitem = FindCreate(ObjectType, item, prevText);
                 Regex regAlter = new Regex("CREATE");
                 
