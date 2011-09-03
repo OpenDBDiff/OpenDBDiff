@@ -77,11 +77,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             if (cboObjects.SelectedItem != null)
             {
                 if (indexFilter == -1)
-                    sqlOption.Filters.Items.Add(new SqlOptionFilterItem((Enums.ObjectType)cboObjects.SelectedIndex, txtFilter.Text));
+                    sqlOption.Filters.Items.Add(new SqlOptionFilterItem((Enums.ObjectType)Enum.Parse(typeof(Enums.ObjectType), cboObjects.SelectedItem.ToString(), true), txtFilter.Text));
                 else
                 {
                     sqlOption.Filters.Items[indexFilter].Filter = txtFilter.Text;
-                    sqlOption.Filters.Items[indexFilter].Type = (Enums.ObjectType)cboObjects.SelectedIndex;
+                    sqlOption.Filters.Items[indexFilter].Type = (Enums.ObjectType)Enum.Parse(typeof(Enums.ObjectType), cboObjects.SelectedItem.ToString(), true);
                 }
                 HandlerHelper.RaiseOnChange();
                 this.Dispose();
