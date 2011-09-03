@@ -24,7 +24,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         {
             string filter = "";
             string sql = "";
-            sql += "SELECT O.type, M.object_id, OBJECT_DEFINITION(M.object_id) AS Text FROM sys.sql_modules M ";
+            sql += "SELECT O.name, O.type, M.object_id, OBJECT_DEFINITION(M.object_id) AS Text FROM sys.sql_modules M ";
             sql += "INNER JOIN sys.objects O ON O.object_id = M.object_id ";
             sql += "WHERE ";
             if (options.Ignore.FilterStoreProcedure)
@@ -58,6 +58,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                 while (reader.Read())
                                 {
                                     string type = reader["Type"].ToString().Trim();
+                                    string name = reader["name"].ToString();
+                                    string definition = reader["Text"].ToString();
                                     int id = (int)reader["object_id"];
                                     if (type.Equals("V"))
                                         code = (ICode)database.Views.Find(id);
@@ -66,7 +68,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                         code = (ICode)database.Find(id);
 
                                     if (type.Equals("P"))
-                                        code = (ICode)database.Procedures.Find(id);
+                                        ((ICode)database.Procedures.Find(id)).Text = GetObjectDefinition(type, name, definition);
 
                                     if (type.Equals("IF") || type.Equals("FN") || type.Equals("TF"))
                                         code = (ICode)database.Functions.Find(id);
@@ -83,6 +85,33 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             {
                 throw ex;
             }
+        }
+
+        private string GetObjectDefinition(string type, string name, string definition)
+        {
+            string rv = definition;
+
+            string sqlDelimiters = @"(\r\n|\s)+";
+            System.Text.RegularExpressions.RegexOptions options = System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Multiline;
+            System.Text.RegularExpressions.Regex re = new System.Text.RegularExpressions.Regex(@"CREATE" + sqlDelimiters + @"PROC(EDURE)?" + sqlDelimiters + @"(dbo.|\[dbo\].)?\[?(?<spname>[a-zA-Z_0-9]+)\]?" + sqlDelimiters, options);
+            switch (type)
+            {
+                case "P":
+                    System.Text.RegularExpressions.Match match = re.Match(definition);
+                    if (match != null)
+                    {
+                        // Try to replace the name saved in the definition when the object was created by the one used for the object in sys.object
+                        string oldName = match.Groups["spname"].Value;
+                        //if (String.IsNullOrEmpty(oldName)) System.Diagnostics.Debugger.Break();
+                        rv = rv.Replace(oldName, name);
+                    }
+                    break;
+                default:
+                    //TODO : Add the logic used for other objects than procedures
+                    break;
+            }
+
+            return rv;
         }
     }
 }
