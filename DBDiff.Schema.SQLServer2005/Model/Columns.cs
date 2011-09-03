@@ -30,11 +30,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             StringBuilder sql = new StringBuilder();
             for (int index = 0; index < this.Count; index++)
             {
-                sql.Append("\t" + this[index].ToSql(true));
-                if (index != this.Count - 1)
+                // Add the coloumn if it's not in DropStatus 
+                if (!this[index].HasState(Enums.ObjectStatusType.DropStatus))
                 {
-                    sql.Append(",");
-                    sql.Append("\r\n");
+                    sql.Append("\t" + this[index].ToSql(true));
+                    if (index != this.Count - 1)
+                    {
+                        sql.Append(",");
+                        sql.Append("\r\n");
+                    }
                 }
             }
             return sql.ToString();
