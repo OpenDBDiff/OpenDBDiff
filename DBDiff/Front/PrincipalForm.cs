@@ -41,6 +41,7 @@ namespace DBDiff.Front
 
             // TODO: form designer requires some controls GAC'd so this is easier
             this.tabControl1.SelectedIndexChanged += new EventHandler(tabControl1_SelectedIndexChanged);
+            this.Text += System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         /*private void ProcesarSybase()

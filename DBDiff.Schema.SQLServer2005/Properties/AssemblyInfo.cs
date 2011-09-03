@@ -35,5 +35,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 [assembly: CLSCompliant(true)]
 [assembly: SecurityPermissionAttribute(SecurityAction.RequestMinimum, Execution = true)]
-[assembly: AssemblyVersion("0.8.0.0")]
-[assembly: AssemblyFileVersion("0.8.0.0")]
+[assembly: AssemblyVersion("0.8.9.0")]
+[assembly: AssemblyFileVersion("0.8.9.0")]
