@@ -12,10 +12,18 @@ namespace DBDiff.Schema.SQLServer.Generates.Front.Util
              DataTable dt = sqlSource.GetDataSources();
 
              List<string> serverList = new List<string>();
+             string serverName = null;
+             string instanceName = null;
 
              foreach(DataRow dr in dt.Rows)
              {
-                     serverList.Add(dr["ServerName"].ToString());
+                 serverName = dr["ServerName"].ToString();
+                 instanceName = dr["InstanceName"] != null ? dr["InstanceName"].ToString() : null;
+
+                 if (string.IsNullOrEmpty(instanceName))
+                     serverList.Add(serverName);
+                 else
+                     serverList.Add(string.Format("{0}\\{1}", serverName, instanceName));
              }
 
              return serverList;
