@@ -190,28 +190,32 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScriptList ToSqlDiff()
         {
+			return ToSqlDiff(new List<ISchemaBase>());
+		}
+        public override SQLScriptList ToSqlDiff(List<ISchemaBase> schemas)
+        {
             var listDiff = new SQLScriptList();
             listDiff.Add("USE [" + Name + "]\r\nGO\r\n\r\n", 0, Enums.ScripActionType.UseDatabase);
-            listDiff.AddRange(Assemblies.ToSqlDiff());
-            listDiff.AddRange(UserTypes.ToSqlDiff());
-            listDiff.AddRange(TablesTypes.ToSqlDiff());
-            listDiff.AddRange(Tables.ToSqlDiff());
-            listDiff.AddRange(Rules.ToSqlDiff());
-            listDiff.AddRange(Schemas.ToSqlDiff());
-            listDiff.AddRange(XmlSchemas.ToSqlDiff());
-            listDiff.AddRange(Procedures.ToSqlDiff());
-            listDiff.AddRange(CLRProcedures.ToSqlDiff());
-            listDiff.AddRange(CLRFunctions.ToSqlDiff());
-            listDiff.AddRange(FileGroups.ToSqlDiff());
-            listDiff.AddRange(DDLTriggers.ToSqlDiff());
-            listDiff.AddRange(Synonyms.ToSqlDiff());
-            listDiff.AddRange(Views.ToSqlDiff());
-            listDiff.AddRange(Users.ToSqlDiff());
-            listDiff.AddRange(Functions.ToSqlDiff());
-            listDiff.AddRange(Roles.ToSqlDiff());
-            listDiff.AddRange(PartitionFunctions.ToSqlDiff());
-            listDiff.AddRange(PartitionSchemes.ToSqlDiff());
-            listDiff.AddRange(FullText.ToSqlDiff());
+			listDiff.AddRange(Assemblies.ToSqlDiff(schemas));
+			listDiff.AddRange(UserTypes.ToSqlDiff(schemas));
+			listDiff.AddRange(TablesTypes.ToSqlDiff(schemas));
+			listDiff.AddRange(Tables.ToSqlDiff(schemas));
+			listDiff.AddRange(Rules.ToSqlDiff(schemas));
+			listDiff.AddRange(Schemas.ToSqlDiff(schemas));
+			listDiff.AddRange(XmlSchemas.ToSqlDiff(schemas));
+			listDiff.AddRange(Procedures.ToSqlDiff(schemas));
+			listDiff.AddRange(CLRProcedures.ToSqlDiff(schemas));
+			listDiff.AddRange(CLRFunctions.ToSqlDiff(schemas));
+			listDiff.AddRange(FileGroups.ToSqlDiff(schemas));
+			listDiff.AddRange(DDLTriggers.ToSqlDiff(schemas));
+			listDiff.AddRange(Synonyms.ToSqlDiff(schemas));
+			listDiff.AddRange(Views.ToSqlDiff(schemas));
+			listDiff.AddRange(Users.ToSqlDiff(schemas));
+			listDiff.AddRange(Functions.ToSqlDiff(schemas));
+			listDiff.AddRange(Roles.ToSqlDiff(schemas));
+			listDiff.AddRange(PartitionFunctions.ToSqlDiff(schemas));
+			listDiff.AddRange(PartitionSchemes.ToSqlDiff(schemas));
+			listDiff.AddRange(FullText.ToSqlDiff(schemas));
             return listDiff;
         }
 

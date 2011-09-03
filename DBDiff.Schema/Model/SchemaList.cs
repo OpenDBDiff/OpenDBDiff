@@ -115,8 +115,12 @@ namespace DBDiff.Schema.Model
 
         public virtual SQLScriptList ToSqlDiff()
         {
+			return ToSqlDiff(new List<ISchemaBase>());	
+		}
+		public virtual SQLScriptList ToSqlDiff(List<ISchemaBase> schemas)
+        {
             SQLScriptList listDiff = new SQLScriptList();
-            this.ForEach(item => listDiff.AddRange(item.ToSqlDiff()));
+            this.Where(item=>(schemas.Count==0 || schemas.FirstOrDefault(sch=>sch.Id==item.Id)!=default(ISchemaBase))).ToList().ForEach(item => listDiff.AddRange(item.ToSqlDiff()));
             return listDiff;
         }
 

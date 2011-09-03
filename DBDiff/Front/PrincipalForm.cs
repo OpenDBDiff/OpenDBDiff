@@ -33,10 +33,14 @@ namespace DBDiff.Front
         private IFront mySqlConnectFront1;
         private IFront mySqlConnectFront2;
         private readonly SqlOption SqlFilter = new SqlOption();
+		private System.Collections.Generic.List<DBDiff.Schema.Model.ISchemaBase> _selectedSchemas = new System.Collections.Generic.List<DBDiff.Schema.Model.ISchemaBase>();
 
         public Form1()
         {
             InitializeComponent();
+
+            // TODO: form designer requires some controls GAC'd so this is easier
+            this.tabControl1.SelectedIndexChanged += new EventHandler(tabControl1_SelectedIndexChanged);
         }
 
         /*private void ProcesarSybase()
@@ -109,7 +113,7 @@ namespace DBDiff.Front
                     txtDiferencias.IsReadOnly = false;
                     txtDiferencias.Styles.LineNumber.BackColor = Color.White;
                     txtDiferencias.Styles.LineNumber.IsVisible = false;
-                    txtDiferencias.Text = destino.ToSqlDiff().ToSQL();
+					txtDiferencias.Text = destino.ToSqlDiff(_selectedSchemas).ToSQL();
                     txtDiferencias.IsReadOnly = true;
                     schemaTreeView1.DatabaseSource = destino;
                     schemaTreeView1.DatabaseDestination = origen;
@@ -158,6 +162,24 @@ namespace DBDiff.Front
             txtOldObject.IsReadOnly = true;
         }
 
+        void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Refresh script when tab is shown
+            if (tabControl1.SelectedIndex != 1)
+            {
+                return;
+            }
+
+            var db = schemaTreeView1.DatabaseSource as Database;
+            if (db != null)
+            {
+                this._selectedSchemas = this.schemaTreeView1.GetCheckedSchemas();
+                this.txtDiferencias.IsReadOnly = false;
+                this.txtDiferencias.Text = db.ToSqlDiff(this._selectedSchemas).ToSQL();
+                this.txtDiferencias.IsReadOnly = false;
+            }
+        }
+
         /*private void ProcesarSQL2000()
         {
             DBDiff.Schema.SQLServer2000.Model.Database origen;
@@ -188,10 +210,12 @@ namespace DBDiff.Front
             try
             {
                 Cursor = Cursors.WaitCursor;
+				_selectedSchemas = schemaTreeView1.GetCheckedSchemas();
                 //if (optSQL2000.Checked) ProcesarSQL2000();
                 if (optSQL2005.Checked) ProcesarSQL2005();
                 //if (optMySQL.Checked) ProcesarMySQL();
                 //if (optSybase.Checked) ProcesarSybase();
+				schemaTreeView1.SetCheckedSchemas(_selectedSchemas);
                 Project.SaveLastConfiguration(mySqlConnectFront1.ConnectionString, mySqlConnectFront2.ConnectionString);
             }
             catch (Exception ex)

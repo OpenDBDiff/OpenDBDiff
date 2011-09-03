@@ -135,6 +135,14 @@ namespace DBDiff.Schema.Model
         {
             return null;
         }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public virtual SQLScriptList ToSqlDiff(System.Collections.Generic.List<ISchemaBase> schemas)
+		{
+			return null;
+		}
 
         public virtual SQLScript Create()
         {
