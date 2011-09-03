@@ -239,6 +239,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                         while (reader.Read())
                         {
                             InitTableIndex(database, reader);
+                            root.RaiseOnReadingOne(reader[TableNameIndex]);
                             if (lastObjectId != (int)reader[TableIdIndex])
                             {
                                 lastObjectId = (int)reader[TableIdIndex];

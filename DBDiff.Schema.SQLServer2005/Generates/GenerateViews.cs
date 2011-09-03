@@ -52,6 +52,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                         View item = null;                        
                         while (reader.Read())
                         {
+                            root.RaiseOnReadingOne(reader["name"]);
                             if (lastViewId != (int)reader["object_id"])
                             {
                                 item = new View(database);

@@ -88,6 +88,8 @@ namespace DBDiff.Front
 
         private void ProcesarSQL2005()
         {
+            ProgressForm progres = null;
+            string errorLocation = null;
             try
             {
                 Database origen;
@@ -105,8 +107,13 @@ namespace DBDiff.Front
                     sql2.ConnectionString = mySqlConnectFront2.ConnectionString;
                     sql2.Options = SqlFilter;
 
-                    ProgressForm progres = new ProgressForm("Source Database", "Destination Database", sql2, sql1);
+                    progres = new ProgressForm("Source Database", "Destination Database", sql2, sql1);
                     progres.ShowDialog(this);
+                    if (progres.Error != null)
+                    {
+                        throw new SchemaException(progres.Error.Message, progres.Error);
+                    }
+
                     origen = progres.Source;
                     destino = progres.Destination;
 
@@ -114,6 +121,7 @@ namespace DBDiff.Front
                     txtDiferencias.IsReadOnly = false;
                     txtDiferencias.Styles.LineNumber.BackColor = Color.White;
                     txtDiferencias.Styles.LineNumber.IsVisible = false;
+                    errorLocation = "Generating Synchronized Script";
 					txtDiferencias.Text = destino.ToSqlDiff(_selectedSchemas).ToSQL();
                     txtDiferencias.IsReadOnly = true;
                     schemaTreeView1.DatabaseSource = destino;
@@ -128,14 +136,14 @@ namespace DBDiff.Front
                     MessageBox.Show(Owner, "Please select a valid connection string", "ERROR", MessageBoxButtons.OK,
                                     MessageBoxIcon.Information);
             }
-            catch (SchemaException)
-            {
-                throw;
-            }
             catch (Exception ex)
             {
-                throw new SchemaException("Invalid database connection. Please check the database connection\r\n" +
-                                          ex.Message);
+                if (errorLocation == null && progres != null)
+                {
+                    errorLocation = String.Format("{0} (while {1})", progres.ErrorLocation, progres.ErrorMostRecentProgress ?? "initializing");
+                }
+
+                throw new SchemaException("Error " + (errorLocation ?? " Comparing Databases"), ex);
             }
         }
 
@@ -208,6 +216,7 @@ namespace DBDiff.Front
 
         private void button1_Click(object sender, EventArgs e)
         {
+            string errorLocation = "Processing Compare";
             try
             {
                 Cursor = Cursors.WaitCursor;
@@ -217,11 +226,69 @@ namespace DBDiff.Front
                 //if (optMySQL.Checked) ProcesarMySQL();
                 //if (optSybase.Checked) ProcesarSybase();
 				schemaTreeView1.SetCheckedSchemas(_selectedSchemas);
+                errorLocation = "Saving Connections";
                 Project.SaveLastConfiguration(mySqlConnectFront1.ConnectionString, mySqlConnectFront2.ConnectionString);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(Owner, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var exceptionList = new System.Collections.Generic.List<Exception>();
+                exceptionList.Add(ex);
+                var innerException = ex.InnerException;
+                while (innerException != null)
+                {
+                    exceptionList.Insert(0, innerException);
+                    innerException = innerException.InnerException;
+                }
+
+                var exceptionMsg = new System.Text.StringBuilder();
+                var prevMessage = exceptionList[0].Message;
+                exceptionMsg.Append(this.Text);
+                for (int i = 1; i < exceptionList.Count; ++i)
+                {
+                    if (exceptionList[i].Message != prevMessage)
+                    {
+                        exceptionMsg.AppendFormat("\r\n{0}", exceptionList[i].Message);
+                        prevMessage = exceptionList[i].Message;
+                    }
+                }
+
+                var ignoreSystem = new System.Text.RegularExpressions.Regex(@"   at System\.[^\r\n]+\r\n|C:\\dev\\open-dbdiff\\");
+                exceptionMsg.AppendFormat("\r\n{0}: {1}\r\n{2}", exceptionList[0].GetType().Name, exceptionList[0].Message, ignoreSystem.Replace(exceptionList[0].StackTrace, String.Empty));
+
+                var ignoreChunks = new System.Text.RegularExpressions.Regex(@": \[[^\)]*\)|\.\.\.\)|Source|Destination");
+                var searchableError = ignoreChunks.Replace(exceptionMsg.ToString(), String.Empty);
+                var searchableErrorBytes = System.Text.Encoding.UTF8.GetBytes(searchableError);
+                searchableErrorBytes = new System.Security.Cryptography.MD5CryptoServiceProvider().ComputeHash(searchableErrorBytes);
+                var searchHash = BitConverter.ToString(searchableErrorBytes).Replace("-", String.Empty);
+                exceptionMsg.AppendFormat("\r\n\r\n{0}", searchHash);
+
+                if (DialogResult.OK == MessageBox.Show(Owner, @"An unexpected error has occured during processing.
+Clicking 'OK' will result in the following: 
+
+    1. The exception info below will be copied to the clipboard.
+
+    2. Your default browser will search CodePlex for more details.
+
+    • *Please* click 'Create New Work Item' and paste the error details
+        into the Description field if there are no work items for this issue! 
+        (At least email the details to opendbdiff@gmail.com...)
+
+    • Vote for existing work items; paste details into 'Add Comment'.
+
+    • If possible, please attach a SQL script creating two dbs with
+        the minimum necessary to reproduce the problem.
+
+" + exceptionMsg.ToString(), "Error " + errorLocation, MessageBoxButtons.OKCancel, MessageBoxIcon.Error))
+                {
+                    try
+                    {
+                        Clipboard.SetText(exceptionMsg.ToString());
+                        System.Diagnostics.Process.Start("http://opendbiff.codeplex.com/workitem/list/basic?keywords=" + Uri.EscapeDataString(searchHash));
+                    }
+                    finally
+                    {
+                    }
+                }
             }
             finally
             {
@@ -351,7 +418,13 @@ namespace DBDiff.Front
 
         private void btnCopy_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(txtDiferencias.Text);
+            try
+            {
+                Clipboard.SetText(txtDiferencias.Text);
+            }
+            finally
+            {
+            }
         }
 
         private void btnOptions_Click(object sender, EventArgs e)

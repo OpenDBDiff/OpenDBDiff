@@ -16,6 +16,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         private readonly List<MessageLog> messages;
         private string connectionString;
         private SqlOption options;
+        private ProgressEventArgs currentlyReading;
 
         public Generate()
         {
@@ -62,7 +63,18 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         public void RaiseOnReading(ProgressEventArgs e)
         {
+            this.currentlyReading = e;
             if (OnReading != null) OnReading(e);
+        }
+
+        public void RaiseOnReadingOne(object name)
+        {
+            if (name != null && this.OnReading != null && this.currentlyReading != null)
+            {
+                var eOne = new ProgressEventArgs(this.currentlyReading.Message, this.currentlyReading.Progress);
+                eOne.Message = eOne.Message.Replace("...", String.Format(": [{0}]", name));
+                this.OnReading(eOne);
+            }
         }
 
         /// <summary>
@@ -160,6 +172,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             ProgressEventHandler.RaiseOnChange(e);
         }
 
+        // TODO: Static because Compare method is static; static events are not my favorite
+        public static event ProgressEventHandler.ProgressHandler OnCompareProgress;
+
+        internal static void RaiseOnCompareProgress(string formatString, params object[] formatParams)
+        {
+            if (Generate.OnCompareProgress != null)
+            {
+                Generate.OnCompareProgress(new ProgressEventArgs(String.Format(formatString, formatParams), -1));
+            }
+        }
+        
         public static Database Compare(Database databaseOriginalSchema, Database databaseCompareSchema)
         {
             Database merge = CompareDatabase.GenerateDiferences(databaseOriginalSchema, databaseCompareSchema);

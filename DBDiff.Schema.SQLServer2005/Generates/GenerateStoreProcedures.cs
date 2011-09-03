@@ -111,6 +111,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             while (reader.Read())
                             {
                                 InitIndex(reader);
+                                root.RaiseOnReadingOne(reader[NameIndex]);
                                 if ((reader[typeIndex].ToString().Trim().Equals("P")) && (database.Options.Ignore.FilterStoreProcedure))
                                 {
                                     StoreProcedure item = new StoreProcedure(database);

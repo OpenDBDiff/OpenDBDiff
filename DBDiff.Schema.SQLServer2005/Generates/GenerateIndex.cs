@@ -40,6 +40,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                         Index item = null;
                         while (reader.Read())
                         {
+                            root.RaiseOnReadingOne(reader["Name"]);
                             type = reader["ObjectType"].ToString().Trim();
                             if (parentId != (int)reader["object_id"])
                             {

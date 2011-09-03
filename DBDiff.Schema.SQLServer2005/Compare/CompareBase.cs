@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DBDiff.Schema.Model;
+using DBDiff.Schema.SQLServer.Generates.Generates;
 using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Compare
@@ -41,10 +42,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 if (DestinoCount > DestinoIndex)
                 {
                     node = CamposDestino[DestinoIndex];
+                    Generate.RaiseOnCompareProgress("Comparing Destination {0}: [{1}]", node.ObjectType, node.Name);
                     if (!CamposOrigen.Exists(node.FullName))
+                    {
+                        Generate.RaiseOnCompareProgress("Adding {0}: [{1}]", node.ObjectType, node.Name);
                         DoNew<Root>(CamposOrigen, node);
+                    }
                     else
+                    {
+                        Generate.RaiseOnCompareProgress("Updating {0}: [{1}]", node.ObjectType, node.Name);
                         DoUpdate<Root>(CamposOrigen, node);
+                    }
 
                     DestinoIndex++;
                     has = true;
@@ -53,8 +61,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 if (OrigenCount > OrigenIndex)
                 {
                     node = CamposOrigen[OrigenIndex];
+                    Generate.RaiseOnCompareProgress("Comparing Source {0}: [{1}]", node.ObjectType, node.Name);
                     if (!CamposDestino.Exists(node.FullName))
+                    {
+                        Generate.RaiseOnCompareProgress("Deleting {0}: [{1}]", node.ObjectType, node.Name);
                         DoDelete(node);
+                    }
 
                     OrigenIndex++;
                     has = true;

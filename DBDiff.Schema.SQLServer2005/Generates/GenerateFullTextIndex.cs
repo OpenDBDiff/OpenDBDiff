@@ -39,6 +39,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                         FullTextIndex item = null;
                         while (reader.Read())
                         {
+                            root.RaiseOnReadingOne(reader["Name"]);
                             if (parentId != (int)reader["object_id"])
                             {
                                 parentId = (int)reader["object_id"];

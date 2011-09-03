@@ -39,6 +39,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                         Constraint item = null;
                         while (reader.Read())
                         {
+                            root.RaiseOnReadingOne(reader["Name"]);
                             if (parentId != (int)reader["parent_object_id"])
                             {
                                 parentId = (int)reader["parent_object_id"];

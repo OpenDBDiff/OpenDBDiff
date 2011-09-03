@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Threading;
 using DBDiff.Schema.SQLServer.Generates.Generates;
 using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.SQLServer.Generates.Compare;
 
 namespace DBDiff.Front
 {
@@ -20,6 +21,11 @@ namespace DBDiff.Front
         private Database origen = null;
         private Database destino = null;
         private Database origenClone = null;
+        
+        // TODO: thread-safe error reporting
+        private Exception error;
+        private string friendlyErrorLocation;
+        private string mostRecentProgressMessage;
 
         public ProgressForm(string DatabaseName1, string DatabaseName2, Generate genData1, Generate genData2)
         {
@@ -42,6 +48,21 @@ namespace DBDiff.Front
             get { return destino; }
         }
 
+        public string ErrorLocation
+        {
+            get { return this.friendlyErrorLocation; }
+        }
+
+        public string ErrorMostRecentProgress
+        {
+            get { return this.mostRecentProgressMessage; }
+        }
+
+        public Exception Error
+        {
+            get { return this.error; }
+        }
+
         private void btnOK_Click(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
@@ -51,49 +72,83 @@ namespace DBDiff.Front
 
         private void ProgressForm_Activated(object sender, EventArgs e)
         {
-
-            if (!IsProcessing)
+            var handler = new DBDiff.Schema.Events.ProgressEventHandler.ProgressHandler(genData2_OnProgress);
+            try
             {
-                this.Refresh();
-                IsProcessing = false;
-                genData1.OnProgress += new DBDiff.Schema.Events.ProgressEventHandler.ProgressHandler(genData1_OnProgress);
-                genData2.OnProgress += new DBDiff.Schema.Events.ProgressEventHandler.ProgressHandler(genData2_OnProgress);
-                /*Thread t1 = new Thread(delegate()
-                {*/
+                if (!IsProcessing)
+                {
+                    this.Refresh();
+                    IsProcessing = false;
+                    genData1.OnProgress += new DBDiff.Schema.Events.ProgressEventHandler.ProgressHandler(genData1_OnProgress);
+                    genData2.OnProgress += handler;
+                    Generate.OnCompareProgress += handler;
+
+                    /*Thread t1 = new Thread(delegate()
+                    {*/
+                    this.friendlyErrorLocation = "Loading " + databaseProgressControl1.DatabaseName;
                     origen = genData1.Process();
-                /*});
-                Thread t2 = new Thread(delegate()
-                {*/
+                    /*});
+                    Thread t2 = new Thread(delegate()
+                    {*/
+                    this.friendlyErrorLocation = "Loading " + databaseProgressControl2.DatabaseName;
                     destino = genData2.Process();
 
                     origenClone = (Database)origen.Clone(null);
-                /*});
-                t1.Start();
-                t2.Start();
-                t1.Join();
-                t2.Join();
-                */
-                destino = Generate.Compare(origen, destino);
-                origen = origenClone;
+                    /*});
+                    t1.Start();
+                    t2.Start();
+                    t1.Join();
+                    t2.Join();
+                    */
+                    this.friendlyErrorLocation = "Comparing Databases";
+                    destino = Generate.Compare(origen, destino);
+                    origen = origenClone;
 
-                databaseProgressControl1.Message = "Complete";
-                databaseProgressControl2.Message = "Complete";
-                databaseProgressControl1.Value = Generate.MaxValue;
-                databaseProgressControl2.Value = Generate.MaxValue;
+                    databaseProgressControl1.Message = "Complete";
+                    databaseProgressControl2.Message = "Complete";
+                    databaseProgressControl1.Value = Generate.MaxValue;
+                    databaseProgressControl2.Value = Generate.MaxValue;
+                }
+            }
+            catch (Exception err)
+            {
+                this.error = err;
+            }
+            finally
+            {
+                Generate.OnCompareProgress -= handler;
                 this.Dispose();
             }
         }
 
         void genData2_OnProgress(DBDiff.Schema.Events.ProgressEventArgs e)
         {
-            databaseProgressControl1.Value = e.Progress;
-            databaseProgressControl1.Message = e.Message;
+            if (e.Progress > -1 && databaseProgressControl1.Value != e.Progress)
+            {
+                databaseProgressControl1.Value = e.Progress;
+            }
+
+            if (String.Compare(databaseProgressControl1.Message, e.Message) != 0)
+            {
+                databaseProgressControl1.Message = e.Message;
+            }
+
+            this.mostRecentProgressMessage = e.Message;
         }
 
         void genData1_OnProgress(DBDiff.Schema.Events.ProgressEventArgs e)
         {
-            databaseProgressControl2.Value = e.Progress;
-            databaseProgressControl2.Message = e.Message;
+            if (e.Progress > -1 && databaseProgressControl2.Value != e.Progress)
+            {
+                databaseProgressControl2.Value = e.Progress;
+            }
+
+            if (String.Compare(databaseProgressControl2.Message, e.Message) != 0)
+            {
+                databaseProgressControl2.Message = e.Message;
+            }
+
+            this.mostRecentProgressMessage = e.Message;
         }
     }
 }

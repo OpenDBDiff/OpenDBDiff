@@ -73,6 +73,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
             if (database.Options.Ignore.FilterXMLSchema)
             {
+                root.RaiseOnReading(new ProgressEventArgs("Reading XML Schema...", Constants.READING_XMLSCHEMAS));
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     using (SqlCommand command = new SqlCommand(GetSQLXMLSchema(), conn))
@@ -83,13 +84,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                         {
                             while (reader.Read())
                             {
+                                root.RaiseOnReadingOne(reader["name"]);
                                 XMLSchema item = new XMLSchema(database);
                                 item.Id = (int)reader["ID"];
                                 item.Name = reader["name"].ToString();
                                 item.Owner = reader["owner"].ToString();
                                 item.Text = reader["Text"].ToString();
                                 database.XmlSchemas.Add(item);
-                                root.RaiseOnReading(new ProgressEventArgs("Reading XML Schema " + item.Name + "...", Constants.READING_XMLSCHEMAS));
 
                             }
                         }

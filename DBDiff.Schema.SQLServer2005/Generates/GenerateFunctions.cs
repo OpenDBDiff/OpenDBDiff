@@ -79,6 +79,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             CLRFunction itemC = null;
                             while (reader.Read())
                             {
+                                root.RaiseOnReadingOne(reader["name"]);
                                 if ((!reader["type"].ToString().Trim().Equals("FS")) && (database.Options.Ignore.FilterFunction))
                                 {
                                     if (lastViewId != (int)reader["object_id"])

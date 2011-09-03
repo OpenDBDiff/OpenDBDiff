@@ -66,6 +66,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             {
                                 while (reader.Read())
                                 {
+                                    root.RaiseOnReadingOne(reader["Name"]);
                                     type = reader["ObjectType"].ToString().Trim();
                                     if (parentId != (int)reader["parent_id"])
                                     {

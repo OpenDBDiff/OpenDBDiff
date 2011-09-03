@@ -93,6 +93,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             {
                                 while (reader.Read())
                                 {
+                                    root.RaiseOnReadingOne(reader["Name"]);
                                     UserDataType item = new UserDataType(database);
                                     item.Id = (int)reader["tid"];
                                     item.AllowNull = (bool)reader["is_nullable"];
