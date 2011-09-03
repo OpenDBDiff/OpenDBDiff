@@ -79,7 +79,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model.Util
                     iAux = match.Index;
                 else
                     iAux = -1;
-                if ((abiertas.Count == indexStart) || (!match.Success))
+                if ((abiertas.Count == indexStart) || (match.Success))
                     finish = true;
                 else
                 {
