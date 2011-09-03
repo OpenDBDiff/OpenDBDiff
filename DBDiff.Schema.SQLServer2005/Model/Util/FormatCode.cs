@@ -83,7 +83,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model.Util
                     finish = true;
                 else
                 {
-                    if ((iAux < abiertas[indexStart].Index) && (iAux < abiertas[indexStart].Index + abiertas[indexStart].Length))
+                    if ((iAux < abiertas[indexStart].Index) || (iAux > abiertas[indexStart].Index + abiertas[indexStart].Length))
                         finish = true;
                     else
                     {
