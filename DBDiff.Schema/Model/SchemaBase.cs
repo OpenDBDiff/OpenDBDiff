@@ -176,6 +176,11 @@ namespace DBDiff.Schema.Model
                 wasInsertInDiffList.Add(action, true);
         }
 
+        public void ResetWasInsertInDiffList()
+        {
+            this.wasInsertInDiffList = null;
+        }
+
         /// <summary>
         /// GUID unico que identifica al objeto.
         /// </summary>

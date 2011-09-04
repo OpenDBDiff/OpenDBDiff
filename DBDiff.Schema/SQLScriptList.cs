@@ -109,4 +109,26 @@ namespace DBDiff.Schema
             return alter;
         }
     }
+
+    public static class SQLScriptListExtensionMethod
+    {
+        public static SQLScriptList WarnMissingScript(this SQLScriptList scriptList, DBDiff.Schema.Model.ISchemaBase scriptSource)
+        {
+            if (scriptList == null || scriptSource == null || scriptSource.Status == Enums.ObjectStatusType.OriginalStatus)
+            {
+                return scriptList;
+            }
+
+            for (int i = 0; i < scriptList.Count; ++i)
+            {
+                if (!String.IsNullOrEmpty(scriptList[i].SQL))
+                {
+                    return scriptList;
+                }
+            }
+
+            scriptList.Add(String.Format("\r\n--\r\n-- DIFF-ERROR 0x{0:x8}.{1:d3}: Missing {2} script for {3} '{4}'\r\n--\r\n\r\n", (int)scriptSource.Status, (int)scriptSource.ObjectType, scriptSource.Status, scriptSource.ObjectType, scriptSource.Name), 0, Enums.ScripActionType.None);
+            return scriptList;
+        }
+    }
 }

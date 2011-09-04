@@ -18,7 +18,8 @@ namespace DBDiff.Schema.Model
         Boolean IsSystem { get; set; }
         Enums.ObjectType ObjectType { get; set;}
         Boolean GetWasInsertInDiffList(Enums.ScripActionType action);
-        void SetWasInsertInDiffList(Enums.ScripActionType action);        
+        void SetWasInsertInDiffList(Enums.ScripActionType action);
+        void ResetWasInsertInDiffList();
         string ToSqlDrop();
         string ToSqlAdd();
         string ToSql();

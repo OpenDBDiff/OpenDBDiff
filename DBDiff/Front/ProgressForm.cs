@@ -87,6 +87,8 @@ namespace DBDiff.Front
                     {*/
                     this.friendlyErrorLocation = "Loading " + databaseProgressControl1.DatabaseName;
                     origen = genData1.Process();
+                    databaseProgressControl2.Message = "Complete";
+                    databaseProgressControl2.Value = Generate.MaxValue;
                     /*});
                     Thread t2 = new Thread(delegate()
                     {*/
@@ -105,9 +107,7 @@ namespace DBDiff.Front
                     origen = origenClone;
 
                     databaseProgressControl1.Message = "Complete";
-                    databaseProgressControl2.Message = "Complete";
                     databaseProgressControl1.Value = Generate.MaxValue;
-                    databaseProgressControl2.Value = Generate.MaxValue;
                 }
             }
             catch (Exception err)
