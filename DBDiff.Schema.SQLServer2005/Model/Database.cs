@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using DBDiff.Schema.Attributes;
 using DBDiff.Schema.Model;
 using DBDiff.Schema.SQLServer.Generates.Options;
@@ -127,15 +129,24 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public override ISchemaBase Clone(ISchemaBase parent)
         {
-            var item = new Database
-                           {
-                               Assemblies = Assemblies.Clone(this),
-                               Tables = Tables.Clone(this),
-                               Procedures = Procedures.Clone(this),
-                               Functions = Functions.Clone(this),
-                               Views = Views.Clone(this),
-                               AllObjects = AllObjects
-                           };
+            //Get a list of all of the objects that are SchemaLists, so that we can clone them all.
+            var item = new Database() { AllObjects = this.AllObjects };
+
+            var explicitProperties = (from properties in this.GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public)
+                                      where properties.PropertyType.GetInterface(typeof(DBDiff.Schema.Model.ISchemaList<Code, Database>).Name) != null
+                                      select properties).ToList();
+
+            foreach (var property in explicitProperties)
+            {
+                object value = property.GetValue(this, null);
+
+                //Clone the value
+                value = value.GetType().GetMethod("Clone").Invoke(value, new object[] { this });
+
+                //Set the value to the cloned object
+                property.SetValue(item, value, null);
+            }
+
             return item;
         }
 

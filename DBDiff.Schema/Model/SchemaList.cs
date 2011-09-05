@@ -27,7 +27,15 @@ namespace DBDiff.Schema.Model
         public SchemaList<T, P> Clone(P parentObject)
         {
             SchemaList<T, P> options = new SchemaList<T, P>(parentObject, allObjects);
-            this.ForEach(item => options.Add((T)item.Clone(parentObject)));
+            this.ForEach(item =>
+            {
+                object cloned = item.Clone(parentObject);
+
+                //Not everything implements the clone methd, so make sure we got some actual cloned data before adding it back to the list
+                if (cloned != null)
+                    options.Add((T)item);
+            });
+
             return options;
         }
 

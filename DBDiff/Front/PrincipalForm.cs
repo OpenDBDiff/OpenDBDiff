@@ -255,7 +255,7 @@ namespace DBDiff.Front
                 var ignoreSystem = new System.Text.RegularExpressions.Regex(@"   at System\.[^\r\n]+\r\n|C:\\dev\\open-dbdiff\\");
                 exceptionMsg.AppendFormat("\r\n{0}: {1}\r\n{2}", exceptionList[0].GetType().Name, exceptionList[0].Message, ignoreSystem.Replace(exceptionList[0].StackTrace, String.Empty));
 
-                var ignoreChunks = new System.Text.RegularExpressions.Regex(@": \[[^\)]*\)|\.\.\.\)|Source|Destination");
+                var ignoreChunks = new System.Text.RegularExpressions.Regex(@": \[[^\)]*\)|\.\.\.\)|\'[^\']*\'|\" + '"' + @"[^\" + '"' + @"]*\" + '"' + @"|Source|Destination");
                 var searchableError = ignoreChunks.Replace(exceptionMsg.ToString(), String.Empty);
                 var searchableErrorBytes = System.Text.Encoding.UTF8.GetBytes(searchableError);
                 searchableErrorBytes = new System.Security.Cryptography.MD5CryptoServiceProvider().ComputeHash(searchableErrorBytes);
