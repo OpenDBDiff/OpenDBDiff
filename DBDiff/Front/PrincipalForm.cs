@@ -473,7 +473,11 @@ Clicking 'OK' will result in the following:
                                         {
                                             ConnectionStringSource = mySqlConnectFront1.ConnectionString,
                                             ConnectionStringDestination = mySqlConnectFront2.ConnectionString,
-                                            Name = mySqlConnectFront1.DatabaseName + " - " + mySqlConnectFront2.DatabaseName,
+                                            Name = String.Format("[{0}].[{1}] - [{2}].[{3}]",
+                                                        ((SqlServerConnectFront)mySqlConnectFront1).ServerName,
+                                                        mySqlConnectFront1.DatabaseName,
+                                                        ((SqlServerConnectFront)mySqlConnectFront2).ServerName,
+                                                        mySqlConnectFront2.DatabaseName),
                                             Type = Project.ProjectType.SQLServer
                                         };
                 }
