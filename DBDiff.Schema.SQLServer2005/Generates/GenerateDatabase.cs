@@ -31,6 +31,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                 using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.GetVersion(database), conn))
                 {
                     conn.Open();
+                    
+                    item.Server = conn.DataSource;
+                    item.Database = conn.Database;
+
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())

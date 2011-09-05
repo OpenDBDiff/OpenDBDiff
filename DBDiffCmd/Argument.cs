@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DBDiff.OCDB
+﻿namespace DBDiff.OCDB
 {
+    using System;
+
     public class Argument
     {
         private string connectionString1;
@@ -23,13 +20,23 @@ namespace DBDiff.OCDB
                         connectionString2 = commandline[i].Substring(4, commandline[i].Length - 4).Trim();
                     if (commandline[i].Substring(0, 2).Equals("F=", StringComparison.CurrentCultureIgnoreCase))
                         outputFile = commandline[i].Substring(2, commandline[i].Length - 2).Trim();
+                    if (String.Compare(commandline[i], "/legacy", true) == 0)
+                        this.OutputAll = true;
                 }
             }
             if (String.IsNullOrEmpty(connectionString1) || String.IsNullOrEmpty(ConnectionString1) || String.IsNullOrEmpty(outputFile))
             {
-                System.Console.WriteLine("Example of use:");
-                System.Console.WriteLine("OCDB CN1=\"Connection String 1\" CN2=\"Connection String 2\" F=FileDestination.sql");
+                System.Console.WriteLine("\r\n Example of use:\r\n");
+                System.Console.WriteLine("    OCDB CN1=\"Destination/Target\" CN2=\"Source\" F=OuputScript.sql\r\n");
+                System.Console.WriteLine(" (where CN1 and CN2 are SQL Server 2005+ Connection Strings)");
+                Console.WriteLine(" NOTE: Optional /legacy switch ouputs the old script.\r\n");
             }
+        }
+
+        public bool OutputAll
+        {
+            get;
+            private set;
         }
 
         public string OutputFile

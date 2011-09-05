@@ -1,30 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DBDiff.Schema.SQLServer.Generates.Generates;
-using DBDiff.Schema.SQLServer.Generates.Options;
-using System.IO;
-using System.Data.SqlClient;
-
-namespace DBDiff.OCDB
+﻿namespace DBDiff.OCDB
 {
+    using System;
+    using System.Data.SqlClient;
+    using System.IO;
+    using DBDiff.Schema.SQLServer.Generates.Generates;
+    using DBDiff.Schema.SQLServer.Generates.Options;
+
     public class Program
     {
         private static SqlOption SqlFilter = new SqlOption();
 
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
+            bool completedSuccessfully = false;
             try
             {
                 Argument arguments = new Argument(args);
                 if (arguments.Validate())
-                    Work(arguments);
+                    completedSuccessfully = Work(arguments);
             }
             catch (Exception ex)
             {
                 System.Console.WriteLine(ex.Message);
             }
+
+            return completedSuccessfully ? 0 : 1;
         }
 
         static Boolean TestConnection(string connectionString1, string connectionString2)
@@ -46,8 +46,9 @@ namespace DBDiff.OCDB
             }
         }
 
-        static void Work(Argument arguments)
+        static bool Work(Argument arguments)
         {
+            bool completedSuccessfully = false;
             try
             {
                 DBDiff.Schema.SQLServer.Generates.Model.Database origen;
@@ -66,13 +67,16 @@ namespace DBDiff.OCDB
                     System.Console.WriteLine("Comparing databases schemas...");
                     origen = Generate.Compare(origen, destino);
                     System.Console.WriteLine("Generating SQL file...");
-                    SaveFile(arguments.OutputFile, origen.ToSql());
+                    SaveFile(arguments.OutputFile, arguments.OutputAll ? origen.ToSql() : origen.ToSqlDiff().ToSQL());
+                    completedSuccessfully = true;
                 }
             }
             catch (Exception ex)
             {
-                System.Console.WriteLine(ex.Message);
+                System.Console.WriteLine(String.Format("{0}\r\n{1}\r\n\r\nPlease report this issue at http://opendbiff.codeplex.com/workitem/list/basic\r\n\r\n", ex.Message, ex.StackTrace));
             }
+
+            return completedSuccessfully;
         }
 
         static void SaveFile(string filenmame, string sql)

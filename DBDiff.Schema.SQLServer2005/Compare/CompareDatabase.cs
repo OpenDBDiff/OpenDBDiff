@@ -34,6 +34,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 (new ComparePartitionSchemes()).GenerateDiferences<Database>(Origen.PartitionSchemes, Destino.PartitionSchemes);
                 (new CompareTableType()).GenerateDiferences<Database>(Origen.TablesTypes, Destino.TablesTypes);
                 (new CompareFullText()).GenerateDiferences<Database>(Origen.FullText, Destino.FullText);
+                data.SourceInfo = Destino.Info;
                 return data;
             }
             catch (SchemaException)

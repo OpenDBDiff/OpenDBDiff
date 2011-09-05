@@ -115,6 +115,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             set { _info = value; }
         }
 
+        public DatabaseInfo SourceInfo
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Coleccion de dependencias de constraints.
         /// </summary>
@@ -208,6 +214,31 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             var isDenali = this.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerDenali;
 
             var listDiff = new SQLScriptList();
+            listDiff.Add(new SQLScript(String.Format(@"/*
+
+    Open DBDiff {0}
+    http://opendbiff.codeplex.com/
+
+    Script created by {1}\{2} on {3} at {4}.
+
+    Created on:  {5}
+    Source:      {6} on {7}
+    Destination: {8} on {9}
+
+*/
+
+",
+                System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(),
+                Environment.UserDomainName, 
+                Environment.UserName,
+                DateTime.Now.ToShortDateString(),
+                DateTime.Now.ToLongTimeString(),
+                Environment.MachineName,
+                SourceInfo != null ? SourceInfo.Database : "Uknown",
+                SourceInfo != null ? SourceInfo.Server : "Uknown",
+                Info != null ? Info.Database : "Uknown",
+                Info != null ? Info.Server : "Uknown",
+                0), 0, Enums.ScripActionType.None));
             if (!isDenali)
             {
                 listDiff.Add("USE [" + Name + "]\r\nGO\r\n\r\n", 0, Enums.ScripActionType.UseDatabase);

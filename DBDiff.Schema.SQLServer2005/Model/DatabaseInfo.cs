@@ -30,6 +30,18 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             version = VersionTypeEnum.SQLServer2005;
         }
 
+        public string Server
+        {
+            get;
+            set;
+        }
+
+        public string Database
+        {
+            get;
+            set;
+        }
+        
         public VersionTypeEnum Version
         {
             get { return version; }
