@@ -92,19 +92,22 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         {
             string rv = definition;
 
-            string sqlDelimiters = @"(\r\n|\s)+";
+            string sqlDelimiters = @"(\r|\n|\s)*?";
             System.Text.RegularExpressions.RegexOptions options = System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Multiline;
-            System.Text.RegularExpressions.Regex re = new System.Text.RegularExpressions.Regex(@"CREATE" + sqlDelimiters + @"PROC(EDURE)?" + sqlDelimiters + @"(dbo.|\[dbo\].)?\[?(?<spname>[a-zA-Z_0-9]+)\]?" + sqlDelimiters, options);
+            System.Text.RegularExpressions.Regex re = new System.Text.RegularExpressions.Regex(@"CREATE" + sqlDelimiters + @"PROC(EDURE)?" + sqlDelimiters + @"(\w+\.|\[\w+\]\.)?\[?(?<spname>\w+)\]?" + sqlDelimiters, options);
             switch (type)
             {
                 case "P":
                     System.Text.RegularExpressions.Match match = re.Match(definition);
-                    if (match != null)
+                    if (match != null && match.Success)
                     {
                         // Try to replace the name saved in the definition when the object was created by the one used for the object in sys.object
                         string oldName = match.Groups["spname"].Value;
                         //if (String.IsNullOrEmpty(oldName)) System.Diagnostics.Debugger.Break();
-                        rv = rv.Replace(oldName, name);
+                        if (String.Compare(oldName, name) != 0)
+                        {
+                            rv = rv.Replace(oldName, name);
+                        }
                     }
                     break;
                 default:

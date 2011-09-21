@@ -65,6 +65,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\DBDiff\Properties\AssemblyVersionInfo.cs">
+      <Link>Properties\AssemblyVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="Errors\MessageLog.cs" />
     <Compile Include="Events\ProgressEventHandler.cs" />
     <Compile Include="Events\ProgressEventArgs.cs" />

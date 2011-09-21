@@ -81,6 +81,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\DBDiff\Properties\AssemblyVersionInfo.cs">
+      <Link>Properties\AssemblyVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="Compare\CompareCLRFunction.cs" />
     <Compile Include="Compare\CompareCLRTriggers.cs" />
     <Compile Include="Compare\CompareDDLTriggers.cs" />
@@ -136,7 +139,8 @@
     <Compile Include="Generates\GenerateFullTextIndex.cs" />
     <Compile Include="Generates\GenerateTextObjects.cs" />
     <Compile Include="Generates\SQLCommands\UserSQLCommand.cs" />
-    <Compile Include="Generates\SQLCommands\ViewSQLCommand.cs" />    <Compile Include="Generates\SQLCommands\DatabaseSQLCommand.cs" />
+    <Compile Include="Generates\SQLCommands\ViewSQLCommand.cs" />
+    <Compile Include="Generates\SQLCommands\DatabaseSQLCommand.cs" />
     <Compile Include="Generates\SQLCommands\FullTextIndexSQLCommand.cs" />
     <Compile Include="Generates\SQLCommands\FunctionSQLCommand.cs" />
     <Compile Include="Generates\Util\Constants.cs" />

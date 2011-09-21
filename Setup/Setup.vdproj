@@ -7,6 +7,10 @@
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
+"SccProjectName" = "8:"
+"SccLocalPath" = "8:"
+"SccAuxPath" = "8:"
+"SccProvider" = "8:"
     "Hierarchy"
     {
         "Entry"
@@ -53,25 +57,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B1ED7C3EB6560983D2991C9F580D4B77"
-        "OwnerKey" = "8:_DA5F0F9DD57415FE8A3869F170809C27"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B1ED7C3EB6560983D2991C9F580D4B77"
+        "MsmKey" = "8:_A710D6D2FBCB5B0997E37E11A4922C6A"
         "OwnerKey" = "8:_A19FD7003C85436CBC49DBF7C2E18F69"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_B1ED7C3EB6560983D2991C9F580D4B77"
-        "OwnerKey" = "8:_437A080DA3CD4219BA2BF0B9390E4DAB"
+        "MsmKey" = "8:_A710D6D2FBCB5B0997E37E11A4922C6A"
+        "OwnerKey" = "8:_DA5F0F9DD57415FE8A3869F170809C27"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_B1ED7C3EB6560983D2991C9F580D4B77"
+        "MsmKey" = "8:_A710D6D2FBCB5B0997E37E11A4922C6A"
         "OwnerKey" = "8:_C2E2F88E1A62164E91CDFDD3CEB41ECB"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -162,7 +160,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A478C6F404F50A5DC14CFF94C09D88F9"
+        "OwnerKey" = "8:_437A080DA3CD4219BA2BF0B9390E4DAB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -174,7 +172,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_437A080DA3CD4219BA2BF0B9390E4DAB"
+        "OwnerKey" = "8:_A710D6D2FBCB5B0997E37E11A4922C6A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -204,13 +202,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B1ED7C3EB6560983D2991C9F580D4B77"
+        "OwnerKey" = "8:_E89E5448E606609E0EF53BB87ED8A1D7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E89E5448E606609E0EF53BB87ED8A1D7"
+        "OwnerKey" = "8:_A478C6F404F50A5DC14CFF94C09D88F9"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -353,7 +351,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DBDiff.Front, Version=0.8.0.0, Culture=neutral, PublicKeyToken=0e1d28f990b8cc92, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DBDiff.Front, Version=0.8.9.0, Culture=neutral, PublicKeyToken=0e1d28f990b8cc92, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_A478C6F404F50A5DC14CFF94C09D88F9"
@@ -380,14 +378,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B1ED7C3EB6560983D2991C9F580D4B77"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A710D6D2FBCB5B0997E37E11A4922C6A"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Ascend.Resources, Version=1.0.0.6, Culture=neutral, PublicKeyToken=9c9aecb37b1e03b6, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_B1ED7C3EB6560983D2991C9F580D4B77"
+                    "_A710D6D2FBCB5B0997E37E11A4922C6A"
                     {
                     "Name" = "8:Ascend.Resources.dll"
                     "Attributes" = "3:512"
@@ -435,7 +433,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DBDiff.Schema.SQLServer, Version=0.8.0.0, Culture=neutral, PublicKeyToken=ff28b8ff00eef53a, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DBDiff.Schema.SQLServer, Version=0.8.9.0, Culture=neutral, PublicKeyToken=ff28b8ff00eef53a, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_C00799D61122C7A2D043B05F7F44ED77"
@@ -528,7 +526,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DBDiff.Schema, Version=0.8.0.0, Culture=neutral, PublicKeyToken=419acba4164e3d25, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DBDiff.Schema, Version=0.8.9.0, Culture=neutral, PublicKeyToken=419acba4164e3d25, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_E89E5448E606609E0EF53BB87ED8A1D7"
@@ -642,18 +640,18 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Open DBDiff"
-        "ProductCode" = "8:{4DBB58E2-3CD2-4279-99BD-CC8720EF6167}"
-        "PackageCode" = "8:{C7969CB6-A5CA-40A9-B131-7D4F66C7E349}"
+        "ProductCode" = "8:{837993C7-D5FB-48BC-8965-0A23EABAEBCA}"
+        "PackageCode" = "8:{700AD00F-BB85-4727-8B44-E739225B810A}"
         "UpgradeCode" = "8:{6404F0DE-9844-4CC3-9F69-5B2E60B35E70}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:0.8.6"
+        "ProductVersion" = "8:0.8.9.1"
         "Manufacturer" = "8:Microsoft"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Open DBDiff Beta 8.6"
+        "Title" = "8:Open DBDiff Beta 8.9"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Microsoft"
         "Keywords" = "8:"
