@@ -45,66 +45,12 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_A478C6F404F50A5DC14CFF94C09D88F9"
-        "OwnerKey" = "8:_A19FD7003C85436CBC49DBF7C2E18F69"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A478C6F404F50A5DC14CFF94C09D88F9"
-        "OwnerKey" = "8:_C00799D61122C7A2D043B05F7F44ED77"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A710D6D2FBCB5B0997E37E11A4922C6A"
-        "OwnerKey" = "8:_A19FD7003C85436CBC49DBF7C2E18F69"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A710D6D2FBCB5B0997E37E11A4922C6A"
-        "OwnerKey" = "8:_DA5F0F9DD57415FE8A3869F170809C27"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A710D6D2FBCB5B0997E37E11A4922C6A"
-        "OwnerKey" = "8:_C2E2F88E1A62164E91CDFDD3CEB41ECB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_B47019EB387EA62D7D2F4FA21613E232"
         "OwnerKey" = "8:_867EDCE360CE49C5A995FE12CAA85B58"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_C00799D61122C7A2D043B05F7F44ED77"
-        "OwnerKey" = "8:_437A080DA3CD4219BA2BF0B9390E4DAB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C00799D61122C7A2D043B05F7F44ED77"
-        "OwnerKey" = "8:_A19FD7003C85436CBC49DBF7C2E18F69"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C2E2F88E1A62164E91CDFDD3CEB41ECB"
-        "OwnerKey" = "8:_C00799D61122C7A2D043B05F7F44ED77"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C2E2F88E1A62164E91CDFDD3CEB41ECB"
-        "OwnerKey" = "8:_A19FD7003C85436CBC49DBF7C2E18F69"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_C2E2F88E1A62164E91CDFDD3CEB41ECB"
         "OwnerKey" = "8:_437A080DA3CD4219BA2BF0B9390E4DAB"
         "MsmSig" = "8:_UNDEFINED"
@@ -118,19 +64,7 @@
         "Entry"
         {
         "MsmKey" = "8:_DA5F0F9DD57415FE8A3869F170809C27"
-        "OwnerKey" = "8:_A19FD7003C85436CBC49DBF7C2E18F69"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DA5F0F9DD57415FE8A3869F170809C27"
         "OwnerKey" = "8:_437A080DA3CD4219BA2BF0B9390E4DAB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E89E5448E606609E0EF53BB87ED8A1D7"
-        "OwnerKey" = "8:_C00799D61122C7A2D043B05F7F44ED77"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -172,19 +106,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A710D6D2FBCB5B0997E37E11A4922C6A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_4CF57375D71086C7A0BA18D991800B49"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C00799D61122C7A2D043B05F7F44ED77"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -351,7 +273,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DBDiff.Front, Version=0.8.9.0, Culture=neutral, PublicKeyToken=0e1d28f990b8cc92, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DBDiff.Front, Version=0.8.9.1, Culture=neutral, PublicKeyToken=0e1d28f990b8cc92, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_A478C6F404F50A5DC14CFF94C09D88F9"
@@ -361,37 +283,6 @@
                     }
                 }
             "SourcePath" = "8:DBDiff.Front.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_7A560F75564B44DBAF9D5813EBFA6615"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A710D6D2FBCB5B0997E37E11A4922C6A"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Ascend.Resources, Version=1.0.0.6, Culture=neutral, PublicKeyToken=9c9aecb37b1e03b6, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_A710D6D2FBCB5B0997E37E11A4922C6A"
-                    {
-                    "Name" = "8:Ascend.Resources.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Ascend.Resources.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_7A560F75564B44DBAF9D5813EBFA6615"
@@ -426,37 +317,6 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C00799D61122C7A2D043B05F7F44ED77"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DBDiff.Schema.SQLServer, Version=0.8.9.0, Culture=neutral, PublicKeyToken=ff28b8ff00eef53a, processorArchitecture=x86"
-                "ScatterAssemblies"
-                {
-                    "_C00799D61122C7A2D043B05F7F44ED77"
-                    {
-                    "Name" = "8:DBDiff.Schema.SQLServer.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:DBDiff.Schema.SQLServer.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_7A560F75564B44DBAF9D5813EBFA6615"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -526,7 +386,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DBDiff.Schema, Version=0.8.9.0, Culture=neutral, PublicKeyToken=419acba4164e3d25, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:DBDiff.Schema, Version=0.8.9.1, Culture=neutral, PublicKeyToken=419acba4164e3d25, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_E89E5448E606609E0EF53BB87ED8A1D7"
@@ -647,7 +507,7 @@
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:0.8.9.1"
+        "ProductVersion" = "8:0.8.9"
         "Manufacturer" = "8:Microsoft"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
