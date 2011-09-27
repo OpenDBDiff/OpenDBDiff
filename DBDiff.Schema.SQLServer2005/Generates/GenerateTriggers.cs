@@ -31,7 +31,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             sql += "LEFT JOIN sys.trigger_events AS tei ON tei.object_id = T.object_id and tei.type=1 ";
             sql += "LEFT JOIN sys.trigger_events AS teu ON teu.object_id = T.object_id and teu.type=2 ";
             sql += "LEFT JOIN sys.trigger_events AS ted ON ted.object_id = T.object_id and ted.type=3 ";
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServerDenali)
+            if (version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
             {
                 sql += ",(SELECT null as execute_as_principal_id, null as assembly_class, null as assembly_id, null as assembly_method) AS AM,";
                 sql += "(SELECT null AS name) AS AF";

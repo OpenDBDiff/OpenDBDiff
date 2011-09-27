@@ -213,7 +213,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 database = current.Parent as Database;
                 current = current.Parent;
             }
-            var isDenali = database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerDenali;
+            var isAzure10 = database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10;
             string typeConstraint = "";
             StringBuilder sql = new StringBuilder();
             if (Index.Type == Index.IndexTypeEnum.Clustered) typeConstraint = "CLUSTERED";
@@ -244,13 +244,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 if (Index.IgnoreDupKey) sql.Append("IGNORE_DUP_KEY = ON"); else sql.Append("IGNORE_DUP_KEY  = OFF");
             else
             {
-                if (!isDenali)
+                if (!isAzure10)
                 {
                     if (Index.IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");
                 }
                 if (Index.IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON"); else sql.Append("STATISTICS_NORECOMPUTE  = OFF");
                 if (Index.IgnoreDupKey) sql.Append(", IGNORE_DUP_KEY = ON"); else sql.Append(", IGNORE_DUP_KEY  = OFF");
-                if (!isDenali)
+                if (!isAzure10)
                 {
                     if (Index.AllowRowLocks) sql.Append(", ALLOW_ROW_LOCKS = ON"); else sql.Append(", ALLOW_ROW_LOCKS  = OFF");
                     if (Index.AllowPageLocks) sql.Append(", ALLOW_PAGE_LOCKS = ON"); else sql.Append(", ALLOW_PAGE_LOCKS  = OFF");
@@ -258,7 +258,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 }
             }
             sql.Append(")");
-            if (!isDenali)
+            if (!isAzure10)
             {
                 if (!String.IsNullOrEmpty(Index.FileGroup)) sql.Append(" ON [" + Index.FileGroup + "]");
             }

@@ -17,7 +17,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
                 version == DatabaseInfo.VersionTypeEnum.SQLServer2008 ||
                 version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2) return GetViewSql2008();
             //Fall back to highest compatible version
-            return GetViewSqlDenali();            
+            return GetViewSqlAzure();            
         }
 
         private static string GetViewSql2008()
@@ -35,7 +35,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             return sql;
         }
 
-        private static string GetViewSqlDenali()
+        private static string GetViewSqlAzure()
         {
             var sql = new StringBuilder();
             //Avoid using sql_dependencies. Use sys.sql_expression_dependencies instead. http://msdn.microsoft.com/en-us/library/ms174402.aspx

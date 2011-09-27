@@ -16,7 +16,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
                 return Get2008();
 
             //fall back to highest compatible version
-            return GetDenali();
+            return GetAzure();
 
         }
 
@@ -30,7 +30,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             return sql.ToString();
         }
 
-        private static string GetDenali()
+        private static string GetAzure()
         {
             var sql = new StringBuilder();
             //to get LoginName in Azure (asside for the current login) you would have to link to master and query sys.sysusers or sys.sql_users

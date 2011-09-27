@@ -198,7 +198,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 database = current.Parent as Database;
                 current = current.Parent;
             }
-            var isDenali = database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerDenali;
+            var isAzure10 = database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10;
                 
             string sql = "";
             string sqlPK = "";
@@ -232,7 +232,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 }
                 sql += ")";
                 
-                if (!isDenali)
+                if (!isAzure10)
                 {
                     if (!String.IsNullOrEmpty(FileGroup)) sql += " ON [" + FileGroup + "]";
                 

@@ -34,10 +34,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008 ||
                 version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2) return GetTableDetail2008();
             //Fall back to highest compatible version
-            return GetTableDetailDenali();            
+            return GetTableDetailAzure();            
         }
 
-        private static string GetTableDetailDenali()
+        private static string GetTableDetailAzure()
         {
             var sql = new StringBuilder();
             sql.AppendLine("SELECT DISTINCT 0 AS HasChangeTrackingTrackColumn, 0 AS HasChangeTracking, TTT.lock_escalation_desc, T.type AS ObjectType, C.Name, C.is_filestream, C.is_sparse, S4.Name as OwnerType,C.user_type_id, C.Column_Id AS ID, C.max_length AS Size, C.Precision, C.Scale, ISNULL(C.Collation_Name,'') as Collation, C.Is_nullable AS IsNullable, C.Is_RowGuidcol AS IsRowGuid, C.Is_Computed AS IsComputed, C.Is_Identity AS IsIdentity, COLUMNPROPERTY(T.object_id,C.name,'IsIdNotForRepl') AS IsIdentityRepl,IDENT_SEED('[' + S1.name + '].[' + T.Name + ']') AS IdentSeed, IDENT_INCR('[' + S1.name + '].[' + T.Name + ']') AS IdentIncrement, ISNULL(CC.Definition,'') AS Formula, ISNULL(CC.Is_Persisted,0) AS FormulaPersisted, ");

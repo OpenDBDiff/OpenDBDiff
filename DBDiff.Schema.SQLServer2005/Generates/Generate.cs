@@ -113,7 +113,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                     {*/
 
             //not supported in azure yet
-            if (databaseSchema.Info.Version != DatabaseInfo.VersionTypeEnum.SQLServerDenali)
+            if (databaseSchema.Info.Version != DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
             {
                 (new GeneratePartitionFunctions(this)).Fill(databaseSchema, connectionString);
                 (new GeneratePartitionScheme(this)).Fill(databaseSchema, connectionString);
@@ -124,7 +124,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             (new GenerateSynonyms(this)).Fill(databaseSchema, connectionString);
             
             //not supported in azure yet
-            if (databaseSchema.Info.Version != DatabaseInfo.VersionTypeEnum.SQLServerDenali)
+            if (databaseSchema.Info.Version != DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
             {
                 (new GenerateAssemblies(this)).Fill(databaseSchema, connectionString);
                 (new GenerateFullText(this)).Fill(databaseSchema, connectionString);

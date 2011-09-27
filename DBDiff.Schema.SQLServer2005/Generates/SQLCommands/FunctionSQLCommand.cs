@@ -14,7 +14,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008 ||
                version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2) return Get2008();
             //Fall back to highest compatible version            
-            return GetDenali();
+            return GetAzure();
         }
 
         private static string Get2005()
@@ -71,7 +71,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             return sql.ToString();
         }
 
-        private static string GetDenali()
+        private static string GetAzure()
         {
             var sql = new StringBuilder();
             sql.AppendLine("SELECT DISTINCT ");

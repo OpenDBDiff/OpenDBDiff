@@ -22,7 +22,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         public void Fill(Database database, string connectionString)
         {
             //not supported in azure yet
-            if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerDenali) return;
+            if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10) return;
             
             int parentId = 0;
             bool change = false;

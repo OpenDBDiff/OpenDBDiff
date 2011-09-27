@@ -12,7 +12,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             SQLServer2005 = 2,
             SQLServer2008 = 3,
             SQLServer2008R2 = 4,
-            SQLServerDenali = 5 /*Azure*/
+            // Azure will be reporting v11 instead of v10.25 soon...
+            // http://social.msdn.microsoft.com/Forums/en-US/ssdsgetstarted/thread/ad7aae98-26ac-4979-848d-517a86c3fa5c/
+            SQLServerAzure10 = 5 /*Azure*/
         }
 
         private float versionNumber;
@@ -98,7 +100,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 if ((versionNumber >= 8) && (versionNumber < 9)) version = VersionTypeEnum.SQLServer2000;
                 if ((versionNumber >= 9) && (versionNumber < 10)) version = VersionTypeEnum.SQLServer2005;
                 if ((versionNumber >= 10) && (versionNumber < 10.25)) version = VersionTypeEnum.SQLServer2008;
-                if ((versionNumber >= 10.25) && (versionNumber < 10.5)) version = VersionTypeEnum.SQLServerDenali;
+                if ((versionNumber >= 10.25) && (versionNumber < 10.5)) version = VersionTypeEnum.SQLServerAzure10;
                 if ((versionNumber >= 10.5) && (versionNumber < 11)) version = VersionTypeEnum.SQLServer2008R2;
 
             }

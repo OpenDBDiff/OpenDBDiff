@@ -11,7 +11,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
         public static string GetVersion(Database databaseSchema)
         {
             string sql;
-            sql = "SELECT SUBSTRING(CONVERT(varchar,SERVERPROPERTY('productversion')),1,PATINDEX('.',CONVERT(varchar,SERVERPROPERTY('productversion')))+5) AS Version";
+            sql = "SELECT SERVERPROPERTY('productversion') AS Version";
             return sql;
         }
 
@@ -20,7 +20,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return Get2005(databaseSchema);
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return Get2008(databaseSchema);
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2) return Get2008R2(databaseSchema);
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServerDenali) return GetDenali(databaseSchema);
+            if (version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10) return GetAzure(databaseSchema);
             return "";
         }
 
@@ -45,7 +45,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             return sql;
         }
 
-        private static string GetDenali(Database databaseSchema)
+        private static string GetAzure(Database databaseSchema)
         {
             string sql;
             //DATABASEPROPERTYEX('IsFullTextEnabled') is deprecated http://technet.microsoft.com/en-us/library/cc646010(SQL.110).aspx

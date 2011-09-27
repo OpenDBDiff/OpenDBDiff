@@ -14,7 +14,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008 ||
                 version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2) return GetUniqueKey2008();
             //Fall back to highest compatible version
-            return GetUniqueKeyDenali();
+            return GetUniqueKeyAzure();
         }
 
         public static string GetCheck(DatabaseInfo.VersionTypeEnum version)
@@ -32,10 +32,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
                 version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2)
                 return GetPrimaryKey2008();
             //Fall back to highest compatible version            
-            return GetPrimaryKeyDenali();
+            return GetPrimaryKeyAzure();
         }
 
-        private static string GetUniqueKeyDenali()
+        private static string GetUniqueKeyAzure()
         {
             //File Groups not supported in Azure
             StringBuilder sql = new StringBuilder();
@@ -122,7 +122,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             return sql;
         }
 
-        private static string GetPrimaryKeyDenali()
+        private static string GetPrimaryKeyAzure()
         {
             //File Groups not supported in Azure
             StringBuilder sql = new StringBuilder();

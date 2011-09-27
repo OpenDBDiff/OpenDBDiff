@@ -25,48 +25,51 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         public DatabaseInfo Get(Database database)
         {
-            DatabaseInfo item = new DatabaseInfo();
-            using (SqlConnection conn = new SqlConnection(connectioString))
+            try
             {
-                using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.GetVersion(database), conn))
+                DatabaseInfo item = new DatabaseInfo();
+                using (SqlConnection conn = new SqlConnection(connectioString))
                 {
-                    conn.Open();
-                    
-                    item.Server = conn.DataSource;
-                    item.Database = conn.Database;
-
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.GetVersion(database), conn))
                     {
-                        if (reader.Read())
+                        conn.Open();
+
+                        item.Server = conn.DataSource;
+                        item.Database = conn.Database;
+
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            //we must compare the decimal as well as Azure is 10.25
-                            string versionText = reader["Version"].ToString();
-                            if (versionText.EndsWith(".") && versionText.Length > 1)
+                            if (reader.Read())
                             {
-                                versionText = versionText.Substring(0, versionText.Length - 1);
+                                // we must compare the decimal as well as Azure is 10.25
+                                var version = new Version(reader["Version"].ToString());
+                                item.VersionNumber = float.Parse(String.Format("{0}.{1}", version.Major, version.Minor));
                             }
-
-                            item.VersionNumber = float.Parse(versionText);
                         }
                     }
-                }
-                using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.Get(item.Version, database), conn))
-                {
-                    using (SqlDataReader reader = command.ExecuteReader())
+
+                    using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.Get(item.Version, database), conn))
                     {
-                        if (reader.Read())
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            item.Collation = reader["Collation"].ToString();
-                            item.HasFullTextEnabled = ((int)reader["IsFulltextEnabled"]) == 1;
+                            if (reader.Read())
+                            {
+                                item.Collation = reader["Collation"].ToString();
+                                item.HasFullTextEnabled = ((int)reader["IsFulltextEnabled"]) == 1;
+                            }
                         }
                     }
+
                 }
 
+                return item;
             }
-            
-            return item;
+            catch (Exception notAGoodIdeaToCatchAllErrors)
+            {
+                throw new DBDiff.Schema.Misc.SchemaException(
+                    "Error detecting database server version. Please include database server info when reporting this error!"
+                    , notAGoodIdeaToCatchAllErrors);
+            }
         }
-
-
     }
 }

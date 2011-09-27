@@ -16,7 +16,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
                 return Get2008();
 
             //fall back to highest compatible version
-            return GetDenali();
+            return GetAzure();
             
         }
 
@@ -54,7 +54,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             return sql.ToString();
         }
 
-        private static string GetDenali()
+        private static string GetAzure()
         {
             StringBuilder sql = new StringBuilder();
             sql.Append("SELECT ISNULL(I.filter_definition,'') AS FilterDefinition, OO.type AS ObjectType, IC.key_ordinal, C.user_type_id, I.object_id, '' as FileGroup, C.column_id,C.Name AS ColumnName, I.Name, I.index_id, I.type, is_unique, ignore_dup_key, is_primary_key, is_unique_constraint, fill_factor, is_padded, is_disabled, allow_row_locks, allow_page_locks, IC.is_descending_key, IC.is_included_column, ISNULL(ST.no_recompute,0) AS NoAutomaticRecomputation ");

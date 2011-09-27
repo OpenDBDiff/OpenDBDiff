@@ -211,7 +211,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 		}
         public override SQLScriptList ToSqlDiff(List<ISchemaBase> schemas)
         {
-            var isDenali = this.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerDenali;
+            var isAzure10 = this.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10;
 
             var listDiff = new SQLScriptList();
             listDiff.Add(new SQLScript(String.Format(@"/*
@@ -239,7 +239,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 Info != null ? Info.Database : "Uknown",
                 Info != null ? Info.Server : "Uknown",
                 0), 0, Enums.ScripActionType.None));
-            if (!isDenali)
+            if (!isAzure10)
             {
                 listDiff.Add("USE [" + Name + "]\r\nGO\r\n\r\n", 0, Enums.ScripActionType.UseDatabase);
                 listDiff.AddRange(Assemblies.ToSqlDiff(schemas));
@@ -251,7 +251,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 			listDiff.AddRange(Schemas.ToSqlDiff(schemas));
 			listDiff.AddRange(XmlSchemas.ToSqlDiff(schemas));
 			listDiff.AddRange(Procedures.ToSqlDiff(schemas));
-            if (!isDenali)
+            if (!isAzure10)
             {
                 listDiff.AddRange(CLRProcedures.ToSqlDiff(schemas));
                 listDiff.AddRange(CLRFunctions.ToSqlDiff(schemas));
@@ -265,7 +265,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 			listDiff.AddRange(Roles.ToSqlDiff(schemas));
 			listDiff.AddRange(PartitionFunctions.ToSqlDiff(schemas));
 			listDiff.AddRange(PartitionSchemes.ToSqlDiff(schemas));
-            if (!isDenali)
+            if (!isAzure10)
             {
                 listDiff.AddRange(FullText.ToSqlDiff(schemas));
             }
