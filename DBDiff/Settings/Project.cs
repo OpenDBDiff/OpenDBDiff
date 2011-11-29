@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.SQLite;
+using System.IO;
+using System.Reflection;
+using System.Windows.Forms;
 using DBDiff.Schema.SQLServer.Generates.Options;
 
 namespace DBDiff.Settings
@@ -14,7 +15,9 @@ namespace DBDiff.Settings
             SQLServer = 1
         }
 
-        private const string connectionSQLLite = "Data Source=Settings.conf;Pooling=true;FailIfMissing=false";
+        private const string connectionFormatSQLLite = "Data Source={0};Pooling=true;FailIfMissing=false";
+        private const string connectionDBFileSQLLite = "Settings.conf";
+        private static bool stillCaringAboutSqlLiteProjectErrors = true;
 
         public int Id { get; set; }
         public string ConnectionStringSource { get; set; }
@@ -22,59 +25,97 @@ namespace DBDiff.Settings
         public SqlOption Options { get; set; }
         public ProjectType Type { get; set; }
         public string Name { get; set; }
- 
-        private static int Add(Project item)
+
+        private static void ReallyDoSqlSomething(string sqlCommand, Action<SQLiteDataReader> OnRead, params string[] sqlNonQueryBeforeReadCommand)
         {
-            int maxId = 0;
-            using (SQLiteConnection connection = new SQLiteConnection(connectionSQLLite))
+            string dbFile = connectionDBFileSQLLite;
+            if (!File.Exists(dbFile))
             {
+                dbFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), dbFile);
+            }
+
+            using (var connection = new SQLiteConnection(String.Format(connectionFormatSQLLite, dbFile)))
+            {
+                // TODO: Don't know about Sqlite; hoping transaction is necessary?
                 connection.Open();
-                using (SQLiteTransaction transaction = connection.BeginTransaction())
+                bool useTransaction = sqlNonQueryBeforeReadCommand != null && sqlNonQueryBeforeReadCommand.Length > 0 && !String.IsNullOrEmpty(sqlNonQueryBeforeReadCommand[0]);
+                using (var transaction = useTransaction ? connection.BeginTransaction() : null)
+                using (var command = new SQLiteCommand(sqlCommand, connection, null))
                 {
-                    using (
-                        SQLiteCommand command = new SQLiteCommand("INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('" + item.Name.Replace("'","''") + "','" + item.ConnectionStringSource + "','" + item.ConnectionStringDestination + "','" + item.Options + "'," + ((int) item.Type).ToString() + ",0)", connection, transaction))
+                    if (transaction != null)
                     {
-                        command.ExecuteNonQuery();
-                    }
-                    using (SQLiteCommand command = new SQLiteCommand("SELECT MAX(ProjectId) AS NewId FROM Project WHERE Internal = 0",connection, transaction))
-                    {
-                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        foreach (string sqlBeforeCommand in sqlNonQueryBeforeReadCommand)
                         {
-                            if (reader.Read())
+                            if (!String.IsNullOrEmpty(sqlBeforeCommand))
                             {
-                                maxId = int.Parse(reader["NewId"].ToString());
+                                using (var beforeCommand = new SQLiteCommand(sqlBeforeCommand, connection, null))
+                                {
+                                    beforeCommand.ExecuteNonQuery();
+                                }
                             }
                         }
                     }
-                    transaction.Commit();
+
+                    if (OnRead != null)
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                OnRead(reader);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        command.ExecuteNonQuery();
+                    }
+
+                    if (transaction != null)
+                    {
+                        transaction.Commit();
+                    }
                 }
             }
+        }
+
+        private static void DoSqlSomething(string sqlCommand, Action<SQLiteDataReader> OnRead, params string[] sqlNonQueryBeforeReadCommand)
+        {
+            try
+            {
+                Project.ReallyDoSqlSomething(sqlCommand, OnRead, sqlNonQueryBeforeReadCommand);
+            }
+            catch (Exception terribleCatchAllErrorsClause)
+            {
+                if (Project.stillCaringAboutSqlLiteProjectErrors 
+                    && DialogResult.No == MessageBox.Show(terribleCatchAllErrorsClause.Message + "\n\nDo you want to see further errors?", "Project Error", MessageBoxButtons.YesNo))
+                {
+                    Project.stillCaringAboutSqlLiteProjectErrors = false;
+                }
+            }
+        }
+
+        private static int Add(Project item)
+        {
+            int maxId = 0;
+            Project.DoSqlSomething(
+                "SELECT MAX(ProjectId) AS NewId FROM Project WHERE Internal = 0",
+                reader => maxId = int.Parse(reader["NewId"].ToString()),
+                "INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('" + item.Name.Replace("'","''") + "','" + item.ConnectionStringSource + "','" + item.ConnectionStringDestination + "','" + item.Options + "'," + ((int) item.Type).ToString() + ",0)");
             return maxId;
         }
 
         private static int Update(Project item)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionSQLLite))
-            {
-                connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand("UPDATE Project SET Name = '" + item.Name.Replace("'","''") + "', ConnectionStringSource = '" + item.ConnectionStringSource + "', ConnectionStringDestination = '" + item.ConnectionStringDestination + "', Type = " + ((int)item.Type).ToString() + " WHERE ProjectId = " + item.Id.ToString(),connection))
-                {
-                    command.ExecuteNonQuery(); 
-                }
-            }
+            Project.DoSqlSomething(
+                "UPDATE Project SET Name = '" + item.Name.Replace("'","''") + "', ConnectionStringSource = '" + item.ConnectionStringSource + "', ConnectionStringDestination = '" + item.ConnectionStringDestination + "', Type = " + ((int)item.Type).ToString() + " WHERE ProjectId = " + item.Id.ToString(),
+                null);
             return item.Id;
         }
 
         public static void Delete(int Id)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionSQLLite))
-            {
-                connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand("DELETE FROM Project WHERE ProjectId = " + Id.ToString(), connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-            }
+            Project.DoSqlSomething("DELETE FROM Project WHERE ProjectId = " + Id.ToString(), null);
         }
 
         public static int Save(Project item)
@@ -89,84 +130,46 @@ namespace DBDiff.Settings
         {
             if (GetLastConfiguration() != null)
             {
-                using (SQLiteConnection connection = new SQLiteConnection(connectionSQLLite))
-                {
-                    connection.Open();
-                    using (SQLiteCommand command = new SQLiteCommand("UPDATE Project SET ConnectionStringSource = '" + ConnectionStringSource + "', ConnectionStringDestination = '" + ConnectionStringDestination + "' WHERE Internal = 1", connection))
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                }                
+                Project.DoSqlSomething("UPDATE Project SET ConnectionStringSource = '" + ConnectionStringSource + "', ConnectionStringDestination = '" + ConnectionStringDestination + "' WHERE Internal = 1", null);
             }
             else
             {
-                using (SQLiteConnection connection = new SQLiteConnection(connectionSQLLite))
-                {
-                    connection.Open();
-                    using (SQLiteCommand command = new SQLiteCommand("INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('LastConfiguration','" + ConnectionStringSource + "','" + ConnectionStringDestination + "','',1,1)", connection))
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                }
+                Project.DoSqlSomething("INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('LastConfiguration','" + ConnectionStringSource + "','" + ConnectionStringDestination + "','',1,1)", null);
             }
         }
 
         public static Project GetLastConfiguration()
         {
             Project item = null;
-            using (SQLiteConnection connection = new SQLiteConnection(connectionSQLLite))
-            {
-                connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Project WHERE Internal = 1 ORDER BY Name", connection))
-                {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+            Project.DoSqlSomething(
+                "SELECT * FROM Project WHERE Internal = 1 ORDER BY Name",
+                reader => item = new Project
                     {
-                        if (reader.Read())
-                        {
-                            item = new Project
-                            {
-                                Id = int.Parse(reader["ProjectId"].ToString()),
-                                ConnectionStringSource = reader["ConnectionStringSource"].ToString(),
-                                ConnectionStringDestination = reader["ConnectionStringDestination"].ToString(),
-                                Type = (ProjectType)(long)reader["Type"],
-                                //Options = (SqlOption) reader["Options"],
-                                Name = reader["Name"].ToString()
-                            };                            
-                        }
-                    }
-                }
-            }
+                        Id = int.Parse(reader["ProjectId"].ToString()),
+                        ConnectionStringSource = reader["ConnectionStringSource"].ToString(),
+                        ConnectionStringDestination = reader["ConnectionStringDestination"].ToString(),
+                        Type = (ProjectType)(long)reader["Type"],
+                        //Options = (SqlOption) reader["Options"],
+                        Name = reader["Name"].ToString()
+                    });
             return item;
-            
         }
 
         public static List<Project> GetAll()
         {
             List<Project> items = new List<Project>();
-            using (SQLiteConnection connection = new SQLiteConnection(connectionSQLLite))
-            {
-                connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Project WHERE Internal = 0 ORDER BY Name",connection))
+            Project.DoSqlSomething(
+                "SELECT * FROM Project WHERE Internal = 0 ORDER BY Name",
+                reader => items.Add(new Project
                 {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Project item = new Project
-                                               {
-                                                   Id = int.Parse(reader["ProjectId"].ToString()),
-                                                   ConnectionStringSource = reader["ConnectionStringSource"].ToString(),
-                                                   ConnectionStringDestination =
-                                                       reader["ConnectionStringDestination"].ToString(),
-                                                   Type = (ProjectType) (long) reader["Type"],
-                                                   //Options = (SqlOption) reader["Options"],
-                                                   Name = reader["Name"].ToString()
-                                               };
-                            items.Add(item);
-                        }
-                    }
-                }
-            }
+                   Id = int.Parse(reader["ProjectId"].ToString()),
+                   ConnectionStringSource = reader["ConnectionStringSource"].ToString(),
+                   ConnectionStringDestination =
+                       reader["ConnectionStringDestination"].ToString(),
+                   Type = (ProjectType) (long) reader["Type"],
+                   //Options = (SqlOption) reader["Options"],
+                   Name = reader["Name"].ToString()
+                }));
             return items;
         }
     }
