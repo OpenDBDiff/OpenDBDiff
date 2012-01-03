@@ -11,7 +11,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
         public static string GetVersion(Database databaseSchema)
         {
             string sql;
-            sql = "SELECT SERVERPROPERTY('productversion') AS Version";
+            sql = "SELECT SERVERPROPERTY('productversion') AS Version, SERVERPROPERTY('EngineEdition') AS Edition";
             return sql;
         }
 

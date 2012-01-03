@@ -102,7 +102,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 if ((versionNumber >= 10) && (versionNumber < 10.25)) version = VersionTypeEnum.SQLServer2008;
                 if ((versionNumber >= 10.25) && (versionNumber < 10.5)) version = VersionTypeEnum.SQLServerAzure10;
                 if ((versionNumber >= 10.5) && (versionNumber < 11)) version = VersionTypeEnum.SQLServer2008R2;
+            }
+        }
 
+        public void SetEdition(int? edition)
+        {
+            if (edition.GetValueOrDefault() == 5)
+            {
+                this.version = VersionTypeEnum.SQLServerAzure10;
             }
         }
     }
