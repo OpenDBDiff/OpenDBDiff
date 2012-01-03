@@ -33,7 +33,7 @@ namespace DBDiff.Schema.Model
 
                 //Not everything implements the clone methd, so make sure we got some actual cloned data before adding it back to the list
                 if (cloned != null)
-                    options.Add((T)item);
+                    options.Add((T)cloned);
             });
 
             return options;
