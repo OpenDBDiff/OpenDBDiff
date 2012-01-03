@@ -46,8 +46,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             string versionValue = reader["Version"] as string;
                             try
                             {
-                                item.VersionNumber = float.Parse(versionValue.Replace(".", " "));
-
                                 // used to use the decimal as well when Azure was 10.25
                                 var version = new Version(versionValue);
                                 item.VersionNumber = float.Parse(String.Format("{0}.{1}", version.Major, version.Minor));
