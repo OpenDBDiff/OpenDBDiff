@@ -119,9 +119,13 @@ namespace DBDiff.Front
                     {
                         subnode.ForeColor = Color.Green;
                     }
-                    if ((item.HasState(Enums.ObjectStatusType.AlterStatus)) || (item.HasState(Enums.ObjectStatusType.RebuildStatus)) || (item.HasState(Enums.ObjectStatusType.DisabledStatus)))
+                    if ((item.HasState(Enums.ObjectStatusType.AlterStatus)) || (item.HasState(Enums.ObjectStatusType.DisabledStatus)))
                     {
                         subnode.ForeColor = Color.Blue;
+                    }
+                    if (item.HasState(Enums.ObjectStatusType.RebuildStatus))
+                    {
+                        subnode.ForeColor = Color.Purple;
                     }
                     subnode.Tag = item;
                     subnode.ImageKey = attr.Image;

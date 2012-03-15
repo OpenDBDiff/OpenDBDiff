@@ -54,15 +54,19 @@ namespace DBDiff.Front
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.btnOptions = new System.Windows.Forms.Button();
             this.btnCopy = new System.Windows.Forms.Button();
+            this.btnUpdate = new System.Windows.Forms.Button();
+            this.btnUpdateAll = new System.Windows.Forms.Button();
             this.btnSaveAs = new System.Windows.Forms.Button();
             this.btnCompare = new System.Windows.Forms.Button();
             this.PanelGlobal = new System.Windows.Forms.Panel();
             this.btnNewProject = new System.Windows.Forms.Button();
+            this.btnCompareTableData = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.PanelDestination = new Ascend.Windows.Forms.GradientPanel();
             this.PanelSource = new Ascend.Windows.Forms.GradientPanel();
             this.btnSaveProject = new System.Windows.Forms.Button();
             this.btnProject = new System.Windows.Forms.Button();
+            this.btnCompareTableData = new System.Windows.Forms.Button();
             this.txtNewObject = new DBDiff.Scintilla.Scintilla();
             this.txtOldObject = new DBDiff.Scintilla.Scintilla();
             this.schemaTreeView1 = new DBDiff.Front.SchemaTreeView();
@@ -368,6 +372,51 @@ namespace DBDiff.Front
             this.btnCopy.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCopy.UseVisualStyleBackColor = true;
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
+            //
+            // btnUpdate
+            //
+            this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUpdate.Enabled = false;
+            this.btnUpdate.Image = global::DBDiff.Properties.Resources.update_misc;
+            this.btnUpdate.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnUpdate.Location = new System.Drawing.Point(842, 429);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(95, 55);
+            this.btnUpdate.TabIndex = 8;
+            this.btnUpdate.Text = "Update item";
+            this.btnUpdate.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+            //
+            // btnCompareTableData
+            //
+            this.btnCompareTableData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCompareTableData.Enabled = false;
+            this.btnCompareTableData.Image = global::DBDiff.Properties.Resources.compareTableData;
+            this.btnCompareTableData.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnCompareTableData.Location = new System.Drawing.Point(842, 490);
+            this.btnCompareTableData.Name = "btnCompareTableData";
+            this.btnCompareTableData.Size = new System.Drawing.Size(95, 55);
+            this.btnCompareTableData.TabIndex = 9;
+            this.btnCompareTableData.Text = "Compare table data";
+            this.btnCompareTableData.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnCompareTableData.UseVisualStyleBackColor = true;
+            this.btnCompareTableData.Click += new System.EventHandler(this.btnCompareTableData_Click);
+            //
+            // btnUpdateAll
+            //
+            this.btnUpdateAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUpdateAll.Enabled = false;
+            this.btnUpdateAll.Image = global::DBDiff.Properties.Resources.db_update;
+            this.btnUpdateAll.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnUpdateAll.Location = new System.Drawing.Point(842, 599);
+            this.btnUpdateAll.Name = "btnUpdateAll";
+            this.btnUpdateAll.Size = new System.Drawing.Size(95, 55);
+            this.btnUpdateAll.TabIndex = 10;
+            this.btnUpdateAll.Text = "Update all";
+            this.btnUpdateAll.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnUpdateAll.UseVisualStyleBackColor = true;
+            this.btnUpdateAll.Click += new System.EventHandler(this.btnUpdateAll_Click);
             // 
             // btnSaveAs
             // 
@@ -534,6 +583,9 @@ namespace DBDiff.Front
             this.Controls.Add(this.PanelGlobal);
             this.Controls.Add(this.btnOptions);
             this.Controls.Add(this.btnCopy);
+            this.Controls.Add(this.btnUpdate);
+            this.Controls.Add(this.btnCompareTableData);
+            this.Controls.Add(this.btnUpdateAll);
             this.Controls.Add(this.btnSaveAs);
             this.Controls.Add(this.btnCompare);
             this.Controls.Add(this.GroupDb);
@@ -581,6 +633,8 @@ namespace DBDiff.Front
         private System.Windows.Forms.Button btnSaveAs;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Button btnCopy;
+        private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.Button btnUpdateAll;
         private System.Windows.Forms.Button btnOptions;
         private System.Windows.Forms.TabPage tabPage2;
         private DBDiff.Front.SchemaTreeView schemaTreeView1;
@@ -608,5 +662,6 @@ namespace DBDiff.Front
         private System.Windows.Forms.Button btnSaveProject;
         private System.Windows.Forms.Button btnProject;
         private System.Windows.Forms.Button btnNewProject;
+        private System.Windows.Forms.Button btnCompareTableData;
     }
 }

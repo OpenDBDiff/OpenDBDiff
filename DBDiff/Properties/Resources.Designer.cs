@@ -67,6 +67,13 @@ namespace DBDiff.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap compareTableData {
+            get {
+                object obj = ResourceManager.GetObject("compareTableData", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Control_panel_1 {
             get {
                 object obj = ResourceManager.GetObject("Control panel 1", resourceCulture);
@@ -102,6 +109,13 @@ namespace DBDiff.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap db_update {
+            get {
+                object obj = ResourceManager.GetObject("db_update", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Floppy {
             get {
                 object obj = ResourceManager.GetObject("Floppy", resourceCulture);
@@ -133,6 +147,20 @@ namespace DBDiff.Properties {
         internal static System.Drawing.Bitmap SaveProject {
             get {
                 object obj = ResourceManager.GetObject("SaveProject", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap tableData_edit {
+            get {
+                object obj = ResourceManager.GetObject("tableData_edit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap update_misc {
+            get {
+                object obj = ResourceManager.GetObject("update_misc", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

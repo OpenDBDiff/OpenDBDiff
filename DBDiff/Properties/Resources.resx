@@ -151,4 +151,16 @@
   <data name="NewProject" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\NewProject.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="db_update" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\db_update.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="update_misc" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\update_misc.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tableData_edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tableData-edit.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="compareTableData" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\compareTableData.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

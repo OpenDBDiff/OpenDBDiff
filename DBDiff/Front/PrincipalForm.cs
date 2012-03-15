@@ -3,8 +3,8 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using DBDiff.Schema;
-using DBDiff.Schema.Events;
 using DBDiff.Schema.Misc;
+using DBDiff.Schema.Model;
 using DBDiff.Schema.SQLServer.Generates.Front;
 using DBDiff.Schema.SQLServer.Generates.Generates;
 using DBDiff.Schema.SQLServer.Generates.Model;
@@ -131,6 +131,7 @@ namespace DBDiff.Front
 
                     btnCopy.Enabled = true;
                     btnSaveAs.Enabled = true;
+                    btnUpdateAll.Enabled = true;
                 }
                 else
                     MessageBox.Show(Owner, "Please select a valid connection string", "ERROR", MessageBoxButtons.OK,
@@ -158,7 +159,23 @@ namespace DBDiff.Front
             if (database.Find(ObjectFullName) != null)
             {
                 if (database.Find(ObjectFullName).Status != Enums.ObjectStatusType.DropStatus)
+                {
                     txtNewObject.Text = database.Find(ObjectFullName).ToSql();
+                    if (database.Find(ObjectFullName).Status == Enums.ObjectStatusType.OriginalStatus)
+                    {
+                        btnUpdate.Enabled = false;
+                    }
+                    else {
+                        btnUpdate.Enabled = true;
+                    }
+                    if (database.Find(ObjectFullName).ObjectType == Enums.ObjectType.Table)
+                    {
+                        btnCompareTableData.Enabled = true;
+                    }
+                    else {
+                        btnCompareTableData.Enabled = false;
+                    }
+                }
             }
 
             database = (Database) schemaTreeView1.DatabaseDestination;
@@ -213,7 +230,13 @@ namespace DBDiff.Front
 
         }
         */
-
+        private void btnCompareTableData_Click(object sender, EventArgs e)
+        {
+            TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
+            ISchemaBase selected = (ISchemaBase)tree.SelectedNode.Tag;
+            DataCompareForm dataCompare = new DataCompareForm(selected, mySqlConnectFront1.ConnectionString, mySqlConnectFront2.ConnectionString);
+            dataCompare.Show();
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             string errorLocation = "Processing Compare";
@@ -255,7 +278,7 @@ namespace DBDiff.Front
                 var ignoreSystem = new System.Text.RegularExpressions.Regex(@"   at System\.[^\r\n]+\r\n|C:\\dev\\open-dbdiff\\");
                 exceptionMsg.AppendFormat("\r\n{0}: {1}\r\n{2}", exceptionList[0].GetType().Name, exceptionList[0].Message, ignoreSystem.Replace(exceptionList[0].StackTrace, String.Empty));
 
-                var ignoreChunks = new System.Text.RegularExpressions.Regex(@": \[[^\)]*\)|\.\.\.\)|\'[^\']*\'|\" + '"' + @"[^\" + '"' + @"]*\" + '"' + @"|Source|Destination");
+                var ignoreChunks = new System.Text.RegularExpressions.Regex(@": \[[^\)]*\)|\.\.\.\)|\'[^\']*\'|\([^\)]*\)|\" + '"' + @"[^\" + '"' + @"]*\" + '"' + @"|Source|Destination");
                 var searchableError = ignoreChunks.Replace(exceptionMsg.ToString(), String.Empty);
                 var searchableErrorBytes = System.Text.Encoding.UTF8.GetBytes(searchableError);
                 searchableErrorBytes = new System.Security.Cryptography.MD5CryptoServiceProvider().ComputeHash(searchableErrorBytes);
@@ -424,6 +447,72 @@ Clicking 'OK' will result in the following:
             }
             finally
             {
+            }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
+            ISchemaBase selected = (ISchemaBase)tree.SelectedNode.Tag;
+
+            Database database = (Database)schemaTreeView1.DatabaseSource;
+            string result = "";
+
+            if (database.Find(selected.FullName) != null)
+            {
+                if (selected.ObjectType == Enums.ObjectType.Table || selected.ObjectType == Enums.ObjectType.StoreProcedure)
+                {
+                    switch (selected.Status)
+                    {
+                        case Enums.ObjectStatusType.CreateStatus: result = Updater.createNew(selected, mySqlConnectFront2.ConnectionString); break;
+                        case Enums.ObjectStatusType.AlterStatus: result = Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                    }
+                }
+                else
+                {
+                    switch (selected.Status)
+                    {
+                        case Enums.ObjectStatusType.CreateStatus: result = Updater.addNew(selected, mySqlConnectFront2.ConnectionString); break;
+                    }
+                }
+            }
+            if (result == string.Empty) 
+            {
+                result = "All successful";
+            }
+            MessageBox.Show(result);
+            if (optSQL2005.Checked) ProcesarSQL2005();
+            btnUpdate.Enabled = false;
+        }
+
+        private void btnUpdateAll_Click(object sender, EventArgs e) 
+        {
+            if (MessageBox.Show("Are you sure you want to update all?", "Confirm update", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
+                TreeNode database = tree.Nodes[0];
+                string result = "";
+                foreach (TreeNode tn in database.Nodes)
+                {
+                    foreach (TreeNode inner in tn.Nodes)
+                    {
+                        if (inner.Tag != null)
+                        {
+                            ISchemaBase item = (ISchemaBase)inner.Tag;
+                            switch (item.Status)
+                            {
+                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(item, mySqlConnectFront2.ConnectionString); break;
+                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(item, mySqlConnectFront2.ConnectionString); break;
+                            }
+                        }
+                    }
+                }
+                if (result == string.Empty)
+                {
+                    result = "Update successful";
+                }
+                MessageBox.Show(result);
+                if (optSQL2005.Checked) ProcesarSQL2005();
             }
         }
 
