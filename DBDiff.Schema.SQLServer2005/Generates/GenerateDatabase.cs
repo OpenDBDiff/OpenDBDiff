@@ -48,7 +48,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             {
                                 // used to use the decimal as well when Azure was 10.25
                                 var version = new Version(versionValue);
-                                item.VersionNumber = float.Parse(String.Format("{0}.{1}", version.Major, version.Minor));
+                                item.VersionNumber = float.Parse(String.Format("{0}.{1}", version.Major, version.Minor), System.Globalization.CultureInfo.InvariantCulture);
 
                                 int? edition = null;
                                 if (reader.FieldCount > 1 && !reader.IsDBNull(1))
