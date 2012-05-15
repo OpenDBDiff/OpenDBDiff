@@ -195,7 +195,8 @@ namespace DBDiff.Front
             ISchemaBase item = ((ISchemaBase)e.Node.Tag);
             if (item != null)
             {
-                if (item.ObjectType == Enums.ObjectType.Table)
+                if (item.ObjectType == Enums.ObjectType.Table
+                    || item.ObjectType == Enums.ObjectType.View)
                     ReadPropertys(item.GetType(), e.Node.Nodes, item);
                 if (OnSelectItem != null) OnSelectItem(item.FullName);
             }

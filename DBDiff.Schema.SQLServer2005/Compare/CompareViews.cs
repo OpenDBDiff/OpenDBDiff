@@ -18,6 +18,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 newNode.DependenciesIn.AddRange(original.DependenciesIn);
 
                 newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                newNode.Indexes = original.Indexes;
+                newNode.Triggers = original.Triggers;
 
                 if (newNode.IsSchemaBinding)
                     newNode.Status += (int)Enums.ObjectStatusType.RebuildDependenciesStatus;
@@ -27,6 +29,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                     newNode.Status += (int)Enums.ObjectStatusType.AlterBodyStatus;
 
                 CamposOrigen[node.FullName] = newNode;
+                original = newNode;
             }
             (new CompareIndexes()).GenerateDiferences<View>(original.Indexes, node.Indexes);
             (new CompareTriggers()).GenerateDiferences<View>(original.Triggers, node.Triggers);

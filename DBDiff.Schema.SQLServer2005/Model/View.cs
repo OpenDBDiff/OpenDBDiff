@@ -49,12 +49,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             set { clrtriggers = value; }
         }
 
+        [ShowItem("Triggers")]
         public SchemaList<Trigger, View> Triggers
         {
             get { return triggers; }
             set { triggers = value; }
         }
 
+        [ShowItem("Indexes", "Index")]
         public SchemaList<Index, View> Indexes
         {
             get { return indexes; }
