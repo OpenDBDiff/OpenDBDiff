@@ -66,6 +66,12 @@
                     destino = sql.Process();
                     System.Console.WriteLine("Comparing databases schemas...");
                     origen = Generate.Compare(origen, destino);
+                    if (!arguments.OutputAll)
+                    {
+                        // temporary work-around: run twice just like GUI
+                        origen.ToSqlDiff();
+                    }
+
                     System.Console.WriteLine("Generating SQL file...");
                     SaveFile(arguments.OutputFile, arguments.OutputAll ? origen.ToSql() : origen.ToSqlDiff().ToSQL());
                     completedSuccessfully = true;
