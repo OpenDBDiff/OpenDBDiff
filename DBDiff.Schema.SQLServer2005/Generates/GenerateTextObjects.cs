@@ -57,6 +57,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             {
                                 while (reader.Read())
                                 {
+                                    code = null;
                                     root.RaiseOnReadingOne(reader["name"]);
                                     string type = reader["Type"].ToString().Trim();
                                     string name = reader["name"].ToString();
