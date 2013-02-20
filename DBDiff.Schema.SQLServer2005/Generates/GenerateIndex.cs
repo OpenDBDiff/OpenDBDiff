@@ -78,7 +78,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                 if ((database.Options.Ignore.FilterTableFileGroup) && (item.Type != Index.IndexTypeEnum.XML))
                                     item.FileGroup = reader["FileGroup"].ToString();
 
-                                if ((database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008) && (database.Options.Ignore.FilterIndexFilter))
+                                if ((database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008 || database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2) && (database.Options.Ignore.FilterIndexFilter))
                                 {
                                     item.FilterDefintion = reader["FilterDefinition"].ToString();
                                 }

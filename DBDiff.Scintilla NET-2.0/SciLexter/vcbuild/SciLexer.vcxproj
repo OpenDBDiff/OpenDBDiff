@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>DBDiff.SciLexer</ProjectName>
+    <ProjectGuid>{4F1EDEC7-018C-479A-A89F-C35DC1780708}</ProjectGuid>
+    <RootNamespace>DBDiff.SciLexer</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.51106.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\../bin\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\../bin\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\../bin/SciLexer.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\include;..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;_USRDLL;SCI_LEXER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>.\Debug/SciLexer.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level4</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>imm32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>.\../bin/DBDiff.SciLexer32.dll</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\../bin/SciLexer.pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>.\../bin/SciLexer.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\../bin/SciLexer.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\../bin/SciLexer.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>MinSpace</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>..\include;..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;_USRDLL;SCI_LEXER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeaderOutputFile>.\Release/SciLexer.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>imm32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>.\../bin/DBDiff.SciLexer32.dll</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>.\Release/SciLexer.map</MapFileName>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>.\../bin/SciLexer.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\../bin/SciLexer.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\AutoComplete.cxx" />
+    <ClCompile Include="..\src\CallTip.cxx" />
+    <ClCompile Include="..\src\CellBuffer.cxx" />
+    <ClCompile Include="..\src\CharClassify.cxx" />
+    <ClCompile Include="..\src\ContractionState.cxx" />
+    <ClCompile Include="..\src\Decoration.cxx" />
+    <ClCompile Include="..\src\Document.cxx" />
+    <ClCompile Include="..\src\DocumentAccessor.cxx" />
+    <ClCompile Include="..\src\Editor.cxx" />
+    <ClCompile Include="..\src\ExternalLexer.cxx" />
+    <ClCompile Include="..\src\Indicator.cxx" />
+    <ClCompile Include="..\src\KeyMap.cxx" />
+    <ClCompile Include="..\src\KeyWords.cxx" />
+    <ClCompile Include="..\src\LexHTML.cxx" />
+    <ClCompile Include="..\src\LexMSSQL.cxx" />
+    <ClCompile Include="..\src\LexMySQL.cxx" />
+    <ClCompile Include="..\src\LexSQL.cxx" />
+    <ClCompile Include="..\src\LineMarker.cxx" />
+    <ClCompile Include="..\src\PerLine.cxx" />
+    <ClCompile Include="..\win32\PlatWin.cxx" />
+    <ClCompile Include="..\src\PositionCache.cxx" />
+    <ClCompile Include="..\src\PropSet.cxx" />
+    <ClCompile Include="..\src\RESearch.cxx" />
+    <ClCompile Include="..\src\RunStyles.cxx" />
+    <ClCompile Include="..\src\ScintillaBase.cxx" />
+    <ClCompile Include="..\win32\ScintillaWin.cxx" />
+    <ClCompile Include="..\src\Style.cxx" />
+    <ClCompile Include="..\src\StyleContext.cxx" />
+    <ClCompile Include="..\src\UniConversion.cxx" />
+    <ClCompile Include="..\src\ViewStyle.cxx" />
+    <ClCompile Include="..\src\WindowAccessor.cxx" />
+    <ClCompile Include="..\src\XPM.cxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\win32\ScintRes.rc">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">\Documents and Settings\esteban\Escritorio\scite178\scintilla\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">\Documents and Settings\esteban\Escritorio\scite178\scintilla\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\Accessor.h" />
+    <ClInclude Include="..\src\AutoComplete.h" />
+    <ClInclude Include="..\src\CallTip.h" />
+    <ClInclude Include="..\src\CellBuffer.h" />
+    <ClInclude Include="..\src\CharacterSet.h" />
+    <ClInclude Include="..\src\CharClassify.h" />
+    <ClInclude Include="..\src\ContractionState.h" />
+    <ClInclude Include="..\src\Decoration.h" />
+    <ClInclude Include="..\src\Document.h" />
+    <ClInclude Include="..\src\DocumentAccessor.h" />
+    <ClInclude Include="..\src\Editor.h" />
+    <ClInclude Include="..\src\ExternalLexer.h" />
+    <ClInclude Include="..\src\Indicator.h" />
+    <ClInclude Include="..\src\KeyMap.h" />
+    <ClInclude Include="..\include\KeyWords.h" />
+    <ClInclude Include="..\src\LineMarker.h" />
+    <ClInclude Include="..\src\Partitioning.h" />
+    <ClInclude Include="..\src\PerLine.h" />
+    <ClInclude Include="..\include\Platform.h" />
+    <ClInclude Include="..\win32\PlatformRes.h" />
+    <ClInclude Include="..\src\PositionCache.h" />
+    <ClInclude Include="..\include\PropSet.h" />
+    <ClInclude Include="..\src\RESearch.h" />
+    <ClInclude Include="..\src\RunStyles.h" />
+    <ClInclude Include="..\include\SciLexer.h" />
+    <ClInclude Include="..\include\Scintilla.h" />
+    <ClInclude Include="..\src\ScintillaBase.h" />
+    <ClInclude Include="..\include\ScintillaWidget.h" />
+    <ClInclude Include="..\src\SplitVector.h" />
+    <ClInclude Include="..\include\SString.h" />
+    <ClInclude Include="..\src\Style.h" />
+    <ClInclude Include="..\src\StyleContext.h" />
+    <ClInclude Include="..\src\SVector.h" />
+    <ClInclude Include="..\src\UniConversion.h" />
+    <ClInclude Include="..\src\ViewStyle.h" />
+    <ClInclude Include="..\include\WindowAccessor.h" />
+    <ClInclude Include="..\src\XPM.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\win32\Margin.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

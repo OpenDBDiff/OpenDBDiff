@@ -88,6 +88,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             //tables.OnTableProgress += new Progress.ProgressHandler(tables_OnTableProgress);
             databaseSchema.Options = options;
             databaseSchema.Name = Name;
+            // TODO как получается номер версии БД
             databaseSchema.Info = (new GenerateDatabase(connectionString, options)).Get(databaseSchema);
             /*Thread t1 = new Thread(delegate()
                 {

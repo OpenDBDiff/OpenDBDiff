@@ -14,7 +14,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             SQLServer2008R2 = 4,
             // Azure will be reporting v11 instead of v10.25 soon...
             // http://social.msdn.microsoft.com/Forums/en-US/ssdsgetstarted/thread/ad7aae98-26ac-4979-848d-517a86c3fa5c/
-            SQLServerAzure10 = 5 /*Azure*/
+            SQLServerAzure10 = 5, /*Azure*/
+            SQLServer2012 = 6,
         }
 
         private float versionNumber;
@@ -102,6 +103,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 if ((versionNumber >= 10) && (versionNumber < 10.25)) version = VersionTypeEnum.SQLServer2008;
                 if ((versionNumber >= 10.25) && (versionNumber < 10.5)) version = VersionTypeEnum.SQLServerAzure10;
                 if ((versionNumber >= 10.5) && (versionNumber < 11)) version = VersionTypeEnum.SQLServer2008R2;
+                if ((versionNumber >= 11.0) && (versionNumber < 12)) version = VersionTypeEnum.SQLServer2008R2; // SQLServer2012
             }
         }
 
