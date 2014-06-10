@@ -143,7 +143,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         private void btnTest_Click(object sender, EventArgs e)
         {
             if (TestConnection())
-                MessageBox.Show(this, "Test succesful!", "Test", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, "Test successful!", "Test", MessageBoxButtons.OK, MessageBoxIcon.Information);
             else
                 MessageBox.Show(this, "Test failed!\r\n" + ErrorConnection, "Test", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
