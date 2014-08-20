@@ -549,7 +549,7 @@ Clicking 'OK' will result in the following:
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            panel2.Left = (Width - panel2.Width)/2;
+			panel2.Left = Math.Max (this.btnProject.Right + this.btnProject.Left, (Width - panel2.Width) / 2);
         }
 
         private void button1_Click_1(object sender, EventArgs e)
