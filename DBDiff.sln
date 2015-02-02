@@ -11,9 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{1704FA7C-5E57-458D-BDE4-5B008A9DB5E1}"
 	ProjectSection(SolutionItems) = preProject
-		References\Ascend.dll = References\Ascend.dll
-		References\Ascend.Resources.dll = References\Ascend.Resources.dll
-		References\Ascend.Windows.Forms.dll = References\Ascend.Windows.Forms.dll
 		References\DBDiff.SciLexer32.dll = References\DBDiff.SciLexer32.dll
 		References\System.Data.SQLite.dll = References\System.Data.SQLite.dll
 	EndProjectSection

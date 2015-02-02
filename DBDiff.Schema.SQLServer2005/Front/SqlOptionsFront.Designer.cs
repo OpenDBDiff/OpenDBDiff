@@ -86,51 +86,51 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label2 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.gradientPanel6 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel6 = new System.Windows.Forms.Panel();
             this.chkIgnoreNotForReplication = new System.Windows.Forms.CheckBox();
-            this.gradientPanel5 = new Ascend.Windows.Forms.GradientPanel();
-            this.gradientPanel4 = new Ascend.Windows.Forms.GradientPanel();
-            this.gradientPanel3 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel5 = new System.Windows.Forms.Panel();
+            this.gradientPanel4 = new System.Windows.Forms.Panel();
+            this.gradientPanel3 = new System.Windows.Forms.Panel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.gradientPanel2 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel2 = new System.Windows.Forms.Panel();
             this.chkTableChangeTracking = new System.Windows.Forms.CheckBox();
             this.chkTableLockEscalation = new System.Windows.Forms.CheckBox();
-            this.gradientPanel1 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel1 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.gradientPanel15 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel15 = new System.Windows.Forms.Panel();
             this.chkIgnoreWhiteSpaceInCode = new System.Windows.Forms.CheckBox();
-            this.gradientPanel14 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel14 = new System.Windows.Forms.Panel();
             this.label14 = new System.Windows.Forms.Label();
-            this.gradientPanel13 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel13 = new System.Windows.Forms.Panel();
             this.rdoCaseSensityInCode = new System.Windows.Forms.RadioButton();
             this.rdoCaseInsensityInCode = new System.Windows.Forms.RadioButton();
-            this.gradientPanel12 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel12 = new System.Windows.Forms.Panel();
             this.label13 = new System.Windows.Forms.Label();
-            this.gradientPanel11 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel11 = new System.Windows.Forms.Panel();
             this.rdoCaseSensitive = new System.Windows.Forms.RadioButton();
             this.rdoCaseAutomatic = new System.Windows.Forms.RadioButton();
             this.rdoCaseInsensitive = new System.Windows.Forms.RadioButton();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.btnAdd = new System.Windows.Forms.Button();
-            this.gradientPanel10 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel10 = new System.Windows.Forms.Panel();
             this.lstFilters = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.btnApply = new System.Windows.Forms.Button();
-            this.gradientPanel9 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel9 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.gradientPanel8 = new Ascend.Windows.Forms.GradientPanel();
-            this.gradientPanel7 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel8 = new System.Windows.Forms.Panel();
+            this.gradientPanel7 = new System.Windows.Forms.Panel();
             this.label12 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.optScriptSchemaBindingAlter = new System.Windows.Forms.RadioButton();
             this.optScriptSchemaDrop = new System.Windows.Forms.RadioButton();
-            this.gradientPanel16 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel16 = new System.Windows.Forms.Panel();
             this.label15 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -857,7 +857,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // 
             this.gradientPanel6.Controls.Add(this.chkIgnoreNotForReplication);
             this.gradientPanel6.Controls.Add(this.chkCompExtendedProperties);
-            this.gradientPanel6.GradientLowColor = System.Drawing.Color.White;
             this.gradientPanel6.Location = new System.Drawing.Point(5, 377);
             this.gradientPanel6.Name = "gradientPanel6";
             this.gradientPanel6.Size = new System.Drawing.Size(525, 33);
@@ -886,7 +885,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel5.Controls.Add(this.chkCompStoreProcedure);
             this.gradientPanel5.Controls.Add(this.chkCompUDT);
             this.gradientPanel5.Controls.Add(this.chkCompXMLSchemas);
-            this.gradientPanel5.GradientLowColor = System.Drawing.Color.White;
             this.gradientPanel5.Location = new System.Drawing.Point(359, 33);
             this.gradientPanel5.Name = "gradientPanel5";
             this.gradientPanel5.Size = new System.Drawing.Size(171, 338);
@@ -900,7 +898,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel4.Controls.Add(this.chkCompCLRTrigger);
             this.gradientPanel4.Controls.Add(this.chkCompCLRUDT);
             this.gradientPanel4.Controls.Add(this.chkCompCLRFunctions);
-            this.gradientPanel4.GradientLowColor = System.Drawing.Color.White;
             this.gradientPanel4.Location = new System.Drawing.Point(182, 176);
             this.gradientPanel4.Name = "gradientPanel4";
             this.gradientPanel4.Size = new System.Drawing.Size(171, 195);
@@ -915,7 +912,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel3.Controls.Add(this.chkFileGroups);
             this.gradientPanel3.Controls.Add(this.chkCompRoles);
             this.gradientPanel3.Controls.Add(this.chkFullText);
-            this.gradientPanel3.GradientLowColor = System.Drawing.Color.White;
             this.gradientPanel3.Location = new System.Drawing.Point(182, 33);
             this.gradientPanel3.Name = "gradientPanel3";
             this.gradientPanel3.Size = new System.Drawing.Size(171, 137);
@@ -953,7 +949,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel2.Controls.Add(this.chkIndexFillFactor);
             this.gradientPanel2.Controls.Add(this.chkIndexIncludeColumns);
             this.gradientPanel2.Controls.Add(this.chkIndexRowLock);
-            this.gradientPanel2.GradientLowColor = System.Drawing.Color.White;
             this.gradientPanel2.Location = new System.Drawing.Point(5, 33);
             this.gradientPanel2.Name = "gradientPanel2";
             this.gradientPanel2.Size = new System.Drawing.Size(171, 338);
@@ -988,7 +983,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // gradientPanel1
             // 
             this.gradientPanel1.Controls.Add(this.label11);
-            this.gradientPanel1.GradientLowColor = System.Drawing.Color.SteelBlue;
             this.gradientPanel1.Location = new System.Drawing.Point(5, 6);
             this.gradientPanel1.Name = "gradientPanel1";
             this.gradientPanel1.Size = new System.Drawing.Size(525, 21);
@@ -1022,7 +1016,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // gradientPanel15
             // 
             this.gradientPanel15.Controls.Add(this.chkIgnoreWhiteSpaceInCode);
-            this.gradientPanel15.GradientLowColor = System.Drawing.Color.White;
             this.gradientPanel15.Location = new System.Drawing.Point(5, 232);
             this.gradientPanel15.Name = "gradientPanel15";
             this.gradientPanel15.Size = new System.Drawing.Size(525, 31);
@@ -1041,7 +1034,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // gradientPanel14
             // 
             this.gradientPanel14.Controls.Add(this.label14);
-            this.gradientPanel14.GradientLowColor = System.Drawing.Color.SteelBlue;
             this.gradientPanel14.Location = new System.Drawing.Point(5, 135);
             this.gradientPanel14.Name = "gradientPanel14";
             this.gradientPanel14.Size = new System.Drawing.Size(525, 21);
@@ -1061,7 +1053,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // 
             this.gradientPanel13.Controls.Add(this.rdoCaseSensityInCode);
             this.gradientPanel13.Controls.Add(this.rdoCaseInsensityInCode);
-            this.gradientPanel13.GradientLowColor = System.Drawing.Color.White;
             this.gradientPanel13.Location = new System.Drawing.Point(5, 162);
             this.gradientPanel13.Name = "gradientPanel13";
             this.gradientPanel13.Size = new System.Drawing.Size(525, 64);
@@ -1092,7 +1083,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // gradientPanel12
             // 
             this.gradientPanel12.Controls.Add(this.label13);
-            this.gradientPanel12.GradientLowColor = System.Drawing.Color.SteelBlue;
             this.gradientPanel12.Location = new System.Drawing.Point(5, 6);
             this.gradientPanel12.Name = "gradientPanel12";
             this.gradientPanel12.Size = new System.Drawing.Size(525, 21);
@@ -1113,7 +1103,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel11.Controls.Add(this.rdoCaseSensitive);
             this.gradientPanel11.Controls.Add(this.rdoCaseAutomatic);
             this.gradientPanel11.Controls.Add(this.rdoCaseInsensitive);
-            this.gradientPanel11.GradientLowColor = System.Drawing.Color.White;
             this.gradientPanel11.Location = new System.Drawing.Point(5, 33);
             this.gradientPanel11.Name = "gradientPanel11";
             this.gradientPanel11.Size = new System.Drawing.Size(525, 87);
@@ -1179,7 +1168,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // gradientPanel10
             // 
             this.gradientPanel10.Controls.Add(this.lstFilters);
-            this.gradientPanel10.GradientLowColor = System.Drawing.Color.White;
             this.gradientPanel10.Location = new System.Drawing.Point(6, 33);
             this.gradientPanel10.Name = "gradientPanel10";
             this.gradientPanel10.Size = new System.Drawing.Size(524, 335);
@@ -1231,7 +1219,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // gradientPanel9
             // 
             this.gradientPanel9.Controls.Add(this.label1);
-            this.gradientPanel9.GradientLowColor = System.Drawing.Color.SteelBlue;
             this.gradientPanel9.Location = new System.Drawing.Point(5, 6);
             this.gradientPanel9.Name = "gradientPanel9";
             this.gradientPanel9.Size = new System.Drawing.Size(525, 21);
@@ -1279,7 +1266,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel8.Controls.Add(this.txtDate);
             this.gradientPanel8.Controls.Add(this.txtBlob);
             this.gradientPanel8.Controls.Add(this.label6);
-            this.gradientPanel8.GradientLowColor = System.Drawing.Color.White;
             this.gradientPanel8.Location = new System.Drawing.Point(5, 33);
             this.gradientPanel8.Name = "gradientPanel8";
             this.gradientPanel8.Size = new System.Drawing.Size(525, 377);
@@ -1288,7 +1274,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // gradientPanel7
             // 
             this.gradientPanel7.Controls.Add(this.label12);
-            this.gradientPanel7.GradientLowColor = System.Drawing.Color.SteelBlue;
             this.gradientPanel7.Location = new System.Drawing.Point(5, 6);
             this.gradientPanel7.Name = "gradientPanel7";
             this.gradientPanel7.Size = new System.Drawing.Size(525, 21);
@@ -1354,7 +1339,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // gradientPanel16
             // 
             this.gradientPanel16.Controls.Add(this.label15);
-            this.gradientPanel16.GradientLowColor = System.Drawing.Color.SteelBlue;
             this.gradientPanel16.Location = new System.Drawing.Point(5, 6);
             this.gradientPanel16.Name = "gradientPanel16";
             this.gradientPanel16.Size = new System.Drawing.Size(525, 21);
@@ -1498,30 +1482,30 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         private System.Windows.Forms.RadioButton rdoCaseSensityInCode;
         private System.Windows.Forms.RadioButton rdoCaseInsensityInCode;
         private System.Windows.Forms.CheckBox chkIgnoreWhiteSpaceInCode;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel1;
+        private System.Windows.Forms.Panel gradientPanel1;
         private System.Windows.Forms.Label label11;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel2;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel3;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel4;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel5;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel6;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel8;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel7;
+        private System.Windows.Forms.Panel gradientPanel2;
+        private System.Windows.Forms.Panel gradientPanel3;
+        private System.Windows.Forms.Panel gradientPanel4;
+        private System.Windows.Forms.Panel gradientPanel5;
+        private System.Windows.Forms.Panel gradientPanel6;
+        private System.Windows.Forms.Panel gradientPanel8;
+        private System.Windows.Forms.Panel gradientPanel7;
         private System.Windows.Forms.Label label12;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel9;
+        private System.Windows.Forms.Panel gradientPanel9;
         private System.Windows.Forms.Label label1;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel10;
+        private System.Windows.Forms.Panel gradientPanel10;
         private System.Windows.Forms.CheckBox chkTableLockEscalation;
         private System.Windows.Forms.CheckBox chkTableChangeTracking;
         private System.Windows.Forms.CheckBox checkBox1;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel12;
+        private System.Windows.Forms.Panel gradientPanel12;
         private System.Windows.Forms.Label label13;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel11;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel13;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel14;
+        private System.Windows.Forms.Panel gradientPanel11;
+        private System.Windows.Forms.Panel gradientPanel13;
+        private System.Windows.Forms.Panel gradientPanel14;
         private System.Windows.Forms.Label label14;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel15;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel16;
+        private System.Windows.Forms.Panel gradientPanel15;
+        private System.Windows.Forms.Panel gradientPanel16;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.RadioButton optScriptSchemaBindingAlter;

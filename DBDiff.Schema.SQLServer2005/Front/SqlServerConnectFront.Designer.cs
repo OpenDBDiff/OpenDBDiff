@@ -40,7 +40,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.txtUsername = new System.Windows.Forms.TextBox();
             this.btnTest = new System.Windows.Forms.Button();
             this.lblName = new System.Windows.Forms.Label();
-            this.gradientPanel1 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.gradientPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -229,7 +229,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         private System.Windows.Forms.ComboBox cboDatabase;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label lblName;
-        private Ascend.Windows.Forms.GradientPanel gradientPanel1;
+        private System.Windows.Forms.Panel gradientPanel1;
         private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

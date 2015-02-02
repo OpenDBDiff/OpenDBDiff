@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.gradientPanel1 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel1 = new System.Windows.Forms.Panel();
             this.lblName = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.databaseProgressControl2 = new DBDiff.Front.DatabaseProgressControl();
@@ -118,7 +118,7 @@
 
         #endregion
 
-        private Ascend.Windows.Forms.GradientPanel gradientPanel1;
+        private System.Windows.Forms.Panel gradientPanel1;
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.Panel panel1;
         private DatabaseProgressControl databaseProgressControl1;

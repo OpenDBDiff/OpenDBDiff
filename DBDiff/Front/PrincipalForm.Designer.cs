@@ -1,3 +1,5 @@
+using System.Windows.Forms;
+
 namespace DBDiff.Front
 {
     partial class Form1
@@ -62,8 +64,8 @@ namespace DBDiff.Front
             this.btnNewProject = new System.Windows.Forms.Button();
             this.btnCompareTableData = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.PanelDestination = new Ascend.Windows.Forms.GradientPanel();
-            this.PanelSource = new Ascend.Windows.Forms.GradientPanel();
+            this.PanelDestination = new System.Windows.Forms.Panel();
+            this.PanelSource = new System.Windows.Forms.Panel();
             this.btnSaveProject = new System.Windows.Forms.Button();
             this.btnProject = new System.Windows.Forms.Button();
             this.btnCompareTableData = new System.Windows.Forms.Button();
@@ -487,8 +489,7 @@ namespace DBDiff.Front
             // 
             // PanelDestination
             // 
-            this.PanelDestination.Border = new Ascend.Border(1);
-            this.PanelDestination.BorderColor = new Ascend.BorderColor(System.Drawing.Color.Gray);
+            this.PanelDestination.BorderStyle = BorderStyle.FixedSingle;
             this.PanelDestination.Location = new System.Drawing.Point(399, 0);
             this.PanelDestination.Name = "PanelDestination";
             this.PanelDestination.Size = new System.Drawing.Size(386, 159);
@@ -496,8 +497,7 @@ namespace DBDiff.Front
             // 
             // PanelSource
             // 
-            this.PanelSource.Border = new Ascend.Border(1);
-            this.PanelSource.BorderColor = new Ascend.BorderColor(System.Drawing.Color.Gray);
+            this.PanelSource.BorderStyle = BorderStyle.FixedSingle;
             this.PanelSource.Location = new System.Drawing.Point(4, 0);
             this.PanelSource.Name = "PanelSource";
             this.PanelSource.Size = new System.Drawing.Size(386, 159);
@@ -645,8 +645,8 @@ namespace DBDiff.Front
         private DBDiff.Scintilla.Scintilla txtDiferencias;
         private System.Windows.Forms.Panel PanelGlobal;
         private System.Windows.Forms.Panel panel2;
-        private Ascend.Windows.Forms.GradientPanel PanelSource;
-        private Ascend.Windows.Forms.GradientPanel PanelDestination;
+        private System.Windows.Forms.Panel PanelSource;
+        private System.Windows.Forms.Panel PanelDestination;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;

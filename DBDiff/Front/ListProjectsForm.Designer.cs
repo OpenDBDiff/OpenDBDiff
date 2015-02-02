@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ListProjectsForm));
-            this.gradientPanel1 = new Ascend.Windows.Forms.GradientPanel();
+            this.gradientPanel1 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
             this.Icon = new System.Windows.Forms.ColumnHeader(0);
@@ -42,7 +42,6 @@
             // gradientPanel1
             // 
             this.gradientPanel1.Controls.Add(this.label11);
-            this.gradientPanel1.GradientLowColor = System.Drawing.Color.SteelBlue;
             this.gradientPanel1.Location = new System.Drawing.Point(3, 5);
             this.gradientPanel1.Name = "gradientPanel1";
             this.gradientPanel1.Size = new System.Drawing.Size(420, 21);
@@ -119,7 +118,7 @@
 
         #endregion
 
-        private Ascend.Windows.Forms.GradientPanel gradientPanel1;
+        private System.Windows.Forms.Panel gradientPanel1;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader Icon;
