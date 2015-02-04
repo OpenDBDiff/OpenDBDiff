@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using ScintillaNET;
 
 namespace DBDiff.Front
 {
@@ -69,10 +70,10 @@ namespace DBDiff.Front
             this.btnSaveProject = new System.Windows.Forms.Button();
             this.btnProject = new System.Windows.Forms.Button();
             this.btnCompareTableData = new System.Windows.Forms.Button();
-            this.txtNewObject = new DBDiff.Scintilla.Scintilla();
-            this.txtOldObject = new DBDiff.Scintilla.Scintilla();
+            this.txtNewObject = new Scintilla();
+            this.txtOldObject = new Scintilla();
             this.schemaTreeView1 = new DBDiff.Front.SchemaTreeView();
-            this.txtDiferencias = new DBDiff.Scintilla.Scintilla();
+            this.txtDiferencias = new Scintilla();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -642,7 +643,7 @@ namespace DBDiff.Front
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Panel panel1;
-        private DBDiff.Scintilla.Scintilla txtDiferencias;
+        private Scintilla txtDiferencias;
         private System.Windows.Forms.Panel PanelGlobal;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel PanelSource;
@@ -657,8 +658,8 @@ namespace DBDiff.Front
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.TabPage tabPage5;
-        private DBDiff.Scintilla.Scintilla txtNewObject;
-        private DBDiff.Scintilla.Scintilla txtOldObject;
+        private Scintilla txtNewObject;
+        private Scintilla txtOldObject;
         private System.Windows.Forms.Button btnSaveProject;
         private System.Windows.Forms.Button btnProject;
         private System.Windows.Forms.Button btnNewProject;

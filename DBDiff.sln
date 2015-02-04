@@ -11,14 +11,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{1704FA7C-5E57-458D-BDE4-5B008A9DB5E1}"
 	ProjectSection(SolutionItems) = preProject
-		References\DBDiff.SciLexer32.dll = References\DBDiff.SciLexer32.dll
+		References\SciLexer.dll = References\SciLexer.dll
+		References\ScintillaNET.dll = References\ScintillaNET.dll
 		References\System.Data.SQLite.dll = References\System.Data.SQLite.dll
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff", "DBDiff\DBDiff.csproj", "{99A26820-E71D-4E01-ADF2-E6AB25B03FA0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65} = {E794AA28-EE68-44BD-827B-1BFD9C106B65}
-		{4F1EDEC7-018C-479A-A89F-C35DC1780708} = {4F1EDEC7-018C-479A-A89F-C35DC1780708}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.Schema", "DBDiff.Schema\DBDiff.Schema.csproj", "{406558A0-1B98-4D0E-B8B6-2013700B065A}"
@@ -28,8 +28,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.Front", "DBDiff.Front\DBDiff.Front.csproj", "{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.OCDB", "DBDiffCmd\DBDiff.OCDB.csproj", "{E794AA28-EE68-44BD-827B-1BFD9C106B65}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBDiff.SciLexer", "DBDiff.Scintilla NET-2.0\SciLexter\vcbuild\SciLexer.vcxproj", "{4F1EDEC7-018C-479A-A89F-C35DC1780708}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,16 +89,6 @@ Global
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65}.Release|Win32.ActiveCfg = Release|Any CPU
-		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Debug|Win32.ActiveCfg = Debug|Win32
-		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Debug|Win32.Build.0 = Debug|Win32
-		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Release|Any CPU.ActiveCfg = Release|Win32
-		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Release|Win32.ActiveCfg = Release|Win32
-		{4F1EDEC7-018C-479A-A89F-C35DC1780708}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,2 +1,0 @@
-Directives
-Parameters
