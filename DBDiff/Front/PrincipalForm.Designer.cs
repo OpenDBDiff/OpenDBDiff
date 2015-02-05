@@ -69,7 +69,6 @@ namespace DBDiff.Front
             this.PanelSource = new System.Windows.Forms.Panel();
             this.btnSaveProject = new System.Windows.Forms.Button();
             this.btnProject = new System.Windows.Forms.Button();
-            this.btnCompareTableData = new System.Windows.Forms.Button();
             this.txtNewObject = new Scintilla();
             this.txtOldObject = new Scintilla();
             this.schemaTreeView1 = new DBDiff.Front.SchemaTreeView();
