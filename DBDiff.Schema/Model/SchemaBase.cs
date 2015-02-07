@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
-using System.Text;
-using System.Reflection;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace DBDiff.Schema.Model
@@ -139,7 +138,7 @@ namespace DBDiff.Schema.Model
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public virtual SQLScriptList ToSqlDiff(System.Collections.Generic.List<ISchemaBase> schemas)
+		public virtual SQLScriptList ToSqlDiff(List<ISchemaBase> schemas)
 		{
 			return null;
 		}

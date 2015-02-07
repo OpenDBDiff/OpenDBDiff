@@ -1,11 +1,14 @@
-﻿namespace DBDiff.Front
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace DBDiff.Front
 {
     partial class DatabaseProgressControl
     {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -93,9 +96,9 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label lblDatabase;
-        private System.Windows.Forms.Label lblMessage;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private PictureBox pictureBox1;
+        private Label lblDatabase;
+        private Label lblMessage;
+        private ProgressBar progressBar1;
     }
 }

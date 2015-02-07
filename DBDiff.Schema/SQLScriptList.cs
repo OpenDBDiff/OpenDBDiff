@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema
 {
@@ -112,7 +113,7 @@ namespace DBDiff.Schema
 
     public static class SQLScriptListExtensionMethod
     {
-        public static SQLScriptList WarnMissingScript(this SQLScriptList scriptList, DBDiff.Schema.Model.ISchemaBase scriptSource)
+        public static SQLScriptList WarnMissingScript(this SQLScriptList scriptList, ISchemaBase scriptSource)
         {
             if (scriptList == null || scriptSource == null || scriptSource.Status == Enums.ObjectStatusType.OriginalStatus)
             {

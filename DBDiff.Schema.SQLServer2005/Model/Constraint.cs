@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Globalization;
+using System.Text;
 using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
@@ -274,7 +273,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             {
                 return ToSQLGeneric(ConstraintType.PrimaryKey);
             }
-            if (this.Type == Constraint.ConstraintType.ForeignKey)
+            if (this.Type == ConstraintType.ForeignKey)
             {
                 StringBuilder sql = new StringBuilder();
                 StringBuilder sqlReference = new StringBuilder();
@@ -307,11 +306,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 sql.Append((NotForReplication ? " NOT FOR REPLICATION" : ""));
                 return sql.ToString();
             }
-            if (this.Type == Constraint.ConstraintType.Unique)
+            if (this.Type == ConstraintType.Unique)
             {
                 return ToSQLGeneric(ConstraintType.Unique);
             }
-            if (this.Type == Constraint.ConstraintType.Check)
+            if (this.Type == ConstraintType.Check)
             {
                 string sqlcheck = "";
                 if (Parent.ObjectType != Enums.ObjectType.TableType)
@@ -335,9 +334,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public override SQLScript Create()
         {
             Enums.ScripActionType action = Enums.ScripActionType.AddConstraint;
-            if (this.Type == Constraint.ConstraintType.ForeignKey)
+            if (this.Type == ConstraintType.ForeignKey)
                 action = Enums.ScripActionType.AddConstraintFK;
-            if (this.Type == Constraint.ConstraintType.PrimaryKey)
+            if (this.Type == ConstraintType.PrimaryKey)
                 action = Enums.ScripActionType.AddConstraintPK;
             if (!GetWasInsertInDiffList(action))
             {
@@ -351,9 +350,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public override SQLScript Drop()
         {
             Enums.ScripActionType action = Enums.ScripActionType.DropConstraint;
-            if (this.Type == Constraint.ConstraintType.ForeignKey)
+            if (this.Type == ConstraintType.ForeignKey)
                 action = Enums.ScripActionType.DropConstraintFK;
-            if (this.Type == Constraint.ConstraintType.PrimaryKey)
+            if (this.Type == ConstraintType.PrimaryKey)
                 action = Enums.ScripActionType.DropConstraintPK;
             if (!GetWasInsertInDiffList(action))
             {

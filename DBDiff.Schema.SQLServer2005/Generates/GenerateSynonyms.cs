@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Text;
 using System.Data.SqlClient;
-using DBDiff.Schema.Events;
-using DBDiff.Schema.SQLServer.Generates.Options;
 using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Generates

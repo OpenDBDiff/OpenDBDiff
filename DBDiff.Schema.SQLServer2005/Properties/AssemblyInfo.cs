@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Security.Permissions;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -25,4 +24,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("4f1e8d72-25ec-41e6-b56a-0091796271c8")]
 
 [assembly: CLSCompliant(true)]
-[assembly: SecurityPermissionAttribute(SecurityAction.RequestMinimum, Execution = true)]
+[assembly: SecurityPermission(SecurityAction.RequestMinimum, Execution = true)]

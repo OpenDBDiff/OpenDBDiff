@@ -1,11 +1,14 @@
-﻿namespace DBDiff.Front
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace DBDiff.Front
 {
     partial class ProgressForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -118,9 +121,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel gradientPanel1;
-        private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.Panel panel1;
+        private Panel gradientPanel1;
+        private Label lblName;
+        private Panel panel1;
         private DatabaseProgressControl databaseProgressControl1;
         private DatabaseProgressControl databaseProgressControl2;
     }

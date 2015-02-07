@@ -1,17 +1,11 @@
 using System;
-using System.Data;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Data;
 using System.Data.SqlClient;
+using System.Windows.Forms;
 using DBDiff.Schema;
-using DBDiff.Schema.Events;
-using DBDiff.Schema.Misc;
-using DBDiff.Schema.SQLServer.Generates.Front;
-using DBDiff.Schema.SQLServer.Generates.Generates;
-using DBDiff.Schema.SQLServer.Generates.Model;
-using DBDiff.Schema.SQLServer.Generates.Options;
-using DBDiff.Settings;
 using DBDiff.Schema.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff
 {

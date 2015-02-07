@@ -1,5 +1,4 @@
-﻿using System;
-namespace DBDiff.Schema.Model
+﻿namespace DBDiff.Schema.Model
 {
     public interface ISchemaList<T, P>
         where T : ISchemaBase

@@ -1,3 +1,6 @@
+using System.ComponentModel;
+using System.Windows.Forms;
+
 namespace DBDiff.Schema.SQLServer.Generates.Front
 {
     partial class SqlServerConnectFront
@@ -5,7 +8,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -217,19 +220,19 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtPassword;
-        private System.Windows.Forms.TextBox txtUsername;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox cboServer;
-        private System.Windows.Forms.ComboBox cboAuthentication;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button btnTest;
-        private System.Windows.Forms.ComboBox cboDatabase;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.Panel gradientPanel1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private TextBox txtPassword;
+        private TextBox txtUsername;
+        private Label label4;
+        private Label label3;
+        private Label label2;
+        private ComboBox cboServer;
+        private ComboBox cboAuthentication;
+        private Label label5;
+        private Button btnTest;
+        private ComboBox cboDatabase;
+        private Label label6;
+        private Label lblName;
+        private Panel gradientPanel1;
+        private PictureBox pictureBox1;
     }
 }

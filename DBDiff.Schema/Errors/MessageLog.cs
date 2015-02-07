@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DBDiff.Schema.Errors
+﻿namespace DBDiff.Schema.Errors
 {
     public class MessageLog
     {

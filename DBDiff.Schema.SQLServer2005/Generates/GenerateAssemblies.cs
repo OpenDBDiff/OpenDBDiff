@@ -1,6 +1,6 @@
 using System;
-using System.Text;
 using System.Data.SqlClient;
+using System.Text;
 using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Generates

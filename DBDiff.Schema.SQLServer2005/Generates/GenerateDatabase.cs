@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Data.SqlClient;
-using DBDiff.Schema.SQLServer.Generates.Options;
-using DBDiff.Schema.SQLServer.Generates.Model;
+using System.Globalization;
+using System.Windows.Forms;
+using DBDiff.Schema.Misc;
 using DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
-
+using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.SQLServer.Generates.Options;
 #if DEBUG
 using System.Runtime.InteropServices;
 #endif
@@ -48,7 +48,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             {
                                 // used to use the decimal as well when Azure was 10.25
                                 var version = new Version(versionValue);
-                                item.VersionNumber = float.Parse(String.Format("{0}.{1}", version.Major, version.Minor), System.Globalization.CultureInfo.InvariantCulture);
+                                item.VersionNumber = float.Parse(String.Format("{0}.{1}", version.Major, version.Minor), CultureInfo.InvariantCulture);
 
                                 int? edition = null;
                                 if (reader.FieldCount > 1 && !reader.IsDBNull(1))
@@ -67,11 +67,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             {
                                 bool useDefaultVersion = false;
 #if DEBUG
-                                useDefaultVersion = IsKeyPushedDown(System.Windows.Forms.Keys.LShiftKey)
-                                    && IsKeyPushedDown(System.Windows.Forms.Keys.RShiftKey);
+                                useDefaultVersion = IsKeyPushedDown(Keys.LShiftKey)
+                                    && IsKeyPushedDown(Keys.RShiftKey);
 #endif
 
-                                var exception = new DBDiff.Schema.Misc.SchemaException(
+                                var exception = new SchemaException(
                                     String.Format("Error parsing ProductVersion. ({0})", versionValue ?? "[null]")
                                     , notAGoodIdeaToCatchAllErrors);
                                 
@@ -106,7 +106,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         [DllImport("user32.dll")]
         static extern ushort GetAsyncKeyState(int vKey);
 
-        public static bool IsKeyPushedDown(System.Windows.Forms.Keys vKey)
+        public static bool IsKeyPushedDown(Keys vKey)
         {
             return 0 != (GetAsyncKeyState((int)vKey) & 0x8000);
         }

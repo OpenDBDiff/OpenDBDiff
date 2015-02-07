@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DBDiff.Schema.SQLServer.Generates.Front
+﻿namespace DBDiff.Schema.SQLServer.Generates.Front
 {
     public static class HandlerHelper
     {

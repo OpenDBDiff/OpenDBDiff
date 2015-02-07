@@ -1,6 +1,6 @@
-﻿using System.Data.Sql;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Collections.Generic;
+using System.Data.Sql;
 
 namespace DBDiff.Schema.SQLServer.Generates.Front.Util
 {

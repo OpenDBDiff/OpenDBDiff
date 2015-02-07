@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Threading;
+using DBDiff.Schema.Events;
 using DBDiff.Schema.SQLServer.Generates.Generates;
 using DBDiff.Schema.SQLServer.Generates.Model;
-using DBDiff.Schema.SQLServer.Generates.Compare;
 
 namespace DBDiff.Front
 {
@@ -72,14 +65,14 @@ namespace DBDiff.Front
 
         private void ProgressForm_Activated(object sender, EventArgs e)
         {
-            var handler = new DBDiff.Schema.Events.ProgressEventHandler.ProgressHandler(genData2_OnProgress);
+            var handler = new ProgressEventHandler.ProgressHandler(genData2_OnProgress);
             try
             {
                 if (!IsProcessing)
                 {
                     this.Refresh();
                     IsProcessing = false;
-                    genData1.OnProgress += new DBDiff.Schema.Events.ProgressEventHandler.ProgressHandler(genData1_OnProgress);
+                    genData1.OnProgress += new ProgressEventHandler.ProgressHandler(genData1_OnProgress);
                     genData2.OnProgress += handler;
                     Generate.OnCompareProgress += handler;
 
@@ -121,7 +114,7 @@ namespace DBDiff.Front
             }
         }
 
-        void genData2_OnProgress(DBDiff.Schema.Events.ProgressEventArgs e)
+        void genData2_OnProgress(ProgressEventArgs e)
         {
             if (e.Progress > -1 && databaseProgressControl1.Value != e.Progress)
             {
@@ -136,7 +129,7 @@ namespace DBDiff.Front
             this.mostRecentProgressMessage = e.Message;
         }
 
-        void genData1_OnProgress(DBDiff.Schema.Events.ProgressEventArgs e)
+        void genData1_OnProgress(ProgressEventArgs e)
         {
             if (e.Progress > -1 && databaseProgressControl2.Value != e.Progress)
             {

@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using DBDiff.Schema.Model;
-using System.Collections.ObjectModel;
+using System.Text;
 
 namespace DBDiff.Schema.Model
 {
-    public class SchemaList<T, P> : List<T>, DBDiff.Schema.Model.ISchemaList<T,P>
+    public class SchemaList<T, P> : List<T>, ISchemaList<T,P>
         where T : ISchemaBase
         where P : ISchemaBase
     {

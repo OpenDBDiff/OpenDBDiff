@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Windows.Forms;
 using ScintillaNET;
 
@@ -8,7 +9,7 @@ namespace DBDiff.Front
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -622,46 +623,46 @@ namespace DBDiff.Front
 
         #endregion
 
-        private System.Windows.Forms.Label lblMessage;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Button btnCompare;
-        private System.Windows.Forms.GroupBox GroupDb;
-        private System.Windows.Forms.RadioButton optSQL2005;
-        private System.Windows.Forms.RadioButton optMySQL;
-        private System.Windows.Forms.RadioButton optSybase;
-        private System.Windows.Forms.Button btnSaveAs;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.Button btnCopy;
-        private System.Windows.Forms.Button btnUpdate;
-        private System.Windows.Forms.Button btnUpdateAll;
-        private System.Windows.Forms.Button btnOptions;
-        private System.Windows.Forms.TabPage tabPage2;
-        private DBDiff.Front.SchemaTreeView schemaTreeView1;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Panel panel1;
+        private Label lblMessage;
+        private TabControl tabControl1;
+        private TabPage tabPage1;
+        private Button btnCompare;
+        private GroupBox GroupDb;
+        private RadioButton optSQL2005;
+        private RadioButton optMySQL;
+        private RadioButton optSybase;
+        private Button btnSaveAs;
+        private SaveFileDialog saveFileDialog1;
+        private Button btnCopy;
+        private Button btnUpdate;
+        private Button btnUpdateAll;
+        private Button btnOptions;
+        private TabPage tabPage2;
+        private SchemaTreeView schemaTreeView1;
+        private GroupBox groupBox1;
+        private TabPage tabPage3;
+        private TextBox textBox1;
+        private Panel panel1;
         private Scintilla txtDiferencias;
-        private System.Windows.Forms.Panel PanelGlobal;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel PanelSource;
-        private System.Windows.Forms.Panel PanelDestination;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TabControl tabControl2;
-        private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.TabPage tabPage5;
+        private Panel PanelGlobal;
+        private Panel panel2;
+        private Panel PanelSource;
+        private Panel PanelDestination;
+        private GroupBox groupBox2;
+        private Panel panel3;
+        private Panel panel4;
+        private Panel panel5;
+        private Label label1;
+        private Label label3;
+        private Label label2;
+        private TabControl tabControl2;
+        private TabPage tabPage4;
+        private TabPage tabPage5;
         private Scintilla txtNewObject;
         private Scintilla txtOldObject;
-        private System.Windows.Forms.Button btnSaveProject;
-        private System.Windows.Forms.Button btnProject;
-        private System.Windows.Forms.Button btnNewProject;
-        private System.Windows.Forms.Button btnCompareTableData;
+        private Button btnSaveProject;
+        private Button btnProject;
+        private Button btnNewProject;
+        private Button btnCompareTableData;
     }
 }

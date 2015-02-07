@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Reflection;
+using System.Windows.Forms;
 using DBDiff.Schema;
-using DBDiff.Schema.Model;
 using DBDiff.Schema.Attributes;
+using DBDiff.Schema.Model;
 
 namespace DBDiff.Front
 {

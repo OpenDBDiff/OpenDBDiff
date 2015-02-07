@@ -177,9 +177,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         internal static void RaiseOnCompareProgress(string formatString, params object[] formatParams)
         {
-            if (Generate.OnCompareProgress != null)
+            if (OnCompareProgress != null)
             {
-                Generate.OnCompareProgress(new ProgressEventArgs(String.Format(formatString, formatParams), -1));
+                OnCompareProgress(new ProgressEventArgs(String.Format(formatString, formatParams), -1));
             }
         }
         

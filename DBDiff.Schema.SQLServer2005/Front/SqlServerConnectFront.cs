@@ -1,7 +1,6 @@
 using System;
-using System.Windows.Forms;
 using System.Data.SqlClient;
-using System.Threading;
+using System.Windows.Forms;
 using DBDiff.Front;
 using DBDiff.Schema.SQLServer.Generates.Front.Util;
 

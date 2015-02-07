@@ -1,11 +1,12 @@
-﻿namespace DBDiff.OCDB
-{
-    using System;
-    using System.Data.SqlClient;
-    using System.IO;
-    using DBDiff.Schema.SQLServer.Generates.Generates;
-    using DBDiff.Schema.SQLServer.Generates.Options;
+﻿using System;
+using System.Data.SqlClient;
+using System.IO;
+using DBDiff.Schema.SQLServer.Generates.Generates;
+using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.SQLServer.Generates.Options;
 
+namespace DBDiff.OCDB
+{
     public class Program
     {
         private static SqlOption SqlFilter = new SqlOption();
@@ -21,7 +22,7 @@
             }
             catch (Exception ex)
             {
-                System.Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message);
             }
 
             return completedSuccessfully ? 0 : 1;
@@ -51,20 +52,20 @@
             bool completedSuccessfully = false;
             try
             {
-                DBDiff.Schema.SQLServer.Generates.Model.Database origen;
-                DBDiff.Schema.SQLServer.Generates.Model.Database destino;
+                Database origen;
+                Database destino;
                 if (TestConnection(arguments.ConnectionString1, arguments.ConnectionString2))
                 {
                     Generate sql = new Generate();
                     sql.ConnectionString = arguments.ConnectionString1;
-                    System.Console.WriteLine("Reading first database...");
+                    Console.WriteLine("Reading first database...");
                     sql.Options = SqlFilter;
                     origen = sql.Process();                    
 
                     sql.ConnectionString = arguments.ConnectionString2;
-                    System.Console.WriteLine("Reading second database...");
+                    Console.WriteLine("Reading second database...");
                     destino = sql.Process();
-                    System.Console.WriteLine("Comparing databases schemas...");
+                    Console.WriteLine("Comparing databases schemas...");
                     origen = Generate.Compare(origen, destino);
                     if (!arguments.OutputAll)
                     {
@@ -72,14 +73,14 @@
                         origen.ToSqlDiff();
                     }
 
-                    System.Console.WriteLine("Generating SQL file...");
+                    Console.WriteLine("Generating SQL file...");
                     SaveFile(arguments.OutputFile, arguments.OutputAll ? origen.ToSql() : origen.ToSqlDiff().ToSQL());
                     completedSuccessfully = true;
                 }
             }
             catch (Exception ex)
             {
-                System.Console.WriteLine(String.Format("{0}\r\n{1}\r\n\r\nPlease report this issue at http://opendbiff.codeplex.com/workitem/list/basic\r\n\r\n", ex.Message, ex.StackTrace));
+                Console.WriteLine(String.Format("{0}\r\n{1}\r\n\r\nPlease report this issue at http://opendbiff.codeplex.com/workitem/list/basic\r\n\r\n", ex.Message, ex.StackTrace));
             }
 
             return completedSuccessfully;

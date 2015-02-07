@@ -1,6 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using DBDiff.Schema;
 using DBDiff.Schema.Misc;
@@ -10,6 +15,8 @@ using DBDiff.Schema.SQLServer.Generates.Generates;
 using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.SQLServer.Generates.Options;
 using DBDiff.Settings;
+using Assembly = System.Reflection.Assembly;
+
 /*using DBDiff.Schema.SQLServer2000;
 using DBDiff.Schema.SQLServer2000.Model;
 using DBDiff.Schema.SQLServer2000.Compare;
@@ -33,7 +40,7 @@ namespace DBDiff.Front
         private IFront mySqlConnectFront1;
         private IFront mySqlConnectFront2;
         private readonly SqlOption SqlFilter = new SqlOption();
-		private System.Collections.Generic.List<DBDiff.Schema.Model.ISchemaBase> _selectedSchemas = new System.Collections.Generic.List<DBDiff.Schema.Model.ISchemaBase>();
+		private List<ISchemaBase> _selectedSchemas = new List<ISchemaBase>();
 
         public Form1()
         {
@@ -41,7 +48,7 @@ namespace DBDiff.Front
 
             // TODO: form designer requires some controls GAC'd so this is easier
             this.tabControl1.SelectedIndexChanged += new EventHandler(tabControl1_SelectedIndexChanged);
-            this.Text += System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            this.Text += Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         /*private void ProcesarSybase()
@@ -254,7 +261,7 @@ namespace DBDiff.Front
             }
             catch (Exception ex)
             {
-                var exceptionList = new System.Collections.Generic.List<Exception>();
+                var exceptionList = new List<Exception>();
                 exceptionList.Add(ex);
                 var innerException = ex.InnerException;
                 while (innerException != null)
@@ -263,7 +270,7 @@ namespace DBDiff.Front
                     innerException = innerException.InnerException;
                 }
 
-                var exceptionMsg = new System.Text.StringBuilder();
+                var exceptionMsg = new StringBuilder();
                 var prevMessage = exceptionList[0].Message;
                 exceptionMsg.Append(this.Text);
                 for (int i = 1; i < exceptionList.Count; ++i)
@@ -275,13 +282,13 @@ namespace DBDiff.Front
                     }
                 }
 
-                var ignoreSystem = new System.Text.RegularExpressions.Regex(@"   at System\.[^\r\n]+\r\n|C:\\dev\\open-dbdiff\\");
+                var ignoreSystem = new Regex(@"   at System\.[^\r\n]+\r\n|C:\\dev\\open-dbdiff\\");
                 exceptionMsg.AppendFormat("\r\n{0}: {1}\r\n{2}", exceptionList[0].GetType().Name, exceptionList[0].Message, ignoreSystem.Replace(exceptionList[0].StackTrace, String.Empty));
 
-                var ignoreChunks = new System.Text.RegularExpressions.Regex(@": \[[^\)]*\)|\.\.\.\)|\'[^\']*\'|\([^\)]*\)|\" + '"' + @"[^\" + '"' + @"]*\" + '"' + @"|Source|Destination");
+                var ignoreChunks = new Regex(@": \[[^\)]*\)|\.\.\.\)|\'[^\']*\'|\([^\)]*\)|\" + '"' + @"[^\" + '"' + @"]*\" + '"' + @"|Source|Destination");
                 var searchableError = ignoreChunks.Replace(exceptionMsg.ToString(), String.Empty);
-                var searchableErrorBytes = System.Text.Encoding.UTF8.GetBytes(searchableError);
-                searchableErrorBytes = new System.Security.Cryptography.MD5CryptoServiceProvider().ComputeHash(searchableErrorBytes);
+                var searchableErrorBytes = Encoding.UTF8.GetBytes(searchableError);
+                searchableErrorBytes = new MD5CryptoServiceProvider().ComputeHash(searchableErrorBytes);
                 var searchHash = BitConverter.ToString(searchableErrorBytes).Replace("-", String.Empty);
                 exceptionMsg.AppendFormat("\r\n\r\n{0}", searchHash);
 
@@ -306,7 +313,7 @@ Clicking 'OK' will result in the following:
                     try
                     {
                         Clipboard.SetText(exceptionMsg.ToString());
-                        System.Diagnostics.Process.Start("http://opendbiff.codeplex.com/workitem/list/basic?keywords=" + Uri.EscapeDataString(searchHash));
+                        Process.Start("http://opendbiff.codeplex.com/workitem/list/basic?keywords=" + Uri.EscapeDataString(searchHash));
                     }
                     finally
                     {

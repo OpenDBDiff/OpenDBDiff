@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DBDiff.Schema.SQLServer.Generates.Model
+﻿namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class ObjectDependency
     {

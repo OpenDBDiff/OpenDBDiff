@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using DBDiff.Schema.Model;
 using DBDiff.Schema.SQLServer.Generates.Model.Util;
+using DBDiff.Schema.SQLServer.Generates.Options;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
@@ -252,7 +251,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 sql1 = whitespace.Replace(this.ToSql(), "");
                 sql2 = whitespace.Replace(obj.ToSql(), "");
             }
-            if (((Database)RootParent).Options.Comparison.CaseSensityInCode == Options.SqlOptionComparison.CaseSensityOptions.CaseInsensity)
+            if (((Database)RootParent).Options.Comparison.CaseSensityInCode == SqlOptionComparison.CaseSensityOptions.CaseInsensity)
                 return (sql1.Equals(sql2, StringComparison.InvariantCultureIgnoreCase));
 
             return (sql1.Equals(sql2, StringComparison.InvariantCulture));

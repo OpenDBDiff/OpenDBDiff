@@ -1,11 +1,14 @@
-﻿namespace DBDiff.Front
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace DBDiff.Front
 {
     sealed partial class ListProjectsForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -118,11 +121,11 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel gradientPanel1;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.ColumnHeader Icon;
-        private System.Windows.Forms.ColumnHeader Connection;
-        private System.Windows.Forms.ImageList imageList1;
+        private Panel gradientPanel1;
+        private Label label11;
+        private ListView listView1;
+        private ColumnHeader Icon;
+        private ColumnHeader Connection;
+        private ImageList imageList1;
     }
 }

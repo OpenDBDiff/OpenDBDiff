@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DBDiff.Schema.SQLServer.Generates.Model;
-using DBDiff.Schema.SQLServer.Generates.Options;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 using DBDiff.Schema.Events;
 using DBDiff.Schema.SQLServer.Generates.Generates.Util;
-using DBDiff.Schema.Model;
+using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.SQLServer.Generates.Options;
 
 namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
@@ -94,12 +91,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             string rv = definition;
 
             string sqlDelimiters = @"(\r|\n|\s)*?";
-            System.Text.RegularExpressions.RegexOptions options = System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Multiline;
-            System.Text.RegularExpressions.Regex re = new System.Text.RegularExpressions.Regex(@"CREATE" + sqlDelimiters + @"PROC(EDURE)?" + sqlDelimiters + @"(\w+\.|\[\w+\]\.)?\[?(?<spname>\w+)\]?" + sqlDelimiters, options);
+            RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Multiline;
+            Regex re = new Regex(@"CREATE" + sqlDelimiters + @"PROC(EDURE)?" + sqlDelimiters + @"(\w+\.|\[\w+\]\.)?\[?(?<spname>\w+)\]?" + sqlDelimiters, options);
             switch (type)
             {
                 case "P":
-                    System.Text.RegularExpressions.Match match = re.Match(definition);
+                    Match match = re.Match(definition);
                     if (match != null && match.Success)
                     {
                         // Try to replace the name saved in the definition when the object was created by the one used for the object in sys.object

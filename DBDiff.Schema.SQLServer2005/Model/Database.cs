@@ -139,7 +139,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             var item = new Database() { AllObjects = this.AllObjects };
 
             var explicitProperties = (from properties in this.GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public)
-                                      where properties.PropertyType.GetInterface(typeof(DBDiff.Schema.Model.ISchemaList<Code, Database>).Name) != null
+                                      where properties.PropertyType.GetInterface(typeof(ISchemaList<Code, Database>).Name) != null
                                       select properties).ToList();
 
             foreach (var property in explicitProperties)

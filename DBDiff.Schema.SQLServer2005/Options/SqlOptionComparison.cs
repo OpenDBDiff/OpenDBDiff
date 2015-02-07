@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DBDiff.Schema.SQLServer.Generates.Options
+﻿namespace DBDiff.Schema.SQLServer.Generates.Options
 {
     public class SqlOptionComparison
     {

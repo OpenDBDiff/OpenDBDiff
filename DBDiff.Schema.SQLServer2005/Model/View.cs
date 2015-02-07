@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+using DBDiff.Schema.Attributes;
 using DBDiff.Schema.Model;
 using DBDiff.Schema.SQLServer.Generates.Model.Util;
-using DBDiff.Schema.Attributes;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
@@ -42,7 +38,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return item;
         }
 
-        [ShowItemAttribute("CLR Triggers")]
+        [ShowItem("CLR Triggers")]
         public SchemaList<CLRTrigger, View> CLRTriggers
         {
             get { return clrtriggers; }

@@ -1,11 +1,14 @@
-﻿namespace DBDiff.Front
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace DBDiff.Front
 {
     partial class SchemaTreeView
     {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -133,10 +136,10 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeView1;
-        private System.Windows.Forms.CheckBox chkOld;
-        private System.Windows.Forms.CheckBox chkNew;
-        private System.Windows.Forms.CheckBox chkDiferent;
-        private System.Windows.Forms.ImageList imageList1;
+        private TreeView treeView1;
+        private CheckBox chkOld;
+        private CheckBox chkNew;
+        private CheckBox chkDiferent;
+        private ImageList imageList1;
     }
 }

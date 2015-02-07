@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
 using System.Data.SqlClient;
+using System.Globalization;
 using DBDiff.Schema.Errors;
-using DBDiff.Schema.Model;
 using DBDiff.Schema.Events;
-using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.Model;
 using DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
 using DBDiff.Schema.SQLServer.Generates.Generates.Util;
-using Constraint=DBDiff.Schema.SQLServer.Generates.Model.Constraint;
+using DBDiff.Schema.SQLServer.Generates.Model;
+using Constraint = DBDiff.Schema.SQLServer.Generates.Model.Constraint;
 
 namespace DBDiff.Schema.SQLServer.Generates.Generates
 {

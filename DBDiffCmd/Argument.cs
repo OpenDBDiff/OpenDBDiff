@@ -1,7 +1,7 @@
-﻿namespace DBDiff.OCDB
-{
-    using System;
+﻿using System;
 
+namespace DBDiff.OCDB
+{
     public class Argument
     {
         private string connectionString1;
@@ -26,9 +26,9 @@
             }
             if (String.IsNullOrEmpty(connectionString1) || String.IsNullOrEmpty(ConnectionString1) || String.IsNullOrEmpty(outputFile))
             {
-                System.Console.WriteLine("\r\n Example of use:\r\n");
-                System.Console.WriteLine("    OCDB CN1=\"Destination/Target\" CN2=\"Source\" F=OuputScript.sql\r\n");
-                System.Console.WriteLine(" (where CN1 and CN2 are SQL Server 2005+ Connection Strings)");
+                Console.WriteLine("\r\n Example of use:\r\n");
+                Console.WriteLine("    OCDB CN1=\"Destination/Target\" CN2=\"Source\" F=OuputScript.sql\r\n");
+                Console.WriteLine(" (where CN1 and CN2 are SQL Server 2005+ Connection Strings)");
                 Console.WriteLine(" NOTE: Optional /legacy switch ouputs the old script.\r\n");
             }
         }

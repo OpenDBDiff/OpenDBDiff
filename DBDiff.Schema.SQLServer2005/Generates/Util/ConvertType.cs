@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DBDiff.Schema.SQLServer.Generates.Generates.Util
+﻿namespace DBDiff.Schema.SQLServer.Generates.Generates.Util
 {
     internal static class ConvertType
     {

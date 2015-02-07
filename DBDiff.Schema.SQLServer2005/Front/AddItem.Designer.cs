@@ -1,11 +1,14 @@
-﻿namespace DBDiff.Schema.SQLServer.Generates.Front
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace DBDiff.Schema.SQLServer.Generates.Front
 {
     partial class AddItem
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -130,12 +133,12 @@
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox txtFilter;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox cboObjects;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btnApply;
-        private System.Windows.Forms.Button button2;
+        private GroupBox groupBox1;
+        private TextBox txtFilter;
+        private Label label1;
+        private ComboBox cboObjects;
+        private Label label2;
+        private Button btnApply;
+        private Button button2;
     }
 }

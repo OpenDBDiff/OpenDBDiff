@@ -1,11 +1,15 @@
-﻿namespace DBDiff.Front
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using DBDiff.Schema.SQLServer.Generates.Front;
+
+namespace DBDiff.Front
 {
     partial class OptionForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -79,9 +83,9 @@
 
         #endregion
 
-        private DBDiff.Schema.SQLServer.Generates.Front.SqlOptionsFront sqlOptionsFront1;
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Button btnApply;
+        private SqlOptionsFront sqlOptionsFront1;
+        private Button btnCancel;
+        private Button btnApply;
 
     }
 }

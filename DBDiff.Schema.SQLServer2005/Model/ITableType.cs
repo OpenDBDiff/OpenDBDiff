@@ -1,5 +1,4 @@
-﻿using System;
-using DBDiff.Schema.Model;
+﻿using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {

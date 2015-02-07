@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
-using DBDiff.Schema.SQLServer.Generates.Options;
-using DBDiff.Schema.SQLServer.Generates.Model;
 using System.Data.SqlClient;
+using DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
+using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
