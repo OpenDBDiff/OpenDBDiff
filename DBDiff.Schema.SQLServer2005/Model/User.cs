@@ -5,8 +5,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class User : SQLServerSchemaBase
     {
-        private string login;
-
         public User(ISchemaBase parent)
             : base(parent, Enums.ObjectType.User)
         {
@@ -17,19 +15,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             get { return "[" + Name + "]"; }
         }
 
-        public string Login
-        {
-            get { return login; }
-            set { login = value; }
-        }
+        public string Login { get; set; }
 
         public override string ToSql()
         {
             string sql = "";
             sql += "CREATE USER ";
             sql += FullName + " ";
-            if (!String.IsNullOrEmpty(login))
-                sql += "FOR LOGIN [" + login + "] ";
+            if (!String.IsNullOrEmpty(Login))
+                sql += "FOR LOGIN [" + Login + "] ";
             else
                 sql += "WITHOUT LOGIN ";
             if (!String.IsNullOrEmpty(Owner))

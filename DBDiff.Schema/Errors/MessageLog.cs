@@ -8,31 +8,18 @@
             Warning = 1,
             Error = 2
         }
-        private string description;
-        private string fullDescription;
-        private LogType type;
 
         public MessageLog(string description, string fullDescription, LogType type)
         {
-            this.description = description;
-            this.fullDescription = fullDescription;
-            this.type = type;
+            this.Description = description;
+            this.FullDescription = fullDescription;
+            this.Type = type;
         }
 
-        public LogType Type
-        {
-            get { return type; }
-        }
+        public LogType Type { get; private set; }
 
-        public string FullDescription
-        {
-            get { return fullDescription; }
-        }
+        public string FullDescription { get; private set; }
 
-        public string Description
-        {
-            get { return description; }
-        }
-        
+        public string Description { get; private set; }
     }
 }

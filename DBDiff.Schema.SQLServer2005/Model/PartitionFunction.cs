@@ -14,18 +14,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         private const int IS_DATE = 2;
         private const int IS_NUMERIC = 3;
 
-        private string type;
-        private bool isBoundaryRight;
-        private int size;
-        private int precision;
-        private int scale;
-        private List<string> values;
-        private PartitionFunction old;
-
         public PartitionFunction(ISchemaBase parent)
             : base(parent, Enums.ObjectType.PartitionFunction)
         {
-            values = new List<string>();
+            Values = new List<string>();
         }
 
         public PartitionFunction Clone(ISchemaBase parent)
@@ -42,47 +34,19 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return item;
         }
 
-        public List<string> Values
-        {
-            get { return values; }
-            set { values = value; }
-        }
+        public List<string> Values { get; set; }
 
-        public PartitionFunction Old
-        {
-            get { return old; }
-            set { old = value; }
-        }
+        public PartitionFunction Old { get; set; }
 
-        public int Precision
-        {
-            get { return precision; }
-            set { precision = value; }
-        }
+        public int Precision { get; set; }
 
-        public int Scale
-        {
-            get { return scale; }
-            set { scale = value; }
-        }
+        public int Scale { get; set; }
 
-        public int Size
-        {
-            get { return size; }
-            set { size = value; }
-        }
+        public int Size { get; set; }
 
-        public bool IsBoundaryRight
-        {
-            get { return isBoundaryRight; }
-            set { isBoundaryRight = value; }
-        }
+        public bool IsBoundaryRight { get; set; }
 
-        public string Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
+        public string Type { get; set; }
 
         private int ValueItem(string typeName)
         {
@@ -123,21 +87,21 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             sql += " FOR VALUES (";
 
             string sqlvalues = "";
-            int valueType = ValueItem(type);
+            int valueType = ValueItem(Type);
 
             if (valueType == IS_STRING)
-                values.ForEach(item => { sqlvalues += "N'" + item + "',"; });
+                Values.ForEach(item => { sqlvalues += "N'" + item + "',"; });
             else
                 if (valueType == IS_DATE)
-                    values.ForEach(item => { sqlvalues += "'" + DateTime.Parse(item).ToString("yyyyMMdd HH:mm:ss.fff") + "',"; });
+                    Values.ForEach(item => { sqlvalues += "'" + DateTime.Parse(item).ToString("yyyyMMdd HH:mm:ss.fff") + "',"; });
                 else
                     if (valueType == IS_UNIQUE)
-                        values.ForEach(item => { sqlvalues += "'{" + item + "}',"; });
+                        Values.ForEach(item => { sqlvalues += "'{" + item + "}',"; });
                     else
                         if (valueType == IS_NUMERIC)
-                            values.ForEach(item => { sqlvalues += item.Replace(",",".") + ","; });
+                            Values.ForEach(item => { sqlvalues += item.Replace(",",".") + ","; });
                         else
-                            values.ForEach(item => { sqlvalues += item + ","; });
+                            Values.ForEach(item => { sqlvalues += item + ","; });
             sql += sqlvalues.Substring(0, sqlvalues.Length - 1) + ")";
 
             return sql + "\r\nGO\r\n";
@@ -159,8 +123,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             string sql = "ALTER PARTITION FUNCTION [" + Name + "]()\r\n";
             string sqlmergue = "";
             string sqsplit = "";
-            IEnumerable<string> items = old.Values.Except<string>(this.values);
-            int valueType = ValueItem(type);
+            IEnumerable<string> items = Old.Values.Except<string>(this.Values);
+            int valueType = ValueItem(Type);
             foreach (var item in items)
             {
                 sqlmergue = "MERGE RANGE (";
@@ -179,7 +143,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                                 sqlmergue += item;
                 sqlFinal.Append(sql + sqlmergue + ")\r\nGO\r\n");
             }
-            IEnumerable<string> items2 = this.Values.Except<string>(this.old.Values);
+            IEnumerable<string> items2 = this.Values.Except<string>(this.Old.Values);
             foreach (var item in items2)
             {
                 sqsplit = "SPLIT RANGE (";
@@ -243,7 +207,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (destino == null) throw new ArgumentNullException("destino");
             if (origen == null) throw new ArgumentNullException("origen");
             if (origen.Values.Count != destino.Values.Count) return false;
-            if (origen.Values.Except(destino.values).ToList().Count != 0) return false;
+            if (origen.Values.Except(destino.Values).ToList().Count != 0) return false;
             return true;
         }
     }

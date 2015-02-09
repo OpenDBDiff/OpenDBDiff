@@ -6,17 +6,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class FullTextIndex : SQLServerSchemaBase
     {
-        private Boolean isDisabled;
-        private string fullText;
-        private string index;
-        private string changeTrackingState;
-        private string fileGroup;
-        private List<FullTextIndexColumn> columns;
-
         public FullTextIndex(ISchemaBase parent)
             : base(parent, Enums.ObjectType.FullTextIndex)
         {
-            columns = new List<FullTextIndexColumn>();
+            Columns = new List<FullTextIndexColumn>();
         }
 
         public override ISchemaBase Clone(ISchemaBase parent)
@@ -36,35 +29,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return index;
         }
 
-        public string FileGroup
-        {
-            get { return fileGroup; }
-            set { fileGroup = value; }
-        }
+        public string FileGroup { get; set; }
 
-        public Boolean IsDisabled
-        {
-            get { return isDisabled; }
-            set { isDisabled = value; }
-        }
+        public Boolean IsDisabled { get; set; }
 
-        public string Index
-        {
-            get { return index; }
-            set { index = value; }
-        }
+        public string Index { get; set; }
 
-        public string FullText
-        {
-            get { return fullText; }
-            set { fullText = value; }
-        }
+        public string FullText { get; set; }
 
-        public string ChangeTrackingState
-        {
-            get { return changeTrackingState; }
-            set { changeTrackingState = value; }
-        }
+        public string ChangeTrackingState { get; set; }
 
         public override string FullName
         {
@@ -74,11 +47,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             }
         }
 
-        public List<FullTextIndexColumn> Columns
-        {
-            get { return columns; }
-            set { columns = value; }
-        }
+        public List<FullTextIndexColumn> Columns { get; set; }
 
         public override SQLScript Create()
         {
@@ -107,7 +76,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public override string ToSqlAdd()
         {
             string sql = "CREATE FULLTEXT INDEX ON " + Parent.FullName + "( ";
-            columns.ForEach (item => { sql += "[" + item.ColumnName + "] LANGUAGE [" + item.Language + "],"; });
+            Columns.ForEach (item => { sql += "[" + item.ColumnName + "] LANGUAGE [" + item.Language + "],"; });
             sql = sql.Substring(0,sql.Length -1);
             sql += ")\r\n";
             if (((Database)this.RootParent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)

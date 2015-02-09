@@ -4,25 +4,20 @@ namespace DBDiff.Schema
 {
     public class SQLScript : IComparable<SQLScript>
     {
-        private string sql;
-        private int dependencies;
-        private Enums.ScripActionType status;
-        private int deep;
-
         public SQLScript(int deepvalue, string sqlScript, int dependenciesCount, Enums.ScripActionType action)
         {
-            sql = sqlScript;
-            dependencies = dependenciesCount;
-            status = action;
-            deep = deepvalue;
+            SQL = sqlScript;
+            Dependencies = dependenciesCount;
+            Status = action;
+            Deep = deepvalue;
             //childs = new SQLScriptList();
         }
 
         public SQLScript(string sqlScript, int dependenciesCount, Enums.ScripActionType action)
         {
-            sql = sqlScript;
-            dependencies = dependenciesCount;
-            status = action;
+            SQL = sqlScript;
+            Dependencies = dependenciesCount;
+            Status = action;
             //childs = new SQLScriptList();
         }
 
@@ -32,35 +27,19 @@ namespace DBDiff.Schema
             set { childs = value; }
         }*/
 
-        public int Deep
-        {
-            get { return deep; }
-            set { deep = value; }
-        }
+        public int Deep { get; set; }
 
-        public Enums.ScripActionType Status
-        {
-            get { return status; }
-            set { status = value; }
-        }
+        public Enums.ScripActionType Status { get; set; }
 
-        public int Dependencies
-        {
-            get { return dependencies; }
-            set { dependencies = value; }
-        }
+        public int Dependencies { get; set; }
 
-        public string SQL
-        {
-            get { return sql; }
-            set { sql = value; }
-        }
+        public string SQL { get; set; }
 
         public bool IsDropAction
         {
             get
             {
-                return ((status == Enums.ScripActionType.DropView) || (status == Enums.ScripActionType.DropFunction)|| (status == Enums.ScripActionType.DropStoreProcedure));
+                return ((Status == Enums.ScripActionType.DropView) || (Status == Enums.ScripActionType.DropFunction)|| (Status == Enums.ScripActionType.DropStoreProcedure));
             }
         }
 
@@ -68,13 +47,13 @@ namespace DBDiff.Schema
         {
             get
             {
-                return ((status == Enums.ScripActionType.AddView) || (status == Enums.ScripActionType.AddFunction) || (status == Enums.ScripActionType.AddStoreProcedure));
+                return ((Status == Enums.ScripActionType.AddView) || (Status == Enums.ScripActionType.AddFunction) || (Status == Enums.ScripActionType.AddStoreProcedure));
             }
         }
 
         public int CompareTo(SQLScript other)
         {
-            if (this.deep == other.deep)
+            if (this.Deep == other.Deep)
             {
                 if (this.Status == other.Status)
                 {

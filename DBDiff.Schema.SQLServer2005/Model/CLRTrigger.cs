@@ -4,10 +4,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class CLRTrigger : CLRCode
     {
-        private bool isDelete;
-        private bool isInsert;
-        private bool isUpdate;
- 
         public CLRTrigger(ISchemaBase parent)
             : base(parent, Enums.ObjectType.CLRTrigger, Enums.ScripActionType.AddTrigger, Enums.ScripActionType.DropTrigger)
         {            
@@ -27,23 +23,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return sql;
         }
 
-        public bool IsUpdate
-        {
-            get { return isUpdate; }
-            set { isUpdate = value; }
-        }
+        public bool IsUpdate { get; set; }
 
-        public bool IsInsert
-        {
-            get { return isInsert; }
-            set { isInsert = value; }
-        }
+        public bool IsInsert { get; set; }
 
-        public bool IsDelete
-        {
-            get { return isDelete; }
-            set { isDelete = value; }
-        }
+        public bool IsDelete { get; set; }
 
         public override SQLScriptList ToSqlDiff()
         {

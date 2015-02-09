@@ -5,14 +5,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class FileGroupFile : SQLServerSchemaBase
     {
-        private int type;
-        private string physical_name;
-        private int max_size;
-        private int growth;
-        private int size;
-        private Boolean isPercentGrowth;
-        private Boolean isSparse;
-
         public FileGroupFile(ISchemaBase parent)
             : base(parent, Enums.ObjectType.File)
         {
@@ -33,23 +25,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return file;
         }
 
-        public int Size
-        {
-            get { return size; }
-            set { size = value; }
-        }
+        public int Size { get; set; }
 
-        public Boolean IsSparse
-        {
-            get { return isSparse; }
-            set { isSparse = value; }
-        }
+        public Boolean IsSparse { get; set; }
 
-        public Boolean IsPercentGrowth
-        {
-            get { return isPercentGrowth; }
-            set { isPercentGrowth = value; }
-        }
+        public Boolean IsPercentGrowth { get; set; }
 
         private string TypeGrowth
         {
@@ -65,29 +45,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             }
         }
 
-        public int Growth
-        {
-            get { return growth; }
-            set { growth = value; }
-        }
+        public int Growth { get; set; }
 
-        public int MaxSize
-        {
-            get { return max_size; }
-            set { max_size = value; }
-        }
+        public int MaxSize { get; set; }
 
-        public string PhysicalName
-        {
-            get { return physical_name; }
-            set { physical_name = value; }
-        }
+        public string PhysicalName { get; set; }
 
-        public int Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
+        public int Type { get; set; }
 
         private string GetNameNewFileGroup(string path)
         {
@@ -117,24 +81,24 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public override string ToSql()
         {
-            if (type != 2)
-                return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD" + ((Type != 1) ? "" : " LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + PhysicalName + "' , SIZE = " + Size * 1000 + "KB , FILEGROWTH = " + growth * 1000 + TypeGrowth + ") TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
+            if (Type != 2)
+                return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD" + ((Type != 1) ? "" : " LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + PhysicalName + "' , SIZE = " + Size * 1000 + "KB , FILEGROWTH = " + Growth * 1000 + TypeGrowth + ") TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
             else
                 return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD" + ((Type != 1) ? "" : " LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + PhysicalName + "') TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
         }
 
         public override string ToSqlAdd()
         {
-            if (type != 2)
-                return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD" + ((Type != 1) ? "" : " LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + GetNameNewFileGroup(PhysicalName) + "' , SIZE = " + Size * 1000 + "KB , FILEGROWTH = " + growth * 1000 + TypeGrowth + ") TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
+            if (Type != 2)
+                return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD" + ((Type != 1) ? "" : " LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + GetNameNewFileGroup(PhysicalName) + "' , SIZE = " + Size * 1000 + "KB , FILEGROWTH = " + Growth * 1000 + TypeGrowth + ") TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
             else
                 return "ALTER DATABASE " + Parent.Parent.FullName + "\r\nADD" + ((Type != 1) ? "" : " LOG") + " FILE ( NAME = N'" + Name + "', FILENAME = N'" + GetNameNewFileGroup(PhysicalName) + "') TO FILEGROUP " + Parent.FullName + "\r\nGO\r\n";
         }
 
         public string ToSQLAlter()
         {
-            if (type != 2)
-                return "ALTER DATABASE " + Parent.Parent.FullName + " MODIFY FILE ( NAME = N'" + Name + "', FILENAME = N'" + PhysicalName + "' , SIZE = " + Size * 1000 + "KB , FILEGROWTH = " + growth * 1000 + TypeGrowth + ")";
+            if (Type != 2)
+                return "ALTER DATABASE " + Parent.Parent.FullName + " MODIFY FILE ( NAME = N'" + Name + "', FILENAME = N'" + PhysicalName + "' , SIZE = " + Size * 1000 + "KB , FILEGROWTH = " + Growth * 1000 + TypeGrowth + ")";
             else
                 return "ALTER DATABASE " + Parent.Parent.FullName + " MODIFY FILE ( NAME = N'" + Name + "', FILENAME = N'" + PhysicalName + "')";
         }

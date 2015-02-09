@@ -9,22 +9,16 @@ namespace DBDiff.Schema.Model
     public abstract class SchemaBase:ISchemaBase
     {
         private Enums.ObjectStatusType status;
-        private Enums.ObjectType type;
         private ISchemaBase parent;
-        private int id;
-        private string name;
-        private string owner;
-        private string guid;
         private string nameCharacterOpen;
         private string nameCharacterClose;
         private Hashtable wasInsertInDiffList;
-        private Boolean isSystem;
         private IDatabase rootParent = null;
 
         protected SchemaBase(string nameCharacterOpen, string nameCharacterClose, Enums.ObjectType objectType)
         {
-            this.guid = System.Guid.NewGuid().ToString();
-            this.type = objectType;
+            this.Guid = System.Guid.NewGuid().ToString();
+            this.ObjectType = objectType;
             this.status = Enums.ObjectStatusType.OriginalStatus;
             this.nameCharacterClose = nameCharacterClose;
             this.nameCharacterOpen = nameCharacterOpen;
@@ -183,29 +177,17 @@ namespace DBDiff.Schema.Model
         /// <summary>
         /// GUID unico que identifica al objeto.
         /// </summary>
-        public string Guid
-        {
-            get { return guid; }
-            set { guid = value; }
-        }
+        public string Guid { get; set; }
 
         /// <summary>
         /// Tipo de objeto (Tabla, Column, Vista, etc)
         /// </summary>
-        public Enums.ObjectType ObjectType
-        {
-            get { return type; }
-            set { type = value; }
-        }
+        public Enums.ObjectType ObjectType { get; set; }
 
         /// <summary>
         /// ID del objeto.
         /// </summary>
-        public int Id
-        {
-            get { return id; }
-            set { id = value; }
-        }
+        public int Id { get; set; }
 
         /// <summary>
         /// Nombre completo del objeto, incluyendo el owner.
@@ -214,39 +196,28 @@ namespace DBDiff.Schema.Model
         {
             get 
             { 
-                if (String.IsNullOrEmpty(owner))
+                if (String.IsNullOrEmpty(Owner))
                     return nameCharacterOpen + Name + nameCharacterClose; 
                 else
-                    return nameCharacterOpen + owner + nameCharacterClose + "." + nameCharacterOpen + Name + nameCharacterClose; 
+                    return nameCharacterOpen + Owner + nameCharacterClose + "." + nameCharacterOpen + Name + nameCharacterClose; 
             }
         }
 
         /// <summary>
         /// Nombre de usuario del owner de la tabla.
         /// </summary>
-        public string Owner
-        {
-            get { return owner; }
-            set { owner = value; }
-        }
+        public string Owner { get; set; }
 
         /// <summary>
         /// Nombre del objecto
         /// </summary>
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// Determine if the database object if a System object or not
         /// </summary>
-        public Boolean IsSystem
-        {
-            get { return isSystem; }
-            set { isSystem = value; }
-        }
+        public Boolean IsSystem { get; set; }
+
         /// <summary>
         /// Indica el estado del objeto (si es propio, si debe borrarse o si es nuevo). Es solo valido
         /// para generar el SQL de diferencias entre 2 bases. 

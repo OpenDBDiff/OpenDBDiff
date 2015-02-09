@@ -5,8 +5,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class TableOption : SQLServerSchemaBase
     {
-        private string vale;
-
         public TableOption(string Name, string value, ISchemaBase parent)
             : base(parent, Enums.ObjectType.TableOption)
         {
@@ -31,13 +29,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return option;
         }
 
-        public string Value
-        {
-            get { return vale; }
-            set { vale = value; }
-        }
+        public string Value { get; set; }
 
-                /// <summary>
+        /// <summary>
         /// Compara dos indices y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
         public static Boolean Compare(TableOption origen, TableOption destino)
@@ -64,9 +58,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public override string ToSql()
         {
             if (this.Name.Equals("TextInRow"))
-                return "EXEC sp_tableoption " + Parent.Name + ", 'text in row'," + vale + "\r\nGO\r\n";
+                return "EXEC sp_tableoption " + Parent.Name + ", 'text in row'," + Value + "\r\nGO\r\n";
             if (this.Name.Equals("LargeValues"))
-                return "EXEC sp_tableoption " + Parent.Name + ", 'large value types out of row'," + vale + "\r\nGO\r\n";
+                return "EXEC sp_tableoption " + Parent.Name + ", 'large value types out of row'," + Value + "\r\nGO\r\n";
             if (this.Name.Equals("VarDecimal"))
                 return "EXEC sp_tableoption " + Parent.Name + ", 'vardecimal storage format','1'\r\nGO\r\n";
             if (this.Name.Equals("LockEscalation"))

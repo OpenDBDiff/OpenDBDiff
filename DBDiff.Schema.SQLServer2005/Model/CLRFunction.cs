@@ -6,32 +6,22 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class CLRFunction : CLRCode
     {
-        private List<Parameter> parameters;
-        private Parameter returnType;
-
         public CLRFunction(ISchemaBase parent)
             : base(parent, Enums.ObjectType.CLRFunction, Enums.ScripActionType.AddFunction, Enums.ScripActionType.DropFunction)
         {
-            parameters = new List<Parameter>();
-            returnType = new Parameter();
+            Parameters = new List<Parameter>();
+            ReturnType = new Parameter();
         }
 
-        public List<Parameter> Parameters
-        {
-            get { return parameters; }
-            set { parameters = value; }
-        }
+        public List<Parameter> Parameters { get; set; }
 
-        public Parameter ReturnType
-        {
-            get { return returnType; }
-        }
+        public Parameter ReturnType { get; private set; }
 
         public override string ToSql()
         {
             string sql = "CREATE FUNCTION " + FullName + "";
             string param = "";
-            parameters.ForEach(item => param += item.ToSql() + ",");
+            Parameters.ForEach(item => param += item.ToSql() + ",");
             if (!String.IsNullOrEmpty(param))
             {
                 param = param.Substring(0, param.Length - 1);
@@ -39,7 +29,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             }
             else
                 sql += "()\r\n";
-            sql += "RETURNS " + returnType.ToSql() + " ";
+            sql += "RETURNS " + ReturnType.ToSql() + " ";
             sql += "WITH EXECUTE AS " + AssemblyExecuteAs + "\r\n";
             sql += "AS\r\n";
             sql += "EXTERNAL NAME [" + AssemblyName + "].[" + AssemblyClass + "].[" + AssemblyMethod + "]\r\n";

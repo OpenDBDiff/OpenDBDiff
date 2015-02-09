@@ -9,17 +9,15 @@ namespace DBDiff.Schema.Model
         where T : ISchemaBase
         where P : ISchemaBase
     {
-        private P parent;
         private Dictionary<string, int> nameMap = new Dictionary<string, int>();
         private SearchSchemaBase allObjects = null;
-        private StringComparison comparion;
         private bool IsCaseSensity = false;
 
         public SchemaList(P parent, SearchSchemaBase allObjects)
         {
-            this.parent = parent;
+            this.Parent = parent;
             this.allObjects = allObjects;
-            this.comparion = StringComparison.CurrentCultureIgnoreCase;
+            this.Comparion = StringComparison.CurrentCultureIgnoreCase;
         }
 
         public SchemaList<T, P> Clone(P parentObject)
@@ -37,14 +35,11 @@ namespace DBDiff.Schema.Model
             return options;
         }
 
-        protected StringComparison Comparion
-        {
-            get { return comparion; }
-        }
+        protected StringComparison Comparion { get; private set; }
 
         public SchemaList(P parent)
         {
-            this.parent = parent;
+            this.Parent = parent;
         }
 
         public new void Add(T item)
@@ -64,10 +59,7 @@ namespace DBDiff.Schema.Model
         /// <summary>
         /// Devuelve el objecto Padre perteneciente a la coleccion.
         /// </summary>
-        public P Parent
-        {
-            get { return parent; }
-        }
+        public P Parent { get; private set; }
 
         /// <summary>
         /// Devuelve el objeto correspondiente a un ID especifico.

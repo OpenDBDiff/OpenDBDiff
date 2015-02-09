@@ -15,78 +15,31 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         }
 
         private float versionNumber;
-        private VersionTypeEnum version;
-        private string collation;
-        private bool hasChangeTracking;
-        private bool isChangeTrackingAutoCleanup;
-        private int changeTrackingRetentionPeriod;
-        private int changeTrackingPeriodUnits;
-        private string changeTrackingPeriodUnitsDesc;
-        private bool hasFullTextEnabled;
 
         public DatabaseInfo()
         {
-            version = VersionTypeEnum.SQLServer2005;
+            Version = VersionTypeEnum.SQLServer2005;
         }
 
-        public string Server
-        {
-            get;
-            set;
-        }
+        public string Server { get; set; }
 
-        public string Database
-        {
-            get;
-            set;
-        }
-        
-        public VersionTypeEnum Version
-        {
-            get { return version; }
-        }
+        public string Database { get; set; }
 
-        public string Collation
-        {
-            get { return collation; }
-            set { collation = value; }
-        }
+        public VersionTypeEnum Version { get; private set; }
 
-        public bool HasFullTextEnabled
-        {
-            get { return hasFullTextEnabled; }
-            set { hasFullTextEnabled = value; }
-        }
+        public string Collation { get; set; }
 
-        public string ChangeTrackingPeriodUnitsDesc
-        {
-            get { return changeTrackingPeriodUnitsDesc; }
-            set { changeTrackingPeriodUnitsDesc = value; }
-        }
+        public bool HasFullTextEnabled { get; set; }
 
-        public int ChangeTrackingPeriodUnits
-        {
-            get { return changeTrackingPeriodUnits; }
-            set { changeTrackingPeriodUnits = value; }
-        }
+        public string ChangeTrackingPeriodUnitsDesc { get; set; }
 
-        public int ChangeTrackingRetentionPeriod
-        {
-            get { return changeTrackingRetentionPeriod; }
-            set { changeTrackingRetentionPeriod = value; }
-        }
+        public int ChangeTrackingPeriodUnits { get; set; }
 
-        public bool IsChangeTrackingAutoCleanup
-        {
-            get { return isChangeTrackingAutoCleanup; }
-            set { isChangeTrackingAutoCleanup = value; }
-        }
+        public int ChangeTrackingRetentionPeriod { get; set; }
 
-        public bool HasChangeTracking
-        {
-            get { return hasChangeTracking; }
-            set { hasChangeTracking = value; }
-        }
+        public bool IsChangeTrackingAutoCleanup { get; set; }
+
+        public bool HasChangeTracking { get; set; }
 
         public float VersionNumber
         {
@@ -94,12 +47,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             set
             {
                 versionNumber = value;
-                if ((versionNumber >= 8) && (versionNumber < 9)) version = VersionTypeEnum.SQLServer2000;
-                if ((versionNumber >= 9) && (versionNumber < 10)) version = VersionTypeEnum.SQLServer2005;
-                if ((versionNumber >= 10) && (versionNumber < 10.25)) version = VersionTypeEnum.SQLServer2008;
-                if ((versionNumber >= 10.25) && (versionNumber < 10.5)) version = VersionTypeEnum.SQLServerAzure10;
-                if ((versionNumber >= 10.5) && (versionNumber < 11)) version = VersionTypeEnum.SQLServer2008R2;
-                if ((versionNumber >= 11.0) && (versionNumber < 12)) version = VersionTypeEnum.SQLServer2008R2; // SQLServer2012
+                if ((versionNumber >= 8) && (versionNumber < 9)) Version = VersionTypeEnum.SQLServer2000;
+                if ((versionNumber >= 9) && (versionNumber < 10)) Version = VersionTypeEnum.SQLServer2005;
+                if ((versionNumber >= 10) && (versionNumber < 10.25)) Version = VersionTypeEnum.SQLServer2008;
+                if ((versionNumber >= 10.25) && (versionNumber < 10.5)) Version = VersionTypeEnum.SQLServerAzure10;
+                if ((versionNumber >= 10.5) && (versionNumber < 11)) Version = VersionTypeEnum.SQLServer2008R2;
+                if ((versionNumber >= 11.0) && (versionNumber < 12)) Version = VersionTypeEnum.SQLServer2008R2; // SQLServer2012
             }
         }
 
@@ -107,7 +60,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             if (edition.GetValueOrDefault() == 5)
             {
-                this.version = VersionTypeEnum.SQLServerAzure10;
+                this.Version = VersionTypeEnum.SQLServerAzure10;
             }
         }
     }

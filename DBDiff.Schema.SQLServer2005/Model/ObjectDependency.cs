@@ -2,44 +2,28 @@
 {
     public class ObjectDependency
     {
-        private string columnName;
-        private string name;
-        private Enums.ObjectType type;
-
         public ObjectDependency(string name, string Column, Enums.ObjectType type)
         {
-            this.name = name;
-            this.columnName = Column;
-            this.type = type;
+            this.Name = name;
+            this.ColumnName = Column;
+            this.Type = type;
         }
 
         public ObjectDependency(string name, string Column)
         {
-            this.name = name;
-            this.columnName = Column;
+            this.Name = name;
+            this.ColumnName = Column;
         }
 
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+        public string Name { get; set; }
 
-        public string ColumnName
-        {
-            get { return columnName; }
-            set { columnName = value; }
-        }
+        public string ColumnName { get; set; }
 
-        public Enums.ObjectType Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
+        public Enums.ObjectType Type { get; set; }
 
         public bool IsCodeType
         {
-            get { return ((type == Enums.ObjectType.StoreProcedure) || (type == Enums.ObjectType.Trigger) || (type == Enums.ObjectType.View) || (type == Enums.ObjectType.Function)); }
+            get { return ((Type == Enums.ObjectType.StoreProcedure) || (Type == Enums.ObjectType.Trigger) || (Type == Enums.ObjectType.View) || (Type == Enums.ObjectType.Function)); }
 
         }
     }

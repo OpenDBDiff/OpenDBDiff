@@ -9,28 +9,17 @@
             CaseSensity = 2
         }
 
-        private CaseSensityOptions caseSensityType;
-        private CaseSensityOptions caseSensityInCode = CaseSensityOptions.CaseInsensity;
-        private bool ignoreWhiteSpacesInCode = false;
-
-        public bool IgnoreWhiteSpacesInCode
+        public SqlOptionComparison()
         {
-            get { return ignoreWhiteSpacesInCode; }
-            set { ignoreWhiteSpacesInCode = value; }
+            CaseSensityInCode = CaseSensityOptions.CaseInsensity;
+            IgnoreWhiteSpacesInCode = false;
         }
 
+        public bool IgnoreWhiteSpacesInCode { get; set; }
 
-        public CaseSensityOptions CaseSensityInCode
-        {
-            get { return caseSensityInCode; }
-            set { caseSensityInCode = value; }
-        }
 
-        public CaseSensityOptions CaseSensityType
-        {
-            get { return caseSensityType; }
-            set { caseSensityType = value; }
-        }
+        public CaseSensityOptions CaseSensityInCode { get; set; }
 
+        public CaseSensityOptions CaseSensityType { get; set; }
     }
 }

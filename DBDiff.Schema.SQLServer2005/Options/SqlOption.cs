@@ -4,66 +4,40 @@ namespace DBDiff.Schema.SQLServer.Generates.Options
 {
     public class SqlOption
     {
-        private SqlOptionDefault defaults;
-        private SqlOptionIgnore ignore;
-        private SqlOptionScript script;
-        private SqlOptionFilter filters;
-        private SqlOptionComparison comparison;
-
         public SqlOption()
         {
-            defaults = new SqlOptionDefault();
-            ignore = new SqlOptionIgnore(true);
-            script = new SqlOptionScript();
-            filters = new SqlOptionFilter();
-            comparison = new SqlOptionComparison();
+            Defaults = new SqlOptionDefault();
+            Ignore = new SqlOptionIgnore(true);
+            Script = new SqlOptionScript();
+            Filters = new SqlOptionFilter();
+            Comparison = new SqlOptionComparison();
         }
 
         public SqlOption(Boolean defaultFilter)
         {
-            defaults = new SqlOptionDefault();
-            ignore = new SqlOptionIgnore(defaultFilter);
-            script = new SqlOptionScript();
-            filters = new SqlOptionFilter();
-            comparison = new SqlOptionComparison();
+            Defaults = new SqlOptionDefault();
+            Ignore = new SqlOptionIgnore(defaultFilter);
+            Script = new SqlOptionScript();
+            Filters = new SqlOptionFilter();
+            Comparison = new SqlOptionComparison();
         }
 
-        public SqlOptionComparison Comparison
-        {
-            get { return comparison; }
-            set { comparison = value; }
-        }
+        public SqlOptionComparison Comparison { get; set; }
 
-        public SqlOptionFilter Filters
-        {
-            get { return filters; }
-            set { filters = value; }
-        }
+        public SqlOptionFilter Filters { get; set; }
 
         /// <summary>
         /// Gets or sets the option filter.
         /// </summary>
         /// <value>The option filter.</value>
-        public SqlOptionIgnore Ignore
-        {
-            get { return ignore; }
-            set { ignore = value; }
-        }
+        public SqlOptionIgnore Ignore { get; set; }
 
         /// <summary>
         /// Gets or sets the option default.
         /// </summary>
         /// <value>The option default.</value>
-        public SqlOptionDefault Defaults
-        {
-            get { return defaults; }
-            set { defaults = value; }
-        }
+        public SqlOptionDefault Defaults { get; set; }
 
-        public SqlOptionScript Script
-        {
-            get { return script; }
-            set { script = value; }
-        }
+        public SqlOptionScript Script { get; set; }
     }
 }

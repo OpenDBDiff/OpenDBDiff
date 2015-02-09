@@ -8,7 +8,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
     public class FileGroupFiles : List<FileGroupFile>
     {
         private Hashtable hash = new Hashtable();
-        private FileGroup parent;
 
         /// <summary>
         /// Constructor de la clase.
@@ -18,7 +17,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// </param>
         public FileGroupFiles(FileGroup parent)
         {
-            this.parent = parent;
+            this.Parent = parent;
         }
 
         /// <summary>
@@ -80,10 +79,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Devuelve la tabla perteneciente a la coleccion de campos.
         /// </summary>
-        public FileGroup Parent
-        {
-            get { return parent; }
-        }
+        public FileGroup Parent { get; private set; }
 
         public string ToSQL()
         {

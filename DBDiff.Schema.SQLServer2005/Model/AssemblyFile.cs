@@ -4,13 +4,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class AssemblyFile : SQLServerSchemaBase
     {
-        private string content;
-
         public AssemblyFile(ISchemaBase parent, AssemblyFile assemblyFile, Enums.ObjectStatusType status)
             : base(parent, Enums.ObjectType.AssemblyFile)
         {
             this.Name = assemblyFile.Name;
-            this.content = assemblyFile.content;
+            this.Content = assemblyFile.Content;
             this.Status = status;
         }
 
@@ -18,7 +16,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             : base(parent,Enums.ObjectType.AssemblyFile)
         {
             this.Name = name;
-            this.content = content;
+            this.Content = content;
         }
 
         public override string FullName
@@ -26,11 +24,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             get { return "[" + Name + "]"; }
         }
 
-        public string Content
-        {
-            get { return content; }
-            set { content = value; }
-        }
+        public string Content { get; set; }
 
         public override string ToSqlAdd()
         {

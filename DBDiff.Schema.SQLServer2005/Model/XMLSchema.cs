@@ -8,13 +8,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class XMLSchema : SQLServerSchemaBase
     {
-        private string text;
-        private List<ObjectDependency> dependencys;
-
         public XMLSchema(ISchemaBase parent)
             : base(parent, Enums.ObjectType.XMLSchema)
         {
-            this.dependencys = new List<ObjectDependency>();
+            this.Dependencys = new List<ObjectDependency>();
         }
 
         /// <summary>
@@ -33,17 +30,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return item;
         }
 
-        public List<ObjectDependency> Dependencys
-        {
-            get { return dependencys; }
-            set { dependencys = value; }
-        }
+        public List<ObjectDependency> Dependencys { get; set; }
 
-        public string Text
-        {
-            get { return text; }
-            set { text = value; }
-        }
+        public string Text { get; set; }
 
         public override string ToSql()
         {

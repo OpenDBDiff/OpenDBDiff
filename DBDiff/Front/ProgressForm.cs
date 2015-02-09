@@ -11,17 +11,14 @@ namespace DBDiff.Front
         private Generate genData1;
         private Generate genData2;
         private bool IsProcessing = false;
-        private Database origen = null;
-        private Database destino = null;
         private Database origenClone = null;
         
         // TODO: thread-safe error reporting
-        private Exception error;
-        private string friendlyErrorLocation;
-        private string mostRecentProgressMessage;
 
         public ProgressForm(string DatabaseName1, string DatabaseName2, Generate genData1, Generate genData2)
         {
+            Destination = null;
+            Source = null;
             InitializeComponent();
             databaseProgressControl1.Maximum = Generate.MaxValue;
             databaseProgressControl2.Maximum = Generate.MaxValue;
@@ -31,30 +28,15 @@ namespace DBDiff.Front
             this.genData2 = genData2;
         }
 
-        public Database Source
-        {
-            get { return origen; }
-        }
+        public Database Source { get; private set; }
 
-        public Database Destination
-        {
-            get { return destino; }
-        }
+        public Database Destination { get; private set; }
 
-        public string ErrorLocation
-        {
-            get { return this.friendlyErrorLocation; }
-        }
+        public string ErrorLocation { get; private set; }
 
-        public string ErrorMostRecentProgress
-        {
-            get { return this.mostRecentProgressMessage; }
-        }
+        public string ErrorMostRecentProgress { get; private set; }
 
-        public Exception Error
-        {
-            get { return this.error; }
-        }
+        public Exception Error { get; private set; }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
@@ -78,26 +60,26 @@ namespace DBDiff.Front
 
                     /*Thread t1 = new Thread(delegate()
                     {*/
-                    this.friendlyErrorLocation = "Loading " + databaseProgressControl1.DatabaseName;
-                    origen = genData1.Process();
+                    this.ErrorLocation = "Loading " + databaseProgressControl1.DatabaseName;
+                    Source = genData1.Process();
                     databaseProgressControl2.Message = "Complete";
                     databaseProgressControl2.Value = Generate.MaxValue;
                     /*});
                     Thread t2 = new Thread(delegate()
                     {*/
-                    this.friendlyErrorLocation = "Loading " + databaseProgressControl2.DatabaseName;
-                    destino = genData2.Process();
+                    this.ErrorLocation = "Loading " + databaseProgressControl2.DatabaseName;
+                    Destination = genData2.Process();
 
-                    origenClone = (Database)origen.Clone(null);
+                    origenClone = (Database)Source.Clone(null);
                     /*});
                     t1.Start();
                     t2.Start();
                     t1.Join();
                     t2.Join();
                     */
-                    this.friendlyErrorLocation = "Comparing Databases";
-                    destino = Generate.Compare(origen, destino);
-                    origen = origenClone;
+                    this.ErrorLocation = "Comparing Databases";
+                    Destination = Generate.Compare(Source, Destination);
+                    Source = origenClone;
 
                     databaseProgressControl1.Message = "Complete";
                     databaseProgressControl1.Value = Generate.MaxValue;
@@ -105,7 +87,7 @@ namespace DBDiff.Front
             }
             catch (Exception err)
             {
-                this.error = err;
+                this.Error = err;
             }
             finally
             {
@@ -126,7 +108,7 @@ namespace DBDiff.Front
                 databaseProgressControl1.Message = e.Message;
             }
 
-            this.mostRecentProgressMessage = e.Message;
+            this.ErrorMostRecentProgress = e.Message;
         }
 
         void genData1_OnProgress(ProgressEventArgs e)
@@ -141,7 +123,7 @@ namespace DBDiff.Front
                 databaseProgressControl2.Message = e.Message;
             }
 
-            this.mostRecentProgressMessage = e.Message;
+            this.ErrorMostRecentProgress = e.Message;
         }
     }
 }

@@ -2,25 +2,14 @@
 {
     public class SqlOptionFilterItem
     {
-        private Enums.ObjectType type;
-        private string filter;
-
         public SqlOptionFilterItem(Enums.ObjectType type, string value)
         {
-            this.filter = value;
-            this.type = type;
+            this.Filter = value;
+            this.Type = type;
         }
 
-        public Enums.ObjectType Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
-        public string Filter
-        {
-            get { return filter; }
-            set { this.filter = value; }
-        }
-        
+        public Enums.ObjectType Type { get; set; }
+
+        public string Filter { get; set; }
     }
 }

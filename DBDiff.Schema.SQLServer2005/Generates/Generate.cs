@@ -14,7 +14,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
     public class Generate
     {
         private readonly List<MessageLog> messages;
-        private string connectionString;
         private SqlOption options;
         private ProgressEventArgs currentlyReading;
 
@@ -29,17 +28,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             get { return Constants.READING_MAX; }
         }
 
-        public string ConnectionString
-        {
-            set { connectionString = value; }
-        }
+        public string ConnectionString { get; set; }
 
         private string Name
         {
             get
             {
                 string name;
-                using (var conn = new SqlConnection(connectionString))
+                using (var conn = new SqlConnection(ConnectionString))
                 {
                     name = conn.Database;
                 }
@@ -88,19 +84,19 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             //tables.OnTableProgress += new Progress.ProgressHandler(tables_OnTableProgress);
             databaseSchema.Options = options;
             databaseSchema.Name = Name;
-            databaseSchema.Info = (new GenerateDatabase(connectionString, options)).Get(databaseSchema);
+            databaseSchema.Info = (new GenerateDatabase(ConnectionString, options)).Get(databaseSchema);
             /*Thread t1 = new Thread(delegate()
                 {
                     try
                     {*/
-            (new GenerateRules(this)).Fill(databaseSchema, connectionString);
-            (new GenerateTables(this)).Fill(databaseSchema, connectionString, messages);
-            (new GenerateViews(this)).Fill(databaseSchema, connectionString, messages);
-            (new GenerateIndex(this)).Fill(databaseSchema, connectionString);
-            (new GenerateFullTextIndex(this)).Fill(databaseSchema, connectionString);
-            (new GenerateUserDataTypes(this)).Fill(databaseSchema, connectionString, messages);
-            (new GenerateXMLSchemas(this)).Fill(databaseSchema, connectionString);
-            (new GenerateSchemas(this)).Fill(databaseSchema, connectionString);
+            (new GenerateRules(this)).Fill(databaseSchema, ConnectionString);
+            (new GenerateTables(this)).Fill(databaseSchema, ConnectionString, messages);
+            (new GenerateViews(this)).Fill(databaseSchema, ConnectionString, messages);
+            (new GenerateIndex(this)).Fill(databaseSchema, ConnectionString);
+            (new GenerateFullTextIndex(this)).Fill(databaseSchema, ConnectionString);
+            (new GenerateUserDataTypes(this)).Fill(databaseSchema, ConnectionString, messages);
+            (new GenerateXMLSchemas(this)).Fill(databaseSchema, ConnectionString);
+            (new GenerateSchemas(this)).Fill(databaseSchema, ConnectionString);
             /*}
                     catch (Exception ex)
                     {
@@ -115,19 +111,19 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             //not supported in azure yet
             if (databaseSchema.Info.Version != DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
             {
-                (new GeneratePartitionFunctions(this)).Fill(databaseSchema, connectionString);
-                (new GeneratePartitionScheme(this)).Fill(databaseSchema, connectionString);
-                (new GenerateFileGroups(this)).Fill(databaseSchema, connectionString);
+                (new GeneratePartitionFunctions(this)).Fill(databaseSchema, ConnectionString);
+                (new GeneratePartitionScheme(this)).Fill(databaseSchema, ConnectionString);
+                (new GenerateFileGroups(this)).Fill(databaseSchema, ConnectionString);
             }
             
-            (new GenerateDDLTriggers(this)).Fill(databaseSchema, connectionString);
-            (new GenerateSynonyms(this)).Fill(databaseSchema, connectionString);
+            (new GenerateDDLTriggers(this)).Fill(databaseSchema, ConnectionString);
+            (new GenerateSynonyms(this)).Fill(databaseSchema, ConnectionString);
             
             //not supported in azure yet
             if (databaseSchema.Info.Version != DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
             {
-                (new GenerateAssemblies(this)).Fill(databaseSchema, connectionString);
-                (new GenerateFullText(this)).Fill(databaseSchema, connectionString);
+                (new GenerateAssemblies(this)).Fill(databaseSchema, ConnectionString);
+                (new GenerateFullText(this)).Fill(databaseSchema, ConnectionString);
             }
             /*}
                     catch (Exception ex)
@@ -139,11 +135,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                 {
                     try
                     {*/
-            (new GenerateStoreProcedures(this)).Fill(databaseSchema, connectionString);
-            (new GenerateFunctions(this)).Fill(databaseSchema, connectionString);
-            (new GenerateTriggers(this)).Fill(databaseSchema, connectionString, messages);
-            (new GenerateTextObjects(this)).Fill(databaseSchema, connectionString);
-            (new GenerateUsers(this)).Fill(databaseSchema, connectionString);
+            (new GenerateStoreProcedures(this)).Fill(databaseSchema, ConnectionString);
+            (new GenerateFunctions(this)).Fill(databaseSchema, ConnectionString);
+            (new GenerateTriggers(this)).Fill(databaseSchema, ConnectionString, messages);
+            (new GenerateTextObjects(this)).Fill(databaseSchema, ConnectionString);
+            (new GenerateUsers(this)).Fill(databaseSchema, ConnectionString);
             /*}
                     catch (Exception ex)
                     {
@@ -159,7 +155,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             if (String.IsNullOrEmpty(error))
             {
                 /*Las propiedades extendidas deben ir despues de haber capturado el resto de los objetos de la base*/
-                (new GenerateExtendedProperties(this)).Fill(databaseSchema, connectionString, messages);
+                (new GenerateExtendedProperties(this)).Fill(databaseSchema, ConnectionString, messages);
                 databaseSchema.BuildDependency();
                 return databaseSchema;
             }

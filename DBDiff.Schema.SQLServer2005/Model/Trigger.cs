@@ -4,12 +4,7 @@ using DBDiff.Schema.Model;
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class Trigger : Code
-    {        
-        private Boolean isDisabled;
-        private Boolean insteadOf;
-        private Boolean notForReplication;
-        private Boolean isDDLTrigger;
-
+    {
         public Trigger(ISchemaBase parent)
             : base(parent, Enums.ObjectType.Trigger, Enums.ScripActionType.AddTrigger, Enums.ScripActionType.DropTrigger)
         {
@@ -35,29 +30,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return trigger;
         }
 
-        public Boolean IsDDLTrigger
-        {
-            get { return isDDLTrigger; }
-            set { isDDLTrigger = value; }
-        }
+        public Boolean IsDDLTrigger { get; set; }
 
-        public Boolean InsteadOf
-        {
-            get { return insteadOf; }
-            set { insteadOf = value; }
-        }
+        public Boolean InsteadOf { get; set; }
 
-        public Boolean IsDisabled
-        {
-            get { return isDisabled; }
-            set { isDisabled = value; }
-        }
+        public Boolean IsDisabled { get; set; }
 
-        public Boolean NotForReplication
-        {
-            get { return notForReplication; }
-            set { notForReplication = value; }
-        }
+        public Boolean NotForReplication { get; set; }
 
         public override Boolean IsCodeType
         {

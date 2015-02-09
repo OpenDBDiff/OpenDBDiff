@@ -5,42 +5,29 @@ namespace DBDiff.Schema.Attributes
     [AttributeUsage(AttributeTargets.Property,AllowMultiple = true)]
     public sealed class ShowItemAttribute:Attribute 
     {
-        private string name;
-        private string image;
-        private Boolean isFullName;
-
         public ShowItemAttribute(string name)
         {
-            this.name = name;
-            this.image = "Folder";
+            this.Name = name;
+            this.Image = "Folder";
         }
 
         public ShowItemAttribute(string name, string image)
         {
-            this.name = name;
-            this.image = image;
+            this.Name = name;
+            this.Image = image;
         }
 
         public ShowItemAttribute(string name, string image, Boolean isFullName)
         {
-            this.name = name;
-            this.image = image;
-            this.isFullName = isFullName;
+            this.Name = name;
+            this.Image = image;
+            this.IsFullName = isFullName;
         }
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name { get; private set; }
 
-        public string Image
-        {
-            get { return image; }
-        }
+        public string Image { get; private set; }
 
-        public Boolean IsFullName
-        {
-            get { return isFullName; }
-        }
+        public Boolean IsFullName { get; private set; }
     }
 }

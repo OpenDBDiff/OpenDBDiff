@@ -4,14 +4,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class ConstraintColumn : SQLServerSchemaBase, IComparable<ConstraintColumn>
     {
-        private string columnRelationalName;
-        private int columnRelationalId;
-        private int columnRelationalDataTypeId;
-        private Boolean order;
-        private Boolean isIncluded;
-        private int keyOrder;
-        private int dataTypeId;
-
         public ConstraintColumn(Constraint parentObject)
             : base(parentObject, Enums.ObjectType.ConstraintColumn)
         {
@@ -32,33 +24,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return ccol;
         }
 
-        public int DataTypeId
-        {
-            get { return dataTypeId; }
-            set { dataTypeId = value; }
-        }
+        public int DataTypeId { get; set; }
 
-        public int ColumnRelationalDataTypeId
-        {
-            get { return columnRelationalDataTypeId; }
-            set { columnRelationalDataTypeId = value; }
-        }
+        public int ColumnRelationalDataTypeId { get; set; }
 
-        public int ColumnRelationalId
-        {
-            get { return columnRelationalId; }
-            set { columnRelationalId = value; }
-        }
+        public int ColumnRelationalId { get; set; }
 
         /// <summary>
         /// Gets or sets the column key order in the index.
         /// </summary>
         /// <value>The key order.</value>
-        public int KeyOrder
-        {
-            get { return keyOrder; }
-            set { keyOrder = value; }
-        }
+        public int KeyOrder { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this column is included in the index leaf page.
@@ -66,26 +42,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <value>
         /// 	<c>true</c> if this column is included; otherwise, <c>false</c>.
         /// </value>
-        public Boolean IsIncluded
-        {
-            get { return isIncluded; }
-            set { isIncluded = value; }
-        }
+        public Boolean IsIncluded { get; set; }
 
         /// <summary>
         /// Orden de la columna (Ascendente o Descendente). Se usa solo en Primary Keys.
         /// </summary>
-        public Boolean Order
-        {
-            get { return order; }
-            set { order = value; }
-        }
+        public Boolean Order { get; set; }
 
-        public string ColumnRelationalName
-        {
-            get { return columnRelationalName; }
-            set { columnRelationalName = value; }
-        }
+        public string ColumnRelationalName { get; set; }
 
         public override string ToSqlDrop()
         {

@@ -4,10 +4,6 @@ namespace DBDiff.OCDB
 {
     public class Argument
     {
-        private string connectionString1;
-        private string connectionString2;
-        private string outputFile;
-        
         public Argument(string[] commandline)
         {
             for (int i = 0; i < commandline.Length; i++)
@@ -15,16 +11,16 @@ namespace DBDiff.OCDB
                 if (commandline[i].Length > 4)
                 {
                     if (commandline[i].Substring(0, 4).Equals("CN1=", StringComparison.CurrentCultureIgnoreCase))
-                        connectionString1 = commandline[i].Substring(4, commandline[i].Length - 4).Trim();
+                        ConnectionString1 = commandline[i].Substring(4, commandline[i].Length - 4).Trim();
                     if (commandline[i].Substring(0, 4).Equals("CN2=", StringComparison.CurrentCultureIgnoreCase))
-                        connectionString2 = commandline[i].Substring(4, commandline[i].Length - 4).Trim();
+                        ConnectionString2 = commandline[i].Substring(4, commandline[i].Length - 4).Trim();
                     if (commandline[i].Substring(0, 2).Equals("F=", StringComparison.CurrentCultureIgnoreCase))
-                        outputFile = commandline[i].Substring(2, commandline[i].Length - 2).Trim();
+                        OutputFile = commandline[i].Substring(2, commandline[i].Length - 2).Trim();
                     if (String.Compare(commandline[i], "/legacy", true) == 0)
                         this.OutputAll = true;
                 }
             }
-            if (String.IsNullOrEmpty(connectionString1) || String.IsNullOrEmpty(ConnectionString1) || String.IsNullOrEmpty(outputFile))
+            if (String.IsNullOrEmpty(ConnectionString1) || String.IsNullOrEmpty(ConnectionString1) || String.IsNullOrEmpty(OutputFile))
             {
                 Console.WriteLine("\r\n Example of use:\r\n");
                 Console.WriteLine("    OCDB CN1=\"Destination/Target\" CN2=\"Source\" F=OuputScript.sql\r\n");
@@ -39,31 +35,19 @@ namespace DBDiff.OCDB
             private set;
         }
 
-        public string OutputFile
-        {
-            get { return outputFile; }
-            set { outputFile = value; }
-        }
+        public string OutputFile { get; set; }
 
-        public string ConnectionString2
-        {
-            get { return connectionString2; }
-            set { connectionString2 = value; }
-        }
+        public string ConnectionString2 { get; set; }
 
-        public string ConnectionString1
-        {
-            get { return connectionString1; }
-            set { connectionString1 = value; }
-        }
+        public string ConnectionString1 { get; set; }
 
         public bool Validate()
         {
-            if (String.IsNullOrEmpty(connectionString1))
+            if (String.IsNullOrEmpty(ConnectionString1))
                 throw new Exception("The target connection string is missing");
-            if (String.IsNullOrEmpty(connectionString2))
+            if (String.IsNullOrEmpty(ConnectionString2))
                 throw new Exception("The destination connection string is missing");
-            if (String.IsNullOrEmpty(outputFile))
+            if (String.IsNullOrEmpty(OutputFile))
                 throw new Exception("The output destination is missing");
             return true;
         }

@@ -7,12 +7,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     internal class Dependencies: List<Dependence>
     {
-        private Database database;
-
-        public Database Database
-        {
-            get { return database; }
-        }
+        public Database Database { get; private set; }
 
         public void Add(Database database, int tableId, int columnId, int ownerTableId, int typeId, ISchemaBase constraint)
         {
@@ -24,7 +19,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             depends.FullName = constraint.FullName;
             depends.Type = constraint.ObjectType;
             depends.DataTypeId = typeId;
-            this.database = database;
+            this.Database = database;
             base.Add(depends);
         }
 
@@ -34,7 +29,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             depends.ObjectId = objectId;
             depends.FullName = objectSchema.FullName;
             depends.Type = objectSchema.ObjectType;
-            this.database = database;
+            this.Database = database;
             base.Add(depends);
         }
 
@@ -50,7 +45,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 {
                     if (depens.Type == type)
                     {
-                        ISchemaBase item = (ISchemaBase)database.Find(depens.FullName);
+                        ISchemaBase item = (ISchemaBase)Database.Find(depens.FullName);
                         if (depens.Type == Enums.ObjectType.Constraint)
                         {
                             if ((depens.ObjectId == tableId) && (((Constraint)item).Type == Constraint.ConstraintType.ForeignKey))
@@ -146,7 +141,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
             cons.ForEach(item => 
                 { 
-                    ISchemaBase schema = database.Find(item);
+                    ISchemaBase schema = Database.Find(item);
                     if (schema != null) real.Add(schema); 
                 }
             );

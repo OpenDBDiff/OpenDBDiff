@@ -5,41 +5,28 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class TableType:SQLServerSchemaBase, ITable<TableType>
     {
-        private Columns<TableType> columns;
-        private SchemaList<Constraint, TableType> constraints;
-        private SchemaList<Index, TableType> indexes;
-
         public TableType(Database parent)
             : base(parent, Enums.ObjectType.TableType)
         {
-            columns = new Columns<TableType>(this);
-            constraints = new SchemaList<Constraint, TableType>(this, parent.AllObjects);
-            indexes = new SchemaList<Index, TableType>(this, parent.AllObjects);
+            Columns = new Columns<TableType>(this);
+            Constraints = new SchemaList<Constraint, TableType>(this, parent.AllObjects);
+            Indexes = new SchemaList<Index, TableType>(this, parent.AllObjects);
         }
 
-        public Columns<TableType> Columns
-        {
-            get { return columns; }
-        }
+        public Columns<TableType> Columns { get; private set; }
 
-        public SchemaList<Constraint, TableType> Constraints
-        {
-            get { return constraints; }
-        }
+        public SchemaList<Constraint, TableType> Constraints { get; private set; }
 
-        public SchemaList<Index, TableType> Indexes
-        {
-            get { return indexes; }
-        }
+        public SchemaList<Index, TableType> Indexes { get; private set; }
 
         public override string ToSql()
         {
             string sql = "";
-            if (columns.Count > 0)
+            if (Columns.Count > 0)
             {
                 sql += "CREATE TYPE " + FullName + " AS TABLE\r\n(\r\n";
-                sql += columns.ToSql() + "\r\n";
-                sql += constraints.ToSql();
+                sql += Columns.ToSql() + "\r\n";
+                sql += Constraints.ToSql();
                 sql += ")";
                 sql += "\r\nGO\r\n";
             }

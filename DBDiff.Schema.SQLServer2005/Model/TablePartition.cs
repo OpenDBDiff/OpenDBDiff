@@ -4,18 +4,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class TablePartition:SQLServerSchemaBase
     {
-        private string compressType;
-
         public TablePartition(Table parent)
             : base(parent, Enums.ObjectType.Partition)
         {
         }
 
-        public string CompressType
-        {
-            get { return compressType; }
-            set { compressType = value; }
-        }
+        public string CompressType { get; set; }
 
 
         public override string ToSql()

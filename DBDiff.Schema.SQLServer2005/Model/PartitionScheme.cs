@@ -6,33 +6,22 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class PartitionScheme:SQLServerSchemaBase
     {
-        private string partitionFunction;
-        private List<string> fileGroups;
-
         public PartitionScheme(ISchemaBase parent)
             : base(parent, Enums.ObjectType.PartitionFunction)
         {
-            fileGroups = new List<string>();
+            FileGroups = new List<string>();
         }
 
-        public List<string> FileGroups
-        {
-            get { return fileGroups; }
-            set { fileGroups = value; }
-        } 
+        public List<string> FileGroups { get; set; }
 
-        public string PartitionFunction
-        {
-            get { return partitionFunction; }
-            set { partitionFunction = value; }
-        }
+        public string PartitionFunction { get; set; }
 
         public override string ToSqlAdd()
         {
             string sql = "CREATE PARTITION SCHEME " + FullName + "\r\n";
-            sql += " AS PARTITION " + partitionFunction + "\r\n";
+            sql += " AS PARTITION " + PartitionFunction + "\r\n";
             sql += "TO (";
-            fileGroups.ForEach(item => sql += "[" + item + "],");
+            FileGroups.ForEach(item => sql += "[" + item + "],");
             sql = sql.Substring(0, sql.Length -1);
             sql += ")\r\nGO\r\n";
             return sql;

@@ -17,18 +17,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             Check = 5
         }
 
-        private string definition;
-        private ConstraintType type;
-        private ConstraintColumns columns;
-        private string relationalTable;
-        private int relationalTableId;
-        private Boolean withNoCheck;
-        private Boolean notForReplication;
-        private int onUpdateCascade;
-        private int onDeleteCascade;
-        private Index index;
-        private Boolean isDisabled;
-
         public Constraint(ISchemaBase parent)
             : base(parent,Enums.ObjectType.Constraint)
         {
@@ -63,20 +51,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Informacion sobre le indice asociado al Constraint.
         /// </summary>
-        public Index Index
-        {
-            get { return index; }
-            set { index = value; }
-        }
+        public Index Index { get; set; }
 
         /// <summary>
         /// Coleccion de columnas de la constraint.
         /// </summary>
-        public ConstraintColumns Columns
-        {
-            get { return columns; }
-            set { columns = value; }
-        }
+        public ConstraintColumns Columns { get; set; }
 
         /// <summary>
         /// Indica si la constraint tiene asociada un indice Clustered.
@@ -97,86 +77,50 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <value>
         /// 	<c>true</c> if this constraint is disabled; otherwise, <c>false</c>.
         /// </value>
-        public Boolean IsDisabled
-        {
-            get { return isDisabled; }
-            set { isDisabled = value; }
-        }
+        public Boolean IsDisabled { get; set; }
 
         /// <summary>
         /// Gets or sets the on delete cascade (only for FK).
         /// </summary>
         /// <value>The on delete cascade.</value>
-        public int OnDeleteCascade
-        {
-            get { return onDeleteCascade; }
-            set { onDeleteCascade = value; }
-        }
+        public int OnDeleteCascade { get; set; }
 
         /// <summary>
         /// Gets or sets the on update cascade (only for FK).
         /// </summary>
         /// <value>The on update cascade.</value>
-        public int OnUpdateCascade
-        {
-            get { return onUpdateCascade; }
-            set { onUpdateCascade = value; }
-        }
-        
+        public int OnUpdateCascade { get; set; }
+
         /// <summary>
         /// Valor de la constraint (se usa para los Check Constraint).
         /// </summary>
-        public string Definition
-        {
-            get { return definition; }
-            set { definition = value; }
-        }
+        public string Definition { get; set; }
 
         /// <summary>
         /// Indica si la constraint va a ser usada en replicacion.
         /// </summary>
-        public Boolean NotForReplication
-        {
-            get { return notForReplication; }
-            set { notForReplication = value; }
-        }
+        public Boolean NotForReplication { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [with no check].
         /// </summary>
         /// <value><c>true</c> if [with no check]; otherwise, <c>false</c>.</value>
-        public Boolean WithNoCheck
-        {
-            get { return withNoCheck; }
-            set { withNoCheck = value; }
-        }
+        public Boolean WithNoCheck { get; set; }
 
         /// <summary>
         /// Indica el tipo de constraint (PrimaryKey, ForeignKey, Unique o Default).
         /// </summary>
-        public ConstraintType Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
+        public ConstraintType Type { get; set; }
 
         /// <summary>
         /// ID de la tabla relacionada a la que hace referencia (solo aplica a FK)
         /// </summary>
-        public int RelationalTableId
-        {
-            get { return relationalTableId; }
-            set { relationalTableId = value; }
-        }
+        public int RelationalTableId { get; set; }
 
         /// <summary>
         /// Nombre de la tabla relacionada a la que hace referencia (solo aplica a FK)
         /// </summary>
-        public string RelationalTableFullName
-        {
-            get { return relationalTable; }
-            set { relationalTable = value; }
-        }       
+        public string RelationalTableFullName { get; set; }
 
         /// <summary>
         /// Compara dos campos y devuelve true si son iguales, caso contrario, devuelve false.
@@ -297,12 +241,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 sql.Append("\t)\r\n");
                 sql.Append("\tREFERENCES " + this.RelationalTableFullName + "\r\n\t(\r\n");
                 sql.Append(sqlReference + "\t)");
-                if (onUpdateCascade == 1) sql.Append(" ON UPDATE CASCADE");
-                if (onDeleteCascade == 1) sql.Append(" ON DELETE CASCADE");
-                if (onUpdateCascade == 2) sql.Append(" ON UPDATE SET NULL");
-                if (onDeleteCascade == 2) sql.Append(" ON DELETE SET NULL");
-                if (onUpdateCascade == 3) sql.Append(" ON UPDATE SET DEFAULT");
-                if (onDeleteCascade == 3) sql.Append(" ON DELETE SET DEFAULT");
+                if (OnUpdateCascade == 1) sql.Append(" ON UPDATE CASCADE");
+                if (OnDeleteCascade == 1) sql.Append(" ON DELETE CASCADE");
+                if (OnUpdateCascade == 2) sql.Append(" ON UPDATE SET NULL");
+                if (OnDeleteCascade == 2) sql.Append(" ON DELETE SET NULL");
+                if (OnUpdateCascade == 3) sql.Append(" ON UPDATE SET DEFAULT");
+                if (OnDeleteCascade == 3) sql.Append(" ON DELETE SET DEFAULT");
                 sql.Append((NotForReplication ? " NOT FOR REPLICATION" : ""));
                 return sql.ToString();
             }
@@ -316,7 +260,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 if (Parent.ObjectType != Enums.ObjectType.TableType)
                     sqlcheck = "CONSTRAINT [" + Name + "] ";
 
-                return sqlcheck + "CHECK " + (NotForReplication ? "NOT FOR REPLICATION" : "") + " (" + definition + ")";
+                return sqlcheck + "CHECK " + (NotForReplication ? "NOT FOR REPLICATION" : "") + " (" + Definition + ")";
             }
             return "";            
         }

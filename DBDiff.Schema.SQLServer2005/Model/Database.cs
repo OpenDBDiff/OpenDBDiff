@@ -11,7 +11,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
     public class Database : SQLServerSchemaBase, IDatabase
     {
         private readonly List<DatabaseChangeStatus> _changesOptions;
-        private DatabaseInfo _info;
 
         public Database() : base(null, Enums.ObjectType.Database)
         {
@@ -109,11 +108,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public SqlOption Options { get; set; }
 
-        public DatabaseInfo Info
-        {
-            get { return _info; }
-            set { _info = value; }
-        }
+        public DatabaseInfo Info { get; set; }
 
         public DatabaseInfo SourceInfo
         {
@@ -163,8 +158,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             get
             {
                 bool isCS = false;
-                if (!String.IsNullOrEmpty(_info.Collation))
-                    isCS = _info.Collation.IndexOf("_CS_") != -1;
+                if (!String.IsNullOrEmpty(Info.Collation))
+                    isCS = Info.Collation.IndexOf("_CS_") != -1;
 
                 if (Options.Comparison.CaseSensityType == SqlOptionComparison.CaseSensityOptions.Automatic)
                     return isCS;

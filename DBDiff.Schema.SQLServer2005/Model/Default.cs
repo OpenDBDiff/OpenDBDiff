@@ -4,8 +4,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class Default:SQLServerSchemaBase 
     {
-        private string value;
-
         public Default(ISchemaBase parent)
             : base(parent, Enums.ObjectType.Default)
         {
@@ -21,11 +19,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return item;
         }
         
-        public string Value
-        {
-            get { return this.value; }
-            set { this.value = value; }
-        }
+        public string Value { get; set; }
 
         public string ToSQLAddBind()
         {

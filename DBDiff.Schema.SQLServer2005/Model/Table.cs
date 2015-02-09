@@ -7,7 +7,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class Table : SQLServerSchemaBase, IComparable<Table>, ITable<Table>
     {
-        private Columns<Table> columns;
         private int dependenciesCount;
         private List<ISchemaBase> dependencis;
         private Boolean? hasFileStream;
@@ -16,7 +15,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             : base(parent, Enums.ObjectType.Table)
         {
             dependenciesCount = -1;
-            columns = new Columns<Table>(this);
+            Columns = new Columns<Table>(this);
             Constraints = new SchemaList<Constraint, Table>(this, ((Database) parent).AllObjects);
             Options = new SchemaList<TableOption, Table>(this);
             Triggers = new SchemaList<Trigger, Table>(this, ((Database) parent).AllObjects);
@@ -143,11 +142,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// Coleccion de campos de la tabla.
         /// </summary>
         [ShowItem("Columns", "Column")]
-        public Columns<Table> Columns
-        {
-            get { return columns; }
-            set { columns = value; }
-        }
+        public Columns<Table> Columns { get; set; }
 
         #endregion
 
@@ -204,10 +199,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             string sqlPK = "";
             string sqlUC = "";
             string sqlFK = "";
-            if (columns.Count > 0)
+            if (Columns.Count > 0)
             {
                 sql += "CREATE TABLE " + FullName + "\r\n(\r\n";
-                sql += columns.ToSql();
+                sql += Columns.ToSql();
                 if (Constraints.Count > 0)
                 {
                     sql += ",\r\n";
@@ -355,7 +350,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             {
                 GenerateDependencis();
                 listDiff.AddRange(ToSQLDropDependencis());
-                listDiff.AddRange(columns.ToSqlDiff());
+                listDiff.AddRange(Columns.ToSqlDiff());
                 listDiff.AddRange(ToSQLCreateDependencis());
                 listDiff.AddRange(Constraints.ToSqlDiff());
                 listDiff.AddRange(Indexes.ToSqlDiff());
@@ -366,7 +361,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             }
             if (HasState(Enums.ObjectStatusType.AlterStatus))
             {
-                listDiff.AddRange(columns.ToSqlDiff());
+                listDiff.AddRange(Columns.ToSqlDiff());
                 listDiff.AddRange(Constraints.ToSqlDiff());
                 listDiff.AddRange(Indexes.ToSqlDiff());
                 listDiff.AddRange(Options.ToSqlDiff());
@@ -378,7 +373,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             {
                 GenerateDependencis();
                 listDiff.AddRange(ToSQLRebuild());
-                listDiff.AddRange(columns.ToSqlDiff());
+                listDiff.AddRange(Columns.ToSqlDiff());
                 listDiff.AddRange(Constraints.ToSqlDiff());
                 listDiff.AddRange(Indexes.ToSqlDiff());
                 listDiff.AddRange(Options.ToSqlDiff());
@@ -561,7 +556,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                         ((Database) Parent).Tables[myDependencis[j].Parent.FullName].Constraints[
                             myDependencis[j].FullName];
                 if (myDependencis[j].ObjectType == Enums.ObjectType.Default)
-                    item = columns[myDependencis[j].FullName].DefaultConstraint;
+                    item = Columns[myDependencis[j].FullName].DefaultConstraint;
                 if (myDependencis[j].ObjectType == Enums.ObjectType.View)
                     item = ((Database) Parent).Views[myDependencis[j].FullName];
                 if (myDependencis[j].ObjectType == Enums.ObjectType.Function)
@@ -622,7 +617,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 }
             }
             //Se buscan todas las columns constraints.
-            columns.ForEach(column =>
+            Columns.ForEach(column =>
                                 {
                                     if (column.DefaultConstraint != null)
                                     {
@@ -658,13 +653,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 }
             }
             //Se buscan todas las columns constraints.
-            for (int index = columns.Count - 1; index >= 0; index--)
+            for (int index = Columns.Count - 1; index >= 0; index--)
             {
-                if (columns[index].DefaultConstraint != null)
+                if (Columns[index].DefaultConstraint != null)
                 {
-                    if ((columns[index].DefaultConstraint.CanCreate) &&
-                        (columns.Parent.Status != Enums.ObjectStatusType.RebuildStatus))
-                        listDiff.Add(columns[index].DefaultConstraint.Create());
+                    if ((Columns[index].DefaultConstraint.CanCreate) &&
+                        (Columns.Parent.Status != Enums.ObjectStatusType.RebuildStatus))
+                        listDiff.Add(Columns[index].DefaultConstraint.Create());
                 }
             }
             return listDiff;

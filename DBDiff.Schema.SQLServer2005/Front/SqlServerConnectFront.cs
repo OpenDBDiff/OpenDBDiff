@@ -8,7 +8,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
 {
     public partial class SqlServerConnectFront : UserControl, IFront 
     {
-        private string errorConnection;
         private Boolean isDatabaseFilled = false;
         private Boolean isServerFilled = false;
         private delegate void clearCombo();
@@ -28,10 +27,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             ClearDatabase();
         }
 
-        public string ErrorConnection
-        {
-            get { return errorConnection; }
-        }
+        public string ErrorConnection { get; private set; }
 
         public int DatabaseIndex
         {
@@ -85,7 +81,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             }
             catch (Exception ex)
             {
-                errorConnection = ex.Message;
+                ErrorConnection = ex.Message;
                 return false;
             }
         }

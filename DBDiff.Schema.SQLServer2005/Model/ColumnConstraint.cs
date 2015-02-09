@@ -7,12 +7,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
     /// </summary>
     public class ColumnConstraint : SQLServerSchemaBase
     {
-        private Constraint.ConstraintType type;
-        private string definition;
-        private Boolean notForReplication;
-        private Boolean disabled;
-        private Boolean withNoCheck;
-
         public ColumnConstraint(Column parent)
             : base(parent, Enums.ObjectType.Constraint)
         {
@@ -36,49 +30,29 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Indica si la constraint esta deshabilitada.
         /// </summary>
-        public Boolean Disabled
-        {
-            get { return disabled; }
-            set { disabled = value; }
-        }
+        public Boolean Disabled { get; set; }
 
         /// <summary>
         /// Indica si la constraint va a ser usada en replicacion.
         /// </summary>
-        public Boolean NotForReplication
-        {
-            get { return notForReplication; }
-            set { notForReplication = value; }
-        }
+        public Boolean NotForReplication { get; set; }
 
 
         /// <summary>
         /// Gets or sets a value indicating whether [with no check].
         /// </summary>
         /// <value><c>true</c> if [with no check]; otherwise, <c>false</c>.</value>
-        public Boolean WithNoCheck
-        {
-            get { return withNoCheck; }
-            set { withNoCheck = value; }
-        }
+        public Boolean WithNoCheck { get; set; }
 
         /// <summary>
         /// Valor de la constraint.
         /// </summary>
-        public string Definition
-        {
-            get { return definition; }
-            set { definition = value; }
-        }
+        public string Definition { get; set; }
 
         /// <summary>
         /// Indica el tipo de constraint (Default o Check constraint).
         /// </summary>
-        public Constraint.ConstraintType Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
+        public Constraint.ConstraintType Type { get; set; }
 
         /// <summary>
         /// Convierte el schema de la constraint en XML.
@@ -88,11 +62,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             string xml = "";
             if (this.Type == Constraint.ConstraintType.Default)
             {
-                xml += "<COLUMNCONSTRAINT name=\"" + Name + "\" type=\"DF\" value=\"" + definition + "\"/>\n";
+                xml += "<COLUMNCONSTRAINT name=\"" + Name + "\" type=\"DF\" value=\"" + Definition + "\"/>\n";
             }
             if (this.Type == Constraint.ConstraintType.Check)
             {
-                xml += "<COLUMNCONSTRAINT name=\"" + Name + "\" type=\"C\" value=\"" + definition + "\" notForReplication=\"" + (NotForReplication?"1":"0") + "\"/>\n";
+                xml += "<COLUMNCONSTRAINT name=\"" + Name + "\" type=\"C\" value=\"" + Definition + "\" notForReplication=\"" + (NotForReplication?"1":"0") + "\"/>\n";
             }
             return xml;
         }
@@ -152,7 +126,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             string sql = "";
             if (this.Type == Constraint.ConstraintType.Default)
-                sql = " CONSTRAINT [" + Name + "] DEFAULT " + definition;
+                sql = " CONSTRAINT [" + Name + "] DEFAULT " + Definition;
             return sql;
         }
 

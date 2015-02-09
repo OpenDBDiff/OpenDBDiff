@@ -5,74 +5,55 @@ namespace DBDiff.Schema
 {
     public class SqlAction
     {
-        private Enums.ObjectType type;
-        private Enums.ObjectStatusType action;
-        private string name;
-        private List<SqlAction> childs;
-
         public SqlAction(ISchemaBase item)
         {
             if ((item.ObjectType == Enums.ObjectType.Column) || (item.ObjectType == Enums.ObjectType.Index) || (item.ObjectType == Enums.ObjectType.Constraint))
-                this.name = item.Name;
+                this.Name = item.Name;
             else
-                this.name = item.FullName;
-            this.action = item.Status;
-            this.type = item.ObjectType;
-            childs = new List<SqlAction>();
+                this.Name = item.FullName;
+            this.Action = item.Status;
+            this.Type = item.ObjectType;
+            Childs = new List<SqlAction>();
         }
 
         public void Add(ISchemaBase item)
         {
-            childs.Add(new SqlAction(item));
+            Childs.Add(new SqlAction(item));
         }
 
         public SqlAction this[string name]
         {
             get
             {
-                for (int j = 0; j < childs.Count; j++)
+                for (int j = 0; j < Childs.Count; j++)
                 {
-                    if (childs[j].Name.Equals(name))
-                        return childs[j];
+                    if (Childs[j].Name.Equals(name))
+                        return Childs[j];
                 }
                 return null;
             }
         }
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name { get; private set; }
 
-        public Enums.ObjectType Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
+        public Enums.ObjectType Type { get; set; }
 
-        public Enums.ObjectStatusType Action
-        {
-            get { return action; }
-            set { action = value; }
-        }
+        public Enums.ObjectStatusType Action { get; set; }
 
-        public List<SqlAction> Childs
-        {
-            get { return childs; }
-        }
+        public List<SqlAction> Childs { get; private set; }
 
         private string GetTypeName()
         {
-            if (type == Enums.ObjectType.Table) return "TABLE";
-            if (type == Enums.ObjectType.Column) return "COLUMN";
-            if (type == Enums.ObjectType.Constraint) return "CONSTRAINT";
-            if (type == Enums.ObjectType.Index) return "INDEX";
-            if (type == Enums.ObjectType.View) return "VIEW";
-            if (type == Enums.ObjectType.StoreProcedure) return "STORE PROCEDURE";
-            if (type == Enums.ObjectType.Synonym) return "SYNONYM";
-            if (type == Enums.ObjectType.Function) return "FUNCTION";
-            if (type == Enums.ObjectType.Assembly) return "ASSEMBLY";
-            if (type == Enums.ObjectType.Trigger) return "TRIGGER";
+            if (Type == Enums.ObjectType.Table) return "TABLE";
+            if (Type == Enums.ObjectType.Column) return "COLUMN";
+            if (Type == Enums.ObjectType.Constraint) return "CONSTRAINT";
+            if (Type == Enums.ObjectType.Index) return "INDEX";
+            if (Type == Enums.ObjectType.View) return "VIEW";
+            if (Type == Enums.ObjectType.StoreProcedure) return "STORE PROCEDURE";
+            if (Type == Enums.ObjectType.Synonym) return "SYNONYM";
+            if (Type == Enums.ObjectType.Function) return "FUNCTION";
+            if (Type == Enums.ObjectType.Assembly) return "ASSEMBLY";
+            if (Type == Enums.ObjectType.Trigger) return "TRIGGER";
             return "";
         }
 
@@ -89,14 +70,14 @@ namespace DBDiff.Schema
             get
             {
                 string message = "";
-                if (action == Enums.ObjectStatusType.DropStatus)
+                if (Action == Enums.ObjectStatusType.DropStatus)
                     message = "DROP " + GetTypeName() + " " + Name + "\r\n";
-                if (action == Enums.ObjectStatusType.CreateStatus)
+                if (Action == Enums.ObjectStatusType.CreateStatus)
                     message = "ADD " + GetTypeName() + " " + Name + "\r\n";
-                if ((action == Enums.ObjectStatusType.AlterStatus) || (action == Enums.ObjectStatusType.RebuildStatus) || (action == Enums.ObjectStatusType.RebuildDependenciesStatus))
+                if ((Action == Enums.ObjectStatusType.AlterStatus) || (Action == Enums.ObjectStatusType.RebuildStatus) || (Action == Enums.ObjectStatusType.RebuildDependenciesStatus))
                     message = "MODIFY " + GetTypeName() + " " + Name + "\r\n";
 
-                childs.ForEach(item =>
+                Childs.ForEach(item =>
                     {
                         if (item.IsRoot)
                             message += "    ";                        

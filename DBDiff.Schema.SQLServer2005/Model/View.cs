@@ -7,16 +7,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class View : Code 
     {
-        private SchemaList<Index, View> indexes;
-        private SchemaList<Trigger, View> triggers;
-        private SchemaList<CLRTrigger, View> clrtriggers;
-
         public View(ISchemaBase parent)
             : base(parent, Enums.ObjectType.View, Enums.ScripActionType.AddView, Enums.ScripActionType.DropView)
         {
-            indexes = new SchemaList<Index, View>(this, ((Database)parent).AllObjects);
-            triggers = new SchemaList<Trigger, View>(this, ((Database)parent).AllObjects);
-            clrtriggers = new SchemaList<CLRTrigger, View>(this, ((Database)parent).AllObjects);
+            Indexes = new SchemaList<Index, View>(this, ((Database)parent).AllObjects);
+            Triggers = new SchemaList<Trigger, View>(this, ((Database)parent).AllObjects);
+            CLRTriggers = new SchemaList<CLRTrigger, View>(this, ((Database)parent).AllObjects);
         }
 
         /// <summary>
@@ -39,25 +35,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         }
 
         [ShowItem("CLR Triggers")]
-        public SchemaList<CLRTrigger, View> CLRTriggers
-        {
-            get { return clrtriggers; }
-            set { clrtriggers = value; }
-        }
+        public SchemaList<CLRTrigger, View> CLRTriggers { get; set; }
 
         [ShowItem("Triggers")]
-        public SchemaList<Trigger, View> Triggers
-        {
-            get { return triggers; }
-            set { triggers = value; }
-        }
+        public SchemaList<Trigger, View> Triggers { get; set; }
 
         [ShowItem("Indexes", "Index")]
-        public SchemaList<Index, View> Indexes
-        {
-            get { return indexes; }
-            set { indexes = value; }
-        }
+        public SchemaList<Index, View> Indexes { get; set; }
 
         public override Boolean IsCodeType
         {
@@ -129,9 +113,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                     list.Add(ToSQLAlter(), iCount, Enums.ScripActionType.AlterView);                    
                 }
                 if (!this.GetWasInsertInDiffList(Enums.ScripActionType.DropFunction) && (!this.GetWasInsertInDiffList(Enums.ScripActionType.AddFunction)))
-                    list.AddRange(indexes.ToSqlDiff());
+                    list.AddRange(Indexes.ToSqlDiff());
 
-                list.AddRange(triggers.ToSqlDiff());
+                list.AddRange(Triggers.ToSqlDiff());
             }
             return list;
         }

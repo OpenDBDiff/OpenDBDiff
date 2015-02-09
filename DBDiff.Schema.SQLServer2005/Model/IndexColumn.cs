@@ -5,11 +5,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class IndexColumn : SQLServerSchemaBase, IComparable<IndexColumn>
     {
-        private Boolean order;
-        private Boolean isIncluded;
-        private int keyOrder;
-        private int dataTypeId;
-
         public IndexColumn(ISchemaBase parentObject)
             : base(parentObject, Enums.ObjectType.IndexColumn)
         {
@@ -28,29 +23,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return column;
         }
 
-        public int DataTypeId
-        {
-            get { return dataTypeId; }
-            set { dataTypeId = value; }
-        }
+        public int DataTypeId { get; set; }
 
-        public int KeyOrder
-        {
-            get { return keyOrder; }
-            set { keyOrder = value; }
-        }
+        public int KeyOrder { get; set; }
 
-        public Boolean IsIncluded
-        {
-            get { return isIncluded; }
-            set { isIncluded = value; }
-        }
+        public Boolean IsIncluded { get; set; }
 
-        public Boolean Order
-        {
-            get { return order; }
-            set { order = value; }
-        }
+        public Boolean Order { get; set; }
 
         public static Boolean Compare(IndexColumn origen, IndexColumn destino)
         {

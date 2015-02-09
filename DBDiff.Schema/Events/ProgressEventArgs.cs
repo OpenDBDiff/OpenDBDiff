@@ -4,25 +4,14 @@ namespace DBDiff.Schema.Events
 {
     public class ProgressEventArgs:EventArgs 
     {
-        private int progress;
-        private string message;
-
-        public string Message
-        {
-            get { return message; }
-            set { message = value; }
-        }
+        public string Message { get; set; }
 
         public ProgressEventArgs(string message, int progress)
         {
-            this.progress = progress;
-            this.message = message;
+            this.Progress = progress;
+            this.Message = message;
         }
 
-        public int Progress
-        {
-            get { return progress; }
-            set { progress = value; }
-        }
+        public int Progress { get; set; }
     }
 }

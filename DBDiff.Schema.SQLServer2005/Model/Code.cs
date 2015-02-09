@@ -9,10 +9,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public abstract class Code: SQLServerSchemaBase, ICode
     {
-        private string text;
-        private Boolean isSchemaBinding;
-        private List<String> dependenciesIn;
-        private List<String> dependenciesOut;
         protected string sql = null;
         protected string typeName = "";
         private int deepMax = 0;
@@ -23,8 +19,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public Code(ISchemaBase parent, Enums.ObjectType type, Enums.ScripActionType addAction, Enums.ScripActionType dropAction)
             : base(parent, type)
         {
-            dependenciesIn = new List<String>();
-            dependenciesOut = new List<String>();
+            DependenciesIn = new List<String>();
+            DependenciesOut = new List<String>();
             typeName = GetObjectTypeName(ObjectType);
             /*Por el momento, solo los Assemblys manejan deep de dependencias*/
             if (this.ObjectType == Enums.ObjectType.Assembly) 
@@ -79,32 +75,16 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Coleccion de objetos dependientes de la funcion.
         /// </summary>
-        public List<String> DependenciesOut
-        {
-            get { return dependenciesOut; }
-            set { dependenciesOut = value; }
-        }
+        public List<String> DependenciesOut { get; set; }
 
         /// <summary>
         /// Coleccion de nombres de objetos de los cuales la funcion depende.
         /// </summary>
-        public List<String> DependenciesIn
-        {
-            get { return dependenciesIn; }
-            set { dependenciesIn = value; }
-        }
+        public List<String> DependenciesIn { get; set; }
 
-        public Boolean IsSchemaBinding
-        {
-            get { return isSchemaBinding; }
-            set { isSchemaBinding = value; }
-        }
+        public Boolean IsSchemaBinding { get; set; }
 
-        public string Text
-        {
-            get { return text; }
-            set { text = value; }
-        }
+        public string Text { get; set; }
 
         public override int DependenciesCount
         {

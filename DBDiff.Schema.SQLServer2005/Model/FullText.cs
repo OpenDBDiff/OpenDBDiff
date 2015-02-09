@@ -5,11 +5,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class FullText : SQLServerSchemaBase
     {
-        private string path;
-        private Boolean isDefault;
-        private Boolean isAccentSensity;
-        private string fileGroupName;
-
         public FullText(ISchemaBase parent)
             : base(parent, Enums.ObjectType.FullText)
         {
@@ -21,26 +16,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             get { return "[" + Name + "]"; }
         }
 
-        public string Path
-        {
-            get { return path; }
-            set { path = value; }
-        }
-        public Boolean IsDefault
-        {
-            get { return isDefault; }
-            set { isDefault = value; }
-        }
-        public Boolean IsAccentSensity
-        {
-            get { return isAccentSensity; }
-            set { isAccentSensity = value; }
-        }
-        public string FileGroupName
-        {
-            get { return fileGroupName; }
-            set { fileGroupName = value; }
-        }
+        public string Path { get; set; }
+
+        public Boolean IsDefault { get; set; }
+
+        public Boolean IsAccentSensity { get; set; }
+
+        public string FileGroupName { get; set; }
 
         public override string ToSql()
         {

@@ -5,15 +5,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class FileGroup: SQLServerSchemaBase
     {
-        private Boolean readOnly;
-        private Boolean defaultFileGroup;
-        private Boolean isFileStream;
-        private FileGroupFiles files;
-
         public FileGroup(ISchemaBase parent)
             : base(parent, Enums.ObjectType.FileGroup)
         {
-            files = new FileGroupFiles(this);
+            Files = new FileGroupFiles(this);
         }
 
         public override ISchemaBase Clone(ISchemaBase parent)
@@ -29,29 +24,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return file;
         }
 
-        public FileGroupFiles Files
-        {
-            get { return files; }
-            set { files = value; }
-        }
+        public FileGroupFiles Files { get; set; }
 
-        public Boolean IsFileStream
-        {
-            get { return isFileStream; }
-            set { isFileStream = value; }
-        }
+        public Boolean IsFileStream { get; set; }
 
-        public Boolean IsDefaultFileGroup
-        {
-            get { return defaultFileGroup; }
-            set { defaultFileGroup = value; }
-        }
+        public Boolean IsDefaultFileGroup { get; set; }
 
-        public Boolean IsReadOnly
-        {
-            get { return readOnly; }
-            set { readOnly = value; }
-        }
+        public Boolean IsReadOnly { get; set; }
 
         public static Boolean Compare(FileGroup origen, FileGroup destino)
         {

@@ -5,8 +5,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class Synonym : SQLServerSchemaBase
     {
-        private string value;
-
         public Synonym(ISchemaBase parent)
             : base(parent, Enums.ObjectType.Synonym)
         {
@@ -23,15 +21,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return item;
         }
 
-        public string Value
-        {
-            get { return this.value; }
-            set { this.value = value; }
-        }
+        public string Value { get; set; }
 
         public override string ToSql()
         {
-            string sql = "CREATE SYNONYM " + FullName + " FOR " + value + "\r\nGO\r\n";
+            string sql = "CREATE SYNONYM " + FullName + " FOR " + Value + "\r\nGO\r\n";
             return sql;
         }
 

@@ -14,8 +14,7 @@ namespace DBDiff.Front
     public partial class SchemaTreeView : UserControl
     {
         private ISchemaBase databaseSource;
-        private ISchemaBase databaseDestination;
-        
+
         public delegate void SchemaHandler(string ObjectFullName);
         public event SchemaHandler OnSelectItem;
 
@@ -24,11 +23,7 @@ namespace DBDiff.Front
             InitializeComponent();
         }
 
-        public ISchemaBase DatabaseDestination
-        {
-            get { return databaseDestination; }
-            set { databaseDestination = value; }
-        }
+        public ISchemaBase DatabaseDestination { get; set; }
 
         public ISchemaBase DatabaseSource
         {

@@ -11,9 +11,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             DatabaseRole = 2
         }
 
-        private RoleTypeEnum type;
-        private string password;
-
         public Role(ISchemaBase parent)
             : base(parent, Enums.ObjectType.Role)
         {
@@ -24,24 +21,16 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             get { return "[" + Name + "]"; }
         }
 
-        public RoleTypeEnum Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
+        public RoleTypeEnum Type { get; set; }
 
-        public string Password
-        {
-            get { return password; }
-            set { password = value; }
-        }
+        public string Password { get; set; }
 
         public override string ToSql()
         {
             string sql = "";
-            sql += "CREATE " + ((type == RoleTypeEnum.ApplicationRole)?"APPLICATION":"") + " ROLE ";
+            sql += "CREATE " + ((Type == RoleTypeEnum.ApplicationRole)?"APPLICATION":"") + " ROLE ";
             sql += FullName + " ";
-            sql += "WITH PASSWORD = N'" + password + "'";
+            sql += "WITH PASSWORD = N'" + Password + "'";
             if (!String.IsNullOrEmpty(Owner))
                 sql += " ,DEFAULT_SCHEMA=[" + Owner + "]";
             return sql.Trim() + "\r\nGO\r\n";
@@ -49,7 +38,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public override string ToSqlDrop()
         {
-            return "DROP " + ((type == RoleTypeEnum.ApplicationRole)?"APPLICATION":"") + " ROLE " + FullName + "\r\nGO\r\n";
+            return "DROP " + ((Type == RoleTypeEnum.ApplicationRole)?"APPLICATION":"") + " ROLE " + FullName + "\r\nGO\r\n";
         }
 
         public override string ToSqlAdd()

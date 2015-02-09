@@ -8,40 +8,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class Column : SQLServerSchemaBase, IComparable<Column>
     {
-        private string collation;
-        private Boolean identity;
-        private Boolean identityForReplication;
-        private Boolean isComputed;
-        private Boolean isRowGuid;
-        private Boolean isSparse;
-        private Boolean isFileStream;
-        private string computedFormula;
-        private string type;
-        private int size;
-        private int identitySeed;
-        private int identityIncrement;
-        private Boolean nullable;
-        private int precision;
-        private int scale;
-        private Boolean isPersisted;
-        private Boolean hasComputedDependencies;
-        private Boolean hasIndexDependencies;
-        private string xmlSchema;
-        private Boolean isXmlDocument;
-        private Boolean isUserDefinedType;
-        private int position;
-        private int dataUserTypeId;
-        private Default _default;
-        private Rule rule;
-        private ColumnConstraint defaultConstraint;
-
         public Column(ISchemaBase parent)
             : base(parent, Enums.ObjectType.Column)
         {
-            computedFormula = "";
-            collation = "";
-            this._default = new Default(this);
-            this.rule = new Rule(this);
+            ComputedFormula = "";
+            Collation = "";
+            this.Default = new Default(this);
+            this.Rule = new Rule(this);
             this.DefaultConstraint = null;
         }
 
@@ -55,7 +28,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 col = new Column(this.Parent);
             else
                 col = new Column(parent);
-            col.ComputedFormula = this.computedFormula;
+            col.ComputedFormula = this.ComputedFormula;
             col.DataUserTypeId = this.DataUserTypeId;
             col.Id = this.Id;
             col.Guid = this.Guid;
@@ -90,29 +63,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return col;
         }
 
-        public ColumnConstraint DefaultConstraint
-        {
-            get { return defaultConstraint; }
-            set { defaultConstraint = value; }
-        }
+        public ColumnConstraint DefaultConstraint { get; set; }
 
-        public Rule Rule
-        {
-            get { return rule; }
-            set { rule = value; }
-        }
+        public Rule Rule { get; set; }
 
-        public Default Default
-        {
-            get { return _default; }
-            set { _default = value; }
-        }
+        public Default Default { get; set; }
 
-        public Boolean IsFileStream
-        {
-            get { return isFileStream; }
-            set { isFileStream = value; }
-        }
+        public Boolean IsFileStream { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is XML document.
@@ -120,27 +77,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <value>
         /// 	<c>true</c> if this instance is XML document; otherwise, <c>false</c>.
         /// </value>
-        public Boolean IsXmlDocument
-        {
-            get { return isXmlDocument; }
-            set { isXmlDocument = value; }
-        }
+        public Boolean IsXmlDocument { get; set; }
 
         /// <summary>
         /// Gets or sets the XML schema.
         /// </summary>
         /// <value>The XML schema.</value>
-        public string XmlSchema
-        {
-            get { return xmlSchema; }
-            set { xmlSchema = value; }
-        }
+        public string XmlSchema { get; set; }
 
-        public Boolean IsSparse
-        {
-            get { return isSparse; }
-            set { isSparse = value; }
-        }
+        public Boolean IsSparse { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is user defined type.
@@ -148,87 +93,51 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <value>
         /// 	<c>true</c> if this instance is user defined type; otherwise, <c>false</c>.
         /// </value>
-        public Boolean IsUserDefinedType
-        {
-            get { return isUserDefinedType; }
-            set { isUserDefinedType = value; }
-        }
-        
-        public int DataUserTypeId
-        {
-            get { return dataUserTypeId; }
-            set { dataUserTypeId = value; }
-        }
+        public Boolean IsUserDefinedType { get; set; }
+
+        public int DataUserTypeId { get; set; }
 
         /// <summary>
         /// Gets or sets the column position.
         /// </summary>
         /// <value>The position.</value>
-        public int Position
-        {
-            get { return position; }
-            set { position = value; }
-        }
+        public int Position { get; set; }
 
         /// <summary>
         /// Gets or sets the scale (only in numeric or decimal datatypes).
         /// </summary>
         /// <value>The scale.</value>
-        public int Scale
-        {
-            get { return scale; }
-            set { scale = value; }
-        }
+        public int Scale { get; set; }
 
         /// <summary>
         /// Gets or sets the precision (only in numeric or decimal datatypes).
         /// </summary>
         /// <value>The precision.</value>
-        public int Precision
-        {
-            get { return precision; }
-            set { precision = value; }
-        }
+        public int Precision { get; set; }
 
         /// <summary>
         /// Gets or sets the collation (only in text datatypes).
         /// </summary>
         /// <value>The collation.</value>
-        public string Collation
-        {
-            get { return collation; }
-            set { collation = value; }
-        }
+        public string Collation { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Column"/> is nullable.
         /// </summary>
         /// <value><c>true</c> if nullable; otherwise, <c>false</c>.</value>
-        public Boolean IsNullable
-        {
-            get { return nullable; }
-            set { nullable = value; }
-        }
+        public Boolean IsNullable { get; set; }
 
         /// <summary>
         /// Gets or sets the size.
         /// </summary>
         /// <value>The size.</value>
-        public int Size
-        {
-            get { return size; }
-            set { size = value; }
-        }
+        public int Size { get; set; }
 
         /// <summary>
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
-        public string Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
+        public string Type { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is persisted (only in Computed columns).
@@ -236,11 +145,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <value>
         /// 	<c>true</c> if this instance is persisted; otherwise, <c>false</c>.
         /// </value>
-        public Boolean IsPersisted
-        {
-            get { return isPersisted; }
-            set { isPersisted = value; }
-        }
+        public Boolean IsPersisted { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance has index dependencies.
@@ -248,11 +153,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <value>
         /// 	<c>true</c> if this instance has index dependencies; otherwise, <c>false</c>.
         /// </value>
-        public Boolean HasIndexDependencies
-        {
-            get { return hasIndexDependencies; }
-            set { hasIndexDependencies = value; }
-        }
+        public Boolean HasIndexDependencies { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance has computed dependencies.
@@ -260,11 +161,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <value>
         /// 	<c>true</c> if this instance has computed dependencies; otherwise, <c>false</c>.
         /// </value>
-        public Boolean HasComputedDependencies
-        {
-            get { return hasComputedDependencies; }
-            set { hasComputedDependencies = value; }
-        }
+        public Boolean HasComputedDependencies { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance has to rebuild only constraint.
@@ -290,19 +187,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (newType.Equals("text") && (!this.IsText)) return true;
             if (newType.Equals("ntext") && (!this.IsText)) return true;
             if (newType.Equals("image") && (!this.IsBinary)) return true;
-            if (isFileStream != this.isFileStream) return true;
-            return ((Position != newPosition) || HasComputedDependencies || HasIndexDependencies || IsComputed || type.ToLower().Equals("timestamp"));
+            if (isFileStream != this.IsFileStream) return true;
+            return ((Position != newPosition) || HasComputedDependencies || HasIndexDependencies || IsComputed || Type.ToLower().Equals("timestamp"));
         }
 
         /// <summary>
         /// Gets or sets the computed formula (only in Computed columns).
         /// </summary>
         /// <value>The computed formula.</value>
-        public string ComputedFormula
-        {
-            get { return computedFormula; }
-            set { computedFormula = value; }
-        }
+        public string ComputedFormula { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is computed.
@@ -310,11 +203,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <value>
         /// 	<c>true</c> if this instance is computed; otherwise, <c>false</c>.
         /// </value>
-        public Boolean IsComputed
-        {
-            get { return isComputed; }
-            set { isComputed = value; }
-        }
+        public Boolean IsComputed { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this column is BLOB.
@@ -324,7 +213,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             get 
             {
-                return type.Equals("varchar(MAX)") || type.Equals("nvarchar(MAX)") || type.Equals("varbinary(MAX)") || type.Equals("text") || type.Equals("image") || type.Equals("ntext") || type.Equals("xml");
+                return Type.Equals("varchar(MAX)") || Type.Equals("nvarchar(MAX)") || Type.Equals("varbinary(MAX)") || Type.Equals("text") || Type.Equals("image") || Type.Equals("ntext") || Type.Equals("xml");
             }
         }
 
@@ -332,7 +221,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             get
             {
-                return type.Equals("varchar(MAX)") || type.Equals("nvarchar(MAX)") || type.Equals("ntext") || type.Equals("text") || type.Equals("nvarchar") || type.Equals("varchar") || type.Equals("xml") || type.Equals("char") || type.Equals("nchar");
+                return Type.Equals("varchar(MAX)") || Type.Equals("nvarchar(MAX)") || Type.Equals("ntext") || Type.Equals("text") || Type.Equals("nvarchar") || Type.Equals("varchar") || Type.Equals("xml") || Type.Equals("char") || Type.Equals("nchar");
             }
         }
 
@@ -340,7 +229,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             get
             {
-                return type.Equals("varbinary") || type.Equals("varbinary(MAX)") || type.Equals("image") || type.Equals("binary");
+                return Type.Equals("varbinary") || Type.Equals("varbinary(MAX)") || Type.Equals("image") || Type.Equals("binary");
             }
         }
         /// <summary>
@@ -349,11 +238,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <value>
         /// 	<c>true</c> if this field is identity for replication; otherwise, <c>false</c>.
         /// </value>
-        public Boolean IsIdentityForReplication
-        {
-            get { return identityForReplication; }
-            set { identityForReplication = value; }
-        }
+        public Boolean IsIdentityForReplication { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this field is identity.
@@ -361,40 +246,24 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <value>
         /// 	<c>true</c> if this field is identity; otherwise, <c>false</c>.
         /// </value>
-        public Boolean IsIdentity
-        {
-            get { return identity; }
-            set { identity = value; }
-        }
+        public Boolean IsIdentity { get; set; }
 
         /// <summary>
         /// Gets or sets the identity increment (only if the field is Identity).
         /// </summary>
         /// <value>The identity increment.</value>
-        public int IdentityIncrement
-        {
-            get { return identityIncrement; }
-            set { identityIncrement = value; }
-        }
+        public int IdentityIncrement { get; set; }
 
         /// <summary>
         /// Gets or sets the identity seed (only if the field is Identity).
         /// </summary>
         /// <value>The identity seed.</value>
-        public int IdentitySeed
-        {
-            get { return identitySeed; }
-            set { identitySeed = value; }
-        }
+        public int IdentitySeed { get; set; }
 
         /// <summary>
         /// Indica si el campo es Row Guid
         /// </summary>
-        public Boolean IsRowGuid
-        {
-            get { return isRowGuid; }
-            set { isRowGuid = value; }
-        }
+        public Boolean IsRowGuid { get; set; }
 
         /// <summary>
         /// Nombre completo del objeto, incluyendo el owner.
@@ -449,7 +318,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             {
                 string tl = this.Type;
                 if (this.IsUserDefinedType)
-                    tl = ((Database)this.Parent.Parent).UserTypes[type].Type.ToLower();
+                    tl = ((Database)this.Parent.Parent).UserTypes[Type].Type.ToLower();
 
                 if ((((Database)Parent.Parent).Options.Defaults.UseDefaultValueIfExists) && (this.DefaultConstraint != null))
                 {
@@ -560,9 +429,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                     if (!String.IsNullOrEmpty(XmlSchema))
                     {
                         if (IsXmlDocument)
-                            sql += "(DOCUMENT " + xmlSchema + ")";
+                            sql += "(DOCUMENT " + XmlSchema + ")";
                         else
-                            sql += "(CONTENT " + xmlSchema + ")";
+                            sql += "(CONTENT " + XmlSchema + ")";
                     }
                 }
                 if (Type.Equals("numeric") || Type.Equals("decimal")) sql += " (" + Precision.ToString(CultureInfo.InvariantCulture) + "," + Scale.ToString(CultureInfo.InvariantCulture) + ")";
@@ -583,7 +452,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             }
             else
             {
-                sql += "AS " + computedFormula;
+                sql += "AS " + ComputedFormula;
                 if (IsPersisted) sql += " PERSISTED";
             }
             if ((sqlConstraint) && (DefaultConstraint != null))
@@ -707,8 +576,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             if (destino == null) throw new ArgumentNullException("destino");
             if (origen == null) throw new ArgumentNullException("origen");
-            if (origen.IsIdentity != destino.identity) return false;
-            if (origen.IsIdentityForReplication != destino.identityForReplication) return false;
+            if (origen.IsIdentity != destino.IsIdentity) return false;
+            if (origen.IsIdentityForReplication != destino.IsIdentityForReplication) return false;
             if (origen.IdentityIncrement != destino.IdentityIncrement) return false;
             if (origen.IdentitySeed != destino.IdentitySeed) return false;
             return true;
@@ -733,7 +602,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (destino == null) throw new ArgumentNullException("destino");
             if (origen == null) throw new ArgumentNullException("origen");
             if (!origen.ComputedFormula.Equals(destino.ComputedFormula)) return false;
-            if (origen.IsComputed != destino.isComputed) return false;
+            if (origen.IsComputed != destino.IsComputed) return false;
             //if (origen.Position != destino.Position) return false;
             if (!origen.IsComputed)
             {
@@ -745,14 +614,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 if (origen.IsFileStream != destino.IsFileStream) return false;
                 if (origen.IsSparse != destino.IsSparse) return false;
                 if (!origen.Collation.Equals(destino.Collation)) return false;                
-                if (!origen.Type.Equals(destino.type, StringComparison.CurrentCultureIgnoreCase)) return false;
+                if (!origen.Type.Equals(destino.Type, StringComparison.CurrentCultureIgnoreCase)) return false;
                 //Si el tipo de campo es custom, no compara size del campo.
                 if (!origen.IsUserDefinedType)
                 {
-                    if (origen.Precision != destino.precision) return false;
-                    if (origen.Scale != destino.scale) return false;
+                    if (origen.Precision != destino.Precision) return false;
+                    if (origen.Scale != destino.Scale) return false;
                     //Si el tamaño de un campo Text cambia, entonces por la opcion TextInRowLimit.
-                    if ((origen.Size != destino.size) && (origen.Type.Equals(destino.Type, StringComparison.CurrentCultureIgnoreCase)) && (!origen.Type.Equals("text", StringComparison.CurrentCultureIgnoreCase))) return false;
+                    if ((origen.Size != destino.Size) && (origen.Type.Equals(destino.Type, StringComparison.CurrentCultureIgnoreCase)) && (!origen.Type.Equals("text", StringComparison.CurrentCultureIgnoreCase))) return false;
                 }
                 
             }
