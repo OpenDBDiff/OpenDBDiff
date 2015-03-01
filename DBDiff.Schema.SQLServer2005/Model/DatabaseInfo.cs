@@ -52,7 +52,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 if ((versionNumber >= 10) && (versionNumber < 10.25)) Version = VersionTypeEnum.SQLServer2008;
                 if ((versionNumber >= 10.25) && (versionNumber < 10.5)) Version = VersionTypeEnum.SQLServerAzure10;
                 if ((versionNumber >= 10.5) && (versionNumber < 11)) Version = VersionTypeEnum.SQLServer2008R2;
-                if ((versionNumber >= 11.0) && (versionNumber < 12)) Version = VersionTypeEnum.SQLServer2008R2; // SQLServer2012
+                if ((versionNumber >= 11.0) && (versionNumber < 13)) Version = VersionTypeEnum.SQLServer2008R2; // SQLServer2012, SQLServer2014
             }
         }
 
