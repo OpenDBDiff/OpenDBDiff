@@ -173,6 +173,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             table.Triggers = Triggers.Clone(table);
             table.Indexes = Indexes.Clone(table);
             table.Partitions = Partitions.Clone(table);
+            table.Constraints = Constraints.Clone(table);
             return table;
         }
 
