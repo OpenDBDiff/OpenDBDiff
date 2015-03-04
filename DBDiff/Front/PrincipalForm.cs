@@ -16,6 +16,11 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 using DBDiff.Schema.SQLServer.Generates.Options;
 using DBDiff.Settings;
 using Assembly = System.Reflection.Assembly;
+using DiffPlex.DiffBuilder;
+using DiffPlex;
+using System.Linq;
+using DiffPlex.DiffBuilder.Model;
+using ScintillaNET;
 
 /*using DBDiff.Schema.SQLServer2000;
 using DBDiff.Schema.SQLServer2000.Model;
@@ -40,7 +45,7 @@ namespace DBDiff.Front
         private IFront mySqlConnectFront1;
         private IFront mySqlConnectFront2;
         private readonly SqlOption SqlFilter = new SqlOption();
-		private List<ISchemaBase> _selectedSchemas = new List<ISchemaBase>();
+        private List<ISchemaBase> _selectedSchemas = new List<ISchemaBase>();
 
         public Form1()
         {
@@ -129,7 +134,7 @@ namespace DBDiff.Front
                     txtDiferencias.Styles.LineNumber.BackColor = Color.White;
                     txtDiferencias.Styles.LineNumber.IsVisible = false;
                     errorLocation = "Generating Synchronized Script";
-					txtDiferencias.Text = destino.ToSqlDiff(_selectedSchemas).ToSQL();
+                    txtDiferencias.Text = destino.ToSqlDiff(_selectedSchemas).ToSQL();
                     txtDiferencias.IsReadOnly = true;
                     schemaTreeView1.DatabaseSource = destino;
                     schemaTreeView1.DatabaseDestination = origen;
@@ -193,6 +198,59 @@ namespace DBDiff.Front
             }
             txtNewObject.IsReadOnly = true;
             txtOldObject.IsReadOnly = true;
+
+            var diff = (new SideBySideDiffBuilder(new Differ())).BuildDiffModel(txtOldObject.Text, txtNewObject.Text);
+
+            var sb = new StringBuilder();
+            DiffPiece newLine, oldLine;
+            var markers = new Marker[] { txtDiff.Markers[0], txtDiff.Markers[1], txtDiff.Markers[2], txtDiff.Markers[3] };
+            foreach(var marker in markers) marker.Symbol = MarkerSymbol.Background;
+            markers[0].BackColor = Color.LightGreen;
+            markers[1].BackColor = Color.LightCyan;
+            markers[2].BackColor = Color.LightSalmon;
+            markers[3].BackColor = Color.PeachPuff;
+
+            var indexes = new List<int>[] { new List<int>(), new List<int>(), new List<int>(), new List<int>() };
+            var index = 0;
+            for (var i = 0; i < Math.Max(diff.NewText.Lines.Count, diff.OldText.Lines.Count); i++)
+            {
+                newLine = i < diff.NewText.Lines.Count ? diff.NewText.Lines[i] : null;
+                oldLine = i < diff.OldText.Lines.Count ? diff.OldText.Lines[i] : null;
+                if (oldLine.Type == ChangeType.Inserted)
+                {
+                    sb.AppendLine(" " + oldLine.Text);
+                }
+                else if (oldLine.Type == ChangeType.Deleted)
+                {
+                    sb.AppendLine("- " + oldLine.Text);
+                    indexes[2].Add(index);
+                }
+                else if (oldLine.Type == ChangeType.Modified)
+                {
+                    sb.AppendLine("* " + newLine.Text);
+                    indexes[1].Add(index++);
+                    sb.AppendLine("* " + oldLine.Text);
+                    indexes[3].Add(index);
+                }
+                else if (oldLine.Type == ChangeType.Imaginary)
+                {
+                    sb.AppendLine("+ " + newLine.Text);
+                    indexes[0].Add(index);
+                }
+                else if (oldLine.Type == ChangeType.Unchanged)
+                {
+                    sb.AppendLine("  " + oldLine.Text);
+                }
+                index++;
+            }
+            txtDiff.Text = sb.ToString();
+            for (var i = 0; i < 4;i++ )
+            {
+                foreach(var ind in indexes[i])
+                {
+                    txtDiff.Lines[ind].AddMarker(markers[i]);
+                }
+            }
         }
 
         void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -213,30 +271,6 @@ namespace DBDiff.Front
             }
         }
 
-        /*private void ProcesarSQL2000()
-        {
-            DBDiff.Schema.SQLServer2000.Model.Database origen;
-            DBDiff.Schema.SQLServer2000.Model.Database destino;
-
-            DBDiff.Schema.SQLServer2000.Generate sql = new DBDiff.Schema.SQLServer2000.Generate();
-
-            lblMessage.Text = "Leyendo tablas de origen...";
-            sql.OnTableProgress += new Progress.ProgressHandler(sql_OnTableProgress);
-            //sql.ConnectioString = txtConnectionOrigen.Text;
-            origen = sql.Process();
-
-            //sql.ConnectioString = txtConnectionDestino.Text;
-            lblMessage.Text = "Leyendo tablas de destino...";
-            destino = sql.Process();
-
-            origen = DBDiff.Schema.SQLServer2000.Generate.Compare(origen, destino);
-            //this.txtScript.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
-            //this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
-            this.txtDiferencias.Text = origen.ToSQLDiff();
-            
-
-        }
-        */
         private void btnCompareTableData_Click(object sender, EventArgs e)
         {
             TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
@@ -250,12 +284,9 @@ namespace DBDiff.Front
             try
             {
                 Cursor = Cursors.WaitCursor;
-				_selectedSchemas = schemaTreeView1.GetCheckedSchemas();
-                //if (optSQL2000.Checked) ProcesarSQL2000();
+                _selectedSchemas = schemaTreeView1.GetCheckedSchemas();
                 if (optSQL2005.Checked) ProcesarSQL2005();
-                //if (optMySQL.Checked) ProcesarMySQL();
-                //if (optSybase.Checked) ProcesarSybase();
-				schemaTreeView1.SetCheckedSchemas(_selectedSchemas);
+                schemaTreeView1.SetCheckedSchemas(_selectedSchemas);
                 errorLocation = "Saving Connections";
                 Project.SaveLastConfiguration(mySqlConnectFront1.ConnectionString, mySqlConnectFront2.ConnectionString);
             }
@@ -312,7 +343,7 @@ Clicking 'OK' will result in the following:
                 {
                     try
                     {
-                        Clipboard.SetText(exceptionMsg.ToString());
+                        System.Windows.Forms.Clipboard.SetText(exceptionMsg.ToString());
                         Process.Start("http://opendbiff.codeplex.com/workitem/list/basic?keywords=" + Uri.EscapeDataString(searchHash));
                     }
                     finally
@@ -450,7 +481,7 @@ Clicking 'OK' will result in the following:
         {
             try
             {
-                Clipboard.SetText(txtDiferencias.Text);
+                System.Windows.Forms.Clipboard.SetText(txtDiferencias.Text);
             }
             finally
             {
@@ -540,6 +571,10 @@ Clicking 'OK' will result in the following:
             txtOldObject.IsReadOnly = false;
             txtOldObject.Styles.LineNumber.BackColor = Color.White;
             txtOldObject.Styles.LineNumber.IsVisible = false;
+            txtDiff.ConfigurationManager.Language = "mssql";
+            txtDiff.IsReadOnly = false;
+            txtDiff.Styles.LineNumber.IsVisible = false;
+            txtDiff.Margins[0].Width = 20;
             Project LastConfiguration = Project.GetLastConfiguration();
             if (LastConfiguration != null)
             {
@@ -556,7 +591,7 @@ Clicking 'OK' will result in the following:
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-			panel2.Left = Math.Max (this.btnProject.Right + this.btnProject.Left, (Width - panel2.Width) / 2);
+            panel2.Left = Math.Max (this.btnProject.Right + this.btnProject.Left, (Width - panel2.Width) / 2);
         }
 
         private void button1_Click_1(object sender, EventArgs e)
