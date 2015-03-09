@@ -10,8 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DBDiff</RootNamespace>
     <AssemblyName>DBDiff</AssemblyName>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>DBDiffProgram.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>false</SignAssembly>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -156,7 +155,6 @@
     <None Include="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="DBDiffProgram.snk" />
     <Compile Include="Properties\AssemblyVersionInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -219,10 +217,6 @@
     <None Include="Resources\Copy.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\References\SciLexer.dll">
-      <Link>SciLexer.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="App.ico" />
     <None Include="Resources\compareTableData.png" />
     <None Include="Resources\tableData-edit.png" />

@@ -1,3 +1,15 @@
+using DBDiff.Schema;
+using DBDiff.Schema.Misc;
+using DBDiff.Schema.Model;
+using DBDiff.Schema.SQLServer.Generates.Front;
+using DBDiff.Schema.SQLServer.Generates.Generates;
+using DBDiff.Schema.SQLServer.Generates.Model;
+using DBDiff.Schema.SQLServer.Generates.Options;
+using DBDiff.Settings;
+using DiffPlex;
+using DiffPlex.DiffBuilder;
+using DiffPlex.DiffBuilder.Model;
+using ScintillaNET;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,20 +19,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using DBDiff.Schema;
-using DBDiff.Schema.Misc;
-using DBDiff.Schema.Model;
-using DBDiff.Schema.SQLServer.Generates.Front;
-using DBDiff.Schema.SQLServer.Generates.Generates;
-using DBDiff.Schema.SQLServer.Generates.Model;
-using DBDiff.Schema.SQLServer.Generates.Options;
-using DBDiff.Settings;
 using Assembly = System.Reflection.Assembly;
-using DiffPlex.DiffBuilder;
-using DiffPlex;
-using System.Linq;
-using DiffPlex.DiffBuilder.Model;
-using ScintillaNET;
 
 /*using DBDiff.Schema.SQLServer2000;
 using DBDiff.Schema.SQLServer2000.Model;
@@ -51,8 +50,6 @@ namespace DBDiff.Front
         {
             InitializeComponent();
 
-            // TODO: form designer requires some controls GAC'd so this is easier
-            this.tabControl1.SelectedIndexChanged += new EventHandler(tabControl1_SelectedIndexChanged);
             this.Text += Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
@@ -134,7 +131,7 @@ namespace DBDiff.Front
                     txtDiferencias.Styles.LineNumber.BackColor = Color.White;
                     txtDiferencias.Styles.LineNumber.IsVisible = false;
                     errorLocation = "Generating Synchronized Script";
-                    txtDiferencias.Text = destino.ToSqlDiff(_selectedSchemas).ToSQL();
+					txtDiferencias.Text = destino.ToSqlDiff(_selectedSchemas).ToSQL();
                     txtDiferencias.IsReadOnly = true;
                     schemaTreeView1.DatabaseSource = destino;
                     schemaTreeView1.DatabaseDestination = origen;
@@ -271,6 +268,30 @@ namespace DBDiff.Front
             }
         }
 
+        /*private void ProcesarSQL2000()
+        {
+            DBDiff.Schema.SQLServer2000.Model.Database origen;
+            DBDiff.Schema.SQLServer2000.Model.Database destino;
+
+            DBDiff.Schema.SQLServer2000.Generate sql = new DBDiff.Schema.SQLServer2000.Generate();
+
+            lblMessage.Text = "Leyendo tablas de origen...";
+            sql.OnTableProgress += new Progress.ProgressHandler(sql_OnTableProgress);
+            //sql.ConnectioString = txtConnectionOrigen.Text;
+            origen = sql.Process();
+
+            //sql.ConnectioString = txtConnectionDestino.Text;
+            lblMessage.Text = "Leyendo tablas de destino...";
+            destino = sql.Process();
+
+            origen = DBDiff.Schema.SQLServer2000.Generate.Compare(origen, destino);
+            //this.txtScript.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
+            //this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
+            this.txtDiferencias.Text = origen.ToSQLDiff();
+            
+
+        }
+        */
         private void btnCompareTableData_Click(object sender, EventArgs e)
         {
             TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
@@ -284,9 +305,12 @@ namespace DBDiff.Front
             try
             {
                 Cursor = Cursors.WaitCursor;
-                _selectedSchemas = schemaTreeView1.GetCheckedSchemas();
+				_selectedSchemas = schemaTreeView1.GetCheckedSchemas();
+                //if (optSQL2000.Checked) ProcesarSQL2000();
                 if (optSQL2005.Checked) ProcesarSQL2005();
-                schemaTreeView1.SetCheckedSchemas(_selectedSchemas);
+                //if (optMySQL.Checked) ProcesarMySQL();
+                //if (optSybase.Checked) ProcesarSybase();
+				schemaTreeView1.SetCheckedSchemas(_selectedSchemas);
                 errorLocation = "Saving Connections";
                 Project.SaveLastConfiguration(mySqlConnectFront1.ConnectionString, mySqlConnectFront2.ConnectionString);
             }
@@ -591,7 +615,7 @@ Clicking 'OK' will result in the following:
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            panel2.Left = Math.Max (this.btnProject.Right + this.btnProject.Left, (Width - panel2.Width) / 2);
+			panel2.Left = Math.Max (this.btnProject.Right + this.btnProject.Left, (Width - panel2.Width) / 2);
         }
 
         private void button1_Click_1(object sender, EventArgs e)
