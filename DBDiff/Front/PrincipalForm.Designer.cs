@@ -38,8 +38,11 @@ namespace DBDiff.Front
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.txtNewObject = new ScintillaNET.Scintilla();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.txtOldObject = new ScintillaNET.Scintilla();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.txtDiff = new ScintillaNET.Scintilla();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -48,8 +51,10 @@ namespace DBDiff.Front
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.schemaTreeView1 = new DBDiff.Front.SchemaTreeView();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.txtSyncScript = new ScintillaNET.Scintilla();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.GroupDb = new System.Windows.Forms.GroupBox();
@@ -65,35 +70,30 @@ namespace DBDiff.Front
             this.btnCompare = new System.Windows.Forms.Button();
             this.PanelGlobal = new System.Windows.Forms.Panel();
             this.btnNewProject = new System.Windows.Forms.Button();
-            this.btnCompareTableData = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.PanelDestination = new System.Windows.Forms.Panel();
             this.PanelSource = new System.Windows.Forms.Panel();
             this.btnSaveProject = new System.Windows.Forms.Button();
             this.btnProject = new System.Windows.Forms.Button();
-            this.txtNewObject = new ScintillaNET.Scintilla();
-            this.txtOldObject = new ScintillaNET.Scintilla();
-            this.schemaTreeView1 = new DBDiff.Front.SchemaTreeView();
-            this.txtDiferencias = new ScintillaNET.Scintilla();
-            this.txtDiff = new ScintillaNET.Scintilla();
+            this.btnCompareTableData = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtNewObject)).BeginInit();
             this.tabPage5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtOldObject)).BeginInit();
             this.tabPage6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtDiff)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSyncScript)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.GroupDb.SuspendLayout();
             this.PanelGlobal.SuspendLayout();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtNewObject)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtOldObject)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtDiferencias)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtDiff)).BeginInit();
             this.SuspendLayout();
             // 
             // lblMessage
@@ -119,7 +119,7 @@ namespace DBDiff.Front
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(829, 491);
             this.tabControl1.TabIndex = 3;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(tabControl1_SelectedIndexChanged);
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage2
             // 
@@ -159,6 +159,24 @@ namespace DBDiff.Front
             this.tabPage4.Text = "New object";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // txtNewObject
+            // 
+            this.txtNewObject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtNewObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNewObject.Location = new System.Drawing.Point(3, 3);
+            this.txtNewObject.Name = "txtNewObject";
+            this.txtNewObject.Size = new System.Drawing.Size(450, 378);
+            this.txtNewObject.Styles.BraceBad.Size = 9F;
+            this.txtNewObject.Styles.BraceLight.Size = 9F;
+            this.txtNewObject.Styles.ControlChar.Size = 9F;
+            this.txtNewObject.Styles.Default.BackColor = System.Drawing.SystemColors.Window;
+            this.txtNewObject.Styles.Default.Size = 9F;
+            this.txtNewObject.Styles.IndentGuide.Size = 9F;
+            this.txtNewObject.Styles.LastPredefined.Size = 9F;
+            this.txtNewObject.Styles.LineNumber.Size = 9F;
+            this.txtNewObject.Styles.Max.Size = 9F;
+            this.txtNewObject.TabIndex = 0;
+            // 
             // tabPage5
             // 
             this.tabPage5.Controls.Add(this.txtOldObject);
@@ -169,6 +187,24 @@ namespace DBDiff.Front
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Old object";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // txtOldObject
+            // 
+            this.txtOldObject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtOldObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtOldObject.Location = new System.Drawing.Point(3, 3);
+            this.txtOldObject.Name = "txtOldObject";
+            this.txtOldObject.Size = new System.Drawing.Size(450, 378);
+            this.txtOldObject.Styles.BraceBad.Size = 9F;
+            this.txtOldObject.Styles.BraceLight.Size = 9F;
+            this.txtOldObject.Styles.ControlChar.Size = 9F;
+            this.txtOldObject.Styles.Default.BackColor = System.Drawing.SystemColors.Window;
+            this.txtOldObject.Styles.Default.Size = 9F;
+            this.txtOldObject.Styles.IndentGuide.Size = 9F;
+            this.txtOldObject.Styles.LastPredefined.Size = 9F;
+            this.txtOldObject.Styles.LineNumber.Size = 9F;
+            this.txtOldObject.Styles.Max.Size = 9F;
+            this.txtOldObject.TabIndex = 0;
             // 
             // tabPage6
             // 
@@ -186,16 +222,6 @@ namespace DBDiff.Front
             this.txtDiff.Location = new System.Drawing.Point(0, 0);
             this.txtDiff.Name = "txtDiff";
             this.txtDiff.Size = new System.Drawing.Size(456, 384);
-            this.txtDiff.Styles.BraceBad.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiff.Styles.BraceLight.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiff.Styles.CallTip.FontName = "Segoe UI\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiff.Styles.ControlChar.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiff.Styles.Default.BackColor = System.Drawing.SystemColors.Window;
-            this.txtDiff.Styles.Default.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiff.Styles.IndentGuide.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiff.Styles.LastPredefined.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiff.Styles.LineNumber.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiff.Styles.Max.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
             this.txtDiff.TabIndex = 0;
             // 
             // groupBox2
@@ -279,6 +305,20 @@ namespace DBDiff.Front
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             // 
+            // schemaTreeView1
+            // 
+            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.schemaTreeView1.DatabaseDestination = null;
+            this.schemaTreeView1.DatabaseSource = null;
+            this.schemaTreeView1.FilterDiferentObjects = true;
+            this.schemaTreeView1.FilterMissingObjects = true;
+            this.schemaTreeView1.FilterNewObjects = true;
+            this.schemaTreeView1.Location = new System.Drawing.Point(7, 10);
+            this.schemaTreeView1.Name = "schemaTreeView1";
+            this.schemaTreeView1.Size = new System.Drawing.Size(322, 437);
+            this.schemaTreeView1.TabIndex = 0;
+            // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.panel1);
@@ -297,11 +337,22 @@ namespace DBDiff.Front
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Controls.Add(this.txtDiferencias);
+            this.panel1.Controls.Add(this.txtSyncScript);
             this.panel1.Location = new System.Drawing.Point(9, 6);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(806, 453);
             this.panel1.TabIndex = 6;
+            // 
+            // txtSyncScript
+            // 
+            this.txtSyncScript.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSyncScript.IsReadOnly = true;
+            this.txtSyncScript.Location = new System.Drawing.Point(0, 0);
+            this.txtSyncScript.Name = "txtSyncScript";
+            this.txtSyncScript.Size = new System.Drawing.Size(802, 449);
+            this.txtSyncScript.Styles.LineNumber.BackColor = System.Drawing.Color.Transparent;
+            this.txtSyncScript.Styles.LineNumber.IsVisible = false;
+            this.txtSyncScript.TabIndex = 0;
             // 
             // tabPage3
             // 
@@ -424,21 +475,6 @@ namespace DBDiff.Front
             this.btnUpdate.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
-            // 
-            // btnCompareTableData
-            // 
-            this.btnCompareTableData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCompareTableData.Enabled = false;
-            this.btnCompareTableData.Image = global::DBDiff.Properties.Resources.compareTableData;
-            this.btnCompareTableData.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnCompareTableData.Location = new System.Drawing.Point(842, 490);
-            this.btnCompareTableData.Name = "btnCompareTableData";
-            this.btnCompareTableData.Size = new System.Drawing.Size(95, 55);
-            this.btnCompareTableData.TabIndex = 9;
-            this.btnCompareTableData.Text = "Compare table data";
-            this.btnCompareTableData.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnCompareTableData.UseVisualStyleBackColor = true;
-            this.btnCompareTableData.Click += new System.EventHandler(this.btnCompareTableData_Click);
             // 
             // btnUpdateAll
             // 
@@ -564,96 +600,20 @@ namespace DBDiff.Front
             this.btnProject.UseVisualStyleBackColor = false;
             this.btnProject.Click += new System.EventHandler(this.btnProject_Click);
             // 
-            // txtNewObject
+            // btnCompareTableData
             // 
-            this.txtNewObject.CurrentPos = 0;
-            this.txtNewObject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtNewObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNewObject.Location = new System.Drawing.Point(3, 3);
-            this.txtNewObject.Name = "txtNewObject";
-            this.txtNewObject.Size = new System.Drawing.Size(450, 378);
-            this.txtNewObject.Styles.BraceBad.FontName = "Verdana\0\0\0\0";
-            this.txtNewObject.Styles.BraceBad.Size = 9F;
-            this.txtNewObject.Styles.BraceLight.FontName = "Verdana\0\0\0\0";
-            this.txtNewObject.Styles.BraceLight.Size = 9F;
-            this.txtNewObject.Styles.CallTip.FontName = "Segoe UI\0\0\0";
-            this.txtNewObject.Styles.ControlChar.FontName = "Verdana\0\0\0\0";
-            this.txtNewObject.Styles.ControlChar.Size = 9F;
-            this.txtNewObject.Styles.Default.BackColor = System.Drawing.SystemColors.Window;
-            this.txtNewObject.Styles.Default.FontName = "Verdana\0\0\0\0";
-            this.txtNewObject.Styles.Default.Size = 9F;
-            this.txtNewObject.Styles.IndentGuide.FontName = "Verdana\0\0\0\0";
-            this.txtNewObject.Styles.IndentGuide.Size = 9F;
-            this.txtNewObject.Styles.LastPredefined.FontName = "Verdana\0\0\0\0";
-            this.txtNewObject.Styles.LastPredefined.Size = 9F;
-            this.txtNewObject.Styles.LineNumber.FontName = "Verdana\0\0\0\0";
-            this.txtNewObject.Styles.LineNumber.Size = 9F;
-            this.txtNewObject.Styles.Max.FontName = "Verdana\0\0\0\0";
-            this.txtNewObject.Styles.Max.Size = 9F;
-            this.txtNewObject.TabIndex = 0;
-            // 
-            // txtOldObject
-            // 
-            this.txtOldObject.CurrentPos = 0;
-            this.txtOldObject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtOldObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtOldObject.Location = new System.Drawing.Point(3, 3);
-            this.txtOldObject.Name = "txtOldObject";
-            this.txtOldObject.Size = new System.Drawing.Size(450, 378);
-            this.txtOldObject.Styles.BraceBad.FontName = "Verdana\0\0\0\0";
-            this.txtOldObject.Styles.BraceBad.Size = 9F;
-            this.txtOldObject.Styles.BraceLight.FontName = "Verdana\0\0\0\0";
-            this.txtOldObject.Styles.BraceLight.Size = 9F;
-            this.txtOldObject.Styles.CallTip.FontName = "Segoe UI\0\0\0";
-            this.txtOldObject.Styles.ControlChar.FontName = "Verdana\0\0\0\0";
-            this.txtOldObject.Styles.ControlChar.Size = 9F;
-            this.txtOldObject.Styles.Default.BackColor = System.Drawing.SystemColors.Window;
-            this.txtOldObject.Styles.Default.FontName = "Verdana\0\0\0\0";
-            this.txtOldObject.Styles.Default.Size = 9F;
-            this.txtOldObject.Styles.IndentGuide.FontName = "Verdana\0\0\0\0";
-            this.txtOldObject.Styles.IndentGuide.Size = 9F;
-            this.txtOldObject.Styles.LastPredefined.FontName = "Verdana\0\0\0\0";
-            this.txtOldObject.Styles.LastPredefined.Size = 9F;
-            this.txtOldObject.Styles.LineNumber.FontName = "Verdana\0\0\0\0";
-            this.txtOldObject.Styles.LineNumber.Size = 9F;
-            this.txtOldObject.Styles.Max.FontName = "Verdana\0\0\0\0";
-            this.txtOldObject.Styles.Max.Size = 9F;
-            this.txtOldObject.TabIndex = 0;
-            // 
-            // schemaTreeView1
-            // 
-            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.schemaTreeView1.DatabaseDestination = null;
-            this.schemaTreeView1.DatabaseSource = null;
-            this.schemaTreeView1.FilterDiferentObjects = true;
-            this.schemaTreeView1.FilterMissingObjects = true;
-            this.schemaTreeView1.FilterNewObjects = true;
-            this.schemaTreeView1.Location = new System.Drawing.Point(7, 10);
-            this.schemaTreeView1.Name = "schemaTreeView1";
-            this.schemaTreeView1.Size = new System.Drawing.Size(322, 437);
-            this.schemaTreeView1.TabIndex = 0;
-            // 
-            // txtDiferencias
-            // 
-            this.txtDiferencias.CurrentPos = 0;
-            this.txtDiferencias.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtDiferencias.IsReadOnly = true;
-            this.txtDiferencias.Location = new System.Drawing.Point(0, 0);
-            this.txtDiferencias.Name = "txtDiferencias";
-            this.txtDiferencias.Size = new System.Drawing.Size(802, 449);
-            this.txtDiferencias.Styles.BraceBad.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiferencias.Styles.BraceLight.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiferencias.Styles.CallTip.FontName = "Segoe UI\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiferencias.Styles.ControlChar.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiferencias.Styles.Default.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiferencias.Styles.IndentGuide.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiferencias.Styles.LastPredefined.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiferencias.Styles.LineNumber.BackColor = System.Drawing.Color.Transparent;
-            this.txtDiferencias.Styles.LineNumber.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiferencias.Styles.LineNumber.IsVisible = false;
-            this.txtDiferencias.Styles.Max.FontName = "Verdana\0\0\0\0\0\0\0\0\0\0\0\0\0";
-            this.txtDiferencias.TabIndex = 0;
+            this.btnCompareTableData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCompareTableData.Enabled = false;
+            this.btnCompareTableData.Image = global::DBDiff.Properties.Resources.compareTableData;
+            this.btnCompareTableData.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnCompareTableData.Location = new System.Drawing.Point(842, 490);
+            this.btnCompareTableData.Name = "btnCompareTableData";
+            this.btnCompareTableData.Size = new System.Drawing.Size(95, 55);
+            this.btnCompareTableData.TabIndex = 9;
+            this.btnCompareTableData.Text = "Compare table data";
+            this.btnCompareTableData.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnCompareTableData.UseVisualStyleBackColor = true;
+            this.btnCompareTableData.Click += new System.EventHandler(this.btnCompareTableData_Click);
             // 
             // Form1
             // 
@@ -680,24 +640,24 @@ namespace DBDiff.Front
             this.tabPage2.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtNewObject)).EndInit();
             this.tabPage5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtOldObject)).EndInit();
             this.tabPage6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtDiff)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtSyncScript)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.GroupDb.ResumeLayout(false);
             this.GroupDb.PerformLayout();
             this.PanelGlobal.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.txtNewObject)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtOldObject)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtDiferencias)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtDiff)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -724,7 +684,7 @@ namespace DBDiff.Front
         private TabPage tabPage3;
         private TextBox textBox1;
         private Panel panel1;
-        private Scintilla txtDiferencias;
+        private Scintilla txtSyncScript;
         private Panel PanelGlobal;
         private Panel panel2;
         private Panel PanelSource;

@@ -126,13 +126,13 @@ namespace DBDiff.Front
                     origen = progres.Source;
                     destino = progres.Destination;
 
-                    txtDiferencias.ConfigurationManager.Language = "mssql";
-                    txtDiferencias.IsReadOnly = false;
-                    txtDiferencias.Styles.LineNumber.BackColor = Color.White;
-                    txtDiferencias.Styles.LineNumber.IsVisible = false;
+                    txtSyncScript.ConfigurationManager.Language = "mssql";
+                    txtSyncScript.IsReadOnly = false;
+                    txtSyncScript.Styles.LineNumber.BackColor = Color.White;
+                    txtSyncScript.Styles.LineNumber.IsVisible = false;
                     errorLocation = "Generating Synchronized Script";
-					txtDiferencias.Text = destino.ToSqlDiff(_selectedSchemas).ToSQL();
-                    txtDiferencias.IsReadOnly = true;
+					txtSyncScript.Text = destino.ToSqlDiff(_selectedSchemas).ToSQL();
+                    txtSyncScript.IsReadOnly = true;
                     schemaTreeView1.DatabaseSource = destino;
                     schemaTreeView1.DatabaseDestination = origen;
                     schemaTreeView1.OnSelectItem += new SchemaTreeView.SchemaHandler(schemaTreeView1_OnSelectItem);
@@ -262,9 +262,9 @@ namespace DBDiff.Front
             if (db != null)
             {
                 this._selectedSchemas = this.schemaTreeView1.GetCheckedSchemas();
-                this.txtDiferencias.IsReadOnly = false;
-                this.txtDiferencias.Text = db.ToSqlDiff(this._selectedSchemas).ToSQL();
-                this.txtDiferencias.IsReadOnly = false;
+                this.txtSyncScript.IsReadOnly = false;
+                this.txtSyncScript.Text = db.ToSqlDiff(this._selectedSchemas).ToSQL();
+                this.txtSyncScript.IsReadOnly = false;
             }
         }
 
@@ -491,7 +491,7 @@ Clicking 'OK' will result in the following:
                 if (!String.IsNullOrEmpty(saveFileDialog1.FileName))
                 {
                     StreamWriter writer = new StreamWriter(saveFileDialog1.FileName, false);
-                    writer.Write(txtDiferencias.Text);
+                    writer.Write(txtSyncScript.Text);
                     writer.Close();
                 }
             }
@@ -505,7 +505,7 @@ Clicking 'OK' will result in the following:
         {
             try
             {
-                System.Windows.Forms.Clipboard.SetText(txtDiferencias.Text);
+                System.Windows.Forms.Clipboard.SetText(txtSyncScript.Text);
             }
             finally
             {
@@ -606,7 +606,7 @@ Clicking 'OK' will result in the following:
                 mySqlConnectFront2.ConnectionString = LastConfiguration.ConnectionStringDestination;
             }
 
-            txtDiferencias.Text = "";
+            txtSyncScript.Text = "";
         }
 
         private void panel2_Resize(object sender, EventArgs e)
