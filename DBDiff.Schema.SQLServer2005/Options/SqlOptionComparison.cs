@@ -16,6 +16,7 @@
         }
 
         public bool IgnoreWhiteSpacesInCode { get; set; }
+        public bool ReloadComparisonOnUpdate { get; set; }
 
 
         public CaseSensityOptions CaseSensityInCode { get; set; }

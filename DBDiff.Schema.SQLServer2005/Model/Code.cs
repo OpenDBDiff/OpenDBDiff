@@ -220,6 +220,22 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return String.Format("DROP {0} {1}\r\nGO\r\n", typeName, FullName);
         }
 
+        public virtual bool CompareExceptWhitespace(ICode obj)
+        {
+            if (obj == null) throw new ArgumentNullException("obj");
+            string sql1 = this.ToSql();
+            string sql2 = obj.ToSql();
+
+            Regex whitespace = new Regex(@"\s");
+            sql1 = whitespace.Replace(this.ToSql(), "");
+            sql2 = whitespace.Replace(obj.ToSql(), "");
+
+            if (((Database)RootParent).Options.Comparison.CaseSensityInCode == Options.SqlOptionComparison.CaseSensityOptions.CaseInsensity)
+                return (sql1.Equals(sql2, StringComparison.InvariantCultureIgnoreCase));
+
+            return (sql1.Equals(sql2, StringComparison.InvariantCulture));
+        }
+
         public virtual bool Compare(ICode obj)
         {
             if (obj == null) throw new ArgumentNullException("obj");

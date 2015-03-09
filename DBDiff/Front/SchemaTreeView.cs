@@ -95,6 +95,7 @@ namespace DBDiff.Front
 
         private void ReadPropertyDetail(TreeNode node, PropertyInfo p, ISchemaBase schema, ShowItemAttribute attr)
         {
+            Color NodeColor = Color.Black;
             IList items = (IList)p.GetValue(schema, null);
             node.Text = node.Text + " (" + items.Count + ")";
             node.Nodes.Clear();
@@ -106,24 +107,35 @@ namespace DBDiff.Front
                     if (item.Status == Enums.ObjectStatusType.DropStatus)
                     {
                         subnode.ForeColor = Color.Red;
+                        NodeColor = (NodeColor == Color.Black || NodeColor == Color.Red ? Color.Red : Color.Plum);
                     }
                     if (item.Status == Enums.ObjectStatusType.CreateStatus)
                     {
                         subnode.ForeColor = Color.Green;
+                        NodeColor = (NodeColor == Color.Black || NodeColor == Color.Green ? Color.Green : Color.Plum);
                     }
                     if ((item.HasState(Enums.ObjectStatusType.AlterStatus)) || (item.HasState(Enums.ObjectStatusType.DisabledStatus)))
                     {
                         subnode.ForeColor = Color.Blue;
+                        NodeColor = (NodeColor == Color.Black || NodeColor == Color.Blue ? Color.Blue : Color.Plum);
+                    }
+                    if (item.HasState(Enums.ObjectStatusType.AlterWhitespaceStatus))
+                    {
+                        subnode.ForeColor = Color.DarkGoldenrod;
+                        NodeColor = (NodeColor == Color.Black || NodeColor == Color.DarkGoldenrod ? Color.DarkGoldenrod : Color.Plum);
                     }
                     if (item.HasState(Enums.ObjectStatusType.RebuildStatus))
                     {
                         subnode.ForeColor = Color.Purple;
+                        NodeColor = (NodeColor == Color.Black || NodeColor == Color.Purple ? Color.Purple : Color.Plum);
                     }
                     subnode.Tag = item;
                     subnode.ImageKey = attr.Image;
                     subnode.SelectedImageKey = attr.Image;
                 }
-            }            
+            }
+
+            node.ForeColor = NodeColor;
         }
 
         private void RebuildSchemaTree()
@@ -143,6 +155,7 @@ namespace DBDiff.Front
             if ((item.Status == Enums.ObjectStatusType.DropStatus) && (FilterMissingObjects)) return true;
             if ((item.Status == Enums.ObjectStatusType.CreateStatus) && (FilterNewObjects)) return true;
             if ((item.Status == Enums.ObjectStatusType.AlterStatus) && (FilterDiferentObjects)) return true;
+            if ((item.Status == Enums.ObjectStatusType.AlterWhitespaceStatus) && (FilterDiferentObjects)) return true;
             if ((item.Status == Enums.ObjectStatusType.RebuildStatus) && (FilterDiferentObjects)) return true;
             if ((item.Status == Enums.ObjectStatusType.DisabledStatus) && (FilterDiferentObjects)) return true;
             if ((item.Status == Enums.ObjectStatusType.UpdateStatus) && (FilterDiferentObjects)) return true;

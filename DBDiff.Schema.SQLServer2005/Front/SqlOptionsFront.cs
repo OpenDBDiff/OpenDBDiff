@@ -104,6 +104,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
 
             chkIgnoreWhiteSpaceInCode.Checked = option.Comparison.IgnoreWhiteSpacesInCode;
 
+            chkReloadDB.Checked = option.Comparison.ReloadComparisonOnUpdate;
+
             LoadFilters();
         }
 
@@ -178,6 +180,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
                 option.Comparison.CaseSensityInCode = SqlOptionComparison.CaseSensityOptions.CaseSensity;
 
             option.Comparison.IgnoreWhiteSpacesInCode = chkIgnoreWhiteSpaceInCode.Checked;
+            option.Comparison.ReloadComparisonOnUpdate = chkReloadDB.Checked;
         }
 
         private void chkCompIndices_CheckedChanged(object sender, EventArgs e)

@@ -515,35 +515,99 @@ Clicking 'OK' will result in the following:
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
-            ISchemaBase selected = (ISchemaBase)tree.SelectedNode.Tag;
-
-            Database database = (Database)schemaTreeView1.DatabaseSource;
+            TreeNode dbArm = tree.Nodes[0];
             string result = "";
 
-            if (database.Find(selected.FullName) != null)
+            foreach (TreeNode node in dbArm.Nodes)
             {
-                if (selected.ObjectType == Enums.ObjectType.Table || selected.ObjectType == Enums.ObjectType.StoreProcedure)
+                if (node.Nodes.Count != 0)
                 {
-                    switch (selected.Status)
+                    foreach (TreeNode subnode in node.Nodes)
                     {
-                        case Enums.ObjectStatusType.CreateStatus: result = Updater.createNew(selected, mySqlConnectFront2.ConnectionString); break;
-                        case Enums.ObjectStatusType.AlterStatus: result = Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
-                    }
-                }
-                else
-                {
-                    switch (selected.Status)
-                    {
-                        case Enums.ObjectStatusType.CreateStatus: result = Updater.addNew(selected, mySqlConnectFront2.ConnectionString); break;
+                        if (subnode.Checked)
+                        {
+                            //ISchemaBase selected = (ISchemaBase)tree.SelectedNode.Tag;
+                            ISchemaBase selected = (ISchemaBase)subnode.Tag;
+
+                            Database database = (Database)schemaTreeView1.DatabaseSource;
+
+                            if (database.Find(selected.FullName) != null)
+                            {
+                                switch (selected.ObjectType)
+                                {
+                                    case Enums.ObjectType.Table:
+                                        {
+                                            switch (selected.Status)
+                                            {
+                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                default: result += "Nothing could be found to do for table " + selected.Name + ".\r\n"; break;
+                                            }
+                                        }
+                                        break;
+                                    case Enums.ObjectType.StoreProcedure:
+                                        {
+                                            switch (selected.Status)
+                                            {
+                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                default: result += "Nothing could be found to do for stored procedure " + selected.Name + ".\r\n"; break;
+                                            }
+                                        }
+                                        break;
+                                    case Enums.ObjectType.Function:
+                                        {
+                                            switch (selected.Status)
+                                            {
+                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                default: result += "Nothing could be found to do for function " + selected.Name + ".\r\n"; break;
+                                            }
+                                        }
+                                        break;
+                                    case Enums.ObjectType.View:
+                                        {
+                                            switch (selected.Status)
+                                            {
+                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                default: result += "Nothing could be found to do for view " + selected.Name + ".\r\n"; break;
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        {
+                                            switch (selected.Status)
+                                            {
+                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.addNew(selected, mySqlConnectFront2.ConnectionString); break;
+                                                default: result += "Nothing could be found to do for " + selected.Name + ".\r\n"; break;
+                                            }
+                                        }
+                                        break;
+                                }
+                            }
+                        }
                     }
                 }
             }
+
             if (result == string.Empty) 
             {
                 result = "All successful";
             }
             MessageBox.Show(result);
-            if (optSQL2005.Checked) ProcesarSQL2005();
+
+            if (SqlFilter.Comparison.ReloadComparisonOnUpdate)
+            {
+                if (optSQL2005.Checked) ProcesarSQL2005();
+            }
+            
             btnUpdate.Enabled = false;
         }
 

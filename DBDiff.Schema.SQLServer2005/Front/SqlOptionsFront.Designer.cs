@@ -100,6 +100,27 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTableLockEscalation = new System.Windows.Forms.CheckBox();
             this.gradientPanel1 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.gradientPanel10 = new System.Windows.Forms.Panel();
+            this.lstFilters = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnApply = new System.Windows.Forms.Button();
+            this.gradientPanel9 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.gradientPanel8 = new System.Windows.Forms.Panel();
+            this.gradientPanel7 = new System.Windows.Forms.Panel();
+            this.label12 = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.optScriptSchemaBindingAlter = new System.Windows.Forms.RadioButton();
+            this.optScriptSchemaDrop = new System.Windows.Forms.RadioButton();
+            this.gradientPanel16 = new System.Windows.Forms.Panel();
+            this.label15 = new System.Windows.Forms.Label();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.gradientPanel15 = new System.Windows.Forms.Panel();
             this.chkIgnoreWhiteSpaceInCode = new System.Windows.Forms.CheckBox();
@@ -114,27 +135,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.rdoCaseSensitive = new System.Windows.Forms.RadioButton();
             this.rdoCaseAutomatic = new System.Windows.Forms.RadioButton();
             this.rdoCaseInsensitive = new System.Windows.Forms.RadioButton();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.btnAdd = new System.Windows.Forms.Button();
-            this.gradientPanel10 = new System.Windows.Forms.Panel();
-            this.lstFilters = new System.Windows.Forms.ListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
-            this.btnApply = new System.Windows.Forms.Button();
-            this.gradientPanel9 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.gradientPanel8 = new System.Windows.Forms.Panel();
-            this.gradientPanel7 = new System.Windows.Forms.Panel();
-            this.label12 = new System.Windows.Forms.Label();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.optScriptSchemaBindingAlter = new System.Windows.Forms.RadioButton();
-            this.optScriptSchemaDrop = new System.Windows.Forms.RadioButton();
-            this.gradientPanel16 = new System.Windows.Forms.Panel();
-            this.label15 = new System.Windows.Forms.Label();
+            this.chkReloadDB = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.gradientPanel6.SuspendLayout();
@@ -143,12 +144,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel3.SuspendLayout();
             this.gradientPanel2.SuspendLayout();
             this.gradientPanel1.SuspendLayout();
-            this.tabPage5.SuspendLayout();
-            this.gradientPanel15.SuspendLayout();
-            this.gradientPanel14.SuspendLayout();
-            this.gradientPanel13.SuspendLayout();
-            this.gradientPanel12.SuspendLayout();
-            this.gradientPanel11.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.gradientPanel10.SuspendLayout();
             this.gradientPanel9.SuspendLayout();
@@ -158,6 +153,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.tabPage3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.gradientPanel16.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.gradientPanel15.SuspendLayout();
+            this.gradientPanel14.SuspendLayout();
+            this.gradientPanel13.SuspendLayout();
+            this.gradientPanel12.SuspendLayout();
+            this.gradientPanel11.SuspendLayout();
             this.SuspendLayout();
             // 
             // chkFullTextPath
@@ -828,10 +829,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -1000,148 +1001,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label11.Size = new System.Drawing.Size(125, 13);
             this.label11.TabIndex = 3;
             this.label11.Text = "Filter Object by Type";
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.BackColor = System.Drawing.Color.White;
-            this.tabPage5.Controls.Add(this.gradientPanel15);
-            this.tabPage5.Controls.Add(this.gradientPanel14);
-            this.tabPage5.Controls.Add(this.gradientPanel13);
-            this.tabPage5.Controls.Add(this.gradientPanel12);
-            this.tabPage5.Controls.Add(this.gradientPanel11);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(537, 416);
-            this.tabPage5.TabIndex = 4;
-            this.tabPage5.Text = "Comparision";
-            // 
-            // gradientPanel15
-            // 
-            this.gradientPanel15.Controls.Add(this.chkIgnoreWhiteSpaceInCode);
-            this.gradientPanel15.Location = new System.Drawing.Point(5, 232);
-            this.gradientPanel15.Name = "gradientPanel15";
-            this.gradientPanel15.Size = new System.Drawing.Size(525, 31);
-            this.gradientPanel15.TabIndex = 7;
-            // 
-            // chkIgnoreWhiteSpaceInCode
-            // 
-            this.chkIgnoreWhiteSpaceInCode.AutoSize = true;
-            this.chkIgnoreWhiteSpaceInCode.Location = new System.Drawing.Point(7, 7);
-            this.chkIgnoreWhiteSpaceInCode.Name = "chkIgnoreWhiteSpaceInCode";
-            this.chkIgnoreWhiteSpaceInCode.Size = new System.Drawing.Size(331, 17);
-            this.chkIgnoreWhiteSpaceInCode.TabIndex = 2;
-            this.chkIgnoreWhiteSpaceInCode.Text = "Ignore white spaces in Store Procedures, Triggers and Functions";
-            this.chkIgnoreWhiteSpaceInCode.UseVisualStyleBackColor = true;
-            // 
-            // gradientPanel14
-            // 
-            this.gradientPanel14.Controls.Add(this.label14);
-            this.gradientPanel14.Location = new System.Drawing.Point(5, 135);
-            this.gradientPanel14.Name = "gradientPanel14";
-            this.gradientPanel14.Size = new System.Drawing.Size(525, 21);
-            this.gradientPanel14.TabIndex = 6;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(4, 4);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(256, 13);
-            this.label14.TabIndex = 3;
-            this.label14.Text = "Procedures, Functions and Triggers Options";
-            // 
-            // gradientPanel13
-            // 
-            this.gradientPanel13.Controls.Add(this.rdoCaseSensityInCode);
-            this.gradientPanel13.Controls.Add(this.rdoCaseInsensityInCode);
-            this.gradientPanel13.Location = new System.Drawing.Point(5, 162);
-            this.gradientPanel13.Name = "gradientPanel13";
-            this.gradientPanel13.Size = new System.Drawing.Size(525, 64);
-            this.gradientPanel13.TabIndex = 5;
-            // 
-            // rdoCaseSensityInCode
-            // 
-            this.rdoCaseSensityInCode.AutoSize = true;
-            this.rdoCaseSensityInCode.Location = new System.Drawing.Point(13, 36);
-            this.rdoCaseSensityInCode.Name = "rdoCaseSensityInCode";
-            this.rdoCaseSensityInCode.Size = new System.Drawing.Size(93, 17);
-            this.rdoCaseSensityInCode.TabIndex = 2;
-            this.rdoCaseSensityInCode.Text = "Case sensitive";
-            this.rdoCaseSensityInCode.UseVisualStyleBackColor = true;
-            // 
-            // rdoCaseInsensityInCode
-            // 
-            this.rdoCaseInsensityInCode.AutoSize = true;
-            this.rdoCaseInsensityInCode.Checked = true;
-            this.rdoCaseInsensityInCode.Location = new System.Drawing.Point(13, 13);
-            this.rdoCaseInsensityInCode.Name = "rdoCaseInsensityInCode";
-            this.rdoCaseInsensityInCode.Size = new System.Drawing.Size(101, 17);
-            this.rdoCaseInsensityInCode.TabIndex = 1;
-            this.rdoCaseInsensityInCode.TabStop = true;
-            this.rdoCaseInsensityInCode.Text = "Case insensitive";
-            this.rdoCaseInsensityInCode.UseVisualStyleBackColor = true;
-            // 
-            // gradientPanel12
-            // 
-            this.gradientPanel12.Controls.Add(this.label13);
-            this.gradientPanel12.Location = new System.Drawing.Point(5, 6);
-            this.gradientPanel12.Name = "gradientPanel12";
-            this.gradientPanel12.Size = new System.Drawing.Size(525, 21);
-            this.gradientPanel12.TabIndex = 4;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(4, 4);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(197, 13);
-            this.label13.TabIndex = 3;
-            this.label13.Text = "Collation Case Sensitibity Options";
-            // 
-            // gradientPanel11
-            // 
-            this.gradientPanel11.Controls.Add(this.rdoCaseSensitive);
-            this.gradientPanel11.Controls.Add(this.rdoCaseAutomatic);
-            this.gradientPanel11.Controls.Add(this.rdoCaseInsensitive);
-            this.gradientPanel11.Location = new System.Drawing.Point(5, 33);
-            this.gradientPanel11.Name = "gradientPanel11";
-            this.gradientPanel11.Size = new System.Drawing.Size(525, 87);
-            this.gradientPanel11.TabIndex = 3;
-            // 
-            // rdoCaseSensitive
-            // 
-            this.rdoCaseSensitive.AutoSize = true;
-            this.rdoCaseSensitive.Location = new System.Drawing.Point(14, 59);
-            this.rdoCaseSensitive.Name = "rdoCaseSensitive";
-            this.rdoCaseSensitive.Size = new System.Drawing.Size(93, 17);
-            this.rdoCaseSensitive.TabIndex = 2;
-            this.rdoCaseSensitive.Text = "Case sensitive";
-            this.rdoCaseSensitive.UseVisualStyleBackColor = true;
-            // 
-            // rdoCaseAutomatic
-            // 
-            this.rdoCaseAutomatic.AutoSize = true;
-            this.rdoCaseAutomatic.Checked = true;
-            this.rdoCaseAutomatic.Location = new System.Drawing.Point(14, 13);
-            this.rdoCaseAutomatic.Name = "rdoCaseAutomatic";
-            this.rdoCaseAutomatic.Size = new System.Drawing.Size(200, 17);
-            this.rdoCaseAutomatic.TabIndex = 0;
-            this.rdoCaseAutomatic.TabStop = true;
-            this.rdoCaseAutomatic.Text = "Automatic (detect database collation)";
-            this.rdoCaseAutomatic.UseVisualStyleBackColor = true;
-            // 
-            // rdoCaseInsensitive
-            // 
-            this.rdoCaseInsensitive.AutoSize = true;
-            this.rdoCaseInsensitive.Location = new System.Drawing.Point(14, 36);
-            this.rdoCaseInsensitive.Name = "rdoCaseInsensitive";
-            this.rdoCaseInsensitive.Size = new System.Drawing.Size(101, 17);
-            this.rdoCaseInsensitive.TabIndex = 1;
-            this.rdoCaseInsensitive.Text = "Case insensitive";
-            this.rdoCaseInsensitive.UseVisualStyleBackColor = true;
             // 
             // tabPage4
             // 
@@ -1357,6 +1216,159 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label15.TabIndex = 3;
             this.label15.Text = "Advanced Script Options";
             // 
+            // tabPage5
+            // 
+            this.tabPage5.BackColor = System.Drawing.Color.White;
+            this.tabPage5.Controls.Add(this.gradientPanel15);
+            this.tabPage5.Controls.Add(this.gradientPanel14);
+            this.tabPage5.Controls.Add(this.gradientPanel13);
+            this.tabPage5.Controls.Add(this.gradientPanel12);
+            this.tabPage5.Controls.Add(this.gradientPanel11);
+            this.tabPage5.Controls.Add(this.chkReloadDB);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(537, 416);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Comparision";
+            // 
+            // gradientPanel15
+            // 
+            this.gradientPanel15.Controls.Add(this.chkIgnoreWhiteSpaceInCode);
+            this.gradientPanel15.Location = new System.Drawing.Point(5, 232);
+            this.gradientPanel15.Name = "gradientPanel15";
+            this.gradientPanel15.Size = new System.Drawing.Size(525, 31);
+            this.gradientPanel15.TabIndex = 7;
+            // 
+            // chkIgnoreWhiteSpaceInCode
+            // 
+            this.chkIgnoreWhiteSpaceInCode.AutoSize = true;
+            this.chkIgnoreWhiteSpaceInCode.Location = new System.Drawing.Point(7, 7);
+            this.chkIgnoreWhiteSpaceInCode.Name = "chkIgnoreWhiteSpaceInCode";
+            this.chkIgnoreWhiteSpaceInCode.Size = new System.Drawing.Size(331, 17);
+            this.chkIgnoreWhiteSpaceInCode.TabIndex = 2;
+            this.chkIgnoreWhiteSpaceInCode.Text = "Ignore white spaces in Store Procedures, Triggers and Functions";
+            this.chkIgnoreWhiteSpaceInCode.UseVisualStyleBackColor = true;
+            // 
+            // gradientPanel14
+            // 
+            this.gradientPanel14.Controls.Add(this.label14);
+            this.gradientPanel14.Location = new System.Drawing.Point(5, 135);
+            this.gradientPanel14.Name = "gradientPanel14";
+            this.gradientPanel14.Size = new System.Drawing.Size(525, 21);
+            this.gradientPanel14.TabIndex = 6;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(4, 4);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(256, 13);
+            this.label14.TabIndex = 3;
+            this.label14.Text = "Procedures, Functions and Triggers Options";
+            // 
+            // gradientPanel13
+            // 
+            this.gradientPanel13.Controls.Add(this.rdoCaseSensityInCode);
+            this.gradientPanel13.Controls.Add(this.rdoCaseInsensityInCode);
+            this.gradientPanel13.Location = new System.Drawing.Point(5, 162);
+            this.gradientPanel13.Name = "gradientPanel13";
+            this.gradientPanel13.Size = new System.Drawing.Size(525, 64);
+            this.gradientPanel13.TabIndex = 5;
+            // 
+            // rdoCaseSensityInCode
+            // 
+            this.rdoCaseSensityInCode.AutoSize = true;
+            this.rdoCaseSensityInCode.Location = new System.Drawing.Point(13, 36);
+            this.rdoCaseSensityInCode.Name = "rdoCaseSensityInCode";
+            this.rdoCaseSensityInCode.Size = new System.Drawing.Size(93, 17);
+            this.rdoCaseSensityInCode.TabIndex = 2;
+            this.rdoCaseSensityInCode.Text = "Case sensitive";
+            this.rdoCaseSensityInCode.UseVisualStyleBackColor = true;
+            // 
+            // rdoCaseInsensityInCode
+            // 
+            this.rdoCaseInsensityInCode.AutoSize = true;
+            this.rdoCaseInsensityInCode.Checked = true;
+            this.rdoCaseInsensityInCode.Location = new System.Drawing.Point(13, 13);
+            this.rdoCaseInsensityInCode.Name = "rdoCaseInsensityInCode";
+            this.rdoCaseInsensityInCode.Size = new System.Drawing.Size(101, 17);
+            this.rdoCaseInsensityInCode.TabIndex = 1;
+            this.rdoCaseInsensityInCode.TabStop = true;
+            this.rdoCaseInsensityInCode.Text = "Case insensitive";
+            this.rdoCaseInsensityInCode.UseVisualStyleBackColor = true;
+            // 
+            // gradientPanel12
+            // 
+            this.gradientPanel12.Controls.Add(this.label13);
+            this.gradientPanel12.Location = new System.Drawing.Point(5, 6);
+            this.gradientPanel12.Name = "gradientPanel12";
+            this.gradientPanel12.Size = new System.Drawing.Size(525, 21);
+            this.gradientPanel12.TabIndex = 4;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(4, 4);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(197, 13);
+            this.label13.TabIndex = 3;
+            this.label13.Text = "Collation Case Sensitibity Options";
+            // 
+            // gradientPanel11
+            // 
+            this.gradientPanel11.Controls.Add(this.rdoCaseSensitive);
+            this.gradientPanel11.Controls.Add(this.rdoCaseAutomatic);
+            this.gradientPanel11.Controls.Add(this.rdoCaseInsensitive);
+            this.gradientPanel11.Location = new System.Drawing.Point(5, 33);
+            this.gradientPanel11.Name = "gradientPanel11";
+            this.gradientPanel11.Size = new System.Drawing.Size(525, 87);
+            this.gradientPanel11.TabIndex = 3;
+            // 
+            // rdoCaseSensitive
+            // 
+            this.rdoCaseSensitive.AutoSize = true;
+            this.rdoCaseSensitive.Location = new System.Drawing.Point(14, 59);
+            this.rdoCaseSensitive.Name = "rdoCaseSensitive";
+            this.rdoCaseSensitive.Size = new System.Drawing.Size(93, 17);
+            this.rdoCaseSensitive.TabIndex = 2;
+            this.rdoCaseSensitive.Text = "Case sensitive";
+            this.rdoCaseSensitive.UseVisualStyleBackColor = true;
+            // 
+            // rdoCaseAutomatic
+            // 
+            this.rdoCaseAutomatic.AutoSize = true;
+            this.rdoCaseAutomatic.Checked = true;
+            this.rdoCaseAutomatic.Location = new System.Drawing.Point(14, 13);
+            this.rdoCaseAutomatic.Name = "rdoCaseAutomatic";
+            this.rdoCaseAutomatic.Size = new System.Drawing.Size(200, 17);
+            this.rdoCaseAutomatic.TabIndex = 0;
+            this.rdoCaseAutomatic.TabStop = true;
+            this.rdoCaseAutomatic.Text = "Automatic (detect database collation)";
+            this.rdoCaseAutomatic.UseVisualStyleBackColor = true;
+            // 
+            // rdoCaseInsensitive
+            // 
+            this.rdoCaseInsensitive.AutoSize = true;
+            this.rdoCaseInsensitive.Location = new System.Drawing.Point(14, 36);
+            this.rdoCaseInsensitive.Name = "rdoCaseInsensitive";
+            this.rdoCaseInsensitive.Size = new System.Drawing.Size(101, 17);
+            this.rdoCaseInsensitive.TabIndex = 1;
+            this.rdoCaseInsensitive.Text = "Case insensitive";
+            this.rdoCaseInsensitive.UseVisualStyleBackColor = true;
+            // 
+            // chkReloadDB
+            // 
+            this.chkReloadDB.AutoSize = true;
+            this.chkReloadDB.Location = new System.Drawing.Point(12, 393);
+            this.chkReloadDB.Name = "chkReloadDB";
+            this.chkReloadDB.Size = new System.Drawing.Size(256, 17);
+            this.chkReloadDB.TabIndex = 8;
+            this.chkReloadDB.Text = "Reload Database Comparison after each Update";
+            this.chkReloadDB.UseVisualStyleBackColor = false;
+            // 
             // SqlOptionsFront
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1378,17 +1390,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel2.PerformLayout();
             this.gradientPanel1.ResumeLayout(false);
             this.gradientPanel1.PerformLayout();
-            this.tabPage5.ResumeLayout(false);
-            this.gradientPanel15.ResumeLayout(false);
-            this.gradientPanel15.PerformLayout();
-            this.gradientPanel14.ResumeLayout(false);
-            this.gradientPanel14.PerformLayout();
-            this.gradientPanel13.ResumeLayout(false);
-            this.gradientPanel13.PerformLayout();
-            this.gradientPanel12.ResumeLayout(false);
-            this.gradientPanel12.PerformLayout();
-            this.gradientPanel11.ResumeLayout(false);
-            this.gradientPanel11.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.gradientPanel10.ResumeLayout(false);
             this.gradientPanel9.ResumeLayout(false);
@@ -1403,6 +1404,18 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.groupBox4.PerformLayout();
             this.gradientPanel16.ResumeLayout(false);
             this.gradientPanel16.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
+            this.gradientPanel15.ResumeLayout(false);
+            this.gradientPanel15.PerformLayout();
+            this.gradientPanel14.ResumeLayout(false);
+            this.gradientPanel14.PerformLayout();
+            this.gradientPanel13.ResumeLayout(false);
+            this.gradientPanel13.PerformLayout();
+            this.gradientPanel12.ResumeLayout(false);
+            this.gradientPanel12.PerformLayout();
+            this.gradientPanel11.ResumeLayout(false);
+            this.gradientPanel11.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1513,5 +1526,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         private GroupBox groupBox4;
         private RadioButton optScriptSchemaBindingAlter;
         private RadioButton optScriptSchemaDrop;
+        private CheckBox chkReloadDB;
     }
 }

@@ -28,7 +28,8 @@ namespace DBDiff.Schema
             ChangeOwner = 512,
             DropOlderStatus = 1024,
             BindStatus = 2048,
-            PermisionSet = 4096
+            PermisionSet = 4096,
+            AlterWhitespaceStatus = 8192
         }
 
         public enum ScripActionType

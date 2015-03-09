@@ -57,7 +57,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 list.Add(Drop());
             if (this.HasState(Enums.ObjectStatusType.CreateStatus))
                 list.Add(Create());
-            if (this.Status == Enums.ObjectStatusType.AlterStatus)
+            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
+                list.Add(ToSQLAlter(), 0, Enums.ScripActionType.AlterProcedure);
+            if (this.HasState(Enums.ObjectStatusType.AlterWhitespaceStatus))
                 list.Add(ToSQLAlter(), 0, Enums.ScripActionType.AlterProcedure);
             return list;
         }

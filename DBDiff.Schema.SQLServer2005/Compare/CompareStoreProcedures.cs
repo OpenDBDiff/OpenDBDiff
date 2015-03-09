@@ -10,7 +10,16 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
             if (!node.Compare(CamposOrigen[node.FullName]))
             {
                 StoreProcedure newNode = node;//.Clone(CamposOrigen.Parent);
-                newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                
+                if (node.CompareExceptWhitespace(CamposOrigen[node.FullName]))
+                {
+                    newNode.Status = Enums.ObjectStatusType.AlterWhitespaceStatus;
+                }
+                else
+                {
+                    newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                }
+
                 CamposOrigen[node.FullName] = newNode;
             }
         }
