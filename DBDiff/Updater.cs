@@ -92,18 +92,17 @@ namespace DBDiff
         public static string alter(ISchemaBase target, string connectionString)
         {
             var db = target.RootParent as Database;
+            SqlConnection connection = new SqlConnection(connectionString);
             if (db != null && DialogResult.Yes != MessageBox.Show(String.Format("Alter {0} {1} in {2}..{3}?\n(WARNING: No automatic backup is made!)",
                     target.ObjectType,
                     target.Name,
-                    db.Info.Server,
-                    db.Info.Database), "ALTER Destination?", MessageBoxButtons.YesNo, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button2))
+                    connection.DataSource,
+                    connection.Database), "ALTER Destination?", MessageBoxButtons.YesNo, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button2))
             {
                 return "Cancelled.";
             }
 
             string result = string.Empty;
-            
-            SqlConnection connection = new SqlConnection(connectionString);
             SQLScriptList SqlDiff = target.ToSqlDiff();
             string[] splitOn = {"GO"};
             string[] tempList = SqlDiff.ToSQL().Split(splitOn, StringSplitOptions.RemoveEmptyEntries);
