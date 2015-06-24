@@ -83,7 +83,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public int CompareTo(ConstraintColumn other)
         {
-            return this.KeyOrder.CompareTo(other.KeyOrder);
+            return this.ColumnRelationalId.CompareTo(other.ColumnRelationalId);
         }
     }
 }
