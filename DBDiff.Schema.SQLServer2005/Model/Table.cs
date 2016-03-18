@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using DBDiff.Schema.Attributes;
 using DBDiff.Schema.Model;
@@ -207,16 +208,20 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 if (Constraints.Count > 0)
                 {
                     sql += ",\r\n";
-                    Constraints.ForEach(item =>
-                                            {
-                                                if (item.Type == Constraint.ConstraintType.PrimaryKey)
-                                                    sqlPK += "\t" + item.ToSql() + ",\r\n";
-                                                if (item.Type == Constraint.ConstraintType.Unique)
-                                                    sqlUC += "\t" + item.ToSql() + ",\r\n";
-                                                if (showFK)
-                                                    if (item.Type == Constraint.ConstraintType.ForeignKey)
-                                                        sqlFK += "\t" + item.ToSql() + ",\r\n";
-                                            });
+                    Constraints.AsQueryable()
+                        // Add the constraint if it's not in DropStatus
+                        .Where(c => !c.HasState(Enums.ObjectStatusType.DropStatus))
+                        .ToList()
+                        .ForEach(item =>
+                        {
+                            if (item.Type == Constraint.ConstraintType.PrimaryKey)
+                                sqlPK += "\t" + item.ToSql() + ",\r\n";
+                            if (item.Type == Constraint.ConstraintType.Unique)
+                                sqlUC += "\t" + item.ToSql() + ",\r\n";
+                            if (showFK)
+                                if (item.Type == Constraint.ConstraintType.ForeignKey)
+                                    sqlFK += "\t" + item.ToSql() + ",\r\n";
+                        });
                     sql += sqlPK + sqlUC + sqlFK;
                     sql = sql.Substring(0, sql.Length - 3) + "\r\n";
                 }
