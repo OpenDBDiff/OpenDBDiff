@@ -115,10 +115,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                 (new GeneratePartitionScheme(this)).Fill(databaseSchema, ConnectionString);
                 (new GenerateFileGroups(this)).Fill(databaseSchema, ConnectionString);
             }
-            
+
             (new GenerateDDLTriggers(this)).Fill(databaseSchema, ConnectionString);
             (new GenerateSynonyms(this)).Fill(databaseSchema, ConnectionString);
-            
+
             //not supported in azure yet
             if (databaseSchema.Info.Version != DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
             {
@@ -178,7 +178,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                 OnCompareProgress(new ProgressEventArgs(String.Format(formatString, formatParams), -1));
             }
         }
-        
+
         public static Database Compare(Database databaseOriginalSchema, Database databaseCompareSchema)
         {
             Database merge = CompareDatabase.GenerateDiferences(databaseOriginalSchema, databaseCompareSchema);

@@ -8,25 +8,25 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public Assembly(ISchemaBase parent)
             : base(parent, Enums.ObjectType.Assembly, Enums.ScripActionType.AddAssembly, Enums.ScripActionType.DropAssembly)
         {
-            Files = new SchemaList<AssemblyFile,Assembly>(this);
+            Files = new SchemaList<AssemblyFile, Assembly>(this);
         }
 
         public override ISchemaBase Clone(ISchemaBase parent)
         {
             Assembly item = new Assembly(parent)
-                                {
-                                    Id = this.Id,
-                                    Name = this.Name,
-                                    Owner = this.Owner,
-                                    Visible = this.Visible,
-                                    Text = this.Text,
-                                    PermissionSet = this.PermissionSet,
-                                    CLRName = this.CLRName,
-                                    Guid = this.Guid,
-                                    Files = this.Files
-                                };
+            {
+                Id = this.Id,
+                Name = this.Name,
+                Owner = this.Owner,
+                Visible = this.Visible,
+                Text = this.Text,
+                PermissionSet = this.PermissionSet,
+                CLRName = this.CLRName,
+                Guid = this.Guid,
+                Files = this.Files
+            };
             this.DependenciesOut.ForEach(dep => item.DependenciesOut.Add(dep));
-            this.ExtendedProperties.ForEach(ep => item.ExtendedProperties.Add(ep));            
+            this.ExtendedProperties.ForEach(ep => item.ExtendedProperties.Add(ep));
             return item;
         }
 
@@ -54,7 +54,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             toSql += "FROM " + Text + "\r\n";
             toSql += "WITH PERMISSION_SET = " + access + "\r\n";
             toSql += "GO\r\n";
-            toSql += Files.ToSql();            
+            toSql += Files.ToSql();
             toSql += this.ExtendedProperties.ToSql();
             return toSql;
         }
@@ -107,7 +107,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public bool Compare(Assembly obj)
         {
-            if (obj == null) throw new ArgumentNullException("obj");            
+            if (obj == null) throw new ArgumentNullException("obj");
             if (!this.CLRName.Equals(obj.CLRName)) return false;
             if (!this.PermissionSet.Equals(obj.PermissionSet)) return false;
             if (!this.Owner.Equals(obj.Owner)) return false;
@@ -115,7 +115,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (this.Files.Count != obj.Files.Count) return false;
             for (int j = 0; j < this.Files.Count; j++)
                 if (!this.Files[j].Content.Equals(obj.Files[j].Content)) return false;
-            return true;            
+            return true;
         }
 
         public override Boolean IsCodeType

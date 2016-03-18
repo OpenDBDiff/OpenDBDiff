@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DBDiff.Schema.Model
 {
-    public class SchemaList<T, P> : List<T>, ISchemaList<T,P>
+    public class SchemaList<T, P> : List<T>, ISchemaList<T, P>
         where T : ISchemaBase
         where P : ISchemaBase
     {
@@ -113,9 +113,9 @@ namespace DBDiff.Schema.Model
 
         public virtual SQLScriptList ToSqlDiff()
         {
-			return ToSqlDiff(new List<ISchemaBase>());	
-		}
-		public virtual SQLScriptList ToSqlDiff(List<ISchemaBase> schemas)
+            return ToSqlDiff(new List<ISchemaBase>());
+        }
+        public virtual SQLScriptList ToSqlDiff(List<ISchemaBase> schemas)
         {
             SQLScriptList listDiff = new SQLScriptList();
             this.Where(item => (schemas.Count == 0 || schemas.FirstOrDefault(sch => sch.Id == item.Id) != default(ISchemaBase))).ToList().ForEach(item => { item.ResetWasInsertInDiffList(); listDiff.AddRange(item.ToSqlDiff().WarnMissingScript(item)); });

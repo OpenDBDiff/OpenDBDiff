@@ -6,7 +6,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 {
     public class Columns<T> : SchemaList<Column, T> where T : ISchemaBase
     {
-        public Columns(T parent):base(parent)
+        public Columns(T parent) : base(parent)
         {
         }
 
@@ -28,7 +28,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             StringBuilder sql = new StringBuilder();
             for (int index = 0; index < this.Count; index++)
             {
-                // Add the coloumn if it's not in DropStatus 
+                // Add the coloumn if it's not in DropStatus
                 if (!this[index].HasState(Enums.ObjectStatusType.DropStatus))
                 {
                     sql.Append("\t" + this[index].ToSql(true));
@@ -42,7 +42,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return sql.ToString();
         }
 
-        public override SQLScriptList  ToSqlDiff()
+        public override SQLScriptList ToSqlDiff()
         {
             string sqlDrop = "";
             string sqlAdd = "";

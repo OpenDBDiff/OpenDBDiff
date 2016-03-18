@@ -24,7 +24,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public Column Clone(ISchemaBase parent)
         {
             Column col;
-            if (parent == null) 
+            if (parent == null)
                 col = new Column(this.Parent);
             else
                 col = new Column(parent);
@@ -49,7 +49,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             col.Name = this.Name;
             col.IsNullable = this.IsNullable;
             col.Position = this.Position;
-            col.Precision = this.Precision;            
+            col.Precision = this.Precision;
             col.Scale = this.Scale;
             col.Collation = this.Collation;
             col.Size = this.Size;
@@ -211,7 +211,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <value><c>true</c> if this column is BLOB; otherwise, <c>false</c>.</value>
         public Boolean IsBLOB
         {
-            get 
+            get
             {
                 return Type.Equals("varchar(MAX)") || Type.Equals("nvarchar(MAX)") || Type.Equals("varbinary(MAX)") || Type.Equals("text") || Type.Equals("image") || Type.Equals("ntext") || Type.Equals("xml");
             }
@@ -278,7 +278,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         /// <summary>
         /// Convierte el schema de la tabla en XML.
-        /// </summary> 
+        /// </summary>
         public string ToXML()
         {
             /*string xml = "";
@@ -517,7 +517,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList list = new SQLScriptList();
             if (HasIndexDependencies)
-            {                
+            {
                 ((Table)Parent).Indexes.ForEach(item =>
                     {
                         IndexColumn ic = item.Columns.Find(this.Id);
@@ -567,7 +567,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             list.Add(sql, 0, typeStatus);
             return list;
         }
-        
+
         /// <summary>
         /// Compara solo las propiedades de dos campos relacionadas con los Identity. Si existen
         /// diferencias, devuelve falso, caso contrario, true.
@@ -613,7 +613,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 if (origen.IsNullable != destino.IsNullable) return false;
                 if (origen.IsFileStream != destino.IsFileStream) return false;
                 if (origen.IsSparse != destino.IsSparse) return false;
-                if (!origen.Collation.Equals(destino.Collation)) return false;                
+                if (!origen.Collation.Equals(destino.Collation)) return false;
                 if (!origen.Type.Equals(destino.Type, StringComparison.CurrentCultureIgnoreCase)) return false;
                 //Si el tipo de campo es custom, no compara size del campo.
                 if (!origen.IsUserDefinedType)
@@ -623,7 +623,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                     //Si el tamaño de un campo Text cambia, entonces por la opcion TextInRowLimit.
                     if ((origen.Size != destino.Size) && (origen.Type.Equals(destino.Type, StringComparison.CurrentCultureIgnoreCase)) && (!origen.Type.Equals("text", StringComparison.CurrentCultureIgnoreCase))) return false;
                 }
-                
+
             }
             else
             {

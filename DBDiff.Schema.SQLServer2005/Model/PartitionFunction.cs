@@ -7,7 +7,7 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class PartitionFunction:SQLServerSchemaBase
+    public class PartitionFunction : SQLServerSchemaBase
     {
         private const int IS_STRING = 0;
         private const int IS_UNIQUE = 1;
@@ -79,8 +79,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 if (Type.Equals("datetime2") || Type.Equals("datetimeoffset") || Type.Equals("time")) sqltype += "(" + Scale.ToString(CultureInfo.InvariantCulture) + ")";
             }
 
-            string sql = "CREATE PARTITION FUNCTION [" + Name + "](" + sqltype +") AS RANGE\r\n ";
-            if (IsBoundaryRight) 
+            string sql = "CREATE PARTITION FUNCTION [" + Name + "](" + sqltype + ") AS RANGE\r\n ";
+            if (IsBoundaryRight)
                 sql += "RIGHT";
             else
                 sql += "LEFT";
@@ -93,15 +93,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 Values.ForEach(item => { sqlvalues += "N'" + item + "',"; });
             else
                 if (valueType == IS_DATE)
-                    Values.ForEach(item => { sqlvalues += "'" + DateTime.Parse(item).ToString("yyyyMMdd HH:mm:ss.fff") + "',"; });
-                else
+                Values.ForEach(item => { sqlvalues += "'" + DateTime.Parse(item).ToString("yyyyMMdd HH:mm:ss.fff") + "',"; });
+            else
                     if (valueType == IS_UNIQUE)
-                        Values.ForEach(item => { sqlvalues += "'{" + item + "}',"; });
-                    else
+                Values.ForEach(item => { sqlvalues += "'{" + item + "}',"; });
+            else
                         if (valueType == IS_NUMERIC)
-                            Values.ForEach(item => { sqlvalues += item.Replace(",",".") + ","; });
-                        else
-                            Values.ForEach(item => { sqlvalues += item + ","; });
+                Values.ForEach(item => { sqlvalues += item.Replace(",", ".") + ","; });
+            else
+                Values.ForEach(item => { sqlvalues += item + ","; });
             sql += sqlvalues.Substring(0, sqlvalues.Length - 1) + ")";
 
             return sql + "\r\nGO\r\n";
@@ -132,15 +132,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                     sqlmergue += "N'" + item + "'";
                 else
                     if (valueType == IS_DATE)
-                        sqlmergue += "'" + DateTime.Parse(item).ToString("yyyyMMdd HH:mm:ss.fff") + "'"; 
-                    else
+                    sqlmergue += "'" + DateTime.Parse(item).ToString("yyyyMMdd HH:mm:ss.fff") + "'";
+                else
                         if (valueType == IS_UNIQUE)
-                            sqlmergue += "'{" + item + "}'"; 
-                        else
+                    sqlmergue += "'{" + item + "}'";
+                else
                             if (valueType == IS_NUMERIC)
-                                sqlmergue += item.Replace(",", ".");
-                            else
-                                sqlmergue += item;
+                    sqlmergue += item.Replace(",", ".");
+                else
+                    sqlmergue += item;
                 sqlFinal.Append(sql + sqlmergue + ")\r\nGO\r\n");
             }
             IEnumerable<string> items2 = this.Values.Except<string>(this.Old.Values);
@@ -151,15 +151,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                     sqsplit += "N'" + item + "'";
                 else
                     if (valueType == IS_DATE)
-                        sqsplit += "'" + DateTime.Parse(item).ToString("yyyyMMdd HH:mm:ss.fff") + "'";
-                    else
+                    sqsplit += "'" + DateTime.Parse(item).ToString("yyyyMMdd HH:mm:ss.fff") + "'";
+                else
                         if (valueType == IS_UNIQUE)
-                            sqsplit += "'{" + item + "}'";
-                        else
+                    sqsplit += "'{" + item + "}'";
+                else
                             if (valueType == IS_NUMERIC)
-                                sqsplit += item.Replace(",", ".");
-                            else
-                                sqsplit += item;
+                    sqsplit += item.Replace(",", ".");
+                else
+                    sqsplit += item;
                 sqlFinal.Append(sql + sqsplit + ")\r\nGO\r\n");
             }
             return sqlFinal.ToString();

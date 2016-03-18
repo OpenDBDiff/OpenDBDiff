@@ -15,7 +15,7 @@ namespace DBDiff.Front
             this.srcConnectionString = SrcConnectionString;
             this.destConnectionString = DestConnectionString;
             this.ClientSize = new Size(1050, 600);
-            
+
             //Label lblSrc
             lblSrc.Text = "Source";
             lblSrc.Font = new Font("Verdana", 14, FontStyle.Bold);
@@ -112,7 +112,8 @@ namespace DBDiff.Front
             doCompare();
         }
 
-        private void doCompare(){
+        private void doCompare()
+        {
             DataTable srcTable = Updater.getData(selected, srcConnectionString);
             DataTable destTable = Updater.getData(selected, destConnectionString);
 
@@ -147,7 +148,8 @@ namespace DBDiff.Front
             }
         }
 
-        private void btnCommitChanges_Click(object sender, EventArgs e) {
+        private void btnCommitChanges_Click(object sender, EventArgs e)
+        {
             DataTable destination = (DataTable)destDgv.DataSource;
             DataTable edits = destination.GetChanges();
             if (Updater.CommitTable(edits, destConnectionString))
@@ -158,15 +160,19 @@ namespace DBDiff.Front
             }
         }
 
-        private void btnUpdateRow_Click(object sender, EventArgs e) {
+        private void btnUpdateRow_Click(object sender, EventArgs e)
+        {
             DataTable source = (DataTable)srcDgv.DataSource;
             DataTable destination = (DataTable)destDgv.DataSource;
 
             object[] sourceItems = source.Rows[srcDgv.CurrentRow.Index].ItemArray;
 
-            for (int i = 0; i < destination.Columns.Count; i++) {
-                if (destination.Columns[i].Unique) {
-                    if (destination.Rows.Find(sourceItems[i]) == null && destination.Columns[i].AutoIncrement) {
+            for (int i = 0; i < destination.Columns.Count; i++)
+            {
+                if (destination.Columns[i].Unique)
+                {
+                    if (destination.Rows.Find(sourceItems[i]) == null && destination.Columns[i].AutoIncrement)
+                    {
                         sourceItems[i] = null;
                     }
                 }
@@ -178,13 +184,16 @@ namespace DBDiff.Front
             btnCommitChanges.Enabled = true;
         }
 
-        private void btnMerge_Click(object sender, EventArgs e) {
+        private void btnMerge_Click(object sender, EventArgs e)
+        {
             DataTable source = (DataTable)srcDgv.DataSource;
             DataTable destination = (DataTable)destDgv.DataSource;
 
             destination.Merge(source, true);
-            foreach(DataRow dr in destination.Rows){
-                if (dr.RowState == DataRowState.Unchanged) {
+            foreach (DataRow dr in destination.Rows)
+            {
+                if (dr.RowState == DataRowState.Unchanged)
+                {
                     dr.SetAdded();
                 }
             }

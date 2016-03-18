@@ -9,8 +9,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
         {
             if (!node.Compare(CamposOrigen[node.FullName]))
             {
-                FullText newNode = node;//.Clone(CamposOrigen.Parent);                
-                if (node.IsDefault != CamposOrigen[node.FullName].IsDefault)                
+                FullText newNode = node;//.Clone(CamposOrigen.Parent);
+                if (node.IsDefault != CamposOrigen[node.FullName].IsDefault)
                     newNode.Status += (int)Enums.ObjectStatusType.DisabledStatus;
                 if (!node.Owner.Equals(CamposOrigen[node.FullName].Owner))
                     newNode.Status += (int)Enums.ObjectStatusType.ChangeOwner;

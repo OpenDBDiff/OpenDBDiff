@@ -80,7 +80,7 @@ namespace DBDiff.Schema
                 Childs.ForEach(item =>
                     {
                         if (item.IsRoot)
-                            message += "    ";                        
+                            message += "    ";
                         message += item.Message;
                     });
                 return message;

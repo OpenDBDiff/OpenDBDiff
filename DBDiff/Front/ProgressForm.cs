@@ -12,7 +12,7 @@ namespace DBDiff.Front
         private Generate genData2;
         private bool IsProcessing = false;
         private Database origenClone = null;
-        
+
         // TODO: thread-safe error reporting
 
         public ProgressForm(string DatabaseName1, string DatabaseName2, Generate genData1, Generate genData2)

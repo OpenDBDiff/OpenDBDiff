@@ -3,7 +3,7 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
-    internal class CompareFileGroups:CompareBase<FileGroup>
+    internal class CompareFileGroups : CompareBase<FileGroup>
     {
         protected override void DoNew<Root>(SchemaList<FileGroup, Root> CamposOrigen, FileGroup node)
         {

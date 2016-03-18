@@ -2,7 +2,7 @@
 {
     public class MessageLog
     {
-        public enum LogType        
+        public enum LogType
         {
             Information = 0,
             Warning = 1,

@@ -19,7 +19,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                         ((ICode)item).DependenciesOut.Add(newNode.FullName);
                 }
             }
-            );            
+            );
         }
 
         protected override void DoUpdate<Root>(SchemaList<Function, Root> CamposOrigen, Function node)
@@ -38,7 +38,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 else
                     newNode.Status += (int)Enums.ObjectStatusType.AlterBodyStatus;
                 CamposOrigen[node.FullName] = newNode;
-            }            
+            }
         }
     }
 }

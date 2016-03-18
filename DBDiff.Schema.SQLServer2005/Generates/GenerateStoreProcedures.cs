@@ -48,7 +48,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             sql += "INNER JOIN sys.schemas S ON S.schema_id = P.schema_id ";
             if (version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
             {
-                sql +=",(SELECT null as execute_as_principal_id, null as assembly_class, null as assembly_id, null as assembly_method) AS AM,";
+                sql += ",(SELECT null as execute_as_principal_id, null as assembly_class, null as assembly_id, null as assembly_method) AS AM,";
                 sql += "(SELECT null AS name) AS AF";
             }
             else
@@ -113,7 +113,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                     item.Id = (int)reader[object_idIndex];
                                     item.Name = (string)reader[NameIndex];
                                     item.Owner = (string)reader[ownerIndex];
-                                    database.Procedures.Add(item);                                    
+                                    database.Procedures.Add(item);
                                 }
                                 if ((reader[typeIndex].ToString().Trim().Equals("PC")) && (database.Options.Ignore.FilterCLRStoreProcedure))
                                 {
@@ -128,10 +128,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                     item.AssemblyExecuteAs = reader["ExecuteAs"].ToString();
                                     item.AssemblyMethod = reader["assembly_method"].ToString();
                                     database.CLRProcedures.Add(item);
-                                }                                
+                                }
                             }
                         }
-                    }                    
+                    }
                 }
                 if (database.CLRProcedures.Count > 0)
                     FillParameters(database, connectionString);

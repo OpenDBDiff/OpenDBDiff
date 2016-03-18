@@ -13,7 +13,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         }
 
         public AssemblyFile(ISchemaBase parent, string name, string content)
-            : base(parent,Enums.ObjectType.AssemblyFile)
+            : base(parent, Enums.ObjectType.AssemblyFile)
         {
             this.Name = name;
             this.Content = content;

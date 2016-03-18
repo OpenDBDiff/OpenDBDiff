@@ -3,7 +3,7 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public interface ICode:ISchemaBase
+    public interface ICode : ISchemaBase
     {
         SQLScriptList Rebuild();
         List<string> DependenciesIn { get; set; }

@@ -106,7 +106,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                 colPrecisionIndex = reader.GetOrdinal("Precision");
                 colScaleIndex = reader.GetOrdinal("Scale");
                 colDataUserTypeIdIndex = reader.GetOrdinal("user_type_id");
-                colIsUserDefinedTypeIndex = reader.GetOrdinal("is_user_defined");                
+                colIsUserDefinedTypeIndex = reader.GetOrdinal("is_user_defined");
                 colSizeIndex = reader.GetOrdinal("Size");
                 colHasIndexIndex = reader.GetOrdinal("HasIndex");
                 colHasComputedFormulaIndex = reader.GetOrdinal("HasComputedFormula");
@@ -129,7 +129,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             }
         }
 
-        private void FillColumn<T>(ITable<T> table, SqlDataReader reader) where T:ISchemaBase
+        private void FillColumn<T>(ITable<T> table, SqlDataReader reader) where T : ISchemaBase
         {
             Database database = (Database)table.Parent;
 
@@ -138,7 +138,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             col.Id = (int)reader[colIDIndex];
             if (database.Options.Ignore.FilterColumnOrder)
                 col.Position = table.Columns.Count + 1;
-            
+
             if (database.Options.Ignore.FilterColumnCollation)
                 col.Collation = (string)reader[colCollationIndex];
 
@@ -164,7 +164,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             col.ComputedFormula = (string)reader[colFormulaIndex];
             col.IsPersisted = (bool)reader[colIsPersistedIndex];
             col.IsComputed = (bool)reader[colIsComputedIndex];
-            col.IsNullable = (bool)reader[colNullableIndex];            
+            col.IsNullable = (bool)reader[colNullableIndex];
             col.XmlSchema = reader[colXmlSchemaIndex].ToString();
             col.IsXmlDocument = (bool)reader[colIs_xml_documentIndex];
             col.Precision = (byte)reader[colPrecisionIndex];
@@ -188,13 +188,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             if ((int)reader[colDefaultIdIndex] != 0)
             {
                 col.DefaultConstraint = new ColumnConstraint(col)
-                                            {
-                                                Id = (int) reader[colDefaultIdIndex],
-                                                Owner = table.Owner,
-                                                Name = (string) reader[colDefaultNameIndex],
-                                                Type = Constraint.ConstraintType.Default,
-                                                Definition = (string) reader[colDefaultDefinitionIndex]
-                                            };
+                {
+                    Id = (int)reader[colDefaultIdIndex],
+                    Owner = table.Owner,
+                    Name = (string)reader[colDefaultNameIndex],
+                    Type = Constraint.ConstraintType.Default,
+                    Definition = (string)reader[colDefaultDefinitionIndex]
+                };
             }
             if ((int)reader[colrule_object_idIndex] != 0)
                 col.Rule = ((Database)table.Parent).Rules.Find((int)reader[colrule_object_idIndex]);
@@ -205,7 +205,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         {
             try
             {
-                root.RaiseOnReading(new ProgressEventArgs("Reading tables...",Constants.READING_TABLES));
+                root.RaiseOnReading(new ProgressEventArgs("Reading tables...", Constants.READING_TABLES));
                 FillTables(database, connectionString);
                 if ((database.Tables.Count > 0) || (database.TablesTypes.Count > 0))
                 {
@@ -215,7 +215,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             }
             catch (Exception ex)
             {
-                messages.Add(new MessageLog(ex.Message,ex.StackTrace, MessageLog.LogType.Error));
+                messages.Add(new MessageLog(ex.Message, ex.StackTrace, MessageLog.LogType.Error));
             }
         }
 
@@ -283,11 +283,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                 else
                                 {
                                     item = new TableType(database)
-                                               {
-                                                   Id = (int) reader[TableIdIndex],
-                                                   Name = (string) reader[TableNameIndex],
-                                                   Owner = (string) reader[TableOwnerIndex]
-                                               };
+                                    {
+                                        Id = (int)reader[TableIdIndex],
+                                        Name = (string)reader[TableNameIndex],
+                                        Owner = (string)reader[TableOwnerIndex]
+                                    };
                                     database.TablesTypes.Add((TableType)item);
                                 }
                             }
@@ -300,7 +300,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             {
                                 if (database.Options.Ignore.FilterUserDataType)
                                     FillColumn((ITable<TableType>)item, reader);
-                            }                                
+                            }
                         }
                     }
                 }

@@ -134,7 +134,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             option.Ignore.FilterConstraintCheck = chkConstraintsCheck.Checked;
 
             option.Ignore.FilterFunction = chkCompFunciones.Checked;
-            
+
             option.Ignore.FilterIndex = chkIndex.Checked;
             option.Ignore.FilterIndexFillFactor = chkIndexFillFactor.Checked && chkIndex.Checked;
             option.Ignore.FilterIndexIncludeColumns = chkIndexIncludeColumns.Checked && chkIndex.Checked;
@@ -151,7 +151,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             option.Ignore.FilterTableLockEscalation = chkTableLockEscalation.Checked && chkTables.Checked;
             option.Ignore.FilterTableChangeTracking = chkTableChangeTracking.Checked && chkTables.Checked;
 
-            option.Ignore.FilterTableFileGroup = chkFileGroups.Checked;            
+            option.Ignore.FilterTableFileGroup = chkFileGroups.Checked;
             option.Ignore.FilterTrigger = chkCompTriggers.Checked;
             option.Ignore.FilterDDLTriggers = chkCompTriggersDDL.Checked;
             option.Ignore.FilterUserDataType = chkCompUDT.Checked;
@@ -188,7 +188,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             chkIndexFillFactor.Enabled = chkIndex.Checked;
             chkIndexIncludeColumns.Enabled = chkIndex.Checked;
             chkIndexFilter.Enabled = chkIndex.Checked;
-            chkIndexRowLock.Enabled = chkIndex.Checked; 
+            chkIndexRowLock.Enabled = chkIndex.Checked;
         }
 
         private void chkCompTablas_CheckedChanged(object sender, EventArgs e)
@@ -198,7 +198,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             chkTablesColumnOrder.Enabled = chkTables.Checked;
             chkTableChangeTracking.Enabled = chkTables.Checked;
             chkTableLockEscalation.Enabled = chkTables.Checked;
-            chkTableOption.Enabled = chkTables.Checked; 
+            chkTableOption.Enabled = chkTables.Checked;
         }
 
         private void btnApply_Click(object sender, EventArgs e)

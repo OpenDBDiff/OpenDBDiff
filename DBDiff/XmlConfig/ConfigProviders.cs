@@ -21,7 +21,7 @@ namespace DBDiff.XmlConfig
                     ConfigProvider provider = new ConfigProvider();
                     provider.Description = nodes[index].Attributes.GetNamedItem("description").Value;
                     provider.Key = nodes[index].Attributes.GetNamedItem("key").Value;
-                    provider.Library = nodes[index].Attributes.GetNamedItem("library").Value ;
+                    provider.Library = nodes[index].Attributes.GetNamedItem("library").Value;
                     providers.Add(key, provider);
                 }
             }

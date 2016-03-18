@@ -3,7 +3,7 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
-    internal class CompareIndexes:CompareBase<Index>
+    internal class CompareIndexes : CompareBase<Index>
     {
         protected override void DoNew<Root>(SchemaList<Index, Root> CamposOrigen, Index node)
         {

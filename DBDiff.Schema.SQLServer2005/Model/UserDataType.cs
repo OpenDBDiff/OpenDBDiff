@@ -62,24 +62,24 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public override ISchemaBase Clone(ISchemaBase parent)
         {
             var item = new UserDataType(parent)
-                           {
-                               Name = Name,
-                               Id = Id,
-                               Owner = Owner,
-                               Guid = Guid,
-                               AllowNull = AllowNull,
-                               Precision = Precision,
-                               Scale = Scale,
-                               Size = Size,
-                               Type = Type,
-                               Default = Default.Clone(this),
-                               Rule = Rule.Clone(this),
-                               Dependencys = Dependencys,
-                               IsAssembly = IsAssembly,
-                               AssemblyClass = AssemblyClass,
-                               AssemblyId = AssemblyId,
-                               AssemblyName = AssemblyName
-                           };
+            {
+                Name = Name,
+                Id = Id,
+                Owner = Owner,
+                Guid = Guid,
+                AllowNull = AllowNull,
+                Precision = Precision,
+                Scale = Scale,
+                Size = Size,
+                Type = Type,
+                Default = Default.Clone(this),
+                Rule = Rule.Clone(this),
+                Dependencys = Dependencys,
+                IsAssembly = IsAssembly,
+                AssemblyClass = AssemblyClass,
+                AssemblyId = AssemblyId,
+                AssemblyName = AssemblyName
+            };
             return item;
         }
 
@@ -153,12 +153,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         private SQLScriptList RebuildDependencys(Table table)
         {
             var list = new SQLScriptList();
-            List<ISchemaBase> items = ((Database) table.Parent).Dependencies.Find(table.Id);
+            List<ISchemaBase> items = ((Database)table.Parent).Dependencies.Find(table.Id);
             items.ForEach(item =>
                               {
-                                  ISchemaBase realItem = ((Database) table.Parent).Find(item.FullName);
+                                  ISchemaBase realItem = ((Database)table.Parent).Find(item.FullName);
                                   if (realItem.IsCodeType)
-                                      list.AddRange(((ICode) realItem).Rebuild());
+                                      list.AddRange(((ICode)realItem).Rebuild());
                               });
             return list;
         }
@@ -172,24 +172,24 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             {
                 foreach (ObjectDependency dependency in Dependencys)
                 {
-                    ISchemaBase itemDepens = ((Database) Parent).Find(dependency.Name);
+                    ISchemaBase itemDepens = ((Database)Parent).Find(dependency.Name);
                     /*Si la dependencia es una funcion o una vista, reconstruye el objecto*/
                     if (dependency.IsCodeType)
                     {
                         if (itemDepens != null)
-                            list.AddRange(((ICode) itemDepens).Rebuild());
+                            list.AddRange(((ICode)itemDepens).Rebuild());
                     }
                     /*Si la dependencia es una tabla, reconstruye los indices, constraint y columnas asociadas*/
                     if (dependency.Type == Enums.ObjectType.Table)
                     {
-                        Column column = ((Table) itemDepens).Columns[dependency.ColumnName];
+                        Column column = ((Table)itemDepens).Columns[dependency.ColumnName];
                         if ((column.Parent.Status != Enums.ObjectStatusType.DropStatus) &&
                             (column.Parent.Status != Enums.ObjectStatusType.CreateStatus) &&
                             ((column.Status != Enums.ObjectStatusType.CreateStatus) || (column.IsComputed)))
                         {
                             if (!fields.ContainsKey(column.FullName))
                             {
-                                listDependencys.AddRange(RebuildDependencys((Table) itemDepens));
+                                listDependencys.AddRange(RebuildDependencys((Table)itemDepens));
                                 if (column.HasToRebuildOnlyConstraint)
                                     //column.Parent.Status = Enums.ObjectStatusType.AlterRebuildDependenciesStatus;
                                     list.AddRange(column.RebuildDependencies());
@@ -214,7 +214,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                                             column.SetWasInsertInDiffList(Enums.ScripActionType.AlterColumnFormula);
                                             list.Add(column.ToSqlDrop(), 0, Enums.ScripActionType.AlterColumnFormula);
                                             List<ISchemaBase> drops =
-                                                ((Database) column.Parent.Parent).Dependencies.Find(column.Parent.Id,
+                                                ((Database)column.Parent.Parent).Dependencies.Find(column.Parent.Id,
                                                                                                     column.Id, 0);
                                             drops.ForEach(item =>
                                                               {
@@ -247,7 +247,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             {
                 /*Si existe otro UDT con el mismo assembly que se va a crear, debe ser borrado ANTES de crearse el nuevo*/
                 UserDataType other =
-                    ((Database) Parent).UserTypes.Find(
+                    ((Database)Parent).UserTypes.Find(
                         item =>
                         (item.Status == Enums.ObjectStatusType.DropStatus) &&
                         (item.AssemblyName + "." + item.AssemblyClass).Equals((AssemblyName + "." + AssemblyClass)));
@@ -260,7 +260,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         private string SQLDropOlder()
         {
             UserDataType other =
-                ((Database) Parent).UserTypes.Find(
+                ((Database)Parent).UserTypes.Find(
                     item =>
                     (item.Status == Enums.ObjectStatusType.DropStatus) &&
                     (item.AssemblyName + "." + item.AssemblyClass).Equals((AssemblyName + "." + AssemblyClass)));

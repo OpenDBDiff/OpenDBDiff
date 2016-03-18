@@ -10,18 +10,18 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return Get2005();
             //Fall back to highest compatible version
             return Get2008();
-            
+
         }
 
         private static string Get2005()
         {
             StringBuilder sql = new StringBuilder();
             sql.Append("SELECT ");
-	        sql.Append("FI.object_id, ");
-	        sql.Append("T.Name AS TableName,  ");
-	        sql.Append("FC.name AS FullTextCatalogName, ");
-	        sql.Append("I.name AS IndexName, ");
-	        sql.Append("FI.is_enabled, ");
+            sql.Append("FI.object_id, ");
+            sql.Append("T.Name AS TableName,  ");
+            sql.Append("FC.name AS FullTextCatalogName, ");
+            sql.Append("I.name AS IndexName, ");
+            sql.Append("FI.is_enabled, ");
             sql.Append("'['+ S.name + '].['+ T.name + '].[' + FC.name + ']' AS Name, ");
             sql.Append("C.name as ColumnName, ");
             sql.Append("FI.change_tracking_state_desc AS ChangeTracking, ");

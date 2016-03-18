@@ -14,7 +14,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 
             //fall back to highest compatible version
             return GetAzure();
-            
+
         }
 
         private static string Get2005()

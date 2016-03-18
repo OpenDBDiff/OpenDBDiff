@@ -17,7 +17,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         private string connectioString;
         private SqlOption objectFilter;
 
-                /// <summary>
+        /// <summary>
         /// Constructor de la clase.
         /// </summary>
         /// <param name="connectioString">Connection string de la base</param>
@@ -74,7 +74,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                 var exception = new SchemaException(
                                     String.Format("Error parsing ProductVersion. ({0})", versionValue ?? "[null]")
                                     , notAGoodIdeaToCatchAllErrors);
-                                
+
                                 if (!useDefaultVersion)
                                 {
                                     throw exception;
@@ -110,6 +110,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         {
             return 0 != (GetAsyncKeyState((int)vKey) & 0x8000);
         }
-#endif    
+#endif
     }
 }

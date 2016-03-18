@@ -47,7 +47,7 @@ namespace DBDiff.Schema
 
         public int Count
         {
-            get { return (list==null)?0:list.Count; }
+            get { return (list == null) ? 0 : list.Count; }
         }
 
         public SQLScript this[int index]
@@ -87,11 +87,11 @@ namespace DBDiff.Schema
             StringBuilder sql = new StringBuilder();
             this.Sort(); /*Ordena la lista antes de generar el script*/
             if (list != null)
-            {                
+            {
                 for (int j = 0; j < list.Count; j++)
                 {
                     //if ((list[j].IsDropAction) || (!list[j].IsAddAction))
-                        sql.Append(list[j].SQL); //ToSqlDown(list[j]);
+                    sql.Append(list[j].SQL); //ToSqlDown(list[j]);
                 }
                 /*for (int j = list.Count-1; j >= 0; j--)
                 {

@@ -19,11 +19,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         {
             //not supported in azure yet
             if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10) return;
-            
+
             int parentId = 0;
             bool change = false;
             Table parent = null;
-            root.RaiseOnReading(new ProgressEventArgs("Reading FullText Index...", Constants.READING_INDEXES));                      
+            root.RaiseOnReading(new ProgressEventArgs("Reading FullText Index...", Constants.READING_INDEXES));
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand(FullTextIndexSQLCommand.Get(database.Info.Version), conn))

@@ -4,7 +4,7 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class PartitionScheme:SQLServerSchemaBase
+    public class PartitionScheme : SQLServerSchemaBase
     {
         public PartitionScheme(ISchemaBase parent)
             : base(parent, Enums.ObjectType.PartitionFunction)
@@ -22,7 +22,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             sql += " AS PARTITION " + PartitionFunction + "\r\n";
             sql += "TO (";
             FileGroups.ForEach(item => sql += "[" + item + "],");
-            sql = sql.Substring(0, sql.Length -1);
+            sql = sql.Substring(0, sql.Length - 1);
             sql += ")\r\nGO\r\n";
             return sql;
         }
@@ -54,7 +54,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             {
                 listDiff.Add(ToSqlAdd(), 0, Enums.ScripActionType.AddPartitionScheme);
             }
-            return listDiff;               
+            return listDiff;
         }
 
         public static Boolean Compare(PartitionScheme origen, PartitionScheme destino)

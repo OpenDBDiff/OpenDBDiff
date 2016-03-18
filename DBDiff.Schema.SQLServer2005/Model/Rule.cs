@@ -27,7 +27,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             string sql;
             if (this.Parent.ObjectType == Enums.ObjectType.Column)
-                sql = String.Format("EXEC sp_bindrule N'{0}', N'[{1}].[{2}]','futureonly'\r\nGO\r\n", Name, this.Parent.Parent.Name,this.Parent.Name);
+                sql = String.Format("EXEC sp_bindrule N'{0}', N'[{1}].[{2}]','futureonly'\r\nGO\r\n", Name, this.Parent.Parent.Name, this.Parent.Name);
             else
                 sql = String.Format("EXEC sp_bindrule N'{0}', N'{1}','futureonly'\r\nGO\r\n", Name, this.Parent.Name);
             return sql;

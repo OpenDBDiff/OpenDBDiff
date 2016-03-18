@@ -3,7 +3,7 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public abstract class CLRCode:Code
+    public abstract class CLRCode : Code
     {
         public CLRCode(ISchemaBase parent, Enums.ObjectType type, Enums.ScripActionType addAction, Enums.ScripActionType dropAction)
             : base(parent, type, addAction, dropAction)

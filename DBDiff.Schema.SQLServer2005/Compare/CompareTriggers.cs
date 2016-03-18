@@ -3,7 +3,7 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
-    internal class CompareTriggers:CompareBase<Trigger>
+    internal class CompareTriggers : CompareBase<Trigger>
     {
         protected override void DoNew<Root>(SchemaList<Trigger, Root> CamposOrigen, Trigger node)
         {

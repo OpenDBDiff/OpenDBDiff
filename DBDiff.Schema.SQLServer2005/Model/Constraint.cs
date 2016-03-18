@@ -18,7 +18,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         }
 
         public Constraint(ISchemaBase parent)
-            : base(parent,Enums.ObjectType.Constraint)
+            : base(parent, Enums.ObjectType.Constraint)
         {
             this.Columns = new ConstraintColumns(this);
             this.Index = new Index(parent);
@@ -130,7 +130,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (destino == null) throw new ArgumentNullException("destino");
             if (origen == null) throw new ArgumentNullException("origen");
             if (origen.NotForReplication != destino.NotForReplication) return false;
-            if ((origen.RelationalTableFullName == null) && (destino.RelationalTableFullName != null)) return false;            
+            if ((origen.RelationalTableFullName == null) && (destino.RelationalTableFullName != null)) return false;
             if (origen.RelationalTableFullName != null)
                 if (!origen.RelationalTableFullName.Equals(destino.RelationalTableFullName, StringComparison.CurrentCultureIgnoreCase)) return false;
             if ((origen.Definition == null) && (destino.Definition != null)) return false;
@@ -171,9 +171,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 sql.Append("PRIMARY KEY " + typeConstraint + "\r\n\t(\r\n");
             else
                 sql.Append("UNIQUE " + typeConstraint + "\r\n\t(\r\n");
-            
+
             this.Columns.Sort();
-            
+
             for (int j = 0; j < this.Columns.Count; j++)
             {
                 sql.Append("\t\t[" + this.Columns[j].Name + "]");
@@ -262,7 +262,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
                 return sqlcheck + "CHECK " + (NotForReplication ? "NOT FOR REPLICATION" : "") + " (" + Definition + ")";
             }
-            return "";            
+            return "";
         }
 
         public override string ToSqlAdd()

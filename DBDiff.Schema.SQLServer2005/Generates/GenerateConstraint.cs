@@ -44,7 +44,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                     table = database.Tables.Find(parentId);
                                 else
                                     table = database.TablesTypes.Find(parentId);
-                            } 
+                            }
                             item = new Constraint(table);
                             item.Id = (int)reader["id"];
                             item.Name = reader["Name"].ToString();
@@ -66,7 +66,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         }
 
         #endregion
-        
+
         #region ForeignKey Functions...
 
         private static string GetSQLForeignKey()
@@ -133,7 +133,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             ccon.ColumnRelationalDataTypeId = (int)reader["user_type_id"];
                             //table.DependenciesCount++;
                             con.Columns.Add(ccon);
-                        }                        
+                        }
                     }
                 }
             }
@@ -203,7 +203,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             ccon.Order = (bool)reader["is_descending_key"];
                             ccon.Id = (int)reader["column_id"];
                             ccon.DataTypeId = (int)reader["user_type_id"];
-                            con.Columns.Add(ccon);                            
+                            con.Columns.Add(ccon);
                         }
                     }
                 }

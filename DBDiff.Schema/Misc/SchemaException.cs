@@ -20,7 +20,7 @@ namespace DBDiff.Schema.Misc
             finally { }
         }
 
-        public SchemaException():base()
+        public SchemaException() : base()
         {
         }
 
@@ -36,7 +36,7 @@ namespace DBDiff.Schema.Misc
             Write(exception.StackTrace);
         }
 
-        protected SchemaException(SerializationInfo info, StreamingContext context):base(info, context)
+        protected SchemaException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

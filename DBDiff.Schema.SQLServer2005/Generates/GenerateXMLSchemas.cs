@@ -66,7 +66,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             //TODO XML_SCHEMA_NAMESPACE function not supported in Azure, is there a workaround?
             //not supported in azure yet
             if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10) return;
-            
+
 
             if (database.Options.Ignore.FilterXMLSchema)
             {

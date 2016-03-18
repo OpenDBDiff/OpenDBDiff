@@ -87,7 +87,7 @@ namespace DBDiff.Settings
             }
             catch (Exception terribleCatchAllErrorsClause)
             {
-                if (stillCaringAboutSqlLiteProjectErrors 
+                if (stillCaringAboutSqlLiteProjectErrors
                     && DialogResult.No == MessageBox.Show(terribleCatchAllErrorsClause.Message + "\n\nDo you want to see further errors?", "Project Error", MessageBoxButtons.YesNo))
                 {
                     stillCaringAboutSqlLiteProjectErrors = false;
@@ -101,14 +101,14 @@ namespace DBDiff.Settings
             DoSqlSomething(
                 "SELECT MAX(ProjectId) AS NewId FROM Project WHERE Internal = 0",
                 reader => maxId = int.Parse(reader["NewId"].ToString()),
-                "INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('" + item.Name.Replace("'","''") + "','" + item.ConnectionStringSource + "','" + item.ConnectionStringDestination + "','" + item.Options + "'," + ((int) item.Type).ToString() + ",0)");
+                "INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('" + item.Name.Replace("'", "''") + "','" + item.ConnectionStringSource + "','" + item.ConnectionStringDestination + "','" + item.Options + "'," + ((int)item.Type).ToString() + ",0)");
             return maxId;
         }
 
         private static int Update(Project item)
         {
             DoSqlSomething(
-                "UPDATE Project SET Name = '" + item.Name.Replace("'","''") + "', ConnectionStringSource = '" + item.ConnectionStringSource + "', ConnectionStringDestination = '" + item.ConnectionStringDestination + "', Type = " + ((int)item.Type).ToString() + " WHERE ProjectId = " + item.Id.ToString(),
+                "UPDATE Project SET Name = '" + item.Name.Replace("'", "''") + "', ConnectionStringSource = '" + item.ConnectionStringSource + "', ConnectionStringDestination = '" + item.ConnectionStringDestination + "', Type = " + ((int)item.Type).ToString() + " WHERE ProjectId = " + item.Id.ToString(),
                 null);
             return item.Id;
         }
@@ -122,7 +122,7 @@ namespace DBDiff.Settings
         {
             if (item.Id == 0)
                 return Add(item);
-            
+
             return Update(item);
         }
 
@@ -144,14 +144,14 @@ namespace DBDiff.Settings
             DoSqlSomething(
                 "SELECT * FROM Project WHERE Internal = 1 ORDER BY Name",
                 reader => item = new Project
-                    {
-                        Id = int.Parse(reader["ProjectId"].ToString()),
-                        ConnectionStringSource = reader["ConnectionStringSource"].ToString(),
-                        ConnectionStringDestination = reader["ConnectionStringDestination"].ToString(),
-                        Type = (ProjectType)(long)reader["Type"],
-                        //Options = (SqlOption) reader["Options"],
-                        Name = reader["Name"].ToString()
-                    });
+                {
+                    Id = int.Parse(reader["ProjectId"].ToString()),
+                    ConnectionStringSource = reader["ConnectionStringSource"].ToString(),
+                    ConnectionStringDestination = reader["ConnectionStringDestination"].ToString(),
+                    Type = (ProjectType)(long)reader["Type"],
+                    //Options = (SqlOption) reader["Options"],
+                    Name = reader["Name"].ToString()
+                });
             return item;
         }
 
@@ -162,13 +162,13 @@ namespace DBDiff.Settings
                 "SELECT * FROM Project WHERE Internal = 0 ORDER BY Name",
                 reader => items.Add(new Project
                 {
-                   Id = int.Parse(reader["ProjectId"].ToString()),
-                   ConnectionStringSource = reader["ConnectionStringSource"].ToString(),
-                   ConnectionStringDestination =
+                    Id = int.Parse(reader["ProjectId"].ToString()),
+                    ConnectionStringSource = reader["ConnectionStringSource"].ToString(),
+                    ConnectionStringDestination =
                        reader["ConnectionStringDestination"].ToString(),
-                   Type = (ProjectType) (long) reader["Type"],
-                   //Options = (SqlOption) reader["Options"],
-                   Name = reader["Name"].ToString()
+                    Type = (ProjectType)(long)reader["Type"],
+                    //Options = (SqlOption) reader["Options"],
+                    Name = reader["Name"].ToString()
                 }));
             return items;
         }

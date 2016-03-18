@@ -5,7 +5,7 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal static class CompareDatabase
-    {        
+    {
         public static Database GenerateDiferences(Database Origen, Database Destino)
         {
             try
@@ -40,7 +40,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
             }
             catch (Exception ex)
             {
-                throw new SchemaException(ex.Message,ex);
+                throw new SchemaException(ex.Message, ex);
             }
         }
     }

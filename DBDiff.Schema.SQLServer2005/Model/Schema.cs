@@ -6,7 +6,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
     {
         public Schema(Database parent)
             : base(parent, Enums.ObjectType.Schema)
-        {                        
+        {
         }
 
         public override string ToSql()

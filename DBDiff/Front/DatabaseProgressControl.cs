@@ -37,8 +37,8 @@ namespace DBDiff.Front
         public int Value
         {
             get { return progressBar1.Value; }
-            set 
-            { 
+            set
+            {
                 progressBar1.Value = value;
                 progressBar1.Refresh();
             }

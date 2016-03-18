@@ -3,7 +3,7 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
-    internal class ComparePartitionFunction:CompareBase<PartitionFunction>
+    internal class ComparePartitionFunction : CompareBase<PartitionFunction>
     {
         protected override void DoUpdate<Root>(SchemaList<PartitionFunction, Root> CamposOrigen, PartitionFunction node)
         {
@@ -25,7 +25,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                     newNode.Old = CamposOrigen[node.FullName].Clone(CamposOrigen.Parent);
                     CamposOrigen[node.FullName] = newNode;
                 }
-            }            
+            }
         }
     }
 }

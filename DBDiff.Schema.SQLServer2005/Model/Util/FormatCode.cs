@@ -44,7 +44,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model.Util
                     prevText += "\r\n";
                 return prevText + "GO\r\n";
             }
-            catch 
+            catch
             {
                 return prevText;
             }
@@ -86,15 +86,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model.Util
                     {
                         //indexBegin = abiertas[indexStart].Index + abiertas[indexStart].Length;
                         indexBegin = iAux + 1;
-                        indexStart++;                        
+                        indexStart++;
                     }
                 }
             }
-            string result = reg3.Replace(prevText, " " + item.FullName,1,iAux+1 );
+            string result = reg3.Replace(prevText, " " + item.FullName, 1, iAux + 1);
             if (iAux != -1)
-                sitem.Body = reg4.Replace(result, " [", 1,iAux);
+                sitem.Body = reg4.Replace(result, " [", 1, iAux);
             sitem.FindPosition = iAux;
-            return sitem; 
+            return sitem;
         }
 
         public static string FormatCreate(string ObjectType, string body, ISchemaBase item)
@@ -122,10 +122,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model.Util
                 prevText = (string)body.Clone();
                 SearchItem sitem = FindCreate(ObjectType, item, prevText);
                 Regex regAlter = new Regex("CREATE");
-                
+
                 if (!quitSchemaBinding)
                     return regAlter.Replace(sitem.Body, "ALTER", 1, sitem.FindPosition);
-                    //return prevText.Substring(0, iFind) + "ALTER " + sitem.ObjectType + " " + prevText.Substring(iFind + sitem.ObjectType.Length + 7, prevText.Length - (iFind + sitem.ObjectType.Length + 7)).TrimStart();
+                //return prevText.Substring(0, iFind) + "ALTER " + sitem.ObjectType + " " + prevText.Substring(iFind + sitem.ObjectType.Length + 7, prevText.Length - (iFind + sitem.ObjectType.Length + 7)).TrimStart();
                 else
                 {
                     string text = regAlter.Replace(sitem.Body, "ALTER", 1, sitem.FindPosition);

@@ -2,8 +2,8 @@ using System;
 
 namespace DBDiff.Schema.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property,AllowMultiple = true)]
-    public sealed class ShowItemAttribute:Attribute 
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    public sealed class ShowItemAttribute : Attribute
     {
         public ShowItemAttribute(string name)
         {

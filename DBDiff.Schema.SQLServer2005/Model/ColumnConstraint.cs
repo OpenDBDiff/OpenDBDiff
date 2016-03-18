@@ -56,7 +56,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         /// <summary>
         /// Convierte el schema de la constraint en XML.
-        /// </summary>  
+        /// </summary>
         public string ToXML()
         {
             string xml = "";
@@ -66,7 +66,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             }
             if (this.Type == Constraint.ConstraintType.Check)
             {
-                xml += "<COLUMNCONSTRAINT name=\"" + Name + "\" type=\"C\" value=\"" + Definition + "\" notForReplication=\"" + (NotForReplication?"1":"0") + "\"/>\n";
+                xml += "<COLUMNCONSTRAINT name=\"" + Name + "\" type=\"C\" value=\"" + Definition + "\" notForReplication=\"" + (NotForReplication ? "1" : "0") + "\"/>\n";
             }
             return xml;
         }
@@ -158,12 +158,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (this.HasState(Enums.ObjectStatusType.DropStatus))
                 list.Add(Drop());
             if (this.HasState(Enums.ObjectStatusType.CreateStatus))
-                list.Add(Create()); 
-            
+                list.Add(Create());
+
             if (this.Status == Enums.ObjectStatusType.AlterStatus)
             {
                 list.Add(Drop());
-                list.Add(Create()); 
+                list.Add(Create());
             }
             return list;
         }

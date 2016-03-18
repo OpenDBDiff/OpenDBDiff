@@ -23,7 +23,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             bool change = false;
             string type;
             ISchemaBase parent = null;
-            root.RaiseOnReading(new ProgressEventArgs("Reading Index...", Constants.READING_INDEXES));                      
+            root.RaiseOnReading(new ProgressEventArgs("Reading Index...", Constants.READING_INDEXES));
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand(IndexSQLCommand.Get(database.Info.Version), conn))

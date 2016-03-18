@@ -3,7 +3,7 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class ExtendedProperty:SQLServerSchemaBase, ISchemaBase
+    public class ExtendedProperty : SQLServerSchemaBase, ISchemaBase
     {
         public ExtendedProperty(ISchemaBase parent)
             : base(parent, Enums.ObjectType.ExtendedProperty)
@@ -23,7 +23,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                     return "[" + Level0name + "].[" + Level2name + "]";
             }
         }
-        
+
         public string Level2name { get; set; }
 
         public string Level2type { get; set; }

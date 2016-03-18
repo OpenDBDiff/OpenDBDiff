@@ -16,12 +16,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             dependenciesCount = -1;
             Columns = new Columns<Table>(this);
-            Constraints = new SchemaList<Constraint, Table>(this, ((Database) parent).AllObjects);
+            Constraints = new SchemaList<Constraint, Table>(this, ((Database)parent).AllObjects);
             Options = new SchemaList<TableOption, Table>(this);
-            Triggers = new SchemaList<Trigger, Table>(this, ((Database) parent).AllObjects);
-            CLRTriggers = new SchemaList<CLRTrigger, Table>(this, ((Database) parent).AllObjects);
-            Indexes = new SchemaList<Index, Table>(this, ((Database) parent).AllObjects);
-            Partitions = new SchemaList<TablePartition, Table>(this, ((Database) parent).AllObjects);
+            Triggers = new SchemaList<Trigger, Table>(this, ((Database)parent).AllObjects);
+            CLRTriggers = new SchemaList<CLRTrigger, Table>(this, ((Database)parent).AllObjects);
+            Indexes = new SchemaList<Index, Table>(this, ((Database)parent).AllObjects);
+            Partitions = new SchemaList<TablePartition, Table>(this, ((Database)parent).AllObjects);
             FullTextIndex = new SchemaList<FullTextIndex, Table>(this);
         }
 
@@ -59,7 +59,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public SchemaList<TablePartition, Table> Partitions { get; set; }
 
-        public SchemaList<TableOption, Table> Options { get; set; }     
+        public SchemaList<TableOption, Table> Options { get; set; }
 
         /// <summary>
         /// Indica si la tabla tiene alguna columna que sea Identity.
@@ -113,7 +113,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             get
             {
                 if (dependenciesCount == -1)
-                    dependenciesCount = ((Database) Parent).Dependencies.DependenciesCount(Id,
+                    dependenciesCount = ((Database)Parent).Dependencies.DependenciesCount(Id,
                                                                                            Enums.ObjectType.Constraint);
                 return dependenciesCount;
             }
@@ -122,7 +122,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         #region IComparable<Table> Members
 
         /// <summary>
-        /// Compara en primer orden por la operacion 
+        /// Compara en primer orden por la operacion
         /// (Primero van los Drops, luego los Create y finalesmente los Alter).
         /// Si la operacion es la misma, ordena por cantidad de tablas dependientes.
         /// </summary>
@@ -152,21 +152,21 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public override ISchemaBase Clone(ISchemaBase objectParent)
         {
             var table = new Table(objectParent)
-                            {
-                                Owner = Owner,
-                                Name = Name,
-                                Id = Id,
-                                Guid = Guid,
-                                Status = Status,
-                                FileGroup = FileGroup,
-                                FileGroupText = FileGroupText,
-                                FileGroupStream = FileGroupStream,
-                                HasClusteredIndex = HasClusteredIndex,
-                                HasChangeTracking = HasChangeTracking,
-                                HasChangeTrackingTrackColumn = HasChangeTrackingTrackColumn,
-                                HasChangeDataCapture = HasChangeDataCapture,
-                                dependenciesCount = DependenciesCount
-                            };
+            {
+                Owner = Owner,
+                Name = Name,
+                Id = Id,
+                Guid = Guid,
+                Status = Status,
+                FileGroup = FileGroup,
+                FileGroupText = FileGroupText,
+                FileGroupStream = FileGroupStream,
+                HasClusteredIndex = HasClusteredIndex,
+                HasChangeTracking = HasChangeTracking,
+                HasChangeTrackingTrackColumn = HasChangeTrackingTrackColumn,
+                HasChangeDataCapture = HasChangeDataCapture,
+                dependenciesCount = DependenciesCount
+            };
             table.Columns = Columns.Clone(table);
             table.Options = Options.Clone(table);
             table.CompressType = CompressType;
@@ -195,7 +195,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 current = current.Parent;
             }
             var isAzure10 = database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10;
-                
+
             string sql = "";
             string sqlPK = "";
             string sqlUC = "";
@@ -227,11 +227,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                         sql += "WITH (DATA_COMPRESSION = " + CompressType + ")\r\n";
                 }
                 sql += ")";
-                
+
                 if (!isAzure10)
                 {
                     if (!String.IsNullOrEmpty(FileGroup)) sql += " ON [" + FileGroup + "]";
-                
+
                     if (!String.IsNullOrEmpty(FileGroupText))
                     {
                         if (HasBlobColumn)
@@ -282,38 +282,38 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return "DROP TABLE " + FullName + "\r\nGO\r\n";
         }
 
-/*
-        private SQLScriptList BuildSQLFileGroup()
-        {
-            var listDiff = new SQLScriptList();
+        /*
+                private SQLScriptList BuildSQLFileGroup()
+                {
+                    var listDiff = new SQLScriptList();
 
-            Boolean found = false;
-            Index clustered = Indexes.Find(item => item.Type == Index.IndexTypeEnum.Clustered);
-            if (clustered == null)
-            {
-                foreach (Constraint cons in Constraints)
-                {
-                    if (cons.Index.Type == Index.IndexTypeEnum.Clustered)
+                    Boolean found = false;
+                    Index clustered = Indexes.Find(item => item.Type == Index.IndexTypeEnum.Clustered);
+                    if (clustered == null)
                     {
-                        listDiff.Add(cons.ToSqlDrop(FileGroup), dependenciesCount, Enums.ScripActionType.DropConstraint);
-                        listDiff.Add(cons.ToSqlAdd(), dependenciesCount, Enums.ScripActionType.AddConstraint);
-                        found = true;
+                        foreach (Constraint cons in Constraints)
+                        {
+                            if (cons.Index.Type == Index.IndexTypeEnum.Clustered)
+                            {
+                                listDiff.Add(cons.ToSqlDrop(FileGroup), dependenciesCount, Enums.ScripActionType.DropConstraint);
+                                listDiff.Add(cons.ToSqlAdd(), dependenciesCount, Enums.ScripActionType.AddConstraint);
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                        {
+                            Status = Enums.ObjectStatusType.RebuildStatus;
+                            listDiff = ToSqlDiff();
+                        }
                     }
+                    else
+                    {
+                        listDiff.Add(clustered.ToSqlDrop(FileGroup), dependenciesCount, Enums.ScripActionType.DropIndex);
+                        listDiff.Add(clustered.ToSqlAdd(), dependenciesCount, Enums.ScripActionType.AddIndex);
+                    }
+                    return listDiff;
                 }
-                if (!found)
-                {
-                    Status = Enums.ObjectStatusType.RebuildStatus;
-                    listDiff = ToSqlDiff();
-                }
-            }
-            else
-            {
-                listDiff.Add(clustered.ToSqlDrop(FileGroup), dependenciesCount, Enums.ScripActionType.DropIndex);
-                listDiff.Add(clustered.ToSqlAdd(), dependenciesCount, Enums.ScripActionType.AddIndex);
-            }
-            return listDiff;
-        }
-*/
+        */
 
         /// <summary>
         /// Devuelve el schema de diferencias de la tabla en formato SQL.
@@ -324,13 +324,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
             if (Status != Enums.ObjectStatusType.OriginalStatus)
             {
-                if (((Database) Parent).Options.Ignore.FilterTable)
+                if (((Database)Parent).Options.Ignore.FilterTable)
                     RootParent.ActionMessage.Add(this);
             }
 
             if (Status == Enums.ObjectStatusType.DropStatus)
             {
-                if (((Database) Parent).Options.Ignore.FilterTable)
+                if (((Database)Parent).Options.Ignore.FilterTable)
                 {
                     listDiff.Add(ToSqlDrop(), dependenciesCount, Enums.ScripActionType.DropTable);
                     listDiff.AddRange(ToSQLDropFKBelow());
@@ -537,14 +537,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 {
                     if ((Columns[ic].Status == Enums.ObjectStatusType.RebuildDependenciesStatus) ||
                         (Columns[ic].Status == Enums.ObjectStatusType.AlterStatus))
-                        myDependencis.AddRange(((Database) Parent).Dependencies.Find(Id, 0, Columns[ic].DataUserTypeId));
+                        myDependencis.AddRange(((Database)Parent).Dependencies.Find(Id, 0, Columns[ic].DataUserTypeId));
                 }
                 /*Si no encuentra ninguna, toma todas las de la tabla*/
                 if (myDependencis.Count == 0)
-                    myDependencis.AddRange(((Database) Parent).Dependencies.Find(Id));
+                    myDependencis.AddRange(((Database)Parent).Dependencies.Find(Id));
             }
             else
-                myDependencis = ((Database) Parent).Dependencies.Find(Id);
+                myDependencis = ((Database)Parent).Dependencies.Find(Id);
 
             dependencis = new List<ISchemaBase>();
             for (int j = 0; j < myDependencis.Count; j++)
@@ -554,14 +554,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                     item = Indexes[myDependencis[j].FullName];
                 if (myDependencis[j].ObjectType == Enums.ObjectType.Constraint)
                     item =
-                        ((Database) Parent).Tables[myDependencis[j].Parent.FullName].Constraints[
+                        ((Database)Parent).Tables[myDependencis[j].Parent.FullName].Constraints[
                             myDependencis[j].FullName];
                 if (myDependencis[j].ObjectType == Enums.ObjectType.Default)
                     item = Columns[myDependencis[j].FullName].DefaultConstraint;
                 if (myDependencis[j].ObjectType == Enums.ObjectType.View)
-                    item = ((Database) Parent).Views[myDependencis[j].FullName];
+                    item = ((Database)Parent).Views[myDependencis[j].FullName];
                 if (myDependencis[j].ObjectType == Enums.ObjectType.Function)
-                    item = ((Database) Parent).Functions[myDependencis[j].FullName];
+                    item = ((Database)Parent).Functions[myDependencis[j].FullName];
                 if (item != null)
                     dependencis.Add(item);
             }
@@ -577,7 +577,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             Constraints.ForEach(constraint =>
                                     {
                                         if ((constraint.Type == Constraint.ConstraintType.ForeignKey) &&
-                                            (((Table) constraint.Parent).DependenciesCount <= DependenciesCount))
+                                            (((Table)constraint.Parent).DependenciesCount <= DependenciesCount))
                                         {
                                             /*Si la FK pertenece a la misma tabla, no se debe explicitar el DROP CONSTRAINT antes de hacer el DROP TABLE*/
                                             if (constraint.Parent.Id != constraint.RelationalTableId)
@@ -606,10 +606,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                     addDependencie = true;
                     if (dependencis[index].ObjectType == Enums.ObjectType.Constraint)
                     {
-                        if ((((Constraint) dependencis[index]).Type == Constraint.ConstraintType.Unique) &&
+                        if ((((Constraint)dependencis[index]).Type == Constraint.ConstraintType.Unique) &&
                             ((HasFileStream) || (OriginalTable.HasFileStream)))
                             addDependencie = false;
-                        if ((((Constraint) dependencis[index]).Type != Constraint.ConstraintType.ForeignKey) &&
+                        if ((((Constraint)dependencis[index]).Type != Constraint.ConstraintType.ForeignKey) &&
                             (dependencis[index].Status == Enums.ObjectStatusType.DropStatus))
                             addDependencie = false;
                     }
@@ -645,7 +645,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                     addDependencie = true;
                     if (dependencis[index].ObjectType == Enums.ObjectType.Constraint)
                     {
-                        if ((((Constraint) dependencis[index]).Type == Constraint.ConstraintType.Unique) &&
+                        if ((((Constraint)dependencis[index]).Type == Constraint.ConstraintType.Unique) &&
                             (HasFileStream))
                             addDependencie = false;
                     }

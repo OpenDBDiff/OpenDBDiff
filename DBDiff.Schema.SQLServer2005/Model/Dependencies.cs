@@ -5,7 +5,7 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    internal class Dependencies: List<Dependence>
+    internal class Dependencies : List<Dependence>
     {
         public Database Database { get; private set; }
 
@@ -53,7 +53,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                         }
                         else
                             if (depens.ObjectId == tableId)
-                                cons.Add(item);
+                            cons.Add(item);
                     }
 
                 });
@@ -76,7 +76,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 if (item.Type == Enums.ObjectType.Constraint)
                     if ((item.ObjectId == tableId) && (item.ObjectSchema.Name.Equals(constraint.Name)))
                         item.ObjectSchema = constraint;
-            });           
+            });
         }*/
 
         /// <summary>
@@ -139,10 +139,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                                 (depends.ObjectId == tableId)
                                 select depends.FullName).ToList();
 
-            cons.ForEach(item => 
-                { 
+            cons.ForEach(item =>
+                {
                     ISchemaBase schema = Database.Find(item);
-                    if (schema != null) real.Add(schema); 
+                    if (schema != null) real.Add(schema);
                 }
             );
             return real;

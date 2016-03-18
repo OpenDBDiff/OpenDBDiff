@@ -4,10 +4,10 @@ using DBDiff.Schema.SQLServer.Generates.Model.Util;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class Function : Code 
+    public class Function : Code
     {
         public Function(ISchemaBase parent)
-            : base(parent,Enums.ObjectType.Function, Enums.ScripActionType.AddFunction, Enums.ScripActionType.DropFunction)
+            : base(parent, Enums.ObjectType.Function, Enums.ScripActionType.AddFunction, Enums.ScripActionType.DropFunction)
         {
 
         }
@@ -50,7 +50,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             SQLScriptList list = new SQLScriptList();
             if (this.Status != Enums.ObjectStatusType.OriginalStatus)
                 RootParent.ActionMessage.Add(this);
-          
+
             if (this.HasState(Enums.ObjectStatusType.DropStatus))
                 list.Add(Drop());
             if (this.HasState(Enums.ObjectStatusType.CreateStatus))

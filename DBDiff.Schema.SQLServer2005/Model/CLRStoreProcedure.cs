@@ -4,7 +4,7 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class CLRStoreProcedure:CLRCode
+    public class CLRStoreProcedure : CLRCode
     {
         public CLRStoreProcedure(ISchemaBase parent)
             : base(parent, Enums.ObjectType.CLRStoreProcedure, Enums.ScripActionType.AddStoreProcedure, Enums.ScripActionType.DropStoreProcedure)

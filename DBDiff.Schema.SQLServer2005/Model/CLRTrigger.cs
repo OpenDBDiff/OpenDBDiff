@@ -6,7 +6,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
     {
         public CLRTrigger(ISchemaBase parent)
             : base(parent, Enums.ObjectType.CLRTrigger, Enums.ScripActionType.AddTrigger, Enums.ScripActionType.DropTrigger)
-        {            
+        {
         }
 
         public override string ToSql()

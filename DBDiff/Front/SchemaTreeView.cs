@@ -28,8 +28,8 @@ namespace DBDiff.Front
         public ISchemaBase DatabaseSource
         {
             get { return databaseSource; }
-            set 
-            { 
+            set
+            {
                 databaseSource = value;
                 if (value != null)
                 {
@@ -37,47 +37,47 @@ namespace DBDiff.Front
                 }
             }
         }
-		public List<ISchemaBase> GetCheckedSchemas()
-		{
-			List<ISchemaBase> schemas = new List<ISchemaBase>();
-			if (treeView1.CheckBoxes)
-			{
-				GetCheckedNodesToList(schemas, treeView1.Nodes);
-			}
-			return schemas;
-		}
-		public void SetCheckedSchemas(List<ISchemaBase> schemas)
-		{
-			SetCheckedNodesFromList(schemas, treeView1.Nodes);
-		}
-		private void GetCheckedNodesToList(List<ISchemaBase> schemas, TreeNodeCollection nodes)
-		{
-			foreach (TreeNode node in nodes)
-			{
-				if (node.Tag != null)
-				{
-					if (node.Checked)
-					{
-						schemas.Add(node.Tag as ISchemaBase);
-					}
-				}
-				GetCheckedNodesToList(schemas, node.Nodes);
-			}
-		}
-		private void SetCheckedNodesFromList(List<ISchemaBase> schemas, TreeNodeCollection nodes)
-		{
-			foreach (TreeNode node in nodes)
-			{
-				if (node.Tag != null)
-				{
-					node.Checked = schemas.FirstOrDefault(sch=>sch.Id==(node.Tag as ISchemaBase).Id )!=null;
-				}
-				SetCheckedNodesFromList(schemas, node.Nodes);
-			}
-		}
+        public List<ISchemaBase> GetCheckedSchemas()
+        {
+            List<ISchemaBase> schemas = new List<ISchemaBase>();
+            if (treeView1.CheckBoxes)
+            {
+                GetCheckedNodesToList(schemas, treeView1.Nodes);
+            }
+            return schemas;
+        }
+        public void SetCheckedSchemas(List<ISchemaBase> schemas)
+        {
+            SetCheckedNodesFromList(schemas, treeView1.Nodes);
+        }
+        private void GetCheckedNodesToList(List<ISchemaBase> schemas, TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Tag != null)
+                {
+                    if (node.Checked)
+                    {
+                        schemas.Add(node.Tag as ISchemaBase);
+                    }
+                }
+                GetCheckedNodesToList(schemas, node.Nodes);
+            }
+        }
+        private void SetCheckedNodesFromList(List<ISchemaBase> schemas, TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Tag != null)
+                {
+                    node.Checked = schemas.FirstOrDefault(sch => sch.Id == (node.Tag as ISchemaBase).Id) != null;
+                }
+                SetCheckedNodesFromList(schemas, node.Nodes);
+            }
+        }
 
         private void ReadPropertys(Type item, TreeNodeCollection nodes, ISchemaBase schema)
-        {                        
+        {
             PropertyInfo[] pi = item.GetProperties();
             nodes.Clear();
             foreach (PropertyInfo p in pi)
@@ -103,7 +103,7 @@ namespace DBDiff.Front
             {
                 if (CanNodeAdd(item))
                 {
-                    TreeNode subnode = node.Nodes.Add((attr.IsFullName?item.FullName:item.Name));
+                    TreeNode subnode = node.Nodes.Add((attr.IsFullName ? item.FullName : item.Name));
                     if (item.Status == Enums.ObjectStatusType.DropStatus)
                     {
                         subnode.ForeColor = Color.Red;
@@ -206,15 +206,15 @@ namespace DBDiff.Front
                 if (OnSelectItem != null) OnSelectItem(item.FullName);
             }
         }
-		private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)
-		{
-			if (e.Node.Tag == null)
-			{
-				foreach (TreeNode node in e.Node.Nodes)
-				{
-					node.Checked = e.Node.Checked;
-    }
-			}
-		}
+        private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node.Tag == null)
+            {
+                foreach (TreeNode node in e.Node.Nodes)
+                {
+                    node.Checked = e.Node.Checked;
+                }
+            }
+        }
     }
 }

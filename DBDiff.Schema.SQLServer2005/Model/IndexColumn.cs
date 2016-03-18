@@ -40,7 +40,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (origen.KeyOrder != destino.KeyOrder) return false;
             return true;
         }
-        
+
         public override string ToSqlDrop()
         {
             return "";
@@ -60,10 +60,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             /*if (other.Name.Equals(this.Name))
             {*/
-                if (other.IsIncluded == this.IsIncluded)
-                    return this.KeyOrder.CompareTo(other.KeyOrder);
-                else
-                    return other.IsIncluded.CompareTo(this.IsIncluded);
+            if (other.IsIncluded == this.IsIncluded)
+                return this.KeyOrder.CompareTo(other.KeyOrder);
+            else
+                return other.IsIncluded.CompareTo(this.IsIncluded);
             /*}
             else
                 return this.Name.CompareTo(other.Name);*/

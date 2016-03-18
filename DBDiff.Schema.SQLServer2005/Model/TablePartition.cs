@@ -2,7 +2,7 @@
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class TablePartition:SQLServerSchemaBase
+    public class TablePartition : SQLServerSchemaBase
     {
         public TablePartition(Table parent)
             : base(parent, Enums.ObjectType.Partition)

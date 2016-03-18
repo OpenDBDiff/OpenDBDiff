@@ -7,7 +7,7 @@ using DBDiff.Schema.SQLServer.Generates.Options;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public abstract class Code: SQLServerSchemaBase, ICode
+    public abstract class Code : SQLServerSchemaBase, ICode
     {
         protected string sql = null;
         protected string typeName = "";
@@ -23,7 +23,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             DependenciesOut = new List<String>();
             typeName = GetObjectTypeName(ObjectType);
             /*Por el momento, solo los Assemblys manejan deep de dependencias*/
-            if (this.ObjectType == Enums.ObjectType.Assembly) 
+            if (this.ObjectType == Enums.ObjectType.Assembly)
             {
                 deepMax = 501;
                 deepMin = 500;
@@ -63,7 +63,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (type == Enums.ObjectType.Rule) return "RULE";
             if (type == Enums.ObjectType.Trigger) return "TRIGGER";
             if (type == Enums.ObjectType.View) return "VIEW";
-            if (type == Enums.ObjectType.Function) return "FUNCTION";            
+            if (type == Enums.ObjectType.Function) return "FUNCTION";
             if (type == Enums.ObjectType.StoreProcedure) return "PROCEDURE";
             if (type == Enums.ObjectType.CLRStoreProcedure) return "PROCEDURE";
             if (type == Enums.ObjectType.CLRTrigger) return "TRIGGER";
@@ -113,7 +113,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                     {
                         if (!depencyTracker.ContainsKey(FullName.ToUpper()))
                         {
-                            depencyTracker.Add(FullName.ToUpper(), true);                            
+                            depencyTracker.Add(FullName.ToUpper(), true);
                         }
                         count += 1 + DependenciesCountFilter(item.DependenciesOut[j], depencyTracker);
                     }
@@ -169,7 +169,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                             if (!((item.Parent.HasState(Enums.ObjectStatusType.RebuildStatus)) && (item.ObjectType == Enums.ObjectType.Trigger)))
                                 list.Add(item.Drop(), newDeepMin);
                         }
-                        if ((this.Status != Enums.ObjectStatusType.DropStatus) && (item.Status != Enums.ObjectStatusType.CreateStatus)) 
+                        if ((this.Status != Enums.ObjectStatusType.DropStatus) && (item.Status != Enums.ObjectStatusType.CreateStatus))
                             list.Add(item.Create(), newDeepMax);
                         if (item.IsCodeType)
                             list.AddRange(RebuildDependencys(((ICode)item).DependenciesOut, newDeepMin, newDeepMax));

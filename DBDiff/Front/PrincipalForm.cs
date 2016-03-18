@@ -131,7 +131,7 @@ namespace DBDiff.Front
                     txtSyncScript.Styles.LineNumber.BackColor = Color.White;
                     txtSyncScript.Styles.LineNumber.IsVisible = false;
                     errorLocation = "Generating Synchronized Script";
-					txtSyncScript.Text = destino.ToSqlDiff(_selectedSchemas).ToSQL();
+                    txtSyncScript.Text = destino.ToSqlDiff(_selectedSchemas).ToSQL();
                     txtSyncScript.IsReadOnly = true;
                     schemaTreeView1.DatabaseSource = destino;
                     schemaTreeView1.DatabaseDestination = origen;
@@ -164,7 +164,7 @@ namespace DBDiff.Front
             txtNewObject.Text = "";
             txtOldObject.Text = "";
 
-            Database database = (Database) schemaTreeView1.DatabaseSource;
+            Database database = (Database)schemaTreeView1.DatabaseSource;
             if (database.Find(ObjectFullName) != null)
             {
                 if (database.Find(ObjectFullName).Status != Enums.ObjectStatusType.DropStatus)
@@ -187,7 +187,7 @@ namespace DBDiff.Front
                 }
             }
 
-            database = (Database) schemaTreeView1.DatabaseDestination;
+            database = (Database)schemaTreeView1.DatabaseDestination;
             if (database.Find(ObjectFullName) != null)
             {
                 if (database.Find(ObjectFullName).Status != Enums.ObjectStatusType.CreateStatus)
@@ -201,7 +201,7 @@ namespace DBDiff.Front
             var sb = new StringBuilder();
             DiffPiece newLine, oldLine;
             var markers = new Marker[] { txtDiff.Markers[0], txtDiff.Markers[1], txtDiff.Markers[2], txtDiff.Markers[3] };
-            foreach(var marker in markers) marker.Symbol = MarkerSymbol.Background;
+            foreach (var marker in markers) marker.Symbol = MarkerSymbol.Background;
             markers[0].BackColor = Color.LightGreen;
             markers[1].BackColor = Color.LightCyan;
             markers[2].BackColor = Color.LightSalmon;
@@ -241,9 +241,9 @@ namespace DBDiff.Front
                 index++;
             }
             txtDiff.Text = sb.ToString();
-            for (var i = 0; i < 4;i++ )
+            for (var i = 0; i < 4; i++)
             {
-                foreach(var ind in indexes[i])
+                foreach (var ind in indexes[i])
                 {
                     txtDiff.Lines[ind].AddMarker(markers[i]);
                 }
@@ -305,12 +305,12 @@ namespace DBDiff.Front
             try
             {
                 Cursor = Cursors.WaitCursor;
-				_selectedSchemas = schemaTreeView1.GetCheckedSchemas();
+                _selectedSchemas = schemaTreeView1.GetCheckedSchemas();
                 //if (optSQL2000.Checked) ProcesarSQL2000();
                 if (optSQL2005.Checked) ProcesarSQL2005();
                 //if (optMySQL.Checked) ProcesarMySQL();
                 //if (optSybase.Checked) ProcesarSybase();
-				schemaTreeView1.SetCheckedSchemas(_selectedSchemas);
+                schemaTreeView1.SetCheckedSchemas(_selectedSchemas);
                 errorLocation = "Saving Connections";
                 Project.SaveLastConfiguration(mySqlConnectFront1.ConnectionString, mySqlConnectFront2.ConnectionString);
             }
@@ -420,28 +420,28 @@ Clicking 'OK' will result in the following:
             mySqlConnectFront1.Location = new Point(1, 1);
             mySqlConnectFront1.Name = "mySqlConnectFront1";
             mySqlConnectFront1.Anchor =
-                (AnchorStyles) ((int) AnchorStyles.Bottom + (int) AnchorStyles.Left + (int) AnchorStyles.Right);
+                (AnchorStyles)((int)AnchorStyles.Bottom + (int)AnchorStyles.Left + (int)AnchorStyles.Right);
 
             mySqlConnectFront1.TabIndex = 10;
             mySqlConnectFront1.Text = "Source Database:";
             mySqlConnectFront2.Location = new Point(1, 1);
             mySqlConnectFront2.Name = "mySqlConnectFront2";
             mySqlConnectFront2.Anchor =
-                (AnchorStyles) ((int) AnchorStyles.Bottom + (int) AnchorStyles.Left + (int) AnchorStyles.Right);
+                (AnchorStyles)((int)AnchorStyles.Bottom + (int)AnchorStyles.Left + (int)AnchorStyles.Right);
             mySqlConnectFront2.TabIndex = 10;
             mySqlConnectFront1.Visible = true;
             mySqlConnectFront2.Visible = true;
             mySqlConnectFront2.Text = "Destination Database:";
-            ((SqlServerConnectFront) mySqlConnectFront1).UserName = "sa";
-            ((SqlServerConnectFront) mySqlConnectFront1).Password = "";
-            ((SqlServerConnectFront) mySqlConnectFront1).ServerName = "(local)";
-            ((SqlServerConnectFront) mySqlConnectFront2).UserName = "sa";
-            ((SqlServerConnectFront) mySqlConnectFront2).Password = "";
-            ((SqlServerConnectFront) mySqlConnectFront2).ServerName = "(local)";
-            ((SqlServerConnectFront) mySqlConnectFront1).DatabaseIndex = 1;
-            ((SqlServerConnectFront) mySqlConnectFront2).DatabaseIndex = 2;
-            PanelDestination.Controls.Add((Control) mySqlConnectFront2);
-            PanelSource.Controls.Add((Control) mySqlConnectFront1);
+            ((SqlServerConnectFront)mySqlConnectFront1).UserName = "sa";
+            ((SqlServerConnectFront)mySqlConnectFront1).Password = "";
+            ((SqlServerConnectFront)mySqlConnectFront1).ServerName = "(local)";
+            ((SqlServerConnectFront)mySqlConnectFront2).UserName = "sa";
+            ((SqlServerConnectFront)mySqlConnectFront2).Password = "";
+            ((SqlServerConnectFront)mySqlConnectFront2).ServerName = "(local)";
+            ((SqlServerConnectFront)mySqlConnectFront1).DatabaseIndex = 1;
+            ((SqlServerConnectFront)mySqlConnectFront2).DatabaseIndex = 2;
+            PanelDestination.Controls.Add((Control)mySqlConnectFront2);
+            PanelSource.Controls.Add((Control)mySqlConnectFront1);
         }
 
         private void optSQL2005_CheckedChanged(object sender, EventArgs e)
@@ -452,8 +452,8 @@ Clicking 'OK' will result in the following:
             }
             else
             {
-                PanelSource.Controls.Remove((Control) mySqlConnectFront1);
-                PanelDestination.Controls.Remove((Control) mySqlConnectFront2);
+                PanelSource.Controls.Remove((Control)mySqlConnectFront1);
+                PanelDestination.Controls.Remove((Control)mySqlConnectFront2);
             }
         }
 
@@ -597,7 +597,7 @@ Clicking 'OK' will result in the following:
                 }
             }
 
-            if (result == string.Empty) 
+            if (result == string.Empty)
             {
                 result = "All successful";
             }
@@ -607,11 +607,11 @@ Clicking 'OK' will result in the following:
             {
                 if (optSQL2005.Checked) ProcesarSQL2005();
             }
-            
+
             btnUpdate.Enabled = false;
         }
 
-        private void btnUpdateAll_Click(object sender, EventArgs e) 
+        private void btnUpdateAll_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to update all?", "Confirm update", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
@@ -679,7 +679,7 @@ Clicking 'OK' will result in the following:
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-			panel2.Left = Math.Max (this.btnProject.Right + this.btnProject.Left, (Width - panel2.Width) / 2);
+            panel2.Left = Math.Max(this.btnProject.Right + this.btnProject.Left, (Width - panel2.Width) / 2);
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -689,16 +689,16 @@ Clicking 'OK' will result in the following:
                 if (ActiveProject == null)
                 {
                     ActiveProject = new Project
-                                        {
-                                            ConnectionStringSource = mySqlConnectFront1.ConnectionString,
-                                            ConnectionStringDestination = mySqlConnectFront2.ConnectionString,
-                                            Name = String.Format("[{0}].[{1}] - [{2}].[{3}]",
+                    {
+                        ConnectionStringSource = mySqlConnectFront1.ConnectionString,
+                        ConnectionStringDestination = mySqlConnectFront2.ConnectionString,
+                        Name = String.Format("[{0}].[{1}] - [{2}].[{3}]",
                                                         ((SqlServerConnectFront)mySqlConnectFront1).ServerName,
                                                         mySqlConnectFront1.DatabaseName,
                                                         ((SqlServerConnectFront)mySqlConnectFront2).ServerName,
                                                         mySqlConnectFront2.DatabaseName),
-                                            Type = Project.ProjectType.SQLServer
-                                        };
+                        Type = Project.ProjectType.SQLServer
+                    };
                 }
                 ActiveProject.Id = Project.Save(ActiveProject);
             }
@@ -721,7 +721,7 @@ Clicking 'OK' will result in the following:
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+            }
         }
 
         private void form_OnRename(Project itemSelected)
@@ -754,7 +754,7 @@ Clicking 'OK' will result in the following:
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+            }
         }
 
         private void form_OnSelect(Project itemSelected)
@@ -771,7 +771,7 @@ Clicking 'OK' will result in the following:
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+            }
         }
 
         private void btnNewProject_Click(object sender, EventArgs e)

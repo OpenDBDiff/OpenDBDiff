@@ -44,7 +44,7 @@ namespace DBDiff.Schema
             UnbindRuleType = 7,
             DropRule = 8,
             AddRule = 9,
-            
+
             DropFullTextIndex = 10,
             DropConstraintFK = 11,
             DropConstraint = 12,
@@ -54,21 +54,21 @@ namespace DBDiff.Schema
             DropTrigger = 16,
             DropView = 17,
             DropFunction = 17,
-            DropIndex = 18,            
+            DropIndex = 18,
             DropTable = 20,
             AlterColumnFormula = 21,
             AlterColumn = 22,
             AddRole = 23,
             AddUser = 24,
             AddSchema = 25,
-            AddDefault = 26,                        
+            AddDefault = 26,
             AddAssembly = 27,
             AddAssemblyFile = 28,
             AddUserDataType = 29,
-            AddTableType = 30,            
+            AddTableType = 30,
             AlterPartitionFunction = 31,
             AddPartitionFunction = 32,
-            AddPartitionScheme = 33,         
+            AddPartitionScheme = 33,
             AddFullText = 34,
             AddXMLSchema = 35,
             AlterAssembly = 36,
@@ -83,7 +83,7 @@ namespace DBDiff.Schema
             AlterFunction = 45,
             AlterView = 46,
             AlterProcedure = 47,
-            AddIndex = 48,                     
+            AddIndex = 48,
             AddFunction = 49,
             AddView = 49, /*AddFunction and AddView must have the same number!!!*/
             AddTrigger = 50,
@@ -97,7 +97,7 @@ namespace DBDiff.Schema
             AddStoreProcedure = 58,
             DropOptions = 59,
             AddOptions = 60,
-            
+
             AlterTableChangeTracking = 61,
 
             DropFullText = 62,
@@ -111,7 +111,7 @@ namespace DBDiff.Schema
 
             DropPartitionScheme = 70,
             DropPartitionFunction = 71,
-            
+
             DropSchema = 72,
             DropUser = 73,
             DropRole = 74,

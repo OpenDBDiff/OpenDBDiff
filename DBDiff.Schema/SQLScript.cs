@@ -39,7 +39,7 @@ namespace DBDiff.Schema
         {
             get
             {
-                return ((Status == Enums.ScripActionType.DropView) || (Status == Enums.ScripActionType.DropFunction)|| (Status == Enums.ScripActionType.DropStoreProcedure));
+                return ((Status == Enums.ScripActionType.DropView) || (Status == Enums.ScripActionType.DropFunction) || (Status == Enums.ScripActionType.DropStoreProcedure));
             }
         }
 

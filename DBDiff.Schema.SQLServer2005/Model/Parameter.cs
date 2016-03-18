@@ -28,7 +28,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                     sql += "(" + Size.ToString(CultureInfo.InvariantCulture) + ")";
                 }
             }
-            if (Type.Equals("numeric") || Type.Equals("decimal")) sql += "(" + Precision.ToString(CultureInfo.InvariantCulture) + "," + Scale.ToString(CultureInfo.InvariantCulture) + ")";            
+            if (Type.Equals("numeric") || Type.Equals("decimal")) sql += "(" + Precision.ToString(CultureInfo.InvariantCulture) + "," + Scale.ToString(CultureInfo.InvariantCulture) + ")";
             if (Output) sql += " OUTPUT";
             return sql;
         }

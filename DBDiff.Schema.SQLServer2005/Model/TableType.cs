@@ -3,7 +3,7 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class TableType:SQLServerSchemaBase, ITable<TableType>
+    public class TableType : SQLServerSchemaBase, ITable<TableType>
     {
         public TableType(Database parent)
             : base(parent, Enums.ObjectType.TableType)

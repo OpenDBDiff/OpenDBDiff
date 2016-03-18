@@ -6,7 +6,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareColumns
     {
-        public void GenerateDiferences<T>(Columns<T> CamposOrigen, Columns<T> CamposDestino) where T:ISchemaBase
+        public void GenerateDiferences<T>(Columns<T> CamposOrigen, Columns<T> CamposDestino) where T : ISchemaBase
         {
             int restPosition = 0;
             int sumPosition = 0;
@@ -22,7 +22,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                     CamposOrigen[node.FullName].Position -= restPosition;
             }
             foreach (Column node in CamposDestino)
-            {                
+            {
                 if (!CamposOrigen.Exists(node.FullName))
                 {
                     Column newNode = node.Clone(CamposOrigen.Parent);
@@ -33,7 +33,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                     }
                     else
                         newNode.Status = Enums.ObjectStatusType.CreateStatus;
-                    sumPosition++;             
+                    sumPosition++;
                     CamposOrigen.Add(newNode);
                 }
                 else
@@ -64,7 +64,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                                     {
                                         node.Status = Enums.ObjectStatusType.AlterStatus;
                                         if ((campoOrigen.IsNullable) && (!node.IsNullable))
-                                            node.Status += (int)Enums.ObjectStatusType.UpdateStatus;                                        
+                                            node.Status += (int)Enums.ObjectStatusType.UpdateStatus;
                                     }
                                 }
                             }
@@ -79,7 +79,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                         else
                         {
                             node.Status = Enums.ObjectStatusType.RebuildStatus;
-                        }                        
+                        }
                         CamposOrigen[node.FullName] = node.Clone(CamposOrigen.Parent);
                     }
                     CamposOrigen[node.FullName].DefaultConstraint = CompareColumnsConstraints.GenerateDiferences(campoOrigen, node);

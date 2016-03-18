@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace DBDiff.Schema.Model
 {
     [DebuggerDisplay("Id: {Id} - Name: {Name} - Status: {status}")]
-    public abstract class SchemaBase:ISchemaBase
+    public abstract class SchemaBase : ISchemaBase
     {
         private Enums.ObjectStatusType status;
         private ISchemaBase parent;
@@ -40,7 +40,7 @@ namespace DBDiff.Schema.Model
                     }
                     else
                         Item.SetValue(newObject, Clone(Item.GetValue(vObj, null),parentObject), null);
-                }            
+                }
                 foreach (FieldInfo Item in newObject.GetType().GetFields())
                 {
                     if (Item.GetType().GetInterface("ICloneable") != null)
@@ -61,16 +61,16 @@ namespace DBDiff.Schema.Model
         public ISchemaBase Parent
         {
             get { return parent; }
-            set 
+            set
             {
                 rootParent = null;
-                parent = value; 
+                parent = value;
             }
         }
 
         public IDatabase RootParent
         {
-            get 
+            get
             {
                 if (rootParent != null) return rootParent;
                 if (this.Parent != null)
@@ -94,7 +94,7 @@ namespace DBDiff.Schema.Model
             else
                 return myName.CompareTo(name);
         }
-    
+
         /// <summary>
         /// SQL Code for the database object
         /// </summary>
@@ -121,21 +121,21 @@ namespace DBDiff.Schema.Model
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public virtual SQLScriptList ToSqlDiff()
         {
             return null;
         }
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public virtual SQLScriptList ToSqlDiff(List<ISchemaBase> schemas)
-		{
-			return null;
-		}
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public virtual SQLScriptList ToSqlDiff(List<ISchemaBase> schemas)
+        {
+            return null;
+        }
 
         public virtual SQLScript Create()
         {
@@ -194,12 +194,12 @@ namespace DBDiff.Schema.Model
         /// </summary>
         public virtual string FullName
         {
-            get 
-            { 
+            get
+            {
                 if (String.IsNullOrEmpty(Owner))
-                    return nameCharacterOpen + Name + nameCharacterClose; 
+                    return nameCharacterOpen + Name + nameCharacterClose;
                 else
-                    return nameCharacterOpen + Owner + nameCharacterClose + "." + nameCharacterOpen + Name + nameCharacterClose; 
+                    return nameCharacterOpen + Owner + nameCharacterClose + "." + nameCharacterOpen + Name + nameCharacterClose;
             }
         }
 
@@ -220,7 +220,7 @@ namespace DBDiff.Schema.Model
 
         /// <summary>
         /// Indica el estado del objeto (si es propio, si debe borrarse o si es nuevo). Es solo valido
-        /// para generar el SQL de diferencias entre 2 bases. 
+        /// para generar el SQL de diferencias entre 2 bases.
         /// Por defecto es siempre Original.
         /// </summary>
         public virtual Enums.ObjectStatusType Status

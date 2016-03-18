@@ -4,7 +4,7 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
-    internal class CompareUserDataTypes:CompareBase<UserDataType>
+    internal class CompareUserDataTypes : CompareBase<UserDataType>
     {
         protected override void DoNew<Root>(SchemaList<UserDataType, Root> CamposOrigen, UserDataType node)
         {
@@ -13,7 +13,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
             Boolean HasAssembly = CamposOrigen.Exists(item => item.AssemblyFullName.Equals(node.AssemblyFullName) && item.IsAssembly);
             if (HasAssembly)
                 newNode.Status += (int)Enums.ObjectStatusType.DropOlderStatus;
-            CamposOrigen.Add(newNode);            
+            CamposOrigen.Add(newNode);
         }
 
         protected override void DoUpdate<Root>(SchemaList<UserDataType, Root> CamposOrigen, UserDataType node)
@@ -45,7 +45,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                         newNode.Status = Enums.ObjectStatusType.RebuildStatus;
                 }
                 CamposOrigen[node.FullName] = newNode;
-            }            
+            }
         }
     }
 }

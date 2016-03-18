@@ -60,7 +60,7 @@ namespace DBDiff.OCDB
                     sql.ConnectionString = arguments.ConnectionString1;
                     Console.WriteLine("Reading first database...");
                     sql.Options = SqlFilter;
-                    origen = sql.Process();                    
+                    origen = sql.Process();
 
                     sql.ConnectionString = arguments.ConnectionString2;
                     Console.WriteLine("Reading second database...");

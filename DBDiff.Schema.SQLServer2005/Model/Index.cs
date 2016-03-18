@@ -25,26 +25,26 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public override ISchemaBase Clone(ISchemaBase parent)
         {
             Index index = new Index(parent)
-                              {
-                                  AllowPageLocks = this.AllowPageLocks,
-                                  AllowRowLocks = this.AllowRowLocks,
-                                  Columns = this.Columns.Clone(),
-                                  FillFactor = this.FillFactor,
-                                  FileGroup = this.FileGroup,
-                                  Id = this.Id,
-                                  IgnoreDupKey = this.IgnoreDupKey,
-                                  IsAutoStatistics = this.IsAutoStatistics,
-                                  IsDisabled = this.IsDisabled,
-                                  IsPadded = this.IsPadded,
-                                  IsPrimaryKey = this.IsPrimaryKey,
-                                  IsUniqueKey = this.IsUniqueKey,
-                                  Name = this.Name,
-                                  SortInTempDb = this.SortInTempDb,
-                                  Status = this.Status,
-                                  Type = this.Type,
-                                  Owner = this.Owner,
-                                  FilterDefintion = this.FilterDefintion
-                              };
+            {
+                AllowPageLocks = this.AllowPageLocks,
+                AllowRowLocks = this.AllowRowLocks,
+                Columns = this.Columns.Clone(),
+                FillFactor = this.FillFactor,
+                FileGroup = this.FileGroup,
+                Id = this.Id,
+                IgnoreDupKey = this.IgnoreDupKey,
+                IsAutoStatistics = this.IsAutoStatistics,
+                IsDisabled = this.IsDisabled,
+                IsPadded = this.IsPadded,
+                IsPrimaryKey = this.IsPrimaryKey,
+                IsUniqueKey = this.IsUniqueKey,
+                Name = this.Name,
+                SortInTempDb = this.SortInTempDb,
+                Status = this.Status,
+                Type = this.Type,
+                Owner = this.Owner,
+                FilterDefintion = this.FilterDefintion
+            };
             ExtendedProperties.ForEach(item => index.ExtendedProperties.Add(item));
             return index;
         }
@@ -105,7 +105,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (origen.SortInTempDb != destino.SortInTempDb) return false;
             if (!origen.FilterDefintion.Equals(destino.FilterDefintion)) return false;
             if (!IndexColumns.Compare(origen.Columns, destino.Columns)) return false;
-            return CompareFileGroup(origen,destino);
+            return CompareFileGroup(origen, destino);
         }
 
         public static Boolean CompareExceptIsDisabled(Index origen, Index destino)
@@ -116,7 +116,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (origen.AllowRowLocks != destino.AllowRowLocks) return false;
             if (origen.FillFactor != destino.FillFactor) return false;
             if (origen.IgnoreDupKey != destino.IgnoreDupKey) return false;
-            if (origen.IsAutoStatistics != destino.IsAutoStatistics) return false;            
+            if (origen.IsAutoStatistics != destino.IsAutoStatistics) return false;
             if (origen.IsPadded != destino.IsPadded) return false;
             if (origen.IsPrimaryKey != destino.IsPrimaryKey) return false;
             if (origen.IsUniqueKey != destino.IsUniqueKey) return false;
@@ -143,7 +143,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             Database database = null;
             ISchemaBase current = this;
-            while (database == null && current.Parent != null )
+            while (database == null && current.Parent != null)
             {
                 database = current.Parent as Database;
                 current = current.Parent;
@@ -159,7 +159,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (Type == IndexTypeEnum.XML) sql.Append("CREATE PRIMARY XML ");
             sql.Append("INDEX [" + Name + "] ON " + Parent.FullName + "\r\n(\r\n");
             /*Ordena la coleccion de campos del Indice en funcion de la propieda IsIncluded*/
-            Columns.Sort();             
+            Columns.Sort();
             for (int j = 0; j < Columns.Count; j++)
             {
                 if (!Columns[j].IsIncluded)
@@ -189,13 +189,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             }
             else
             {
-                if (!isAzure10){
-                    if (IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");}
-                
+                if (!isAzure10)
+                {
+                    if (IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");
+                }
+
                 if (IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON"); else sql.Append("STATISTICS_NORECOMPUTE  = OFF");
                 if (Type != IndexTypeEnum.XML)
                     if ((IgnoreDupKey) && (IsUniqueKey)) sql.Append("IGNORE_DUP_KEY = ON, "); else sql.Append(", IGNORE_DUP_KEY  = OFF");
-                
+
                 if (!isAzure10)
                 {
                     if (AllowRowLocks) sql.Append(", ALLOW_ROW_LOCKS = ON"); else sql.Append(", ALLOW_ROW_LOCKS  = OFF");

@@ -3,7 +3,7 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class FileGroup: SQLServerSchemaBase
+    public class FileGroup : SQLServerSchemaBase
     {
         public FileGroup(ISchemaBase parent)
             : base(parent, Enums.ObjectType.FileGroup)
@@ -16,7 +16,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             FileGroup file = new FileGroup(parent);
             file.IsDefaultFileGroup = this.IsDefaultFileGroup;
             file.IsReadOnly = this.IsReadOnly;
-            file.Name = this.Name;            
+            file.Name = this.Name;
             file.Id = this.Id;
             file.Files = this.Files.Clone(file);
             file.Guid = this.Guid;

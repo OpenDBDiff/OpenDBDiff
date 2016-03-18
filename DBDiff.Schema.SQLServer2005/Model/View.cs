@@ -5,7 +5,7 @@ using DBDiff.Schema.SQLServer.Generates.Model.Util;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class View : Code 
+    public class View : Code
     {
         public View(ISchemaBase parent)
             : base(parent, Enums.ObjectType.View, Enums.ScripActionType.AddView, Enums.ScripActionType.DropView)
@@ -27,7 +27,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             item.Id = this.Id;
             item.Owner = this.Owner;
             item.IsSchemaBinding = this.IsSchemaBinding;
-            item.DependenciesIn  = this.DependenciesIn;
+            item.DependenciesIn = this.DependenciesIn;
             item.DependenciesOut = this.DependenciesOut;
             item.Indexes = this.Indexes.Clone(item);
             item.Triggers = this.Triggers.Clone(item);
@@ -55,7 +55,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 {
                     if (item.Status != Enums.ObjectStatusType.DropStatus)
                     {
-                        item.SetWasInsertInDiffList(Enums.ScripActionType.AddIndex); 
+                        item.SetWasInsertInDiffList(Enums.ScripActionType.AddIndex);
                         sql += item.ToSql();
                     }
                 }
@@ -64,7 +64,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 {
                     if (item.Status != Enums.ObjectStatusType.DropStatus)
                     {
-                        item.SetWasInsertInDiffList(Enums.ScripActionType.AddTrigger); 
+                        item.SetWasInsertInDiffList(Enums.ScripActionType.AddTrigger);
                         sql += item.ToSql();
                     }
                 }
@@ -110,7 +110,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 if (this.HasState(Enums.ObjectStatusType.AlterBodyStatus))
                 {
                     int iCount = DependenciesCount;
-                    list.Add(ToSQLAlter(), iCount, Enums.ScripActionType.AlterView);                    
+                    list.Add(ToSQLAlter(), iCount, Enums.ScripActionType.AlterView);
                 }
                 if (!this.GetWasInsertInDiffList(Enums.ScripActionType.DropFunction) && (!this.GetWasInsertInDiffList(Enums.ScripActionType.AddFunction)))
                     list.AddRange(Indexes.ToSqlDiff());

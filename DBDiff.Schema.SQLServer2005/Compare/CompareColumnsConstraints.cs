@@ -2,7 +2,7 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
-    internal class CompareColumnsConstraints:CompareBase<ColumnConstraint>
+    internal class CompareColumnsConstraints : CompareBase<ColumnConstraint>
     {
         public static ColumnConstraint GenerateDiferences(Column CamposOrigen, Column CamposDestino)
         {
@@ -28,11 +28,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 }
                 else
                     if ((CamposOrigen.DefaultConstraint != null) && (CamposDestino.DefaultConstraint == null))
-                    {
-                        CamposOrigen.DefaultConstraint.Status = Enums.ObjectStatusType.DropStatus;
-                        CamposOrigen.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                        CamposOrigen.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
-                    }
+                {
+                    CamposOrigen.DefaultConstraint.Status = Enums.ObjectStatusType.DropStatus;
+                    CamposOrigen.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                    CamposOrigen.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                }
             }
             /*foreach (ColumnConstraint node in CamposDestino)
             {
@@ -53,12 +53,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                         newNode.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
                         newNode.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
                         CamposOrigen[node.FullName] = newNode;
-                        
+
                     }
                 }
             }
 
-            MarkDrop(CamposOrigen, CamposDestino, node => 
+            MarkDrop(CamposOrigen, CamposDestino, node =>
             {
                 node.Status = Enums.ObjectStatusType.DropStatus;
                 CamposOrigen.Parent.Status = Enums.ObjectStatusType.OriginalStatus;

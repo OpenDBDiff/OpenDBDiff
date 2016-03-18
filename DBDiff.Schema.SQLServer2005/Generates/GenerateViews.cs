@@ -25,7 +25,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                 root.RaiseOnReading(new ProgressEventArgs("Reading views...", Constants.READING_VIEWS));
                 if (database.Options.Ignore.FilterView)
                 {
-                    FillView(database,connectionString);
+                    FillView(database, connectionString);
                 }
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                     command.CommandTimeout = 0;
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        View item = null;                        
+                        View item = null;
                         while (reader.Read())
                         {
                             root.RaiseOnReadingOne(reader["name"]);
@@ -62,15 +62,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             if (item.IsSchemaBinding)
                             {
                                 if (!reader.IsDBNull(reader.GetOrdinal("referenced_major_id")))
-                                    database.Dependencies.Add(database,(int)reader["referenced_major_id"], item);
+                                    database.Dependencies.Add(database, (int)reader["referenced_major_id"], item);
                                 if (!String.IsNullOrEmpty(reader["TableName"].ToString()))
                                     item.DependenciesIn.Add(reader["TableName"].ToString());
                                 if (!String.IsNullOrEmpty(reader["DependOut"].ToString()))
                                     item.DependenciesOut.Add(reader["DependOut"].ToString());
-                            }                            
+                            }
                         }
                     }
-                }                    
+                }
             }
         }
     }

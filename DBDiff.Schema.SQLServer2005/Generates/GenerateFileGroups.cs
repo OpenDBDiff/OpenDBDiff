@@ -92,7 +92,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                     item.IsDefaultFileGroup = (bool)reader["is_default"];
                                     item.IsReadOnly = (bool)reader["is_read_only"];
                                     item.IsFileStream = reader["type"].Equals("FD");
-                                    FillFiles(item,connectionString);
+                                    FillFiles(item, connectionString);
                                     database.FileGroups.Add(item);
                                 }
                             }

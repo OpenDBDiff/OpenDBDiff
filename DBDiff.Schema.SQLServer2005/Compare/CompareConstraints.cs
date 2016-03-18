@@ -3,9 +3,9 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
-    internal class CompareConstraints:CompareBase<Constraint>
+    internal class CompareConstraints : CompareBase<Constraint>
     {
-        protected override void DoUpdate<Root>(SchemaList<Constraint, Root> CamposOrigen, Constraint node) 
+        protected override void DoUpdate<Root>(SchemaList<Constraint, Root> CamposOrigen, Constraint node)
         {
             Constraint origen = CamposOrigen[node.FullName];
             if (!Constraint.Compare(origen, node))
@@ -30,7 +30,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
             }
         }
 
-        protected override void DoNew<Root>(SchemaList<Constraint, Root> CamposOrigen, Constraint node) 
+        protected override void DoNew<Root>(SchemaList<Constraint, Root> CamposOrigen, Constraint node)
         {
             Constraint newNode = (Constraint)node.Clone(CamposOrigen.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;

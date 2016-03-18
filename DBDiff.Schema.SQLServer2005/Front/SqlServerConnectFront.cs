@@ -6,7 +6,7 @@ using DBDiff.Schema.SQLServer.Generates.Front.Util;
 
 namespace DBDiff.Schema.SQLServer.Generates.Front
 {
-    public partial class SqlServerConnectFront : UserControl, IFront 
+    public partial class SqlServerConnectFront : UserControl, IFront
     {
         private Boolean isDatabaseFilled = false;
         private Boolean isServerFilled = false;
@@ -32,10 +32,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         public int DatabaseIndex
         {
             get { return cboDatabase.SelectedIndex; }
-            set 
+            set
             {
                 if (cboDatabase.Items.Count > 0)
-                    cboDatabase.SelectedIndex = value; 
+                    cboDatabase.SelectedIndex = value;
             }
         }
 

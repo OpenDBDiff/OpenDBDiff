@@ -23,6 +23,6 @@
         public const int READING_TEXTOBJECTS = 18;
         public const int READING_EXTENDED_PROPERTIES = 19;
         public const int READING_MAX = 20;
-        
+
     }
 }

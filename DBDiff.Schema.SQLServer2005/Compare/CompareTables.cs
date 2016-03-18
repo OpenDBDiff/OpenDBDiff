@@ -3,7 +3,7 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
-    internal class CompareTables:CompareBase<Table>
+    internal class CompareTables : CompareBase<Table>
     {
         protected override void DoUpdate<Root>(SchemaList<Table, Root> CamposOrigen, Table node)
         {
@@ -57,7 +57,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 if (!tablasOrigen.Exists(node.FullName))
                 {
                     node.Status = Enums.ObjectStatusType.CreateStatus;
-                    node.Parent = tablasOrigen.Parent; 
+                    node.Parent = tablasOrigen.Parent;
                     tablasOrigen.Add(node);
                 }
                 else
@@ -86,7 +86,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                         }
                     }
                 }
-            }                       
+            }
         }*/
     }
 }

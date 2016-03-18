@@ -16,7 +16,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
         {
             if (!node.Compare(CamposOrigen[node.FullName]))
             {
-                FullTextIndex newNode = (FullTextIndex)node.Clone(CamposOrigen.Parent);                
+                FullTextIndex newNode = (FullTextIndex)node.Clone(CamposOrigen.Parent);
                 if (node.IsDisabled != CamposOrigen[node.FullName].IsDisabled)
                     newNode.Status += (int)Enums.ObjectStatusType.DisabledStatus;
                 else

@@ -8,7 +8,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public FullText(ISchemaBase parent)
             : base(parent, Enums.ObjectType.FullText)
         {
-            
+
         }
 
         public override string FullName

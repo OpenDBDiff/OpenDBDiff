@@ -4,7 +4,7 @@ using DBDiff.Schema.SQLServer.Generates.Model.Util;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class StoreProcedure : Code 
+    public class StoreProcedure : Code
     {
         public StoreProcedure(ISchemaBase parent)
             : base(parent, Enums.ObjectType.StoreProcedure, Enums.ScripActionType.AddStoreProcedure, Enums.ScripActionType.DropStoreProcedure)
@@ -35,7 +35,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public override string ToSql()
         {
             //if (String.IsNullOrEmpty(sql))
-                sql = FormatCode.FormatCreate("PROC(EDURE)?", Text, this);
+            sql = FormatCode.FormatCreate("PROC(EDURE)?", Text, this);
             return sql;
         }
 

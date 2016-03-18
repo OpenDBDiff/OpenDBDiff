@@ -76,8 +76,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public override string ToSqlAdd()
         {
             string sql = "CREATE FULLTEXT INDEX ON " + Parent.FullName + "( ";
-            Columns.ForEach (item => { sql += "[" + item.ColumnName + "] LANGUAGE [" + item.Language + "],"; });
-            sql = sql.Substring(0,sql.Length -1);
+            Columns.ForEach(item => { sql += "[" + item.ColumnName + "] LANGUAGE [" + item.Language + "],"; });
+            sql = sql.Substring(0, sql.Length - 1);
             sql += ")\r\n";
             if (((Database)this.RootParent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
             {

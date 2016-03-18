@@ -28,7 +28,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public override string ToSql()
         {
             string sql = "";
-            sql += "CREATE " + ((Type == RoleTypeEnum.ApplicationRole)?"APPLICATION":"") + " ROLE ";
+            sql += "CREATE " + ((Type == RoleTypeEnum.ApplicationRole) ? "APPLICATION" : "") + " ROLE ";
             sql += FullName + " ";
             sql += "WITH PASSWORD = N'" + Password + "'";
             if (!String.IsNullOrEmpty(Owner))
@@ -38,7 +38,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public override string ToSqlDrop()
         {
-            return "DROP " + ((Type == RoleTypeEnum.ApplicationRole)?"APPLICATION":"") + " ROLE " + FullName + "\r\nGO\r\n";
+            return "DROP " + ((Type == RoleTypeEnum.ApplicationRole) ? "APPLICATION" : "") + " ROLE " + FullName + "\r\nGO\r\n";
         }
 
         public override string ToSqlAdd()

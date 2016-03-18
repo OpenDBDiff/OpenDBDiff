@@ -38,7 +38,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             sql += "WHERE is_user_defined = 1 ";
 
             sql += "UNION ";
-            sql += "SELECT TT.type, 0 AS IsComputed, T.user_type_id,'[' + S.Name + '].[' + TT.Name + ']' AS TableName, '[' + S.Name + '].[' + TT.Name + '].[' + C.Name + ']' AS ColumnName,'[' + S2.Name + '].[' + T.Name + ']' AS TypeName from sys.sql_dependencies DEP ";            
+            sql += "SELECT TT.type, 0 AS IsComputed, T.user_type_id,'[' + S.Name + '].[' + TT.Name + ']' AS TableName, '[' + S.Name + '].[' + TT.Name + '].[' + C.Name + ']' AS ColumnName,'[' + S2.Name + '].[' + T.Name + ']' AS TypeName from sys.sql_dependencies DEP ";
             sql += "INNER JOIN sys.objects TT ON DEP.object_id = TT.object_id ";
             sql += "INNER JOIN sys.schemas S ON S.schema_id = TT.schema_id ";
             sql += "INNER JOIN sys.parameters C ON C.object_id = TT.object_id AND C.parameter_id = DEP.referenced_minor_id ";
@@ -74,7 +74,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         {
             //not supported in azure yet http://msdn.microsoft.com/en-us/library/ee336233.aspx
             if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10) return;
-            
+
             try
             {
                 if (database.Options.Ignore.FilterUserDataType)

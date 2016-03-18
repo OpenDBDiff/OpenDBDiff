@@ -43,16 +43,16 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 
         protected override void DoNew<Root>(SchemaList<Assembly, Root> CamposOrigen, Assembly node)
         {
-            bool pass = true;    
-            Assembly newNode = (Assembly)node.Clone(CamposOrigen.Parent);               
-            if ((((Database)newNode.RootParent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2005) 
+            bool pass = true;
+            Assembly newNode = (Assembly)node.Clone(CamposOrigen.Parent);
+            if ((((Database)newNode.RootParent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2005)
                 && (((Database)node.RootParent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008))
                 pass = node.FullName.Equals("Microsoft.SqlServer.Types");
             if (pass)
-            {            
+            {
                 newNode.Status = Enums.ObjectStatusType.CreateStatus;
                 CamposOrigen.Add(newNode);
-            }            
+            }
         }
     }
 }

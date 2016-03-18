@@ -22,7 +22,7 @@ namespace DBDiff
             //script = script.Replace("\t", "");
             //script = script.Replace("\n", "");
             string result = string.Empty;
-            SqlConnection connection  = new SqlConnection(connectionString);
+            SqlConnection connection = new SqlConnection(connectionString);
             SqlCommand command = new SqlCommand(script, connection);
 
             try
@@ -82,7 +82,7 @@ namespace DBDiff
                     connection.Close();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
@@ -104,7 +104,7 @@ namespace DBDiff
 
             string result = string.Empty;
             SQLScriptList SqlDiff = target.ToSqlDiff();
-            string[] splitOn = {"GO"};
+            string[] splitOn = { "GO" };
             string[] tempList = SqlDiff.ToSQL().Split(splitOn, StringSplitOptions.RemoveEmptyEntries);
             List<string> scripts = new List<string>(tempList);
 
@@ -125,7 +125,7 @@ namespace DBDiff
                     command.ExecuteNonQuery();
                     connection.Close();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     result += target.Name + ": " + e.Message + "\n\n";
                     connection.Close();
@@ -150,7 +150,8 @@ namespace DBDiff
             return result;
         }
 
-        public static bool CommitTable(DataTable table, string ConnectionString) {
+        public static bool CommitTable(DataTable table, string ConnectionString)
+        {
             SqlConnection connection = new SqlConnection(ConnectionString);
             SqlCommand command = new SqlCommand("SELECT * FROM " + table.TableName, connection);
             SqlDataAdapter da = new SqlDataAdapter(command);
@@ -164,7 +165,7 @@ namespace DBDiff
                     return true;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
                 return false;

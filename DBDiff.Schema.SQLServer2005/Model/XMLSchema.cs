@@ -39,7 +39,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             StringBuilder sql = new StringBuilder();
             sql.Append("CREATE XML SCHEMA COLLECTION ");
             sql.Append(this.FullName + " AS ");
-            sql.Append("N'"+this.Text+"'");
+            sql.Append("N'" + this.Text + "'");
             sql.Append("\r\nGO\r\n");
             return sql.ToString();
         }
@@ -77,10 +77,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                                 if (column.HasToRebuildOnlyConstraint)
                                     column.Parent.Status = Enums.ObjectStatusType.RebuildDependenciesStatus;
                                 list.AddRange(column.RebuildConstraint(true));
-                                list.Add("ALTER TABLE " + column.Parent.FullName + " ALTER COLUMN " + column.ToSQLRedefine(null,0, "") + "\r\nGO\r\n", 0, Enums.ScripActionType.AlterColumn);
+                                list.Add("ALTER TABLE " + column.Parent.FullName + " ALTER COLUMN " + column.ToSQLRedefine(null, 0, "") + "\r\nGO\r\n", 0, Enums.ScripActionType.AlterColumn);
                                 /*Si la columna va a ser eliminada o la tabla va a ser reconstruida, no restaura la columna*/
                                 if ((column.Status != Enums.ObjectStatusType.DropStatus) && (column.Parent.Status != Enums.ObjectStatusType.RebuildStatus))
-                                    list.AddRange(column.Alter( Enums.ScripActionType.AlterColumnRestore));
+                                    list.AddRange(column.Alter(Enums.ScripActionType.AlterColumnRestore));
                                 fields.Add(column.FullName, column.FullName);
                             }
                         }
@@ -89,7 +89,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             }
             return list;
         }
-        
+
         /// <summary>
         /// Devuelve el schema de diferencias del Schema en formato SQL.
         /// </summary>

@@ -100,8 +100,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                         item.Level1type = "TABLE";
                                         item.Level1name = reader["ObjectName"].ToString();
                                         item.Level2type = reader["class_desc"].ToString();
-                                        item.Level2name = reader["IndexName"].ToString();                                        
-                                    } 
+                                        item.Level2name = reader["IndexName"].ToString();
+                                    }
                                     item.Value = reader["Value"].ToString();
                                     item.Name = reader["Name"].ToString();
                                     parent = ((ISQLServerSchemaBase)database.Find(item.FullName));
@@ -120,7 +120,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             }
             catch (Exception ex)
             {
-                messages.Add(new MessageLog(ex.Message,ex.StackTrace, MessageLog.LogType.Error));
+                messages.Add(new MessageLog(ex.Message, ex.StackTrace, MessageLog.LogType.Error));
             }
         }
     }

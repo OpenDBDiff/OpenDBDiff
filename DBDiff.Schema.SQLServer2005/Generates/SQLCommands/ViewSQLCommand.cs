@@ -15,7 +15,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
                 version == DatabaseInfo.VersionTypeEnum.SQLServer2008 ||
                 version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2) return GetViewSql2008();
             //Fall back to highest compatible version
-            return GetViewSqlAzure();            
+            return GetViewSqlAzure();
         }
 
         private static string GetViewSql2008()
@@ -52,8 +52,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             sql.Append("ORDER BY P.object_id ");
             return sql.ToString();
         }
-        
-      
+
+
         #endregion
 
     }

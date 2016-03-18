@@ -3,7 +3,7 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class IndexColumns : SchemaList<IndexColumn,ISchemaBase>
+    public class IndexColumns : SchemaList<IndexColumn, ISchemaBase>
     {
         public IndexColumns(ISchemaBase parent)
             : base(parent)

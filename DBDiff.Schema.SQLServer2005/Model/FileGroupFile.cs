@@ -35,13 +35,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             get
             {
-                if (Growth == 0) 
+                if (Growth == 0)
                     return "";
                 else
-                    if (IsPercentGrowth) 
-                        return "%"; 
-                    else 
-                        return "KB";
+                    if (IsPercentGrowth)
+                    return "%";
+                else
+                    return "KB";
             }
         }
 

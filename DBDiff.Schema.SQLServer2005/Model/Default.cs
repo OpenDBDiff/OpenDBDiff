@@ -2,7 +2,7 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    public class Default:SQLServerSchemaBase 
+    public class Default : SQLServerSchemaBase
     {
         public Default(ISchemaBase parent)
             : base(parent, Enums.ObjectType.Default)
@@ -18,7 +18,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             item.Value = this.Value;
             return item;
         }
-        
+
         public string Value { get; set; }
 
         public string ToSQLAddBind()

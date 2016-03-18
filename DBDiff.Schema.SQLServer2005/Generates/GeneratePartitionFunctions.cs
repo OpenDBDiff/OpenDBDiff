@@ -25,7 +25,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             sql += "ORDER BY PP.function_id, PRV.parameter_id, boundary_id";
             return sql;
         }
-        
+
         private static string ToHex(byte[] stream)
         {
             StringBuilder sHex = new StringBuilder(2 * stream.Length);

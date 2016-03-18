@@ -69,7 +69,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                 if (((int)reader["FileId"]) != 1)
                                 {
                                     Assembly assem = database.Assemblies[reader["Name"].ToString()];
-                                    AssemblyFile file = new AssemblyFile(assem,reader["FileName"].ToString(), ToHex((byte[])reader["FileContent"]));
+                                    AssemblyFile file = new AssemblyFile(assem, reader["FileName"].ToString(), ToHex((byte[])reader["FileContent"]));
                                     assem.Files.Add(file);
                                 }
                             }
@@ -93,19 +93,19 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                         {
                             Assembly item = null;
                             while (reader.Read())
-                            {                                
+                            {
                                 if (lastViewId != (int)reader["assembly_id"])
                                 {
                                     item = new Assembly(database)
-                                               {
-                                                   Id = (int) reader["assembly_id"],
-                                                   Name = reader["Name"].ToString(),
-                                                   Owner = reader["Owner"].ToString(),
-                                                   CLRName = reader["clr_name"].ToString(),
-                                                   PermissionSet = reader["permission_set_desc"].ToString(),
-                                                   Text = ToHex((byte[]) reader["content"]),
-                                                   Visible = (bool) reader["is_visible"]
-                                               };
+                                    {
+                                        Id = (int)reader["assembly_id"],
+                                        Name = reader["Name"].ToString(),
+                                        Owner = reader["Owner"].ToString(),
+                                        CLRName = reader["clr_name"].ToString(),
+                                        PermissionSet = reader["permission_set_desc"].ToString(),
+                                        Text = ToHex((byte[])reader["content"]),
+                                        Visible = (bool)reader["is_visible"]
+                                    };
                                     lastViewId = item.Id;
                                     database.Assemblies.Add(item);
                                 }

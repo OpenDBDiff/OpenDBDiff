@@ -7,7 +7,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Options
         public SqlOptionFilter()
         {
             Items = new Collection<SqlOptionFilterItem>();
-            Items.Add(new SqlOptionFilterItem(Enums.ObjectType.Table,"dbo.dtproperties"));
+            Items.Add(new SqlOptionFilterItem(Enums.ObjectType.Table, "dbo.dtproperties"));
             /* // TODO: Filter by name doesn't seem to be implemented?
             Items.Add(new SqlOptionFilterItem(Enums.ObjectType.Assembly, "Microsoft.SqlServer.Types"));
             Items.Add(new SqlOptionFilterItem(Enums.ObjectType.Schema, "db_accessadmin"));

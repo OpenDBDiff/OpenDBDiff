@@ -7,9 +7,9 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
-    internal abstract class CompareBase<T> where T:ISchemaBase
+    internal abstract class CompareBase<T> where T : ISchemaBase
     {
-        protected virtual void DoUpdate<Root>(SchemaList<T, Root> CamposOrigen, T node) where Root:ISchemaBase
+        protected virtual void DoUpdate<Root>(SchemaList<T, Root> CamposOrigen, T node) where Root : ISchemaBase
         {
 
         }
@@ -81,8 +81,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                                                select node).ToList<ExtendedProperty>();
             List<ExtendedProperty> addList = (from node in destino.ExtendedProperties
                                               where !origen.ExtendedProperties.Exists(item => item.Name.Equals(node.Name, StringComparison.CurrentCultureIgnoreCase))
-                                               select node).ToList<ExtendedProperty>();
-            dropList.ForEach(item => { item.Status = Enums.ObjectStatusType.DropStatus;} );
+                                              select node).ToList<ExtendedProperty>();
+            dropList.ForEach(item => { item.Status = Enums.ObjectStatusType.DropStatus; });
             addList.ForEach(item => { item.Status = Enums.ObjectStatusType.CreateStatus; });
             origen.ExtendedProperties.AddRange(addList);
         }

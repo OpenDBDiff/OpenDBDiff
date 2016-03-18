@@ -5,7 +5,7 @@ using DBDiff.Settings;
 
 namespace DBDiff.Front
 {
-    public delegate void ListProjectHandler(Project itemSelected);    
+    public delegate void ListProjectHandler(Project itemSelected);
 
     public sealed partial class ListProjectsForm : Form
     {
@@ -24,14 +24,14 @@ namespace DBDiff.Front
                                  ListViewItem listViewItem = new ListViewItem();
                                  listViewItem.ImageIndex = 0;
                                  listViewItem.Text = pro.Name;
-                                 listView1.Items.Add(listViewItem);                                 
+                                 listView1.Items.Add(listViewItem);
                              });
 
             ContextMenu mnuContextMenu = new ContextMenu();
             ContextMenu = mnuContextMenu;
             MenuItem mnuItemDelete = new MenuItem();
             MenuItem mnuItemOpen = new MenuItem();
-            MenuItem mnuItemRename = new MenuItem();            
+            MenuItem mnuItemRename = new MenuItem();
             mnuItemOpen.Text = "&Open";
             mnuItemRename.Text = "&Rename";
             mnuItemDelete.Text = "&Delete";
@@ -59,12 +59,12 @@ namespace DBDiff.Front
                     item.Type = projects[listView1.SelectedItems[0].Index].Type;
                     if (OnSelect != null)
                         OnSelect(item);
-                }                            
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+            }
         }
 
         private void DeleteProject()
@@ -89,14 +89,14 @@ namespace DBDiff.Front
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+            }
         }
 
         private void mnuItemRename_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count != 0)
             {
-                listView1.SelectedItems[0].BeginEdit();                
+                listView1.SelectedItems[0].BeginEdit();
             }
         }
 

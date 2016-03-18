@@ -202,8 +202,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScriptList ToSqlDiff()
         {
-			return ToSqlDiff(new List<ISchemaBase>());
-		}
+            return ToSqlDiff(new List<ISchemaBase>());
+        }
         public override SQLScriptList ToSqlDiff(List<ISchemaBase> schemas)
         {
             var isAzure10 = this.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10;
@@ -224,7 +224,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
 ",
                 System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(),
-                Environment.UserDomainName, 
+                Environment.UserDomainName,
                 Environment.UserName,
                 DateTime.Now.ToShortDateString(),
                 DateTime.Now.ToLongTimeString(),
@@ -240,26 +240,26 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 listDiff.AddRange(Assemblies.ToSqlDiff(schemas));
                 listDiff.AddRange(UserTypes.ToSqlDiff(schemas));
             }
-			listDiff.AddRange(TablesTypes.ToSqlDiff(schemas));
-			listDiff.AddRange(Tables.ToSqlDiff(schemas));
-			listDiff.AddRange(Rules.ToSqlDiff(schemas));
-			listDiff.AddRange(Schemas.ToSqlDiff(schemas));
-			listDiff.AddRange(XmlSchemas.ToSqlDiff(schemas));
-			listDiff.AddRange(Procedures.ToSqlDiff(schemas));
+            listDiff.AddRange(TablesTypes.ToSqlDiff(schemas));
+            listDiff.AddRange(Tables.ToSqlDiff(schemas));
+            listDiff.AddRange(Rules.ToSqlDiff(schemas));
+            listDiff.AddRange(Schemas.ToSqlDiff(schemas));
+            listDiff.AddRange(XmlSchemas.ToSqlDiff(schemas));
+            listDiff.AddRange(Procedures.ToSqlDiff(schemas));
             if (!isAzure10)
             {
                 listDiff.AddRange(CLRProcedures.ToSqlDiff(schemas));
                 listDiff.AddRange(CLRFunctions.ToSqlDiff(schemas));
                 listDiff.AddRange(FileGroups.ToSqlDiff(schemas));
             }
-			listDiff.AddRange(DDLTriggers.ToSqlDiff(schemas));
-			listDiff.AddRange(Synonyms.ToSqlDiff(schemas));
-			listDiff.AddRange(Views.ToSqlDiff(schemas));
-			listDiff.AddRange(Users.ToSqlDiff(schemas));
-			listDiff.AddRange(Functions.ToSqlDiff(schemas));
-			listDiff.AddRange(Roles.ToSqlDiff(schemas));
-			listDiff.AddRange(PartitionFunctions.ToSqlDiff(schemas));
-			listDiff.AddRange(PartitionSchemes.ToSqlDiff(schemas));
+            listDiff.AddRange(DDLTriggers.ToSqlDiff(schemas));
+            listDiff.AddRange(Synonyms.ToSqlDiff(schemas));
+            listDiff.AddRange(Views.ToSqlDiff(schemas));
+            listDiff.AddRange(Users.ToSqlDiff(schemas));
+            listDiff.AddRange(Functions.ToSqlDiff(schemas));
+            listDiff.AddRange(Roles.ToSqlDiff(schemas));
+            listDiff.AddRange(PartitionFunctions.ToSqlDiff(schemas));
+            listDiff.AddRange(PartitionSchemes.ToSqlDiff(schemas));
             if (!isAzure10)
             {
                 listDiff.AddRange(FullText.ToSqlDiff(schemas));
@@ -410,7 +410,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                         else
                         {
                             if (
-                                ((Table) schema).FullTextIndex.Exists(
+                                ((Table)schema).FullTextIndex.Exists(
                                     item => { return item.Index.Equals(con.Name); }))
                             {
                                 Dependencies.Add(this, schema.Id, 0, schema.Id, 0, con);

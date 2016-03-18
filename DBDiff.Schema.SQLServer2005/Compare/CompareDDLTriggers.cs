@@ -15,7 +15,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 if (node.IsDisabled != CamposOrigen[node.FullName].IsDisabled)
                     newNode.Status = newNode.Status + (int)Enums.ObjectStatusType.DisabledStatus;
                 CamposOrigen[node.FullName] = newNode;
-            }            
+            }
         }
 
         protected override void DoNew<Root>(SchemaList<Trigger, Root> CamposOrigen, Trigger node)

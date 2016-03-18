@@ -11,7 +11,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         {
             this.root = root;
         }
-        
+
         private static string GetSQL()
         {
             string sql;

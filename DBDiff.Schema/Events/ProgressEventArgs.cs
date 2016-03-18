@@ -2,7 +2,7 @@ using System;
 
 namespace DBDiff.Schema.Events
 {
-    public class ProgressEventArgs:EventArgs 
+    public class ProgressEventArgs : EventArgs
     {
         public string Message { get; set; }
 

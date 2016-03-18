@@ -83,7 +83,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
                 this.Dispose();
             }
             else
-                MessageBox.Show(this,"Must complete all fields","ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(this, "Must complete all fields", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void AddItem_Load(object sender, EventArgs e)
