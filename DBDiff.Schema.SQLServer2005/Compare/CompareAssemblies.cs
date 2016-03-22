@@ -15,7 +15,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 if (node.Text.Equals(CamposOrigen[node.FullName].Text))
                 {
                     if (!node.PermissionSet.Equals(CamposOrigen[node.FullName].PermissionSet))
-                        newNode.Status += (int)Enums.ObjectStatusType.PermisionSet;
+                        newNode.Status += (int)Enums.ObjectStatusType.PermissionSet;
                     if (!node.Owner.Equals(CamposOrigen[node.FullName].Owner))
                         newNode.Status += (int)Enums.ObjectStatusType.ChangeOwner;
                 }

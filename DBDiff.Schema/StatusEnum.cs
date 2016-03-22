@@ -28,7 +28,7 @@ namespace DBDiff.Schema
             ChangeOwner = 512,
             DropOlderStatus = 1024,
             BindStatus = 2048,
-            PermisionSet = 4096,
+            PermissionSet = 4096,
             AlterWhitespaceStatus = 8192
         }
 

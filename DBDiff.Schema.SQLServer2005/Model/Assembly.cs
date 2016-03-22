@@ -97,7 +97,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 list.AddRange(Rebuild());
             if (this.HasState(Enums.ObjectStatusType.ChangeOwner))
                 list.Add(ToSQLAlterOwner(), 0, Enums.ScripActionType.AlterAssembly);
-            if (this.HasState(Enums.ObjectStatusType.PermisionSet))
+            if (this.HasState(Enums.ObjectStatusType.PermissionSet))
                 list.Add(ToSQLAlter(), 0, Enums.ScripActionType.AlterAssembly);
             if (this.HasState(Enums.ObjectStatusType.AlterStatus))
                 list.AddRange(Files.ToSqlDiff());

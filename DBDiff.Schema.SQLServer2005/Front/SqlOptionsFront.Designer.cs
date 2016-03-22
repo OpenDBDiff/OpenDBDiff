@@ -5,12 +5,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
 {
     partial class SqlOptionsFront
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -25,8 +25,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -160,9 +160,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel12.SuspendLayout();
             this.gradientPanel11.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // chkFullTextPath
-            // 
+            //
             this.chkFullTextPath.AutoSize = true;
             this.chkFullTextPath.Checked = true;
             this.chkFullTextPath.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -173,9 +173,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkFullTextPath.TabIndex = 36;
             this.chkFullTextPath.Text = "Include Path";
             this.chkFullTextPath.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkIndexFilter
-            // 
+            //
             this.chkIndexFilter.AutoSize = true;
             this.chkIndexFilter.Checked = true;
             this.chkIndexFilter.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -186,9 +186,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIndexFilter.TabIndex = 9;
             this.chkIndexFilter.Text = "Filter Columns";
             this.chkIndexFilter.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkConstraintsCheck
-            // 
+            //
             this.chkConstraintsCheck.AutoSize = true;
             this.chkConstraintsCheck.Checked = true;
             this.chkConstraintsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -199,9 +199,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkConstraintsCheck.TabIndex = 14;
             this.chkConstraintsCheck.Text = "Check";
             this.chkConstraintsCheck.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkConstraintsUK
-            // 
+            //
             this.chkConstraintsUK.AutoSize = true;
             this.chkConstraintsUK.Checked = true;
             this.chkConstraintsUK.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -212,9 +212,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkConstraintsUK.TabIndex = 13;
             this.chkConstraintsUK.Text = "Unique Key";
             this.chkConstraintsUK.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkConstraintsFK
-            // 
+            //
             this.chkConstraintsFK.AutoSize = true;
             this.chkConstraintsFK.Checked = true;
             this.chkConstraintsFK.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -225,9 +225,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkConstraintsFK.TabIndex = 12;
             this.chkConstraintsFK.Text = "Foreign Key";
             this.chkConstraintsFK.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkConstraintsPK
-            // 
+            //
             this.chkConstraintsPK.AutoSize = true;
             this.chkConstraintsPK.Checked = true;
             this.chkConstraintsPK.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -238,9 +238,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkConstraintsPK.TabIndex = 11;
             this.chkConstraintsPK.Text = "Primary Key";
             this.chkConstraintsPK.UseVisualStyleBackColor = true;
-            // 
+            //
             // checkBox5
-            // 
+            //
             this.checkBox5.AutoSize = true;
             this.checkBox5.Checked = true;
             this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -251,9 +251,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.checkBox5.TabIndex = 27;
             this.checkBox5.Text = "Partition Schema";
             this.checkBox5.UseVisualStyleBackColor = true;
-            // 
+            //
             // checkPartitionFunction
-            // 
+            //
             this.checkPartitionFunction.AutoSize = true;
             this.checkPartitionFunction.Checked = true;
             this.checkPartitionFunction.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -264,9 +264,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.checkPartitionFunction.TabIndex = 26;
             this.checkPartitionFunction.Text = "Partition Function";
             this.checkPartitionFunction.UseVisualStyleBackColor = true;
-            // 
+            //
             // checkBox4
-            // 
+            //
             this.checkBox4.AutoSize = true;
             this.checkBox4.Checked = true;
             this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -277,9 +277,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.checkBox4.TabIndex = 35;
             this.checkBox4.Text = "CLR Aggregates";
             this.checkBox4.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompCLRUDT
-            // 
+            //
             this.chkCompCLRUDT.AutoSize = true;
             this.chkCompCLRUDT.Checked = true;
             this.chkCompCLRUDT.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -290,9 +290,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompCLRUDT.TabIndex = 34;
             this.chkCompCLRUDT.Text = "CLR User Data Types";
             this.chkCompCLRUDT.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompCLRFunctions
-            // 
+            //
             this.chkCompCLRFunctions.AutoSize = true;
             this.chkCompCLRFunctions.Checked = true;
             this.chkCompCLRFunctions.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -303,9 +303,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompCLRFunctions.TabIndex = 33;
             this.chkCompCLRFunctions.Text = "CLR Functions";
             this.chkCompCLRFunctions.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompCLRTrigger
-            // 
+            //
             this.chkCompCLRTrigger.AutoSize = true;
             this.chkCompCLRTrigger.Checked = true;
             this.chkCompCLRTrigger.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -316,9 +316,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompCLRTrigger.TabIndex = 32;
             this.chkCompCLRTrigger.Text = "CLR Triggers";
             this.chkCompCLRTrigger.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompCLRStore
-            // 
+            //
             this.chkCompCLRStore.AutoSize = true;
             this.chkCompCLRStore.Checked = true;
             this.chkCompCLRStore.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -329,9 +329,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompCLRStore.TabIndex = 31;
             this.chkCompCLRStore.Text = "CLR Store Procedures";
             this.chkCompCLRStore.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkIndexRowLock
-            // 
+            //
             this.chkIndexRowLock.AutoSize = true;
             this.chkIndexRowLock.Checked = true;
             this.chkIndexRowLock.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -342,9 +342,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIndexRowLock.TabIndex = 6;
             this.chkIndexRowLock.Text = "Row Locks";
             this.chkIndexRowLock.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkFullText
-            // 
+            //
             this.chkFullText.AutoSize = true;
             this.chkFullText.Checked = true;
             this.chkFullText.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -356,9 +356,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkFullText.Text = "FullText";
             this.chkFullText.UseVisualStyleBackColor = true;
             this.chkFullText.CheckedChanged += new System.EventHandler(this.chkFullText_CheckedChanged);
-            // 
+            //
             // chkCompRules
-            // 
+            //
             this.chkCompRules.AutoSize = true;
             this.chkCompRules.Checked = true;
             this.chkCompRules.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -369,9 +369,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompRules.TabIndex = 22;
             this.chkCompRules.Text = "Rules";
             this.chkCompRules.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompRoles
-            // 
+            //
             this.chkCompRoles.AutoSize = true;
             this.chkCompRoles.Checked = true;
             this.chkCompRoles.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -382,9 +382,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompRoles.TabIndex = 28;
             this.chkCompRoles.Text = "Roles";
             this.chkCompRoles.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompUsers
-            // 
+            //
             this.chkCompUsers.AutoSize = true;
             this.chkCompUsers.Checked = true;
             this.chkCompUsers.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -395,9 +395,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompUsers.TabIndex = 23;
             this.chkCompUsers.Text = "Users";
             this.chkCompUsers.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkIndexIncludeColumns
-            // 
+            //
             this.chkIndexIncludeColumns.AutoSize = true;
             this.chkIndexIncludeColumns.Checked = true;
             this.chkIndexIncludeColumns.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -408,9 +408,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIndexIncludeColumns.TabIndex = 8;
             this.chkIndexIncludeColumns.Text = "Include Columns";
             this.chkIndexIncludeColumns.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompTriggersDDL
-            // 
+            //
             this.chkCompTriggersDDL.AutoSize = true;
             this.chkCompTriggersDDL.Checked = true;
             this.chkCompTriggersDDL.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -421,9 +421,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompTriggersDDL.TabIndex = 19;
             this.chkCompTriggersDDL.Text = "DDL Triggers";
             this.chkCompTriggersDDL.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkIndexFillFactor
-            // 
+            //
             this.chkIndexFillFactor.AutoSize = true;
             this.chkIndexFillFactor.Checked = true;
             this.chkIndexFillFactor.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -434,9 +434,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIndexFillFactor.TabIndex = 7;
             this.chkIndexFillFactor.Text = "Fill Factor";
             this.chkIndexFillFactor.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkTablesColumnOrder
-            // 
+            //
             this.chkTablesColumnOrder.AutoSize = true;
             this.chkTablesColumnOrder.Checked = true;
             this.chkTablesColumnOrder.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -447,9 +447,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTablesColumnOrder.TabIndex = 3;
             this.chkTablesColumnOrder.Text = "Column Order";
             this.chkTablesColumnOrder.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompAssemblys
-            // 
+            //
             this.chkCompAssemblys.AutoSize = true;
             this.chkCompAssemblys.Checked = true;
             this.chkCompAssemblys.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -462,9 +462,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompAssemblys.Text = "Assemblys";
             this.chkCompAssemblys.UseVisualStyleBackColor = true;
             this.chkCompAssemblys.CheckedChanged += new System.EventHandler(this.chkCompAssemblys_CheckedChanged);
-            // 
+            //
             // chkFileGroups
-            // 
+            //
             this.chkFileGroups.AutoSize = true;
             this.chkFileGroups.Checked = true;
             this.chkFileGroups.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -475,9 +475,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkFileGroups.TabIndex = 25;
             this.chkFileGroups.Text = "File Groups";
             this.chkFileGroups.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkTablesColumnIdentity
-            // 
+            //
             this.chkTablesColumnIdentity.AutoSize = true;
             this.chkTablesColumnIdentity.Checked = true;
             this.chkTablesColumnIdentity.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -488,9 +488,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTablesColumnIdentity.TabIndex = 2;
             this.chkTablesColumnIdentity.Text = "Identity options";
             this.chkTablesColumnIdentity.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkTablesColumnCollation
-            // 
+            //
             this.chkTablesColumnCollation.AutoSize = true;
             this.chkTablesColumnCollation.Checked = true;
             this.chkTablesColumnCollation.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -501,9 +501,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTablesColumnCollation.TabIndex = 1;
             this.chkTablesColumnCollation.Text = "Column Collation";
             this.chkTablesColumnCollation.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkConstraints
-            // 
+            //
             this.chkConstraints.AutoSize = true;
             this.chkConstraints.Checked = true;
             this.chkConstraints.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -516,9 +516,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkConstraints.Text = "Constraints";
             this.chkConstraints.UseVisualStyleBackColor = true;
             this.chkConstraints.CheckedChanged += new System.EventHandler(this.chkConstraints_CheckedChanged);
-            // 
+            //
             // chkCompSchemas
-            // 
+            //
             this.chkCompSchemas.AutoSize = true;
             this.chkCompSchemas.Checked = true;
             this.chkCompSchemas.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -529,9 +529,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompSchemas.TabIndex = 24;
             this.chkCompSchemas.Text = "Schemas";
             this.chkCompSchemas.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompUDT
-            // 
+            //
             this.chkCompUDT.AutoSize = true;
             this.chkCompUDT.Checked = true;
             this.chkCompUDT.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -542,9 +542,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompUDT.TabIndex = 20;
             this.chkCompUDT.Text = "User Data Types";
             this.chkCompUDT.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkIndex
-            // 
+            //
             this.chkIndex.AutoSize = true;
             this.chkIndex.Checked = true;
             this.chkIndex.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -557,9 +557,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIndex.Text = "Indexes";
             this.chkIndex.UseVisualStyleBackColor = true;
             this.chkIndex.CheckedChanged += new System.EventHandler(this.chkCompIndices_CheckedChanged);
-            // 
+            //
             // chkTableOption
-            // 
+            //
             this.chkTableOption.AutoSize = true;
             this.chkTableOption.Checked = true;
             this.chkTableOption.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -570,9 +570,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTableOption.TabIndex = 4;
             this.chkTableOption.Text = "Table Options";
             this.chkTableOption.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompXMLSchemas
-            // 
+            //
             this.chkCompXMLSchemas.AutoSize = true;
             this.chkCompXMLSchemas.Checked = true;
             this.chkCompXMLSchemas.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -583,9 +583,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompXMLSchemas.TabIndex = 21;
             this.chkCompXMLSchemas.Text = "XML Schemas";
             this.chkCompXMLSchemas.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompFunciones
-            // 
+            //
             this.chkCompFunciones.AutoSize = true;
             this.chkCompFunciones.Checked = true;
             this.chkCompFunciones.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -596,9 +596,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompFunciones.TabIndex = 15;
             this.chkCompFunciones.Text = "Functions";
             this.chkCompFunciones.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompStoreProcedure
-            // 
+            //
             this.chkCompStoreProcedure.AutoSize = true;
             this.chkCompStoreProcedure.Checked = true;
             this.chkCompStoreProcedure.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -609,9 +609,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompStoreProcedure.TabIndex = 16;
             this.chkCompStoreProcedure.Text = "Store Procedures";
             this.chkCompStoreProcedure.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkTables
-            // 
+            //
             this.chkTables.AutoSize = true;
             this.chkTables.Checked = true;
             this.chkTables.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -624,9 +624,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTables.Text = "Tables";
             this.chkTables.UseVisualStyleBackColor = true;
             this.chkTables.CheckedChanged += new System.EventHandler(this.chkCompTablas_CheckedChanged);
-            // 
+            //
             // chkCompTriggers
-            // 
+            //
             this.chkCompTriggers.AutoSize = true;
             this.chkCompTriggers.Checked = true;
             this.chkCompTriggers.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -637,9 +637,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompTriggers.TabIndex = 18;
             this.chkCompTriggers.Text = "Triggers";
             this.chkCompTriggers.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompVistas
-            // 
+            //
             this.chkCompVistas.AutoSize = true;
             this.chkCompVistas.Checked = true;
             this.chkCompVistas.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -650,9 +650,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompVistas.TabIndex = 17;
             this.chkCompVistas.Text = "Views";
             this.chkCompVistas.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkCompExtendedProperties
-            // 
+            //
             this.chkCompExtendedProperties.AutoSize = true;
             this.chkCompExtendedProperties.Checked = true;
             this.chkCompExtendedProperties.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -663,17 +663,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompExtendedProperties.TabIndex = 1;
             this.chkCompExtendedProperties.Text = "Extended Properties";
             this.chkCompExtendedProperties.UseVisualStyleBackColor = true;
-            // 
+            //
             // txtXML
-            // 
+            //
             this.txtXML.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtXML.Location = new System.Drawing.Point(16, 257);
             this.txtXML.Name = "txtXML";
             this.txtXML.Size = new System.Drawing.Size(388, 20);
             this.txtXML.TabIndex = 18;
-            // 
+            //
             // label10
-            // 
+            //
             this.label10.AutoSize = true;
             this.label10.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label10.Location = new System.Drawing.Point(13, 241);
@@ -681,17 +681,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label10.Size = new System.Drawing.Size(29, 13);
             this.label10.TabIndex = 17;
             this.label10.Text = "XML";
-            // 
+            //
             // txtTime
-            // 
+            //
             this.txtTime.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtTime.Location = new System.Drawing.Point(268, 116);
             this.txtTime.Name = "txtTime";
             this.txtTime.Size = new System.Drawing.Size(237, 20);
             this.txtTime.TabIndex = 16;
-            // 
+            //
             // label9
-            // 
+            //
             this.label9.AutoSize = true;
             this.label9.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label9.Location = new System.Drawing.Point(268, 100);
@@ -699,17 +699,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label9.Size = new System.Drawing.Size(26, 13);
             this.label9.TabIndex = 15;
             this.label9.Text = "time";
-            // 
+            //
             // txtVariant
-            // 
+            //
             this.txtVariant.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtVariant.Location = new System.Drawing.Point(16, 209);
             this.txtVariant.Name = "txtVariant";
             this.txtVariant.Size = new System.Drawing.Size(388, 20);
             this.txtVariant.TabIndex = 14;
-            // 
+            //
             // label8
-            // 
+            //
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label8.Location = new System.Drawing.Point(13, 193);
@@ -717,17 +717,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label8.Size = new System.Drawing.Size(58, 13);
             this.label8.TabIndex = 13;
             this.label8.Text = "sql_variant";
-            // 
+            //
             // txtNText
-            // 
+            //
             this.txtNText.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtNText.Location = new System.Drawing.Point(268, 68);
             this.txtNText.Name = "txtNText";
             this.txtNText.Size = new System.Drawing.Size(237, 20);
             this.txtNText.TabIndex = 12;
-            // 
+            //
             // label7
-            // 
+            //
             this.label7.AutoSize = true;
             this.label7.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label7.Location = new System.Drawing.Point(268, 52);
@@ -735,17 +735,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label7.Size = new System.Drawing.Size(184, 13);
             this.label7.TabIndex = 11;
             this.label7.Text = "nchar, nvarchar, nvarchar(max), ntext";
-            // 
+            //
             // txtBlob
-            // 
+            //
             this.txtBlob.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtBlob.Location = new System.Drawing.Point(16, 164);
             this.txtBlob.Name = "txtBlob";
             this.txtBlob.Size = new System.Drawing.Size(388, 20);
             this.txtBlob.TabIndex = 10;
-            // 
+            //
             // label6
-            // 
+            //
             this.label6.AutoSize = true;
             this.label6.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label6.Location = new System.Drawing.Point(13, 148);
@@ -753,17 +753,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label6.Size = new System.Drawing.Size(192, 13);
             this.label6.TabIndex = 9;
             this.label6.Text = "binary, image, varbinary, varbinary(max)";
-            // 
+            //
             // txtDate
-            // 
+            //
             this.txtDate.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtDate.Location = new System.Drawing.Point(16, 116);
             this.txtDate.Name = "txtDate";
             this.txtDate.Size = new System.Drawing.Size(237, 20);
             this.txtDate.TabIndex = 8;
-            // 
+            //
             // label5
-            // 
+            //
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label5.Location = new System.Drawing.Point(13, 100);
@@ -771,17 +771,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label5.Size = new System.Drawing.Size(240, 13);
             this.label5.TabIndex = 7;
             this.label5.Text = "datetime, smalldatetime, datetime2, datetimeoffset";
-            // 
+            //
             // txtText
-            // 
+            //
             this.txtText.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtText.Location = new System.Drawing.Point(16, 68);
             this.txtText.Name = "txtText";
             this.txtText.Size = new System.Drawing.Size(237, 20);
             this.txtText.TabIndex = 6;
-            // 
+            //
             // label4
-            // 
+            //
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label4.Location = new System.Drawing.Point(13, 52);
@@ -789,17 +789,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label4.Size = new System.Drawing.Size(160, 13);
             this.label4.TabIndex = 5;
             this.label4.Text = "char, varchar, varchar(max), text";
-            // 
+            //
             // txtDefaultReal
-            // 
+            //
             this.txtDefaultReal.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtDefaultReal.Location = new System.Drawing.Point(268, 25);
             this.txtDefaultReal.Name = "txtDefaultReal";
             this.txtDefaultReal.Size = new System.Drawing.Size(237, 20);
             this.txtDefaultReal.TabIndex = 4;
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label3.Location = new System.Drawing.Point(265, 9);
@@ -807,17 +807,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label3.Size = new System.Drawing.Size(232, 13);
             this.label3.TabIndex = 3;
             this.label3.Text = "float, real, numeric, decimal, money, smallmoney";
-            // 
+            //
             // txtDefaultInteger
-            // 
+            //
             this.txtDefaultInteger.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtDefaultInteger.Location = new System.Drawing.Point(16, 25);
             this.txtDefaultInteger.Name = "txtDefaultInteger";
             this.txtDefaultInteger.Size = new System.Drawing.Size(237, 20);
             this.txtDefaultInteger.TabIndex = 2;
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label2.Location = new System.Drawing.Point(13, 9);
@@ -825,9 +825,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label2.Size = new System.Drawing.Size(160, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "integer, smallint, bigint, tinyint, bit";
-            // 
+            //
             // tabControl1
-            // 
+            //
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage2);
@@ -839,9 +839,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(545, 442);
             this.tabControl1.TabIndex = 2;
-            // 
+            //
             // tabPage1
-            // 
+            //
             this.tabPage1.BackColor = System.Drawing.Color.White;
             this.tabPage1.Controls.Add(this.gradientPanel6);
             this.tabPage1.Controls.Add(this.gradientPanel5);
@@ -856,18 +856,18 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.tabPage1.Size = new System.Drawing.Size(537, 416);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Filter by Type";
-            // 
+            //
             // gradientPanel6
-            // 
+            //
             this.gradientPanel6.Controls.Add(this.chkIgnoreNotForReplication);
             this.gradientPanel6.Controls.Add(this.chkCompExtendedProperties);
             this.gradientPanel6.Location = new System.Drawing.Point(5, 377);
             this.gradientPanel6.Name = "gradientPanel6";
             this.gradientPanel6.Size = new System.Drawing.Size(525, 33);
             this.gradientPanel6.TabIndex = 7;
-            // 
+            //
             // chkIgnoreNotForReplication
-            // 
+            //
             this.chkIgnoreNotForReplication.AutoSize = true;
             this.chkIgnoreNotForReplication.ForeColor = System.Drawing.SystemColors.ControlText;
             this.chkIgnoreNotForReplication.Location = new System.Drawing.Point(12, 7);
@@ -876,9 +876,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIgnoreNotForReplication.TabIndex = 0;
             this.chkIgnoreNotForReplication.Text = "Ignore Not For Replication";
             this.chkIgnoreNotForReplication.UseVisualStyleBackColor = true;
-            // 
+            //
             // gradientPanel5
-            // 
+            //
             this.gradientPanel5.Controls.Add(this.checkBox5);
             this.gradientPanel5.Controls.Add(this.chkCompFunciones);
             this.gradientPanel5.Controls.Add(this.checkPartitionFunction);
@@ -893,9 +893,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel5.Name = "gradientPanel5";
             this.gradientPanel5.Size = new System.Drawing.Size(171, 338);
             this.gradientPanel5.TabIndex = 6;
-            // 
+            //
             // gradientPanel4
-            // 
+            //
             this.gradientPanel4.Controls.Add(this.chkCompCLRStore);
             this.gradientPanel4.Controls.Add(this.chkCompAssemblys);
             this.gradientPanel4.Controls.Add(this.checkBox4);
@@ -906,9 +906,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel4.Name = "gradientPanel4";
             this.gradientPanel4.Size = new System.Drawing.Size(171, 195);
             this.gradientPanel4.TabIndex = 5;
-            // 
+            //
             // gradientPanel3
-            // 
+            //
             this.gradientPanel3.Controls.Add(this.checkBox1);
             this.gradientPanel3.Controls.Add(this.chkFullTextPath);
             this.gradientPanel3.Controls.Add(this.chkCompUsers);
@@ -920,9 +920,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel3.Name = "gradientPanel3";
             this.gradientPanel3.Size = new System.Drawing.Size(171, 137);
             this.gradientPanel3.TabIndex = 4;
-            // 
+            //
             // checkBox1
-            // 
+            //
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -931,11 +931,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(76, 17);
             this.checkBox1.TabIndex = 37;
-            this.checkBox1.Text = "Permisions";
+            this.checkBox1.Text = "Permissions";
             this.checkBox1.UseVisualStyleBackColor = true;
-            // 
+            //
             // gradientPanel2
-            // 
+            //
             this.gradientPanel2.Controls.Add(this.chkTableChangeTracking);
             this.gradientPanel2.Controls.Add(this.chkTableLockEscalation);
             this.gradientPanel2.Controls.Add(this.chkTables);
@@ -957,9 +957,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel2.Name = "gradientPanel2";
             this.gradientPanel2.Size = new System.Drawing.Size(171, 338);
             this.gradientPanel2.TabIndex = 3;
-            // 
+            //
             // chkTableChangeTracking
-            // 
+            //
             this.chkTableChangeTracking.AutoSize = true;
             this.chkTableChangeTracking.Checked = true;
             this.chkTableChangeTracking.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -970,9 +970,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTableChangeTracking.TabIndex = 16;
             this.chkTableChangeTracking.Text = "Change Tracking";
             this.chkTableChangeTracking.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkTableLockEscalation
-            // 
+            //
             this.chkTableLockEscalation.AutoSize = true;
             this.chkTableLockEscalation.Checked = true;
             this.chkTableLockEscalation.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -983,17 +983,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTableLockEscalation.TabIndex = 15;
             this.chkTableLockEscalation.Text = "Lock Escalation";
             this.chkTableLockEscalation.UseVisualStyleBackColor = true;
-            // 
+            //
             // gradientPanel1
-            // 
+            //
             this.gradientPanel1.Controls.Add(this.label11);
             this.gradientPanel1.Location = new System.Drawing.Point(5, 6);
             this.gradientPanel1.Name = "gradientPanel1";
             this.gradientPanel1.Size = new System.Drawing.Size(525, 21);
             this.gradientPanel1.TabIndex = 2;
-            // 
+            //
             // label11
-            // 
+            //
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.Location = new System.Drawing.Point(4, 4);
@@ -1001,9 +1001,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label11.Size = new System.Drawing.Size(125, 13);
             this.label11.TabIndex = 3;
             this.label11.Text = "Filter Object by Type";
-            // 
+            //
             // tabPage4
-            // 
+            //
             this.tabPage4.BackColor = System.Drawing.Color.White;
             this.tabPage4.Controls.Add(this.btnAdd);
             this.tabPage4.Controls.Add(this.gradientPanel10);
@@ -1015,9 +1015,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.tabPage4.Size = new System.Drawing.Size(537, 416);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Filter by Name";
-            // 
+            //
             // btnAdd
-            // 
+            //
             this.btnAdd.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnAdd.Location = new System.Drawing.Point(412, 374);
             this.btnAdd.Name = "btnAdd";
@@ -1026,17 +1026,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.btnAdd.Text = "Add";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            // 
+            //
             // gradientPanel10
-            // 
+            //
             this.gradientPanel10.Controls.Add(this.lstFilters);
             this.gradientPanel10.Location = new System.Drawing.Point(6, 33);
             this.gradientPanel10.Name = "gradientPanel10";
             this.gradientPanel10.Size = new System.Drawing.Size(524, 335);
             this.gradientPanel10.TabIndex = 5;
-            // 
+            //
             // lstFilters
-            // 
+            //
             this.lstFilters.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
@@ -1048,27 +1048,27 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.lstFilters.TabIndex = 0;
             this.lstFilters.UseCompatibleStateImageBehavior = false;
             this.lstFilters.View = System.Windows.Forms.View.Details;
-            // 
+            //
             // columnHeader1
-            // 
+            //
             this.columnHeader1.Text = "Filter Pattern Name";
             this.columnHeader1.Width = 250;
-            // 
+            //
             // columnHeader2
-            // 
+            //
             this.columnHeader2.Text = "Object Type";
             this.columnHeader2.Width = 100;
-            // 
+            //
             // columnHeader3
-            // 
+            //
             this.columnHeader3.Width = 0;
-            // 
+            //
             // columnHeader4
-            // 
+            //
             this.columnHeader4.Text = "";
-            // 
+            //
             // btnApply
-            // 
+            //
             this.btnApply.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnApply.Location = new System.Drawing.Point(473, 374);
             this.btnApply.Name = "btnApply";
@@ -1077,17 +1077,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.btnApply.Text = "Edit";
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
-            // 
+            //
             // gradientPanel9
-            // 
+            //
             this.gradientPanel9.Controls.Add(this.label1);
             this.gradientPanel9.Location = new System.Drawing.Point(5, 6);
             this.gradientPanel9.Name = "gradientPanel9";
             this.gradientPanel9.Size = new System.Drawing.Size(525, 21);
             this.gradientPanel9.TabIndex = 4;
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(4, 4);
@@ -1095,9 +1095,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label1.Size = new System.Drawing.Size(129, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "Filter Object by Name";
-            // 
+            //
             // tabPage2
-            // 
+            //
             this.tabPage2.BackColor = System.Drawing.Color.White;
             this.tabPage2.Controls.Add(this.gradientPanel8);
             this.tabPage2.Controls.Add(this.gradientPanel7);
@@ -1107,9 +1107,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.tabPage2.Size = new System.Drawing.Size(537, 416);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Defaults";
-            // 
+            //
             // gradientPanel8
-            // 
+            //
             this.gradientPanel8.Controls.Add(this.txtXML);
             this.gradientPanel8.Controls.Add(this.label2);
             this.gradientPanel8.Controls.Add(this.label10);
@@ -1132,17 +1132,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel8.Name = "gradientPanel8";
             this.gradientPanel8.Size = new System.Drawing.Size(525, 377);
             this.gradientPanel8.TabIndex = 4;
-            // 
+            //
             // gradientPanel7
-            // 
+            //
             this.gradientPanel7.Controls.Add(this.label12);
             this.gradientPanel7.Location = new System.Drawing.Point(5, 6);
             this.gradientPanel7.Name = "gradientPanel7";
             this.gradientPanel7.Size = new System.Drawing.Size(525, 21);
             this.gradientPanel7.TabIndex = 3;
-            // 
+            //
             // label12
-            // 
+            //
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.Location = new System.Drawing.Point(4, 4);
@@ -1150,9 +1150,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label12.Size = new System.Drawing.Size(90, 13);
             this.label12.TabIndex = 3;
             this.label12.Text = "Default Values";
-            // 
+            //
             // tabPage3
-            // 
+            //
             this.tabPage3.BackColor = System.Drawing.Color.White;
             this.tabPage3.Controls.Add(this.groupBox4);
             this.tabPage3.Controls.Add(this.gradientPanel16);
@@ -1161,9 +1161,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.tabPage3.Size = new System.Drawing.Size(537, 416);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Script";
-            // 
+            //
             // groupBox4
-            // 
+            //
             this.groupBox4.Controls.Add(this.optScriptSchemaBindingAlter);
             this.groupBox4.Controls.Add(this.optScriptSchemaDrop);
             this.groupBox4.Location = new System.Drawing.Point(5, 33);
@@ -1172,9 +1172,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "When rebuild a View WITH SCHEMABINDING";
-            // 
+            //
             // optScriptSchemaBindingAlter
-            // 
+            //
             this.optScriptSchemaBindingAlter.AutoSize = true;
             this.optScriptSchemaBindingAlter.Checked = true;
             this.optScriptSchemaBindingAlter.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -1185,9 +1185,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.optScriptSchemaBindingAlter.TabStop = true;
             this.optScriptSchemaBindingAlter.Text = "ALTER object twice";
             this.optScriptSchemaBindingAlter.UseVisualStyleBackColor = true;
-            // 
+            //
             // optScriptSchemaDrop
-            // 
+            //
             this.optScriptSchemaDrop.AutoSize = true;
             this.optScriptSchemaDrop.ForeColor = System.Drawing.SystemColors.ControlText;
             this.optScriptSchemaDrop.Location = new System.Drawing.Point(18, 19);
@@ -1197,17 +1197,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.optScriptSchemaDrop.TabStop = true;
             this.optScriptSchemaDrop.Text = "DROP/CREATE object";
             this.optScriptSchemaDrop.UseVisualStyleBackColor = true;
-            // 
+            //
             // gradientPanel16
-            // 
+            //
             this.gradientPanel16.Controls.Add(this.label15);
             this.gradientPanel16.Location = new System.Drawing.Point(5, 6);
             this.gradientPanel16.Name = "gradientPanel16";
             this.gradientPanel16.Size = new System.Drawing.Size(525, 21);
             this.gradientPanel16.TabIndex = 3;
-            // 
+            //
             // label15
-            // 
+            //
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.Location = new System.Drawing.Point(4, 4);
@@ -1215,9 +1215,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label15.Size = new System.Drawing.Size(148, 13);
             this.label15.TabIndex = 3;
             this.label15.Text = "Advanced Script Options";
-            // 
+            //
             // tabPage5
-            // 
+            //
             this.tabPage5.BackColor = System.Drawing.Color.White;
             this.tabPage5.Controls.Add(this.gradientPanel15);
             this.tabPage5.Controls.Add(this.gradientPanel14);
@@ -1231,17 +1231,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.tabPage5.Size = new System.Drawing.Size(537, 416);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Comparision";
-            // 
+            //
             // gradientPanel15
-            // 
+            //
             this.gradientPanel15.Controls.Add(this.chkIgnoreWhiteSpaceInCode);
             this.gradientPanel15.Location = new System.Drawing.Point(5, 232);
             this.gradientPanel15.Name = "gradientPanel15";
             this.gradientPanel15.Size = new System.Drawing.Size(525, 31);
             this.gradientPanel15.TabIndex = 7;
-            // 
+            //
             // chkIgnoreWhiteSpaceInCode
-            // 
+            //
             this.chkIgnoreWhiteSpaceInCode.AutoSize = true;
             this.chkIgnoreWhiteSpaceInCode.Location = new System.Drawing.Point(7, 7);
             this.chkIgnoreWhiteSpaceInCode.Name = "chkIgnoreWhiteSpaceInCode";
@@ -1249,17 +1249,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIgnoreWhiteSpaceInCode.TabIndex = 2;
             this.chkIgnoreWhiteSpaceInCode.Text = "Ignore white spaces in Store Procedures, Triggers and Functions";
             this.chkIgnoreWhiteSpaceInCode.UseVisualStyleBackColor = true;
-            // 
+            //
             // gradientPanel14
-            // 
+            //
             this.gradientPanel14.Controls.Add(this.label14);
             this.gradientPanel14.Location = new System.Drawing.Point(5, 135);
             this.gradientPanel14.Name = "gradientPanel14";
             this.gradientPanel14.Size = new System.Drawing.Size(525, 21);
             this.gradientPanel14.TabIndex = 6;
-            // 
+            //
             // label14
-            // 
+            //
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.Location = new System.Drawing.Point(4, 4);
@@ -1267,18 +1267,18 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label14.Size = new System.Drawing.Size(256, 13);
             this.label14.TabIndex = 3;
             this.label14.Text = "Procedures, Functions and Triggers Options";
-            // 
+            //
             // gradientPanel13
-            // 
+            //
             this.gradientPanel13.Controls.Add(this.rdoCaseSensityInCode);
             this.gradientPanel13.Controls.Add(this.rdoCaseInsensityInCode);
             this.gradientPanel13.Location = new System.Drawing.Point(5, 162);
             this.gradientPanel13.Name = "gradientPanel13";
             this.gradientPanel13.Size = new System.Drawing.Size(525, 64);
             this.gradientPanel13.TabIndex = 5;
-            // 
+            //
             // rdoCaseSensityInCode
-            // 
+            //
             this.rdoCaseSensityInCode.AutoSize = true;
             this.rdoCaseSensityInCode.Location = new System.Drawing.Point(13, 36);
             this.rdoCaseSensityInCode.Name = "rdoCaseSensityInCode";
@@ -1286,9 +1286,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.rdoCaseSensityInCode.TabIndex = 2;
             this.rdoCaseSensityInCode.Text = "Case sensitive";
             this.rdoCaseSensityInCode.UseVisualStyleBackColor = true;
-            // 
+            //
             // rdoCaseInsensityInCode
-            // 
+            //
             this.rdoCaseInsensityInCode.AutoSize = true;
             this.rdoCaseInsensityInCode.Checked = true;
             this.rdoCaseInsensityInCode.Location = new System.Drawing.Point(13, 13);
@@ -1298,17 +1298,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.rdoCaseInsensityInCode.TabStop = true;
             this.rdoCaseInsensityInCode.Text = "Case insensitive";
             this.rdoCaseInsensityInCode.UseVisualStyleBackColor = true;
-            // 
+            //
             // gradientPanel12
-            // 
+            //
             this.gradientPanel12.Controls.Add(this.label13);
             this.gradientPanel12.Location = new System.Drawing.Point(5, 6);
             this.gradientPanel12.Name = "gradientPanel12";
             this.gradientPanel12.Size = new System.Drawing.Size(525, 21);
             this.gradientPanel12.TabIndex = 4;
-            // 
+            //
             // label13
-            // 
+            //
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13.Location = new System.Drawing.Point(4, 4);
@@ -1316,9 +1316,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label13.Size = new System.Drawing.Size(197, 13);
             this.label13.TabIndex = 3;
             this.label13.Text = "Collation Case Sensitibity Options";
-            // 
+            //
             // gradientPanel11
-            // 
+            //
             this.gradientPanel11.Controls.Add(this.rdoCaseSensitive);
             this.gradientPanel11.Controls.Add(this.rdoCaseAutomatic);
             this.gradientPanel11.Controls.Add(this.rdoCaseInsensitive);
@@ -1326,9 +1326,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel11.Name = "gradientPanel11";
             this.gradientPanel11.Size = new System.Drawing.Size(525, 87);
             this.gradientPanel11.TabIndex = 3;
-            // 
+            //
             // rdoCaseSensitive
-            // 
+            //
             this.rdoCaseSensitive.AutoSize = true;
             this.rdoCaseSensitive.Location = new System.Drawing.Point(14, 59);
             this.rdoCaseSensitive.Name = "rdoCaseSensitive";
@@ -1336,9 +1336,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.rdoCaseSensitive.TabIndex = 2;
             this.rdoCaseSensitive.Text = "Case sensitive";
             this.rdoCaseSensitive.UseVisualStyleBackColor = true;
-            // 
+            //
             // rdoCaseAutomatic
-            // 
+            //
             this.rdoCaseAutomatic.AutoSize = true;
             this.rdoCaseAutomatic.Checked = true;
             this.rdoCaseAutomatic.Location = new System.Drawing.Point(14, 13);
@@ -1348,9 +1348,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.rdoCaseAutomatic.TabStop = true;
             this.rdoCaseAutomatic.Text = "Automatic (detect database collation)";
             this.rdoCaseAutomatic.UseVisualStyleBackColor = true;
-            // 
+            //
             // rdoCaseInsensitive
-            // 
+            //
             this.rdoCaseInsensitive.AutoSize = true;
             this.rdoCaseInsensitive.Location = new System.Drawing.Point(14, 36);
             this.rdoCaseInsensitive.Name = "rdoCaseInsensitive";
@@ -1358,9 +1358,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.rdoCaseInsensitive.TabIndex = 1;
             this.rdoCaseInsensitive.Text = "Case insensitive";
             this.rdoCaseInsensitive.UseVisualStyleBackColor = true;
-            // 
+            //
             // chkReloadDB
-            // 
+            //
             this.chkReloadDB.AutoSize = true;
             this.chkReloadDB.Location = new System.Drawing.Point(12, 393);
             this.chkReloadDB.Name = "chkReloadDB";
@@ -1368,9 +1368,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkReloadDB.TabIndex = 8;
             this.chkReloadDB.Text = "Reload Database Comparison after each Update";
             this.chkReloadDB.UseVisualStyleBackColor = false;
-            // 
+            //
             // SqlOptionsFront
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl1);
