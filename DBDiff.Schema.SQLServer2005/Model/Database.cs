@@ -100,7 +100,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         [ShowItem("XML Schemas", "XMLSchema")]
         public SchemaList<XMLSchema, Database> XmlSchemas { get; private set; }
 
-        [ShowItem("Tables", "Table")]
+        [ShowItem("Tables", "Table", true)]
         public SchemaList<Table, Database> Tables { get; private set; }
 
         [ShowItem("User Types", "UDT")]
