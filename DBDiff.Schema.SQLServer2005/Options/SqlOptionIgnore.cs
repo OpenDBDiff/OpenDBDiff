@@ -42,7 +42,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Options
             FilterSchema = defaultValue;
             FilterXMLSchema = defaultValue;
             FilterTableFileGroup = defaultValue;
-            FilterExtendedPropertys = defaultValue;
+            FilterExtendedProperties = defaultValue;
             FilterDDLTriggers = defaultValue;
             FilterSynonyms = defaultValue;
             FilterRules = defaultValue;
@@ -91,7 +91,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Options
 
         public Boolean FilterDDLTriggers { get; set; }
 
-        public Boolean FilterExtendedPropertys { get; set; }
+        public Boolean FilterExtendedProperties { get; set; }
 
         public Boolean FilterTableFileGroup { get; set; }
 

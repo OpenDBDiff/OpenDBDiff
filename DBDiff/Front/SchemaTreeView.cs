@@ -76,7 +76,7 @@ namespace DBDiff.Front
             }
         }
 
-        private void ReadPropertys(Type item, TreeNodeCollection nodes, ISchemaBase schema)
+        private void ReadProperties(Type item, TreeNodeCollection nodes, ISchemaBase schema)
         {
             PropertyInfo[] pi = item.GetProperties();
             nodes.Clear();
@@ -143,7 +143,7 @@ namespace DBDiff.Front
             treeView1.Visible = false;
             treeView1.Nodes.Clear();
             TreeNode databaseNode = treeView1.Nodes.Add(databaseSource.Name);
-            ReadPropertys(databaseSource.GetType(), databaseNode.Nodes, databaseSource);
+            ReadProperties(databaseSource.GetType(), databaseNode.Nodes, databaseSource);
             treeView1.Sort();
             databaseNode.ImageKey = "Database";
             databaseNode.Expand();
@@ -202,7 +202,7 @@ namespace DBDiff.Front
             {
                 if (item.ObjectType == Enums.ObjectType.Table
                     || item.ObjectType == Enums.ObjectType.View)
-                    ReadPropertys(item.GetType(), e.Node.Nodes, item);
+                    ReadProperties(item.GetType(), e.Node.Nodes, item);
                 if (OnSelectItem != null) OnSelectItem(item.FullName);
             }
         }

@@ -55,7 +55,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             chkConstraintsUK.Checked = option.Ignore.FilterConstraintUK;
             chkConstraintsCheck.Checked = option.Ignore.FilterConstraintCheck;
 
-            chkCompExtendedProperties.Checked = option.Ignore.FilterExtendedPropertys;
+            chkCompExtendedProperties.Checked = option.Ignore.FilterExtendedProperties;
             chkCompFunciones.Checked = option.Ignore.FilterFunction;
             chkIndex.Checked = option.Ignore.FilterIndex;
             chkIndexFillFactor.Checked = option.Ignore.FilterIndexFillFactor;
@@ -157,7 +157,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             option.Ignore.FilterUserDataType = chkCompUDT.Checked;
             option.Ignore.FilterView = chkCompVistas.Checked;
             option.Ignore.FilterXMLSchema = chkCompXMLSchemas.Checked;
-            option.Ignore.FilterExtendedPropertys = chkCompExtendedProperties.Checked;
+            option.Ignore.FilterExtendedProperties = chkCompExtendedProperties.Checked;
             option.Ignore.FilterUsers = chkCompUsers.Checked;
             option.Ignore.FilterRoles = chkCompRoles.Checked;
             option.Ignore.FilterRules = chkCompRules.Checked;

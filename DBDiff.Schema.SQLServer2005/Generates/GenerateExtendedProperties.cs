@@ -50,7 +50,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             ISQLServerSchemaBase parent;
             try
             {
-                if (database.Options.Ignore.FilterExtendedPropertys)
+                if (database.Options.Ignore.FilterExtendedProperties)
                 {
                     using (SqlConnection conn = new SqlConnection(connectionString))
                     {
