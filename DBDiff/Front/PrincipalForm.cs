@@ -53,7 +53,7 @@ namespace DBDiff.Front
             this.Text += Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
-        /*private void ProcesarSybase()
+        /*private void ProcessSybase()
         {
             DBDiff.Schema.Sybase.Model.Database origin;
             DBDiff.Schema.Sybase.Model.Database destination;
@@ -76,7 +76,7 @@ namespace DBDiff.Front
             //this.txtDiferencias.Text = origin.ToSQLDiff();
         }*/
 
-        /*private void ProcesarMySQL()
+        /*private void ProcessMySQL()
         {
             DBDiff.Schema.MySQL.Model.Database origin;
             DBDiff.Schema.MySQL.Model.Database destination;
@@ -95,7 +95,7 @@ namespace DBDiff.Front
         }
         */
 
-        private void ProcesarSQL2005()
+        private void ProcessSQL2005()
         {
             ProgressForm progres = null;
             string errorLocation = null;
@@ -268,7 +268,7 @@ namespace DBDiff.Front
             }
         }
 
-        /*private void ProcesarSQL2000()
+        /*private void ProcessSQL2000()
         {
             DBDiff.Schema.SQLServer2000.Model.Database origin;
             DBDiff.Schema.SQLServer2000.Model.Database destination;
@@ -306,10 +306,10 @@ namespace DBDiff.Front
             {
                 Cursor = Cursors.WaitCursor;
                 _selectedSchemas = schemaTreeView1.GetCheckedSchemas();
-                //if (optSQL2000.Checked) ProcesarSQL2000();
-                if (optSQL2005.Checked) ProcesarSQL2005();
-                //if (optMySQL.Checked) ProcesarMySQL();
-                //if (optSybase.Checked) ProcesarSybase();
+                //if (optSQL2000.Checked) ProcessSQL2000();
+                if (optSQL2005.Checked) ProcessSQL2005();
+                //if (optMySQL.Checked) ProcessMySQL();
+                //if (optSybase.Checked) ProcessSybase();
                 schemaTreeView1.SetCheckedSchemas(_selectedSchemas);
                 errorLocation = "Saving Connections";
                 Project.SaveLastConfiguration(mySqlConnectFront1.ConnectionString, mySqlConnectFront2.ConnectionString);
@@ -605,7 +605,7 @@ Clicking 'OK' will result in the following:
 
             if (SqlFilter.Comparison.ReloadComparisonOnUpdate)
             {
-                if (optSQL2005.Checked) ProcesarSQL2005();
+                if (optSQL2005.Checked) ProcessSQL2005();
             }
 
             btnUpdate.Enabled = false;
@@ -638,7 +638,7 @@ Clicking 'OK' will result in the following:
                     result = "Update successful";
                 }
                 MessageBox.Show(result);
-                if (optSQL2005.Checked) ProcesarSQL2005();
+                if (optSQL2005.Checked) ProcessSQL2005();
             }
         }
 
