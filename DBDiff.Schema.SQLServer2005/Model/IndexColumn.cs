@@ -31,13 +31,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public Boolean Order { get; set; }
 
-        public static Boolean Compare(IndexColumn origen, IndexColumn destino)
+        public static Boolean Compare(IndexColumn origin, IndexColumn destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (origen.IsIncluded != destino.IsIncluded) return false;
-            if (origen.Order != destino.Order) return false;
-            if (origen.KeyOrder != destino.KeyOrder) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (origin.IsIncluded != destination.IsIncluded) return false;
+            if (origin.Order != destination.Order) return false;
+            if (origin.KeyOrder != destination.KeyOrder) return false;
             return true;
         }
 

@@ -43,29 +43,29 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
         /// Compara las colecciones de tablas de dos bases diferentes y marca el estado de los objetos
         /// dependiendo si existen o si deben borrarse.
         /// </summary>
-        /// <param name="tablasOrigen"></param>
+        /// <param name="originTables"></param>
         /// Tablas originales, donde se guardaran los estados de las tablas.
-        /// <param name="tablasDestino">
+        /// <param name="destinationTables">
         /// Tablas comparativas, que se usa para comparar con la base original.
         /// </param>
-        /*public static void GenerateDifferences(SchemaList<Table, Database> tablasOrigen, SchemaList<Table, Database> tablasDestino)
+        /*public static void GenerateDifferences(SchemaList<Table, Database> originTables, SchemaList<Table, Database> destinationTables)
         {
-            MarkDrop(tablasOrigen, tablasDestino);
+            MarkDrop(originTables, destinationTables);
 
-            foreach (Table node in tablasDestino)
+            foreach (Table node in destinationTables)
             {
-                if (!tablasOrigen.Exists(node.FullName))
+                if (!originTables.Exists(node.FullName))
                 {
                     node.Status = Enums.ObjectStatusType.CreateStatus;
-                    node.Parent = tablasOrigen.Parent;
-                    tablasOrigen.Add(node);
+                    node.Parent = originTables.Parent;
+                    originTables.Add(node);
                 }
                 else
                 {
                     if (node.Status != Enums.ObjectStatusType.DropStatus)
                     {
-                        Table tablaOriginal = tablasOrigen[node.FullName];
-                        tablaOriginal.OriginalTable = (Table)tablasOrigen[node.FullName].Clone((Database)tablaOriginal.Parent);
+                        Table tablaOriginal = originTables[node.FullName];
+                        tablaOriginal.OriginalTable = (Table)originTables[node.FullName].Clone((Database)tablaOriginal.Parent);
                         CompareColumns.GenerateDifferences<Table>(tablaOriginal.Columns, node.Columns);
                         CompareConstraints.GenerateDifferences<Table>(tablaOriginal.Constraints, node.Constraints);
                         CompareIndexes.GenerateDifferences(tablaOriginal.Indexes, node.Indexes);

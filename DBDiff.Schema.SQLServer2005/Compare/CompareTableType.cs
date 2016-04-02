@@ -16,23 +16,23 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
             }
         }
 
-        /*public static void GenerateDifferences(SchemaList<TableType, Database> tablasOrigen, SchemaList<TableType, Database> tablasDestino)
+        /*public static void GenerateDifferences(SchemaList<TableType, Database> originTables, SchemaList<TableType, Database> destinationTables)
         {
-            MarkDrop(tablasOrigen, tablasDestino);
+            MarkDrop(originTables, destinationTables);
 
-            foreach (TableType node in tablasDestino)
+            foreach (TableType node in destinationTables)
             {
-                if (!tablasOrigen.Exists(node.FullName))
+                if (!originTables.Exists(node.FullName))
                 {
                     node.Status = Enums.ObjectStatusType.CreateStatus;
-                    node.Parent = tablasOrigen.Parent;
-                    tablasOrigen.Add(node);
+                    node.Parent = originTables.Parent;
+                    originTables.Add(node);
                 }
                 else
                 {
                     if (node.Status != Enums.ObjectStatusType.DropStatus)
                     {
-                        TableType tablaOriginal = tablasOrigen[node.FullName];
+                        TableType tablaOriginal = originTables[node.FullName];
                         CompareColumns.GenerateDifferences<TableType>(tablaOriginal.Columns, node.Columns);
                         CompareConstraints.GenerateDifferences<TableType>(tablaOriginal.Constraints, node.Constraints);
                         CompareIndexes.GenerateDifferences(tablaOriginal.Indexes, node.Indexes);

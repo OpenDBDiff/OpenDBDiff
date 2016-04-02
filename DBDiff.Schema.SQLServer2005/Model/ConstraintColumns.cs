@@ -26,26 +26,26 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Compara dos campos y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
-        public static Boolean Compare(ConstraintColumns origen, ConstraintColumns destino)
+        public static Boolean Compare(ConstraintColumns origin, ConstraintColumns destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (origen.Count != destino.Count) return false;
-            for (int j = 0; j < origen.Count; j++)
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (origin.Count != destination.Count) return false;
+            for (int j = 0; j < origin.Count; j++)
             {
-                ConstraintColumn item = destino[origen[j].FullName];
+                ConstraintColumn item = destination[origin[j].FullName];
                 if (item == null)
                     return false;
                 else
-                    if (!ConstraintColumn.Compare(origen[j], item)) return false;
+                    if (!ConstraintColumn.Compare(origin[j], item)) return false;
             }
-            for (int j = 0; j < destino.Count; j++)
+            for (int j = 0; j < destination.Count; j++)
             {
-                ConstraintColumn item = origen[destino[j].FullName];
+                ConstraintColumn item = origin[destination[j].FullName];
                 if (item == null)
                     return false;
                 else
-                    if (!ConstraintColumn.Compare(destino[j], item)) return false;
+                    if (!ConstraintColumn.Compare(destination[j], item)) return false;
             }
             return true;
         }

@@ -572,65 +572,65 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// Compara solo las propiedades de dos campos relacionadas con los Identity. Si existen
         /// diferencias, devuelve falso, caso contrario, true.
         /// </summary>
-        public static Boolean CompareIdentity(Column origen, Column destino)
+        public static Boolean CompareIdentity(Column origin, Column destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (origen.IsIdentity != destino.IsIdentity) return false;
-            if (origen.IsIdentityForReplication != destino.IsIdentityForReplication) return false;
-            if (origen.IdentityIncrement != destino.IdentityIncrement) return false;
-            if (origen.IdentitySeed != destino.IdentitySeed) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (origin.IsIdentity != destination.IsIdentity) return false;
+            if (origin.IsIdentityForReplication != destination.IsIdentityForReplication) return false;
+            if (origin.IdentityIncrement != destination.IdentityIncrement) return false;
+            if (origin.IdentitySeed != destination.IdentitySeed) return false;
             return true;
         }
 
-        public static Boolean CompareRule(Column origen, Column destino)
+        public static Boolean CompareRule(Column origin, Column destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if ((origen.Rule.Name != null) && (destino.Rule.Name == null)) return false;
-            if ((origen.Rule.Name == null) && (destino.Rule.Name != null)) return false;
-            if (origen.Rule.Name != null)
-                if (!origen.Rule.Name.Equals(destino.Rule.Name)) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if ((origin.Rule.Name != null) && (destination.Rule.Name == null)) return false;
+            if ((origin.Rule.Name == null) && (destination.Rule.Name != null)) return false;
+            if (origin.Rule.Name != null)
+                if (!origin.Rule.Name.Equals(destination.Rule.Name)) return false;
             return true;
         }
 
         /// <summary>
         /// Compara dos campos y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
-        public static Boolean Compare(Column origen, Column destino)
+        public static Boolean Compare(Column origin, Column destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (!origen.ComputedFormula.Equals(destino.ComputedFormula)) return false;
-            if (origen.IsComputed != destino.IsComputed) return false;
-            //if (origen.Position != destino.Position) return false;
-            if (!origen.IsComputed)
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (!origin.ComputedFormula.Equals(destination.ComputedFormula)) return false;
+            if (origin.IsComputed != destination.IsComputed) return false;
+            //if (origin.Position != destination.Position) return false;
+            if (!origin.IsComputed)
             {
-                if (origen.IsXmlDocument != destino.IsXmlDocument) return false;
-                if ((origen.XmlSchema == null) && (destino.XmlSchema != null)) return false;
-                if (origen.XmlSchema != null)
-                    if (!origen.XmlSchema.Equals(destino.XmlSchema)) return false;
-                if (origen.IsNullable != destino.IsNullable) return false;
-                if (origen.IsFileStream != destino.IsFileStream) return false;
-                if (origen.IsSparse != destino.IsSparse) return false;
-                if (!origen.Collation.Equals(destino.Collation)) return false;
-                if (!origen.Type.Equals(destino.Type, StringComparison.CurrentCultureIgnoreCase)) return false;
+                if (origin.IsXmlDocument != destination.IsXmlDocument) return false;
+                if ((origin.XmlSchema == null) && (destination.XmlSchema != null)) return false;
+                if (origin.XmlSchema != null)
+                    if (!origin.XmlSchema.Equals(destination.XmlSchema)) return false;
+                if (origin.IsNullable != destination.IsNullable) return false;
+                if (origin.IsFileStream != destination.IsFileStream) return false;
+                if (origin.IsSparse != destination.IsSparse) return false;
+                if (!origin.Collation.Equals(destination.Collation)) return false;
+                if (!origin.Type.Equals(destination.Type, StringComparison.CurrentCultureIgnoreCase)) return false;
                 //Si el tipo de campo es custom, no compara size del campo.
-                if (!origen.IsUserDefinedType)
+                if (!origin.IsUserDefinedType)
                 {
-                    if (origen.Precision != destino.Precision) return false;
-                    if (origen.Scale != destino.Scale) return false;
+                    if (origin.Precision != destination.Precision) return false;
+                    if (origin.Scale != destination.Scale) return false;
                     //Si el tamaño de un campo Text cambia, entonces por la opcion TextInRowLimit.
-                    if ((origen.Size != destino.Size) && (origen.Type.Equals(destino.Type, StringComparison.CurrentCultureIgnoreCase)) && (!origen.Type.Equals("text", StringComparison.CurrentCultureIgnoreCase))) return false;
+                    if ((origin.Size != destination.Size) && (origin.Type.Equals(destination.Type, StringComparison.CurrentCultureIgnoreCase)) && (!origin.Type.Equals("text", StringComparison.CurrentCultureIgnoreCase))) return false;
                 }
 
             }
             else
             {
-                if (origen.IsPersisted != destino.IsPersisted) return false;
+                if (origin.IsPersisted != destination.IsPersisted) return false;
             }
-            if (!CompareIdentity(origen, destino)) return false;
-            return CompareRule(origen, destino);
+            if (!CompareIdentity(origin, destination)) return false;
+            return CompareRule(origin, destination);
         }
 
         public int CompareTo(Column other)

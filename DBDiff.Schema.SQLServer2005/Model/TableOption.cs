@@ -34,11 +34,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Compara dos indices y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
-        public static Boolean Compare(TableOption origen, TableOption destino)
+        public static Boolean Compare(TableOption origin, TableOption destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (!destino.Value.Equals(origen.Value)) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (!destination.Value.Equals(origin.Value)) return false;
             return true;
         }
 

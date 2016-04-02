@@ -63,7 +63,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public bool Compare(User obj)
         {
-            if (obj == null) throw new ArgumentNullException("destino");
+            if (obj == null) throw new ArgumentNullException("destination");
             if (!this.Login.Equals(obj.Login)) return false;
             if (!this.Owner.Equals(obj.Owner)) return false;
             return true;

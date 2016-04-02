@@ -1,29 +1,29 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DBDiff.Schema.SQLServer.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DBDiff.Schema.SQLServer.Generates.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="SQLServerUserOrigen" Type="System.String" Scope="User">
+    <Setting Name="SQLServerUserOrigin" Type="System.String" Scope="User">
       <Value Profile="(Default)">sa</Value>
     </Setting>
-    <Setting Name="SQLServerUserDestino" Type="System.String" Scope="User">
+    <Setting Name="SQLServerUserDestination" Type="System.String" Scope="User">
       <Value Profile="(Default)">sa</Value>
     </Setting>
-    <Setting Name="SQLServerConnectionTypeOrigen" Type="System.Int32" Scope="User">
+    <Setting Name="SQLServerConnectionTypeOrigin" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="SQLServerConnectionTypeDestino" Type="System.Int32" Scope="User">
+    <Setting Name="SQLServerConnectionTypeDestination" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="SQLServerNameOrigen" Type="System.String" Scope="User">
+    <Setting Name="SQLServerNameOrigin" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SQLServerNameDestino" Type="System.String" Scope="User">
+    <Setting Name="SQLServerNameDestination" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SQLServerDatabaseOrigen" Type="System.Int32" Scope="User">
+    <Setting Name="SQLServerDatabaseOrigin" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">-1</Value>
     </Setting>
-    <Setting Name="SQLServerDatabaseDestino" Type="System.Int32" Scope="User">
+    <Setting Name="SQLServerDatabaseDestination" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">-1</Value>
     </Setting>
   </Settings>

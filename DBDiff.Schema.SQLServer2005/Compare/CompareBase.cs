@@ -74,17 +74,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
             }
         }
 
-        protected static void CompareExtendedProperties(ISQLServerSchemaBase origen, ISQLServerSchemaBase destino)
+        protected static void CompareExtendedProperties(ISQLServerSchemaBase origin, ISQLServerSchemaBase destination)
         {
-            List<ExtendedProperty> dropList = (from node in origen.ExtendedProperties
-                                               where !destino.ExtendedProperties.Exists(item => item.Name.Equals(node.Name, StringComparison.CurrentCultureIgnoreCase))
+            List<ExtendedProperty> dropList = (from node in origin.ExtendedProperties
+                                               where !destination.ExtendedProperties.Exists(item => item.Name.Equals(node.Name, StringComparison.CurrentCultureIgnoreCase))
                                                select node).ToList<ExtendedProperty>();
-            List<ExtendedProperty> addList = (from node in destino.ExtendedProperties
-                                              where !origen.ExtendedProperties.Exists(item => item.Name.Equals(node.Name, StringComparison.CurrentCultureIgnoreCase))
+            List<ExtendedProperty> addList = (from node in destination.ExtendedProperties
+                                              where !origin.ExtendedProperties.Exists(item => item.Name.Equals(node.Name, StringComparison.CurrentCultureIgnoreCase))
                                               select node).ToList<ExtendedProperty>();
             dropList.ForEach(item => { item.Status = Enums.ObjectStatusType.DropStatus; });
             addList.ForEach(item => { item.Status = Enums.ObjectStatusType.CreateStatus; });
-            origen.ExtendedProperties.AddRange(addList);
+            origin.ExtendedProperties.AddRange(addList);
         }
     }
 }

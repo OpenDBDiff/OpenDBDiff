@@ -32,13 +32,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public Boolean IsReadOnly { get; set; }
 
-        public static Boolean Compare(FileGroup origen, FileGroup destino)
+        public static Boolean Compare(FileGroup origin, FileGroup destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (origen.IsReadOnly != destino.IsReadOnly) return false;
-            if (origen.IsDefaultFileGroup != destino.IsDefaultFileGroup) return false;
-            if (origen.IsFileStream != destino.IsFileStream) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (origin.IsReadOnly != destination.IsReadOnly) return false;
+            if (origin.IsDefaultFileGroup != destination.IsDefaultFileGroup) return false;
+            if (origin.IsFileStream != destination.IsFileStream) return false;
             return true;
         }
 

@@ -190,24 +190,24 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return listDiff;
         }
 
-        public static Boolean Compare(PartitionFunction origen, PartitionFunction destino)
+        public static Boolean Compare(PartitionFunction origin, PartitionFunction destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (!origen.Type.Equals(destino.Type)) return false;
-            if (origen.Size != destino.Size) return false;
-            if (origen.Precision != destino.Precision) return false;
-            if (origen.Scale != destino.Scale) return false;
-            if (origen.IsBoundaryRight != destino.IsBoundaryRight) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (!origin.Type.Equals(destination.Type)) return false;
+            if (origin.Size != destination.Size) return false;
+            if (origin.Precision != destination.Precision) return false;
+            if (origin.Scale != destination.Scale) return false;
+            if (origin.IsBoundaryRight != destination.IsBoundaryRight) return false;
             return true;
         }
 
-        public static Boolean CompareValues(PartitionFunction origen, PartitionFunction destino)
+        public static Boolean CompareValues(PartitionFunction origin, PartitionFunction destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (origen.Values.Count != destino.Values.Count) return false;
-            if (origen.Values.Except(destino.Values).ToList().Count != 0) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (origin.Values.Count != destination.Values.Count) return false;
+            if (origin.Values.Except(destination.Values).ToList().Count != 0) return false;
             return true;
         }
     }

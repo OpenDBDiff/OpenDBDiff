@@ -57,15 +57,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return listDiff;
         }
 
-        public static Boolean Compare(PartitionScheme origen, PartitionScheme destino)
+        public static Boolean Compare(PartitionScheme origin, PartitionScheme destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (!origen.PartitionFunction.Equals(destino.PartitionFunction)) return false;
-            if (origen.FileGroups.Count != destino.FileGroups.Count) return false;
-            for (int j = 0; j < origen.FileGroups.Count; j++)
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (!origin.PartitionFunction.Equals(destination.PartitionFunction)) return false;
+            if (origin.FileGroups.Count != destination.FileGroups.Count) return false;
+            for (int j = 0; j < origin.FileGroups.Count; j++)
             {
-                if (origen.CompareFullNameTo(origen.FileGroups[j], destino.FileGroups[j]) != 0)
+                if (origin.CompareFullNameTo(origin.FileGroups[j], destination.FileGroups[j]) != 0)
                     return false;
             }
             return true;

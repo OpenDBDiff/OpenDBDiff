@@ -65,11 +65,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Compara dos Synonyms y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
-        public static Boolean Compare(Synonym origen, Synonym destino)
+        public static Boolean Compare(Synonym origin, Synonym destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (!origen.Value.Equals(destino.Value)) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (!origin.Value.Equals(destination.Value)) return false;
             return true;
         }
     }

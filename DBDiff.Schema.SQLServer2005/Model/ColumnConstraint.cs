@@ -74,13 +74,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Compara dos campos y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
-        public static Boolean Compare(ColumnConstraint origen, ColumnConstraint destino)
+        public static Boolean Compare(ColumnConstraint origin, ColumnConstraint destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (origen.NotForReplication != destino.NotForReplication) return false;
-            if (origen.Disabled != destino.Disabled) return false;
-            if ((!origen.Definition.Equals(destino.Definition)) && (!origen.Definition.Equals("(" + destino.Definition + ")"))) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (origin.NotForReplication != destination.NotForReplication) return false;
+            if (origin.Disabled != destination.Disabled) return false;
+            if ((!origin.Definition.Equals(destination.Definition)) && (!origin.Definition.Equals("(" + destination.Definition + ")"))) return false;
             return true;
         }
 

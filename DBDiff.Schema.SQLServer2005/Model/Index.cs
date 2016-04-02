@@ -88,53 +88,53 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Compara dos indices y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
-        public static Boolean Compare(Index origen, Index destino)
+        public static Boolean Compare(Index origin, Index destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (origen.AllowPageLocks != destino.AllowPageLocks) return false;
-            if (origen.AllowRowLocks != destino.AllowRowLocks) return false;
-            if (origen.FillFactor != destino.FillFactor) return false;
-            if (origen.IgnoreDupKey != destino.IgnoreDupKey) return false;
-            if (origen.IsAutoStatistics != destino.IsAutoStatistics) return false;
-            if (origen.IsDisabled != destino.IsDisabled) return false;
-            if (origen.IsPadded != destino.IsPadded) return false;
-            if (origen.IsPrimaryKey != destino.IsPrimaryKey) return false;
-            if (origen.IsUniqueKey != destino.IsUniqueKey) return false;
-            if (origen.Type != destino.Type) return false;
-            if (origen.SortInTempDb != destino.SortInTempDb) return false;
-            if (!origen.FilterDefintion.Equals(destino.FilterDefintion)) return false;
-            if (!IndexColumns.Compare(origen.Columns, destino.Columns)) return false;
-            return CompareFileGroup(origen, destino);
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (origin.AllowPageLocks != destination.AllowPageLocks) return false;
+            if (origin.AllowRowLocks != destination.AllowRowLocks) return false;
+            if (origin.FillFactor != destination.FillFactor) return false;
+            if (origin.IgnoreDupKey != destination.IgnoreDupKey) return false;
+            if (origin.IsAutoStatistics != destination.IsAutoStatistics) return false;
+            if (origin.IsDisabled != destination.IsDisabled) return false;
+            if (origin.IsPadded != destination.IsPadded) return false;
+            if (origin.IsPrimaryKey != destination.IsPrimaryKey) return false;
+            if (origin.IsUniqueKey != destination.IsUniqueKey) return false;
+            if (origin.Type != destination.Type) return false;
+            if (origin.SortInTempDb != destination.SortInTempDb) return false;
+            if (!origin.FilterDefintion.Equals(destination.FilterDefintion)) return false;
+            if (!IndexColumns.Compare(origin.Columns, destination.Columns)) return false;
+            return CompareFileGroup(origin, destination);
         }
 
-        public static Boolean CompareExceptIsDisabled(Index origen, Index destino)
+        public static Boolean CompareExceptIsDisabled(Index origin, Index destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (origen.AllowPageLocks != destino.AllowPageLocks) return false;
-            if (origen.AllowRowLocks != destino.AllowRowLocks) return false;
-            if (origen.FillFactor != destino.FillFactor) return false;
-            if (origen.IgnoreDupKey != destino.IgnoreDupKey) return false;
-            if (origen.IsAutoStatistics != destino.IsAutoStatistics) return false;
-            if (origen.IsPadded != destino.IsPadded) return false;
-            if (origen.IsPrimaryKey != destino.IsPrimaryKey) return false;
-            if (origen.IsUniqueKey != destino.IsUniqueKey) return false;
-            if (origen.Type != destino.Type) return false;
-            if (origen.SortInTempDb != destino.SortInTempDb) return false;
-            if (!origen.FilterDefintion.Equals(destino.FilterDefintion)) return false;
-            if (!IndexColumns.Compare(origen.Columns, destino.Columns)) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (origin.AllowPageLocks != destination.AllowPageLocks) return false;
+            if (origin.AllowRowLocks != destination.AllowRowLocks) return false;
+            if (origin.FillFactor != destination.FillFactor) return false;
+            if (origin.IgnoreDupKey != destination.IgnoreDupKey) return false;
+            if (origin.IsAutoStatistics != destination.IsAutoStatistics) return false;
+            if (origin.IsPadded != destination.IsPadded) return false;
+            if (origin.IsPrimaryKey != destination.IsPrimaryKey) return false;
+            if (origin.IsUniqueKey != destination.IsUniqueKey) return false;
+            if (origin.Type != destination.Type) return false;
+            if (origin.SortInTempDb != destination.SortInTempDb) return false;
+            if (!origin.FilterDefintion.Equals(destination.FilterDefintion)) return false;
+            if (!IndexColumns.Compare(origin.Columns, destination.Columns)) return false;
             //return true;
-            return CompareFileGroup(origen, destino);
+            return CompareFileGroup(origin, destination);
         }
 
-        private static Boolean CompareFileGroup(Index origen, Index destino)
+        private static Boolean CompareFileGroup(Index origin, Index destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (origen.FileGroup != null)
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (origin.FileGroup != null)
             {
-                if (!origen.FileGroup.Equals(destino.FileGroup)) return false;
+                if (!origin.FileGroup.Equals(destination.FileGroup)) return false;
             }
             return true;
         }

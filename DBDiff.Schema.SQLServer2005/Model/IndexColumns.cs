@@ -26,26 +26,26 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Compara dos campos y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
-        public static Boolean Compare(IndexColumns origen, IndexColumns destino)
+        public static Boolean Compare(IndexColumns origin, IndexColumns destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (origen.Count != destino.Count) return false;
-            for (int j = 0; j < origen.Count; j++)
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (origin.Count != destination.Count) return false;
+            for (int j = 0; j < origin.Count; j++)
             {
-                IndexColumn item = destino[origen[j].FullName];
+                IndexColumn item = destination[origin[j].FullName];
                 if (item == null)
                     return false;
                 else
-                    if (!IndexColumn.Compare(origen[j], item)) return false;
+                    if (!IndexColumn.Compare(origin[j], item)) return false;
             }
-            for (int j = 0; j < destino.Count; j++)
+            for (int j = 0; j < destination.Count; j++)
             {
-                IndexColumn item = origen[destino[j].FullName];
+                IndexColumn item = origin[destination[j].FullName];
                 if (item == null)
                     return false;
                 else
-                    if (!IndexColumn.Compare(destino[j], item)) return false;
+                    if (!IndexColumn.Compare(destination[j], item)) return false;
             }
             return true;
         }

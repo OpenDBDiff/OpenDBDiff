@@ -674,12 +674,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Compara dos tablas y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
-        public static Boolean CompareFileGroup(Table origen, Table destino)
+        public static Boolean CompareFileGroup(Table origin, Table destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if ((!String.IsNullOrEmpty(destino.FileGroup) && (!String.IsNullOrEmpty(origen.FileGroup))))
-                if (!destino.FileGroup.Equals(origen.FileGroup))
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if ((!String.IsNullOrEmpty(destination.FileGroup) && (!String.IsNullOrEmpty(origin.FileGroup))))
+                if (!destination.FileGroup.Equals(origin.FileGroup))
                     return false;
             return true;
         }
@@ -687,12 +687,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Compara dos tablas y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
-        public static Boolean CompareFileGroupText(Table origen, Table destino)
+        public static Boolean CompareFileGroupText(Table origin, Table destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if ((!String.IsNullOrEmpty(destino.FileGroupText) && (!String.IsNullOrEmpty(origen.FileGroupText))))
-                if (!destino.FileGroupText.Equals(origen.FileGroupText))
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if ((!String.IsNullOrEmpty(destination.FileGroupText) && (!String.IsNullOrEmpty(origin.FileGroupText))))
+                if (!destination.FileGroupText.Equals(origin.FileGroupText))
                     return false;
             return true;
         }

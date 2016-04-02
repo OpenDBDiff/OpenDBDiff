@@ -52,29 +52,29 @@ namespace DBDiff.OCDB
             bool completedSuccessfully = false;
             try
             {
-                Database origen;
-                Database destino;
+                Database origin;
+                Database destination;
                 if (TestConnection(arguments.ConnectionString1, arguments.ConnectionString2))
                 {
                     Generate sql = new Generate();
                     sql.ConnectionString = arguments.ConnectionString1;
                     Console.WriteLine("Reading first database...");
                     sql.Options = SqlFilter;
-                    origen = sql.Process();
+                    origin = sql.Process();
 
                     sql.ConnectionString = arguments.ConnectionString2;
                     Console.WriteLine("Reading second database...");
-                    destino = sql.Process();
+                    destination = sql.Process();
                     Console.WriteLine("Comparing databases schemas...");
-                    origen = Generate.Compare(origen, destino);
+                    origin = Generate.Compare(origin, destination);
                     if (!arguments.OutputAll)
                     {
                         // temporary work-around: run twice just like GUI
-                        origen.ToSqlDiff();
+                        origin.ToSqlDiff();
                     }
 
                     Console.WriteLine("Generating SQL file...");
-                    SaveFile(arguments.OutputFile, arguments.OutputAll ? origen.ToSql() : origen.ToSqlDiff().ToSQL());
+                    SaveFile(arguments.OutputFile, arguments.OutputAll ? origin.ToSql() : origin.ToSqlDiff().ToSQL());
                     completedSuccessfully = true;
                 }
             }

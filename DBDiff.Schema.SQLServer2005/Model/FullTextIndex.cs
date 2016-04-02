@@ -142,16 +142,16 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return list;
         }
 
-        public Boolean Compare(FullTextIndex destino)
+        public Boolean Compare(FullTextIndex destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (!this.ChangeTrackingState.Equals(destino.ChangeTrackingState)) return false;
-            if (!this.FullText.Equals(destino.FullText)) return false;
-            if (!this.Index.Equals(destino.Index)) return false;
-            if (this.IsDisabled != destino.IsDisabled) return false;
-            if (this.Columns.Count != destino.Columns.Count) return false;
-            if (this.Columns.Exists(item => { return !destino.Columns.Exists(item2 => item2.ColumnName.Equals(item.ColumnName)); })) return false;
-            if (destino.Columns.Exists(item => { return !this.Columns.Exists(item2 => item2.ColumnName.Equals(item.ColumnName)); })) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (!this.ChangeTrackingState.Equals(destination.ChangeTrackingState)) return false;
+            if (!this.FullText.Equals(destination.FullText)) return false;
+            if (!this.Index.Equals(destination.Index)) return false;
+            if (this.IsDisabled != destination.IsDisabled) return false;
+            if (this.Columns.Count != destination.Columns.Count) return false;
+            if (this.Columns.Exists(item => { return !destination.Columns.Exists(item2 => item2.ColumnName.Equals(item.ColumnName)); })) return false;
+            if (destination.Columns.Exists(item => { return !this.Columns.Exists(item2 => item2.ColumnName.Equals(item.ColumnName)); })) return false;
 
             return true;
         }

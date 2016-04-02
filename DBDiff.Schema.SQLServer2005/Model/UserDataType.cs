@@ -83,25 +83,25 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return item;
         }
 
-        public static Boolean CompareRule(UserDataType origen, UserDataType destino)
+        public static Boolean CompareRule(UserDataType origin, UserDataType destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if ((origen.Rule.Name != null) && (destino.Rule.Name == null)) return false;
-            if ((origen.Rule.Name == null) && (destino.Rule.Name != null)) return false;
-            if (origen.Rule.Name != null)
-                if (!origen.Rule.Name.Equals(destino.Rule.Name)) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if ((origin.Rule.Name != null) && (destination.Rule.Name == null)) return false;
+            if ((origin.Rule.Name == null) && (destination.Rule.Name != null)) return false;
+            if (origin.Rule.Name != null)
+                if (!origin.Rule.Name.Equals(destination.Rule.Name)) return false;
             return true;
         }
 
-        public static Boolean CompareDefault(UserDataType origen, UserDataType destino)
+        public static Boolean CompareDefault(UserDataType origin, UserDataType destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if ((origen.Default.Name != null) && (destino.Default.Name == null)) return false;
-            if ((origen.Default.Name == null) && (destino.Default.Name != null)) return false;
-            if (origen.Default.Name != null)
-                if (!origen.Default.Name.Equals(destino.Default.Name)) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if ((origin.Default.Name != null) && (destination.Default.Name == null)) return false;
+            if ((origin.Default.Name == null) && (destination.Default.Name != null)) return false;
+            if (origin.Default.Name != null)
+                if (!origin.Default.Name.Equals(destination.Default.Name)) return false;
             return true;
         }
 

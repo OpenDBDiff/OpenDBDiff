@@ -69,7 +69,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public Boolean Compare(Role obj)
         {
-            if (obj == null) throw new ArgumentNullException("destino");
+            if (obj == null) throw new ArgumentNullException("destination");
             if (this.Type != obj.Type) return false;
             if (!this.Password.Equals(obj.Password)) return false;
             if (!this.Owner.Equals(obj.Owner)) return false;

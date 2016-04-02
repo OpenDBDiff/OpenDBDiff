@@ -67,15 +67,15 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Compara dos triggers y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
-        public static Boolean Compare(FileGroupFile origen, FileGroupFile destino)
+        public static Boolean Compare(FileGroupFile origin, FileGroupFile destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if (origen.Growth != destino.Growth) return false;
-            if (origen.IsPercentGrowth != destino.IsPercentGrowth) return false;
-            if (origen.IsSparse != destino.IsSparse) return false;
-            if (origen.MaxSize != destino.MaxSize) return false;
-            if (!origen.PhysicalName.Equals(destino.PhysicalName)) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if (origin.Growth != destination.Growth) return false;
+            if (origin.IsPercentGrowth != destination.IsPercentGrowth) return false;
+            if (origin.IsSparse != destination.IsSparse) return false;
+            if (origin.MaxSize != destination.MaxSize) return false;
+            if (!origin.PhysicalName.Equals(destination.PhysicalName)) return false;
             return true;
         }
 

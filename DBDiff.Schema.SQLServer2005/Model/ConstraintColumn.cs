@@ -66,18 +66,18 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return "";
         }
 
-        public static Boolean Compare(ConstraintColumn origen, ConstraintColumn destino)
+        public static Boolean Compare(ConstraintColumn origin, ConstraintColumn destination)
         {
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (origen == null) throw new ArgumentNullException("origen");
-            if ((origen.ColumnRelationalName == null) && (destino.ColumnRelationalName != null)) return false;
-            if (origen.ColumnRelationalName != null)
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (origin == null) throw new ArgumentNullException("origin");
+            if ((origin.ColumnRelationalName == null) && (destination.ColumnRelationalName != null)) return false;
+            if (origin.ColumnRelationalName != null)
             {
-                if (!origen.ColumnRelationalName.Equals(destino.ColumnRelationalName, StringComparison.CurrentCultureIgnoreCase)) return false;
+                if (!origin.ColumnRelationalName.Equals(destination.ColumnRelationalName, StringComparison.CurrentCultureIgnoreCase)) return false;
             }
-            if (origen.IsIncluded != destino.IsIncluded) return false;
-            if (origen.Order != destino.Order) return false;
-            if (origen.KeyOrder != destino.KeyOrder) return false;
+            if (origin.IsIncluded != destination.IsIncluded) return false;
+            if (origin.Order != destination.Order) return false;
+            if (origin.KeyOrder != destination.KeyOrder) return false;
             return true;
         }
 

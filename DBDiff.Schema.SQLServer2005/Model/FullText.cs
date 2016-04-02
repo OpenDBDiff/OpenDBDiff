@@ -114,17 +114,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Compara dos Synonyms y devuelve true si son iguales, caso contrario, devuelve false.
         /// </summary>
-        public Boolean Compare(FullText destino)
+        public Boolean Compare(FullText destination)
         {
             Database database = (Database)this.Parent;
-            if (destino == null) throw new ArgumentNullException("destino");
-            if (!this.IsAccentSensity.Equals(destino.IsAccentSensity)) return false;
-            if (!this.IsDefault.Equals(destino.IsDefault)) return false;
-            if ((!String.IsNullOrEmpty(this.FileGroupName)) && (!String.IsNullOrEmpty(destino.FileGroupName)))
-                if (!this.FileGroupName.Equals(destino.FileGroupName)) return false;
+            if (destination == null) throw new ArgumentNullException("destination");
+            if (!this.IsAccentSensity.Equals(destination.IsAccentSensity)) return false;
+            if (!this.IsDefault.Equals(destination.IsDefault)) return false;
+            if ((!String.IsNullOrEmpty(this.FileGroupName)) && (!String.IsNullOrEmpty(destination.FileGroupName)))
+                if (!this.FileGroupName.Equals(destination.FileGroupName)) return false;
             if (database.Options.Ignore.FilterFullTextPath)
-                if ((!String.IsNullOrEmpty(this.Path)) && (!String.IsNullOrEmpty(destino.Path)))
-                    return this.Path.Equals(destino.Path, StringComparison.CurrentCultureIgnoreCase);
+                if ((!String.IsNullOrEmpty(this.Path)) && (!String.IsNullOrEmpty(destination.Path)))
+                    return this.Path.Equals(destination.Path, StringComparison.CurrentCultureIgnoreCase);
             return true;
         }
     }
