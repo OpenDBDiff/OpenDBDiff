@@ -5,11 +5,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareTableType : CompareBase<TableType>
     {
-        protected override void DoUpdate<Root>(SchemaList<TableType, Root> CamposOrigen, TableType node)
+        protected override void DoUpdate<Root>(SchemaList<TableType, Root> originFields, TableType node)
         {
             if (node.Status != Enums.ObjectStatusType.DropStatus)
             {
-                TableType tablaOriginal = CamposOrigen[node.FullName];
+                TableType tablaOriginal = originFields[node.FullName];
                 (new CompareColumns()).GenerateDiferences<TableType>(tablaOriginal.Columns, node.Columns);
                 (new CompareConstraints()).GenerateDiferences<TableType>(tablaOriginal.Constraints, node.Constraints);
                 (new CompareIndexes()).GenerateDiferences<TableType>(tablaOriginal.Indexes, node.Indexes);

@@ -5,21 +5,21 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareRules : CompareBase<Rule>
     {
-        protected override void DoUpdate<Root>(SchemaList<Rule, Root> CamposOrigen, Rule node)
+        protected override void DoUpdate<Root>(SchemaList<Rule, Root> originFields, Rule node)
         {
-            if (!node.Compare(CamposOrigen[node.FullName]))
+            if (!node.Compare(originFields[node.FullName]))
             {
-                Rule newNode = node.Clone(CamposOrigen.Parent);
+                Rule newNode = node.Clone(originFields.Parent);
                 newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
         }
 
-        protected override void DoNew<Root>(SchemaList<Rule, Root> CamposOrigen, Rule node)
+        protected override void DoNew<Root>(SchemaList<Rule, Root> originFields, Rule node)
         {
-            Rule newNode = node.Clone(CamposOrigen.Parent);
+            Rule newNode = node.Clone(originFields.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
-            CamposOrigen.Add(newNode);
+            originFields.Add(newNode);
         }
     }
 }

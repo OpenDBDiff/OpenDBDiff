@@ -55,43 +55,43 @@ namespace DBDiff.Front
 
         /*private void ProcesarSybase()
         {
-            DBDiff.Schema.Sybase.Model.Database origen;
-            DBDiff.Schema.Sybase.Model.Database destino;
+            DBDiff.Schema.Sybase.Model.Database origin;
+            DBDiff.Schema.Sybase.Model.Database destination;
 
             DBDiff.Schema.Sybase.Generate sql = new DBDiff.Schema.Sybase.Generate();
             sql.ConnectioString = txtConnectionOrigen.Text;
             
             AseFilter.OptionFilter.FilterTrigger = false;
 
-            origen = sql.Process(AseFilter);
+            origin = sql.Process(AseFilter);
 
-            sql.ConnectioString = txtConnectionDestino.Text;
-            destino = sql.Process(AseFilter);
+            sql.ConnectioString = txtConnectionDestination.Text;
+            destination = sql.Process(AseFilter);
 
             this.txtScript.SQLType = SQLEnum.SQLTypeEnum.Sybase;
             this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.Sybase;
-            //origen = DBDiff.Schema.Sybase.Generate.Compare(origen, destino);
+            //origin = DBDiff.Schema.Sybase.Generate.Compare(origin, destination);
 
-            this.txtScript.Text = origen.ToSQL();
-            //this.txtDiferencias.Text = origen.ToSQLDiff();
+            this.txtScript.Text = origin.ToSQL();
+            //this.txtDiferencias.Text = origin.ToSQLDiff();
         }*/
 
         /*private void ProcesarMySQL()
         {
-            DBDiff.Schema.MySQL.Model.Database origen;
-            DBDiff.Schema.MySQL.Model.Database destino;
+            DBDiff.Schema.MySQL.Model.Database origin;
+            DBDiff.Schema.MySQL.Model.Database destination;
 
             DBDiff.Schema.MySQL.Generate sql = new DBDiff.Schema.MySQL.Generate();
             sql.ConnectioString = mySqlConnectFront1.ConnectionString;
-            origen = sql.Process(MySQLfilter);
+            origin = sql.Process(MySQLfilter);
 
             sql.ConnectioString = mySqlConnectFront2.ConnectionString;
-            destino = sql.Process(MySQLfilter);
+            destination = sql.Process(MySQLfilter);
 
             //this.txtScript.SQLType = SQLEnum.SQLTypeEnum.MySQL;
             //this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.MySQL;
-            origen = DBDiff.Schema.MySQL.Generate.Compare(origen, destino);
-            this.txtDiferencias.Text = origen.ToSQLDiff();
+            origin = DBDiff.Schema.MySQL.Generate.Compare(origin, destination);
+            this.txtDiferencias.Text = origin.ToSQLDiff();
         }
         */
 
@@ -101,8 +101,8 @@ namespace DBDiff.Front
             string errorLocation = null;
             try
             {
-                Database origen;
-                Database destino;
+                Database origin;
+                Database destination;
 
                 if ((!String.IsNullOrEmpty(mySqlConnectFront1.DatabaseName) &&
                      (!String.IsNullOrEmpty(mySqlConnectFront2.DatabaseName))))
@@ -123,20 +123,20 @@ namespace DBDiff.Front
                         throw new SchemaException(progres.Error.Message, progres.Error);
                     }
 
-                    origen = progres.Source;
-                    destino = progres.Destination;
+                    origin = progres.Source;
+                    destination = progres.Destination;
 
                     txtSyncScript.ConfigurationManager.Language = "mssql";
                     txtSyncScript.IsReadOnly = false;
                     txtSyncScript.Styles.LineNumber.BackColor = Color.White;
                     txtSyncScript.Styles.LineNumber.IsVisible = false;
                     errorLocation = "Generating Synchronized Script";
-                    txtSyncScript.Text = destino.ToSqlDiff(_selectedSchemas).ToSQL();
+                    txtSyncScript.Text = destination.ToSqlDiff(_selectedSchemas).ToSQL();
                     txtSyncScript.IsReadOnly = true;
-                    schemaTreeView1.DatabaseSource = destino;
-                    schemaTreeView1.DatabaseDestination = origen;
+                    schemaTreeView1.DatabaseSource = destination;
+                    schemaTreeView1.DatabaseDestination = origin;
                     schemaTreeView1.OnSelectItem += new SchemaTreeView.SchemaHandler(schemaTreeView1_OnSelectItem);
-                    textBox1.Text = origen.ActionMessage.Message;
+                    textBox1.Text = origin.ActionMessage.Message;
 
                     btnCopy.Enabled = true;
                     btnSaveAs.Enabled = true;
@@ -270,24 +270,24 @@ namespace DBDiff.Front
 
         /*private void ProcesarSQL2000()
         {
-            DBDiff.Schema.SQLServer2000.Model.Database origen;
-            DBDiff.Schema.SQLServer2000.Model.Database destino;
+            DBDiff.Schema.SQLServer2000.Model.Database origin;
+            DBDiff.Schema.SQLServer2000.Model.Database destination;
 
             DBDiff.Schema.SQLServer2000.Generate sql = new DBDiff.Schema.SQLServer2000.Generate();
 
-            lblMessage.Text = "Leyendo tablas de origen...";
+            lblMessage.Text = "Leyendo tablas de origin...";
             sql.OnTableProgress += new Progress.ProgressHandler(sql_OnTableProgress);
             //sql.ConnectioString = txtConnectionOrigen.Text;
-            origen = sql.Process();
+            origin = sql.Process();
 
-            //sql.ConnectioString = txtConnectionDestino.Text;
-            lblMessage.Text = "Leyendo tablas de destino...";
-            destino = sql.Process();
+            //sql.ConnectioString = txtConnectionDestination.Text;
+            lblMessage.Text = "Leyendo tablas de destination...";
+            destination = sql.Process();
 
-            origen = DBDiff.Schema.SQLServer2000.Generate.Compare(origen, destino);
+            origin = DBDiff.Schema.SQLServer2000.Generate.Compare(origin, destination);
             //this.txtScript.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
             //this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
-            this.txtDiferencias.Text = origen.ToSQLDiff();
+            this.txtDiferencias.Text = origin.ToSQLDiff();
             
 
         }

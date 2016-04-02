@@ -6,26 +6,26 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareColumns
     {
-        public void GenerateDiferences<T>(Columns<T> CamposOrigen, Columns<T> CamposDestino) where T : ISchemaBase
+        public void GenerateDiferences<T>(Columns<T> originFields, Columns<T> destinationFields) where T : ISchemaBase
         {
             int restPosition = 0;
             int sumPosition = 0;
 
-            foreach (Column node in CamposOrigen)
+            foreach (Column node in originFields)
             {
-                if (!CamposDestino.Exists(node.FullName))
+                if (!destinationFields.Exists(node.FullName))
                 {
                     node.Status = Enums.ObjectStatusType.DropStatus;
                     restPosition++;
                 }
                 else
-                    CamposOrigen[node.FullName].Position -= restPosition;
+                    originFields[node.FullName].Position -= restPosition;
             }
-            foreach (Column node in CamposDestino)
+            foreach (Column node in destinationFields)
             {
-                if (!CamposOrigen.Exists(node.FullName))
+                if (!originFields.Exists(node.FullName))
                 {
-                    Column newNode = node.Clone(CamposOrigen.Parent);
+                    Column newNode = node.Clone(originFields.Parent);
                     if ((newNode.Position == 1) || ((newNode.DefaultConstraint == null) && (!newNode.IsNullable) && (!newNode.IsComputed) && (!newNode.IsIdentity) && (!newNode.IsIdentityForReplication)))
                     {
                         newNode.Status = Enums.ObjectStatusType.CreateStatus;
@@ -34,11 +34,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                     else
                         newNode.Status = Enums.ObjectStatusType.CreateStatus;
                     sumPosition++;
-                    CamposOrigen.Add(newNode);
+                    originFields.Add(newNode);
                 }
                 else
                 {
-                    Column campoOrigen = CamposOrigen[node.FullName];
+                    Column campoOrigen = originFields[node.FullName];
                     /*ColumnConstraint oldDefault = null;
                     if (campoOrigen.DefaultConstraint != null)
                         oldDefault = campoOrigen.DefaultConstraint.Clone(campoOrigen);*/
@@ -80,9 +80,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                         {
                             node.Status = Enums.ObjectStatusType.RebuildStatus;
                         }
-                        CamposOrigen[node.FullName] = node.Clone(CamposOrigen.Parent);
+                        originFields[node.FullName] = node.Clone(originFields.Parent);
                     }
-                    CamposOrigen[node.FullName].DefaultConstraint = CompareColumnsConstraints.GenerateDiferences(campoOrigen, node);
+                    originFields[node.FullName].DefaultConstraint = CompareColumnsConstraints.GenerateDiferences(campoOrigen, node);
                 }
             }
         }

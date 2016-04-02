@@ -5,12 +5,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareViews : CompareBase<View>
     {
-        protected override void DoUpdate<Root>(SchemaList<View, Root> CamposOrigen, View node)
+        protected override void DoUpdate<Root>(SchemaList<View, Root> originFields, View node)
         {
-            View original = CamposOrigen[node.FullName];
+            View original = originFields[node.FullName];
             if (!node.Compare(original))
             {
-                View newNode = (View)node.Clone(CamposOrigen.Parent);
+                View newNode = (View)node.Clone(originFields.Parent);
                 newNode.DependenciesOut.AddRange(original.DependenciesOut);
                 newNode.DependenciesIn.AddRange(original.DependenciesIn);
 
@@ -25,21 +25,21 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 else
                     newNode.Status += (int)Enums.ObjectStatusType.AlterBodyStatus;
 
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
                 original = newNode;
             }
             (new CompareIndexes()).GenerateDiferences<View>(original.Indexes, node.Indexes);
             (new CompareTriggers()).GenerateDiferences<View>(original.Triggers, node.Triggers);
         }
 
-        protected override void DoNew<Root>(SchemaList<View, Root> CamposOrigen, View node)
+        protected override void DoNew<Root>(SchemaList<View, Root> originFields, View node)
         {
-            View newNode = (View)node.Clone(CamposOrigen.Parent);
+            View newNode = (View)node.Clone(originFields.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
-            CamposOrigen.Add(newNode);
+            originFields.Add(newNode);
             newNode.DependenciesIn.ForEach(dep =>
             {
-                ISchemaBase item = ((Database)((ISchemaBase)CamposOrigen.Parent)).Find(dep);
+                ISchemaBase item = ((Database)((ISchemaBase)originFields.Parent)).Find(dep);
                 if (item != null)
                 {
                     if (item.IsCodeType)

@@ -5,36 +5,36 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareConstraints : CompareBase<Constraint>
     {
-        protected override void DoUpdate<Root>(SchemaList<Constraint, Root> CamposOrigen, Constraint node)
+        protected override void DoUpdate<Root>(SchemaList<Constraint, Root> originFields, Constraint node)
         {
-            Constraint origen = CamposOrigen[node.FullName];
+            Constraint origen = originFields[node.FullName];
             if (!Constraint.Compare(origen, node))
             {
-                Constraint newNode = (Constraint)node.Clone(CamposOrigen.Parent);
+                Constraint newNode = (Constraint)node.Clone(originFields.Parent);
                 if (node.IsDisabled == origen.IsDisabled)
                 {
                     newNode.Status = Enums.ObjectStatusType.AlterStatus;
                 }
                 else
                     newNode.Status = Enums.ObjectStatusType.AlterStatus + (int)Enums.ObjectStatusType.DisabledStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
             else
             {
                 if (node.IsDisabled != origen.IsDisabled)
                 {
-                    Constraint newNode = (Constraint)node.Clone(CamposOrigen.Parent);
+                    Constraint newNode = (Constraint)node.Clone(originFields.Parent);
                     newNode.Status = Enums.ObjectStatusType.DisabledStatus;
-                    CamposOrigen[node.FullName] = newNode;
+                    originFields[node.FullName] = newNode;
                 }
             }
         }
 
-        protected override void DoNew<Root>(SchemaList<Constraint, Root> CamposOrigen, Constraint node)
+        protected override void DoNew<Root>(SchemaList<Constraint, Root> originFields, Constraint node)
         {
-            Constraint newNode = (Constraint)node.Clone(CamposOrigen.Parent);
+            Constraint newNode = (Constraint)node.Clone(originFields.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
-            CamposOrigen.Add(newNode);
+            originFields.Add(newNode);
         }
     }
 }

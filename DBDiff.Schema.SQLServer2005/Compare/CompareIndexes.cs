@@ -5,25 +5,25 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareIndexes : CompareBase<Index>
     {
-        protected override void DoNew<Root>(SchemaList<Index, Root> CamposOrigen, Index node)
+        protected override void DoNew<Root>(SchemaList<Index, Root> originFields, Index node)
         {
-            Index newNode = (Index)node.Clone(CamposOrigen.Parent);
+            Index newNode = (Index)node.Clone(originFields.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
-            CamposOrigen.Add(newNode);
+            originFields.Add(newNode);
         }
 
-        protected override void DoUpdate<Root>(SchemaList<Index, Root> CamposOrigen, Index node)
+        protected override void DoUpdate<Root>(SchemaList<Index, Root> originFields, Index node)
         {
-            if (!Index.Compare(node, CamposOrigen[node.FullName]))
+            if (!Index.Compare(node, originFields[node.FullName]))
             {
-                Index newNode = (Index)node.Clone(CamposOrigen.Parent);
-                if (!Index.CompareExceptIsDisabled(node, CamposOrigen[node.FullName]))
+                Index newNode = (Index)node.Clone(originFields.Parent);
+                if (!Index.CompareExceptIsDisabled(node, originFields[node.FullName]))
                 {
                     newNode.Status = Enums.ObjectStatusType.AlterStatus;
                 }
                 else
                     newNode.Status = Enums.ObjectStatusType.DisabledStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
         }
     }

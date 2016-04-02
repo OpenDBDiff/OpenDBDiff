@@ -5,13 +5,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareCLRStoreProcedure : CompareBase<CLRStoreProcedure>
     {
-        protected override void DoUpdate<Root>(SchemaList<CLRStoreProcedure, Root> CamposOrigen, CLRStoreProcedure node)
+        protected override void DoUpdate<Root>(SchemaList<CLRStoreProcedure, Root> originFields, CLRStoreProcedure node)
         {
-            if (!node.Compare(CamposOrigen[node.FullName]))
+            if (!node.Compare(originFields[node.FullName]))
             {
-                CLRStoreProcedure newNode = node;//.Clone(CamposOrigen.Parent);
+                CLRStoreProcedure newNode = node; //.Clone(originFields.Parent);
                 newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
         }
     }

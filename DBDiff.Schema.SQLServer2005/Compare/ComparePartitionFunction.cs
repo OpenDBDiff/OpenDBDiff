@@ -5,25 +5,25 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class ComparePartitionFunction : CompareBase<PartitionFunction>
     {
-        protected override void DoUpdate<Root>(SchemaList<PartitionFunction, Root> CamposOrigen, PartitionFunction node)
+        protected override void DoUpdate<Root>(SchemaList<PartitionFunction, Root> originFields, PartitionFunction node)
         {
-            if (!PartitionFunction.Compare(node, CamposOrigen[node.FullName]))
+            if (!PartitionFunction.Compare(node, originFields[node.FullName]))
             {
-                PartitionFunction newNode = node;//.Clone(CamposOrigen.Parent);
+                PartitionFunction newNode = node; //.Clone(originFields.Parent);
                 newNode.Status = Enums.ObjectStatusType.RebuildStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
             else
             {
-                if (!PartitionFunction.CompareValues(node, CamposOrigen[node.FullName]))
+                if (!PartitionFunction.CompareValues(node, originFields[node.FullName]))
                 {
-                    PartitionFunction newNode = node.Clone(CamposOrigen.Parent);
-                    if (newNode.Values.Count == CamposOrigen[node.FullName].Values.Count)
+                    PartitionFunction newNode = node.Clone(originFields.Parent);
+                    if (newNode.Values.Count == originFields[node.FullName].Values.Count)
                         newNode.Status = Enums.ObjectStatusType.RebuildStatus;
                     else
                         newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                    newNode.Old = CamposOrigen[node.FullName].Clone(CamposOrigen.Parent);
-                    CamposOrigen[node.FullName] = newNode;
+                    newNode.Old = originFields[node.FullName].Clone(originFields.Parent);
+                    originFields[node.FullName] = newNode;
                 }
             }
         }

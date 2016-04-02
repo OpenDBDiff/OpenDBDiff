@@ -5,24 +5,24 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareAssemblies : CompareBase<Assembly>
     {
-        protected override void DoUpdate<Root>(SchemaList<Assembly, Root> CamposOrigen, Assembly node)
+        protected override void DoUpdate<Root>(SchemaList<Assembly, Root> originFields, Assembly node)
         {
-            if (!node.Compare(CamposOrigen[node.FullName]))
+            if (!node.Compare(originFields[node.FullName]))
             {
-                Assembly newNode = (Assembly)node.Clone(CamposOrigen.Parent);
+                Assembly newNode = (Assembly)node.Clone(originFields.Parent);
                 newNode.Status = Enums.ObjectStatusType.AlterStatus;
 
-                if (node.Text.Equals(CamposOrigen[node.FullName].Text))
+                if (node.Text.Equals(originFields[node.FullName].Text))
                 {
-                    if (!node.PermissionSet.Equals(CamposOrigen[node.FullName].PermissionSet))
+                    if (!node.PermissionSet.Equals(originFields[node.FullName].PermissionSet))
                         newNode.Status += (int)Enums.ObjectStatusType.PermissionSet;
-                    if (!node.Owner.Equals(CamposOrigen[node.FullName].Owner))
+                    if (!node.Owner.Equals(originFields[node.FullName].Owner))
                         newNode.Status += (int)Enums.ObjectStatusType.ChangeOwner;
                 }
                 else
                     newNode.Status = Enums.ObjectStatusType.RebuildStatus;
 
-                CamposOrigen[node.FullName].Files.ForEach(item =>
+                originFields[node.FullName].Files.ForEach(item =>
                 {
                     if (!newNode.Files.Exists(item.FullName))
                         newNode.Files.Add(new AssemblyFile(newNode, item, Enums.ObjectStatusType.DropStatus));
@@ -31,27 +31,27 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 });
                 newNode.Files.ForEach(item =>
                 {
-                    if (!CamposOrigen[node.FullName].Files.Exists(item.FullName))
+                    if (!originFields[node.FullName].Files.Exists(item.FullName))
                     {
                         item.Status = Enums.ObjectStatusType.CreateStatus;
                     }
                 });
-                CompareExtendedProperties(CamposOrigen[node.FullName], newNode);
-                CamposOrigen[node.FullName] = newNode;
+                CompareExtendedProperties(originFields[node.FullName], newNode);
+                originFields[node.FullName] = newNode;
             }
         }
 
-        protected override void DoNew<Root>(SchemaList<Assembly, Root> CamposOrigen, Assembly node)
+        protected override void DoNew<Root>(SchemaList<Assembly, Root> originFields, Assembly node)
         {
             bool pass = true;
-            Assembly newNode = (Assembly)node.Clone(CamposOrigen.Parent);
+            Assembly newNode = (Assembly)node.Clone(originFields.Parent);
             if ((((Database)newNode.RootParent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2005)
                 && (((Database)node.RootParent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008))
                 pass = node.FullName.Equals("Microsoft.SqlServer.Types");
             if (pass)
             {
                 newNode.Status = Enums.ObjectStatusType.CreateStatus;
-                CamposOrigen.Add(newNode);
+                originFields.Add(newNode);
             }
         }
     }

@@ -5,13 +5,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareRoles : CompareBase<Role>
     {
-        protected override void DoUpdate<Root>(SchemaList<Role, Root> CamposOrigen, Role node)
+        protected override void DoUpdate<Root>(SchemaList<Role, Root> originFields, Role node)
         {
-            if (!node.Compare(CamposOrigen[node.FullName]))
+            if (!node.Compare(originFields[node.FullName]))
             {
                 Role newNode = node;
                 newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
         }
     }

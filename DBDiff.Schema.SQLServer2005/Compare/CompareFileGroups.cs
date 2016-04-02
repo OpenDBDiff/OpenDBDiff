@@ -5,14 +5,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareFileGroups : CompareBase<FileGroup>
     {
-        protected override void DoNew<Root>(SchemaList<FileGroup, Root> CamposOrigen, FileGroup node)
+        protected override void DoNew<Root>(SchemaList<FileGroup, Root> originFields, FileGroup node)
         {
-            FileGroup newNode = (FileGroup)node.Clone(CamposOrigen.Parent);
+            FileGroup newNode = (FileGroup)node.Clone(originFields.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
             /*If the Logical File Name exists in another filegroup,
              * we must change the new Logical File Name.
              */
-            CamposOrigen.ForEach(file =>
+            originFields.ForEach(file =>
             {
                 if (file.Status != Enums.ObjectStatusType.DropStatus)
                 {
@@ -28,16 +28,16 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                     });
                 }
             });
-            CamposOrigen.Add(newNode);
+            originFields.Add(newNode);
         }
 
-        protected override void DoUpdate<Root>(SchemaList<FileGroup, Root> CamposOrigen, FileGroup node)
+        protected override void DoUpdate<Root>(SchemaList<FileGroup, Root> originFields, FileGroup node)
         {
-            if (!FileGroup.Compare(node, CamposOrigen[node.FullName]))
+            if (!FileGroup.Compare(node, originFields[node.FullName]))
             {
-                FileGroup newNode = (FileGroup)node.Clone(CamposOrigen.Parent);
+                FileGroup newNode = (FileGroup)node.Clone(originFields.Parent);
                 newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
         }
     }

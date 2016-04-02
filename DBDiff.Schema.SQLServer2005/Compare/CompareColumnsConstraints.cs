@@ -4,69 +4,69 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareColumnsConstraints : CompareBase<ColumnConstraint>
     {
-        public static ColumnConstraint GenerateDiferences(Column CamposOrigen, Column CamposDestino)
+        public static ColumnConstraint GenerateDiferences(Column originFields, Column destinationFields)
         {
-            if ((CamposOrigen.DefaultConstraint == null) && (CamposDestino.DefaultConstraint != null))
+            if ((originFields.DefaultConstraint == null) && (destinationFields.DefaultConstraint != null))
             {
-                CamposOrigen.DefaultConstraint = CamposDestino.DefaultConstraint.Clone(CamposOrigen);
-                CamposOrigen.DefaultConstraint.Status = Enums.ObjectStatusType.CreateStatus;
-                CamposOrigen.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                CamposOrigen.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                originFields.DefaultConstraint = destinationFields.DefaultConstraint.Clone(originFields);
+                originFields.DefaultConstraint.Status = Enums.ObjectStatusType.CreateStatus;
+                originFields.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                originFields.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
             }
             else
             {
-                if ((CamposOrigen.DefaultConstraint != null) && (CamposDestino.DefaultConstraint != null))
+                if ((originFields.DefaultConstraint != null) && (destinationFields.DefaultConstraint != null))
                 {
-                    if (!ColumnConstraint.Compare(CamposOrigen.DefaultConstraint, CamposDestino.DefaultConstraint))
+                    if (!ColumnConstraint.Compare(originFields.DefaultConstraint, destinationFields.DefaultConstraint))
                     {
-                        CamposOrigen.DefaultConstraint = CamposDestino.DefaultConstraint.Clone(CamposOrigen);
+                        originFields.DefaultConstraint = destinationFields.DefaultConstraint.Clone(originFields);
                         //Indico que hay un ALTER TABLE, pero sobre la columna, no seteo ningun estado.
-                        CamposOrigen.DefaultConstraint.Status = Enums.ObjectStatusType.AlterStatus;
-                        CamposOrigen.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                        CamposOrigen.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                        originFields.DefaultConstraint.Status = Enums.ObjectStatusType.AlterStatus;
+                        originFields.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                        originFields.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
                     }
                 }
                 else
-                    if ((CamposOrigen.DefaultConstraint != null) && (CamposDestino.DefaultConstraint == null))
+                    if ((originFields.DefaultConstraint != null) && (destinationFields.DefaultConstraint == null))
                 {
-                    CamposOrigen.DefaultConstraint.Status = Enums.ObjectStatusType.DropStatus;
-                    CamposOrigen.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                    CamposOrigen.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                    originFields.DefaultConstraint.Status = Enums.ObjectStatusType.DropStatus;
+                    originFields.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                    originFields.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
                 }
             }
-            /*foreach (ColumnConstraint node in CamposDestino)
+            /*foreach (ColumnConstraint node in destinationFields)
             {
-                if (!CamposOrigen.Exists(node.FullName))
+                if (!originFields.Exists(node.FullName))
                 {
                     node.Status = Enums.ObjectStatusType.CreateStatus;
-                    CamposOrigen.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                    CamposOrigen.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
-                    CamposOrigen.Add(node);
+                    originFields.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                    originFields.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                    originFields.Add(node);
                 }
                 else
                 {
-                    if (!ColumnConstraint.Compare(CamposOrigen[node.FullName], node))
+                    if (!ColumnConstraint.Compare(originFields[node.FullName], node))
                     {
-                        ColumnConstraint newNode = node.Clone(CamposOrigen.Parent);
+                        ColumnConstraint newNode = node.Clone(originFields.Parent);
                         //Indico que hay un ALTER TABLE, pero sobre la columna, no seteo ningun estado.
                         newNode.Status = Enums.ObjectStatusType.AlterStatus;
                         newNode.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
                         newNode.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
-                        CamposOrigen[node.FullName] = newNode;
+                        originFields[node.FullName] = newNode;
 
                     }
                 }
             }
 
-            MarkDrop(CamposOrigen, CamposDestino, node =>
+            MarkDrop(originFields, destinationFields, node =>
             {
                 node.Status = Enums.ObjectStatusType.DropStatus;
-                CamposOrigen.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                CamposOrigen.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                originFields.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
+                originFields.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
             }
             );
             */
-            return CamposOrigen.DefaultConstraint;
+            return originFields.DefaultConstraint;
         }
     }
 }

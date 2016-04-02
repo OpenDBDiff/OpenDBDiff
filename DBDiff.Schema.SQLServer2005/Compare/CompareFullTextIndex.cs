@@ -5,23 +5,23 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareFullTextIndex : CompareBase<FullTextIndex>
     {
-        protected override void DoNew<Root>(SchemaList<FullTextIndex, Root> CamposOrigen, FullTextIndex node)
+        protected override void DoNew<Root>(SchemaList<FullTextIndex, Root> originFields, FullTextIndex node)
         {
-            FullTextIndex newNode = (FullTextIndex)node.Clone(CamposOrigen.Parent);
+            FullTextIndex newNode = (FullTextIndex)node.Clone(originFields.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
-            CamposOrigen.Add(newNode);
+            originFields.Add(newNode);
         }
 
-        protected override void DoUpdate<Root>(SchemaList<FullTextIndex, Root> CamposOrigen, FullTextIndex node)
+        protected override void DoUpdate<Root>(SchemaList<FullTextIndex, Root> originFields, FullTextIndex node)
         {
-            if (!node.Compare(CamposOrigen[node.FullName]))
+            if (!node.Compare(originFields[node.FullName]))
             {
-                FullTextIndex newNode = (FullTextIndex)node.Clone(CamposOrigen.Parent);
-                if (node.IsDisabled != CamposOrigen[node.FullName].IsDisabled)
+                FullTextIndex newNode = (FullTextIndex)node.Clone(originFields.Parent);
+                if (node.IsDisabled != originFields[node.FullName].IsDisabled)
                     newNode.Status += (int)Enums.ObjectStatusType.DisabledStatus;
                 else
                     newNode.Status += (int)Enums.ObjectStatusType.AlterStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
         }
     }

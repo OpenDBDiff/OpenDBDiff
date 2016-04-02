@@ -5,14 +5,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareFunctions : CompareBase<Function>
     {
-        protected override void DoNew<Root>(SchemaList<Function, Root> CamposOrigen, Function node)
+        protected override void DoNew<Root>(SchemaList<Function, Root> originFields, Function node)
         {
-            Function newNode = (Function)node.Clone(CamposOrigen.Parent);
+            Function newNode = (Function)node.Clone(originFields.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
-            CamposOrigen.Add(newNode);
+            originFields.Add(newNode);
             newNode.DependenciesIn.ForEach(dep =>
             {
-                ISchemaBase item = ((Database)((ISchemaBase)CamposOrigen.Parent)).Find(dep);
+                ISchemaBase item = ((Database)((ISchemaBase)originFields.Parent)).Find(dep);
                 if (item != null)
                 {
                     if (item.IsCodeType)
@@ -22,13 +22,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
             );
         }
 
-        protected override void DoUpdate<Root>(SchemaList<Function, Root> CamposOrigen, Function node)
+        protected override void DoUpdate<Root>(SchemaList<Function, Root> originFields, Function node)
         {
-            if (!node.Compare(CamposOrigen[node.FullName]))
+            if (!node.Compare(originFields[node.FullName]))
             {
-                Function newNode = (Function)node.Clone(CamposOrigen.Parent);
-                newNode.DependenciesIn.AddRange(CamposOrigen[node.FullName].DependenciesIn);
-                newNode.DependenciesOut.AddRange(CamposOrigen[node.FullName].DependenciesOut);
+                Function newNode = (Function)node.Clone(originFields.Parent);
+                newNode.DependenciesIn.AddRange(originFields[node.FullName].DependenciesIn);
+                newNode.DependenciesOut.AddRange(originFields[node.FullName].DependenciesOut);
 
                 newNode.Status = Enums.ObjectStatusType.AlterStatus;
                 if (newNode.IsSchemaBinding)
@@ -37,7 +37,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                     newNode.Status += (int)Enums.ObjectStatusType.RebuildStatus;
                 else
                     newNode.Status += (int)Enums.ObjectStatusType.AlterBodyStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
         }
     }

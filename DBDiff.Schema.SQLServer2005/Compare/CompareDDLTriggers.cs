@@ -5,24 +5,24 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareDDLTriggers : CompareBase<Trigger>
     {
-        protected override void DoUpdate<Root>(SchemaList<Trigger, Root> CamposOrigen, Trigger node)
+        protected override void DoUpdate<Root>(SchemaList<Trigger, Root> originFields, Trigger node)
         {
-            if (!node.Compare(CamposOrigen[node.FullName]))
+            if (!node.Compare(originFields[node.FullName]))
             {
-                Trigger newNode = (Trigger)node.Clone(CamposOrigen.Parent);
-                if (!newNode.Text.Equals(CamposOrigen[node.FullName].Text))
+                Trigger newNode = (Trigger)node.Clone(originFields.Parent);
+                if (!newNode.Text.Equals(originFields[node.FullName].Text))
                     newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                if (node.IsDisabled != CamposOrigen[node.FullName].IsDisabled)
+                if (node.IsDisabled != originFields[node.FullName].IsDisabled)
                     newNode.Status = newNode.Status + (int)Enums.ObjectStatusType.DisabledStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
         }
 
-        protected override void DoNew<Root>(SchemaList<Trigger, Root> CamposOrigen, Trigger node)
+        protected override void DoNew<Root>(SchemaList<Trigger, Root> originFields, Trigger node)
         {
-            Trigger newNode = (Trigger)node.Clone(CamposOrigen.Parent);
+            Trigger newNode = (Trigger)node.Clone(originFields.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
-            CamposOrigen.Add(newNode);
+            originFields.Add(newNode);
         }
     }
 }

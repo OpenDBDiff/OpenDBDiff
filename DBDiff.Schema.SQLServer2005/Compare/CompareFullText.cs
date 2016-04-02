@@ -5,18 +5,18 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareFullText : CompareBase<FullText>
     {
-        protected override void DoUpdate<Root>(SchemaList<FullText, Root> CamposOrigen, FullText node)
+        protected override void DoUpdate<Root>(SchemaList<FullText, Root> originFields, FullText node)
         {
-            if (!node.Compare(CamposOrigen[node.FullName]))
+            if (!node.Compare(originFields[node.FullName]))
             {
-                FullText newNode = node;//.Clone(CamposOrigen.Parent);
-                if (node.IsDefault != CamposOrigen[node.FullName].IsDefault)
+                FullText newNode = node; //.Clone(originFields.Parent);
+                if (node.IsDefault != originFields[node.FullName].IsDefault)
                     newNode.Status += (int)Enums.ObjectStatusType.DisabledStatus;
-                if (!node.Owner.Equals(CamposOrigen[node.FullName].Owner))
+                if (!node.Owner.Equals(originFields[node.FullName].Owner))
                     newNode.Status += (int)Enums.ObjectStatusType.ChangeOwner;
-                if (node.IsAccentSensity != CamposOrigen[node.FullName].IsAccentSensity)
+                if (node.IsAccentSensity != originFields[node.FullName].IsAccentSensity)
                     newNode.Status += (int)Enums.ObjectStatusType.AlterStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
         }
     }

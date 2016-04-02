@@ -5,13 +5,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareSynonyms : CompareBase<Synonym>
     {
-        protected override void DoUpdate<Root>(SchemaList<Synonym, Root> CamposOrigen, Synonym node)
+        protected override void DoUpdate<Root>(SchemaList<Synonym, Root> originFields, Synonym node)
         {
-            if (!Synonym.Compare(node, CamposOrigen[node.FullName]))
+            if (!Synonym.Compare(node, originFields[node.FullName]))
             {
-                Synonym newNode = node;//.Clone(CamposOrigen.Parent);
+                Synonym newNode = node; //.Clone(originFields.Parent);
                 newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
         }
     }

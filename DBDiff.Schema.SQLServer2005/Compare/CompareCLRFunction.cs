@@ -5,13 +5,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareCLRFunction : CompareBase<CLRFunction>
     {
-        protected override void DoUpdate<Root>(SchemaList<CLRFunction, Root> CamposOrigen, CLRFunction node)
+        protected override void DoUpdate<Root>(SchemaList<CLRFunction, Root> originFields, CLRFunction node)
         {
-            if (!node.Compare(CamposOrigen[node.FullName]))
+            if (!node.Compare(originFields[node.FullName]))
             {
-                CLRFunction newNode = node;//.Clone(CamposOrigen.Parent);
+                CLRFunction newNode = node; //.Clone(originFields.Parent);
                 newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
         }
     }

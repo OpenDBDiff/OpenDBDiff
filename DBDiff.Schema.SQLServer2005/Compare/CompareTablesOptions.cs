@@ -5,20 +5,20 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareTablesOptions : CompareBase<TableOption>
     {
-        protected override void DoNew<Root>(SchemaList<TableOption, Root> CamposOrigen, TableOption node)
+        protected override void DoNew<Root>(SchemaList<TableOption, Root> originFields, TableOption node)
         {
-            TableOption newNode = (TableOption)node.Clone(CamposOrigen.Parent);
+            TableOption newNode = (TableOption)node.Clone(originFields.Parent);
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
-            CamposOrigen.Add(newNode);
+            originFields.Add(newNode);
         }
 
-        protected override void DoUpdate<Root>(SchemaList<TableOption, Root> CamposOrigen, TableOption node)
+        protected override void DoUpdate<Root>(SchemaList<TableOption, Root> originFields, TableOption node)
         {
-            if (!TableOption.Compare(node, CamposOrigen[node.FullName]))
+            if (!TableOption.Compare(node, originFields[node.FullName]))
             {
-                TableOption newNode = (TableOption)node.Clone(CamposOrigen.Parent);
+                TableOption newNode = (TableOption)node.Clone(originFields.Parent);
                 newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
         }
     }

@@ -5,13 +5,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareStoreProcedures : CompareBase<StoreProcedure>
     {
-        protected override void DoUpdate<Root>(SchemaList<StoreProcedure, Root> CamposOrigen, StoreProcedure node)
+        protected override void DoUpdate<Root>(SchemaList<StoreProcedure, Root> originFields, StoreProcedure node)
         {
-            if (!node.Compare(CamposOrigen[node.FullName]))
+            if (!node.Compare(originFields[node.FullName]))
             {
-                StoreProcedure newNode = node;//.Clone(CamposOrigen.Parent);
+                StoreProcedure newNode = node; //.Clone(originFields.Parent);
 
-                if (node.CompareExceptWhitespace(CamposOrigen[node.FullName]))
+                if (node.CompareExceptWhitespace(originFields[node.FullName]))
                 {
                     newNode.Status = Enums.ObjectStatusType.AlterWhitespaceStatus;
                 }
@@ -20,7 +20,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                     newNode.Status = Enums.ObjectStatusType.AlterStatus;
                 }
 
-                CamposOrigen[node.FullName] = newNode;
+                originFields[node.FullName] = newNode;
             }
         }
     }

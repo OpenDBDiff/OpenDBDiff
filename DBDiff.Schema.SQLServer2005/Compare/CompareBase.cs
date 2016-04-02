@@ -9,17 +9,17 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal abstract class CompareBase<T> where T : ISchemaBase
     {
-        protected virtual void DoUpdate<Root>(SchemaList<T, Root> CamposOrigen, T node) where Root : ISchemaBase
+        protected virtual void DoUpdate<Root>(SchemaList<T, Root> originFields, T node) where Root : ISchemaBase
         {
 
         }
 
-        protected virtual void DoNew<Root>(SchemaList<T, Root> CamposOrigen, T node) where Root : ISchemaBase
+        protected virtual void DoNew<Root>(SchemaList<T, Root> originFields, T node) where Root : ISchemaBase
         {
-            T newNode = node;//.Clone(CamposOrigen.Parent);
-            newNode.Parent = CamposOrigen.Parent;
+            T newNode = node;//.Clone(originFields.Parent);
+            newNode.Parent = originFields.Parent;
             newNode.Status = Enums.ObjectStatusType.CreateStatus;
-            CamposOrigen.Add(newNode);
+            originFields.Add(newNode);
         }
 
         protected void DoDelete(T node)
@@ -27,48 +27,48 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
             node.Status = Enums.ObjectStatusType.DropStatus;
         }
 
-        public void GenerateDiferences<Root>(SchemaList<T, Root> CamposOrigen, SchemaList<T, Root> CamposDestino) where Root : ISchemaBase
+        public void GenerateDiferences<Root>(SchemaList<T, Root> originFields, SchemaList<T, Root> destinationFields) where Root : ISchemaBase
         {
             bool has = true;
-            int DestinoIndex = 0;
-            int OrigenIndex = 0;
-            int DestinoCount = CamposDestino.Count;
-            int OrigenCount = CamposOrigen.Count;
+            int destinationIndex = 0;
+            int originIndex = 0;
+            int destinationCount = destinationFields.Count;
+            int originCount = originFields.Count;
             T node;
 
             while (has)
             {
                 has = false;
-                if (DestinoCount > DestinoIndex)
+                if (destinationCount > destinationIndex)
                 {
-                    node = CamposDestino[DestinoIndex];
+                    node = destinationFields[destinationIndex];
                     Generate.RaiseOnCompareProgress("Comparing Destination {0}: [{1}]", node.ObjectType, node.Name);
-                    if (!CamposOrigen.Exists(node.FullName))
+                    if (!originFields.Exists(node.FullName))
                     {
                         Generate.RaiseOnCompareProgress("Adding {0}: [{1}]", node.ObjectType, node.Name);
-                        DoNew<Root>(CamposOrigen, node);
+                        DoNew<Root>(originFields, node);
                     }
                     else
                     {
                         Generate.RaiseOnCompareProgress("Updating {0}: [{1}]", node.ObjectType, node.Name);
-                        DoUpdate<Root>(CamposOrigen, node);
+                        DoUpdate<Root>(originFields, node);
                     }
 
-                    DestinoIndex++;
+                    destinationIndex++;
                     has = true;
                 }
 
-                if (OrigenCount > OrigenIndex)
+                if (originCount > originIndex)
                 {
-                    node = CamposOrigen[OrigenIndex];
+                    node = originFields[originIndex];
                     Generate.RaiseOnCompareProgress("Comparing Source {0}: [{1}]", node.ObjectType, node.Name);
-                    if (!CamposDestino.Exists(node.FullName))
+                    if (!destinationFields.Exists(node.FullName))
                     {
                         Generate.RaiseOnCompareProgress("Deleting {0}: [{1}]", node.ObjectType, node.Name);
                         DoDelete(node);
                     }
 
-                    OrigenIndex++;
+                    originIndex++;
                     has = true;
                 }
             }
