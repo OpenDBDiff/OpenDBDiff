@@ -97,7 +97,7 @@ namespace DBDiff.Front
 
         private void ProcessSQL2005()
         {
-            ProgressForm progres = null;
+            ProgressForm progress = null;
             string errorLocation = null;
             try
             {
@@ -116,15 +116,15 @@ namespace DBDiff.Front
                     sql2.ConnectionString = mySqlConnectFront2.ConnectionString;
                     sql2.Options = SqlFilter;
 
-                    progres = new ProgressForm("Source Database", "Destination Database", sql2, sql1);
-                    progres.ShowDialog(this);
-                    if (progres.Error != null)
+                    progress = new ProgressForm("Source Database", "Destination Database", sql2, sql1);
+                    progress.ShowDialog(this);
+                    if (progress.Error != null)
                     {
-                        throw new SchemaException(progres.Error.Message, progres.Error);
+                        throw new SchemaException(progress.Error.Message, progress.Error);
                     }
 
-                    origin = progres.Source;
-                    destination = progres.Destination;
+                    origin = progress.Source;
+                    destination = progress.Destination;
 
                     txtSyncScript.ConfigurationManager.Language = "mssql";
                     txtSyncScript.IsReadOnly = false;
@@ -148,9 +148,9 @@ namespace DBDiff.Front
             }
             catch (Exception ex)
             {
-                if (errorLocation == null && progres != null)
+                if (errorLocation == null && progress != null)
                 {
-                    errorLocation = String.Format("{0} (while {1})", progres.ErrorLocation, progres.ErrorMostRecentProgress ?? "initializing");
+                    errorLocation = String.Format("{0} (while {1})", progress.ErrorLocation, progress.ErrorMostRecentProgress ?? "initializing");
                 }
 
                 throw new SchemaException("Error " + (errorLocation ?? " Comparing Databases"), ex);
