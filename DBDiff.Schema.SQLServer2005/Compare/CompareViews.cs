@@ -28,8 +28,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 originFields[node.FullName] = newNode;
                 original = newNode;
             }
-            (new CompareIndexes()).GenerateDiferences<View>(original.Indexes, node.Indexes);
-            (new CompareTriggers()).GenerateDiferences<View>(original.Triggers, node.Triggers);
+            (new CompareIndexes()).GenerateDifferences<View>(original.Indexes, node.Indexes);
+            (new CompareTriggers()).GenerateDifferences<View>(original.Triggers, node.Triggers);
         }
 
         protected override void DoNew<Root>(SchemaList<View, Root> originFields, View node)

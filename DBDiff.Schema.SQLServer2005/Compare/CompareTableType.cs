@@ -10,13 +10,13 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
             if (node.Status != Enums.ObjectStatusType.DropStatus)
             {
                 TableType tablaOriginal = originFields[node.FullName];
-                (new CompareColumns()).GenerateDiferences<TableType>(tablaOriginal.Columns, node.Columns);
-                (new CompareConstraints()).GenerateDiferences<TableType>(tablaOriginal.Constraints, node.Constraints);
-                (new CompareIndexes()).GenerateDiferences<TableType>(tablaOriginal.Indexes, node.Indexes);
+                (new CompareColumns()).GenerateDifferences<TableType>(tablaOriginal.Columns, node.Columns);
+                (new CompareConstraints()).GenerateDifferences<TableType>(tablaOriginal.Constraints, node.Constraints);
+                (new CompareIndexes()).GenerateDifferences<TableType>(tablaOriginal.Indexes, node.Indexes);
             }
         }
 
-        /*public static void GenerateDiferences(SchemaList<TableType, Database> tablasOrigen, SchemaList<TableType, Database> tablasDestino)
+        /*public static void GenerateDifferences(SchemaList<TableType, Database> tablasOrigen, SchemaList<TableType, Database> tablasDestino)
         {
             MarkDrop(tablasOrigen, tablasDestino);
 
@@ -33,9 +33,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                     if (node.Status != Enums.ObjectStatusType.DropStatus)
                     {
                         TableType tablaOriginal = tablasOrigen[node.FullName];
-                        CompareColumns.GenerateDiferences<TableType>(tablaOriginal.Columns, node.Columns);
-                        CompareConstraints.GenerateDiferences<TableType>(tablaOriginal.Constraints, node.Constraints);
-                        CompareIndexes.GenerateDiferences(tablaOriginal.Indexes, node.Indexes);
+                        CompareColumns.GenerateDifferences<TableType>(tablaOriginal.Columns, node.Columns);
+                        CompareConstraints.GenerateDifferences<TableType>(tablaOriginal.Constraints, node.Constraints);
+                        CompareIndexes.GenerateDifferences(tablaOriginal.Indexes, node.Indexes);
                     }
                 }
             }

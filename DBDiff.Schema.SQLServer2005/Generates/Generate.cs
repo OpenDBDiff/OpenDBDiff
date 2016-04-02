@@ -181,7 +181,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         public static Database Compare(Database databaseOriginalSchema, Database databaseCompareSchema)
         {
-            Database merge = CompareDatabase.GenerateDiferences(databaseOriginalSchema, databaseCompareSchema);
+            Database merge = CompareDatabase.GenerateDifferences(databaseOriginalSchema, databaseCompareSchema);
             return merge;
         }
     }

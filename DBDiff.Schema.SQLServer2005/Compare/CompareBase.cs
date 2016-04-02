@@ -27,7 +27,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
             node.Status = Enums.ObjectStatusType.DropStatus;
         }
 
-        public void GenerateDiferences<Root>(SchemaList<T, Root> originFields, SchemaList<T, Root> destinationFields) where Root : ISchemaBase
+        public void GenerateDifferences<Root>(SchemaList<T, Root> originFields, SchemaList<T, Root> destinationFields) where Root : ISchemaBase
         {
             bool has = true;
             int destinationIndex = 0;

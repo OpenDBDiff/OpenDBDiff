@@ -4,7 +4,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareColumnsConstraints : CompareBase<ColumnConstraint>
     {
-        public static ColumnConstraint GenerateDiferences(Column originFields, Column destinationFields)
+        public static ColumnConstraint GenerateDifferences(Column originFields, Column destinationFields)
         {
             if ((originFields.DefaultConstraint == null) && (destinationFields.DefaultConstraint != null))
             {

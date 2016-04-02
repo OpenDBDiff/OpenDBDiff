@@ -6,7 +6,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
     internal class CompareColumns
     {
-        public void GenerateDiferences<T>(Columns<T> originFields, Columns<T> destinationFields) where T : ISchemaBase
+        public void GenerateDifferences<T>(Columns<T> originFields, Columns<T> destinationFields) where T : ISchemaBase
         {
             int restPosition = 0;
             int sumPosition = 0;
@@ -82,7 +82,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                         }
                         originFields[node.FullName] = node.Clone(originFields.Parent);
                     }
-                    originFields[node.FullName].DefaultConstraint = CompareColumnsConstraints.GenerateDiferences(campoOrigen, node);
+                    originFields[node.FullName].DefaultConstraint = CompareColumnsConstraints.GenerateDifferences(campoOrigen, node);
                 }
             }
         }
