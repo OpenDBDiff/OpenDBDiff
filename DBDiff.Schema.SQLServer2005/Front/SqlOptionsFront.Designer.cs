@@ -64,7 +64,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkTableOption = new System.Windows.Forms.CheckBox();
             this.chkCompXMLSchemas = new System.Windows.Forms.CheckBox();
             this.chkCompFunciones = new System.Windows.Forms.CheckBox();
-            this.chkCompStoreProcedure = new System.Windows.Forms.CheckBox();
+            this.chkCompStoredProcedure = new System.Windows.Forms.CheckBox();
             this.chkTables = new System.Windows.Forms.CheckBox();
             this.chkCompTriggers = new System.Windows.Forms.CheckBox();
             this.chkCompVistas = new System.Windows.Forms.CheckBox();
@@ -327,7 +327,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompCLRStore.Name = "chkCompCLRStore";
             this.chkCompCLRStore.Size = new System.Drawing.Size(132, 17);
             this.chkCompCLRStore.TabIndex = 31;
-            this.chkCompCLRStore.Text = "CLR Store Procedures";
+            this.chkCompCLRStore.Text = "CLR Stored Procedures";
             this.chkCompCLRStore.UseVisualStyleBackColor = true;
             //
             // chkIndexRowLock
@@ -597,18 +597,18 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompFunciones.Text = "Functions";
             this.chkCompFunciones.UseVisualStyleBackColor = true;
             //
-            // chkCompStoreProcedure
+            // chkCompStoredProcedure
             //
-            this.chkCompStoreProcedure.AutoSize = true;
-            this.chkCompStoreProcedure.Checked = true;
-            this.chkCompStoreProcedure.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCompStoreProcedure.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkCompStoreProcedure.Location = new System.Drawing.Point(13, 26);
-            this.chkCompStoreProcedure.Name = "chkCompStoreProcedure";
-            this.chkCompStoreProcedure.Size = new System.Drawing.Size(108, 17);
-            this.chkCompStoreProcedure.TabIndex = 16;
-            this.chkCompStoreProcedure.Text = "Store Procedures";
-            this.chkCompStoreProcedure.UseVisualStyleBackColor = true;
+            this.chkCompStoredProcedure.AutoSize = true;
+            this.chkCompStoredProcedure.Checked = true;
+            this.chkCompStoredProcedure.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCompStoredProcedure.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkCompStoredProcedure.Location = new System.Drawing.Point(13, 26);
+            this.chkCompStoredProcedure.Name = "chkCompStoredProcedure";
+            this.chkCompStoredProcedure.Size = new System.Drawing.Size(108, 17);
+            this.chkCompStoredProcedure.TabIndex = 16;
+            this.chkCompStoredProcedure.Text = "Stored Procedures";
+            this.chkCompStoredProcedure.UseVisualStyleBackColor = true;
             //
             // chkTables
             //
@@ -886,7 +886,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.gradientPanel5.Controls.Add(this.chkCompRules);
             this.gradientPanel5.Controls.Add(this.chkCompTriggers);
             this.gradientPanel5.Controls.Add(this.chkCompTriggersDDL);
-            this.gradientPanel5.Controls.Add(this.chkCompStoreProcedure);
+            this.gradientPanel5.Controls.Add(this.chkCompStoredProcedure);
             this.gradientPanel5.Controls.Add(this.chkCompUDT);
             this.gradientPanel5.Controls.Add(this.chkCompXMLSchemas);
             this.gradientPanel5.Location = new System.Drawing.Point(359, 33);
@@ -1247,7 +1247,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIgnoreWhiteSpaceInCode.Name = "chkIgnoreWhiteSpaceInCode";
             this.chkIgnoreWhiteSpaceInCode.Size = new System.Drawing.Size(331, 17);
             this.chkIgnoreWhiteSpaceInCode.TabIndex = 2;
-            this.chkIgnoreWhiteSpaceInCode.Text = "Ignore white spaces in Store Procedures, Triggers and Functions";
+            this.chkIgnoreWhiteSpaceInCode.Text = "Ignore white spaces in stored procedures, triggers and functions";
             this.chkIgnoreWhiteSpaceInCode.UseVisualStyleBackColor = true;
             //
             // gradientPanel14
@@ -1430,7 +1430,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         private CheckBox chkTableOption;
         private CheckBox chkCompXMLSchemas;
         private CheckBox chkCompFunciones;
-        private CheckBox chkCompStoreProcedure;
+        private CheckBox chkCompStoredProcedure;
         private CheckBox chkTables;
         private CheckBox chkCompTriggers;
         private CheckBox chkCompVistas;

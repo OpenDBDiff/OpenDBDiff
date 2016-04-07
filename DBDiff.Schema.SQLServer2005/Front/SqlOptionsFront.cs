@@ -45,7 +45,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
 
             chkCompAssemblys.Checked = option.Ignore.FilterAssemblies;
             chkCompCLRFunctions.Checked = option.Ignore.FilterCLRFunction;
-            chkCompCLRStore.Checked = option.Ignore.FilterCLRStoreProcedure;
+            chkCompCLRStore.Checked = option.Ignore.FilterCLRStoredProcedure;
             chkCompCLRTrigger.Checked = option.Ignore.FilterCLRTrigger;
             chkCompCLRUDT.Checked = option.Ignore.FilterCLRUDT;
 
@@ -65,7 +65,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             chkFullTextPath.Checked = option.Ignore.FilterFullTextPath;
 
             chkCompSchemas.Checked = option.Ignore.FilterSchema;
-            chkCompStoreProcedure.Checked = option.Ignore.FilterStoreProcedure;
+            chkCompStoredProcedure.Checked = option.Ignore.FilterStoredProcedure;
             chkTableOption.Checked = option.Ignore.FilterTableOption;
             chkTables.Checked = option.Ignore.FilterTable;
             chkTablesColumnIdentity.Checked = option.Ignore.FilterColumnIdentity;
@@ -123,7 +123,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
 
             option.Ignore.FilterAssemblies = chkCompAssemblys.Checked;
             option.Ignore.FilterCLRFunction = chkCompCLRFunctions.Checked && chkCompAssemblys.Checked;
-            option.Ignore.FilterCLRStoreProcedure = chkCompCLRStore.Checked && chkCompAssemblys.Checked;
+            option.Ignore.FilterCLRStoredProcedure = chkCompCLRStore.Checked && chkCompAssemblys.Checked;
             option.Ignore.FilterCLRTrigger = chkCompCLRTrigger.Checked && chkCompAssemblys.Checked;
             option.Ignore.FilterCLRUDT = chkCompCLRUDT.Checked && chkCompAssemblys.Checked;
 
@@ -141,7 +141,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             option.Ignore.FilterIndexFilter = chkIndexFilter.Checked && chkIndex.Checked;
 
             option.Ignore.FilterSchema = chkCompSchemas.Checked;
-            option.Ignore.FilterStoreProcedure = chkCompStoreProcedure.Checked;
+            option.Ignore.FilterStoredProcedure = chkCompStoredProcedure.Checked;
 
             option.Ignore.FilterTable = chkTables.Checked;
             option.Ignore.FilterColumnIdentity = chkTablesColumnIdentity.Checked && chkTables.Checked;

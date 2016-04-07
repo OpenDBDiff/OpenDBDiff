@@ -64,8 +64,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             if (type == Enums.ObjectType.Trigger) return "TRIGGER";
             if (type == Enums.ObjectType.View) return "VIEW";
             if (type == Enums.ObjectType.Function) return "FUNCTION";
-            if (type == Enums.ObjectType.StoreProcedure) return "PROCEDURE";
-            if (type == Enums.ObjectType.CLRStoreProcedure) return "PROCEDURE";
+            if (type == Enums.ObjectType.StoredProcedure) return "PROCEDURE";
+            if (type == Enums.ObjectType.CLRStoredProcedure) return "PROCEDURE";
             if (type == Enums.ObjectType.CLRTrigger) return "TRIGGER";
             if (type == Enums.ObjectType.CLRFunction) return "FUNCTION";
             if (type == Enums.ObjectType.Assembly) return "ASSEMBLY";
@@ -159,7 +159,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 {
                     if ((item.Status != Enums.ObjectStatusType.CreateStatus) && (item.Status != Enums.ObjectStatusType.DropStatus))
                     {
-                        if ((item.ObjectType != Enums.ObjectType.CLRStoreProcedure) && (item.ObjectType != Enums.ObjectType.Assembly) && (item.ObjectType != Enums.ObjectType.UserDataType) && (item.ObjectType != Enums.ObjectType.View) && (item.ObjectType != Enums.ObjectType.Function))
+                        if ((item.ObjectType != Enums.ObjectType.CLRStoredProcedure) && (item.ObjectType != Enums.ObjectType.Assembly) && (item.ObjectType != Enums.ObjectType.UserDataType) && (item.ObjectType != Enums.ObjectType.View) && (item.ObjectType != Enums.ObjectType.Function))
                         {
                             newDeepMin = 0;
                             newDeepMax = 0;

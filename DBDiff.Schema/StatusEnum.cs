@@ -50,7 +50,7 @@ namespace DBDiff.Schema
             DropConstraint = 12,
             DropConstraintPK = 13,
             DropSynonyms = 14,
-            DropStoreProcedure = 15,
+            DropStoredProcedure = 15,
             DropTrigger = 16,
             DropView = 17,
             DropFunction = 17,
@@ -94,7 +94,7 @@ namespace DBDiff.Schema
             AddFullTextIndex = 55,
             EnabledTrigger = 56,
             AddSynonyms = 57,
-            AddStoreProcedure = 58,
+            AddStoredProcedure = 58,
             DropOptions = 59,
             AddOptions = 60,
 
@@ -137,8 +137,8 @@ namespace DBDiff.Schema
             XMLSchema = 9,
             View = 10,
             Function = 11,
-            [Description("Store Procedure")]
-            StoreProcedure = 12,
+            [Description("Stored Procedure")]
+            StoredProcedure = 12,
             TableOption = 13,
             Database = 14,
             Schema = 15,
@@ -152,8 +152,8 @@ namespace DBDiff.Schema
             Role = 23,
             FullText = 24,
             AssemblyFile = 25,
-            [Description("CLR Store Procedure")]
-            CLRStoreProcedure = 26,
+            [Description("CLR Stored Procedure")]
+            CLRStoredProcedure = 26,
             [Description("CLR Trigger")]
             CLRTrigger = 27,
             [Description("CLR Function")]

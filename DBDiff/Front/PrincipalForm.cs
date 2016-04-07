@@ -60,7 +60,7 @@ namespace DBDiff.Front
 
             DBDiff.Schema.Sybase.Generate sql = new DBDiff.Schema.Sybase.Generate();
             sql.ConnectioString = txtConnectionOrigen.Text;
-            
+
             AseFilter.OptionFilter.FilterTrigger = false;
 
             origin = sql.Process(AseFilter);
@@ -288,7 +288,7 @@ namespace DBDiff.Front
             //this.txtScript.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
             //this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
             this.txtDiferencias.Text = origin.ToSQLDiff();
-            
+
 
         }
         */
@@ -348,14 +348,14 @@ namespace DBDiff.Front
                 exceptionMsg.AppendFormat("\r\n\r\n{0}", searchHash);
 
                 if (DialogResult.OK == MessageBox.Show(Owner, @"An unexpected error has occured during processing.
-Clicking 'OK' will result in the following: 
+Clicking 'OK' will result in the following:
 
     1. The exception info below will be copied to the clipboard.
 
     2. Your default browser will search CodePlex for more details.
 
     • *Please* click 'Create New Work Item' and paste the error details
-        into the Description field if there are no work items for this issue! 
+        into the Description field if there are no work items for this issue!
         (At least email the details to opendbdiff@gmail.com...)
 
     • Vote for existing work items; paste details into 'Add Comment'.
@@ -546,7 +546,7 @@ Clicking 'OK' will result in the following:
                                             }
                                         }
                                         break;
-                                    case Enums.ObjectType.StoreProcedure:
+                                    case Enums.ObjectType.StoredProcedure:
                                         {
                                             switch (selected.Status)
                                             {

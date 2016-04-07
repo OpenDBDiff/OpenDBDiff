@@ -49,7 +49,7 @@ namespace DBDiff.Schema
             if (Type == Enums.ObjectType.Constraint) return "CONSTRAINT";
             if (Type == Enums.ObjectType.Index) return "INDEX";
             if (Type == Enums.ObjectType.View) return "VIEW";
-            if (Type == Enums.ObjectType.StoreProcedure) return "STORE PROCEDURE";
+            if (Type == Enums.ObjectType.StoredProcedure) return "STORED PROCEDURE";
             if (Type == Enums.ObjectType.Synonym) return "SYNONYM";
             if (Type == Enums.ObjectType.Function) return "FUNCTION";
             if (Type == Enums.ObjectType.Assembly) return "ASSEMBLY";
@@ -61,7 +61,7 @@ namespace DBDiff.Schema
         {
             get
             {
-                return ((this.Type != Enums.ObjectType.Function) && (this.Type != Enums.ObjectType.StoreProcedure) && (this.Type != Enums.ObjectType.View) && (this.Type != Enums.ObjectType.Table) && (this.Type != Enums.ObjectType.Database));
+                return ((this.Type != Enums.ObjectType.Function) && (this.Type != Enums.ObjectType.StoredProcedure) && (this.Type != Enums.ObjectType.View) && (this.Type != Enums.ObjectType.Table) && (this.Type != Enums.ObjectType.Database));
             }
         }
 

@@ -7,7 +7,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
     public class StoreProcedure : Code
     {
         public StoreProcedure(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.StoreProcedure, Enums.ScripActionType.AddStoreProcedure, Enums.ScripActionType.DropStoreProcedure)
+            : base(parent, Enums.ObjectType.StoredProcedure, Enums.ScripActionType.AddStoredProcedure, Enums.ScripActionType.DropStoredProcedure)
         {
 
         }

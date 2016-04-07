@@ -92,9 +92,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         public void Fill(Database database, string connectionString)
         {
-            if ((database.Options.Ignore.FilterStoreProcedure) || (database.Options.Ignore.FilterCLRStoreProcedure))
+            if ((database.Options.Ignore.FilterStoredProcedure) || (database.Options.Ignore.FilterCLRStoredProcedure))
             {
-                root.RaiseOnReading(new ProgressEventArgs("Reading Store Procedures...", Constants.READING_PROCEDURES));
+                root.RaiseOnReading(new ProgressEventArgs("Reading stored procedures...", Constants.READING_PROCEDURES));
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     using (SqlCommand command = new SqlCommand(GetSQL(database.Info.Version), conn))
@@ -107,7 +107,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                             {
                                 InitIndex(reader);
                                 root.RaiseOnReadingOne(reader[NameIndex]);
-                                if ((reader[typeIndex].ToString().Trim().Equals("P")) && (database.Options.Ignore.FilterStoreProcedure))
+                                if ((reader[typeIndex].ToString().Trim().Equals("P")) && (database.Options.Ignore.FilterStoredProcedure))
                                 {
                                     StoreProcedure item = new StoreProcedure(database);
                                     item.Id = (int)reader[object_idIndex];
@@ -115,7 +115,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                     item.Owner = (string)reader[ownerIndex];
                                     database.Procedures.Add(item);
                                 }
-                                if ((reader[typeIndex].ToString().Trim().Equals("PC")) && (database.Options.Ignore.FilterCLRStoreProcedure))
+                                if ((reader[typeIndex].ToString().Trim().Equals("PC")) && (database.Options.Ignore.FilterCLRStoredProcedure))
                                 {
                                     CLRStoreProcedure item = new CLRStoreProcedure(database);
                                     item.Id = (int)reader[object_idIndex];

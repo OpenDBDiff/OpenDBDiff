@@ -85,10 +85,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         [ShowItem("Rules")]
         public SchemaList<Rule, Database> Rules { get; private set; }
 
-        [ShowItem("Store Procedures", "Procedure", true)]
+        [ShowItem("Stored Procedures", "Procedure", true)]
         public SchemaList<StoreProcedure, Database> Procedures { get; private set; }
 
-        [ShowItem("CLR Store Procedures", "CLRProcedure", true)]
+        [ShowItem("CLR Stored Procedures", "CLRProcedure", true)]
         public SchemaList<CLRStoreProcedure, Database> CLRProcedures { get; private set; }
 
         [ShowItem("CLR Functions", "CLRFunction", true)]
@@ -303,7 +303,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                 {
                     case Enums.ObjectType.Table:
                         return Tables[_FullName];
-                    case Enums.ObjectType.StoreProcedure:
+                    case Enums.ObjectType.StoredProcedure:
                         return Procedures[_FullName];
                     case Enums.ObjectType.Function:
                         return Functions[_FullName];
@@ -317,7 +317,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                         return TablesTypes[_FullName];
                     case Enums.ObjectType.XMLSchema:
                         return XmlSchemas[_FullName];
-                    case Enums.ObjectType.CLRStoreProcedure:
+                    case Enums.ObjectType.CLRStoredProcedure:
                         return CLRProcedures[_FullName];
                     case Enums.ObjectType.CLRFunction:
                         return CLRFunctions[_FullName];

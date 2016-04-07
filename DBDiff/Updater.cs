@@ -114,7 +114,7 @@ namespace DBDiff
                 //script = script.Replace("\r", "");
                 //script = script.Replace("\t", "");
                 //script = script.Replace("\n", " ");
-                if (target.ObjectType == Enums.ObjectType.StoreProcedure)
+                if (target.ObjectType == Enums.ObjectType.StoredProcedure)
                 {
                     script = sql.Replace("CREATE PROCEDURE", "ALTER PROCEDURE");
                 }

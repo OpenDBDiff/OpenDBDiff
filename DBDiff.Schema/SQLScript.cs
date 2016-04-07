@@ -39,7 +39,7 @@ namespace DBDiff.Schema
         {
             get
             {
-                return ((Status == Enums.ScripActionType.DropView) || (Status == Enums.ScripActionType.DropFunction) || (Status == Enums.ScripActionType.DropStoreProcedure));
+                return ((Status == Enums.ScripActionType.DropView) || (Status == Enums.ScripActionType.DropFunction) || (Status == Enums.ScripActionType.DropStoredProcedure));
             }
         }
 
@@ -47,7 +47,7 @@ namespace DBDiff.Schema
         {
             get
             {
-                return ((Status == Enums.ScripActionType.AddView) || (Status == Enums.ScripActionType.AddFunction) || (Status == Enums.ScripActionType.AddStoreProcedure));
+                return ((Status == Enums.ScripActionType.AddView) || (Status == Enums.ScripActionType.AddFunction) || (Status == Enums.ScripActionType.AddStoredProcedure));
             }
         }
 

@@ -23,7 +23,7 @@
 
         public bool IsCodeType
         {
-            get { return ((Type == Enums.ObjectType.StoreProcedure) || (Type == Enums.ObjectType.Trigger) || (Type == Enums.ObjectType.View) || (Type == Enums.ObjectType.Function)); }
+            get { return ((Type == Enums.ObjectType.StoredProcedure) || (Type == Enums.ObjectType.Trigger) || (Type == Enums.ObjectType.View) || (Type == Enums.ObjectType.Function)); }
 
         }
     }

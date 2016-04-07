@@ -9,7 +9,7 @@
             if (type.Trim().Equals("FN")) return Enums.ObjectType.Function;
             if (type.Trim().Equals("TF")) return Enums.ObjectType.Function;
             if (type.Trim().Equals("IF")) return Enums.ObjectType.Function;
-            if (type.Trim().Equals("P")) return Enums.ObjectType.StoreProcedure;
+            if (type.Trim().Equals("P")) return Enums.ObjectType.StoredProcedure;
             if (type.Trim().Equals("TR")) return Enums.ObjectType.Trigger;
             return Enums.ObjectType.None;
         }
