@@ -5,12 +5,12 @@ namespace DBDiff.Front
 {
     partial class SchemaTreeView
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -25,8 +25,8 @@ namespace DBDiff.Front
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -37,11 +37,11 @@ namespace DBDiff.Front
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.chkOld = new System.Windows.Forms.CheckBox();
             this.chkNew = new System.Windows.Forms.CheckBox();
-            this.chkDiferent = new System.Windows.Forms.CheckBox();
+            this.chkDifferent = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
-            // 
+            //
             // treeView1
-            // 
+            //
             this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -55,9 +55,9 @@ namespace DBDiff.Front
             this.treeView1.TabIndex = 0;
 			this.treeView1.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterCheck);
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
-            // 
+            //
             // imageList1
-            // 
+            //
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "Folder");
@@ -76,9 +76,9 @@ namespace DBDiff.Front
             this.imageList1.Images.SetKeyName(13, "Assembly");
             this.imageList1.Images.SetKeyName(14, "PartitionFunction");
             this.imageList1.Images.SetKeyName(15, "PartitionScheme");
-            // 
+            //
             // chkOld
-            // 
+            //
             this.chkOld.AutoSize = true;
             this.chkOld.Checked = true;
             this.chkOld.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -90,9 +90,9 @@ namespace DBDiff.Front
             this.chkOld.Text = "Filter Missing Objects";
             this.chkOld.UseVisualStyleBackColor = true;
             this.chkOld.CheckedChanged += new System.EventHandler(this.chkOld_CheckedChanged);
-            // 
+            //
             // chkNew
-            // 
+            //
             this.chkNew.AutoSize = true;
             this.chkNew.Checked = true;
             this.chkNew.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -104,26 +104,26 @@ namespace DBDiff.Front
             this.chkNew.Text = "Filter New Objects";
             this.chkNew.UseVisualStyleBackColor = true;
             this.chkNew.CheckedChanged += new System.EventHandler(this.chkNew_CheckedChanged);
-            // 
-            // chkDiferent
-            // 
-            this.chkDiferent.AutoSize = true;
-            this.chkDiferent.Checked = true;
-            this.chkDiferent.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDiferent.Enabled = false;
-            this.chkDiferent.Location = new System.Drawing.Point(135, 4);
-            this.chkDiferent.Name = "chkDiferent";
-            this.chkDiferent.Size = new System.Drawing.Size(130, 17);
-            this.chkDiferent.TabIndex = 3;
-            this.chkDiferent.Text = "Filter Different Objects";
-            this.chkDiferent.UseVisualStyleBackColor = true;
-            this.chkDiferent.CheckedChanged += new System.EventHandler(this.chkDiferent_CheckedChanged);
-            // 
+            //
+            // chkDifferent
+            //
+            this.chkDifferent.AutoSize = true;
+            this.chkDifferent.Checked = true;
+            this.chkDifferent.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDifferent.Enabled = false;
+            this.chkDifferent.Location = new System.Drawing.Point(135, 4);
+            this.chkDifferent.Name = "chkDifferent";
+            this.chkDifferent.Size = new System.Drawing.Size(130, 17);
+            this.chkDifferent.TabIndex = 3;
+            this.chkDifferent.Text = "Filter Different Objects";
+            this.chkDifferent.UseVisualStyleBackColor = true;
+            this.chkDifferent.CheckedChanged += new System.EventHandler(this.chkDifferent_CheckedChanged);
+            //
             // SchemaTreeView
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.chkDiferent);
+            this.Controls.Add(this.chkDifferent);
             this.Controls.Add(this.chkNew);
             this.Controls.Add(this.chkOld);
             this.Controls.Add(this.treeView1);
@@ -139,7 +139,7 @@ namespace DBDiff.Front
         private TreeView treeView1;
         private CheckBox chkOld;
         private CheckBox chkNew;
-        private CheckBox chkDiferent;
+        private CheckBox chkDifferent;
         private ImageList imageList1;
     }
 }

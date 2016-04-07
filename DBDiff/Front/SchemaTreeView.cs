@@ -154,11 +154,11 @@ namespace DBDiff.Front
         {
             if ((item.Status == Enums.ObjectStatusType.DropStatus) && (FilterMissingObjects)) return true;
             if ((item.Status == Enums.ObjectStatusType.CreateStatus) && (FilterNewObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.AlterStatus) && (FilterDiferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.AlterWhitespaceStatus) && (FilterDiferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.RebuildStatus) && (FilterDiferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.DisabledStatus) && (FilterDiferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.UpdateStatus) && (FilterDiferentObjects)) return true;
+            if ((item.Status == Enums.ObjectStatusType.AlterStatus) && (FilterDifferentObjects)) return true;
+            if ((item.Status == Enums.ObjectStatusType.AlterWhitespaceStatus) && (FilterDifferentObjects)) return true;
+            if ((item.Status == Enums.ObjectStatusType.RebuildStatus) && (FilterDifferentObjects)) return true;
+            if ((item.Status == Enums.ObjectStatusType.DisabledStatus) && (FilterDifferentObjects)) return true;
+            if ((item.Status == Enums.ObjectStatusType.UpdateStatus) && (FilterDifferentObjects)) return true;
             return true;
         }
 
@@ -174,13 +174,13 @@ namespace DBDiff.Front
             set { chkOld.Checked = value; }
         }
 
-        public Boolean FilterDiferentObjects
+        public Boolean FilterDifferentObjects
         {
-            get { return chkDiferent.Checked; }
-            set { chkDiferent.Checked = value; }
+            get { return chkDifferent.Checked; }
+            set { chkDifferent.Checked = value; }
         }
 
-        private void chkDiferent_CheckedChanged(object sender, EventArgs e)
+        private void chkDifferent_CheckedChanged(object sender, EventArgs e)
         {
             RebuildSchemaTree();
         }
