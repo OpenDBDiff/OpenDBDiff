@@ -152,45 +152,42 @@ namespace DBDiff.Front
 
         private Boolean CanNodeAdd(ISchemaBase item)
         {
-            if ((item.Status == Enums.ObjectStatusType.DropStatus) && (FilterMissingObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.CreateStatus) && (FilterNewObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.AlterStatus) && (FilterDiferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.AlterWhitespaceStatus) && (FilterDiferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.RebuildStatus) && (FilterDiferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.DisabledStatus) && (FilterDiferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.UpdateStatus) && (FilterDiferentObjects)) return true;
-            return true;
+            if ((item.Status == Enums.ObjectStatusType.DropStatus) && (ShowMissingItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.CreateStatus) && (ShowNewItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.AlterStatus) && (ShowChangedItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.AlterWhitespaceStatus) && (ShowChangedItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.RebuildStatus) && (ShowChangedItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.DisabledStatus) && (ShowChangedItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.UpdateStatus) && (ShowChangedItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.OriginalStatus) && (ShowUnchangedItems)) return true;
+            return false;
         }
 
-        public Boolean FilterNewObjects
+        public Boolean ShowNewItems
         {
             get { return chkNew.Checked; }
             set { chkNew.Checked = value; }
         }
 
-        public Boolean FilterMissingObjects
+        public Boolean ShowMissingItems
         {
             get { return chkOld.Checked; }
             set { chkOld.Checked = value; }
         }
 
-        public Boolean FilterDiferentObjects
+        public Boolean ShowChangedItems
         {
             get { return chkDiferent.Checked; }
             set { chkDiferent.Checked = value; }
         }
 
-        private void chkDiferent_CheckedChanged(object sender, EventArgs e)
+        public Boolean ShowUnchangedItems
         {
-            RebuildSchemaTree();
+            get { return chkShowUnchangedItems.Checked; }
+            set { chkShowUnchangedItems.Checked = value; }
         }
 
-        private void chkOld_CheckedChanged(object sender, EventArgs e)
-        {
-            RebuildSchemaTree();
-        }
-
-        private void chkNew_CheckedChanged(object sender, EventArgs e)
+        private void FilterCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             RebuildSchemaTree();
         }
