@@ -135,7 +135,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                 {
                     try
                     {*/
-            (new GenerateStoreProcedures(this)).Fill(databaseSchema, ConnectionString);
+            (new GenerateStoredProcedures(this)).Fill(databaseSchema, ConnectionString);
             (new GenerateFunctions(this)).Fill(databaseSchema, ConnectionString);
             (new GenerateTriggers(this)).Fill(databaseSchema, ConnectionString, messages);
             (new GenerateTextObjects(this)).Fill(databaseSchema, ConnectionString);

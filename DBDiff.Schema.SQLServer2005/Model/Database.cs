@@ -21,8 +21,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             UserTypes = new SchemaList<UserDataType, Database>(this, AllObjects);
             XmlSchemas = new SchemaList<XMLSchema, Database>(this, AllObjects);
             Schemas = new SchemaList<Schema, Database>(this, AllObjects);
-            Procedures = new SchemaList<StoreProcedure, Database>(this, AllObjects);
-            CLRProcedures = new SchemaList<CLRStoreProcedure, Database>(this, AllObjects);
+            Procedures = new SchemaList<StoredProcedure, Database>(this, AllObjects);
+            CLRProcedures = new SchemaList<CLRStoredProcedure, Database>(this, AllObjects);
             CLRFunctions = new SchemaList<CLRFunction, Database>(this, AllObjects);
             FileGroups = new SchemaList<FileGroup, Database>(this);
             Rules = new SchemaList<Rule, Database>(this, AllObjects);
@@ -86,10 +86,10 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public SchemaList<Rule, Database> Rules { get; private set; }
 
         [ShowItem("Stored Procedures", "Procedure", true)]
-        public SchemaList<StoreProcedure, Database> Procedures { get; private set; }
+        public SchemaList<StoredProcedure, Database> Procedures { get; private set; }
 
         [ShowItem("CLR Stored Procedures", "CLRProcedure", true)]
-        public SchemaList<CLRStoreProcedure, Database> CLRProcedures { get; private set; }
+        public SchemaList<CLRStoredProcedure, Database> CLRProcedures { get; private set; }
 
         [ShowItem("CLR Functions", "CLRFunction", true)]
         public SchemaList<CLRFunction, Database> CLRFunctions { get; private set; }

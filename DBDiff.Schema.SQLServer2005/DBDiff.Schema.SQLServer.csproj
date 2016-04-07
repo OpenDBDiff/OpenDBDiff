@@ -73,11 +73,11 @@
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="Compare\CompareCLRFunction.cs" />
+    <Compile Include="Compare\CompareCLRStoredProcedure.cs" />
     <Compile Include="Compare\CompareCLRTriggers.cs" />
     <Compile Include="Compare\CompareDDLTriggers.cs" />
     <Compile Include="Compare\CompareAssemblies.cs" />
     <Compile Include="Compare\CompareBase.cs" />
-    <Compile Include="Compare\CompareCLRStoreProcedure.cs" />
     <Compile Include="Compare\CompareColumns.cs" />
     <Compile Include="Compare\CompareColumnsConstraints.cs" />
     <Compile Include="Compare\CompareConstraints.cs" />
@@ -92,7 +92,7 @@
     <Compile Include="Compare\CompareRoles.cs" />
     <Compile Include="Compare\CompareRules.cs" />
     <Compile Include="Compare\CompareSchemas.cs" />
-    <Compile Include="Compare\CompareStoreProcedures.cs" />
+    <Compile Include="Compare\CompareStoredProcedures.cs" />
     <Compile Include="Compare\CompareSynonyms.cs" />
     <Compile Include="Compare\CompareTables.cs" />
     <Compile Include="Compare\CompareTablesOptions.cs" />
@@ -125,6 +125,7 @@
     <Compile Include="Generates\Generate.cs" />
     <Compile Include="Generates\GenerateFullText.cs" />
     <Compile Include="Generates\GenerateFullTextIndex.cs" />
+    <Compile Include="Generates\GenerateStoredProcedures.cs" />
     <Compile Include="Generates\GenerateTextObjects.cs" />
     <Compile Include="Generates\SQLCommands\UserSQLCommand.cs" />
     <Compile Include="Generates\SQLCommands\ViewSQLCommand.cs" />
@@ -150,7 +151,6 @@
     <Compile Include="Generates\GenerateIndex.cs" />
     <Compile Include="Generates\GenerateRules.cs" />
     <Compile Include="Generates\GenerateSchemas.cs" />
-    <Compile Include="Generates\GenerateStoreProcedures.cs" />
     <Compile Include="Generates\GenerateTables.cs" />
     <Compile Include="Generates\GenerateDDLTriggers.cs" />
     <Compile Include="Generates\GenerateUserDataTypes.cs" />
@@ -161,7 +161,7 @@
     <Compile Include="Model\AssemblyFile.cs" />
     <Compile Include="Model\CLRCode.cs" />
     <Compile Include="Model\CLRFunction.cs" />
-    <Compile Include="Model\CLRStoreProcedure.cs" />
+    <Compile Include="Model\CLRStoredProcedure.cs" />
     <Compile Include="Model\CLRTrigger.cs" />
     <Compile Include="Model\Code.cs" />
     <Compile Include="Model\ExtendedProperty.cs" />
@@ -199,7 +199,7 @@
     <Compile Include="Model\Rule.cs" />
     <Compile Include="Model\Schema.cs" />
     <Compile Include="Model\SQLServerSchemaBase.cs" />
-    <Compile Include="Model\StoreProcedure.cs" />
+    <Compile Include="Model\StoredProcedure.cs" />
     <Compile Include="Model\Synonym.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\ObjectDependency.cs" />

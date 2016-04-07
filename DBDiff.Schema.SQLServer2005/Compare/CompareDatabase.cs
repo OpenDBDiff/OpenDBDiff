@@ -21,8 +21,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
                 (new CompareDDLTriggers()).GenerateDifferences<Database>(origin.DDLTriggers, destination.DDLTriggers);
                 (new CompareSynonyms()).GenerateDifferences<Database>(origin.Synonyms, destination.Synonyms);
                 (new CompareUsers()).GenerateDifferences<Database>(origin.Users, destination.Users);
-                (new CompareStoreProcedures()).GenerateDifferences<Database>(origin.Procedures, destination.Procedures);
-                (new CompareCLRStoreProcedure()).GenerateDifferences<Database>(origin.CLRProcedures, destination.CLRProcedures);
+                (new CompareStoredProcedures()).GenerateDifferences<Database>(origin.Procedures, destination.Procedures);
+                (new CompareCLRStoredProcedure()).GenerateDifferences<Database>(origin.CLRProcedures, destination.CLRProcedures);
                 (new CompareCLRFunction()).GenerateDifferences<Database>(origin.CLRFunctions, destination.CLRFunctions);
                 (new CompareViews()).GenerateDifferences<Database>(origin.Views, destination.Views);
                 (new CompareFunctions()).GenerateDifferences<Database>(origin.Functions, destination.Functions);

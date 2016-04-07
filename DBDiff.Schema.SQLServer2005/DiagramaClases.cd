@@ -26,14 +26,14 @@
       <FileName>Model\CLRCode.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DBDiff.Schema.SQLServer.Model.CLRStoreProcedure">
+  <Class Name="DBDiff.Schema.SQLServer.Model.CLRStoredProcedure">
     <Position X="10.5" Y="7.25" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAEAAAAAAAIBAAACAAAA=</HashCode>
-      <FileName>Model\CLRStoreProcedure.cs</FileName>
+      <FileName>Model\CLRStoredProcedure.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
       <Property Name="Parameters" />
@@ -109,11 +109,11 @@
       <FileName>Model\Trigger.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DBDiff.Schema.SQLServer.Model.StoreProcedure" Collapsed="true">
+  <Class Name="DBDiff.Schema.SQLServer.Model.StoredProcedure" Collapsed="true">
     <Position X="15" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAAAAgAAAAAAAAAAAEAAAAAAAABAAQAAABA=</HashCode>
-      <FileName>Model\StoreProcedure.cs</FileName>
+      <FileName>Model\StoredProcedure.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DBDiff.Schema.SQLServer.Model.Database">

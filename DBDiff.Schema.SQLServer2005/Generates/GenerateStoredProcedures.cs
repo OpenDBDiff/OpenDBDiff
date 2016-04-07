@@ -5,7 +5,7 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
-    public class GenerateStoreProcedures
+    public class GenerateStoredProcedures
     {
         private static int NameIndex = -1;
         private static int object_idIndex = -1;
@@ -14,7 +14,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         private Generate root;
 
-        public GenerateStoreProcedures(Generate root)
+        public GenerateStoredProcedures(Generate root)
         {
             this.root = root;
         }
@@ -109,7 +109,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                 root.RaiseOnReadingOne(reader[NameIndex]);
                                 if ((reader[typeIndex].ToString().Trim().Equals("P")) && (database.Options.Ignore.FilterStoredProcedure))
                                 {
-                                    StoreProcedure item = new StoreProcedure(database);
+                                    StoredProcedure item = new StoredProcedure(database);
                                     item.Id = (int)reader[object_idIndex];
                                     item.Name = (string)reader[NameIndex];
                                     item.Owner = (string)reader[ownerIndex];
@@ -117,7 +117,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                 }
                                 if ((reader[typeIndex].ToString().Trim().Equals("PC")) && (database.Options.Ignore.FilterCLRStoredProcedure))
                                 {
-                                    CLRStoreProcedure item = new CLRStoreProcedure(database);
+                                    CLRStoredProcedure item = new CLRStoredProcedure(database);
                                     item.Id = (int)reader[object_idIndex];
                                     item.Name = reader[NameIndex].ToString();
                                     item.Owner = reader[ownerIndex].ToString();

@@ -3,13 +3,13 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
-    internal class CompareCLRStoreProcedure : CompareBase<CLRStoreProcedure>
+    internal class CompareCLRStoredProcedure : CompareBase<CLRStoredProcedure>
     {
-        protected override void DoUpdate<Root>(SchemaList<CLRStoreProcedure, Root> originFields, CLRStoreProcedure node)
+        protected override void DoUpdate<Root>(SchemaList<CLRStoredProcedure, Root> originFields, CLRStoredProcedure node)
         {
             if (!node.Compare(originFields[node.FullName]))
             {
-                CLRStoreProcedure newNode = node; //.Clone(originFields.Parent);
+                CLRStoredProcedure newNode = node; //.Clone(originFields.Parent);
                 newNode.Status = Enums.ObjectStatusType.AlterStatus;
                 originFields[node.FullName] = newNode;
             }
