@@ -86,16 +86,60 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             }
         }
 
+        private string BuildConnectionString(string server, string database)
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = server.Trim();
+
+            // if database is ommitted the connection will be established to the default database for the user
+            if (!string.IsNullOrEmpty(database))
+                builder.InitialCatalog = database.Trim();
+
+            builder.IntegratedSecurity = true;
+            return builder.ConnectionString;
+        }
+
+        private string BuildConnectionString(string server, string database, string username, string password)
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(BuildConnectionString(server, database));
+
+            builder.IntegratedSecurity = false;
+            builder.UserID = username;
+            builder.Password = password;
+            return builder.ConnectionString;
+        }
+
+
+        public string ConnectionStringToDefaultDatabase
+        {
+            get
+            {
+                if (cboAuthentication.SelectedIndex == 1)
+                    return BuildConnectionString(cboServer.Text, null, txtUsername.Text, txtPassword.Text);
+                else
+                    return BuildConnectionString(cboServer.Text, null);
+            }
+        }
+
+        public string ConnectionStringToMasterDatabase
+        {
+            get
+            {
+                if (cboAuthentication.SelectedIndex == 1)
+                    return BuildConnectionString(cboServer.Text, "master", txtUsername.Text, txtPassword.Text);
+                else
+                    return BuildConnectionString(cboServer.Text, "master");
+            }
+        }
+
         public string ConnectionString
         {
             get
             {
-                string sql = "Data Source=" + cboServer.Text + ";Initial Catalog=" + cboDatabase.Text + ";";
                 if (cboAuthentication.SelectedIndex == 1)
-                    sql += "User Id=" + txtUsername.Text + ";Password=" + txtPassword.Text + ";";
+                    return BuildConnectionString(cboServer.Text, cboDatabase.Text, txtUsername.Text, txtPassword.Text);
                 else
-                    sql += "Integrated Security=SSPI;";
-                return sql;
+                    return BuildConnectionString(cboServer.Text, cboDatabase.Text);
             }
             set
             {
@@ -170,7 +214,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         {
             if (!isDatabaseFilled)
             {
-                String connectionString = ConnectionString;
+                String connectionString = ConnectionStringToDefaultDatabase;
                 ClearDatabase();
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
