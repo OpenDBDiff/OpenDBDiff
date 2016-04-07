@@ -132,6 +132,9 @@
     <EmbeddedResource Include="Front\DatabaseProgressControl.resx">
       <DependentUpon>DatabaseProgressControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Front\DataCompareForm.resx">
+      <DependentUpon>DataCompareForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Front\OptionForm.resx">
       <DependentUpon>OptionForm.cs</DependentUpon>
       <SubType>Designer</SubType>
