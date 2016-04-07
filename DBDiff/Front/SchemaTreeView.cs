@@ -103,7 +103,7 @@ namespace DBDiff.Front
             {
                 if (CanNodeAdd(item))
                 {
-                    TreeNode subnode = node.Nodes.Add((attr.IsFullName ? item.FullName : item.Name));
+                    TreeNode subnode = node.Nodes.Add(item.Id.ToString(), (attr.IsFullName ? item.FullName : item.Name));
                     if (item.Status == Enums.ObjectStatusType.DropStatus)
                     {
                         subnode.ForeColor = Color.Red;
@@ -140,14 +140,32 @@ namespace DBDiff.Front
 
         private void RebuildSchemaTree()
         {
-            treeView1.Visible = false;
+
+            string currentlySelectedNode = treeView1.SelectedNode?.Name;
+            string currentTopNode = treeView1.SelectedNode?.Name;
+
+            treeView1.BeginUpdate();
             treeView1.Nodes.Clear();
-            TreeNode databaseNode = treeView1.Nodes.Add(databaseSource.Name);
+            TreeNode databaseNode = treeView1.Nodes.Add("root", databaseSource.Name);
             ReadPropertys(databaseSource.GetType(), databaseNode.Nodes, databaseSource);
             treeView1.Sort();
             databaseNode.ImageKey = "Database";
             databaseNode.Expand();
-            treeView1.Visible = true;
+
+            if (currentlySelectedNode != null)
+            {
+                var nodes = treeView1.Nodes.Find(currentlySelectedNode, true);
+                if (nodes.Any()) treeView1.SelectedNode = nodes.First();
+            }
+
+            if (currentTopNode != null)
+            {
+                var nodes = treeView1.Nodes.Find(currentTopNode, true);
+                if (nodes.Any()) treeView1.TopNode = nodes.First();
+            }
+
+            treeView1.EndUpdate();
+            treeView1.Focus();
         }
 
         private Boolean CanNodeAdd(ISchemaBase item)
