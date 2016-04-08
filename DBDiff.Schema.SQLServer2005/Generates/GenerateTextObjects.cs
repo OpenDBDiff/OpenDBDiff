@@ -90,7 +90,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
         {
             string rv = definition;
 
-            string sqlDelimiters = @"(\r|\n|\s)*?";
+            string sqlDelimiters = @"(\r|\n|\s)+?";
             RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Multiline;
             Regex re = new Regex(@"CREATE" + sqlDelimiters + @"PROC(EDURE)?" + sqlDelimiters + @"(\w+\.|\[\w+\]\.)?\[?(?<spname>\w+)\]?" + sqlDelimiters, options);
             switch (type)
