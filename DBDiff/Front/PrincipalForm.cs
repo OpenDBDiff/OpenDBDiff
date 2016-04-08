@@ -60,7 +60,7 @@ namespace DBDiff.Front
 
             DBDiff.Schema.Sybase.Generate sql = new DBDiff.Schema.Sybase.Generate();
             sql.ConnectioString = txtConnectionOrigen.Text;
-            
+
             AseFilter.OptionFilter.FilterTrigger = false;
 
             origen = sql.Process(AseFilter);
@@ -288,7 +288,7 @@ namespace DBDiff.Front
             //this.txtScript.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
             //this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
             this.txtDiferencias.Text = origen.ToSQLDiff();
-            
+
 
         }
         */
@@ -348,14 +348,14 @@ namespace DBDiff.Front
                 exceptionMsg.AppendFormat("\r\n\r\n{0}", searchHash);
 
                 if (DialogResult.OK == MessageBox.Show(Owner, @"An unexpected error has occured during processing.
-Clicking 'OK' will result in the following: 
+Clicking 'OK' will result in the following:
 
     1. The exception info below will be copied to the clipboard.
 
     2. Your default browser will search CodePlex for more details.
 
     • *Please* click 'Create New Work Item' and paste the error details
-        into the Description field if there are no work items for this issue! 
+        into the Description field if there are no work items for this issue!
         (At least email the details to opendbdiff@gmail.com...)
 
     • Vote for existing work items; paste details into 'Add Comment'.
@@ -487,12 +487,24 @@ Clicking 'OK' will result in the following:
         {
             try
             {
-                saveFileDialog1.ShowDialog(Owner);
+                if (!string.IsNullOrEmpty(saveFileDialog1.FileName) && !string.IsNullOrEmpty(Path.GetDirectoryName(saveFileDialog1.FileName)))
+                {
+                    saveFileDialog1.InitialDirectory = Path.GetDirectoryName(saveFileDialog1.FileName);
+                    saveFileDialog1.FileName = Path.GetFileName(saveFileDialog1.FileName);
+                }
+                saveFileDialog1.ShowDialog(this);
                 if (!String.IsNullOrEmpty(saveFileDialog1.FileName))
                 {
-                    StreamWriter writer = new StreamWriter(saveFileDialog1.FileName, false);
-                    writer.Write(txtSyncScript.Text);
-                    writer.Close();
+                    var db = schemaTreeView1.DatabaseSource as Database;
+                    if (db != null)
+                    {
+                        using (StreamWriter writer = new StreamWriter(saveFileDialog1.FileName, false))
+                        {
+                            this._selectedSchemas = this.schemaTreeView1.GetCheckedSchemas();
+                            writer.Write(db.ToSqlDiff(this._selectedSchemas).ToSQL());
+                            writer.Close();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
