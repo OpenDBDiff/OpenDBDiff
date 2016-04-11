@@ -141,8 +141,8 @@ namespace DBDiff.Front
         private void RebuildSchemaTree()
         {
 
-            string currentlySelectedNode = treeView1.SelectedNode?.Name;
-            string currentTopNode = treeView1.SelectedNode?.Name;
+            string currentlySelectedNode = treeView1.SelectedNode != null ? treeView1.SelectedNode.Name : null;
+            string currentTopNode = treeView1.TopNode != null ? treeView1.TopNode.Name : null;
 
             treeView1.BeginUpdate();
             treeView1.Nodes.Clear();
