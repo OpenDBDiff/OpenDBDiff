@@ -18,6 +18,8 @@ namespace DBDiff.Front
         public delegate void SchemaHandler(string ObjectFullName);
         public event SchemaHandler OnSelectItem;
 
+        private bool busy = false;
+
         public SchemaTreeView()
         {
             InitializeComponent();
@@ -144,6 +146,7 @@ namespace DBDiff.Front
             string currentlySelectedNode = treeView1.SelectedNode != null ? treeView1.SelectedNode.Name : null;
             string currentTopNode = treeView1.TopNode != null ? treeView1.TopNode.Name : null;
 
+            this.busy = true;
             treeView1.BeginUpdate();
             treeView1.Nodes.Clear();
             TreeNode databaseNode = treeView1.Nodes.Add("root", databaseSource.Name);
@@ -165,6 +168,7 @@ namespace DBDiff.Front
             }
 
             treeView1.EndUpdate();
+            this.busy = false;
             treeView1.Focus();
         }
 
@@ -212,6 +216,8 @@ namespace DBDiff.Front
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            if (busy) return;
+
             ISchemaBase item = ((ISchemaBase)e.Node.Tag);
             if (item != null)
             {
@@ -229,6 +235,19 @@ namespace DBDiff.Front
                 {
                     node.Checked = e.Node.Checked;
                 }
+            }
+        }
+
+        public string SelectedNode
+        {
+            get
+            {
+                if (treeView1.SelectedNode == null) return null;
+
+                var item = treeView1.SelectedNode.Tag as ISchemaBase;
+                if (item == null) return null;
+
+                return item.FullName;
             }
         }
     }

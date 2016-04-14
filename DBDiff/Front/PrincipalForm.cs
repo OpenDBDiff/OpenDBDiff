@@ -136,6 +136,7 @@ namespace DBDiff.Front
                     schemaTreeView1.DatabaseSource = destino;
                     schemaTreeView1.DatabaseDestination = origen;
                     schemaTreeView1.OnSelectItem += new SchemaTreeView.SchemaHandler(schemaTreeView1_OnSelectItem);
+                    schemaTreeView1_OnSelectItem(schemaTreeView1.SelectedNode);
                     textBox1.Text = origen.ActionMessage.Message;
 
                     btnCopy.Enabled = true;
@@ -159,6 +160,8 @@ namespace DBDiff.Front
 
         private void schemaTreeView1_OnSelectItem(string ObjectFullName)
         {
+            if (ObjectFullName == null) return;
+
             txtNewObject.IsReadOnly = false;
             txtOldObject.IsReadOnly = false;
             txtNewObject.Text = "";
