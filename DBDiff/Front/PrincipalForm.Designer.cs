@@ -95,21 +95,21 @@ namespace DBDiff.Front
             this.PanelGlobal.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // lblMessage
-            // 
-            this.lblMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            //
+            this.lblMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.lblMessage.AutoSize = true;
             this.lblMessage.Location = new System.Drawing.Point(6, 528);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(0, 13);
             this.lblMessage.TabIndex = 4;
-            // 
+            //
             // tabControl1
-            // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -120,9 +120,9 @@ namespace DBDiff.Front
             this.tabControl1.Size = new System.Drawing.Size(829, 491);
             this.tabControl1.TabIndex = 3;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
-            // 
+            //
             // tabPage2
-            // 
+            //
             this.tabPage2.Controls.Add(this.tabControl2);
             this.tabPage2.Controls.Add(this.groupBox2);
             this.tabPage2.Controls.Add(this.groupBox1);
@@ -133,11 +133,11 @@ namespace DBDiff.Front
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Schema";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
+            //
             // tabControl2
-            // 
-            this.tabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.tabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl2.Controls.Add(this.tabPage4);
             this.tabControl2.Controls.Add(this.tabPage5);
@@ -147,9 +147,9 @@ namespace DBDiff.Front
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(464, 410);
             this.tabControl2.TabIndex = 3;
-            // 
+            //
             // tabPage4
-            // 
+            //
             this.tabPage4.Controls.Add(this.txtNewObject);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
@@ -158,9 +158,9 @@ namespace DBDiff.Front
             this.tabPage4.TabIndex = 0;
             this.tabPage4.Text = "New object";
             this.tabPage4.UseVisualStyleBackColor = true;
-            // 
+            //
             // txtNewObject
-            // 
+            //
             this.txtNewObject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtNewObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtNewObject.Location = new System.Drawing.Point(3, 3);
@@ -176,9 +176,9 @@ namespace DBDiff.Front
             this.txtNewObject.Styles.LineNumber.Size = 9F;
             this.txtNewObject.Styles.Max.Size = 9F;
             this.txtNewObject.TabIndex = 0;
-            // 
+            //
             // tabPage5
-            // 
+            //
             this.tabPage5.Controls.Add(this.txtOldObject);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
@@ -187,9 +187,9 @@ namespace DBDiff.Front
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Old object";
             this.tabPage5.UseVisualStyleBackColor = true;
-            // 
+            //
             // txtOldObject
-            // 
+            //
             this.txtOldObject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtOldObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtOldObject.Location = new System.Drawing.Point(3, 3);
@@ -205,9 +205,9 @@ namespace DBDiff.Front
             this.txtOldObject.Styles.LineNumber.Size = 9F;
             this.txtOldObject.Styles.Max.Size = 9F;
             this.txtOldObject.TabIndex = 0;
-            // 
+            //
             // tabPage6
-            // 
+            //
             this.tabPage6.Controls.Add(this.txtDiff);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
@@ -215,18 +215,18 @@ namespace DBDiff.Front
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "Diff";
             this.tabPage6.UseVisualStyleBackColor = true;
-            // 
+            //
             // txtDiff
-            // 
+            //
             this.txtDiff.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtDiff.Location = new System.Drawing.Point(0, 0);
             this.txtDiff.Name = "txtDiff";
             this.txtDiff.Size = new System.Drawing.Size(456, 384);
             this.txtDiff.TabIndex = 0;
-            // 
+            //
             // groupBox2
-            // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.label2);
@@ -239,64 +239,64 @@ namespace DBDiff.Front
             this.groupBox2.Size = new System.Drawing.Size(465, 40);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(345, 16);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(62, 13);
             this.label3.TabIndex = 5;
             this.label3.Text = "Drop object";
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(195, 16);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(98, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "Alter existing object";
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(45, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(93, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "Create new object";
-            // 
+            //
             // panel5
-            // 
+            //
             this.panel5.BackColor = System.Drawing.Color.Red;
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel5.Location = new System.Drawing.Point(310, 12);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(32, 20);
             this.panel5.TabIndex = 2;
-            // 
+            //
             // panel4
-            // 
+            //
             this.panel4.BackColor = System.Drawing.Color.Blue;
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel4.Location = new System.Drawing.Point(160, 12);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(32, 20);
             this.panel4.TabIndex = 1;
-            // 
+            //
             // panel3
-            // 
+            //
             this.panel3.BackColor = System.Drawing.Color.Lime;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel3.Location = new System.Drawing.Point(10, 12);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(32, 20);
             this.panel3.TabIndex = 0;
-            // 
+            //
             // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            //
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.Controls.Add(this.schemaTreeView1);
             this.groupBox1.Location = new System.Drawing.Point(6, 4);
@@ -304,10 +304,10 @@ namespace DBDiff.Front
             this.groupBox1.Size = new System.Drawing.Size(335, 453);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            // 
+            //
             // schemaTreeView1
-            // 
-            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            //
+            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.schemaTreeView1.DatabaseDestination = null;
             this.schemaTreeView1.DatabaseSource = null;
@@ -319,9 +319,9 @@ namespace DBDiff.Front
             this.schemaTreeView1.Name = "schemaTreeView1";
             this.schemaTreeView1.Size = new System.Drawing.Size(322, 437);
             this.schemaTreeView1.TabIndex = 0;
-            // 
+            //
             // tabPage1
-            // 
+            //
             this.tabPage1.Controls.Add(this.panel1);
             this.tabPage1.Controls.Add(this.lblMessage);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -331,11 +331,11 @@ namespace DBDiff.Front
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Synchronized script";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
+            //
             // panel1
-            // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.txtSyncScript);
@@ -343,9 +343,9 @@ namespace DBDiff.Front
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(806, 453);
             this.panel1.TabIndex = 6;
-            // 
+            //
             // txtSyncScript
-            // 
+            //
             this.txtSyncScript.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSyncScript.IsReadOnly = true;
             this.txtSyncScript.Location = new System.Drawing.Point(0, 0);
@@ -354,9 +354,9 @@ namespace DBDiff.Front
             this.txtSyncScript.Styles.LineNumber.BackColor = System.Drawing.Color.Transparent;
             this.txtSyncScript.Styles.LineNumber.IsVisible = false;
             this.txtSyncScript.TabIndex = 0;
-            // 
+            //
             // tabPage3
-            // 
+            //
             this.tabPage3.Controls.Add(this.textBox1);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
@@ -365,11 +365,11 @@ namespace DBDiff.Front
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Action report";
             this.tabPage3.UseVisualStyleBackColor = true;
-            // 
+            //
             // textBox1
-            // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(9, 6);
@@ -378,9 +378,9 @@ namespace DBDiff.Front
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox1.Size = new System.Drawing.Size(806, 453);
             this.textBox1.TabIndex = 0;
-            // 
+            //
             // GroupDb
-            // 
+            //
             this.GroupDb.Controls.Add(this.optSybase);
             this.GroupDb.Controls.Add(this.optMySQL);
             this.GroupDb.Controls.Add(this.optSQL2005);
@@ -390,9 +390,9 @@ namespace DBDiff.Front
             this.GroupDb.TabIndex = 0;
             this.GroupDb.TabStop = false;
             this.GroupDb.Visible = false;
-            // 
+            //
             // optSybase
-            // 
+            //
             this.optSybase.AutoSize = true;
             this.optSybase.Location = new System.Drawing.Point(291, 15);
             this.optSybase.Name = "optSybase";
@@ -402,9 +402,9 @@ namespace DBDiff.Front
             this.optSybase.UseVisualStyleBackColor = true;
             this.optSybase.Visible = false;
             this.optSybase.CheckedChanged += new System.EventHandler(this.optSybase_CheckedChanged);
-            // 
+            //
             // optMySQL
-            // 
+            //
             this.optMySQL.AutoSize = true;
             this.optMySQL.Location = new System.Drawing.Point(163, 15);
             this.optMySQL.Name = "optMySQL";
@@ -414,9 +414,9 @@ namespace DBDiff.Front
             this.optMySQL.UseVisualStyleBackColor = true;
             this.optMySQL.Visible = false;
             this.optMySQL.CheckedChanged += new System.EventHandler(this.optMySQL_CheckedChanged);
-            // 
+            //
             // optSQL2005
-            // 
+            //
             this.optSQL2005.AutoSize = true;
             this.optSQL2005.Checked = true;
             this.optSQL2005.Location = new System.Drawing.Point(6, 12);
@@ -427,14 +427,14 @@ namespace DBDiff.Front
             this.optSQL2005.Text = "SQL Server 2005";
             this.optSQL2005.UseVisualStyleBackColor = true;
             this.optSQL2005.CheckedChanged += new System.EventHandler(this.optSQL2005_CheckedChanged);
-            // 
+            //
             // saveFileDialog1
-            // 
+            //
             this.saveFileDialog1.DefaultExt = "sql";
             this.saveFileDialog1.Filter = "SQL File|*.sql";
-            // 
+            //
             // btnOptions
-            // 
+            //
             this.btnOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOptions.Image = global::DBDiff.Properties.Resources.setting_tools;
             this.btnOptions.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -446,9 +446,9 @@ namespace DBDiff.Front
             this.btnOptions.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnOptions.UseVisualStyleBackColor = true;
             this.btnOptions.Click += new System.EventHandler(this.btnOptions_Click);
-            // 
+            //
             // btnCopy
-            // 
+            //
             this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCopy.Enabled = false;
             this.btnCopy.Image = global::DBDiff.Properties.Resources.clipboard_invoice;
@@ -461,9 +461,9 @@ namespace DBDiff.Front
             this.btnCopy.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCopy.UseVisualStyleBackColor = true;
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
-            // 
+            //
             // btnUpdate
-            // 
+            //
             this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUpdate.Enabled = false;
             this.btnUpdate.Image = global::DBDiff.Properties.Resources.refresh_all;
@@ -476,9 +476,9 @@ namespace DBDiff.Front
             this.btnUpdate.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
-            // 
+            //
             // btnUpdateAll
-            // 
+            //
             this.btnUpdateAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUpdateAll.Enabled = false;
             this.btnUpdateAll.Image = global::DBDiff.Properties.Resources.database_refresh;
@@ -491,9 +491,9 @@ namespace DBDiff.Front
             this.btnUpdateAll.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnUpdateAll.UseVisualStyleBackColor = true;
             this.btnUpdateAll.Click += new System.EventHandler(this.btnUpdateAll_Click);
-            // 
+            //
             // btnSaveAs
-            // 
+            //
             this.btnSaveAs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveAs.Enabled = false;
             this.btnSaveAs.Image = global::DBDiff.Properties.Resources.save_as;
@@ -506,9 +506,9 @@ namespace DBDiff.Front
             this.btnSaveAs.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnSaveAs.UseVisualStyleBackColor = true;
             this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
-            // 
+            //
             // btnCompare
-            // 
+            //
             this.btnCompare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCompare.Image = global::DBDiff.Properties.Resources.compare;
             this.btnCompare.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -519,11 +519,11 @@ namespace DBDiff.Front
             this.btnCompare.Text = "Compare";
             this.btnCompare.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCompare.UseVisualStyleBackColor = true;
-            this.btnCompare.Click += new System.EventHandler(this.button1_Click);
-            // 
+            this.btnCompare.Click += new System.EventHandler(this.btnCompare_Click);
+            //
             // PanelGlobal
-            // 
-            this.PanelGlobal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.PanelGlobal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PanelGlobal.BackColor = System.Drawing.Color.White;
             this.PanelGlobal.Controls.Add(this.btnNewProject);
@@ -534,9 +534,9 @@ namespace DBDiff.Front
             this.PanelGlobal.Name = "PanelGlobal";
             this.PanelGlobal.Size = new System.Drawing.Size(937, 159);
             this.PanelGlobal.TabIndex = 10;
-            // 
+            //
             // btnNewProject
-            // 
+            //
             this.btnNewProject.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.btnNewProject.Image = global::DBDiff.Properties.Resources.new_window;
             this.btnNewProject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -547,9 +547,9 @@ namespace DBDiff.Front
             this.btnNewProject.Text = "New project";
             this.btnNewProject.UseVisualStyleBackColor = false;
             this.btnNewProject.Click += new System.EventHandler(this.btnNewProject_Click);
-            // 
+            //
             // panel2
-            // 
+            //
             this.panel2.BackColor = System.Drawing.Color.Transparent;
             this.panel2.Controls.Add(this.PanelDestination);
             this.panel2.Controls.Add(this.PanelSource);
@@ -558,25 +558,25 @@ namespace DBDiff.Front
             this.panel2.Size = new System.Drawing.Size(808, 159);
             this.panel2.TabIndex = 10;
             this.panel2.Resize += new System.EventHandler(this.panel2_Resize);
-            // 
+            //
             // PanelDestination
-            // 
+            //
             this.PanelDestination.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PanelDestination.Location = new System.Drawing.Point(399, 0);
             this.PanelDestination.Name = "PanelDestination";
             this.PanelDestination.Size = new System.Drawing.Size(386, 159);
             this.PanelDestination.TabIndex = 11;
-            // 
+            //
             // PanelSource
-            // 
+            //
             this.PanelSource.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PanelSource.Location = new System.Drawing.Point(4, 0);
             this.PanelSource.Name = "PanelSource";
             this.PanelSource.Size = new System.Drawing.Size(386, 159);
             this.PanelSource.TabIndex = 10;
-            // 
+            //
             // btnSaveProject
-            // 
+            //
             this.btnSaveProject.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.btnSaveProject.Image = global::DBDiff.Properties.Resources.diskette;
             this.btnSaveProject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -587,9 +587,9 @@ namespace DBDiff.Front
             this.btnSaveProject.Text = "Save project";
             this.btnSaveProject.UseVisualStyleBackColor = false;
             this.btnSaveProject.Click += new System.EventHandler(this.button1_Click_1);
-            // 
+            //
             // btnProject
-            // 
+            //
             this.btnProject.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.btnProject.Image = global::DBDiff.Properties.Resources.folder;
             this.btnProject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -600,9 +600,9 @@ namespace DBDiff.Front
             this.btnProject.Text = "Open project";
             this.btnProject.UseVisualStyleBackColor = false;
             this.btnProject.Click += new System.EventHandler(this.btnProject_Click);
-            // 
+            //
             // btnCompareTableData
-            // 
+            //
             this.btnCompareTableData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCompareTableData.Enabled = false;
             this.btnCompareTableData.Image = global::DBDiff.Properties.Resources.table_analysis;
@@ -615,9 +615,9 @@ namespace DBDiff.Front
             this.btnCompareTableData.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCompareTableData.UseVisualStyleBackColor = true;
             this.btnCompareTableData.Click += new System.EventHandler(this.btnCompareTableData_Click);
-            // 
+            //
             // Form1
-            // 
+            //
             this.AcceptButton = this.btnCompare;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
