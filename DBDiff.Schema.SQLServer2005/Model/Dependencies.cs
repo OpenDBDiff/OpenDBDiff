@@ -5,32 +5,32 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    internal class Dependencies : List<Dependence>
+    internal class Dependencies : List<Dependency>
     {
         public Database Database { get; private set; }
 
         public void Add(Database database, int tableId, int columnId, int ownerTableId, int typeId, ISchemaBase constraint)
         {
-            Dependence depends = new Dependence();
-            depends.SubObjectId = columnId;
-            depends.ObjectId = tableId;
-            depends.OwnerTableId = ownerTableId;
+            Dependency dependency = new Dependency();
+            dependency.SubObjectId = columnId;
+            dependency.ObjectId = tableId;
+            dependency.OwnerTableId = ownerTableId;
 
-            depends.FullName = constraint.FullName;
-            depends.Type = constraint.ObjectType;
-            depends.DataTypeId = typeId;
+            dependency.FullName = constraint.FullName;
+            dependency.Type = constraint.ObjectType;
+            dependency.DataTypeId = typeId;
             this.Database = database;
-            base.Add(depends);
+            base.Add(dependency);
         }
 
         public void Add(Database database, int objectId, ISchemaBase objectSchema)
         {
-            Dependence depends = new Dependence();
-            depends.ObjectId = objectId;
-            depends.FullName = objectSchema.FullName;
-            depends.Type = objectSchema.ObjectType;
+            Dependency dependency = new Dependency();
+            dependency.ObjectId = objectId;
+            dependency.FullName = objectSchema.FullName;
+            dependency.Type = objectSchema.ObjectType;
             this.Database = database;
-            base.Add(depends);
+            base.Add(dependency);
         }
 
         /// <summary>
@@ -41,18 +41,18 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             try
             {
                 List<ISchemaBase> cons = new List<ISchemaBase>();
-                this.ForEach(depens =>
+                this.ForEach(dependency =>
                 {
-                    if (depens.Type == type)
+                    if (dependency.Type == type)
                     {
-                        ISchemaBase item = (ISchemaBase)Database.Find(depens.FullName);
-                        if (depens.Type == Enums.ObjectType.Constraint)
+                        ISchemaBase item = (ISchemaBase)Database.Find(dependency.FullName);
+                        if (dependency.Type == Enums.ObjectType.Constraint)
                         {
-                            if ((depens.ObjectId == tableId) && (((Constraint)item).Type == Constraint.ConstraintType.ForeignKey))
+                            if ((dependency.ObjectId == tableId) && (((Constraint)item).Type == Constraint.ConstraintType.ForeignKey))
                                 cons.Add(item);
                         }
                         else
-                            if (depens.ObjectId == tableId)
+                            if (dependency.ObjectId == tableId)
                             cons.Add(item);
                     }
 

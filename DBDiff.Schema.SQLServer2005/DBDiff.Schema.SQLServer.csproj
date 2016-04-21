@@ -164,6 +164,7 @@
     <Compile Include="Model\CLRStoredProcedure.cs" />
     <Compile Include="Model\CLRTrigger.cs" />
     <Compile Include="Model\Code.cs" />
+    <Compile Include="Model\Dependency.cs" />
     <Compile Include="Model\ExtendedProperty.cs" />
     <Compile Include="Model\FullText.cs" />
     <Compile Include="Model\FullTextIndex.cs" />
@@ -183,7 +184,6 @@
     <Compile Include="Model\ConstraintColumns.cs" />
     <Compile Include="Model\DatabaseInfo.cs" />
     <Compile Include="Model\Default.cs" />
-    <Compile Include="Model\Dependence.cs" />
     <Compile Include="Model\Dependencies.cs" />
     <Compile Include="Model\Column.cs" />
     <Compile Include="Model\Columns.cs" />

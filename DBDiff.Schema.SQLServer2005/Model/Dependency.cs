@@ -1,6 +1,6 @@
 namespace DBDiff.Schema.SQLServer.Generates.Model
 {
-    internal class Dependence
+    internal class Dependency
     {
         public string FullName { get; set; }
 
