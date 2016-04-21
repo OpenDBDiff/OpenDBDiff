@@ -40,6 +40,7 @@ namespace DBDiff.Front
             // 
             // btnCancel
             // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(433, 450);
             this.btnCancel.Name = "btnCancel";
@@ -51,6 +52,7 @@ namespace DBDiff.Front
             // 
             // btnApply
             // 
+            this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnApply.Location = new System.Drawing.Point(514, 450);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(75, 23);
@@ -61,6 +63,9 @@ namespace DBDiff.Front
             // 
             // sqlOptionsFront1
             // 
+            this.sqlOptionsFront1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sqlOptionsFront1.Location = new System.Drawing.Point(3, 3);
             this.sqlOptionsFront1.Name = "sqlOptionsFront1";
             this.sqlOptionsFront1.Size = new System.Drawing.Size(586, 440);

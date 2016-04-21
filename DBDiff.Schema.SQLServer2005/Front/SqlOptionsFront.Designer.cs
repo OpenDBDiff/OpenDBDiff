@@ -325,7 +325,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompCLRStore.ForeColor = System.Drawing.SystemColors.ControlText;
             this.chkCompCLRStore.Location = new System.Drawing.Point(28, 65);
             this.chkCompCLRStore.Name = "chkCompCLRStore";
-            this.chkCompCLRStore.Size = new System.Drawing.Size(132, 17);
+            this.chkCompCLRStore.Size = new System.Drawing.Size(138, 17);
             this.chkCompCLRStore.TabIndex = 31;
             this.chkCompCLRStore.Text = "CLR Stored Procedures";
             this.chkCompCLRStore.UseVisualStyleBackColor = true;
@@ -605,7 +605,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkCompStoredProcedure.ForeColor = System.Drawing.SystemColors.ControlText;
             this.chkCompStoredProcedure.Location = new System.Drawing.Point(13, 26);
             this.chkCompStoredProcedure.Name = "chkCompStoredProcedure";
-            this.chkCompStoredProcedure.Size = new System.Drawing.Size(108, 17);
+            this.chkCompStoredProcedure.Size = new System.Drawing.Size(114, 17);
             this.chkCompStoredProcedure.TabIndex = 16;
             this.chkCompStoredProcedure.Text = "Stored Procedures";
             this.chkCompStoredProcedure.UseVisualStyleBackColor = true;
@@ -929,7 +929,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.checkBox1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.checkBox1.Location = new System.Drawing.Point(10, 120);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(76, 17);
+            this.checkBox1.Size = new System.Drawing.Size(81, 17);
             this.checkBox1.TabIndex = 37;
             this.checkBox1.Text = "Permissions";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -1018,8 +1018,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             //
             // btnAdd
             //
+            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAdd.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAdd.Location = new System.Drawing.Point(412, 374);
+            this.btnAdd.Location = new System.Drawing.Point(403, 387);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(58, 23);
             this.btnAdd.TabIndex = 3;
@@ -1029,14 +1030,20 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             //
             // gradientPanel10
             //
+            this.gradientPanel10.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gradientPanel10.Controls.Add(this.lstFilters);
             this.gradientPanel10.Location = new System.Drawing.Point(6, 33);
             this.gradientPanel10.Name = "gradientPanel10";
-            this.gradientPanel10.Size = new System.Drawing.Size(524, 335);
+            this.gradientPanel10.Size = new System.Drawing.Size(524, 348);
             this.gradientPanel10.TabIndex = 5;
             //
             // lstFilters
             //
+            this.lstFilters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lstFilters.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
@@ -1045,7 +1052,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.lstFilters.FullRowSelect = true;
             this.lstFilters.Location = new System.Drawing.Point(7, 8);
             this.lstFilters.Name = "lstFilters";
-            this.lstFilters.Size = new System.Drawing.Size(509, 320);
+            this.lstFilters.Size = new System.Drawing.Size(509, 333);
             this.lstFilters.TabIndex = 0;
             this.lstFilters.UseCompatibleStateImageBehavior = false;
             this.lstFilters.View = System.Windows.Forms.View.Details;
@@ -1070,8 +1077,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             //
             // btnApply
             //
+            this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnApply.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnApply.Location = new System.Drawing.Point(473, 374);
+            this.btnApply.Location = new System.Drawing.Point(464, 387);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(58, 23);
             this.btnApply.TabIndex = 2;
@@ -1081,6 +1089,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             //
             // gradientPanel9
             //
+            this.gradientPanel9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gradientPanel9.Controls.Add(this.label1);
             this.gradientPanel9.Location = new System.Drawing.Point(5, 6);
             this.gradientPanel9.Name = "gradientPanel9";
@@ -1165,6 +1175,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             //
             // groupBox4
             //
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.optScriptSchemaBindingAlter);
             this.groupBox4.Controls.Add(this.optScriptSchemaDrop);
             this.groupBox4.Location = new System.Drawing.Point(5, 33);
@@ -1246,7 +1258,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkIgnoreWhiteSpaceInCode.AutoSize = true;
             this.chkIgnoreWhiteSpaceInCode.Location = new System.Drawing.Point(7, 7);
             this.chkIgnoreWhiteSpaceInCode.Name = "chkIgnoreWhiteSpaceInCode";
-            this.chkIgnoreWhiteSpaceInCode.Size = new System.Drawing.Size(331, 17);
+            this.chkIgnoreWhiteSpaceInCode.Size = new System.Drawing.Size(327, 17);
             this.chkIgnoreWhiteSpaceInCode.TabIndex = 2;
             this.chkIgnoreWhiteSpaceInCode.Text = "Ignore white spaces in stored procedures, triggers and functions";
             this.chkIgnoreWhiteSpaceInCode.UseVisualStyleBackColor = true;
