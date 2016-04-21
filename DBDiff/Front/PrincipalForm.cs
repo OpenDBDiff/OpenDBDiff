@@ -302,7 +302,7 @@ namespace DBDiff.Front
             DataCompareForm dataCompare = new DataCompareForm(selected, mySqlConnectFront1.ConnectionString, mySqlConnectFront2.ConnectionString);
             dataCompare.Show();
         }
-        private void button1_Click(object sender, EventArgs e)
+        private void btnCompare_Click(object sender, EventArgs e)
         {
             string errorLocation = "Processing Compare";
             try

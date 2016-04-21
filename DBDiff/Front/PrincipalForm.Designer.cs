@@ -519,7 +519,7 @@ namespace DBDiff.Front
             this.btnCompare.Text = "Compare";
             this.btnCompare.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCompare.UseVisualStyleBackColor = true;
-            this.btnCompare.Click += new System.EventHandler(this.button1_Click);
+            this.btnCompare.Click += new System.EventHandler(this.btnCompare_Click);
             //
             // PanelGlobal
             //
