@@ -128,8 +128,10 @@ namespace DBDiff.Schema
             Column = 2,
             Trigger = 3,
             Constraint = 4,
+            [Description("Constraint Column")]
             ConstraintColumn = 5,
             Index = 6,
+            [Description("Index Column")]
             IndexColumn = 7,
             [Description("User Data Type")]
             UserDataType = 8,
@@ -139,9 +141,11 @@ namespace DBDiff.Schema
             Function = 11,
             [Description("Stored Procedure")]
             StoredProcedure = 12,
+            [Description("Table Option")]
             TableOption = 13,
             Database = 14,
             Schema = 15,
+            [Description("File Group")]
             FileGroup = 16,
             File = 17,
             Default = 18,
@@ -150,7 +154,9 @@ namespace DBDiff.Schema
             Assembly = 21,
             User = 22,
             Role = 23,
+            [Description("Full Text")]
             FullText = 24,
+            [Description("Assembly File")]
             AssemblyFile = 25,
             [Description("CLR Stored Procedure")]
             CLRStoredProcedure = 26,
@@ -167,6 +173,7 @@ namespace DBDiff.Schema
             PartitionScheme = 33,
             [Description("Table Type")]
             TableType = 34,
+            [Description("Full Text Index")]
             FullTextIndex = 35
         }
     }

@@ -311,9 +311,10 @@ namespace DBDiff.Front
             | System.Windows.Forms.AnchorStyles.Left)));
             this.schemaTreeView1.DatabaseDestination = null;
             this.schemaTreeView1.DatabaseSource = null;
-            this.schemaTreeView1.FilterDifferentObjects = true;
-            this.schemaTreeView1.FilterMissingObjects = true;
-            this.schemaTreeView1.FilterNewObjects = true;
+            this.schemaTreeView1.ShowChangedItems = true;
+            this.schemaTreeView1.ShowMissingItems = true;
+            this.schemaTreeView1.ShowNewItems = true;
+            this.schemaTreeView1.ShowUnchangedItems = true;
             this.schemaTreeView1.Location = new System.Drawing.Point(7, 10);
             this.schemaTreeView1.Name = "schemaTreeView1";
             this.schemaTreeView1.Size = new System.Drawing.Size(322, 437);
@@ -328,7 +329,7 @@ namespace DBDiff.Front
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(821, 465);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Synchronized Script";
+            this.tabPage1.Text = "Synchronized script";
             this.tabPage1.UseVisualStyleBackColor = true;
             //
             // panel1
@@ -362,7 +363,7 @@ namespace DBDiff.Front
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage3.Size = new System.Drawing.Size(821, 465);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Actions Report";
+            this.tabPage3.Text = "Action report";
             this.tabPage3.UseVisualStyleBackColor = true;
             //
             // textBox1
@@ -429,13 +430,13 @@ namespace DBDiff.Front
             //
             // saveFileDialog1
             //
-            this.saveFileDialog1.DefaultExt = "SQL";
+            this.saveFileDialog1.DefaultExt = "sql";
             this.saveFileDialog1.Filter = "SQL File|*.sql";
             //
             // btnOptions
             //
             this.btnOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOptions.Image = global::DBDiff.Properties.Resources.Control_panel_2;
+            this.btnOptions.Image = global::DBDiff.Properties.Resources.setting_tools;
             this.btnOptions.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnOptions.Location = new System.Drawing.Point(842, 246);
             this.btnOptions.Name = "btnOptions";
@@ -450,13 +451,13 @@ namespace DBDiff.Front
             //
             this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCopy.Enabled = false;
-            this.btnCopy.Image = global::DBDiff.Properties.Resources.Copy;
+            this.btnCopy.Image = global::DBDiff.Properties.Resources.clipboard_invoice;
             this.btnCopy.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnCopy.Location = new System.Drawing.Point(842, 368);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(95, 55);
             this.btnCopy.TabIndex = 7;
-            this.btnCopy.Text = "Copy Clipboard";
+            this.btnCopy.Text = "Copy script";
             this.btnCopy.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCopy.UseVisualStyleBackColor = true;
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
@@ -465,13 +466,13 @@ namespace DBDiff.Front
             //
             this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUpdate.Enabled = false;
-            this.btnUpdate.Image = global::DBDiff.Properties.Resources.update_misc;
+            this.btnUpdate.Image = global::DBDiff.Properties.Resources.refresh_all;
             this.btnUpdate.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnUpdate.Location = new System.Drawing.Point(842, 429);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(95, 55);
             this.btnUpdate.TabIndex = 8;
-            this.btnUpdate.Text = "Update item";
+            this.btnUpdate.Text = "Update selected";
             this.btnUpdate.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
@@ -480,7 +481,7 @@ namespace DBDiff.Front
             //
             this.btnUpdateAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUpdateAll.Enabled = false;
-            this.btnUpdateAll.Image = global::DBDiff.Properties.Resources.db_update;
+            this.btnUpdateAll.Image = global::DBDiff.Properties.Resources.database_refresh;
             this.btnUpdateAll.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnUpdateAll.Location = new System.Drawing.Point(842, 599);
             this.btnUpdateAll.Name = "btnUpdateAll";
@@ -495,13 +496,13 @@ namespace DBDiff.Front
             //
             this.btnSaveAs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveAs.Enabled = false;
-            this.btnSaveAs.Image = global::DBDiff.Properties.Resources.Floppy;
+            this.btnSaveAs.Image = global::DBDiff.Properties.Resources.save_as;
             this.btnSaveAs.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnSaveAs.Location = new System.Drawing.Point(842, 307);
             this.btnSaveAs.Name = "btnSaveAs";
             this.btnSaveAs.Size = new System.Drawing.Size(95, 55);
             this.btnSaveAs.TabIndex = 6;
-            this.btnSaveAs.Text = "Save As";
+            this.btnSaveAs.Text = "Save as";
             this.btnSaveAs.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnSaveAs.UseVisualStyleBackColor = true;
             this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
@@ -509,7 +510,7 @@ namespace DBDiff.Front
             // btnCompare
             //
             this.btnCompare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCompare.Image = global::DBDiff.Properties.Resources.Compare;
+            this.btnCompare.Image = global::DBDiff.Properties.Resources.compare;
             this.btnCompare.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnCompare.Location = new System.Drawing.Point(842, 185);
             this.btnCompare.Name = "btnCompare";
@@ -537,13 +538,13 @@ namespace DBDiff.Front
             // btnNewProject
             //
             this.btnNewProject.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.btnNewProject.Image = global::DBDiff.Properties.Resources.NewProject;
+            this.btnNewProject.Image = global::DBDiff.Properties.Resources.new_window;
             this.btnNewProject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnNewProject.Location = new System.Drawing.Point(7, 60);
             this.btnNewProject.Name = "btnNewProject";
             this.btnNewProject.Size = new System.Drawing.Size(113, 33);
             this.btnNewProject.TabIndex = 15;
-            this.btnNewProject.Text = "New Project";
+            this.btnNewProject.Text = "New project";
             this.btnNewProject.UseVisualStyleBackColor = false;
             this.btnNewProject.Click += new System.EventHandler(this.btnNewProject_Click);
             //
@@ -577,26 +578,26 @@ namespace DBDiff.Front
             // btnSaveProject
             //
             this.btnSaveProject.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.btnSaveProject.Image = global::DBDiff.Properties.Resources.SaveProject;
+            this.btnSaveProject.Image = global::DBDiff.Properties.Resources.diskette;
             this.btnSaveProject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSaveProject.Location = new System.Drawing.Point(7, 99);
             this.btnSaveProject.Name = "btnSaveProject";
             this.btnSaveProject.Size = new System.Drawing.Size(113, 33);
             this.btnSaveProject.TabIndex = 13;
-            this.btnSaveProject.Text = "Save Project";
+            this.btnSaveProject.Text = "Save project";
             this.btnSaveProject.UseVisualStyleBackColor = false;
             this.btnSaveProject.Click += new System.EventHandler(this.button1_Click_1);
             //
             // btnProject
             //
             this.btnProject.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.btnProject.Image = global::DBDiff.Properties.Resources.Open;
+            this.btnProject.Image = global::DBDiff.Properties.Resources.folder;
             this.btnProject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnProject.Location = new System.Drawing.Point(7, 21);
             this.btnProject.Name = "btnProject";
             this.btnProject.Size = new System.Drawing.Size(113, 33);
             this.btnProject.TabIndex = 12;
-            this.btnProject.Text = "Open Project";
+            this.btnProject.Text = "Open project";
             this.btnProject.UseVisualStyleBackColor = false;
             this.btnProject.Click += new System.EventHandler(this.btnProject_Click);
             //
@@ -604,19 +605,20 @@ namespace DBDiff.Front
             //
             this.btnCompareTableData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCompareTableData.Enabled = false;
-            this.btnCompareTableData.Image = global::DBDiff.Properties.Resources.compareTableData;
+            this.btnCompareTableData.Image = global::DBDiff.Properties.Resources.table_analysis;
             this.btnCompareTableData.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnCompareTableData.Location = new System.Drawing.Point(842, 490);
             this.btnCompareTableData.Name = "btnCompareTableData";
             this.btnCompareTableData.Size = new System.Drawing.Size(95, 55);
             this.btnCompareTableData.TabIndex = 9;
-            this.btnCompareTableData.Text = "Compare table data";
+            this.btnCompareTableData.Text = "Compare data";
             this.btnCompareTableData.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCompareTableData.UseVisualStyleBackColor = true;
             this.btnCompareTableData.Click += new System.EventHandler(this.btnCompareTableData_Click);
             //
             // Form1
             //
+            this.AcceptButton = this.btnCompare;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(940, 658);

@@ -132,6 +132,9 @@
     <EmbeddedResource Include="Front\DatabaseProgressControl.resx">
       <DependentUpon>DatabaseProgressControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Front\DataCompareForm.resx">
+      <DependentUpon>DataCompareForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Front\OptionForm.resx">
       <DependentUpon>OptionForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -209,35 +212,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\Compare.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Floppy.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Copy.ico" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
-    <None Include="Resources\compareTableData.png" />
-    <None Include="Resources\tableData-edit.png" />
-    <None Include="Resources\update_misc.png" />
-    <None Include="Resources\db_update.png" />
-    <None Include="Resources\NewProject.ico" />
-    <None Include="Resources\SaveProject1.ico" />
-    <None Include="Resources\Open1.ico" />
-    <None Include="Resources\Database1.ico" />
-    <None Include="Resources\SaveProject.ico" />
-    <None Include="Resources\Open.ico" />
-    <None Include="Resources\OpenP.bmp" />
+    <None Include="Resources\folder.png" />
+    <None Include="Resources\diskette.png" />
+    <None Include="Resources\new_window.png" />
+    <None Include="Resources\database_yellow.png" />
+    <None Include="Resources\refresh_all.png" />
+    <None Include="Resources\clipboard_invoice.png" />
+    <None Include="Resources\database_refresh.png" />
+    <None Include="Resources\table_analysis.png" />
+    <None Include="Resources\save_as.png" />
+    <None Include="Resources\table_edit.png" />
+    <None Include="Resources\setting_tools.png" />
+    <None Include="Resources\compare.png" />
     <EmbeddedResource Include="Front\ListProjectsForm.resx">
       <DependentUpon>ListProjectsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Resources\Database.ico" />
-    <None Include="Resources\Folder.ico" />
-    <None Include="Resources\Image1.bmp" />
-    <None Include="Resources\Control panel 2.ico" />
-    <None Include="Resources\Control panel 1.ico" />
     <None Include="Settings.conf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

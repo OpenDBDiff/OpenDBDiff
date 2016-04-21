@@ -40,9 +40,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // groupBox1
-            // 
+            //
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.cboObjects);
             this.groupBox1.Controls.Add(this.txtFilter);
@@ -54,9 +57,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filter";
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label2.Location = new System.Drawing.Point(7, 43);
@@ -64,26 +67,29 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label2.Size = new System.Drawing.Size(68, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Object Type:";
-            // 
+            //
             // cboObjects
-            // 
+            //
+            this.cboObjects.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cboObjects.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboObjects.FormattingEnabled = true;
             this.cboObjects.Location = new System.Drawing.Point(82, 40);
             this.cboObjects.Name = "cboObjects";
             this.cboObjects.Size = new System.Drawing.Size(223, 21);
-            this.cboObjects.Sorted = true;
             this.cboObjects.TabIndex = 2;
-            // 
+            //
             // txtFilter
-            // 
+            //
+            this.txtFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFilter.Location = new System.Drawing.Point(82, 13);
             this.txtFilter.Name = "txtFilter";
             this.txtFilter.Size = new System.Drawing.Size(222, 20);
             this.txtFilter.TabIndex = 1;
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label1.Location = new System.Drawing.Point(6, 16);
@@ -91,9 +97,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.label1.Size = new System.Drawing.Size(69, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Filter Pattern:";
-            // 
+            //
             // btnApply
-            // 
+            //
             this.btnApply.Location = new System.Drawing.Point(242, 80);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(75, 23);
@@ -101,9 +107,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.btnApply.Text = "Apply";
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
-            // 
+            //
             // button2
-            // 
+            //
             this.button2.Location = new System.Drawing.Point(161, 80);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
@@ -111,9 +117,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
+            //
             // AddItem
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(324, 107);
@@ -124,7 +130,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.Name = "AddItem";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Filters";
-            this.Load += new System.EventHandler(this.AddItem_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);

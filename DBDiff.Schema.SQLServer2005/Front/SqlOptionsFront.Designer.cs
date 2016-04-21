@@ -1042,6 +1042,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
+            this.lstFilters.FullRowSelect = true;
             this.lstFilters.Location = new System.Drawing.Point(7, 8);
             this.lstFilters.Name = "lstFilters";
             this.lstFilters.Size = new System.Drawing.Size(509, 320);

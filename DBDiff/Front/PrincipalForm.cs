@@ -136,6 +136,7 @@ namespace DBDiff.Front
                     schemaTreeView1.DatabaseSource = destination;
                     schemaTreeView1.DatabaseDestination = origin;
                     schemaTreeView1.OnSelectItem += new SchemaTreeView.SchemaHandler(schemaTreeView1_OnSelectItem);
+                    schemaTreeView1_OnSelectItem(schemaTreeView1.SelectedNode);
                     textBox1.Text = origin.ActionMessage.Message;
 
                     btnCopy.Enabled = true;
@@ -159,6 +160,8 @@ namespace DBDiff.Front
 
         private void schemaTreeView1_OnSelectItem(string ObjectFullName)
         {
+            if (ObjectFullName == null) return;
+
             txtNewObject.IsReadOnly = false;
             txtOldObject.IsReadOnly = false;
             txtNewObject.Text = "";
@@ -487,12 +490,24 @@ Clicking 'OK' will result in the following:
         {
             try
             {
-                saveFileDialog1.ShowDialog(Owner);
+                if (!string.IsNullOrEmpty(saveFileDialog1.FileName) && !string.IsNullOrEmpty(Path.GetDirectoryName(saveFileDialog1.FileName)))
+                {
+                    saveFileDialog1.InitialDirectory = Path.GetDirectoryName(saveFileDialog1.FileName);
+                    saveFileDialog1.FileName = Path.GetFileName(saveFileDialog1.FileName);
+                }
+                saveFileDialog1.ShowDialog(this);
                 if (!String.IsNullOrEmpty(saveFileDialog1.FileName))
                 {
-                    StreamWriter writer = new StreamWriter(saveFileDialog1.FileName, false);
-                    writer.Write(txtSyncScript.Text);
-                    writer.Close();
+                    var db = schemaTreeView1.DatabaseSource as Database;
+                    if (db != null)
+                    {
+                        using (StreamWriter writer = new StreamWriter(saveFileDialog1.FileName, false))
+                        {
+                            this._selectedSchemas = this.schemaTreeView1.GetCheckedSchemas();
+                            writer.Write(db.ToSqlDiff(this._selectedSchemas).ToSQL());
+                            writer.Close();
+                        }
+                    }
                 }
             }
             catch (Exception ex)

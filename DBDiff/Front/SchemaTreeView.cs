@@ -18,6 +18,8 @@ namespace DBDiff.Front
         public delegate void SchemaHandler(string ObjectFullName);
         public event SchemaHandler OnSelectItem;
 
+        private bool busy = false;
+
         public SchemaTreeView()
         {
             InitializeComponent();
@@ -103,7 +105,7 @@ namespace DBDiff.Front
             {
                 if (CanNodeAdd(item))
                 {
-                    TreeNode subnode = node.Nodes.Add((attr.IsFullName ? item.FullName : item.Name));
+                    TreeNode subnode = node.Nodes.Add(item.Id.ToString(), (attr.IsFullName ? item.FullName : item.Name));
                     if (item.Status == Enums.ObjectStatusType.DropStatus)
                     {
                         subnode.ForeColor = Color.Red;
@@ -140,63 +142,82 @@ namespace DBDiff.Front
 
         private void RebuildSchemaTree()
         {
-            treeView1.Visible = false;
+
+            string currentlySelectedNode = treeView1.SelectedNode != null ? treeView1.SelectedNode.Name : null;
+            string currentTopNode = treeView1.TopNode != null ? treeView1.TopNode.Name : null;
+
+            this.busy = true;
+            treeView1.BeginUpdate();
             treeView1.Nodes.Clear();
-            TreeNode databaseNode = treeView1.Nodes.Add(databaseSource.Name);
+            TreeNode databaseNode = treeView1.Nodes.Add("root", databaseSource.Name);
             ReadProperties(databaseSource.GetType(), databaseNode.Nodes, databaseSource);
             treeView1.Sort();
             databaseNode.ImageKey = "Database";
             databaseNode.Expand();
-            treeView1.Visible = true;
+
+            if (currentlySelectedNode != null)
+            {
+                var nodes = treeView1.Nodes.Find(currentlySelectedNode, true);
+                if (nodes.Any()) treeView1.SelectedNode = nodes.First();
+            }
+
+            if (currentTopNode != null)
+            {
+                var nodes = treeView1.Nodes.Find(currentTopNode, true);
+                if (nodes.Any()) treeView1.TopNode = nodes.First();
+            }
+
+            treeView1.EndUpdate();
+            this.busy = false;
+            treeView1.Focus();
         }
 
         private Boolean CanNodeAdd(ISchemaBase item)
         {
-            if ((item.Status == Enums.ObjectStatusType.DropStatus) && (FilterMissingObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.CreateStatus) && (FilterNewObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.AlterStatus) && (FilterDifferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.AlterWhitespaceStatus) && (FilterDifferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.RebuildStatus) && (FilterDifferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.DisabledStatus) && (FilterDifferentObjects)) return true;
-            if ((item.Status == Enums.ObjectStatusType.UpdateStatus) && (FilterDifferentObjects)) return true;
-            return true;
+            if ((item.Status == Enums.ObjectStatusType.DropStatus) && (ShowMissingItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.CreateStatus) && (ShowNewItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.AlterStatus) && (ShowChangedItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.AlterWhitespaceStatus) && (ShowChangedItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.RebuildStatus) && (ShowChangedItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.DisabledStatus) && (ShowChangedItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.UpdateStatus) && (ShowChangedItems)) return true;
+            if ((item.Status == Enums.ObjectStatusType.OriginalStatus) && (ShowUnchangedItems)) return true;
+            return false;
         }
 
-        public Boolean FilterNewObjects
+        public Boolean ShowNewItems
         {
             get { return chkNew.Checked; }
             set { chkNew.Checked = value; }
         }
 
-        public Boolean FilterMissingObjects
+        public Boolean ShowMissingItems
         {
             get { return chkOld.Checked; }
             set { chkOld.Checked = value; }
         }
 
-        public Boolean FilterDifferentObjects
+        public Boolean ShowChangedItems
         {
             get { return chkDifferent.Checked; }
             set { chkDifferent.Checked = value; }
         }
 
-        private void chkDifferent_CheckedChanged(object sender, EventArgs e)
+        public Boolean ShowUnchangedItems
         {
-            RebuildSchemaTree();
+            get { return chkShowUnchangedItems.Checked; }
+            set { chkShowUnchangedItems.Checked = value; }
         }
 
-        private void chkOld_CheckedChanged(object sender, EventArgs e)
-        {
-            RebuildSchemaTree();
-        }
-
-        private void chkNew_CheckedChanged(object sender, EventArgs e)
+        private void FilterCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             RebuildSchemaTree();
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            if (busy) return;
+
             ISchemaBase item = ((ISchemaBase)e.Node.Tag);
             if (item != null)
             {
@@ -214,6 +235,19 @@ namespace DBDiff.Front
                 {
                     node.Checked = e.Node.Checked;
                 }
+            }
+        }
+
+        public string SelectedNode
+        {
+            get
+            {
+                if (treeView1.SelectedNode == null) return null;
+
+                var item = treeView1.SelectedNode.Tag as ISchemaBase;
+                if (item == null) return null;
+
+                return item.FullName;
             }
         }
     }
