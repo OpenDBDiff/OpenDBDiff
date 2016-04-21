@@ -1231,7 +1231,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage5.Size = new System.Drawing.Size(537, 416);
             this.tabPage5.TabIndex = 4;
-            this.tabPage5.Text = "Comparision";
+            this.tabPage5.Text = "Comparison";
             //
             // gradientPanel15
             //
