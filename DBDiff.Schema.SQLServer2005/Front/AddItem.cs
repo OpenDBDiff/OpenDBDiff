@@ -71,20 +71,30 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
 
         private void btnApply_Click(object sender, EventArgs e)
         {
-            if (cboObjects.SelectedItem != null)
+            if (cboObjects.SelectedItem == null)
             {
-                if (indexFilter == -1)
-                    sqlOption.Filters.Items.Add(new SqlOptionFilterItem((Enums.ObjectType)Enum.Parse(typeof(Enums.ObjectType), cboObjects.SelectedValue.ToString(), true), txtFilter.Text));
-                else
-                {
-                    sqlOption.Filters.Items[indexFilter].Filter = txtFilter.Text;
-                    sqlOption.Filters.Items[indexFilter].Type = (Enums.ObjectType)Enum.Parse(typeof(Enums.ObjectType), cboObjects.SelectedValue.ToString(), true);
-                }
-                HandlerHelper.RaiseOnChange();
-                this.Dispose();
+                MessageBox.Show(this, "All fields are required.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
+
+            var fi = new SqlOptionFilterItem((Enums.ObjectType)Enum.Parse(typeof(Enums.ObjectType), cboObjects.SelectedValue.ToString(), true), txtFilter.Text);
+
+            if (sqlOption.Filters.Items.Contains(fi))
+            {
+                MessageBox.Show(this, string.Format("The list of name filters already includes an entry for text '{0}' of type '{1}'", fi.Filter, fi.Type.ToString()), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+
+            if (indexFilter == -1)
+                sqlOption.Filters.Items.Add(fi);
             else
-                MessageBox.Show(this, "Must complete all fields", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            {
+                sqlOption.Filters.Items[indexFilter].Filter = fi.Filter;
+                sqlOption.Filters.Items[indexFilter].Type = fi.Type;
+            }
+            HandlerHelper.RaiseOnChange();
+            this.Dispose();
         }
     }
 }
