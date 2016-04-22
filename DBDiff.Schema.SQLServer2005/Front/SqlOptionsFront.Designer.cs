@@ -136,6 +136,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.rdoCaseAutomatic = new System.Windows.Forms.RadioButton();
             this.rdoCaseInsensitive = new System.Windows.Forms.RadioButton();
             this.chkReloadDB = new System.Windows.Forms.CheckBox();
+            this.DeleteNameFilterButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.gradientPanel6.SuspendLayout();
@@ -1005,6 +1006,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             // tabPage4
             //
             this.tabPage4.BackColor = System.Drawing.Color.White;
+            this.tabPage4.Controls.Add(this.DeleteNameFilterButton);
             this.tabPage4.Controls.Add(this.btnAdd);
             this.tabPage4.Controls.Add(this.gradientPanel10);
             this.tabPage4.Controls.Add(this.btnApply);
@@ -1020,7 +1022,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             //
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAdd.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAdd.Location = new System.Drawing.Point(403, 387);
+            this.btnAdd.Location = new System.Drawing.Point(336, 387);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(58, 23);
             this.btnAdd.TabIndex = 3;
@@ -1079,7 +1081,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             //
             this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnApply.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnApply.Location = new System.Drawing.Point(464, 387);
+            this.btnApply.Location = new System.Drawing.Point(400, 387);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(58, 23);
             this.btnApply.TabIndex = 2;
@@ -1382,6 +1384,18 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             this.chkReloadDB.Text = "Reload Database Comparison after each Update";
             this.chkReloadDB.UseVisualStyleBackColor = false;
             //
+            // DeleteNameFilterButton
+            //
+            this.DeleteNameFilterButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.DeleteNameFilterButton.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.DeleteNameFilterButton.Location = new System.Drawing.Point(464, 387);
+            this.DeleteNameFilterButton.Name = "DeleteNameFilterButton";
+            this.DeleteNameFilterButton.Size = new System.Drawing.Size(58, 23);
+            this.DeleteNameFilterButton.TabIndex = 6;
+            this.DeleteNameFilterButton.Text = "Delete";
+            this.DeleteNameFilterButton.UseVisualStyleBackColor = true;
+            this.DeleteNameFilterButton.Click += new System.EventHandler(this.DeleteNameFilterButton_Click);
+            //
             // SqlOptionsFront
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1540,5 +1554,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
         private RadioButton optScriptSchemaBindingAlter;
         private RadioButton optScriptSchemaDrop;
         private CheckBox chkReloadDB;
+        private Button DeleteNameFilterButton;
     }
 }

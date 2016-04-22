@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Windows.Forms;
 using DBDiff.Schema.SQLServer.Generates.Options;
 
@@ -235,6 +236,24 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             chkCompCLRTrigger.Enabled = chkCompAssemblys.Checked;
             chkCompCLRFunctions.Enabled = chkCompAssemblys.Checked;
             chkCompCLRUDT.Enabled = chkCompAssemblys.Checked;
+        }
+
+        private void DeleteNameFilterButton_Click(object sender, EventArgs e)
+        {
+            if (lstFilters.SelectedItems.Count > 0)
+            {
+                foreach (ListViewItem item in lstFilters.Items)
+                {
+                    if (item.Selected)
+                    {
+                        var type = (Enums.ObjectType)Enum.Parse(typeof(Enums.ObjectType), item.SubItems[1].Text);
+                        var fi = new SqlOptionFilterItem(type, item.Text);
+                        if (option.Filters.Items.Contains(fi))
+                            option.Filters.Items.Remove(fi);
+                    }
+                }
+                LoadFilters();
+            }
         }
     }
 }
