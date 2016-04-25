@@ -174,15 +174,21 @@ namespace DBDiff.Front
 
         private Boolean CanNodeAdd(ISchemaBase item)
         {
-            if ((item.Status == Enums.ObjectStatusType.DropStatus) && (ShowMissingItems)) return true;
-            if ((item.Status == Enums.ObjectStatusType.CreateStatus) && (ShowNewItems)) return true;
-            if ((item.Status == Enums.ObjectStatusType.AlterStatus) && (ShowChangedItems)) return true;
-            if ((item.Status == Enums.ObjectStatusType.AlterWhitespaceStatus) && (ShowChangedItems)) return true;
-            if ((item.Status == Enums.ObjectStatusType.RebuildStatus) && (ShowChangedItems)) return true;
-            if ((item.Status == Enums.ObjectStatusType.DisabledStatus) && (ShowChangedItems)) return true;
-            if ((item.Status == Enums.ObjectStatusType.UpdateStatus) && (ShowChangedItems)) return true;
-            if ((item.Status == Enums.ObjectStatusType.OriginalStatus) && (ShowUnchangedItems)) return true;
-            return false;
+            if (item.HasState(Enums.ObjectStatusType.DropStatus) && ShowMissingItems) return true;
+            if (item.HasState(Enums.ObjectStatusType.CreateStatus) && ShowNewItems) return true;
+            if (item.HasState(Enums.ObjectStatusType.AlterStatus) && ShowChangedItems) return true;
+            if (item.HasState(Enums.ObjectStatusType.AlterWhitespaceStatus) && ShowChangedItems) return true;
+            if (item.HasState(Enums.ObjectStatusType.AlterBodyStatus) && ShowChangedItems) return true;
+            if (item.HasState(Enums.ObjectStatusType.RebuildStatus) && ShowChangedItems) return true;
+            if (item.HasState(Enums.ObjectStatusType.RebuildDependenciesStatus) && ShowChangedItems) return true;
+            if (item.HasState(Enums.ObjectStatusType.ChangeOwner) && ShowChangedItems) return true;
+            if (item.HasState(Enums.ObjectStatusType.DropOlderStatus) && ShowChangedItems) return true;
+            if (item.HasState(Enums.ObjectStatusType.BindStatus) && ShowChangedItems) return true;
+            if (item.HasState(Enums.ObjectStatusType.PermissionSet) && ShowChangedItems) return true;
+            if (item.HasState(Enums.ObjectStatusType.DisabledStatus) && ShowChangedItems) return true;
+            if (item.HasState(Enums.ObjectStatusType.UpdateStatus) && ShowChangedItems) return true;
+            if (item.HasState(Enums.ObjectStatusType.OriginalStatus) && ShowUnchangedItems) return true;
+            return true;
         }
 
         public Boolean ShowNewItems
