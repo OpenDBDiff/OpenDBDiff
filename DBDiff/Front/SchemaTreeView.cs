@@ -174,21 +174,58 @@ namespace DBDiff.Front
 
         private Boolean CanNodeAdd(ISchemaBase item)
         {
+            Enums.ObjectStatusType checkedStatus = Enums.ObjectStatusType.OriginalStatus;
+            // OriginalStatus == 0, so have to treat differently
+            if (item.Status == Enums.ObjectStatusType.OriginalStatus && ShowUnchangedItems) return true;
+
             if (item.HasState(Enums.ObjectStatusType.DropStatus) && ShowMissingItems) return true;
+            checkedStatus = checkedStatus | Enums.ObjectStatusType.DropStatus;
+
             if (item.HasState(Enums.ObjectStatusType.CreateStatus) && ShowNewItems) return true;
+            checkedStatus = checkedStatus | Enums.ObjectStatusType.CreateStatus;
+
             if (item.HasState(Enums.ObjectStatusType.AlterStatus) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | Enums.ObjectStatusType.AlterStatus;
+
             if (item.HasState(Enums.ObjectStatusType.AlterWhitespaceStatus) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | Enums.ObjectStatusType.AlterWhitespaceStatus;
+
             if (item.HasState(Enums.ObjectStatusType.AlterBodyStatus) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | Enums.ObjectStatusType.AlterBodyStatus;
+
             if (item.HasState(Enums.ObjectStatusType.RebuildStatus) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | Enums.ObjectStatusType.RebuildStatus;
+
             if (item.HasState(Enums.ObjectStatusType.RebuildDependenciesStatus) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | Enums.ObjectStatusType.RebuildDependenciesStatus;
+
             if (item.HasState(Enums.ObjectStatusType.ChangeOwner) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | Enums.ObjectStatusType.ChangeOwner;
+
             if (item.HasState(Enums.ObjectStatusType.DropOlderStatus) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | Enums.ObjectStatusType.DropOlderStatus;
+
             if (item.HasState(Enums.ObjectStatusType.BindStatus) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | Enums.ObjectStatusType.BindStatus;
+
             if (item.HasState(Enums.ObjectStatusType.PermissionSet) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | Enums.ObjectStatusType.PermissionSet;
+
             if (item.HasState(Enums.ObjectStatusType.DisabledStatus) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | Enums.ObjectStatusType.DisabledStatus;
+
             if (item.HasState(Enums.ObjectStatusType.UpdateStatus) && ShowChangedItems) return true;
-            if (item.HasState(Enums.ObjectStatusType.OriginalStatus) && ShowUnchangedItems) return true;
-            return true;
+            checkedStatus = checkedStatus | Enums.ObjectStatusType.UpdateStatus;
+
+
+            // At the end, we should have check all possible statuses.
+            Enums.ObjectStatusType expectedTotalStatus = Enums.ObjectStatusType.OriginalStatus;
+            Enum.GetValues(typeof(Enums.ObjectStatusType)).Cast<Enums.ObjectStatusType>().ToList().ForEach((s) => expectedTotalStatus = expectedTotalStatus | s);
+
+            if (expectedTotalStatus != checkedStatus)
+                throw new Exception(string.Format("The OjbectStatusType '{0:G}' wasn't implemented in the CanNodeAdd() method. Developer, please ensure that all values in the Enum are checked.", (Enums.ObjectStatusType)(expectedTotalStatus - checkedStatus)));
+
+            return false;
         }
 
         public Boolean ShowNewItems
