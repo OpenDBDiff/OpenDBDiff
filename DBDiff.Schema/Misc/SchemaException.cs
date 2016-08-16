@@ -13,7 +13,7 @@ namespace DBDiff.Schema.Misc
         {
             try
             {
-                StreamWriter writer = new StreamWriter("OpenDBDiff.log", true, Encoding.ASCII);
+                StreamWriter writer = new StreamWriter(Path.Combine(Path.GetTempPath(), "OpenDBDiff.log"), true, Encoding.ASCII);
                 writer.WriteLine("ERROR: " + DateTime.Now.ToString("yyyy/MM/dd hh:mm", CultureInfo.InvariantCulture) + "-" + message);
                 writer.Close();
             }
