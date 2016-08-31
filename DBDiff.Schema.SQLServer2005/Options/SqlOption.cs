@@ -1,8 +1,9 @@
+using DBDiff.Schema.Model;
 using System;
 
 namespace DBDiff.Schema.SQLServer.Generates.Options
 {
-    public class SqlOption
+    public class SqlOption : IOption
     {
         public SqlOption()
         {
@@ -25,6 +26,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Options
         public SqlOptionComparison Comparison { get; set; }
 
         public SqlOptionFilter Filters { get; set; }
+        IOptionFilter IOption.Filters { get { return Filters; } }
 
         /// <summary>
         /// Gets or sets the option filter.

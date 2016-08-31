@@ -107,6 +107,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         public SchemaList<UserDataType, Database> UserTypes { get; private set; }
 
         public SqlOption Options { get; set; }
+        IOption IDatabase.Options { get { return Options; } }
 
         public DatabaseInfo Info { get; set; }
 

@@ -67,7 +67,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                                         code = (ICode)database.Find(id);
 
                                     if (type.Equals("P"))
-                                        ((ICode)database.Procedures.Find(id)).Text = GetObjectDefinition(type, name, definition);
+                                    {
+                                        var procedure = database.Procedures.Find(id);
+                                        if (procedure != null)
+                                            ((ICode)procedure).Text = GetObjectDefinition(type, name, definition);
+                                    }
 
                                     if (type.Equals("IF") || type.Equals("FN") || type.Equals("TF"))
                                         code = (ICode)database.Functions.Find(id);
