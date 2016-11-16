@@ -44,6 +44,10 @@ namespace DBDiff.Schema.Model
 
         public new void Add(T item)
         {
+            var db = this.Parent.RootParent;
+            if (!db.Options.Filters.IsItemIncluded(item))
+                return;
+
             base.Add(item);
             if (allObjects != null)
                 allObjects.Add(item);

@@ -83,6 +83,10 @@ namespace DBDiff.Schema.Model
                     else
                         rootParent = (IDatabase)this.Parent;
                 }
+                else if (this is IDatabase)
+                {
+                    rootParent = (IDatabase)this;
+                }
                 return rootParent;
             }
         }

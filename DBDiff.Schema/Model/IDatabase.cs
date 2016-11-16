@@ -4,5 +4,6 @@
     {
         bool IsCaseSensity { get; }
         SqlAction ActionMessage { get; }
+        IOption Options { get; }
     }
 }

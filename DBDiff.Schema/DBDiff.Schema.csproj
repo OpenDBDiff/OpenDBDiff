@@ -69,6 +69,8 @@
     <Compile Include="Events\ProgressEventHandler.cs" />
     <Compile Include="Events\ProgressEventArgs.cs" />
     <Compile Include="Model\IDatabase.cs" />
+    <Compile Include="Model\IOption.cs" />
+    <Compile Include="Model\IOptionFilter.cs" />
     <Compile Include="Model\ISchemaList.cs" />
     <Compile Include="Model\SchemaList.cs" />
     <Compile Include="Misc\SchemaException.cs" />
