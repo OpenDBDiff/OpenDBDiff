@@ -23,4 +23,7 @@ Open DBDiff can synchronize
 * Users
 * Roles
 
+![image](https://cloud.githubusercontent.com/assets/145854/24702579/9e657426-19ff-11e7-9722-9d2f4a54d2ed.png)
+![image](https://cloud.githubusercontent.com/assets/145854/24702592/abc1b094-19ff-11e7-9e1b-d4ed581105a3.png)
+
 Icons provided from http://www.fatcow.com/free-icons under under a Creative Commons Attribution 3.0 License.
