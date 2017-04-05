@@ -1,1 +1,0 @@
-Icons provided from http://www.fatcow.com/free-icons under under a Creative Commons Attribution 3.0 License.
