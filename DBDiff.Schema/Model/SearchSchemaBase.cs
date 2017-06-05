@@ -34,12 +34,11 @@ namespace DBDiff.Schema.Model
         }
 
 
-		public Nullable<Enums.ObjectType> GetType(string FullName)
-		{
-			if (objectTypes.ContainsKey(FullName.ToUpper()))
-				return objectTypes[FullName.ToUpper()];
-			return null;
-		}
+        public Nullable<Enums.ObjectType> GetType(string FullName) {
+            if(objectTypes.ContainsKey(FullName.ToUpper()))
+                return objectTypes[FullName.ToUpper()];
+            return null;
+        }
 
         public string GetParentName(string FullName)
         {
