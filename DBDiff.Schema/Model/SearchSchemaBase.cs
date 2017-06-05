@@ -34,8 +34,9 @@ namespace DBDiff.Schema.Model
         }
 
 
-        public Nullable<Enums.ObjectType> GetType(string FullName) {
-            if(objectTypes.ContainsKey(FullName.ToUpper()))
+        public Nullable<Enums.ObjectType> GetType(string FullName)
+        {
+            if (objectTypes.ContainsKey(FullName.ToUpper()))
                 return objectTypes[FullName.ToUpper()];
             return null;
         }
