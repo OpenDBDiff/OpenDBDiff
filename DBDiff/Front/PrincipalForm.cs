@@ -43,7 +43,7 @@ namespace DBDiff.Front
         private Project ActiveProject;
         private IFront mySqlConnectFront1;
         private IFront mySqlConnectFront2;
-        private readonly SqlOption SqlFilter = new SqlOption();
+        private SqlOption SqlFilter = new SqlOption();
         private List<ISchemaBase> _selectedSchemas = new List<ISchemaBase>();
 
         public Form1()
@@ -681,8 +681,11 @@ Clicking 'OK' will result in the following:
             Project LastConfiguration = Project.GetLastConfiguration();
             if (LastConfiguration != null)
             {
+                ActiveProject = LastConfiguration;
                 mySqlConnectFront1.ConnectionString = LastConfiguration.ConnectionStringSource;
                 mySqlConnectFront2.ConnectionString = LastConfiguration.ConnectionStringDestination;
+
+                SqlFilter = LastConfiguration.Options;
             }
 
             txtSyncScript.Text = "";
@@ -712,7 +715,8 @@ Clicking 'OK' will result in the following:
                                                         mySqlConnectFront1.DatabaseName,
                                                         ((SqlServerConnectFront)mySqlConnectFront2).ServerName,
                                                         mySqlConnectFront2.DatabaseName),
-                        Type = Project.ProjectType.SQLServer
+                        Type = Project.ProjectType.SQLServer,
+                        Options = SqlFilter
                     };
                 }
                 ActiveProject.Id = Project.Save(ActiveProject);
