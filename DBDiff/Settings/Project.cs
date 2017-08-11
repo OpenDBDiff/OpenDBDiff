@@ -8,6 +8,8 @@ using DBDiff.Schema.SQLServer.Generates.Options;
 
 namespace DBDiff.Settings
 {
+    using Newtonsoft.Json;
+
     public class Project
     {
         public enum ProjectType
@@ -101,14 +103,14 @@ namespace DBDiff.Settings
             DoSqlSomething(
                 "SELECT MAX(ProjectId) AS NewId FROM Project WHERE Internal = 0",
                 reader => maxId = int.Parse(reader["NewId"].ToString()),
-                "INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('" + item.Name.Replace("'", "''") + "','" + item.ConnectionStringSource + "','" + item.ConnectionStringDestination + "','" + item.Options + "'," + ((int)item.Type).ToString() + ",0)");
+                "INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('" + item.Name.Replace("'", "''") + "','" + item.ConnectionStringSource + "','" + item.ConnectionStringDestination + "','" + SerializeOptions(item.Options) + "'," + ((int)item.Type).ToString() + ",0)");
             return maxId;
         }
 
         private static int Update(Project item)
         {
             DoSqlSomething(
-                "UPDATE Project SET Name = '" + item.Name.Replace("'", "''") + "', ConnectionStringSource = '" + item.ConnectionStringSource + "', ConnectionStringDestination = '" + item.ConnectionStringDestination + "', Type = " + ((int)item.Type).ToString() + " WHERE ProjectId = " + item.Id.ToString(),
+                "UPDATE Project SET Name = '" + item.Name.Replace("'", "''") + "', ConnectionStringSource = '" + item.ConnectionStringSource + "', ConnectionStringDestination = '" + item.ConnectionStringDestination + "', Type = " + ((int)item.Type).ToString() + ", Options = '" + SerializeOptions(item.Options) + "'" + " WHERE ProjectId = " + item.Id.ToString(),
                 null);
             return item.Id;
         }
@@ -142,16 +144,18 @@ namespace DBDiff.Settings
         {
             Project item = null;
             DoSqlSomething(
-                "SELECT * FROM Project WHERE Internal = 1 ORDER BY Name",
+                //"SELECT * FROM Project WHERE Internal = 1 ORDER BY Name",
+                "SELECT * FROM Project ORDER BY ProjectId DESC LIMIT 1",
                 reader => item = new Project
                 {
                     Id = int.Parse(reader["ProjectId"].ToString()),
                     ConnectionStringSource = reader["ConnectionStringSource"].ToString(),
                     ConnectionStringDestination = reader["ConnectionStringDestination"].ToString(),
                     Type = (ProjectType)(long)reader["Type"],
-                    //Options = (SqlOption) reader["Options"],
+                    Options = DeserializeOptions((string)reader["Options"]),
                     Name = reader["Name"].ToString()
                 });
+            
             return item;
         }
 
@@ -167,10 +171,31 @@ namespace DBDiff.Settings
                     ConnectionStringDestination =
                        reader["ConnectionStringDestination"].ToString(),
                     Type = (ProjectType)(long)reader["Type"],
-                    //Options = (SqlOption) reader["Options"],
+                    Options = DeserializeOptions((string)reader["Options"]),
                     Name = reader["Name"].ToString()
                 }));
             return items;
+        }
+
+        private static string SerializeOptions(SqlOption options)
+        {
+            if (options == null)
+            {
+                return string.Empty;
+            }
+
+            //Escape single quote in JSON due to SQLite standard
+            return JsonConvert.SerializeObject(options).Replace("'", "''");
+        }
+
+        private static SqlOption DeserializeOptions(string options)
+        {
+            if (String.IsNullOrEmpty(options))
+            {
+                return new SqlOption();
+            }
+
+            return JsonConvert.DeserializeObject<SqlOption>(options);
         }
     }
 }
