@@ -150,10 +150,10 @@ namespace DBDiff
             return result;
         }
 
-        public static bool CommitTable(DataTable table, string ConnectionString)
+        public static bool CommitTable(DataTable table, string tableFullName, string ConnectionString)
         {
             SqlConnection connection = new SqlConnection(ConnectionString);
-            SqlCommand command = new SqlCommand("SELECT * FROM " + table.TableName, connection);
+            SqlCommand command = new SqlCommand("SELECT * FROM " + tableFullName, connection);
             SqlDataAdapter da = new SqlDataAdapter(command);
             try
             {

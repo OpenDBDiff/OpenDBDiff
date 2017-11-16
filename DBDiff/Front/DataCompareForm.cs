@@ -152,7 +152,7 @@ namespace DBDiff.Front
         {
             DataTable destination = (DataTable)destDgv.DataSource;
             DataTable edits = destination.GetChanges();
-            if (Updater.CommitTable(edits, destConnectionString))
+            if (Updater.CommitTable(edits, selected.FullName, destConnectionString))
             {
                 destination.AcceptChanges();
                 doCompare();
