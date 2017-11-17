@@ -269,7 +269,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList list = new SQLScriptList();
             if (Status != Enums.ObjectStatusType.OriginalStatus)
-                RootParent.ActionMessage[Parent.FullName].Add(this);
+            {
+                var actionMessage = RootParent.ActionMessage[Parent.FullName];
+                if (actionMessage != null)
+                    actionMessage.Add(this);
+            }
 
             if (HasState(Enums.ObjectStatusType.DropStatus))
                 list.Add(Drop());
