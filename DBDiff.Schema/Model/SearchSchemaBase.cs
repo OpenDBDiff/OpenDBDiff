@@ -11,39 +11,37 @@ namespace DBDiff.Schema.Model
 
         public SearchSchemaBase()
         {
-            objectTypes = new Dictionary<string, Enums.ObjectType>();
-            objectParent = new Dictionary<string, string>();
+            objectTypes = new Dictionary<string, Enums.ObjectType>(StringComparer.OrdinalIgnoreCase);
+            objectParent = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             objectId = new Dictionary<Int32, string>();
         }
 
         public void Add(ISchemaBase item)
         {
-            if (objectTypes.ContainsKey(item.FullName.ToUpper()))
-                objectTypes.Remove(item.FullName.ToUpper());
-            objectTypes.Add(item.FullName.ToUpper(), item.ObjectType);
-            if ((item.ObjectType == Enums.ObjectType.Constraint) || (item.ObjectType == Enums.ObjectType.Index) || (item.ObjectType == Enums.ObjectType.Trigger) || (item.ObjectType == Enums.ObjectType.CLRTrigger))
-            {
-                if (objectParent.ContainsKey(item.FullName.ToUpper()))
-                    objectParent.Remove(item.FullName.ToUpper());
-                objectParent.Add(item.FullName.ToUpper(), item.Parent.FullName);
+            objectTypes[item.FullName] = item.ObjectType;
 
-                if (objectId.ContainsKey(item.Id))
-                    objectId.Remove(item.Id);
-                objectId.Add(item.Id, item.FullName);
+            if ((item.ObjectType == Enums.ObjectType.Constraint) 
+                || (item.ObjectType == Enums.ObjectType.Index) 
+                || (item.ObjectType == Enums.ObjectType.Trigger) 
+                || (item.ObjectType == Enums.ObjectType.CLRTrigger))
+            {
+                objectParent[item.FullName] = item.Parent.FullName;
+                objectId[item.Id] = item.FullName;
             }
         }
 
-
         public Nullable<Enums.ObjectType> GetType(string FullName)
         {
-            if (objectTypes.ContainsKey(FullName.ToUpper()))
-                return objectTypes[FullName.ToUpper()];
+            Enums.ObjectType result;
+            if (objectTypes.TryGetValue(FullName, out result))
+                return result;
+                
             return null;
         }
 
         public string GetParentName(string FullName)
         {
-            return objectParent[FullName.ToUpper()];
+            return objectParent[FullName];
         }
 
         public string GetFullName(int Id)
