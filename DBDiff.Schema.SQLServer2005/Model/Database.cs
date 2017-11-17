@@ -297,7 +297,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             try
             {
-                Enums.ObjectType type = AllObjects.GetType(_FullName);
+                var typeVal = AllObjects.GetType(_FullName);
+                if (!typeVal.HasValue)
+                {
+                    return null;
+                }
+                Enums.ObjectType type = typeVal.Value;
+
+
                 string parentName = "";
 
                 switch (type)
@@ -341,19 +348,35 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
                         return Tables[parentName].Constraints[_FullName];
                     case Enums.ObjectType.Index:
                         parentName = AllObjects.GetParentName(_FullName);
-                        type = AllObjects.GetType(parentName);
+
+                        var typeName = AllObjects.GetType(parentName);
+                        if (!typeName.HasValue)
+                        {
+                            return null;
+                        }
+                        type = typeName.Value;
                         if (type == Enums.ObjectType.Table)
                             return Tables[parentName].Indexes[_FullName];
                         return Views[parentName].Indexes[_FullName];
                     case Enums.ObjectType.Trigger:
                         parentName = AllObjects.GetParentName(_FullName);
-                        type = AllObjects.GetType(parentName);
+                        var typeNameB = AllObjects.GetType(parentName);
+                        if (!typeNameB.HasValue)
+                        {
+                            return null;
+                        }
+                        type = typeNameB.Value;
                         if (type == Enums.ObjectType.Table)
                             return Tables[parentName].Triggers[_FullName];
                         return Views[parentName].Triggers[_FullName];
                     case Enums.ObjectType.CLRTrigger:
                         parentName = AllObjects.GetParentName(_FullName);
-                        type = AllObjects.GetType(parentName);
+                        var typeNameC = AllObjects.GetType(parentName);
+                        if (!typeNameC.HasValue)
+                        {
+                            return null;
+                        }
+                        type = typeNameC.Value;
                         if (type == Enums.ObjectType.Table)
                             return Tables[parentName].CLRTriggers[_FullName];
                         return Views[parentName].CLRTriggers[_FullName];
