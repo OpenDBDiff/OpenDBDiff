@@ -16,37 +16,21 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             this.root = root;
         }
 
-        private static string GetSQLColumnsDependencis()
+        private static string GetSQLColumnsDependencies()
         {
-            string sql;
-            sql = "SELECT O.Type, '[' + S1.Name + '].[' + XS.Name +']' AS XMLName, '[' + S.Name + '].[' + O.Name +']' AS TableName, '[' + S.Name + '].[' + O.Name + '].[' + C.Name + ']' AS ColumnName from sys.columns C ";
-            sql += "INNER JOIN sys.xml_schema_collections XS ON XS.xml_collection_id = C.xml_collection_id ";
-            sql += "INNER JOIN sys.objects O ON O.object_id = C.object_id ";
-            sql += "INNER JOIN sys.schemas S ON S.schema_id = O.schema_id ";
-            sql += "INNER JOIN sys.schemas S1 ON S1.schema_id = XS.schema_id ";
-            sql += "ORDER BY XS.xml_collection_id";
-            return sql;
+            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetXMLSchemaCollections");
         }
 
         private static string GetSQLXMLSchema()
         {
-            var sql = new StringBuilder();
-            sql.AppendLine("SELECT  ");
-            sql.AppendLine("xsc.name, ");
-            sql.AppendLine("xsc.xml_collection_id AS [ID], ");
-            sql.AppendLine("sch.name AS Owner, ");
-            sql.AppendLine("XML_SCHEMA_NAMESPACE(sch.Name, xsc.name) AS Text ");
-            sql.AppendLine("FROM sys.xml_schema_collections AS xsc ");
-            sql.AppendLine("INNER JOIN sys.schemas AS sch ON xsc.schema_id = sch.schema_id ");
-            sql.AppendLine("WHERE xsc.schema_id <> 4");
-            return sql.ToString();
+            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetSQLXMLSchema");
         }
 
         private static void FillColumnsDependencies(SchemaList<XMLSchema, Database> items, string connectionString)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(GetSQLColumnsDependencis(), conn))
+                using (SqlCommand command = new SqlCommand(GetSQLColumnsDependencies(), conn))
                 {
                     conn.Open();
                     command.CommandTimeout = 0;

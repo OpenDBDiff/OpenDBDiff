@@ -19,11 +19,8 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQL(SqlOption options)
         {
+            var filterQuery =  SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetTextObjectsQuery");
             string filter = "";
-            string sql = "";
-            sql += "SELECT O.name, O.type, M.object_id, OBJECT_DEFINITION(M.object_id) AS Text FROM sys.sql_modules M ";
-            sql += "INNER JOIN sys.objects O ON O.object_id = M.object_id ";
-            sql += "WHERE ";
             if (options.Ignore.FilterStoredProcedure)
                 filter += "O.type = 'P' OR ";
             if (options.Ignore.FilterView)
@@ -33,7 +30,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
             if (options.Ignore.FilterFunction)
                 filter += "O.type IN ('IF','FN','TF') OR ";
             filter = filter.Substring(0, filter.Length - 4);
-            return sql + filter;
+            return filterQuery.Replace("{FILTER}", filter);
         }
 
         public void Fill(Database database, string connectionString)

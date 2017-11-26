@@ -16,32 +16,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQLFiles()
         {
-            string sql = "select '[' + A.Name + ']' AS Name, AF.content AS FileContent, AF.File_Id AS FileId, AF.Name AS FileName ";
-            sql += "FROM sys.assemblies A ";
-            sql += "INNER JOIN sys.assembly_files AF ON AF.assembly_id = A.assembly_id ";
-            sql += "ORDER BY A.Name ";
-            return sql;
+            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetAssemblyFiles");
         }
 
         private static string GetSQL()
         {
-            string sql = "select DISTINCT '[' + S2.Name + '].[' + AT.Name + ']' as UDTName, ";
-            sql += "ISNULL('[' + A2.name + ']','') AS Dependency, ";
-            sql += "ISNULL('[' + S3.Name + '].[' + A3.name + ']','') AS ObjectDependency, ";
-            sql += "AF.assembly_id, A.clr_name,A.name,S.name AS Owner, A.permission_set_desc, A.is_visible, content ";
-            sql += "FROM sys.assemblies A ";
-            sql += "INNER JOIN sys.assembly_files AF ON AF.assembly_id = A.assembly_id ";
-            sql += "LEFT JOIN sys.assembly_references AR ON A.assembly_id = AR.referenced_assembly_id ";
-            sql += "LEFT JOIN sys.assemblies A2 ON A2.assembly_id = AR.assembly_id ";
-            sql += "LEFT JOIN sys.schemas S1 ON S1.schema_id = A2.principal_id ";
-            sql += "INNER JOIN sys.schemas S ON S.schema_id = A.principal_id ";
-            sql += "LEFT JOIN sys.assembly_types AT ON AT.assembly_id = A.assembly_id ";
-            sql += "LEFT JOIN sys.schemas S2 ON S2.schema_id = AT.schema_id ";
-            sql += "LEFT JOIN sys.assembly_modules AM ON AM.assembly_id = A.assembly_id ";
-            sql += "LEFT JOIN sys.objects A3 ON A3.object_id = AM.object_id ";
-            sql += "LEFT JOIN sys.schemas S3 ON S3.schema_id = A3.schema_id ";
-            sql += "ORDER BY A.name";
-            return sql;
+            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetAssemblies");
         }
 
         private static string ToHex(byte[] stream)

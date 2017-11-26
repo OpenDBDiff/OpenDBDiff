@@ -14,8 +14,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQL()
         {
-            string sql = "SELECT SCHEMA_NAME(schema_id) AS Owner,name,object_id,base_object_name from sys.synonyms ORDER BY Name";
-            return sql;
+            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetSynonyms");
         }
 
         public void Fill(Database database, string connectionString)

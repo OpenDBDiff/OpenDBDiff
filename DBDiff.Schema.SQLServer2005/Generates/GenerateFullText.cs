@@ -14,11 +14,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQL()
         {
-            string sql = "SELECT S.Name as Owner,F.name AS FileGroupName, fulltext_catalog_id, FC.Name, path, FC.is_default, is_accent_sensitivity_on ";
-            sql += "FROM sys.fulltext_catalogs FC ";
-            sql += "LEFT JOIN sys.filegroups F ON F.data_space_id = FC.data_space_id ";
-            sql += "INNER JOIN sys.schemas S ON S.schema_id = FC.principal_id";
-            return sql;
+            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetFullTextCatalogs");
         }
 
         public void Fill(Database database, string connectionString)
