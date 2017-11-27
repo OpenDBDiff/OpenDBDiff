@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DBEC6CD3-5B8F-427C-8304-9BFD223C8B1D}"
 	ProjectSection(SolutionItems) = preProject
@@ -28,6 +28,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.OCDB", "DBDiffCmd\DBDiff.OCDB.csproj", "{E794AA28-EE68-44BD-827B-1BFD9C106B65}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{87023747-4D77-4CCA-A435-4FA32D133639}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBDiff.Schema.SQLServer.Generates", "DBDiff.Schema.SQLServer.Generates\DBDiff.Schema.SQLServer.Generates.csproj", "{32AC9AF6-DB93-4354-B69F-6DBC65C70867}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +91,18 @@ Global
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65}.Release|Win32.ActiveCfg = Release|Any CPU
+		{32AC9AF6-DB93-4354-B69F-6DBC65C70867}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32AC9AF6-DB93-4354-B69F-6DBC65C70867}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32AC9AF6-DB93-4354-B69F-6DBC65C70867}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{32AC9AF6-DB93-4354-B69F-6DBC65C70867}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{32AC9AF6-DB93-4354-B69F-6DBC65C70867}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{32AC9AF6-DB93-4354-B69F-6DBC65C70867}.Debug|Win32.Build.0 = Debug|Any CPU
+		{32AC9AF6-DB93-4354-B69F-6DBC65C70867}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32AC9AF6-DB93-4354-B69F-6DBC65C70867}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32AC9AF6-DB93-4354-B69F-6DBC65C70867}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{32AC9AF6-DB93-4354-B69F-6DBC65C70867}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{32AC9AF6-DB93-4354-B69F-6DBC65C70867}.Release|Win32.ActiveCfg = Release|Any CPU
+		{32AC9AF6-DB93-4354-B69F-6DBC65C70867}.Release|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -72,36 +72,6 @@
     <Compile Include="..\DBDiff\Properties\AssemblyVersionInfo.cs">
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Compare\CompareCLRFunction.cs" />
-    <Compile Include="Compare\CompareCLRStoredProcedure.cs" />
-    <Compile Include="Compare\CompareCLRTriggers.cs" />
-    <Compile Include="Compare\CompareDDLTriggers.cs" />
-    <Compile Include="Compare\CompareAssemblies.cs" />
-    <Compile Include="Compare\CompareBase.cs" />
-    <Compile Include="Compare\CompareColumns.cs" />
-    <Compile Include="Compare\CompareColumnsConstraints.cs" />
-    <Compile Include="Compare\CompareConstraints.cs" />
-    <Compile Include="Compare\CompareDatabase.cs" />
-    <Compile Include="Compare\CompareFileGroups.cs" />
-    <Compile Include="Compare\CompareFullText.cs" />
-    <Compile Include="Compare\CompareFullTextIndex.cs" />
-    <Compile Include="Compare\CompareFunctions.cs" />
-    <Compile Include="Compare\CompareIndexes.cs" />
-    <Compile Include="Compare\ComparePartitionFunction.cs" />
-    <Compile Include="Compare\ComparePartitionSchemes.cs" />
-    <Compile Include="Compare\CompareRoles.cs" />
-    <Compile Include="Compare\CompareRules.cs" />
-    <Compile Include="Compare\CompareSchemas.cs" />
-    <Compile Include="Compare\CompareStoredProcedures.cs" />
-    <Compile Include="Compare\CompareSynonyms.cs" />
-    <Compile Include="Compare\CompareTables.cs" />
-    <Compile Include="Compare\CompareTablesOptions.cs" />
-    <Compile Include="Compare\CompareTableType.cs" />
-    <Compile Include="Compare\CompareTriggers.cs" />
-    <Compile Include="Compare\CompareUserDataTypes.cs" />
-    <Compile Include="Compare\CompareUsers.cs" />
-    <Compile Include="Compare\CompareXMLSchemas.cs" />
-    <Compile Include="Compare\CompareViews.cs" />
     <Compile Include="Front\AddItem.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,104 +92,7 @@
       <DependentUpon>SqlServerConnectFront.cs</DependentUpon>
     </Compile>
     <Compile Include="Front\Util\SqlServerList.cs" />
-    <Compile Include="Generates\Generate.cs" />
-    <EmbeddedResource Include="SQLQueries\GetFileGroups.sql" />
-    <Compile Include="Generates\GenerateFullText.cs" />
-    <Compile Include="Generates\GenerateFullTextIndex.cs" />
-    <Compile Include="Generates\GenerateStoredProcedures.cs" />
-    <Compile Include="Generates\GenerateTextObjects.cs" />
-    <Compile Include="Generates\SQLCommands\UserSQLCommand.cs" />
-    <Compile Include="Generates\SQLCommands\ViewSQLCommand.cs" />
-    <Compile Include="Generates\SQLCommands\DatabaseSQLCommand.cs" />
-    <Compile Include="Generates\SQLCommands\FullTextIndexSQLCommand.cs" />
-    <Compile Include="Generates\SQLCommands\FunctionSQLCommand.cs" />
-    <Compile Include="SQLQueries\SQLQueryFactory.cs" />
-    <Compile Include="Generates\Util\Constants.cs" />
-    <Compile Include="Generates\GenerateDefaults.cs" />
-    <Compile Include="Generates\GenerateExtendedProperties.cs" />
-    <Compile Include="Generates\GenerateFunctions.cs" />
-    <Compile Include="Generates\GeneratePartitionFunctions.cs" />
-    <Compile Include="Generates\GeneratePartitionScheme.cs" />
-    <Compile Include="Generates\GenerateUsers.cs" />
-    <Compile Include="Generates\GenerateViews.cs" />
-    <Compile Include="Generates\GenerateAssemblies.cs" />
-    <Compile Include="Generates\GenerateSynonyms.cs" />
-    <Compile Include="Generates\GenerateTriggers.cs" />
-    <Compile Include="Generates\SQLCommands\ConstraintSQLCommand.cs" />
-    <Compile Include="Generates\SQLCommands\IndexSQLCommand.cs" />
-    <Compile Include="Generates\SQLCommands\TableSQLCommand.cs" />
-    <Compile Include="Generates\GenerateDatabase.cs" />
-    <Compile Include="Generates\GenerateFileGroups.cs" />
-    <Compile Include="Generates\GenerateIndex.cs" />
-    <Compile Include="Generates\GenerateRules.cs" />
-    <Compile Include="Generates\GenerateSchemas.cs" />
-    <Compile Include="Generates\GenerateTables.cs" />
-    <Compile Include="Generates\GenerateDDLTriggers.cs" />
-    <Compile Include="Generates\GenerateUserDataTypes.cs" />
-    <Compile Include="Generates\GenerateConstraint.cs" />
-    <Compile Include="Generates\GenerateXMLSchemas.cs" />
-    <Compile Include="Generates\SQLCommands\UserDataTypeCommand.cs" />
-    <Compile Include="Generates\Util\ConvertType.cs" />
-    <Compile Include="Model\AssemblyFile.cs" />
-    <Compile Include="Model\CLRCode.cs" />
-    <Compile Include="Model\CLRFunction.cs" />
-    <Compile Include="Model\CLRStoredProcedure.cs" />
-    <Compile Include="Model\CLRTrigger.cs" />
-    <Compile Include="Model\Code.cs" />
-    <Compile Include="Model\Dependency.cs" />
-    <Compile Include="Model\ExtendedProperty.cs" />
-    <Compile Include="Model\FullText.cs" />
-    <Compile Include="Model\FullTextIndex.cs" />
-    <Compile Include="Model\FullTextIndexColumn.cs" />
-    <Compile Include="Model\Interfaces\ICode.cs" />
-    <Compile Include="Model\Interfaces\ISQLServerSchemaBase.cs" />
-    <Compile Include="Model\ITableType.cs" />
-    <Compile Include="Model\Parameter.cs" />
-    <Compile Include="Model\PartitionFunction.cs" />
-    <Compile Include="Model\PartitionScheme.cs" />
-    <Compile Include="Model\TablePartition.cs" />
-    <Compile Include="Model\TableType.cs" />
-    <Compile Include="Model\Util\FormatCode.cs" />
-    <Compile Include="Model\Assembly.cs" />
-    <Compile Include="Model\ColumnConstraint.cs" />
-    <Compile Include="Model\ConstraintColumn.cs" />
-    <Compile Include="Model\ConstraintColumns.cs" />
-    <Compile Include="Model\DatabaseInfo.cs" />
-    <Compile Include="Model\Default.cs" />
-    <Compile Include="Model\Dependencies.cs" />
-    <Compile Include="Model\Column.cs" />
-    <Compile Include="Model\Columns.cs" />
-    <Compile Include="Model\Constraint.cs" />
-    <Compile Include="Model\FileGroup.cs" />
-    <Compile Include="Model\FileGroupFile.cs" />
-    <Compile Include="Model\FileGroupFiles.cs" />
-    <Compile Include="Model\Function.cs" />
-    <Compile Include="Model\Index.cs" />
-    <Compile Include="Model\IndexColumn.cs" />
-    <Compile Include="Model\IndexColumns.cs" />
-    <Compile Include="Model\Role.cs" />
-    <Compile Include="Model\Rule.cs" />
-    <Compile Include="Model\Schema.cs" />
-    <Compile Include="Model\SQLServerSchemaBase.cs" />
-    <Compile Include="Model\StoredProcedure.cs" />
-    <Compile Include="Model\Synonym.cs" />
-    <Compile Include="Model\User.cs" />
-    <Compile Include="Model\ObjectDependency.cs" />
-    <Compile Include="Model\View.cs" />
-    <Compile Include="Model\XMLSchema.cs" />
-    <Compile Include="Options\SqlOption.cs" />
-    <Compile Include="Options\SqlOptionComparison.cs" />
-    <Compile Include="Options\SqlOptionDefault.cs" />
-    <Compile Include="Options\SqlOptionFilter.cs" />
-    <Compile Include="Options\SqlOptionFilterItem.cs" />
-    <Compile Include="Options\SqlOptionIgnore.cs" />
-    <Compile Include="Options\SqlOptionScript.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model\Database.cs" />
-    <Compile Include="Model\Table.cs" />
-    <Compile Include="Model\TableOption.cs" />
-    <Compile Include="Model\Trigger.cs" />
-    <Compile Include="Model\UserDataType.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -236,6 +109,10 @@
     <ProjectReference Include="..\DBDiff.Front\DBDiff.Front.csproj">
       <Project>{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}</Project>
       <Name>DBDiff.Front</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DBDiff.Schema.SQLServer.Generates\DBDiff.Schema.SQLServer.Generates.csproj">
+      <Project>{32ac9af6-db93-4354-b69f-6dbc65c70867}</Project>
+      <Name>DBDiff.Schema.SQLServer.Generates</Name>
     </ProjectReference>
     <ProjectReference Include="..\DBDiff.Schema\DBDiff.Schema.csproj">
       <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
@@ -294,30 +171,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\database_yellow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="SQLQueries\GetProcedures.SQLServerAzure10.sql" />
-    <EmbeddedResource Include="SQLQueries\GetProcedures.sql" />
-    <EmbeddedResource Include="SQLQueries\GetSynonyms.sql" />
-    <EmbeddedResource Include="SQLQueries\GetSQLColumnsDependencies.sql" />
-    <EmbeddedResource Include="SQLQueries\GetSQLXMLSchema.sql" />
-    <EmbeddedResource Include="SQLQueries\GetXMLSchemaCollections.sql" />
-    <EmbeddedResource Include="SQLQueries\GetTriggers.SQLServerAzure10.sql" />
-    <EmbeddedResource Include="SQLQueries\GetTriggers.sql" />
-    <EmbeddedResource Include="SQLQueries\GetTextObjectsQuery.sql" />
-    <EmbeddedResource Include="SQLQueries\GetSchemas.sql" />
-    <EmbeddedResource Include="SQLQueries\GetRules.sql" />
-    <EmbeddedResource Include="SQLQueries\GetPartitionSchemes.sql" />
-    <EmbeddedResource Include="SQLQueries\GetPartitionFunctions.sql" />
-    <EmbeddedResource Include="SQLQueries\GetParameters.sql" />
-    <EmbeddedResource Include="SQLQueries\GetFullTextCatalogs.sql" />
-    <EmbeddedResource Include="SQLQueries\GetExtendedProperties.sql" />
-    <EmbeddedResource Include="SQLQueries\GetDatabaseFile.sql" />
-    <EmbeddedResource Include="SQLQueries\GetDefaults.sql" />
-    <EmbeddedResource Include="SQLQueries\GetDDLTriggers.sql" />
-    <EmbeddedResource Include="SQLQueries\GetForeignKeys.sql" />
-    <EmbeddedResource Include="SQLQueries\GetAssemblies.sql" />
-    <EmbeddedResource Include="SQLQueries\GetAssemblyFiles.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
