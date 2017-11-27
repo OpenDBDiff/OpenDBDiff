@@ -7,11 +7,11 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
     {
         protected override void DoUpdate<Root>(SchemaList<Constraint, Root> originFields, Constraint node)
         {
-            Constraint origen = originFields[node.FullName];
-            if (!Constraint.Compare(origen, node))
+            Constraint origin = originFields[node.FullName];
+            if (!Constraint.Compare(origin, node))
             {
                 Constraint newNode = (Constraint)node.Clone(originFields.Parent);
-                if (node.IsDisabled == origen.IsDisabled)
+                if (node.IsDisabled == origin.IsDisabled)
                 {
                     newNode.Status = Enums.ObjectStatusType.AlterStatus;
                 }
@@ -21,7 +21,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Compare
             }
             else
             {
-                if (node.IsDisabled != origen.IsDisabled)
+                if (node.IsDisabled != origin.IsDisabled)
                 {
                     Constraint newNode = (Constraint)node.Clone(originFields.Parent);
                     newNode.Status = Enums.ObjectStatusType.DisabledStatus;

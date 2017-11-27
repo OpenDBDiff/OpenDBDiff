@@ -56,7 +56,7 @@ namespace DBDiff.Schema.Model
          } */
 
         /// <summary>
-        /// Objeto padre de la instancia.
+        /// Instance's parent object
         /// </summary>
         public ISchemaBase Parent
         {
@@ -125,17 +125,21 @@ namespace DBDiff.Schema.Model
         }
 
         /// <summary>
-        ///
+        /// Returns the list of SQL Scripts to execute to sync for the specified object
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A list (<see cref="SQLScriptList"/>) of scripts to run to sync
+        /// </returns>
         public virtual SQLScriptList ToSqlDiff()
         {
             return null;
         }
         /// <summary>
-        ///
+        /// Returns the list of SQL Scripts to execute to sync for the specified schemas
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// A list (<see cref="SQLScriptList"/>) of scripts to run to sync
+        /// </returns>
         public virtual SQLScriptList ToSqlDiff(List<ISchemaBase> schemas)
         {
             return null;
@@ -151,10 +155,10 @@ namespace DBDiff.Schema.Model
             throw new NotImplementedException();
         }
         /// <summary>
-        /// Devuelve si el objeto ya fue insertado en la lista de script con diferencias.
+        /// Returns if the obecet was already inserted in the list of scripts with differencies
         /// </summary>
-        /// <param name="action"></param>
-        /// <returns></returns>
+        /// <param name="action">The action to check in the list</param>
+        /// <returns>True if is already inserted. False if it wasn't</returns>
         public Boolean GetWasInsertInDiffList(Enums.ScripActionType action)
         {
             if (wasInsertInDiffList != null)
@@ -164,7 +168,7 @@ namespace DBDiff.Schema.Model
         }
 
         /// <summary>
-        /// Setea que el objeto ya fue insertado en la lista de script con diferencias.
+        /// Sets the object as inserted in the list of differences script
         /// </summary>
         public void SetWasInsertInDiffList(Enums.ScripActionType action)
         {
@@ -179,12 +183,12 @@ namespace DBDiff.Schema.Model
         }
 
         /// <summary>
-        /// GUID unico que identifica al objeto.
+        /// Unique GUID identifying the object
         /// </summary>
         public string Guid { get; set; }
 
         /// <summary>
-        /// Tipo de objeto (Tabla, Column, Vista, etc)
+        /// Object type. <seealso cref="Enums.ObjectType"/>
         /// </summary>
         public Enums.ObjectType ObjectType { get; set; }
 
@@ -208,12 +212,12 @@ namespace DBDiff.Schema.Model
         }
 
         /// <summary>
-        /// Nombre de usuario del owner de la tabla.
+        /// Username of the owner of the object
         /// </summary>
         public string Owner { get; set; }
 
         /// <summary>
-        /// Nombre del objecto
+        /// Nombre of the object
         /// </summary>
         public string Name { get; set; }
 
@@ -223,9 +227,7 @@ namespace DBDiff.Schema.Model
         public Boolean IsSystem { get; set; }
 
         /// <summary>
-        /// Indica el estado del objeto (si es propio, si debe borrarse o si es nuevo). Es solo valido
-        /// para generar el SQL de diferencias entre 2 bases.
-        /// Por defecto es siempre Original.
+        /// Returns the status of the object. By default is set to <see cref="Enums.ObjectStatusType.OriginalStatus"/>. When setting a value, it also affects to the <see cref="Parent"/> status.
         /// </summary>
         public virtual Enums.ObjectStatusType Status
         {

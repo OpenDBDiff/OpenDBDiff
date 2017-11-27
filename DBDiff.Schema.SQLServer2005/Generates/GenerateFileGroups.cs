@@ -14,18 +14,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQLFile(FileGroup filegroup)
         {
-            string sql;
-            sql = "select file_id,";
-            sql += "type,";
-            sql += "name,";
-            sql += "physical_name,";
-            sql += "size,";
-            sql += "max_size,";
-            sql += "growth,";
-            sql += "is_sparse,";
-            sql += "is_percent_growth ";
-            sql += "from sys.database_files WHERE data_space_id = " + filegroup.Id.ToString();
-            return sql;
+            string query = SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetDatabaseFile");
+
+            return query.Replace("{ID}", filegroup.Id.ToString());
+        }
+
+        private static string GetSQL()
+        {
+            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetFileGroups");
         }
 
         private static void FillFiles(FileGroup filegroup, string connectionString)
@@ -55,19 +51,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
                     }
                 }
             }
-        }
-
-        private static string GetSQL()
-        {
-            string sql;
-            sql = "SELECT  ";
-            sql += "name, ";
-            sql += "data_space_id AS [ID], ";
-            sql += "is_default, ";
-            sql += "is_read_only, ";
-            sql += "type ";
-            sql += "FROM sys.filegroups ORDER BY name";
-            return sql;
         }
 
         public void Fill(Database database, string connectionString)

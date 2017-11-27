@@ -32,31 +32,19 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQLParameters()
         {
-            string sql = "";
-            sql += "select AP.is_output, AP.scale, AP.precision, '[' + SCHEMA_NAME(O.schema_id) + '].['+  O.name + ']' AS ObjectName, AP.name, TT.name AS TypeName, AP.max_length from sys.all_parameters AP ";
-            sql += "INNER JOIN sys.types TT ON TT.user_type_id = AP.user_type_id ";
-            sql += "INNER JOIN sys.objects O ON O.object_id = AP.object_id ";
-            sql += "WHERE type = 'PC' ORDER BY O.object_id, AP.parameter_id ";
-            return sql;
+            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetParameters");
         }
 
         private static string GetSQL(DatabaseInfo.VersionTypeEnum version)
         {
-            string sql = "";
-            sql += "SELECT ISNULL(CONVERT(varchar,AM.execute_as_principal_id),'CALLER') as ExecuteAs, P.type, AF.name AS assembly_name, AM.assembly_class, AM.assembly_id, AM.assembly_method, P.object_id, S.name as owner, P.name as name ";
-            sql += "FROM sys.procedures P ";
-            sql += "INNER JOIN sys.schemas S ON S.schema_id = P.schema_id ";
             if (version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
             {
-                sql += ",(SELECT null as execute_as_principal_id, null as assembly_class, null as assembly_id, null as assembly_method) AS AM,";
-                sql += "(SELECT null AS name) AS AF";
+                return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetProcedures", DatabaseInfo.VersionTypeEnum.SQLServerAzure10);
             }
             else
             {
-                sql += "LEFT JOIN sys.assembly_modules AM ON AM.object_id = P.object_id ";
-                sql += "LEFT JOIN sys.assemblies AF ON AF.assembly_id = AM.assembly_id";
+                return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetProcedures");
             }
-            return sql;
         }
 
         private static void FillParameters(Database database, string connectionString)

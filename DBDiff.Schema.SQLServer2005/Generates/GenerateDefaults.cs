@@ -14,11 +14,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQL()
         {
-            string sql = "SELECT obj.object_id, Name, SCHEMA_NAME(obj.schema_id) AS Owner, ISNULL(smobj.definition, ssmobj.definition) AS [Definition] from sys.objects obj  ";
-            sql += "LEFT OUTER JOIN sys.sql_modules AS smobj ON smobj.object_id = obj.object_id ";
-            sql += "LEFT OUTER JOIN sys.system_sql_modules AS ssmobj ON ssmobj.object_id = obj.object_id ";
-            sql += "where obj.type='D'";
-            return sql;
+            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetDefaults");
         }
 
         public void Fill(Database database, string connectionString)

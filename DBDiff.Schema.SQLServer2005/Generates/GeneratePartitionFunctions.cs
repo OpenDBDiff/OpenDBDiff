@@ -16,14 +16,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQL()
         {
-            string sql;
-            sql = "select PRV.value, T.name AS TypeName, PP.max_length, PP.precision, PP.scale, PF.Name, PF.function_id, fanout, boundary_value_on_right AS IsRight ";
-            sql += "from sys.partition_functions PF ";
-            sql += "INNER JOIN sys.partition_parameters PP ON PP.function_id = PF.function_id ";
-            sql += "INNER JOIN sys.types T ON T.system_type_id = PP.system_type_id ";
-            sql += "INNER JOIN sys.partition_range_values PRV ON PRV.parameter_id = PP.parameter_id and PP.function_id = PRV.function_id ";
-            sql += "ORDER BY PP.function_id, PRV.parameter_id, boundary_id";
-            return sql;
+            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetPartitionFunctions");
         }
 
         private static string ToHex(byte[] stream)
