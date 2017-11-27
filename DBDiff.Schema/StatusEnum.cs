@@ -16,18 +16,39 @@ namespace DBDiff.Schema
         [Flags]
         public enum ObjectStatusType
         {
+            /// <summary>
+            /// The object is unaltered
+            /// </summary>
             OriginalStatus = 0,
+            /// <summary>
+            /// The object was altered
+            /// </summary>
             AlterStatus = 2,
             AlterBodyStatus = 4,
+            /// <summary>
+            /// The object was altered but requires a rebuild
+            /// </summary>
             RebuildStatus = 8,
+            /// <summary>
+            /// The object has properties altered, but not in it's structure
+            /// </summary>
             RebuildDependenciesStatus = 16,
             UpdateStatus = 32,
             CreateStatus = 64,
+            /// <summary>
+            /// The object should be dropped
+            /// </summary>
             DropStatus = 128,
             DisabledStatus = 256,
+            /// <summary>
+            /// The owner of the object changed
+            /// </summary>
             ChangeOwner = 512,
             DropOlderStatus = 1024,
             BindStatus = 2048,
+            /// <summary>
+            /// The permission set of the object changed
+            /// </summary>
             PermissionSet = 4096,
             AlterWhitespaceStatus = 8192
         }

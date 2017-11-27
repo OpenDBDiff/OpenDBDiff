@@ -73,12 +73,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         }
 
         /// <summary>
-        /// Coleccion de objetos dependientes de la funcion.
+        /// Names collection of dependant objects of the object
         /// </summary>
         public List<String> DependenciesOut { get; set; }
 
         /// <summary>
-        /// Coleccion de nombres de objetos de los cuales la funcion depende.
+        /// Names collection of objects which the object depends on
         /// </summary>
         public List<String> DependenciesIn { get; set; }
 
@@ -127,7 +127,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         }
 
         /// <summary>
-        /// Indica si existen tablas de las cuales depende el objeto que deben ser reconstruidas.
+        /// Indicates if there are dependant tables on the object which must be rebuild
         /// </summary>
         /// <returns></returns>
         public Boolean HasToRebuild
@@ -180,7 +180,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         }
 
         /// <summary>
-        /// Regenera el objeto, y todos sus objetos dependientes.
+        /// Rebuilds the object and all its dependant objects.
         /// </summary>
         /// <returns></returns>
         public SQLScriptList Rebuild()
@@ -193,7 +193,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         }
 
         /// <summary>
-        /// Regenera los objetos dependientes.
+        /// Rebuilds the dependant objects.
         /// </summary>
         /// <returns></returns>
         public SQLScriptList RebuildDependencys()

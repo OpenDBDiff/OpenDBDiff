@@ -4,7 +4,7 @@ using ScintillaNET;
 
 namespace DBDiff.Front
 {
-    partial class Form1
+    partial class PrincipalForm
     {
         /// <summary>
         /// Required designer variable.
@@ -32,7 +32,7 @@ namespace DBDiff.Front
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrincipalForm));
             this.lblMessage = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
