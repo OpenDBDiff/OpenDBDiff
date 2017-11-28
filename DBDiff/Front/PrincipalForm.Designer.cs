@@ -64,22 +64,22 @@ namespace DBDiff.Front
             this.btnSaveAs = new System.Windows.Forms.Button();
             this.btnCompare = new System.Windows.Forms.Button();
             this.PanelGlobal = new System.Windows.Forms.Panel();
-            this.btnNewProject = new System.Windows.Forms.Button();
-            this.PanelDestination = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.PanelSource = new System.Windows.Forms.Panel();
+            this.PanelDestination = new System.Windows.Forms.Panel();
+            this.btnNewProject = new System.Windows.Forms.Button();
             this.btnSaveProject = new System.Windows.Forms.Button();
             this.btnProject = new System.Windows.Forms.Button();
             this.btnCompareTableData = new System.Windows.Forms.Button();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolMenu = new System.Windows.Forms.ToolStrip();
             this.toolOpenProject = new System.Windows.Forms.ToolStripButton();
             this.toolNewProject = new System.Windows.Forms.ToolStripButton();
             this.toolSaveProject = new System.Windows.Forms.ToolStripButton();
             this.toolLblProjectType = new System.Windows.Forms.ToolStripLabel();
             this.toolProjectTypes = new System.Windows.Forms.ToolStripComboBox();
-            this.toolSwitchProjectType = new System.Windows.Forms.ToolStripButton();
             this.PanelActions = new System.Windows.Forms.FlowLayoutPanel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.schemaTreeView1 = new DBDiff.Front.SchemaTreeView();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -96,9 +96,9 @@ namespace DBDiff.Front
             ((System.ComponentModel.ISupportInitialize)(this.txtSyncScript)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.PanelGlobal.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
-            this.PanelActions.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.toolMenu.SuspendLayout();
+            this.PanelActions.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblMessage
@@ -186,7 +186,7 @@ namespace DBDiff.Front
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(469, 367);
+            this.tabPage5.Size = new System.Drawing.Size(469, 376);
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Old object";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -197,7 +197,7 @@ namespace DBDiff.Front
             this.txtOldObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtOldObject.Location = new System.Drawing.Point(3, 3);
             this.txtOldObject.Name = "txtOldObject";
-            this.txtOldObject.Size = new System.Drawing.Size(463, 361);
+            this.txtOldObject.Size = new System.Drawing.Size(463, 370);
             this.txtOldObject.Styles.BraceBad.Size = 9F;
             this.txtOldObject.Styles.BraceLight.Size = 9F;
             this.txtOldObject.Styles.ControlChar.Size = 9F;
@@ -214,7 +214,7 @@ namespace DBDiff.Front
             this.tabPage6.Controls.Add(this.txtDiff);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(469, 367);
+            this.tabPage6.Size = new System.Drawing.Size(469, 376);
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "Diff";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -224,7 +224,7 @@ namespace DBDiff.Front
             this.txtDiff.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtDiff.Location = new System.Drawing.Point(0, 0);
             this.txtDiff.Name = "txtDiff";
-            this.txtDiff.Size = new System.Drawing.Size(469, 367);
+            this.txtDiff.Size = new System.Drawing.Size(469, 376);
             this.txtDiff.TabIndex = 0;
             // 
             // groupBox2
@@ -315,7 +315,7 @@ namespace DBDiff.Front
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(834, 448);
+            this.tabPage1.Size = new System.Drawing.Size(834, 457);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Synchronized script";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -329,7 +329,7 @@ namespace DBDiff.Front
             this.panel1.Controls.Add(this.txtSyncScript);
             this.panel1.Location = new System.Drawing.Point(9, 6);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(819, 436);
+            this.panel1.Size = new System.Drawing.Size(819, 461);
             this.panel1.TabIndex = 6;
             // 
             // txtSyncScript
@@ -338,7 +338,7 @@ namespace DBDiff.Front
             this.txtSyncScript.IsReadOnly = true;
             this.txtSyncScript.Location = new System.Drawing.Point(0, 0);
             this.txtSyncScript.Name = "txtSyncScript";
-            this.txtSyncScript.Size = new System.Drawing.Size(815, 432);
+            this.txtSyncScript.Size = new System.Drawing.Size(815, 457);
             this.txtSyncScript.Styles.LineNumber.BackColor = System.Drawing.Color.Transparent;
             this.txtSyncScript.Styles.LineNumber.IsVisible = false;
             this.txtSyncScript.TabIndex = 0;
@@ -349,7 +349,7 @@ namespace DBDiff.Front
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(834, 448);
+            this.tabPage3.Size = new System.Drawing.Size(834, 457);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Action report";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -364,7 +364,7 @@ namespace DBDiff.Front
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(819, 436);
+            this.textBox1.Size = new System.Drawing.Size(819, 461);
             this.textBox1.TabIndex = 0;
             // 
             // saveFileDialog1
@@ -474,6 +474,43 @@ namespace DBDiff.Front
             this.PanelGlobal.Size = new System.Drawing.Size(940, 175);
             this.PanelGlobal.TabIndex = 10;
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.PanelSource, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.PanelDestination, 0, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(126, 3);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 172F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(814, 172);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // PanelSource
+            // 
+            this.PanelSource.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelSource.Location = new System.Drawing.Point(410, 3);
+            this.PanelSource.Name = "PanelSource";
+            this.PanelSource.Size = new System.Drawing.Size(401, 166);
+            this.PanelSource.TabIndex = 10;
+            // 
+            // PanelDestination
+            // 
+            this.PanelDestination.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.PanelDestination.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelDestination.Location = new System.Drawing.Point(3, 3);
+            this.PanelDestination.Name = "PanelDestination";
+            this.PanelDestination.Size = new System.Drawing.Size(401, 166);
+            this.PanelDestination.TabIndex = 11;
+            // 
             // btnNewProject
             // 
             this.btnNewProject.BackColor = System.Drawing.SystemColors.ButtonFace;
@@ -486,23 +523,6 @@ namespace DBDiff.Front
             this.btnNewProject.Text = "New project";
             this.btnNewProject.UseVisualStyleBackColor = false;
             this.btnNewProject.Click += new System.EventHandler(this.btnNewProject_Click);
-            // 
-            // PanelDestination
-            // 
-            this.PanelDestination.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.PanelDestination.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PanelDestination.Location = new System.Drawing.Point(3, 3);
-            this.PanelDestination.Name = "PanelDestination";
-            this.PanelDestination.Size = new System.Drawing.Size(401, 166);
-            this.PanelDestination.TabIndex = 11;
-            // 
-            // PanelSource
-            // 
-            this.PanelSource.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PanelSource.Location = new System.Drawing.Point(410, 3);
-            this.PanelSource.Name = "PanelSource";
-            this.PanelSource.Size = new System.Drawing.Size(401, 166);
-            this.PanelSource.TabIndex = 10;
             // 
             // btnSaveProject
             // 
@@ -545,20 +565,20 @@ namespace DBDiff.Front
             this.btnCompareTableData.UseVisualStyleBackColor = true;
             this.btnCompareTableData.Click += new System.EventHandler(this.btnCompareTableData_Click);
             // 
-            // toolStrip1
+            // toolMenu
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolOpenProject,
             this.toolNewProject,
             this.toolSaveProject,
+            this.toolStripSeparator1,
             this.toolLblProjectType,
-            this.toolProjectTypes,
-            this.toolSwitchProjectType});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(940, 25);
-            this.toolStrip1.TabIndex = 16;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolProjectTypes});
+            this.toolMenu.Location = new System.Drawing.Point(0, 0);
+            this.toolMenu.Name = "toolMenu";
+            this.toolMenu.Size = new System.Drawing.Size(940, 25);
+            this.toolMenu.TabIndex = 16;
+            this.toolMenu.Visible = false;
             // 
             // toolOpenProject
             // 
@@ -602,15 +622,6 @@ namespace DBDiff.Front
             this.toolProjectTypes.Size = new System.Drawing.Size(200, 23);
             this.toolProjectTypes.SelectedIndexChanged += new System.EventHandler(this.toolProjectTypes_SelectedIndexChanged);
             // 
-            // toolSwitchProjectType
-            // 
-            this.toolSwitchProjectType.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolSwitchProjectType.Image = ((System.Drawing.Image)(resources.GetObject("toolSwitchProjectType.Image")));
-            this.toolSwitchProjectType.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolSwitchProjectType.Name = "toolSwitchProjectType";
-            this.toolSwitchProjectType.Size = new System.Drawing.Size(23, 22);
-            this.toolSwitchProjectType.Text = "Switch Project Type";
-            // 
             // PanelActions
             // 
             this.PanelActions.Controls.Add(this.btnCompare);
@@ -627,26 +638,6 @@ namespace DBDiff.Front
             this.PanelActions.Size = new System.Drawing.Size(98, 458);
             this.PanelActions.TabIndex = 17;
             // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.AutoSize = true;
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.PanelSource, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.PanelDestination, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(126, 3);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 156F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(814, 172);
-            this.tableLayoutPanel1.TabIndex = 0;
-            // 
             // schemaTreeView1
             // 
             this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -662,6 +653,12 @@ namespace DBDiff.Front
             this.schemaTreeView1.Size = new System.Drawing.Size(322, 404);
             this.schemaTreeView1.TabIndex = 0;
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Visible = false;
+            // 
             // PrincipalForm
             // 
             this.AcceptButton = this.btnCompare;
@@ -671,7 +668,7 @@ namespace DBDiff.Front
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.PanelActions);
             this.Controls.Add(this.PanelGlobal);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.toolMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PrincipalForm";
             this.Text = "Open DBDiff Beta ";
@@ -698,10 +695,10 @@ namespace DBDiff.Front
             this.tabPage3.PerformLayout();
             this.PanelGlobal.ResumeLayout(false);
             this.PanelGlobal.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
-            this.PanelActions.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.toolMenu.ResumeLayout(false);
+            this.toolMenu.PerformLayout();
+            this.PanelActions.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -747,14 +744,14 @@ namespace DBDiff.Front
         private Button btnCompareTableData;
         private TabPage tabPage6;
         private Scintilla txtDiff;
-        private ToolStrip toolStrip1;
+        private ToolStrip toolMenu;
         private ToolStripButton toolOpenProject;
         private ToolStripButton toolNewProject;
         private ToolStripButton toolSaveProject;
         private ToolStripComboBox toolProjectTypes;
         private FlowLayoutPanel PanelActions;
         private ToolStripLabel toolLblProjectType;
-        private ToolStripButton toolSwitchProjectType;
         private TableLayoutPanel tableLayoutPanel1;
+        private ToolStripSeparator toolStripSeparator1;
     }
 }

@@ -83,7 +83,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyLoader.cs" />
     <Compile Include="ConnectionsSettings\ConnectionResource.cs" />
     <Compile Include="Front\DataCompareForm.cs">
       <SubType>Form</SubType>
