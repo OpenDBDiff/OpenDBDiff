@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
+using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Options
 {
-    public class SqlOptionDefault
+    public class SqlOptionDefault : Schema.Model.IOptionsContainer<string>
     {
         private string defaultIntegerValue = "0";
         private string defaultRealValue = "0.0";
@@ -16,6 +18,26 @@ namespace DBDiff.Schema.SQLServer.Generates.Options
         private string defaultTime = "00:00:00";
         private string defaultXml = "";
 
+        public SqlOptionDefault(IOptionsContainer<string> optionsContainer)
+        {
+            var options = optionsContainer.GetOptions();
+            defaultIntegerValue = options["defaultIntegerValue"];
+            defaultRealValue = options["defaultRealValue"];
+            defaultTextValue = options["defaultTextValue"];
+            defaultDateValue = options["defaultDateValue"];
+            defaultVariantValue = options["defaultVariantValue"];
+            defaultNTextValue = options["defaultNTextValue"];
+            defaultBlobValue = options["defaultBlobValue"];
+            defaultUniqueValue = options["defaultUniqueValue"];
+            useDefaultValueIfExists = bool.Parse(options["useDefaultValueIfExists"]);
+            defaultTime = options["defaultTime"];
+            defaultXml = options["defaultXml"];
+        }
+
+        public SqlOptionDefault()
+        {
+        }
+
         public string DefaultXml
         {
             get { return defaultXml; }
@@ -28,6 +50,22 @@ namespace DBDiff.Schema.SQLServer.Generates.Options
             set { defaultTime = value; }
         }
 
+        public IDictionary<string, string> GetOptions()
+        {
+            Dictionary<string, string> options = new Dictionary<string, string>();
+            options.Add("defaultIntegerValue", defaultIntegerValue);
+            options.Add("defaultRealValue", defaultRealValue);
+            options.Add("defaultTextValue", defaultTextValue);
+            options.Add("defaultDateValue", defaultDateValue); 
+            options.Add("defaultVariantValue", defaultVariantValue);
+            options.Add("defaultNTextValue", defaultNTextValue);
+            options.Add("defaultBlobValue", defaultBlobValue);
+            options.Add("defaultUniqueValue", defaultUniqueValue);
+            options.Add("useDefaultValueIfExists", useDefaultValueIfExists.ToString());
+            options.Add("defaultTime", defaultTime);
+            options.Add("defaultXml", defaultXml);
+            return options;
+        }
         /// <summary>
         /// Gets or sets a value indicating whether use default value if exists.
         /// </summary>
@@ -119,7 +157,6 @@ namespace DBDiff.Schema.SQLServer.Generates.Options
             get { return defaultIntegerValue; }
             set { defaultIntegerValue = value; }
         }
-
 
     }
 }

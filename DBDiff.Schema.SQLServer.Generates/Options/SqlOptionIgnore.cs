@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
+using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Options
 {
-    public class SqlOptionIgnore
+    public class SqlOptionIgnore : Schema.Model.IOptionsContainer<bool>
     {
-        public SqlOptionIgnore(Boolean defaultValue)
+        public SqlOptionIgnore(bool defaultValue)
         {
             FilterPartitionFunction = true;
             FilterPartitionScheme = true;
@@ -47,6 +49,53 @@ namespace DBDiff.Schema.SQLServer.Generates.Options
             FilterSynonyms = defaultValue;
             FilterRules = defaultValue;
             FilterAssemblies = defaultValue;
+        }
+
+        public SqlOptionIgnore(IOptionsContainer<bool> optionsContainer)
+        {
+            var options = optionsContainer.GetOptions();
+            FilterPartitionFunction = options["FilterPartitionFunction"];
+            FilterPartitionScheme = options["FilterPartitionScheme"];
+            FilterIndexFilter = options["FilterIndexFilter"];
+            FilterIndex = options["FilterIndex"];
+            FilterConstraintPK = options["FilterConstraintPK"];
+            FilterConstraintFK = options["FilterConstraintFK"];
+            FilterConstraintUK = options["FilterConstraintUK"];
+            FilterConstraintCheck = options["FilterConstraintCheck"];
+            FilterIndexFillFactor = options["FilterIndexFillFactor"];
+            FilterIndexIncludeColumns = options["FilterIndexIncludeColumns"];
+            FilterIndexRowLock = options["FilterIndexRowLock"];
+            FilterColumnOrder = options["FilterColumnOrder"];
+            FilterColumnIdentity = options["FilterColumnIdentity"];
+            FilterColumnCollation = options["FilterColumnCollation"];
+            FilterNotForReplication = options["FilterNotForReplication"];
+            FilterUsers = options["FilterUsers"];
+            FilterRoles = options["FilterRoles"];
+            FilterCLRFunction = options["FilterCLRFunction"];
+            FilterCLRTrigger = options["FilterCLRTrigger"];
+            FilterCLRUDT = options["FilterCLRUDT"];
+            FilterCLRStoredProcedure = options["FilterCLRStoredProcedure"];
+            FilterFullText = options["FilterFullText"];
+            FilterFullTextPath = options["FilterFullTextPath"];
+            FilterTableLockEscalation = options["FilterTableLockEscalation"];
+            FilterTableChangeTracking = options["FilterTableChangeTracking"];
+            FilterConstraint = options["FilterConstraint"];
+            FilterFunction = options["FilterFunction"];
+            FilterStoredProcedure = options["FilterStoredProcedure"];
+            FilterView = options["FilterView"];
+            FilterTable = options["FilterTable"];
+            FilterTableOption = options["FilterTableOption"];
+            FilterUserDataType = options["FilterUserDataType"];
+            FilterTrigger = options["FilterTrigger"];
+            FilterSchema = options["FilterSchema"];
+            FilterXMLSchema = options["FilterXMLSchema"];
+            FilterTableFileGroup = options["FilterTableFileGroup"];
+            FilterExtendedProperties = options["FilterExtendedProperties"];
+            FilterDDLTriggers = options["FilterDDLTriggers"];
+            FilterSynonyms = options["FilterSynonyms"];
+            FilterRules = options["FilterRules"];
+            FilterAssemblies = options["FilterAssemblies"];
+
         }
 
         public Boolean FilterTableChangeTracking { get; set; }
@@ -130,5 +179,53 @@ namespace DBDiff.Schema.SQLServer.Generates.Options
         public Boolean FilterPartitionScheme { get; set; }
 
         public Boolean FilterPartitionFunction { get; set; }
+
+        public IDictionary<string, bool> GetOptions()
+        {
+
+            Dictionary<string, bool> options = new Dictionary<string, bool>();
+            options.Add("FilterPartitionFunction", FilterPartitionFunction);
+            options.Add("FilterPartitionScheme", FilterPartitionScheme);
+            options.Add("FilterIndexFilter", FilterIndexFilter);
+            options.Add("FilterIndex", FilterIndex);
+            options.Add("FilterConstraintPK", FilterConstraintPK);
+            options.Add("FilterConstraintFK", FilterConstraintFK);
+            options.Add("FilterConstraintUK", FilterConstraintUK);
+            options.Add("FilterConstraintCheck", FilterConstraintCheck);
+            options.Add("FilterIndexFillFactor", FilterIndexFillFactor);
+            options.Add("FilterIndexIncludeColumns", FilterIndexIncludeColumns);
+            options.Add("FilterIndexRowLock", FilterIndexRowLock);
+            options.Add("FilterColumnOrder", FilterColumnOrder);
+            options.Add("FilterColumnIdentity", FilterColumnIdentity);
+            options.Add("FilterColumnCollation", FilterColumnCollation);
+            options.Add("FilterNotForReplication", FilterNotForReplication);
+            options.Add("FilterUsers", FilterUsers);
+            options.Add("FilterRoles", FilterRoles);
+            options.Add("FilterCLRFunction", FilterCLRFunction);
+            options.Add("FilterCLRTrigger", FilterCLRTrigger);
+            options.Add("FilterCLRUDT", FilterCLRUDT);
+            options.Add("FilterCLRStoredProcedure", FilterCLRStoredProcedure);
+            options.Add("FilterFullText", FilterFullText);
+            options.Add("FilterFullTextPath", FilterFullTextPath);
+            options.Add("FilterTableLockEscalation", FilterTableLockEscalation);
+            options.Add("FilterTableChangeTracking", FilterTableChangeTracking);
+            options.Add("FilterConstraint", FilterConstraint);
+            options.Add("FilterFunction", FilterFunction);
+            options.Add("FilterStoredProcedure", FilterStoredProcedure);
+            options.Add("FilterView", FilterView);
+            options.Add("FilterTable", FilterTable);
+            options.Add("FilterTableOption", FilterTableOption);
+            options.Add("FilterUserDataType", FilterUserDataType);
+            options.Add("FilterTrigger", FilterTrigger);
+            options.Add("FilterSchema", FilterSchema);
+            options.Add("FilterXMLSchema", FilterXMLSchema);
+            options.Add("FilterTableFileGroup", FilterTableFileGroup);
+            options.Add("FilterExtendedProperties", FilterExtendedProperties);
+            options.Add("FilterDDLTriggers", FilterDDLTriggers);
+            options.Add("FilterSynonyms", FilterSynonyms);
+            options.Add("FilterRules", FilterRules);
+            options.Add("FilterAssemblies", FilterAssemblies);
+            return options;
+        }
     }
 }

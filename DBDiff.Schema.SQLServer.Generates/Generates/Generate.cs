@@ -11,7 +11,7 @@ using DBDiff.Schema.SQLServer.Generates.Options;
 
 namespace DBDiff.Schema.SQLServer.Generates.Generates
 {
-    public class Generate
+    public class Generate 
     {
         private readonly List<MessageLog> messages;
         private SqlOption options;

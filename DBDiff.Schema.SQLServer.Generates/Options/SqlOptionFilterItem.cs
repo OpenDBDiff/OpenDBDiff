@@ -5,9 +5,9 @@ namespace DBDiff.Schema.SQLServer.Generates.Options
 {
     public class SqlOptionFilterItem
     {
-        public SqlOptionFilterItem(Enums.ObjectType type, string value)
+        public SqlOptionFilterItem(Enums.ObjectType type, string filter)
         {
-            this.Filter = value;
+            this.Filter = filter;
             this.Type = type;
         }
 

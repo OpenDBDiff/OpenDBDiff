@@ -2,11 +2,13 @@
 using System.Collections.ObjectModel;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace DBDiff.Schema.SQLServer.Generates.Options
 {
     public class SqlOptionFilter: IOptionFilter
     {
+
         public SqlOptionFilter()
         {
             Items = new Collection<SqlOptionFilterItem>();
@@ -27,7 +29,29 @@ namespace DBDiff.Schema.SQLServer.Generates.Options
             Items.Add(new SqlOptionFilterItem(Enums.ObjectType.Schema, "sys"));
         }
 
+        public SqlOptionFilter(IOptionFilter optionFilter)
+        {
+            Items = new Collection<SqlOptionFilterItem>();
+            var options = optionFilter.GetOptions();
+            foreach (var key in options.Keys)
+            {
+                var filter = options[key];
+                Enums.ObjectType type = (Enums.ObjectType)Enum.Parse(typeof(Enums.ObjectType), filter, true);
+                Items.Add(new SqlOptionFilterItem(type, key));
+            }
+        }
+
         public Collection<SqlOptionFilterItem> Items { get; private set; }
+
+        public IDictionary<string, string> GetOptions()
+        {
+            Dictionary<string, string> values = new Dictionary<string, string>();
+            for (int i = 0; i < Items.Count; i++)
+            {
+                values.Add(Items[i].Filter, Items[i].Type.ToString());
+            }
+            return values;
+        }
 
         public bool IsItemIncluded(ISchemaBase item)
         {

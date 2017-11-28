@@ -83,6 +83,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyLoader.cs" />
     <Compile Include="ConnectionsSettings\ConnectionResource.cs" />
     <Compile Include="Front\DataCompareForm.cs">
       <SubType>Form</SubType>
@@ -179,7 +180,7 @@
       <Name>DBDiff.Schema.SQLServer.Generates</Name>
     </ProjectReference>
     <ProjectReference Include="..\DBDiff.Schema.SQLServer2005\DBDiff.Schema.SQLServer.csproj">
-      <Project>{EF2F571E-A7AD-40BE-8500-50A039159FC1}</Project>
+      <Project>{ef2f571e-a7ad-40be-8500-50a039159fc1}</Project>
       <Name>DBDiff.Schema.SQLServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\DBDiff.Schema\DBDiff.Schema.csproj">

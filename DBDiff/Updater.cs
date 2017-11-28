@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using DBDiff.Schema;
 using DBDiff.Schema.Model;
-using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff
 {
@@ -91,7 +90,7 @@ namespace DBDiff
 
         public static string alter(ISchemaBase target, string connectionString)
         {
-            var db = target.RootParent as Database;
+            var db = target.RootParent as IDatabase;
             SqlConnection connection = new SqlConnection(connectionString);
             if (db != null && DialogResult.Yes != MessageBox.Show(String.Format("Alter {0} {1} in {2}..{3}?\n(WARNING: No automatic backup is made!)",
                     target.ObjectType,

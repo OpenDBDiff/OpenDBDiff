@@ -179,6 +179,14 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
             }
         }
 
+        public Control Control
+        {
+            get
+            {
+                return this;
+            }
+        }
+
         private void btnTest_Click(object sender, EventArgs e)
         {
             if (TestConnection())
