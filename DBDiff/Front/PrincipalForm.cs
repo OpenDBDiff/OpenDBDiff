@@ -34,6 +34,7 @@ namespace DBDiff.Front
 
         IDatabase selectedOrigin;
         IDatabase selectedDestination;
+        private readonly string[] ProjectHandlerAssemblies = new string[1] { "DBDiff.Schema.SQLServer" };
 
         public PrincipalForm()
         {
@@ -387,7 +388,7 @@ Clicking 'OK' will result in the following:
             {
                 System.Windows.Forms.Clipboard.SetText(txtSyncScript.Text);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("An error ocurred while trying to copying the text to the clipboard");
                 System.Diagnostics.Trace.WriteLine("ERROR: +" + ex.Message);
@@ -533,15 +534,19 @@ Clicking 'OK' will result in the following:
             form.Show(Owner, Options);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void LoadProjectHandlers(string[] assemblyNames)
         {
             Type projectHandlerType = typeof(IProjectHandler);
             ProjectHandlers.Clear();
             toolProjectTypes.Items.Clear();
             List<Type> projectHandlerTypes = new List<Type>();
-            Assembly.Load("DBDiff.Schema.SQLServer");
+            List<Assembly> loadedAssemblies = new List<System.Reflection.Assembly>();
+            for (int i = 0; i < assemblyNames.Length; i++)
+            {
+                loadedAssemblies.Add(Assembly.Load(assemblyNames[i]));
+            }
 
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (var assembly in loadedAssemblies)
             {
                 var types = assembly.GetTypes();
                 foreach (var type in types)
@@ -556,6 +561,10 @@ Clicking 'OK' will result in the following:
             {
                 ProjectHandlers.Add(Activator.CreateInstance(handlerType) as IProjectHandler);
             }
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            LoadProjectHandlers(ProjectHandlerAssemblies);
             foreach (var projectHandler in ProjectHandlers)
             {
                 toolProjectTypes.Items.Add(projectHandler);
@@ -569,7 +578,7 @@ Clicking 'OK' will result in the following:
                 if (DestinationSelector != null)
                     DestinationSelector.ConnectionString = LastConfiguration.ConnectionStringDestination;
             }
-            if (toolProjectTypes.SelectedItem == null && toolProjectTypes.Items.Count>0)
+            if (toolProjectTypes.SelectedItem == null && toolProjectTypes.Items.Count > 0)
             {
                 toolProjectTypes.SelectedIndex = 0;
             }
@@ -616,6 +625,7 @@ Clicking 'OK' will result in the following:
                                                         ProjectSelectorHandler.GetSourceDatabaseName(),
                                                         ProjectSelectorHandler.GetDestinationServerName(),
                                                         ProjectSelectorHandler.GetDestinationDatabaseName()),
+                        Options = Options ?? ProjectSelectorHandler.GetProjectOptions(),
                         Type = Project.ProjectType.SQLServer
                     };
                 }
@@ -623,7 +633,7 @@ Clicking 'OK' will result in the following:
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, ex.ToString(), "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -703,7 +713,7 @@ Clicking 'OK' will result in the following:
         private void toolProjectTypes_SelectedIndexChanged(object sender, EventArgs e)
         {
             UnloadProjectHandler();
-            if (toolProjectTypes.SelectedItem !=null)
+            if (toolProjectTypes.SelectedItem != null)
             {
                 var handler = toolProjectTypes.SelectedItem as IProjectHandler;
                 LoadProjectHandler(handler);
