@@ -9,7 +9,7 @@ using DBDiff.Schema.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Front
 {
-    public class SQLProjectHandler : DBDiff.Front.IProjectHandler
+    public class SQLServerProjectHandler : DBDiff.Front.IProjectHandler
     {
         private SqlServerConnectFront DestinationControl;
         private SqlServerConnectFront SourceControl;

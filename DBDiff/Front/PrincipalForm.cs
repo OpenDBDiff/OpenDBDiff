@@ -34,7 +34,6 @@ namespace DBDiff.Front
 
         IDatabase selectedOrigin;
         IDatabase selectedDestination;
-        private readonly string[] ProjectHandlerAssemblies = new string[1] { "DBDiff.Schema.SQLServer" };
 
         public PrincipalForm()
         {
@@ -534,37 +533,17 @@ Clicking 'OK' will result in the following:
             form.Show(Owner, Options);
         }
 
-        private void LoadProjectHandlers(string[] assemblyNames)
+        private void LoadProjectHandlers()
         {
-            Type projectHandlerType = typeof(IProjectHandler);
             ProjectHandlers.Clear();
             toolProjectTypes.Items.Clear();
-            List<Type> projectHandlerTypes = new List<Type>();
-            List<Assembly> loadedAssemblies = new List<System.Reflection.Assembly>();
-            for (int i = 0; i < assemblyNames.Length; i++)
-            {
-                loadedAssemblies.Add(Assembly.Load(assemblyNames[i]));
-            }
 
-            foreach (var assembly in loadedAssemblies)
-            {
-                var types = assembly.GetTypes();
-                foreach (var type in types)
-                {
-                    if (projectHandlerType.IsAssignableFrom(type) && type.IsClass)
-                    {
-                        projectHandlerTypes.Add(type);
-                    }
-                }
-            }
-            foreach (var handlerType in projectHandlerTypes)
-            {
-                ProjectHandlers.Add(Activator.CreateInstance(handlerType) as IProjectHandler);
-            }
+            ProjectHandlers.Add(new DBDiff.Schema.SQLServer.Generates.Front.SQLServerProjectHandler());
         }
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            LoadProjectHandlers(ProjectHandlerAssemblies);
+            LoadProjectHandlers();
             foreach (var projectHandler in ProjectHandlers)
             {
                 toolProjectTypes.Items.Add(projectHandler);
