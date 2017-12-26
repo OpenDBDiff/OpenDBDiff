@@ -245,7 +245,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             if (IsAssembly)
             {
-                /*Si existe otro UDT con el mismo assembly que se va a crear, debe ser borrado ANTES de crearse el nuevo*/
+                /*If another UDT exists in the same assembly to bre created. It must be deleted BEFORE creating the new one.*/
                 UserDataType other =
                     ((Database)Parent).UserTypes.Find(
                         item =>
