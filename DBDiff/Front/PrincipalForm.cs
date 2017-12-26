@@ -327,7 +327,7 @@ namespace DBDiff.Front
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HandleException("Save Script As", ex);
             }
         }
 
@@ -562,7 +562,7 @@ namespace DBDiff.Front
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.ToString(), "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HandleException("Saving Project", ex);
             }
         }
 
@@ -578,7 +578,7 @@ namespace DBDiff.Front
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HandleException("Opening Project", ex);
             }
         }
 
@@ -590,7 +590,7 @@ namespace DBDiff.Front
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HandleException("Renaming Project", ex);
             }
         }
 
@@ -611,7 +611,7 @@ namespace DBDiff.Front
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HandleException("Deleting Project", ex);
             }
         }
 
@@ -628,7 +628,7 @@ namespace DBDiff.Front
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HandleException("Selecting Project", ex);
             }
         }
 
