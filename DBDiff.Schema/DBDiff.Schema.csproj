@@ -66,8 +66,8 @@
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="Errors\MessageLog.cs" />
-    <Compile Include="Events\ProgressEventHandler.cs" />
     <Compile Include="Events\ProgressEventArgs.cs" />
+    <Compile Include="Events\ProgressEventHandler.cs" />
     <Compile Include="Model\IDatabase.cs" />
     <Compile Include="Model\IOption.cs" />
     <Compile Include="Model\IOptionFilter.cs" />

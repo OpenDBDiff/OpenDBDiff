@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Windows.Forms;
-using DBDiff.Schema.SQLServer.Generates.Options;
 
 namespace DBDiff.Front
 {
     public partial class OptionForm : Form
     {
-        private SqlOption SqlFilter;
+        private IProjectHandler projectSelectorHandler;
+        private Schema.Model.IOption SqlFilter;
 
-        public OptionForm()
+
+        public OptionForm(IProjectHandler projectSelectorHandler)
         {
+            this.projectSelectorHandler = projectSelectorHandler;
+            sqlOptionsFront1 = projectSelectorHandler.CreateOptionControl();
             InitializeComponent();
         }
 
-        public void Show(IWin32Window owner, SqlOption filter)
+        public void Show(IWin32Window owner, Schema.Model.IOption filter)
         {
             SqlFilter = filter;
             sqlOptionsFront1.Load(filter);

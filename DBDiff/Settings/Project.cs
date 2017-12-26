@@ -4,7 +4,6 @@ using System.Data.SQLite;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using DBDiff.Schema.SQLServer.Generates.Options;
 
 namespace DBDiff.Settings
 {
@@ -22,7 +21,7 @@ namespace DBDiff.Settings
         public int Id { get; set; }
         public string ConnectionStringSource { get; set; }
         public string ConnectionStringDestination { get; set; }
-        public SqlOption Options { get; set; }
+        public Schema.Model.IOption Options { get; set; }
         public ProjectType Type { get; set; }
         public string Name { get; set; }
 
@@ -101,8 +100,13 @@ namespace DBDiff.Settings
             DoSqlSomething(
                 "SELECT MAX(ProjectId) AS NewId FROM Project WHERE Internal = 0",
                 reader => maxId = int.Parse(reader["NewId"].ToString()),
-                "INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('" + item.Name.Replace("'", "''") + "','" + item.ConnectionStringSource + "','" + item.ConnectionStringDestination + "','" + item.Options + "'," + ((int)item.Type).ToString() + ",0)");
+                "INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('" + item.Name.Replace("'", "''") + "','" + item.ConnectionStringSource + "','" + item.ConnectionStringDestination + "','" + item.GetSerializedOptions() + "'," + ((int)item.Type).ToString() + ",0)");
             return maxId;
+        }
+
+        protected virtual string GetSerializedOptions()
+        {
+            return Options.Serialize();
         }
 
         private static int Update(Project item)

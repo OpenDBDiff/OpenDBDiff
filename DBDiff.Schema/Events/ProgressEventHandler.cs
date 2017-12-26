@@ -10,7 +10,5 @@ namespace DBDiff.Schema.Events
         {
             if (OnProgress != null) OnProgress(e);
         }
-
-
     }
 }

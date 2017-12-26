@@ -1,10 +1,6 @@
 using DBDiff.Schema;
 using DBDiff.Schema.Misc;
 using DBDiff.Schema.Model;
-using DBDiff.Schema.SQLServer.Generates.Front;
-using DBDiff.Schema.SQLServer.Generates.Generates;
-using DBDiff.Schema.SQLServer.Generates.Model;
-using DBDiff.Schema.SQLServer.Generates.Options;
 using DBDiff.Settings;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
@@ -21,30 +17,23 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Assembly = System.Reflection.Assembly;
 
-/*using DBDiff.Schema.SQLServer2000;
-using DBDiff.Schema.SQLServer2000.Model;
-using DBDiff.Schema.SQLServer2000.Compare;
-/*using DBDiff.Schema.Sybase;
-using DBDiff.Schema.Sybase.Options;
-using DBDiff.Schema.Sybase.Model;*/
-
-/*using DBDiff.Schema.MySQL;
-using DBDiff.Schema.MySQL.Options;
-using DBDiff.Schema.MySQL.Model;
-*/
-
 namespace DBDiff.Front
 {
     public partial class PrincipalForm : Form
     {
-        //private MySqlOption MySQLfilter = new MySqlOption();
-        //private AseOption AseFilter = new AseOption();
 
         private Project ActiveProject;
-        private IFront mySqlConnectFront1;
-        private IFront mySqlConnectFront2;
-        private readonly SqlOption SqlFilter = new SqlOption();
+        private IFront SourceSelector;
+        private IFront DestinationSelector;
+        private IOption Options;
         private List<ISchemaBase> _selectedSchemas = new List<ISchemaBase>();
+
+        List<IProjectHandler> ProjectHandlers = new List<IProjectHandler>();
+        DBDiff.Front.IProjectHandler ProjectSelectorHandler;
+
+
+        IDatabase selectedOrigin;
+        IDatabase selectedDestination;
 
         public PrincipalForm()
         {
@@ -53,91 +42,42 @@ namespace DBDiff.Front
             this.Text += Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
-        /*private void ProcessSybase()
-        {
-            DBDiff.Schema.Sybase.Model.Database origin;
-            DBDiff.Schema.Sybase.Model.Database destination;
-
-            DBDiff.Schema.Sybase.Generate sql = new DBDiff.Schema.Sybase.Generate();
-            sql.ConnectioString = txtConnectionOrigen.Text;
-
-            AseFilter.OptionFilter.FilterTrigger = false;
-
-            origin = sql.Process(AseFilter);
-
-            sql.ConnectioString = txtConnectionDestination.Text;
-            destination = sql.Process(AseFilter);
-
-            this.txtScript.SQLType = SQLEnum.SQLTypeEnum.Sybase;
-            this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.Sybase;
-            //origin = DBDiff.Schema.Sybase.Generate.Compare(origin, destination);
-
-            this.txtScript.Text = origin.ToSQL();
-            //this.txtDiferencias.Text = origin.ToSQLDiff();
-        }*/
-
-        /*private void ProcessMySQL()
-        {
-            DBDiff.Schema.MySQL.Model.Database origin;
-            DBDiff.Schema.MySQL.Model.Database destination;
-
-            DBDiff.Schema.MySQL.Generate sql = new DBDiff.Schema.MySQL.Generate();
-            sql.ConnectioString = mySqlConnectFront1.ConnectionString;
-            origin = sql.Process(MySQLfilter);
-
-            sql.ConnectioString = mySqlConnectFront2.ConnectionString;
-            destination = sql.Process(MySQLfilter);
-
-            //this.txtScript.SQLType = SQLEnum.SQLTypeEnum.MySQL;
-            //this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.MySQL;
-            origin = DBDiff.Schema.MySQL.Generate.Compare(origin, destination);
-            this.txtDiferencias.Text = origin.ToSQLDiff();
-        }
-        */
-
-        private void ProcessSQL2005()
+        private void StartComparision()
         {
             ProgressForm progress = null;
             string errorLocation = null;
             try
             {
-                Database origin;
-                Database destination;
-
-                if ((!String.IsNullOrEmpty(mySqlConnectFront1.DatabaseName) &&
-                     (!String.IsNullOrEmpty(mySqlConnectFront2.DatabaseName))))
+                if ((!String.IsNullOrEmpty(ProjectSelectorHandler.GetSourceDatabaseName()) &&
+                     (!String.IsNullOrEmpty(ProjectSelectorHandler.GetDestinationDatabaseName()))))
                 {
-                    Generate sql1 = new Generate();
-                    Generate sql2 = new Generate();
+                    Options = this.ProjectSelectorHandler.GetProjectOptions();
+                    IGenerator sourceGenerator = this.ProjectSelectorHandler.SetSourceGenerator(SourceSelector.ConnectionString, Options);
+                    IGenerator destinationGenerator = this.ProjectSelectorHandler.SetDestinationGenerator(DestinationSelector.ConnectionString, Options);
+                    IDatabaseComparer databaseComparer = this.ProjectSelectorHandler.GetDatabaseComparer();
 
-                    sql1.ConnectionString = mySqlConnectFront1.ConnectionString;
-                    sql1.Options = SqlFilter;
-
-                    sql2.ConnectionString = mySqlConnectFront2.ConnectionString;
-                    sql2.Options = SqlFilter;
-
-                    progress = new ProgressForm("Source Database", "Destination Database", sql2, sql1);
+                    progress = new ProgressForm("Source Database", "Destination Database", destinationGenerator, sourceGenerator, databaseComparer);
                     progress.ShowDialog(this);
                     if (progress.Error != null)
                     {
                         throw new SchemaException(progress.Error.Message, progress.Error);
                     }
 
-                    origin = progress.Source;
-                    destination = progress.Destination;
+                    selectedOrigin = progress.Source;
+                    selectedDestination = progress.Destination;
 
-                    txtSyncScript.ConfigurationManager.Language = "mssql";
+                    txtSyncScript.ConfigurationManager.Language = this.ProjectSelectorHandler.GetScriptLanguage();
                     txtSyncScript.IsReadOnly = false;
                     txtSyncScript.Styles.LineNumber.BackColor = Color.White;
                     txtSyncScript.Styles.LineNumber.IsVisible = false;
                     errorLocation = "Generating Synchronized Script";
-                    txtSyncScript.Text = destination.ToSqlDiff(_selectedSchemas).ToSQL();
+                    txtSyncScript.Text = selectedDestination.ToSqlDiff(this._selectedSchemas).ToSQL();
                     txtSyncScript.IsReadOnly = true;
-                    schemaTreeView1.DatabaseSource = destination;
-                    schemaTreeView1.DatabaseDestination = origin;
+                    schemaTreeView1.DatabaseSource = selectedDestination;
+                    schemaTreeView1.DatabaseDestination = selectedOrigin;
                     schemaTreeView1.OnSelectItem += new SchemaTreeView.SchemaHandler(schemaTreeView1_OnSelectItem);
                     schemaTreeView1_OnSelectItem(schemaTreeView1.SelectedNode);
-                    textBox1.Text = origin.ActionMessage.Message;
+                    textBox1.Text = selectedOrigin.ActionMessage.Message;
 
                     btnCopy.Enabled = true;
                     btnSaveAs.Enabled = true;
@@ -167,7 +107,7 @@ namespace DBDiff.Front
             txtNewObject.Text = "";
             txtOldObject.Text = "";
 
-            Database database = (Database)schemaTreeView1.DatabaseSource;
+            IDatabase database = (IDatabase)schemaTreeView1.DatabaseSource;
             if (database.Find(ObjectFullName) != null)
             {
                 if (database.Find(ObjectFullName).Status != Enums.ObjectStatusType.DropStatus)
@@ -177,20 +117,22 @@ namespace DBDiff.Front
                     {
                         btnUpdate.Enabled = false;
                     }
-                    else {
+                    else
+                    {
                         btnUpdate.Enabled = true;
                     }
                     if (database.Find(ObjectFullName).ObjectType == Enums.ObjectType.Table)
                     {
                         btnCompareTableData.Enabled = true;
                     }
-                    else {
+                    else
+                    {
                         btnCompareTableData.Enabled = false;
                     }
                 }
             }
 
-            database = (Database)schemaTreeView1.DatabaseDestination;
+            database = (IDatabase)schemaTreeView1.DatabaseDestination;
             if (database.Find(ObjectFullName) != null)
             {
                 if (database.Find(ObjectFullName).Status != Enums.ObjectStatusType.CreateStatus)
@@ -261,7 +203,7 @@ namespace DBDiff.Front
                 return;
             }
 
-            var db = schemaTreeView1.DatabaseSource as Database;
+            var db = schemaTreeView1.DatabaseSource as IDatabase;
             if (db != null)
             {
                 this._selectedSchemas = this.schemaTreeView1.GetCheckedSchemas();
@@ -270,36 +212,11 @@ namespace DBDiff.Front
                 this.txtSyncScript.IsReadOnly = false;
             }
         }
-
-        /*private void ProcessSQL2000()
-        {
-            DBDiff.Schema.SQLServer2000.Model.Database origin;
-            DBDiff.Schema.SQLServer2000.Model.Database destination;
-
-            DBDiff.Schema.SQLServer2000.Generate sql = new DBDiff.Schema.SQLServer2000.Generate();
-
-            lblMessage.Text = "Leyendo tablas de origin...";
-            sql.OnTableProgress += new Progress.ProgressHandler(sql_OnTableProgress);
-            //sql.ConnectioString = txtConnectionOrigen.Text;
-            origin = sql.Process();
-
-            //sql.ConnectioString = txtConnectionDestination.Text;
-            lblMessage.Text = "Leyendo tablas de destination...";
-            destination = sql.Process();
-
-            origin = DBDiff.Schema.SQLServer2000.Generate.Compare(origin, destination);
-            //this.txtScript.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
-            //this.txtDiferencias.SQLType = SQLEnum.SQLTypeEnum.SQLServer;
-            this.txtDiferencias.Text = origin.ToSQLDiff();
-
-
-        }
-        */
         private void btnCompareTableData_Click(object sender, EventArgs e)
         {
             TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
             ISchemaBase selected = (ISchemaBase)tree.SelectedNode.Tag;
-            DataCompareForm dataCompare = new DataCompareForm(selected, mySqlConnectFront1.ConnectionString, mySqlConnectFront2.ConnectionString);
+            DataCompareForm dataCompare = new DataCompareForm(selected, SourceSelector.ConnectionString, DestinationSelector.ConnectionString);
             dataCompare.Show();
         }
         private void btnCompare_Click(object sender, EventArgs e)
@@ -309,13 +226,10 @@ namespace DBDiff.Front
             {
                 Cursor = Cursors.WaitCursor;
                 _selectedSchemas = schemaTreeView1.GetCheckedSchemas();
-                //if (optSQL2000.Checked) ProcessSQL2000();
-                if (optSQL2005.Checked) ProcessSQL2005();
-                //if (optMySQL.Checked) ProcessMySQL();
-                //if (optSybase.Checked) ProcessSybase();
+                StartComparision();
                 schemaTreeView1.SetCheckedSchemas(_selectedSchemas);
                 errorLocation = "Saving Connections";
-                Project.SaveLastConfiguration(mySqlConnectFront1.ConnectionString, mySqlConnectFront2.ConnectionString);
+                Project.SaveLastConfiguration(SourceSelector.ConnectionString, DestinationSelector.ConnectionString);
             }
             catch (Exception ex)
             {
@@ -384,80 +298,31 @@ Clicking 'OK' will result in the following:
             }
         }
 
-        private void optMySQL_CheckedChanged(object sender, EventArgs e)
+        private void UnloadProjectHandler()
         {
-            /*if (optMySQL.Checked)
+            if (ProjectSelectorHandler != null)
             {
-                ShowMySQL();
+                PanelSource.Controls.Remove((Control)SourceSelector);
+                PanelDestination.Controls.Remove((Control)DestinationSelector);
+                ProjectSelectorHandler.Unload();
+                ProjectSelectorHandler = null;
             }
-            else
-            {
-                this.groupBox2.Controls.Remove((System.Windows.Forms.Control)this.mySqlConnectFront1);
-                this.groupBox3.Controls.Remove((System.Windows.Forms.Control)this.mySqlConnectFront2);
-            }*/
         }
 
-        /*private void ShowMySQL()
+        private void LoadProjectHandler(IProjectHandler projectHandler)
         {
-            this.mySqlConnectFront2 = new DBDiff.Schema.MySQL.Front.MySqlConnectFront();
-            this.mySqlConnectFront1 = new DBDiff.Schema.MySQL.Front.MySqlConnectFront();
-            this.mySqlConnectFront1.Location = new System.Drawing.Point(5, 19);
-            this.mySqlConnectFront1.Name = "mySqlConnectFront1";
-            this.mySqlConnectFront1.Size = new System.Drawing.Size(420, 190);
-            this.mySqlConnectFront1.TabIndex = 10;
-            this.mySqlConnectFront2.Location = new System.Drawing.Point(5, 19);
-            this.mySqlConnectFront2.Name = "mySqlConnectFront2";
-            this.mySqlConnectFront2.Size = new System.Drawing.Size(420, 190);
-            this.mySqlConnectFront2.TabIndex = 10;
-            this.mySqlConnectFront1.Visible = true;
-            this.mySqlConnectFront2.Visible = true;
-            this.groupBox3.Controls.Add((System.Windows.Forms.Control)this.mySqlConnectFront2);
-            this.groupBox2.Controls.Add((System.Windows.Forms.Control)this.mySqlConnectFront1);
-        }
-        */
-
-        private void ShowSQL2005()
-        {
-            mySqlConnectFront2 = new SqlServerConnectFront();
-            mySqlConnectFront1 = new SqlServerConnectFront();
-            mySqlConnectFront1.Location = new Point(1, 1);
-            mySqlConnectFront1.Name = "mySqlConnectFront1";
-            mySqlConnectFront1.Anchor =
-                (AnchorStyles)((int)AnchorStyles.Bottom + (int)AnchorStyles.Left + (int)AnchorStyles.Right);
-
-            mySqlConnectFront1.TabIndex = 10;
-            mySqlConnectFront1.Text = "Source Database:";
-            mySqlConnectFront2.Location = new Point(1, 1);
-            mySqlConnectFront2.Name = "mySqlConnectFront2";
-            mySqlConnectFront2.Anchor =
-                (AnchorStyles)((int)AnchorStyles.Bottom + (int)AnchorStyles.Left + (int)AnchorStyles.Right);
-            mySqlConnectFront2.TabIndex = 10;
-            mySqlConnectFront1.Visible = true;
-            mySqlConnectFront2.Visible = true;
-            mySqlConnectFront2.Text = "Destination Database:";
-            ((SqlServerConnectFront)mySqlConnectFront1).UserName = "sa";
-            ((SqlServerConnectFront)mySqlConnectFront1).Password = "";
-            ((SqlServerConnectFront)mySqlConnectFront1).ServerName = "(local)";
-            ((SqlServerConnectFront)mySqlConnectFront2).UserName = "sa";
-            ((SqlServerConnectFront)mySqlConnectFront2).Password = "";
-            ((SqlServerConnectFront)mySqlConnectFront2).ServerName = "(local)";
-            ((SqlServerConnectFront)mySqlConnectFront1).DatabaseIndex = 1;
-            ((SqlServerConnectFront)mySqlConnectFront2).DatabaseIndex = 2;
-            PanelDestination.Controls.Add((Control)mySqlConnectFront2);
-            PanelSource.Controls.Add((Control)mySqlConnectFront1);
+            UnloadProjectHandler();
+            ProjectSelectorHandler = projectHandler;
+            SourceSelector = ProjectSelectorHandler.CreateSourceSelector();
+            DestinationSelector = ProjectSelectorHandler.CreateDestinationSelector();
+            PanelSource.Controls.Add(SourceSelector.Control);
+            PanelDestination.Controls.Add(DestinationSelector.Control);
         }
 
-        private void optSQL2005_CheckedChanged(object sender, EventArgs e)
+        private void LoadProjectHandler<T>() where T : IProjectHandler, new()
         {
-            if (optSQL2005.Checked)
-            {
-                ShowSQL2005();
-            }
-            else
-            {
-                PanelSource.Controls.Remove((Control)mySqlConnectFront1);
-                PanelDestination.Controls.Remove((Control)mySqlConnectFront2);
-            }
+            var handler = new T();
+            LoadProjectHandler(handler);
         }
 
         private void optSybase_CheckedChanged(object sender, EventArgs e)
@@ -498,7 +363,7 @@ Clicking 'OK' will result in the following:
                 saveFileDialog1.ShowDialog(this);
                 if (!String.IsNullOrEmpty(saveFileDialog1.FileName))
                 {
-                    var db = schemaTreeView1.DatabaseSource as Database;
+                    var db = schemaTreeView1.DatabaseSource as IDatabase;
                     if (db != null)
                     {
                         using (StreamWriter writer = new StreamWriter(saveFileDialog1.FileName, false))
@@ -522,6 +387,11 @@ Clicking 'OK' will result in the following:
             {
                 System.Windows.Forms.Clipboard.SetText(txtSyncScript.Text);
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error ocurred while trying to copying the text to the clipboard");
+                System.Diagnostics.Trace.WriteLine("ERROR: +" + ex.Message);
+            }
             finally
             {
             }
@@ -544,7 +414,7 @@ Clicking 'OK' will result in the following:
                             //ISchemaBase selected = (ISchemaBase)tree.SelectedNode.Tag;
                             ISchemaBase selected = (ISchemaBase)subnode.Tag;
 
-                            Database database = (Database)schemaTreeView1.DatabaseSource;
+                            IDatabase database = (IDatabase)schemaTreeView1.DatabaseSource;
 
                             if (database.Find(selected.FullName) != null)
                             {
@@ -554,9 +424,9 @@ Clicking 'OK' will result in the following:
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, mySqlConnectFront2.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, DestinationSelector.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
                                                 default: result += "Nothing could be found to do for table " + selected.Name + ".\r\n"; break;
                                             }
                                         }
@@ -565,9 +435,9 @@ Clicking 'OK' will result in the following:
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, mySqlConnectFront2.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, DestinationSelector.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
                                                 default: result += "Nothing could be found to do for stored procedure " + selected.Name + ".\r\n"; break;
                                             }
                                         }
@@ -576,10 +446,10 @@ Clicking 'OK' will result in the following:
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, mySqlConnectFront2.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, DestinationSelector.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
                                                 default: result += "Nothing could be found to do for function " + selected.Name + ".\r\n"; break;
                                             }
                                         }
@@ -588,10 +458,10 @@ Clicking 'OK' will result in the following:
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, mySqlConnectFront2.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: result += Updater.alter(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, DestinationSelector.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
+                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
                                                 default: result += "Nothing could be found to do for view " + selected.Name + ".\r\n"; break;
                                             }
                                         }
@@ -600,7 +470,7 @@ Clicking 'OK' will result in the following:
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.addNew(selected, mySqlConnectFront2.ConnectionString); break;
+                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.addNew(selected, DestinationSelector.ConnectionString); break;
                                                 default: result += "Nothing could be found to do for " + selected.Name + ".\r\n"; break;
                                             }
                                         }
@@ -618,9 +488,9 @@ Clicking 'OK' will result in the following:
             }
             MessageBox.Show(result);
 
-            if (SqlFilter.Comparison.ReloadComparisonOnUpdate)
+            if (Options.Comparison.ReloadComparisonOnUpdate)
             {
-                if (optSQL2005.Checked) ProcessSQL2005();
+                StartComparision();
             }
 
             btnUpdate.Enabled = false;
@@ -642,8 +512,8 @@ Clicking 'OK' will result in the following:
                             ISchemaBase item = (ISchemaBase)inner.Tag;
                             switch (item.Status)
                             {
-                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(item, mySqlConnectFront2.ConnectionString); break;
-                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(item, mySqlConnectFront2.ConnectionString); break;
+                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(item, DestinationSelector.ConnectionString); break;
+                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(item, DestinationSelector.ConnectionString); break;
                             }
                         }
                     }
@@ -653,19 +523,46 @@ Clicking 'OK' will result in the following:
                     result = "Update successful";
                 }
                 MessageBox.Show(result);
-                if (optSQL2005.Checked) ProcessSQL2005();
+                StartComparision();
             }
         }
 
         private void btnOptions_Click(object sender, EventArgs e)
         {
-            OptionForm form = new OptionForm();
-            form.Show(Owner, SqlFilter);
+            OptionForm form = new OptionForm(this.ProjectSelectorHandler);
+            form.Show(Owner, Options);
+        }
+
+        private void LoadProjectHandlers()
+        {
+            ProjectHandlers.Clear();
+            toolProjectTypes.Items.Clear();
+
+            ProjectHandlers.Add(new DBDiff.Schema.SQLServer.Generates.Front.SQLServerProjectHandler());
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            ShowSQL2005();
+            LoadProjectHandlers();
+            foreach (var projectHandler in ProjectHandlers)
+            {
+                toolProjectTypes.Items.Add(projectHandler);
+            }
+
+            Project LastConfiguration = Project.GetLastConfiguration();
+            if (LastConfiguration != null)
+            {
+                if (SourceSelector != null)
+                    SourceSelector.ConnectionString = LastConfiguration.ConnectionStringSource;
+                if (DestinationSelector != null)
+                    DestinationSelector.ConnectionString = LastConfiguration.ConnectionStringDestination;
+            }
+            if (toolProjectTypes.SelectedItem == null && toolProjectTypes.Items.Count > 0)
+            {
+                toolProjectTypes.SelectedIndex = 0;
+            }
+
+
             txtNewObject.ConfigurationManager.Language = "mssql";
             txtNewObject.IsReadOnly = false;
             txtNewObject.Styles.LineNumber.BackColor = Color.White;
@@ -678,12 +575,6 @@ Clicking 'OK' will result in the following:
             txtDiff.IsReadOnly = false;
             txtDiff.Styles.LineNumber.IsVisible = false;
             txtDiff.Margins[0].Width = 20;
-            Project LastConfiguration = Project.GetLastConfiguration();
-            if (LastConfiguration != null)
-            {
-                mySqlConnectFront1.ConnectionString = LastConfiguration.ConnectionStringSource;
-                mySqlConnectFront2.ConnectionString = LastConfiguration.ConnectionStringDestination;
-            }
 
             txtSyncScript.Text = "";
         }
@@ -694,10 +585,10 @@ Clicking 'OK' will result in the following:
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            panel2.Left = Math.Max(this.btnProject.Right + this.btnProject.Left, (Width - panel2.Width) / 2);
+            //panel2.Left = Math.Max(this.btnProject.Right + this.btnProject.Left, (Width - panel2.Width) / 2);
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void btnSaveProject_Click_1(object sender, EventArgs e)
         {
             try
             {
@@ -705,13 +596,15 @@ Clicking 'OK' will result in the following:
                 {
                     ActiveProject = new Project
                     {
-                        ConnectionStringSource = mySqlConnectFront1.ConnectionString,
-                        ConnectionStringDestination = mySqlConnectFront2.ConnectionString,
+                        ConnectionStringSource = ProjectSelectorHandler.GetSourceConnectionString(),
+                        ConnectionStringDestination = ProjectSelectorHandler.GetDestinationConnectionString(),
                         Name = String.Format("[{0}].[{1}] - [{2}].[{3}]",
-                                                        ((SqlServerConnectFront)mySqlConnectFront1).ServerName,
-                                                        mySqlConnectFront1.DatabaseName,
-                                                        ((SqlServerConnectFront)mySqlConnectFront2).ServerName,
-                                                        mySqlConnectFront2.DatabaseName),
+
+                                                        ProjectSelectorHandler.GetSourceServerName(),
+                                                        ProjectSelectorHandler.GetSourceDatabaseName(),
+                                                        ProjectSelectorHandler.GetDestinationServerName(),
+                                                        ProjectSelectorHandler.GetDestinationDatabaseName()),
+                        Options = Options ?? ProjectSelectorHandler.GetProjectOptions(),
                         Type = Project.ProjectType.SQLServer
                     };
                 }
@@ -719,7 +612,7 @@ Clicking 'OK' will result in the following:
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, ex.ToString(), "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -761,8 +654,8 @@ Clicking 'OK' will result in the following:
                     if (ActiveProject.Id == itemSelected.Id)
                     {
                         ActiveProject = null;
-                        mySqlConnectFront1.ConnectionString = "";
-                        mySqlConnectFront2.ConnectionString = "";
+                        SourceSelector.ConnectionString = "";
+                        DestinationSelector.ConnectionString = "";
                     }
                 }
             }
@@ -779,8 +672,8 @@ Clicking 'OK' will result in the following:
                 if (itemSelected != null)
                 {
                     ActiveProject = itemSelected;
-                    mySqlConnectFront1.ConnectionString = itemSelected.ConnectionStringSource;
-                    mySqlConnectFront2.ConnectionString = itemSelected.ConnectionStringDestination;
+                    SourceSelector.ConnectionString = itemSelected.ConnectionStringSource;
+                    DestinationSelector.ConnectionString = itemSelected.ConnectionStringDestination;
                 }
             }
             catch (Exception ex)
@@ -791,9 +684,19 @@ Clicking 'OK' will result in the following:
 
         private void btnNewProject_Click(object sender, EventArgs e)
         {
-            mySqlConnectFront1.ConnectionString = "";
-            mySqlConnectFront2.ConnectionString = "";
+            SourceSelector.ConnectionString = "";
+            DestinationSelector.ConnectionString = "";
             ActiveProject = null;
+        }
+
+        private void toolProjectTypes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UnloadProjectHandler();
+            if (toolProjectTypes.SelectedItem != null)
+            {
+                var handler = toolProjectTypes.SelectedItem as IProjectHandler;
+                LoadProjectHandler(handler);
+            }
         }
     }
 }
