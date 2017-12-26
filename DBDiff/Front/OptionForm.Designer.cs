@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
-using DBDiff.Schema.SQLServer.Generates.Front;
 
 namespace DBDiff.Front
 {
@@ -35,7 +34,6 @@ namespace DBDiff.Front
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionForm));
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
-            this.sqlOptionsFront1 = new DBDiff.Schema.SQLServer.Generates.Front.SqlOptionsFront();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -93,7 +91,7 @@ namespace DBDiff.Front
 
         #endregion
 
-        private SqlOptionsFront sqlOptionsFront1;
+        private OptionControl sqlOptionsFront1;
         private Button btnCancel;
         private Button btnApply;
 

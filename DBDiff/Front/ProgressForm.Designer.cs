@@ -35,8 +35,8 @@ namespace DBDiff.Front
             this.gradientPanel1 = new System.Windows.Forms.Panel();
             this.lblName = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.databaseProgressControl2 = new DBDiff.Front.DatabaseProgressControl();
-            this.databaseProgressControl1 = new DBDiff.Front.DatabaseProgressControl();
+            this.sourceProgressControl = new DBDiff.Front.DatabaseProgressControl();
+            this.destinationProgressControl = new DBDiff.Front.DatabaseProgressControl();
             this.gradientPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -66,8 +66,8 @@ namespace DBDiff.Front
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.Controls.Add(this.databaseProgressControl2);
-            this.panel1.Controls.Add(this.databaseProgressControl1);
+            this.panel1.Controls.Add(this.sourceProgressControl);
+            this.panel1.Controls.Add(this.destinationProgressControl);
             this.panel1.Location = new System.Drawing.Point(0, 57);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(499, 173);
@@ -75,27 +75,27 @@ namespace DBDiff.Front
             // 
             // databaseProgressControl2
             // 
-            this.databaseProgressControl2.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.databaseProgressControl2.DatabaseName = "Database1:";
-            this.databaseProgressControl2.Location = new System.Drawing.Point(12, 92);
-            this.databaseProgressControl2.Maximum = 100;
-            this.databaseProgressControl2.Message = "";
-            this.databaseProgressControl2.Name = "databaseProgressControl2";
-            this.databaseProgressControl2.Size = new System.Drawing.Size(472, 64);
-            this.databaseProgressControl2.TabIndex = 35;
-            this.databaseProgressControl2.Value = 0;
+            this.sourceProgressControl.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.sourceProgressControl.DatabaseName = "Database1:";
+            this.sourceProgressControl.Location = new System.Drawing.Point(12, 92);
+            this.sourceProgressControl.Maximum = 100;
+            this.sourceProgressControl.Message = "";
+            this.sourceProgressControl.Name = "databaseProgressControl2";
+            this.sourceProgressControl.Size = new System.Drawing.Size(472, 64);
+            this.sourceProgressControl.TabIndex = 35;
+            this.sourceProgressControl.Value = 0;
             // 
             // databaseProgressControl1
             // 
-            this.databaseProgressControl1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.databaseProgressControl1.DatabaseName = "Database1:";
-            this.databaseProgressControl1.Location = new System.Drawing.Point(12, 15);
-            this.databaseProgressControl1.Maximum = 100;
-            this.databaseProgressControl1.Message = "";
-            this.databaseProgressControl1.Name = "databaseProgressControl1";
-            this.databaseProgressControl1.Size = new System.Drawing.Size(472, 64);
-            this.databaseProgressControl1.TabIndex = 34;
-            this.databaseProgressControl1.Value = 0;
+            this.destinationProgressControl.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.destinationProgressControl.DatabaseName = "Database1:";
+            this.destinationProgressControl.Location = new System.Drawing.Point(12, 15);
+            this.destinationProgressControl.Maximum = 100;
+            this.destinationProgressControl.Message = "";
+            this.destinationProgressControl.Name = "databaseProgressControl1";
+            this.destinationProgressControl.Size = new System.Drawing.Size(472, 64);
+            this.destinationProgressControl.TabIndex = 34;
+            this.destinationProgressControl.Value = 0;
             // 
             // ProgressForm
             // 
@@ -127,7 +127,7 @@ namespace DBDiff.Front
         private Panel gradientPanel1;
         private Label lblName;
         private Panel panel1;
-        private DatabaseProgressControl databaseProgressControl1;
-        private DatabaseProgressControl databaseProgressControl2;
+        private DatabaseProgressControl destinationProgressControl;
+        private DatabaseProgressControl sourceProgressControl;
     }
 }

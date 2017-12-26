@@ -60,6 +60,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DBDiff.Schema.SQLServer.Generates\DBDiff.Schema.SQLServer.Generates.csproj">
+      <Project>{32ac9af6-db93-4354-b69f-6dbc65c70867}</Project>
+      <Name>DBDiff.Schema.SQLServer.Generates</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DBDiff.Schema.SQLServer2005\DBDiff.Schema.SQLServer.csproj">
       <Project>{EF2F571E-A7AD-40BE-8500-50A039159FC1}</Project>
       <Name>DBDiff.Schema.SQLServer</Name>

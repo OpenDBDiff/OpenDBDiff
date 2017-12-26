@@ -67,7 +67,13 @@
     <Compile Include="..\DBDiff\Properties\AssemblyVersionInfo.cs">
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="IDatabaseComparer.cs" />
     <Compile Include="IFront.cs" />
+    <Compile Include="IGenerator.cs" />
+    <Compile Include="IProjectHandler.cs" />
+    <Compile Include="OptionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +96,12 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DBDiff.Schema\DBDiff.Schema.csproj">
+      <Project>{406558a0-1b98-4d0e-b8b6-2013700b065a}</Project>
+      <Name>DBDiff.Schema</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

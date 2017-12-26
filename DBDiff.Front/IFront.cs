@@ -18,5 +18,6 @@ namespace DBDiff.Front
         string DatabaseName { get; }
         string Text { get; set; }
         AnchorStyles Anchor { get; set; }
+        Control Control { get;  }
     }
 }
