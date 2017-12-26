@@ -35,7 +35,7 @@ using DBDiff.Schema.MySQL.Model;
 
 namespace DBDiff.Front
 {
-    public partial class Form1 : Form
+    public partial class PrincipalForm : Form
     {
         //private MySqlOption MySQLfilter = new MySqlOption();
         //private AseOption AseFilter = new AseOption();
@@ -46,7 +46,7 @@ namespace DBDiff.Front
         private readonly SqlOption SqlFilter = new SqlOption();
         private List<ISchemaBase> _selectedSchemas = new List<ISchemaBase>();
 
-        public Form1()
+        public PrincipalForm()
         {
             InitializeComponent();
 
