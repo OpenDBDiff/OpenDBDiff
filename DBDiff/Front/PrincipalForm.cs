@@ -233,69 +233,19 @@ namespace DBDiff.Front
             }
             catch (Exception ex)
             {
-                var exceptionList = new List<Exception>();
-                exceptionList.Add(ex);
-                var innerException = ex.InnerException;
-                while (innerException != null)
-                {
-                    exceptionList.Insert(0, innerException);
-                    innerException = innerException.InnerException;
-                }
-
-                var exceptionMsg = new StringBuilder();
-                var prevMessage = exceptionList[0].Message;
-                exceptionMsg.Append(this.Text);
-                for (int i = 1; i < exceptionList.Count; ++i)
-                {
-                    if (exceptionList[i].Message != prevMessage)
-                    {
-                        exceptionMsg.AppendFormat("\r\n{0}", exceptionList[i].Message);
-                        prevMessage = exceptionList[i].Message;
-                    }
-                }
-
-                var ignoreSystem = new Regex(@"   at System\.[^\r\n]+\r\n|C:\\dev\\open-dbdiff\\");
-                exceptionMsg.AppendFormat("\r\n{0}: {1}\r\n{2}", exceptionList[0].GetType().Name, exceptionList[0].Message, ignoreSystem.Replace(exceptionList[0].StackTrace, String.Empty));
-
-                var ignoreChunks = new Regex(@": \[[^\)]*\)|\.\.\.\)|\'[^\']*\'|\([^\)]*\)|\" + '"' + @"[^\" + '"' + @"]*\" + '"' + @"|Source|Destination");
-                var searchableError = ignoreChunks.Replace(exceptionMsg.ToString(), String.Empty);
-                var searchableErrorBytes = Encoding.UTF8.GetBytes(searchableError);
-                searchableErrorBytes = new MD5CryptoServiceProvider().ComputeHash(searchableErrorBytes);
-                var searchHash = BitConverter.ToString(searchableErrorBytes).Replace("-", String.Empty);
-                exceptionMsg.AppendFormat("\r\n\r\n{0}", searchHash);
-
-                if (DialogResult.OK == MessageBox.Show(Owner, @"An unexpected error has occured during processing.
-Clicking 'OK' will result in the following:
-
-    1. The exception info below will be copied to the clipboard.
-
-    2. Your default browser will search CodePlex for more details.
-
-    • *Please* click 'Create New Work Item' and paste the error details
-        into the Description field if there are no work items for this issue!
-        (At least email the details to opendbdiff@gmail.com...)
-
-    • Vote for existing work items; paste details into 'Add Comment'.
-
-    • If possible, please attach a SQL script creating two dbs with
-        the minimum necessary to reproduce the problem.
-
-" + exceptionMsg.ToString(), "Error " + errorLocation, MessageBoxButtons.OKCancel, MessageBoxIcon.Error))
-                {
-                    try
-                    {
-                        System.Windows.Forms.Clipboard.SetText(exceptionMsg.ToString());
-                        Process.Start("http://opendbiff.codeplex.com/workitem/list/basic?keywords=" + Uri.EscapeDataString(searchHash));
-                    }
-                    finally
-                    {
-                    }
-                }
+                HandleException(errorLocation, ex);
             }
             finally
             {
                 Cursor = Cursors.Default;
             }
+        }
+
+        private void HandleException(string errorLocation, Exception ex)
+        {
+            var errorDialog = new ErrorForm(ex);
+
+            var dialogResult = errorDialog.ShowDialog(this);
         }
 
         private void UnloadProjectHandler()
@@ -377,7 +327,7 @@ Clicking 'OK' will result in the following:
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HandleException("Save Script As", ex);
             }
         }
 
@@ -612,7 +562,7 @@ Clicking 'OK' will result in the following:
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.ToString(), "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HandleException("Saving Project", ex);
             }
         }
 
@@ -628,7 +578,7 @@ Clicking 'OK' will result in the following:
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HandleException("Opening Project", ex);
             }
         }
 
@@ -640,7 +590,7 @@ Clicking 'OK' will result in the following:
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HandleException("Renaming Project", ex);
             }
         }
 
@@ -661,7 +611,7 @@ Clicking 'OK' will result in the following:
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HandleException("Deleting Project", ex);
             }
         }
 
@@ -678,7 +628,7 @@ Clicking 'OK' will result in the following:
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                HandleException("Selecting Project", ex);
             }
         }
 

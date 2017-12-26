@@ -90,6 +90,12 @@
     <Compile Include="Front\DataCompareForm.Designer.cs">
       <DependentUpon>DataCompareForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Front\ErrorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Front\ErrorForm.Designer.cs">
+      <DependentUpon>ErrorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Updater.cs" />
     <Compile Include="Front\DatabaseProgressControl.cs">
       <SubType>UserControl</SubType>
@@ -134,6 +140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Front\DataCompareForm.resx">
       <DependentUpon>DataCompareForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Front\ErrorForm.resx">
+      <DependentUpon>ErrorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Front\OptionForm.resx">
       <DependentUpon>OptionForm.cs</DependentUpon>
