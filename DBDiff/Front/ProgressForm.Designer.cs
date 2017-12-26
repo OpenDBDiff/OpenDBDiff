@@ -73,26 +73,26 @@ namespace DBDiff.Front
             this.panel1.Size = new System.Drawing.Size(499, 173);
             this.panel1.TabIndex = 30;
             // 
-            // databaseProgressControl2
+            // sourceProgressControl
             // 
             this.sourceProgressControl.BackColor = System.Drawing.Color.WhiteSmoke;
             this.sourceProgressControl.DatabaseName = "Database1:";
             this.sourceProgressControl.Location = new System.Drawing.Point(12, 92);
             this.sourceProgressControl.Maximum = 100;
             this.sourceProgressControl.Message = "";
-            this.sourceProgressControl.Name = "databaseProgressControl2";
+            this.sourceProgressControl.Name = "sourceProgressControl";
             this.sourceProgressControl.Size = new System.Drawing.Size(472, 64);
             this.sourceProgressControl.TabIndex = 35;
             this.sourceProgressControl.Value = 0;
             // 
-            // databaseProgressControl1
+            // destinationProgressControl
             // 
             this.destinationProgressControl.BackColor = System.Drawing.Color.WhiteSmoke;
             this.destinationProgressControl.DatabaseName = "Database1:";
             this.destinationProgressControl.Location = new System.Drawing.Point(12, 15);
             this.destinationProgressControl.Maximum = 100;
             this.destinationProgressControl.Message = "";
-            this.destinationProgressControl.Name = "databaseProgressControl1";
+            this.destinationProgressControl.Name = "destinationProgressControl";
             this.destinationProgressControl.Size = new System.Drawing.Size(472, 64);
             this.destinationProgressControl.TabIndex = 34;
             this.destinationProgressControl.Value = 0;
@@ -114,7 +114,6 @@ namespace DBDiff.Front
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Running";
             this.Activated += new System.EventHandler(this.ProgressForm_Activated);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProgressForm_FormClosing);
             this.gradientPanel1.ResumeLayout(false);
             this.gradientPanel1.PerformLayout();
             this.panel1.ResumeLayout(false);
