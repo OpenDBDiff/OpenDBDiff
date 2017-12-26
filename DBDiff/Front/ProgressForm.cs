@@ -125,5 +125,10 @@ namespace DBDiff.Front
 
             this.ErrorMostRecentProgress = e.Message;
         }
+
+        private void ProgressForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+        }
     }
 }

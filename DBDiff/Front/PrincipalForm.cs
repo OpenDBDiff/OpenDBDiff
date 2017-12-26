@@ -329,96 +329,9 @@ namespace DBDiff.Front
 
         private void HandleException(string errorLocation, Exception ex)
         {
-            var exceptionList = new List<Exception>();
-            exceptionList.Add(ex);
+            var errorDialog = new ErrorForm(ex);
 
-            var innerException = ex.InnerException;
-            while (innerException != null)
-            {
-                exceptionList.Insert(0, innerException);
-                innerException = innerException.InnerException;
-
-            }
-
-            var exceptionMsg = new StringBuilder();
-            var prevMessage = exceptionList[0].Message;
-            exceptionMsg.Append(this.Text);
-            for (int i = 1; i < exceptionList.Count; ++i)
-            {
-                if (exceptionList[i].Message != prevMessage)
-                {
-                    exceptionMsg.Append($"\r\n{exceptionList[i].Message}");
-                    prevMessage = exceptionList[i].Message;
-                }
-            }
-
-            var ignoreSystem = new Regex(@"   at System\.[^\r\n]+\r\n|C:\\dev\\open-dbdiff\\");
-            exceptionMsg.Append($"\r\n{exceptionList[0].GetType().Name}: {exceptionList[0].Message}\r\n{ignoreSystem.Replace(exceptionList[0].StackTrace, String.Empty)}");
-
-            var ignoreChunks = new Regex(@": \[[^\)]*\)|\.\.\.\)|\'[^\']*\'|\([^\)]*\)|\" + '"' + @"[^\" + '"' + @"]*\" + '"' + @"|Source|Destination");
-            var searchableError = new StringBuilder();
-            string joiner = " OR ";
-            int queryMaxLength = 280; //Bug in github for searching issues? Q max length is 280
-            foreach (var err in exceptionList)
-            {
-                var roomLeft = queryMaxLength - searchableError.Length;
-                if (roomLeft > (joiner.Length + 2 + err.Message.Length))
-                {
-                    if (searchableError.Length > 0)
-                    {
-                        searchableError.Append(joiner);
-                    }
-                    searchableError.Append("\"");
-                    searchableError.Append(err.Message);
-                    searchableError.Append("\"");
-                }
-            }
-            var searchableErrorBytes = Encoding.UTF8.GetBytes(searchableError.ToString());
-            searchableErrorBytes = new MD5CryptoServiceProvider().ComputeHash(searchableErrorBytes);
-            var searchHash = BitConverter.ToString(searchableErrorBytes).Replace("-", String.Empty);
-            exceptionMsg.AppendFormat("\r\n\r\n{0}", searchHash);
-
-            if (DialogResult.OK == MessageBox.Show(Owner, @"An unexpected error has occured during processing.
-Clicking 'OK' will result in the following:
-
-    1. The exception info below will be copied to the clipboard.
-
-    2. Your default browser will search in github issues for more details.
-
-    • *Please* click 'Create New Issue' and paste the error details
-        into the Description field if there are no work items for this issue!
-        (At least email the details to opendbdiff@gmail.com...)
-
-    • Vote for existing work items; paste details into 'Add Comment'.
-
-    • If possible, please attach a SQL script creating two dbs with
-        the minimum necessary to reproduce the problem.
-
-" + exceptionMsg.ToString(), "Error " + errorLocation, MessageBoxButtons.OKCancel, MessageBoxIcon.Error))
-            {
-                try
-                {
-                    System.Windows.Forms.Clipboard.SetText(exceptionMsg.ToString());
-                }
-                catch (Exception)
-                {
-
-                }
-                finally
-                {
-                }
-                try
-                {
-                    Process.Start("https://github.com/OpenDBDiff/OpenDBDiff/issues?q=is%3Aissue+" + Uri.EscapeDataString(searchableError.ToString()));
-                }
-                catch (Exception)
-                {
-
-                }
-                finally
-                {
-                }
-            }
+            var dialogResult = errorDialog.ShowDialog(this);
         }
 
         private void optMySQL_CheckedChanged(object sender, EventArgs e)

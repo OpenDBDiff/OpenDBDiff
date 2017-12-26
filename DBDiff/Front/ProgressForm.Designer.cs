@@ -114,6 +114,7 @@ namespace DBDiff.Front
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Running";
             this.Activated += new System.EventHandler(this.ProgressForm_Activated);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProgressForm_FormClosing);
             this.gradientPanel1.ResumeLayout(false);
             this.gradientPanel1.PerformLayout();
             this.panel1.ResumeLayout(false);
