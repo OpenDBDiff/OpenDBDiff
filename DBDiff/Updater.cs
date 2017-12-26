@@ -102,7 +102,7 @@ namespace DBDiff
             }
 
             string result = string.Empty;
-            SQLScriptList SqlDiff = target.ToSqlDiff();
+            SQLScriptList SqlDiff = target.ToSqlDiff(new List<ISchemaBase>());
             string[] splitOn = { "GO" };
             string[] tempList = SqlDiff.ToSQL().Split(splitOn, StringSplitOptions.RemoveEmptyEntries);
             List<string> scripts = new List<string>(tempList);
@@ -135,7 +135,7 @@ namespace DBDiff
 
         public static string rebuild(ISchemaBase target, string connectionString)
         {
-            SQLScriptList SqlDiff = target.ToSqlDiff();
+            SQLScriptList SqlDiff = target.ToSqlDiff(new List<ISchemaBase>());
             string[] splitOn = { "GO" };
             string[] tempList = SqlDiff.ToSQL().Split(splitOn, StringSplitOptions.RemoveEmptyEntries);
             List<string> scripts = new List<string>(tempList);

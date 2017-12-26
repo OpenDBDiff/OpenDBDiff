@@ -152,7 +152,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return "ALTER TABLE " + ((Table)Parent.Parent).FullName + " DROP CONSTRAINT [" + Name + "]\r\nGO\r\n";
         }
 
-        public override SQLScriptList ToSqlDiff()
+        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<DBDiff.Schema.Model.ISchemaBase> schemas)
         {
             SQLScriptList list = new SQLScriptList();
             if (this.HasState(Enums.ObjectStatusType.DropStatus))

@@ -125,22 +125,12 @@ namespace DBDiff.Schema.Model
         }
 
         /// <summary>
-        /// Returns the list of SQL Scripts to execute to sync for the specified object
-        /// </summary>
-        /// <returns>
-        /// A list (<see cref="SQLScriptList"/>) of scripts to run to sync
-        /// </returns>
-        public virtual SQLScriptList ToSqlDiff()
-        {
-            return null;
-        }
-        /// <summary>
         /// Returns the list of SQL Scripts to execute to sync for the specified schemas
         /// </summary>
         /// <returns>
         /// A list (<see cref="SQLScriptList"/>) of scripts to run to sync
         /// </returns>
-        public virtual SQLScriptList ToSqlDiff(List<ISchemaBase> schemas)
+        public virtual SQLScriptList ToSqlDiff(ICollection<ISchemaBase> schemas)
         {
             return null;
         }

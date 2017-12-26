@@ -48,7 +48,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return sql + "GO\r\n";
         }
 
-        public override SQLScriptList ToSqlDiff()
+        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             SQLScriptList listDiff = new SQLScriptList();
 
