@@ -259,7 +259,7 @@ namespace DBDiff.Front
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(98, 13);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Alter existing object";
+            this.label2.Text = "Alter old object";
             // 
             // label1
             // 
