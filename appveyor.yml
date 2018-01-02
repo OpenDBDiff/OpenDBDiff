@@ -9,13 +9,13 @@ assembly_info:
   assembly_informational_version: "{version}"
 
 before_build:
-- cmd: nuget restore DBDiff.sln
+- cmd: nuget restore OpenDBDiff.sln
 
 build:
   parallel: true # enable MSBuild parallel builds
-  project: DBDiff.sln
+  project: OpenDBDiff.sln
   verbosity: minimal
 
 artifacts:
-- path: DBDiff\bin\Debug
+- path: OpenDBDiff\bin\Debug
   name: OpenDBDiffCI
