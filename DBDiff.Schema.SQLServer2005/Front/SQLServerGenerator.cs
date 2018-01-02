@@ -18,11 +18,12 @@ namespace DBDiff.Schema.SQLServer.Generates.Front
                 ConnectionString = connectionString,
                 Options = new Options.SqlOption(option)
             };
-            if (OnProgress != null)
+            this.Generate.OnProgress += new ProgressEventHandler.ProgressHandler(args =>
             {
-                this.Generate.OnProgress += new ProgressEventHandler.ProgressHandler(args => OnProgress.Invoke(args));
-            }
-            
+                if (OnProgress != null)
+                    OnProgress.Invoke(args);
+            });
+
         }
 
         public int GetMaxValue()

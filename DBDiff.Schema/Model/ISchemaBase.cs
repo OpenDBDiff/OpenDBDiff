@@ -21,7 +21,7 @@ namespace DBDiff.Schema.Model
         string ToSqlDrop();
         string ToSqlAdd();
         string ToSql();
-        SQLScriptList ToSqlDiff();
+        SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas);
         SQLScript Create();
         SQLScript Drop();
         int CompareFullNameTo(string name, string myName);

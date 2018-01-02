@@ -290,7 +290,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return null;
         }
 
-        public override SQLScriptList ToSqlDiff()
+        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             try
             {

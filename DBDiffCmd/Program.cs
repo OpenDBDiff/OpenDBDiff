@@ -70,11 +70,11 @@ namespace DBDiff.OCDB
                     if (!arguments.OutputAll)
                     {
                         // temporary work-around: run twice just like GUI
-                        origin.ToSqlDiff();
+                        origin.ToSqlDiff(new System.Collections.Generic.List<Schema.Model.ISchemaBase>());
                     }
 
                     Console.WriteLine("Generating SQL file...");
-                    SaveFile(arguments.OutputFile, arguments.OutputAll ? origin.ToSql() : origin.ToSqlDiff().ToSQL());
+                    SaveFile(arguments.OutputFile, arguments.OutputAll ? origin.ToSql() : origin.ToSqlDiff(new System.Collections.Generic.List<Schema.Model.ISchemaBase>()).ToSQL());
                     completedSuccessfully = true;
                 }
             }

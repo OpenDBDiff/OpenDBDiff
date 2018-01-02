@@ -29,7 +29,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
 
         public bool IsDelete { get; set; }
 
-        public override SQLScriptList ToSqlDiff()
+        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             SQLScriptList list = new SQLScriptList();
 

@@ -42,7 +42,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return sql.ToString();
         }
 
-        public override SQLScriptList ToSqlDiff()
+        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             string sqlDrop = "";
             string sqlAdd = "";
@@ -53,36 +53,51 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             {
                 this.ForEach(item =>
                 {
-                    if (item.HasState(Enums.ObjectStatusType.DropStatus))
+                    bool isIncluded = schemas.Count == 0;
+                    if (!isIncluded)
                     {
+                        foreach (var selectedSchema in schemas)
+                        {
+                            if (selectedSchema.Id == item.Id)
+                            {
+                                isIncluded = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (isIncluded)
+                    {
+                        if (item.HasState(Enums.ObjectStatusType.DropStatus))
+                        {
+                            if (item.DefaultConstraint != null)
+                                list.Add(item.DefaultConstraint.Drop());
+                            /*Si la columna formula debe ser eliminada y ya fue efectuada la operacion en otro momento, no
+                             * se borra nuevamente*/
+                            if (!item.GetWasInsertInDiffList(Enums.ScripActionType.AlterColumnFormula))
+                                sqlDrop += "[" + item.Name + "],";
+                        }
+                        if (item.HasState(Enums.ObjectStatusType.CreateStatus))
+                            sqlAdd += "\r\n" + item.ToSql(true) + ",";
+                        if ((item.HasState(Enums.ObjectStatusType.AlterStatus) || (item.HasState(Enums.ObjectStatusType.RebuildDependenciesStatus))))
+                        {
+                            if ((!item.Parent.HasState(Enums.ObjectStatusType.RebuildDependenciesStatus) || (!item.Parent.HasState(Enums.ObjectStatusType.RebuildStatus))))
+                                list.AddRange(item.RebuildSchemaBindingDependencies());
+                            list.AddRange(item.RebuildConstraint(false));
+                            list.AddRange(item.RebuildDependencies());
+                            list.AddRange(item.Alter(Enums.ScripActionType.AlterTable));
+                        }
+                        if (item.HasState(Enums.ObjectStatusType.UpdateStatus))
+                            list.Add("UPDATE " + Parent.FullName + " SET [" + item.Name + "] = " + item.DefaultForceValue + " WHERE [" + item.Name + "] IS NULL\r\nGO\r\n", 0, Enums.ScripActionType.UpdateTable);
+                        if (item.HasState(Enums.ObjectStatusType.BindStatus))
+                        {
+                            if (item.Rule.Id != 0)
+                                sqlBinds += item.Rule.ToSQLAddBind();
+                            if (item.Rule.Id == 0)
+                                sqlBinds += item.Rule.ToSQLAddUnBind();
+                        }
                         if (item.DefaultConstraint != null)
-                            list.Add(item.DefaultConstraint.Drop());
-                        /*Si la columna formula debe ser eliminada y ya fue efectuada la operacion en otro momento, no
-                         * se borra nuevamente*/
-                        if (!item.GetWasInsertInDiffList(Enums.ScripActionType.AlterColumnFormula))
-                            sqlDrop += "[" + item.Name + "],";
+                            list.AddRange(item.DefaultConstraint.ToSqlDiff(schemas));
                     }
-                    if (item.HasState(Enums.ObjectStatusType.CreateStatus))
-                        sqlAdd += "\r\n" + item.ToSql(true) + ",";
-                    if ((item.HasState(Enums.ObjectStatusType.AlterStatus) || (item.HasState(Enums.ObjectStatusType.RebuildDependenciesStatus))))
-                    {
-                        if ((!item.Parent.HasState(Enums.ObjectStatusType.RebuildDependenciesStatus) || (!item.Parent.HasState(Enums.ObjectStatusType.RebuildStatus))))
-                            list.AddRange(item.RebuildSchemaBindingDependencies());
-                        list.AddRange(item.RebuildConstraint(false));
-                        list.AddRange(item.RebuildDependencies());
-                        list.AddRange(item.Alter(Enums.ScripActionType.AlterTable));
-                    }
-                    if (item.HasState(Enums.ObjectStatusType.UpdateStatus))
-                        list.Add("UPDATE " + Parent.FullName + " SET [" + item.Name + "] = " + item.DefaultForceValue + " WHERE [" + item.Name + "] IS NULL\r\nGO\r\n", 0, Enums.ScripActionType.UpdateTable);
-                    if (item.HasState(Enums.ObjectStatusType.BindStatus))
-                    {
-                        if (item.Rule.Id != 0)
-                            sqlBinds += item.Rule.ToSQLAddBind();
-                        if (item.Rule.Id == 0)
-                            sqlBinds += item.Rule.ToSQLAddUnBind();
-                    }
-                    if (item.DefaultConstraint != null)
-                        list.AddRange(item.DefaultConstraint.ToSqlDiff());
                 });
                 if (!String.IsNullOrEmpty(sqlDrop))
                     sqlDrop = "ALTER TABLE " + Parent.FullName + " DROP COLUMN " + sqlDrop.Substring(0, sqlDrop.Length - 1) + "\r\nGO\r\n";

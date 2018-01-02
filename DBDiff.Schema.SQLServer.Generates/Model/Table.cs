@@ -323,7 +323,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Devuelve el schema de diferencias de la tabla en formato SQL.
         /// </summary>
-        public override SQLScriptList ToSqlDiff()
+        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             var listDiff = new SQLScriptList();
 
@@ -356,7 +356,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             {
                 GenerateDependencis();
                 listDiff.AddRange(ToSQLDropDependencis());
-                listDiff.AddRange(Columns.ToSqlDiff());
+                listDiff.AddRange(Columns.ToSqlDiff(schemas));
                 listDiff.AddRange(ToSQLCreateDependencis());
                 listDiff.AddRange(Constraints.ToSqlDiff());
                 listDiff.AddRange(Indexes.ToSqlDiff());
@@ -367,7 +367,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             }
             if (HasState(Enums.ObjectStatusType.AlterStatus))
             {
-                listDiff.AddRange(Columns.ToSqlDiff());
+                listDiff.AddRange(Columns.ToSqlDiff(schemas));
                 listDiff.AddRange(Constraints.ToSqlDiff());
                 listDiff.AddRange(Indexes.ToSqlDiff());
                 listDiff.AddRange(Options.ToSqlDiff());

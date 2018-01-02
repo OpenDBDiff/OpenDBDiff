@@ -81,7 +81,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
             return ToSqlAdd();
         }
 
-        public override SQLScriptList ToSqlDiff()
+        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             SQLScriptList list = new SQLScriptList();
             if (this.Parent.Status != Enums.ObjectStatusType.CreateStatus)

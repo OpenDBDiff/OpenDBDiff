@@ -200,12 +200,7 @@ namespace DBDiff.Schema.SQLServer.Generates.Model
         {
             this.t
         }*/
-
-        public override SQLScriptList ToSqlDiff()
-        {
-            return ToSqlDiff(new List<ISchemaBase>());
-        }
-        public override SQLScriptList ToSqlDiff(List<ISchemaBase> schemas)
+        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             var isAzure10 = this.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10;
 

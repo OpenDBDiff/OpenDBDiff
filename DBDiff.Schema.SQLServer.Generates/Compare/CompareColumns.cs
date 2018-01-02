@@ -4,7 +4,7 @@ using DBDiff.Schema.SQLServer.Generates.Model;
 
 namespace DBDiff.Schema.SQLServer.Generates.Compare
 {
-    internal class CompareColumns
+    public class CompareColumns
     {
         public void GenerateDifferences<T>(Columns<T> originFields, Columns<T> destinationFields) where T : ISchemaBase
         {
