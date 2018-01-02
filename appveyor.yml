@@ -1,0 +1,21 @@
+version: 0.9.0.{build}
+
+# enable patching of AssemblyInfo.* files
+assembly_info:
+  patch: true
+  file: AssemblyVersionInfo.*
+  assembly_version: "{version}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
+
+before_build:
+- cmd: nuget restore DBDiff.sln
+
+build:
+  parallel: true # enable MSBuild parallel builds
+  project: DBDiff.sln
+  verbosity: minimal
+
+artifacts:
+- path: DBDiff\bin\Debug
+  name: OpenDBDiffCI
