@@ -19,7 +19,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQL(SqlOption options)
         {
-            var filterQuery =  SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetTextObjectsQuery");
+            var filterQuery =  SQLQueries.SQLQueryFactory.Get("GetTextObjectsQuery");
             string filter = "";
             if (options.Ignore.FilterStoredProcedure)
                 filter += "O.type = 'P' OR ";

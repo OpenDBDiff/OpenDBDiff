@@ -71,7 +71,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQLForeignKey()
         {
-            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetForeignKeys");
+            return SQLQueries.SQLQueryFactory.Get("GetForeignKeys");
         }
 
         private static void FillForeignKey(Database database, string connectionString)

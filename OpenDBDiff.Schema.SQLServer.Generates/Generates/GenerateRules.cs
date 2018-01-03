@@ -14,7 +14,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQL()
         {
-            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetRules");
+            return SQLQueries.SQLQueryFactory.Get("GetRules");
         }
 
         public void Fill(Database database, string connectionString)

@@ -18,12 +18,12 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQLColumnsDependencies()
         {
-            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetXMLSchemaCollections");
+            return SQLQueries.SQLQueryFactory.Get("GetXMLSchemaCollections");
         }
 
         private static string GetSQLXMLSchema()
         {
-            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetSQLXMLSchema");
+            return SQLQueries.SQLQueryFactory.Get("GetSQLXMLSchema");
         }
 
         private static void FillColumnsDependencies(SchemaList<XMLSchema, Database> items, string connectionString)

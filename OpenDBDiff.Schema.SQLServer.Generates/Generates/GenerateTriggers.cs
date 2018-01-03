@@ -23,11 +23,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
         {
             if (version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
             {
-                return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetTriggers", version);
+                return SQLQueries.SQLQueryFactory.Get("GetTriggers", version);
             }
             else
             {
-                return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetTriggers");
+                return SQLQueries.SQLQueryFactory.Get("GetTriggers");
             }
         }
 

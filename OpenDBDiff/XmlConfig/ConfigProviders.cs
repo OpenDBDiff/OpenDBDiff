@@ -13,8 +13,8 @@ namespace OpenDBDiff.XmlConfig
             if (providers == null)
             {
                 XmlDocument xmldom = new XmlDocument();
-                xmldom.Load("DBDiffConfig.xml");
-                nodes = xmldom.SelectNodes("DBDIFF/Providers/Provider");
+                xmldom.Load("OpenDBDiffConfig.xml");
+                nodes = xmldom.SelectNodes("OpenDBDiff/Providers/Provider");
                 providers = new Hashtable();
                 for (int index = 0; index < nodes.Count; index++)
                 {

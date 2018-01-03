@@ -16,12 +16,12 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQLFiles()
         {
-            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetAssemblyFiles");
+            return SQLQueries.SQLQueryFactory.Get("GetAssemblyFiles");
         }
 
         private static string GetSQL()
         {
-            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetAssemblies");
+            return SQLQueries.SQLQueryFactory.Get("GetAssemblies");
         }
 
         private static string ToHex(byte[] stream)

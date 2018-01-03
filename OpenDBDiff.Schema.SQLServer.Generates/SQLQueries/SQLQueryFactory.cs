@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLQueries
+namespace OpenDBDiff.Schema.SQLServer.Generates.SQLQueries
 {
     public static class SQLQueryFactory
     {
@@ -13,16 +13,20 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLQueries
         {
             return Get($"{queryFullName}.{version}");
         }
-        public static string Get(string queryFullName)
+
+        public static string Get(string queryClass)
         {
-            if (queries.ContainsKey(queryFullName))
+            var ns = typeof(SQLQueryFactory).Namespace;
+            var qualifiedQueryClass = string.Concat(ns, '.', queryClass);
+
+            if (queries.ContainsKey(qualifiedQueryClass))
             {
-                return queries[queryFullName];
+                return queries[qualifiedQueryClass];
             }
             else
             {
-                string query = FetchQuery(queryFullName);
-                queries.Add(queryFullName, query);
+                string query = FetchQuery(qualifiedQueryClass);
+                queries.Add(qualifiedQueryClass, query);
                 return query;
             }
         }

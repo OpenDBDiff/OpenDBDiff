@@ -21,7 +21,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQLColumnsDependencies()
         {
-            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetSQLColumnsDependencies");
+            return SQLQueries.SQLQueryFactory.Get("GetSQLColumnsDependencies");
         }
 
         private static void FillColumnsDependencies(SchemaList<UserDataType, Database> types, string connectionString)
