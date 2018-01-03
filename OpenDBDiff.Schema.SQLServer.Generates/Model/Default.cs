@@ -9,7 +9,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
         }
 
-        public Default Clone(ISchemaBase parent)
+        public new Default Clone(ISchemaBase parent)
         {
             Default item = new Default(parent);
             item.Id = this.Id;

@@ -12,7 +12,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
         }
 
-        public Rule Clone(ISchemaBase parent)
+        public new Rule Clone(ISchemaBase parent)
         {
             Rule item = new Rule(parent);
             item.Id = this.Id;

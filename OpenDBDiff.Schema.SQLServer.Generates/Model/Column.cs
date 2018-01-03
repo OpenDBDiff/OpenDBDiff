@@ -21,7 +21,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Clona el objeto Column en una nueva instancia.
         /// </summary>
-        public Column Clone(ISchemaBase parent)
+        public new Column Clone(ISchemaBase parent)
         {
             Column col;
             if (parent == null)

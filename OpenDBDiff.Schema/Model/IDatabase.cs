@@ -8,7 +8,7 @@ namespace OpenDBDiff.Schema.Model
         SqlAction ActionMessage { get; }
         IOption Options { get; }
 
-        SQLScriptList ToSqlDiff(ICollection<ISchemaBase> selectedSchemas);
+        new SQLScriptList ToSqlDiff(ICollection<ISchemaBase> selectedSchemas);
         ISchemaBase Find(string objectFullName);
     }
 }
