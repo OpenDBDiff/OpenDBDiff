@@ -5,8 +5,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Options
 {
     public class SqlOption : IOption
     {
-        private IOption option;
-
         public SqlOption()
         {
             Defaults = new SqlOptionDefault();

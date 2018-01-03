@@ -36,22 +36,22 @@ namespace OpenDBDiff.Front
             this.gradientPanel1 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.Icon = new System.Windows.Forms.ColumnHeader(0);
-            this.Connection = new System.Windows.Forms.ColumnHeader();
+            this.IconColumnHeader = new System.Windows.Forms.ColumnHeader(0);
+            this.ConnectionColumnHeader = new System.Windows.Forms.ColumnHeader();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.gradientPanel1.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // gradientPanel1
-            // 
+            //
             this.gradientPanel1.Controls.Add(this.label11);
             this.gradientPanel1.Location = new System.Drawing.Point(3, 5);
             this.gradientPanel1.Name = "gradientPanel1";
             this.gradientPanel1.Size = new System.Drawing.Size(420, 21);
             this.gradientPanel1.TabIndex = 4;
-            // 
+            //
             // label11
-            // 
+            //
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.Location = new System.Drawing.Point(4, 4);
@@ -59,13 +59,13 @@ namespace OpenDBDiff.Front
             this.label11.Size = new System.Drawing.Size(116, 13);
             this.label11.TabIndex = 3;
             this.label11.Text = "List of Diff Projects";
-            // 
+            //
             // listView1
-            // 
+            //
             this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Icon,
-            this.Connection});
+            this.IconColumnHeader,
+            this.ConnectionColumnHeader});
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.listView1.HideSelection = false;
             this.listView1.LabelWrap = false;
@@ -80,23 +80,23 @@ namespace OpenDBDiff.Front
             this.listView1.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.listView1_AfterLabelEdit);
             this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             this.listView1.DoubleClick += new System.EventHandler(this.listView1_DoubleClick);
-            // 
+            //
             // Icon
-            // 
-            this.Icon.Width = 500;
-            // 
+            //
+            this.IconColumnHeader.Width = 500;
+            //
             // Connection
-            // 
-            this.Connection.Width = 600;
-            // 
+            //
+            this.ConnectionColumnHeader.Width = 600;
+            //
             // imageList1
-            // 
+            //
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "Database.ico");
-            // 
+            //
             // ListProjectsForm
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
@@ -124,8 +124,8 @@ namespace OpenDBDiff.Front
         private Panel gradientPanel1;
         private Label label11;
         private ListView listView1;
-        private ColumnHeader Icon;
-        private ColumnHeader Connection;
+        private ColumnHeader IconColumnHeader;
+        private ColumnHeader ConnectionColumnHeader;
         private ImageList imageList1;
     }
 }

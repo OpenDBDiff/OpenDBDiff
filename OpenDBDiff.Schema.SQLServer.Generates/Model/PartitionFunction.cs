@@ -20,7 +20,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             Values = new List<string>();
         }
 
-        public PartitionFunction Clone(ISchemaBase parent)
+        public new PartitionFunction Clone(ISchemaBase parent)
         {
             PartitionFunction item = new PartitionFunction(parent);
             item.Id = this.Id;

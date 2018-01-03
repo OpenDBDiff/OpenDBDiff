@@ -17,7 +17,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Clona el objeto en una nueva instancia.
         /// </summary>
-        public XMLSchema Clone(ISchemaBase parent)
+        public new XMLSchema Clone(ISchemaBase parent)
         {
             XMLSchema item = new XMLSchema(parent);
             item.Text = this.Text;

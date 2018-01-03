@@ -86,7 +86,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 }
                 return list;
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
