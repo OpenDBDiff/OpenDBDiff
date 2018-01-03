@@ -11,7 +11,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
         {
             if (source is Model.Database && destination is Model.Database)
             {
-                return Generate.Compare(source as Model.Database, destination as Model.Database);
+                return Generate.Compare(destination as Model.Database, source as Model.Database);
             }
             else if (!(source is Model.Database))
             {

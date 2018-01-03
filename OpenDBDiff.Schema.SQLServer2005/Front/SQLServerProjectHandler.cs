@@ -23,7 +23,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             this.DestinationControl.Name = "mySqlConnectFront1";
             this.DestinationControl.Anchor = (AnchorStyles)((int)AnchorStyles.Bottom + (int)AnchorStyles.Left + (int)AnchorStyles.Right);
             this.DestinationControl.TabIndex = 10;
-            this.DestinationControl.Text = "Source Database:";
+            this.DestinationControl.Text = "Destination Database:";
             this.DestinationControl.UserName = "sa";
             this.DestinationControl.Password = "";
             this.DestinationControl.ServerName = "(local)";
