@@ -18,7 +18,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQLParameters()
         {
-            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetParameters");
+            return SQLQueries.SQLQueryFactory.Get("GetParameters");
         }
 
         private static void FillParameters(Database database, string connectionString)

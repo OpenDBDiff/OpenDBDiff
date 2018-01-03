@@ -18,7 +18,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQL()
         {
-            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetExtendedProperties");
+            return SQLQueries.SQLQueryFactory.Get("GetExtendedProperties");
         }
 
         private static string GetTypeDescription(string type)

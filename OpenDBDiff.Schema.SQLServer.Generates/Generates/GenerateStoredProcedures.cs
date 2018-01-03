@@ -32,18 +32,18 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQLParameters()
         {
-            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetParameters");
+            return SQLQueries.SQLQueryFactory.Get("GetParameters");
         }
 
         private static string GetSQL(DatabaseInfo.VersionTypeEnum version)
         {
             if (version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
             {
-                return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetProcedures", DatabaseInfo.VersionTypeEnum.SQLServerAzure10);
+                return SQLQueries.SQLQueryFactory.Get("GetProcedures", DatabaseInfo.VersionTypeEnum.SQLServerAzure10);
             }
             else
             {
-                return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetProcedures");
+                return SQLQueries.SQLQueryFactory.Get("GetProcedures");
             }
         }
 

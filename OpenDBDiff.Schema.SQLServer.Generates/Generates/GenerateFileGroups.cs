@@ -14,14 +14,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQLFile(FileGroup filegroup)
         {
-            string query = SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetDatabaseFile");
+            string query = SQLQueries.SQLQueryFactory.Get("GetDatabaseFile");
 
             return query.Replace("{ID}", filegroup.Id.ToString());
         }
 
         private static string GetSQL()
         {
-            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetFileGroups");
+            return SQLQueries.SQLQueryFactory.Get("GetFileGroups");
         }
 
         private static void FillFiles(FileGroup filegroup, string connectionString)

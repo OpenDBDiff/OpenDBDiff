@@ -14,7 +14,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         private static string GetSQL()
         {
-            return SQLQueries.SQLQueryFactory.Get("DBDiff.Schema.SQLServer.Generates.SQLQueries.GetFullTextCatalogs");
+            return SQLQueries.SQLQueryFactory.Get("GetFullTextCatalogs");
         }
 
         public void Fill(Database database, string connectionString)
