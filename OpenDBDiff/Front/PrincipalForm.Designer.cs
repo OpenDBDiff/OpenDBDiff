@@ -51,7 +51,7 @@ namespace OpenDBDiff.Front
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.schemaTreeView1 = new DBDiff.Front.SchemaTreeView();
+            this.schemaTreeView1 = new OpenDBDiff.Front.SchemaTreeView();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.txtSyncScript = new ScintillaNET.Scintilla();
