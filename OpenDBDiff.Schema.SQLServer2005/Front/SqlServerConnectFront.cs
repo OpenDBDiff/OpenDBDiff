@@ -13,6 +13,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
         private delegate void clearCombo();
         private delegate void addCombo(string item);
 
+
         public SqlServerConnectFront()
         {
             InitializeComponent();

@@ -51,6 +51,7 @@ namespace OpenDBDiff.Front
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.schemaTreeView1 = new DBDiff.Front.SchemaTreeView();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.txtSyncScript = new ScintillaNET.Scintilla();
@@ -75,11 +76,10 @@ namespace OpenDBDiff.Front
             this.toolOpenProject = new System.Windows.Forms.ToolStripButton();
             this.toolNewProject = new System.Windows.Forms.ToolStripButton();
             this.toolSaveProject = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolLblProjectType = new System.Windows.Forms.ToolStripLabel();
             this.toolProjectTypes = new System.Windows.Forms.ToolStripComboBox();
             this.PanelActions = new System.Windows.Forms.FlowLayoutPanel();
-            this.schemaTreeView1 = new OpenDBDiff.Front.SchemaTreeView();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -117,10 +117,10 @@ namespace OpenDBDiff.Front
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 200);
+            this.tabControl1.Location = new System.Drawing.Point(0, 175);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(842, 458);
+            this.tabControl1.Size = new System.Drawing.Size(842, 483);
             this.tabControl1.TabIndex = 3;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             //
@@ -132,7 +132,7 @@ namespace OpenDBDiff.Front
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(834, 432);
+            this.tabPage2.Size = new System.Drawing.Size(834, 457);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Schema";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -148,7 +148,7 @@ namespace OpenDBDiff.Front
             this.tabControl2.Location = new System.Drawing.Point(350, 50);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(477, 377);
+            this.tabControl2.Size = new System.Drawing.Size(477, 402);
             this.tabControl2.TabIndex = 3;
             //
             // tabPage4
@@ -157,7 +157,7 @@ namespace OpenDBDiff.Front
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(469, 351);
+            this.tabPage4.Size = new System.Drawing.Size(469, 376);
             this.tabPage4.TabIndex = 0;
             this.tabPage4.Text = "New object";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -168,7 +168,7 @@ namespace OpenDBDiff.Front
             this.txtNewObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtNewObject.Location = new System.Drawing.Point(3, 3);
             this.txtNewObject.Name = "txtNewObject";
-            this.txtNewObject.Size = new System.Drawing.Size(463, 345);
+            this.txtNewObject.Size = new System.Drawing.Size(463, 370);
             this.txtNewObject.Styles.BraceBad.Size = 9F;
             this.txtNewObject.Styles.BraceLight.Size = 9F;
             this.txtNewObject.Styles.ControlChar.Size = 9F;
@@ -186,7 +186,7 @@ namespace OpenDBDiff.Front
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(469, 376);
+            this.tabPage5.Size = new System.Drawing.Size(469, 351);
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Old object";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -197,7 +197,7 @@ namespace OpenDBDiff.Front
             this.txtOldObject.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtOldObject.Location = new System.Drawing.Point(3, 3);
             this.txtOldObject.Name = "txtOldObject";
-            this.txtOldObject.Size = new System.Drawing.Size(463, 370);
+            this.txtOldObject.Size = new System.Drawing.Size(463, 345);
             this.txtOldObject.Styles.BraceBad.Size = 9F;
             this.txtOldObject.Styles.BraceLight.Size = 9F;
             this.txtOldObject.Styles.ControlChar.Size = 9F;
@@ -214,7 +214,7 @@ namespace OpenDBDiff.Front
             this.tabPage6.Controls.Add(this.txtDiff);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(469, 376);
+            this.tabPage6.Size = new System.Drawing.Size(469, 351);
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "Diff";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -224,7 +224,7 @@ namespace OpenDBDiff.Front
             this.txtDiff.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtDiff.Location = new System.Drawing.Point(0, 0);
             this.txtDiff.Name = "txtDiff";
-            this.txtDiff.Size = new System.Drawing.Size(469, 376);
+            this.txtDiff.Size = new System.Drawing.Size(469, 351);
             this.txtDiff.TabIndex = 0;
             //
             // groupBox2
@@ -257,7 +257,7 @@ namespace OpenDBDiff.Front
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(195, 16);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(98, 13);
+            this.label2.Size = new System.Drawing.Size(77, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "Alter old object";
             //
@@ -304,10 +304,25 @@ namespace OpenDBDiff.Front
             this.groupBox1.Controls.Add(this.schemaTreeView1);
             this.groupBox1.Location = new System.Drawing.Point(6, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(335, 420);
+            this.groupBox1.Size = new System.Drawing.Size(335, 445);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             //
+            // schemaTreeView1
+            // 
+            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.schemaTreeView1.DatabaseDestination = null;
+            this.schemaTreeView1.DatabaseSource = null;
+            this.schemaTreeView1.Location = new System.Drawing.Point(7, 10);
+            this.schemaTreeView1.Name = "schemaTreeView1";
+            this.schemaTreeView1.ShowChangedItems = true;
+            this.schemaTreeView1.ShowMissingItems = true;
+            this.schemaTreeView1.ShowNewItems = true;
+            this.schemaTreeView1.ShowUnchangedItems = true;
+            this.schemaTreeView1.Size = new System.Drawing.Size(322, 429);
+            this.schemaTreeView1.TabIndex = 0;
+            // 
             // tabPage1
             //
             this.tabPage1.Controls.Add(this.panel1);
@@ -315,7 +330,7 @@ namespace OpenDBDiff.Front
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(834, 457);
+            this.tabPage1.Size = new System.Drawing.Size(834, 432);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Synchronized script";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -349,7 +364,7 @@ namespace OpenDBDiff.Front
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(834, 457);
+            this.tabPage3.Size = new System.Drawing.Size(834, 432);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Action report";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -469,7 +484,7 @@ namespace OpenDBDiff.Front
             this.PanelGlobal.Controls.Add(this.btnSaveProject);
             this.PanelGlobal.Controls.Add(this.btnProject);
             this.PanelGlobal.Dock = System.Windows.Forms.DockStyle.Top;
-            this.PanelGlobal.Location = new System.Drawing.Point(0, 25);
+            this.PanelGlobal.Location = new System.Drawing.Point(0, 0);
             this.PanelGlobal.Name = "PanelGlobal";
             this.PanelGlobal.Size = new System.Drawing.Size(940, 175);
             this.PanelGlobal.TabIndex = 10;
@@ -483,8 +498,8 @@ namespace OpenDBDiff.Front
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.PanelSource, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.PanelDestination, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.PanelSource, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.PanelDestination, 1, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(126, 3);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -604,6 +619,12 @@ namespace OpenDBDiff.Front
             this.toolSaveProject.Size = new System.Drawing.Size(91, 22);
             this.toolSaveProject.Text = "&Save Project";
             //
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Visible = false;
+            // 
             // toolLblProjectType
             //
             this.toolLblProjectType.Name = "toolLblProjectType";
@@ -633,31 +654,10 @@ namespace OpenDBDiff.Front
             this.PanelActions.Controls.Add(this.btnUpdateAll);
             this.PanelActions.Dock = System.Windows.Forms.DockStyle.Right;
             this.PanelActions.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.PanelActions.Location = new System.Drawing.Point(842, 200);
+            this.PanelActions.Location = new System.Drawing.Point(842, 175);
             this.PanelActions.Name = "PanelActions";
-            this.PanelActions.Size = new System.Drawing.Size(98, 458);
+            this.PanelActions.Size = new System.Drawing.Size(98, 483);
             this.PanelActions.TabIndex = 17;
-            //
-            // schemaTreeView1
-            //
-            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.schemaTreeView1.DatabaseDestination = null;
-            this.schemaTreeView1.DatabaseSource = null;
-            this.schemaTreeView1.Location = new System.Drawing.Point(7, 10);
-            this.schemaTreeView1.Name = "schemaTreeView1";
-            this.schemaTreeView1.ShowChangedItems = true;
-            this.schemaTreeView1.ShowMissingItems = true;
-            this.schemaTreeView1.ShowNewItems = true;
-            this.schemaTreeView1.ShowUnchangedItems = true;
-            this.schemaTreeView1.Size = new System.Drawing.Size(322, 404);
-            this.schemaTreeView1.TabIndex = 0;
-            //
-            // toolStripSeparator1
-            //
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            this.toolStripSeparator1.Visible = false;
             //
             // PrincipalForm
             //

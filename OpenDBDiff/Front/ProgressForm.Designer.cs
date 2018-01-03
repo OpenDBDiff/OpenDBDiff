@@ -66,8 +66,8 @@ namespace OpenDBDiff.Front
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.Controls.Add(this.sourceProgressControl);
             this.panel1.Controls.Add(this.destinationProgressControl);
+            this.panel1.Controls.Add(this.sourceProgressControl);
             this.panel1.Location = new System.Drawing.Point(0, 57);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(499, 173);
@@ -76,8 +76,8 @@ namespace OpenDBDiff.Front
             // sourceProgressControl
             //
             this.sourceProgressControl.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.sourceProgressControl.DatabaseName = "Database1:";
-            this.sourceProgressControl.Location = new System.Drawing.Point(12, 92);
+            this.sourceProgressControl.DatabaseName = "Source:";
+            this.sourceProgressControl.Location = new System.Drawing.Point(12, 15);
             this.sourceProgressControl.Maximum = 100;
             this.sourceProgressControl.Message = "";
             this.sourceProgressControl.Name = "sourceProgressControl";
@@ -88,8 +88,8 @@ namespace OpenDBDiff.Front
             // destinationProgressControl
             //
             this.destinationProgressControl.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.destinationProgressControl.DatabaseName = "Database1:";
-            this.destinationProgressControl.Location = new System.Drawing.Point(12, 15);
+            this.destinationProgressControl.DatabaseName = "Destination:";
+            this.destinationProgressControl.Location = new System.Drawing.Point(12, 92);
             this.destinationProgressControl.Maximum = 100;
             this.destinationProgressControl.Message = "";
             this.destinationProgressControl.Name = "destinationProgressControl";
