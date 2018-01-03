@@ -11,7 +11,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{1704FA7C-5E57-458D-BDE4-5B008A9DB5E1}"
 	ProjectSection(SolutionItems) = preProject
 		References\ScintillaNET.dll = References\ScintillaNET.dll
-		References\System.Data.SQLite.dll = References\System.Data.SQLite.dll
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff", "OpenDBDiff\OpenDBDiff.csproj", "{99A26820-E71D-4E01-ADF2-E6AB25B03FA0}"
