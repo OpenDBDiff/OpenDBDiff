@@ -279,8 +279,8 @@ namespace OpenDBDiff.Front
         {
             /*if (optSybase.Checked)
             {
-                this.mySqlConnectFront2 = new DBDiff.Schema.Sybase.Front.AseConnectFront();
-                this.mySqlConnectFront1 = new DBDiff.Schema.Sybase.Front.AseConnectFront();
+                this.mySqlConnectFront2 = new OpenDBDiff.Schema.Sybase.Front.AseConnectFront();
+                this.mySqlConnectFront1 = new OpenDBDiff.Schema.Sybase.Front.AseConnectFront();
                 this.mySqlConnectFront1.Location = new System.Drawing.Point(5, 19);
                 this.mySqlConnectFront1.Name = "mySqlConnectFront1";
                 this.mySqlConnectFront1.Size = new System.Drawing.Size(410, 214);

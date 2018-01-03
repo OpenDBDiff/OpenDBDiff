@@ -34,7 +34,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>DBDiff.Schema.SQLServer.Generates.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>OpenDBDiff.Schema.SQLServer.Generates.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -251,7 +251,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DBDiff.Schema.SQLServer.Generates.snk" />
+    <None Include="OpenDBDiff.Schema.SQLServer.Generates.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

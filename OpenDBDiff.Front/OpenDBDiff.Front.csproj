@@ -11,7 +11,7 @@
     <RootNamespace>OpenDBDiff.Front</RootNamespace>
     <AssemblyName>OpenDBDiff.Front</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>DBDiff.Front.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>OpenDBDiff.Front.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -78,7 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
-    <None Include="DBDiff.Front.snk" />
+    <None Include="OpenDBDiff.Front.snk" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

@@ -11,7 +11,7 @@
     <RootNamespace>OpenDBDiff.Schema.SQLServer.Generates</RootNamespace>
     <AssemblyName>OpenDBDiff.Schema.SQLServer</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>DBDiff.Schema.SQLServer.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>OpenDBDiff.Schema.SQLServer.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -127,7 +127,7 @@
     <None Include="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="DBDiff.Schema.SQLServer.snk" />
+    <None Include="OpenDBDiff.Schema.SQLServer.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -170,7 +170,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DiagramaClases.cd" />
+    <None Include="ClassDiagrams.cd" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\database_yellow.png" />
