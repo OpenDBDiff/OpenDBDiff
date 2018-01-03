@@ -50,7 +50,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         private event ProgressEventHandler.ProgressHandler OnReading;
         public event ProgressEventHandler.ProgressHandler OnProgress;
-        public event ProgressEventHandler.ProgressHandler OnFinish;
 
         private void Generate_OnReading(ProgressEventArgs e)
         {
