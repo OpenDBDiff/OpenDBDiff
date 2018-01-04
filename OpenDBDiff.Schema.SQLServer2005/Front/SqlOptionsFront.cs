@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using OpenDBDiff.Schema.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Options;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Front
@@ -182,6 +183,12 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 
             SQLOption.Comparison.IgnoreWhiteSpacesInCode = chkIgnoreWhiteSpaceInCode.Checked;
             SQLOption.Comparison.ReloadComparisonOnUpdate = chkReloadDB.Checked;
+
+            FireOptionChanged(SQLOption);
+        }
+        public Schema.Model.IOption GetOption()
+        {
+            return SQLOption;
         }
 
         private void chkCompIndices_CheckedChanged(object sender, EventArgs e)
