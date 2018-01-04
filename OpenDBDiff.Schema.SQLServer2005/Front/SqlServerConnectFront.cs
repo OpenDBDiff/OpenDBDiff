@@ -74,11 +74,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
         {
             try
             {
-                SqlConnection connection = new SqlConnection();
-                connection.ConnectionString = this.ConnectionString;
-                connection.Open();
-                connection.Close();
-                return true;
+                using (SqlConnection connection = new SqlConnection())
+                {
+                    connection.ConnectionString = this.ConnectionString;
+                    connection.Open();
+                    connection.Close();
+                    return true;
+                }
             }
             catch (Exception ex)
             {

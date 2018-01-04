@@ -39,14 +39,16 @@ namespace OpenDBDiff.OCDB
         {
             try
             {
-                SqlConnection connection = new SqlConnection();
-                connection.ConnectionString = connectionString1;
-                connection.Open();
-                connection.Close();
-                connection.ConnectionString = connectionString2;
-                connection.Open();
-                connection.Close();
-                return true;
+                using (SqlConnection connection = new SqlConnection())
+                {
+                    connection.ConnectionString = connectionString1;
+                    connection.Open();
+                    connection.Close();
+                    connection.ConnectionString = connectionString2;
+                    connection.Open();
+                    connection.Close();
+                    return true;
+                }
             }
             catch (Exception ex)
             {
