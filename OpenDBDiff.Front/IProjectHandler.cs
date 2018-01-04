@@ -19,7 +19,7 @@ namespace OpenDBDiff.Front
         IGenerator SetSourceGenerator(string connectionString, IOption options);
         IGenerator SetDestinationGenerator(string connectionString, IOption options);
         IDatabaseComparer GetDatabaseComparer();
-        IOption GetProjectOptions();
+        IOption GetDefaultProjectOptions();
         string GetScriptLanguage();
         void Unload();
     }

@@ -51,7 +51,7 @@ namespace OpenDBDiff.Front
                 if ((!String.IsNullOrEmpty(ProjectSelectorHandler.GetSourceDatabaseName()) &&
                      (!String.IsNullOrEmpty(ProjectSelectorHandler.GetDestinationDatabaseName()))))
                 {
-                    Options = this.ProjectSelectorHandler.GetProjectOptions();
+                    Options = Options ?? this.ProjectSelectorHandler.GetDefaultProjectOptions();
                     IGenerator sourceGenerator = this.ProjectSelectorHandler.SetSourceGenerator(SourceSelector.ConnectionString, Options);
                     IGenerator destinationGenerator = this.ProjectSelectorHandler.SetDestinationGenerator(DestinationSelector.ConnectionString, Options);
                     IDatabaseComparer databaseComparer = this.ProjectSelectorHandler.GetDatabaseComparer();
@@ -479,7 +479,9 @@ namespace OpenDBDiff.Front
 
         private void btnOptions_Click(object sender, EventArgs e)
         {
+            Options = Options ?? ProjectSelectorHandler.GetDefaultProjectOptions();
             OptionForm form = new OptionForm(this.ProjectSelectorHandler);
+            form.OptionSaved += new OptionControl.OptionEventHandler((option) => Options = option);
             form.Show(Owner, Options);
         }
 
@@ -554,7 +556,7 @@ namespace OpenDBDiff.Front
                                                         ProjectSelectorHandler.GetSourceDatabaseName(),
                                                         ProjectSelectorHandler.GetDestinationServerName(),
                                                         ProjectSelectorHandler.GetDestinationDatabaseName()),
-                        Options = Options ?? ProjectSelectorHandler.GetProjectOptions(),
+                        Options = Options ?? ProjectSelectorHandler.GetDefaultProjectOptions(),
                         Type = Project.ProjectType.SQLServer
                     };
                 }

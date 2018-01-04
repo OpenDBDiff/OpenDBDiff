@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDBDiff.Front;
 using OpenDBDiff.Schema.Model;
+using OpenDBDiff.Schema.SQLServer.Generates.Options;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 {
@@ -15,6 +16,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
         private SqlServerConnectFront SourceControl;
         private SQLServerGenerator SourceGenerator;
         private SQLServerGenerator DestinationGenerator;
+
+        private SqlOption Option;
 
         public IFront CreateDestinationSelector()
         {
@@ -93,9 +96,25 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             return SourceControl.ServerName;
         }
 
-        public IOption GetProjectOptions()
+        public IOption GetDefaultProjectOptions()
         {
-            return new Options.SqlOption();
+            if (Option == null)
+            {
+                Option = new Options.SqlOption();
+            }
+            return Option;
+        }
+        public void SetProjectOptions(IOption option)
+        {
+            if (option == null)
+            {
+                throw new ArgumentNullException(nameof(option));
+            }
+            else if (!(option is SqlOption))
+            {
+                throw new NotSupportedException($"This project handler only supports {nameof(SqlOption)} options. {option.GetType().Name} not supported");
+            }
+            Option = option as SqlOption;
         }
 
         public OptionControl CreateOptionControl()
