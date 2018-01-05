@@ -9,9 +9,9 @@ using System.Security.Permissions;
 [assembly: AssemblyTitle("OpenDBDiff.Schema.SQLServer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("EGSOFT")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("OpenDBDiff.Schema.SQLServer")]
-[assembly: AssemblyCopyright("Copyright © EGSOFT 2007")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

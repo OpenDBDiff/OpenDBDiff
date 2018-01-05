@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("OpenDBDiff.Schema")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("EGSOFT")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("OpenDBDiff.Schema")]
-[assembly: AssemblyCopyright("Copyright © EGSOFT 2007")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("OpenDBDiff.Front")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("EDS")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("OpenDBDiff.Front")]
-[assembly: AssemblyCopyright("Copyright © EDS 2007")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
