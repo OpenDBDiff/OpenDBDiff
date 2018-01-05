@@ -21,18 +21,20 @@ namespace OpenDBDiff
             //script = script.Replace("\t", "");
             //script = script.Replace("\n", "");
             string result = string.Empty;
-            SqlConnection connection = new SqlConnection(connectionString);
-            SqlCommand command = new SqlCommand(script, connection);
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(script, connection);
 
-            try
-            {
-                connection.Open();
-                command.ExecuteNonQuery();
-                connection.Close();
-            }
-            catch (Exception e)
-            {
-                result = e.Message + "\n";
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    result = e.Message + "\n";
+                }
             }
             return result;
         }
@@ -46,18 +48,20 @@ namespace OpenDBDiff
             //script = script.Replace("\t", "");
             //script = script.Replace("\n", "");
 
-            SqlConnection connection = new SqlConnection(connectionString);
-            SqlCommand command = new SqlCommand(script, connection);
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(script, connection);
 
-            try
-            {
-                connection.Open();
-                command.ExecuteNonQuery();
-                connection.Close();
-            }
-            catch (Exception e)
-            {
-                result = e.Message + "\n";
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    result = e.Message + "\n";
+                }
             }
             return result;
         }
@@ -91,46 +95,48 @@ namespace OpenDBDiff
         public static string alter(ISchemaBase target, string connectionString)
         {
             var db = target.RootParent as IDatabase;
-            SqlConnection connection = new SqlConnection(connectionString);
-            if (db != null && DialogResult.Yes != MessageBox.Show(String.Format("Alter {0} {1} in {2}..{3}?\n(WARNING: No automatic backup is made!)",
-                    target.ObjectType,
-                    target.Name,
-                    connection.DataSource,
-                    connection.Database), "ALTER Destination?", MessageBoxButtons.YesNo, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button2))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                return "Cancelled.";
-            }
+                if (db != null && DialogResult.Yes != MessageBox.Show(String.Format("Alter {0} {1} in {2}..{3}?\n(WARNING: No automatic backup is made!)",
+                        target.ObjectType,
+                        target.Name,
+                        connection.DataSource,
+                        connection.Database), "ALTER Destination?", MessageBoxButtons.YesNo, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button2))
+                {
+                    return "Cancelled.";
+                }
 
-            string result = string.Empty;
-            SQLScriptList SqlDiff = target.ToSqlDiff(new List<ISchemaBase>());
-            string[] splitOn = { "GO" };
-            string[] tempList = SqlDiff.ToSQL().Split(splitOn, StringSplitOptions.RemoveEmptyEntries);
-            List<string> scripts = new List<string>(tempList);
+                string result = string.Empty;
+                SQLScriptList SqlDiff = target.ToSqlDiff(new List<ISchemaBase>());
+                string[] splitOn = { "GO" };
+                string[] tempList = SqlDiff.ToSQL().Split(splitOn, StringSplitOptions.RemoveEmptyEntries);
+                List<string> scripts = new List<string>(tempList);
 
-            foreach (string sql in scripts)
-            {
-                string script = sql;
-                //script = script.Replace("\r", "");
-                //script = script.Replace("\t", "");
-                //script = script.Replace("\n", " ");
-                if (target.ObjectType == Enums.ObjectType.StoredProcedure)
+                foreach (string sql in scripts)
                 {
-                    script = sql.Replace("CREATE PROCEDURE", "ALTER PROCEDURE");
+                    string script = sql;
+                    //script = script.Replace("\r", "");
+                    //script = script.Replace("\t", "");
+                    //script = script.Replace("\n", " ");
+                    if (target.ObjectType == Enums.ObjectType.StoredProcedure)
+                    {
+                        script = sql.Replace("CREATE PROCEDURE", "ALTER PROCEDURE");
+                    }
+                    SqlCommand command = new SqlCommand(script, connection);
+                    try
+                    {
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        result += target.Name + ": " + e.Message + "\n\n";
+                        connection.Close();
+                    }
                 }
-                SqlCommand command = new SqlCommand(script, connection);
-                try
-                {
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.Close();
-                }
-                catch (Exception e)
-                {
-                    result += target.Name + ": " + e.Message + "\n\n";
-                    connection.Close();
-                }
+                return result;
             }
-            return result;
         }
 
         public static string rebuild(ISchemaBase target, string connectionString)
@@ -151,23 +157,25 @@ namespace OpenDBDiff
 
         public static bool CommitTable(DataTable table, string tableFullName, string ConnectionString)
         {
-            SqlConnection connection = new SqlConnection(ConnectionString);
-            SqlCommand command = new SqlCommand("SELECT * FROM " + tableFullName, connection);
-            SqlDataAdapter da = new SqlDataAdapter(command);
-            try
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                using (SqlCommandBuilder builder = new SqlCommandBuilder(da))
+                SqlCommand command = new SqlCommand("SELECT * FROM " + tableFullName, connection);
+                SqlDataAdapter da = new SqlDataAdapter(command);
+                try
                 {
-                    connection.Open();
-                    da.Update(table);
-                    connection.Close();
-                    return true;
+                    using (SqlCommandBuilder builder = new SqlCommandBuilder(da))
+                    {
+                        connection.Open();
+                        da.Update(table);
+                        connection.Close();
+                        return true;
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return false;
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                    return false;
+                }
             }
         }
     }
