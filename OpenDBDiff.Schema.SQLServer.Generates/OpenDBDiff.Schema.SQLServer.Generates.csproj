@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\OpenDBDiff\Properties\AssemblyVersionInfo.cs">
+      <Link>Properties\AssemblyVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="Compare\CompareAssemblies.cs" />
     <Compile Include="Compare\CompareBase.cs" />
     <Compile Include="Compare\CompareCLRFunction.cs" />
