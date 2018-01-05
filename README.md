@@ -1,7 +1,9 @@
 # OpenDBDiff
 A database comparison tool for Microsoft SQL Server 2005+ that reports schema differences and creates a synchronization script.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/rdng91bfx3ao8ts6?svg=true)](https://ci.appveyor.com/project/OpenDBDiff/opendbdiff/build/artifacts) <- 💾 **[DOWNLOAD .ZIP'ed build](https://ci.appveyor.com/project/OpenDBDiff/opendbdiff/build/artifacts)**! 
+[![Build status](https://ci.appveyor.com/api/projects/status/rdng91bfx3ao8ts6?svg=true)](https://ci.appveyor.com/project/OpenDBDiff/OpenDBDiff/branch/master/artifacts)
+
+[💾 Download latest CI build](https://ci.appveyor.com/project/OpenDBDiff/OpenDBDiff/branch/master/artifacts)
 
 Open DBDiff can synchronize
 * Tables (including Table Options like vardecimal, text in row, etc.)
