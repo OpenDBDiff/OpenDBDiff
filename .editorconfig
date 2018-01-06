@@ -1,9 +1,5 @@
-﻿# EditorConfig is awesome: http://EditorConfig.org
+﻿root = true
 
-# top-most EditorConfig file
-root = true
-
-# Unix-style newlines with a newline ending every file
 [*]
 end_of_line = crlf
 insert_final_newline = true
