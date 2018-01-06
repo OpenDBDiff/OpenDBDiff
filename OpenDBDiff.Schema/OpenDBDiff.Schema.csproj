@@ -85,7 +85,9 @@
     <Compile Include="StatusEnum.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".editorconfig" />
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="OpenDBDiff.Schema.snk" />
   </ItemGroup>
   <ItemGroup>
