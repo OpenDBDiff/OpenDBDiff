@@ -18,4 +18,6 @@ build:
 
 artifacts:
 - path: OpenDBDiff\bin\Debug
-  name: OpenDBDiffCI
+  name: OpenDBDiff.CI
+- path: OpenDBDiffCmd\bin\Debug
+  name: OpenDBDiff.OCDB.CI
