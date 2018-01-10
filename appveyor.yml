@@ -17,7 +17,7 @@ build:
   verbosity: minimal
 
 artifacts:
-- path: OpenDBDiff\bin\Debug
+- path: OpenDBDiff\bin\Debug\net452
   name: OpenDBDiff.CI
-- path: OpenDBDiffCmd\bin\Debug
+- path: OpenDBDiffCmd\bin\Debug\net452
   name: OpenDBDiff.OCDB.CI
