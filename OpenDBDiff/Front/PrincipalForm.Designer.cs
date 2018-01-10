@@ -84,16 +84,12 @@ namespace OpenDBDiff.Front
             this.tabPage2.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtNewObject)).BeginInit();
             this.tabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtOldObject)).BeginInit();
             this.tabPage6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtDiff)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtSyncScript)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.PanelGlobal.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -169,15 +165,6 @@ namespace OpenDBDiff.Front
             this.txtNewObject.Location = new System.Drawing.Point(3, 3);
             this.txtNewObject.Name = "txtNewObject";
             this.txtNewObject.Size = new System.Drawing.Size(463, 370);
-            this.txtNewObject.Styles.BraceBad.Size = 9F;
-            this.txtNewObject.Styles.BraceLight.Size = 9F;
-            this.txtNewObject.Styles.ControlChar.Size = 9F;
-            this.txtNewObject.Styles.Default.BackColor = System.Drawing.SystemColors.Window;
-            this.txtNewObject.Styles.Default.Size = 9F;
-            this.txtNewObject.Styles.IndentGuide.Size = 9F;
-            this.txtNewObject.Styles.LastPredefined.Size = 9F;
-            this.txtNewObject.Styles.LineNumber.Size = 9F;
-            this.txtNewObject.Styles.Max.Size = 9F;
             this.txtNewObject.TabIndex = 0;
             //
             // tabPage5
@@ -198,15 +185,6 @@ namespace OpenDBDiff.Front
             this.txtOldObject.Location = new System.Drawing.Point(3, 3);
             this.txtOldObject.Name = "txtOldObject";
             this.txtOldObject.Size = new System.Drawing.Size(463, 345);
-            this.txtOldObject.Styles.BraceBad.Size = 9F;
-            this.txtOldObject.Styles.BraceLight.Size = 9F;
-            this.txtOldObject.Styles.ControlChar.Size = 9F;
-            this.txtOldObject.Styles.Default.BackColor = System.Drawing.SystemColors.Window;
-            this.txtOldObject.Styles.Default.Size = 9F;
-            this.txtOldObject.Styles.IndentGuide.Size = 9F;
-            this.txtOldObject.Styles.LastPredefined.Size = 9F;
-            this.txtOldObject.Styles.LineNumber.Size = 9F;
-            this.txtOldObject.Styles.Max.Size = 9F;
             this.txtOldObject.TabIndex = 0;
             //
             // tabPage6
@@ -350,12 +328,10 @@ namespace OpenDBDiff.Front
             // txtSyncScript
             //
             this.txtSyncScript.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSyncScript.IsReadOnly = true;
+            this.txtSyncScript.ReadOnly = true;
             this.txtSyncScript.Location = new System.Drawing.Point(0, 0);
             this.txtSyncScript.Name = "txtSyncScript";
             this.txtSyncScript.Size = new System.Drawing.Size(815, 457);
-            this.txtSyncScript.Styles.LineNumber.BackColor = System.Drawing.Color.Transparent;
-            this.txtSyncScript.Styles.LineNumber.IsVisible = false;
             this.txtSyncScript.TabIndex = 0;
             //
             // tabPage3
@@ -673,24 +649,19 @@ namespace OpenDBDiff.Front
             this.Name = "PrincipalForm";
             this.Text = "Open DBDiff Beta ";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.Resize += new System.EventHandler(this.Form1_Resize);
+            this.Load += new System.EventHandler(this.PrincipalForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.txtNewObject)).EndInit();
             this.tabPage5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.txtOldObject)).EndInit();
             this.tabPage6.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.txtDiff)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.txtSyncScript)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.PanelGlobal.ResumeLayout(false);
