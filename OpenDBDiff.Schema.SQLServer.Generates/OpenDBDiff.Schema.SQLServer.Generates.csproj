@@ -19,4 +19,8 @@
     <ProjectReference Include="..\OpenDBDiff.Schema\OpenDBDiff.Schema.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="SQLQueries\*.sql" />
+  </ItemGroup>
+
 </Project>
