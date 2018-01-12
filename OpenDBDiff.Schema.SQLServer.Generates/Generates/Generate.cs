@@ -176,10 +176,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         internal static void RaiseOnCompareProgress(string formatString, params object[] formatParams)
         {
-            if (OnCompareProgress != null)
-            {
-                OnCompareProgress(new ProgressEventArgs(String.Format(formatString, formatParams), -1));
-            }
+            OnCompareProgress?.Invoke(new ProgressEventArgs(String.Format(formatString, formatParams), -1));
         }
 
         /// <summary>
