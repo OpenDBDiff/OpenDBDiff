@@ -44,7 +44,7 @@ namespace OpenDBDiff.Front
             this.Text += Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
-        private void StartComparision()
+        private void StartComparison()
         {
             ProgressForm progress = null;
             string errorLocation = null;
@@ -229,7 +229,7 @@ namespace OpenDBDiff.Front
             {
                 Cursor = Cursors.WaitCursor;
                 _selectedSchemas = schemaTreeView1.GetCheckedSchemas();
-                StartComparision();
+                StartComparison();
                 schemaTreeView1.SetCheckedSchemas(_selectedSchemas);
                 errorLocation = "Saving Connections";
                 Project.SaveLastConfiguration(SourceSelector.ConnectionString, DestinationSelector.ConnectionString);
@@ -437,7 +437,7 @@ namespace OpenDBDiff.Front
 
             if (Options.Comparison.ReloadComparisonOnUpdate)
             {
-                StartComparision();
+                StartComparison();
             }
 
             btnUpdate.Enabled = false;
@@ -471,7 +471,7 @@ namespace OpenDBDiff.Front
                 else
                     MessageBox.Show(this, sb.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                StartComparision();
+                StartComparison();
             }
         }
 
