@@ -346,7 +346,7 @@ namespace OpenDBDiff.Front
         {
             TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
             TreeNode dbArm = tree.Nodes[0];
-            string result = "";
+            var sb = new StringBuilder();
 
             foreach (TreeNode node in dbArm.Nodes)
             {
@@ -369,10 +369,10 @@ namespace OpenDBDiff.Front
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                default: result += "Nothing could be found to do for table " + selected.Name + ".\r\n"; break;
+                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(selected, DestinationSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(selected, DestinationSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: sb.Append(Updater.alter(selected, DestinationSelector.ConnectionString)); break;
+                                                default: sb.AppendLine($"Nothing could be found to do for table '{selected.Name}'"); break;
                                             }
                                         }
                                         break;
@@ -380,10 +380,10 @@ namespace OpenDBDiff.Front
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                default: result += "Nothing could be found to do for stored procedure " + selected.Name + ".\r\n"; break;
+                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(selected, DestinationSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(selected, DestinationSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: sb.Append(Updater.alter(selected, DestinationSelector.ConnectionString)); break;
+                                                default: sb.AppendLine($"Nothing could be found to do for stored procedure '{selected.Name}'"); break;
                                             }
                                         }
                                         break;
@@ -391,11 +391,11 @@ namespace OpenDBDiff.Front
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                default: result += "Nothing could be found to do for function " + selected.Name + ".\r\n"; break;
+                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(selected, DestinationSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(selected, DestinationSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: sb.Append(Updater.alter(selected, DestinationSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: sb.Append(Updater.alter(selected, DestinationSelector.ConnectionString)); break;
+                                                default: sb.AppendLine($"Nothing could be found to do for function '{selected.Name}'"); break;
                                             }
                                         }
                                         break;
@@ -403,11 +403,11 @@ namespace OpenDBDiff.Front
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                default: result += "Nothing could be found to do for view " + selected.Name + ".\r\n"; break;
+                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(selected, DestinationSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(selected, DestinationSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: sb.Append(Updater.alter(selected, DestinationSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: sb.Append(Updater.alter(selected, DestinationSelector.ConnectionString)); break;
+                                                default: sb.AppendLine($"Nothing could be found to do for view '{selected.Name}'"); break;
                                             }
                                         }
                                         break;
@@ -415,8 +415,8 @@ namespace OpenDBDiff.Front
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.addNew(selected, DestinationSelector.ConnectionString); break;
-                                                default: result += "Nothing could be found to do for " + selected.Name + ".\r\n"; break;
+                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.addNew(selected, DestinationSelector.ConnectionString)); break;
+                                                default: sb.AppendLine($"Nothing could be found to do for '{selected.Name}'"); break;
                                             }
                                         }
                                         break;
@@ -427,10 +427,7 @@ namespace OpenDBDiff.Front
                 }
             }
 
-            if (result == string.Empty)
-            {
-                result = "All successful";
-            }
+            string result = sb.Length == 0 ? "All successful" : sb.ToString();
             MessageBox.Show(result);
 
             if (Options.Comparison.ReloadComparisonOnUpdate)
@@ -447,7 +444,7 @@ namespace OpenDBDiff.Front
             {
                 TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
                 TreeNode database = tree.Nodes[0];
-                string result = "";
+                var sb = new StringBuilder();
                 foreach (TreeNode tn in database.Nodes)
                 {
                     foreach (TreeNode inner in tn.Nodes)
@@ -457,16 +454,13 @@ namespace OpenDBDiff.Front
                             ISchemaBase item = (ISchemaBase)inner.Tag;
                             switch (item.Status)
                             {
-                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(item, DestinationSelector.ConnectionString); break;
-                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(item, DestinationSelector.ConnectionString); break;
+                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(item, DestinationSelector.ConnectionString)); break;
+                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(item, DestinationSelector.ConnectionString)); break;
                             }
                         }
                     }
                 }
-                if (result == string.Empty)
-                {
-                    result = "Update successful";
-                }
+                string result = sb.Length == 0 ? "Update successful" : sb.ToString();
                 MessageBox.Show(result);
                 StartComparision();
             }
