@@ -107,36 +107,39 @@ namespace OpenDBDiff.Front
             txtNewObject.Text = "";
             txtOldObject.Text = "";
 
+
             IDatabase database = (IDatabase)schemaTreeView1.DatabaseSource;
-            if (database.Find(ObjectFullName) != null)
+
+            Enums.ObjectStatusType? status;
+
+            status = database.Find(ObjectFullName)?.Status;
+            if (status.HasValue && status.Value != Enums.ObjectStatusType.DropStatus)
             {
-                if (database.Find(ObjectFullName).Status != Enums.ObjectStatusType.DropStatus)
+                txtNewObject.Text = database.Find(ObjectFullName).ToSql();
+                if (database.Find(ObjectFullName).Status == Enums.ObjectStatusType.OriginalStatus)
                 {
-                    txtNewObject.Text = database.Find(ObjectFullName).ToSql();
-                    if (database.Find(ObjectFullName).Status == Enums.ObjectStatusType.OriginalStatus)
-                    {
-                        btnUpdate.Enabled = false;
-                    }
-                    else
-                    {
-                        btnUpdate.Enabled = true;
-                    }
-                    if (database.Find(ObjectFullName).ObjectType == Enums.ObjectType.Table)
-                    {
-                        btnCompareTableData.Enabled = true;
-                    }
-                    else
-                    {
-                        btnCompareTableData.Enabled = false;
-                    }
+                    btnUpdate.Enabled = false;
+                }
+                else
+                {
+                    btnUpdate.Enabled = true;
+                }
+                if (database.Find(ObjectFullName).ObjectType == Enums.ObjectType.Table)
+                {
+                    btnCompareTableData.Enabled = true;
+                }
+                else
+                {
+                    btnCompareTableData.Enabled = false;
                 }
             }
 
+
             database = (IDatabase)schemaTreeView1.DatabaseDestination;
-            if (database.Find(ObjectFullName) != null)
+            status = database.Find(ObjectFullName)?.Status;
+            if (status.HasValue && status.Value != Enums.ObjectStatusType.CreateStatus)
             {
-                if (database.Find(ObjectFullName).Status != Enums.ObjectStatusType.CreateStatus)
-                    txtOldObject.Text = database.Find(ObjectFullName).ToSql();
+                txtOldObject.Text = database.Find(ObjectFullName).ToSql();
             }
             txtNewObject.ReadOnly = true;
             txtOldObject.ReadOnly = true;
@@ -654,15 +657,13 @@ namespace OpenDBDiff.Front
             try
             {
                 Project.Delete(itemSelected.Id);
-                if (ActiveProject != null)
+                if ((ActiveProject?.Id ?? int.MinValue) == itemSelected.Id)
                 {
-                    if (ActiveProject.Id == itemSelected.Id)
-                    {
-                        ActiveProject = null;
-                        SourceSelector.ConnectionString = "";
-                        DestinationSelector.ConnectionString = "";
-                    }
+                    ActiveProject = null;
+                    SourceSelector.ConnectionString = "";
+                    DestinationSelector.ConnectionString = "";
                 }
+
             }
             catch (Exception ex)
             {
