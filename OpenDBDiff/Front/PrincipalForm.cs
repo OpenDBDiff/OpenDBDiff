@@ -427,8 +427,10 @@ namespace OpenDBDiff.Front
                 }
             }
 
-            string result = sb.Length == 0 ? "All successful" : sb.ToString();
-            MessageBox.Show(result);
+            if (sb.Length == 0)
+                MessageBox.Show(this, "All successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else
+                MessageBox.Show(this, sb.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             if (Options.Comparison.ReloadComparisonOnUpdate)
             {
@@ -460,8 +462,12 @@ namespace OpenDBDiff.Front
                         }
                     }
                 }
-                string result = sb.Length == 0 ? "Update successful" : sb.ToString();
-                MessageBox.Show(result);
+
+                if (sb.Length == 0)
+                    MessageBox.Show(this, "Update successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                    MessageBox.Show(this, sb.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 StartComparision();
             }
         }
