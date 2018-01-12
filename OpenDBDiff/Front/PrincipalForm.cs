@@ -244,8 +244,6 @@ namespace OpenDBDiff.Front
         private void HandleException(string errorLocation, Exception ex)
         {
             var errorDialog = new ErrorForm(ex);
-
-            var dialogResult = errorDialog.ShowDialog(this);
         }
 
         private void UnloadProjectHandler()
@@ -340,10 +338,7 @@ namespace OpenDBDiff.Front
             catch (Exception ex)
             {
                 MessageBox.Show("An error ocurred while trying to copying the text to the clipboard");
-                System.Diagnostics.Trace.WriteLine("ERROR: +" + ex.Message);
-            }
-            finally
-            {
+                Trace.WriteLine("ERROR: +" + ex.Message);
             }
         }
 
