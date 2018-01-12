@@ -1,19 +1,17 @@
+using DiffPlex;
+using DiffPlex.DiffBuilder;
+using DiffPlex.DiffBuilder.Model;
 using OpenDBDiff.Schema;
 using OpenDBDiff.Schema.Misc;
 using OpenDBDiff.Schema.Model;
 using OpenDBDiff.Settings;
-using DiffPlex;
-using DiffPlex.DiffBuilder;
-using DiffPlex.DiffBuilder.Model;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Drawing.Text;
@@ -23,16 +21,14 @@ namespace OpenDBDiff.Front
 {
     public partial class PrincipalForm : Form
     {
-
         private Project ActiveProject;
         private IFront LeftDatabaseSelector;
         private IFront RightDatabaseSelector;
         private IOption Options;
         private List<ISchemaBase> _selectedSchemas = new List<ISchemaBase>();
 
-        List<IProjectHandler> ProjectHandlers = new List<IProjectHandler>();
-        OpenDBDiff.Front.IProjectHandler ProjectSelectorHandler;
-
+        private List<IProjectHandler> ProjectHandlers = new List<IProjectHandler>();
+        private OpenDBDiff.Front.IProjectHandler ProjectSelectorHandler;
 
         public PrincipalForm()
         {
@@ -66,7 +62,6 @@ namespace OpenDBDiff.Front
                     {
                         throw new SchemaException(progress.Error.Message, progress.Error);
                     }
-
 
                     txtSyncScript.LexerLanguage = this.ProjectSelectorHandler.GetScriptLanguage();
                     txtSyncScript.ReadOnly = false;
@@ -110,7 +105,6 @@ namespace OpenDBDiff.Front
             txtNewObject.Text = "";
             txtOldObject.Text = "";
 
-
             IDatabase database = (IDatabase)schemaTreeView1.LeftDatabase;
 
             Enums.ObjectStatusType? status;
@@ -136,7 +130,6 @@ namespace OpenDBDiff.Front
                     btnCompareTableData.Enabled = false;
                 }
             }
-
 
             database = (IDatabase)schemaTreeView1.RightDatabase;
             status = database.Find(ObjectFullName)?.Status;
@@ -201,7 +194,7 @@ namespace OpenDBDiff.Front
             }
         }
 
-        void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Refresh script when tab is shown
             if (tabControl1.SelectedIndex != 1)
@@ -218,6 +211,7 @@ namespace OpenDBDiff.Front
                 this.txtSyncScript.ReadOnly = false;
             }
         }
+
         private void btnCompareTableData_Click(object sender, EventArgs e)
         {
             TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
@@ -225,6 +219,7 @@ namespace OpenDBDiff.Front
             DataCompareForm dataCompare = new DataCompareForm(selected, LeftDatabaseSelector.ConnectionString, RightDatabaseSelector.ConnectionString);
             dataCompare.Show();
         }
+
         private void btnCompare_Click(object sender, EventArgs e)
         {
             string errorLocation = "Processing Compare";
@@ -382,6 +377,7 @@ namespace OpenDBDiff.Front
                                             }
                                         }
                                         break;
+
                                     case Enums.ObjectType.StoredProcedure:
                                         {
                                             switch (selected.Status)
@@ -393,6 +389,7 @@ namespace OpenDBDiff.Front
                                             }
                                         }
                                         break;
+
                                     case Enums.ObjectType.Function:
                                         {
                                             switch (selected.Status)
@@ -405,6 +402,7 @@ namespace OpenDBDiff.Front
                                             }
                                         }
                                         break;
+
                                     case Enums.ObjectType.View:
                                         {
                                             switch (selected.Status)
@@ -417,6 +415,7 @@ namespace OpenDBDiff.Front
                                             }
                                         }
                                         break;
+
                                     default:
                                         {
                                             switch (selected.Status)
@@ -528,7 +527,6 @@ namespace OpenDBDiff.Front
             {
                 InitializeScintillaControls(scintilla);
             }
-
             txtSyncScript.Text = "";
         }
 
@@ -666,7 +664,6 @@ namespace OpenDBDiff.Front
                     LeftDatabaseSelector.ConnectionString = "";
                     RightDatabaseSelector.ConnectionString = "";
                 }
-
             }
             catch (Exception ex)
             {

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Windows.Forms;
-using OpenDBDiff.Schema.Events;
+﻿using OpenDBDiff.Schema.Events;
+using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace OpenDBDiff.Front
 {
@@ -91,7 +91,7 @@ namespace OpenDBDiff.Front
             }
         }
 
-        void genData2_OnProgress(ProgressEventArgs e)
+        private void genData2_OnProgress(ProgressEventArgs e)
         {
             if (e.Progress > -1 && destinationProgressControl.Value != e.Progress)
             {
@@ -106,7 +106,7 @@ namespace OpenDBDiff.Front
             this.ErrorMostRecentProgress = e.Message;
         }
 
-        void genData1_OnProgress(ProgressEventArgs e)
+        private void genData1_OnProgress(ProgressEventArgs e)
         {
             if (e.Progress > -1 && originProgressControl.Value != e.Progress)
             {

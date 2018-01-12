@@ -1,6 +1,6 @@
-using System;
 using OpenDBDiff.Schema.Misc;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using System;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
 {

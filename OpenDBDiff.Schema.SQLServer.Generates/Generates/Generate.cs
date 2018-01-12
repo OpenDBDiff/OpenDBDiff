@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
 using OpenDBDiff.Schema.Errors;
 using OpenDBDiff.Schema.Events;
 using OpenDBDiff.Schema.Misc;
@@ -8,6 +5,9 @@ using OpenDBDiff.Schema.SQLServer.Generates.Compare;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.Util;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Options;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 {
@@ -49,6 +49,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
         }
 
         private event ProgressEventHandler.ProgressHandler OnReading;
+
         public event ProgressEventHandler.ProgressHandler OnProgress;
 
         private void Generate_OnReading(ProgressEventArgs e)

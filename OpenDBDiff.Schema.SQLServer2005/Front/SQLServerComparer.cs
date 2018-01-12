@@ -1,7 +1,7 @@
 ﻿using OpenDBDiff.Front;
-using System;
 using OpenDBDiff.Schema.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates;
+using System;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 {
