@@ -311,5 +311,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
         {
             isDatabaseFilled = false;
         }
+
+        public override string ToString()
+        {
+            return string.Format($"Server: {ServerName}, Database: {DatabaseName}");
+        }
     }
 }

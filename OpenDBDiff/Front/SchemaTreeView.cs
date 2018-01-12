@@ -25,9 +25,9 @@ namespace OpenDBDiff.Front
             InitializeComponent();
         }
 
-        public ISchemaBase DatabaseDestination { get; set; }
+        public ISchemaBase RightDatabase { get; set; }
 
-        public ISchemaBase DatabaseSource
+        public ISchemaBase LeftDatabase
         {
             get { return databaseSource; }
             set

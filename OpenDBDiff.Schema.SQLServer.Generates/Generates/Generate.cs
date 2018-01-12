@@ -11,7 +11,7 @@ using OpenDBDiff.Schema.SQLServer.Generates.Options;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 {
-    public class Generate 
+    public class Generate
     {
         private readonly List<MessageLog> messages;
         private SqlOption options;
@@ -182,9 +182,15 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             }
         }
 
-        public static Database Compare(Database databaseOriginalSchema, Database databaseCompareSchema)
+        /// <summary>
+        /// Generates the differences to migrate a schema from origin to destination
+        /// </summary>
+        /// <param name="origin">The Origin schema is the schema before our generated actions are applied.</param>
+        /// <param name="destination">The Destination schema is the schema after our actions are applied.</param>
+        /// <returns></returns>
+        public static Database Compare(Database origin, Database destination)
         {
-            Database merge = CompareDatabase.GenerateDifferences(databaseOriginalSchema, databaseCompareSchema);
+            Database merge = CompareDatabase.GenerateDifferences(origin, destination);
             return merge;
         }
     }
