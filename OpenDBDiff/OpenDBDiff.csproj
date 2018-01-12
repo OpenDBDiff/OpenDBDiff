@@ -216,6 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
+    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Resources\folder.png" />
     <None Include="Resources\diskette.png" />
