@@ -309,8 +309,8 @@ namespace OpenDBDiff.Front
             this.groupBox1.TabStop = false;
             //
             // schemaTreeView1
-            // 
-            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            //
+            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.schemaTreeView1.DatabaseDestination = null;
             this.schemaTreeView1.DatabaseSource = null;
@@ -322,7 +322,7 @@ namespace OpenDBDiff.Front
             this.schemaTreeView1.ShowUnchangedItems = true;
             this.schemaTreeView1.Size = new System.Drawing.Size(322, 429);
             this.schemaTreeView1.TabIndex = 0;
-            // 
+            //
             // tabPage1
             //
             this.tabPage1.Controls.Add(this.panel1);
@@ -620,11 +620,11 @@ namespace OpenDBDiff.Front
             this.toolSaveProject.Text = "&Save Project";
             //
             // toolStripSeparator1
-            // 
+            //
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             this.toolStripSeparator1.Visible = false;
-            // 
+            //
             // toolLblProjectType
             //
             this.toolLblProjectType.Name = "toolLblProjectType";
@@ -671,7 +671,7 @@ namespace OpenDBDiff.Front
             this.Controls.Add(this.toolMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PrincipalForm";
-            this.Text = "Open DBDiff Beta ";
+            this.Text = "OpenDBDiff";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);

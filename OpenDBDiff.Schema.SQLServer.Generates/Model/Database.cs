@@ -207,7 +207,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             var listDiff = new SQLScriptList();
             listDiff.Add(new SQLScript(String.Format(@"/*
 
-    Open DBDiff {0}
+    OpenDBDiff {0}
     https://github.com/OpenDBDiff/OpenDBDiff
 
     Script created by {1}\{2} on {3} at {4}.
@@ -225,10 +225,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 DateTime.Now.ToShortDateString(),
                 DateTime.Now.ToLongTimeString(),
                 Environment.MachineName,
-                SourceInfo != null ? SourceInfo.Database : "Uknown",
-                SourceInfo != null ? SourceInfo.Server : "Uknown",
-                Info != null ? Info.Database : "Uknown",
-                Info != null ? Info.Server : "Uknown",
+                SourceInfo != null ? SourceInfo.Database : "Unknown",
+                SourceInfo != null ? SourceInfo.Server : "Unknown",
+                Info != null ? Info.Database : "Unknown",
+                Info != null ? Info.Server : "Unknown",
                 0), 0, Enums.ScripActionType.None));
             if (!isAzure10)
             {
