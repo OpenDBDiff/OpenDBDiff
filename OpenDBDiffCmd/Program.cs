@@ -83,7 +83,12 @@ namespace OpenDBDiff.OCDB
             }
             catch (Exception ex)
             {
-                Console.WriteLine(String.Format("{0}\r\n{1}\r\n\r\nPlease report this issue at http://opendbiff.codeplex.com/workitem/list/basic\r\n\r\n", ex.Message, ex.StackTrace));
+                string newIssueUri = System.Configuration.ConfigurationManager.AppSettings["OpenDBDiff.NewIssueUri"];
+                if (string.IsNullOrEmpty(newIssueUri))
+                    newIssueUri = "https://github.com/OpenDBDiff/OpenDBDiff/issues/new";
+
+                Console.WriteLine($"{ex.Message}\r\n{ex.StackTrace}\r\n\r\nPlease report this issue at {newIssueUri}.");
+                Console.WriteLine();
             }
 
             return false;
