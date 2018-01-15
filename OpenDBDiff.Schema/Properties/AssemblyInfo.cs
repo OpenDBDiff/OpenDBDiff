@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("OpenDBDiff.Schema")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("OpenDBDiff")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
