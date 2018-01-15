@@ -58,8 +58,9 @@
       <HintPath>..\packages\DiffPlex.1.1.0\lib\NET35\DiffPlex.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ScintillaNET">
-      <HintPath>..\References\ScintillaNET.dll</HintPath>
+    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
