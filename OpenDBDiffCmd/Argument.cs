@@ -20,7 +20,7 @@ namespace OpenDBDiff.OCDB
                         this.OutputAll = true;
                 }
             }
-            if (String.IsNullOrEmpty(ConnectionString1) || String.IsNullOrEmpty(ConnectionString1) || String.IsNullOrEmpty(OutputFile))
+            if (String.IsNullOrEmpty(ConnectionString1) || String.IsNullOrEmpty(ConnectionString2) || String.IsNullOrEmpty(OutputFile))
             {
                 Console.WriteLine("\r\n Example of use:\r\n");
                 Console.WriteLine("    OCDB CN1=\"Destination/Target\" CN2=\"Source\" F=OuputScript.sql\r\n");
