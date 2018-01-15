@@ -44,11 +44,11 @@ namespace OpenDBDiff.OCDB
         public bool Validate()
         {
             if (String.IsNullOrEmpty(ConnectionString1))
-                throw new Exception("The target connection string is missing");
+                throw new InvalidOperationException("The target connection string is missing");
             if (String.IsNullOrEmpty(ConnectionString2))
-                throw new Exception("The destination connection string is missing");
+                throw new InvalidOperationException("The destination connection string is missing");
             if (String.IsNullOrEmpty(OutputFile))
-                throw new Exception("The output destination is missing");
+                throw new InvalidOperationException("The output destination is missing");
             return true;
         }
     }
