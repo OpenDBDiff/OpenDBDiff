@@ -1,10 +1,10 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.IO;
-using OpenDBDiff.Schema.SQLServer.Generates.Generates;
+﻿using OpenDBDiff.Schema.SQLServer.Generates.Generates;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Options;
+using System;
+using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 
 namespace OpenDBDiff.OCDB
 {
@@ -12,7 +12,9 @@ namespace OpenDBDiff.OCDB
     {
         private static SqlOption SqlFilter = new SqlOption();
 
-        static int Main(string[] args)
+        protected Program() { }
+
+        private static int Main(string[] args)
         {
             bool completedSuccessfully = false;
             try
@@ -35,7 +37,7 @@ namespace OpenDBDiff.OCDB
             return completedSuccessfully ? 0 : 1;
         }
 
-        static Boolean TestConnection(string connectionString1, string connectionString2)
+        private static Boolean TestConnection(string connectionString1, string connectionString2)
         {
             using (SqlConnection connection = new SqlConnection())
             {
@@ -49,9 +51,8 @@ namespace OpenDBDiff.OCDB
             }
         }
 
-        static bool Work(Argument arguments)
+        private static bool Work(Argument arguments)
         {
-            bool completedSuccessfully = false;
             try
             {
                 Database origin;
@@ -77,7 +78,7 @@ namespace OpenDBDiff.OCDB
 
                     Console.WriteLine("Generating SQL file...");
                     SaveFile(arguments.OutputFile, arguments.OutputAll ? origin.ToSql() : origin.ToSqlDiff(new System.Collections.Generic.List<Schema.Model.ISchemaBase>()).ToSQL());
-                    completedSuccessfully = true;
+                    return true;
                 }
             }
             catch (Exception ex)
@@ -85,10 +86,10 @@ namespace OpenDBDiff.OCDB
                 Console.WriteLine(String.Format("{0}\r\n{1}\r\n\r\nPlease report this issue at http://opendbiff.codeplex.com/workitem/list/basic\r\n\r\n", ex.Message, ex.StackTrace));
             }
 
-            return completedSuccessfully;
+            return false;
         }
 
-        static void SaveFile(string filenmame, string sql)
+        private static void SaveFile(string filenmame, string sql)
         {
             if (!String.IsNullOrEmpty(filenmame))
             {
