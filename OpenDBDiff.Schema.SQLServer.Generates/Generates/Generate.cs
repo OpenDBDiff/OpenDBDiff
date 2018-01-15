@@ -14,7 +14,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
     public class Generate
     {
         private readonly List<MessageLog> messages;
-        private SqlOption options;
         private ProgressEventArgs currentlyReading;
 
         public Generate()
@@ -43,10 +42,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             }
         }
 
-        public SqlOption Options
-        {
-            set { options = value; }
-        }
+        public SqlOption Options { get; set; }
 
         private event ProgressEventHandler.ProgressHandler OnReading;
 
@@ -82,9 +78,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             var databaseSchema = new Database();
 
             //tables.OnTableProgress += new Progress.ProgressHandler(tables_OnTableProgress);
-            databaseSchema.Options = options;
+            databaseSchema.Options = Options;
             databaseSchema.Name = Name;
-            databaseSchema.Info = (new GenerateDatabase(ConnectionString, options)).Get(databaseSchema);
+            databaseSchema.Info = (new GenerateDatabase(ConnectionString, Options)).Get(databaseSchema);
             /*Thread t1 = new Thread(delegate()
                 {
                     try
@@ -93,7 +89,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             (new GenerateTables(this)).Fill(databaseSchema, ConnectionString, messages);
             (new GenerateViews(this)).Fill(databaseSchema, ConnectionString, messages);
 
-            if (options.Ignore.FilterIndex)
+            if (Options.Ignore.FilterIndex)
             {
                 (new GenerateIndex(this)).Fill(databaseSchema, ConnectionString);
                 (new GenerateFullTextIndex(this)).Fill(databaseSchema, ConnectionString);
