@@ -37,22 +37,15 @@ namespace OpenDBDiff.OCDB
 
         static Boolean TestConnection(string connectionString1, string connectionString2)
         {
-            try
+            using (SqlConnection connection = new SqlConnection())
             {
-                using (SqlConnection connection = new SqlConnection())
-                {
-                    connection.ConnectionString = connectionString1;
-                    connection.Open();
-                    connection.Close();
-                    connection.ConnectionString = connectionString2;
-                    connection.Open();
-                    connection.Close();
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                connection.ConnectionString = connectionString1;
+                connection.Open();
+                connection.Close();
+                connection.ConnectionString = connectionString2;
+                connection.Open();
+                connection.Close();
+                return true;
             }
         }
 
