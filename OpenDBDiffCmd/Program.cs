@@ -17,15 +17,18 @@ namespace OpenDBDiff.OCDB
         private static int Main(string[] args)
         {
             bool completedSuccessfully = false;
-            try
+
+            var options = new CommandlineOptions();
+            if (CommandLine.Parser.Default.ParseArguments(args, options))
             {
-                Argument arguments = new Argument(args);
-                if (arguments.Validate())
-                    completedSuccessfully = Work(arguments);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
+                try
+                {
+                    completedSuccessfully = Work(options);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
 
             if (Debugger.IsAttached)
@@ -37,47 +40,53 @@ namespace OpenDBDiff.OCDB
             return completedSuccessfully ? 0 : 1;
         }
 
-        private static Boolean TestConnection(string connectionString1, string connectionString2)
+        private static Boolean TestConnection(string connectionString1)
         {
             using (SqlConnection connection = new SqlConnection())
             {
                 connection.ConnectionString = connectionString1;
                 connection.Open();
                 connection.Close();
-                connection.ConnectionString = connectionString2;
-                connection.Open();
-                connection.Close();
                 return true;
             }
         }
 
-        private static bool Work(Argument arguments)
+        private static bool Work(CommandlineOptions options)
         {
             try
             {
                 Database origin;
                 Database destination;
-                if (TestConnection(arguments.ConnectionString1, arguments.ConnectionString2))
+                if (TestConnection(options.Before)
+                    && TestConnection(options.After))
                 {
                     Generate sql = new Generate();
-                    sql.ConnectionString = arguments.ConnectionString1;
+                    sql.ConnectionString = options.Before;
                     Console.WriteLine("Reading first database...");
                     sql.Options = SqlFilter;
                     origin = sql.Process();
 
-                    sql.ConnectionString = arguments.ConnectionString2;
+                    sql.ConnectionString = options.After;
                     Console.WriteLine("Reading second database...");
                     destination = sql.Process();
                     Console.WriteLine("Comparing databases schemas...");
                     origin = Generate.Compare(origin, destination);
-                    if (!arguments.OutputAll)
-                    {
-                        // temporary work-around: run twice just like GUI
-                        origin.ToSqlDiff(new System.Collections.Generic.List<Schema.Model.ISchemaBase>());
-                    }
+                    // temporary work-around: run twice just like GUI
+                    origin.ToSqlDiff(new System.Collections.Generic.List<Schema.Model.ISchemaBase>());
 
                     Console.WriteLine("Generating SQL file...");
-                    SaveFile(arguments.OutputFile, arguments.OutputAll ? origin.ToSql() : origin.ToSqlDiff(new System.Collections.Generic.List<Schema.Model.ISchemaBase>()).ToSQL());
+                    var script = origin.ToSqlDiff(new System.Collections.Generic.List<Schema.Model.ISchemaBase>()).ToSQL();
+                    if (!string.IsNullOrWhiteSpace(options.OutputFile))
+                    {
+                        Console.WriteLine("Writing action script to {0}", options.OutputFile);
+                        SaveFile(options.OutputFile, script);
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine(script);
+                        Console.WriteLine();
+                    }
                     return true;
                 }
             }
