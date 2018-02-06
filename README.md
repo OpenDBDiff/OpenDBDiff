@@ -3,7 +3,9 @@ A database comparison tool for Microsoft SQL Server 2005+ that reports schema di
 
 [![Build status](https://ci.appveyor.com/api/projects/status/rdng91bfx3ao8ts6?svg=true)](https://ci.appveyor.com/project/OpenDBDiff/OpenDBDiff/branch/develop/artifacts)
 
-[💾 Download latest CI build](https://ci.appveyor.com/project/OpenDBDiff/OpenDBDiff/branch/develop/artifacts)
+[💾 Download stable CI build](https://ci.appveyor.com/project/OpenDBDiff/OpenDBDiff/branch/master/artifacts)
+
+[💾 Download develop CI build](https://ci.appveyor.com/project/OpenDBDiff/OpenDBDiff/branch/develop/artifacts)
 
 Open DBDiff can synchronize
 * Tables (including Table Options like vardecimal, text in row, etc.)

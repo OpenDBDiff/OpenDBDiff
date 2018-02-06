@@ -124,6 +124,7 @@ namespace OpenDBDiff.Schema.Model
             SQLScriptList listDiff = new SQLScriptList();
             foreach (var item in this.Where(item => (schemas.Count() == 0 || schemas.FirstOrDefault(sch => sch.Id == item.Id || (sch.Parent != null && sch.Parent.Id == item.Id)) != default(ISchemaBase))))
             {
+                item.ResetWasInsertInDiffList();
                 var childrenSchemas = schemas.Where(s => s.Parent != null && s.Parent.Id == item.Id).ToList();
                 listDiff.AddRange(item.ToSqlDiff(childrenSchemas).WarnMissingScript(item));
             }
