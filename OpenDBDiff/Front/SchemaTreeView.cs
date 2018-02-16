@@ -1,13 +1,13 @@
-﻿using System;
+﻿using OpenDBDiff.Schema;
+using OpenDBDiff.Schema.Attributes;
+using OpenDBDiff.Schema.Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using OpenDBDiff.Schema;
-using OpenDBDiff.Schema.Attributes;
-using OpenDBDiff.Schema.Model;
 
 namespace OpenDBDiff.Front
 {
@@ -16,6 +16,7 @@ namespace OpenDBDiff.Front
         private ISchemaBase databaseSource;
 
         public delegate void SchemaHandler(string ObjectFullName);
+
         public event SchemaHandler OnSelectItem;
 
         private bool busy = false;
@@ -25,9 +26,9 @@ namespace OpenDBDiff.Front
             InitializeComponent();
         }
 
-        public ISchemaBase DatabaseDestination { get; set; }
+        public ISchemaBase RightDatabase { get; set; }
 
-        public ISchemaBase DatabaseSource
+        public ISchemaBase LeftDatabase
         {
             get { return databaseSource; }
             set
@@ -39,6 +40,7 @@ namespace OpenDBDiff.Front
                 }
             }
         }
+
         public List<ISchemaBase> GetCheckedSchemas()
         {
             List<ISchemaBase> schemas = new List<ISchemaBase>();
@@ -48,10 +50,12 @@ namespace OpenDBDiff.Front
             }
             return schemas;
         }
+
         public void SetCheckedSchemas(List<ISchemaBase> schemas)
         {
             SetCheckedNodesFromList(schemas, treeView1.Nodes);
         }
+
         private void GetCheckedNodesToList(List<ISchemaBase> schemas, TreeNodeCollection nodes)
         {
             foreach (TreeNode node in nodes)
@@ -66,6 +70,7 @@ namespace OpenDBDiff.Front
                 GetCheckedNodesToList(schemas, node.Nodes);
             }
         }
+
         private void SetCheckedNodesFromList(List<ISchemaBase> schemas, TreeNodeCollection nodes)
         {
             foreach (TreeNode node in nodes)
@@ -142,7 +147,6 @@ namespace OpenDBDiff.Front
 
         private void RebuildSchemaTree()
         {
-
             string currentlySelectedNode = treeView1.SelectedNode != null ? treeView1.SelectedNode.Name : null;
             string currentTopNode = treeView1.TopNode != null ? treeView1.TopNode.Name : null;
 
@@ -217,7 +221,6 @@ namespace OpenDBDiff.Front
             if (item.HasState(Enums.ObjectStatusType.UpdateStatus) && ShowChangedItems) return true;
             checkedStatus = checkedStatus | Enums.ObjectStatusType.UpdateStatus;
 
-
             // At the end, we should have check all possible statuses.
             Enums.ObjectStatusType expectedTotalStatus = Enums.ObjectStatusType.OriginalStatus;
             Enum.GetValues(typeof(Enums.ObjectStatusType)).Cast<Enums.ObjectStatusType>().ToList().ForEach((s) => expectedTotalStatus = expectedTotalStatus | s);
@@ -270,6 +273,7 @@ namespace OpenDBDiff.Front
                 if (OnSelectItem != null) OnSelectItem(item.FullName);
             }
         }
+
         private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)
         {
             if (e.Node.Tag == null)

@@ -2,9 +2,8 @@
 
 namespace OpenDBDiff.Front
 {
-
     public interface IDatabaseComparer
     {
-        IDatabase Compare(IDatabase source, IDatabase destination);
+        IDatabase Compare(IDatabase origin, IDatabase destination);
     }
 }

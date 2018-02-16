@@ -66,8 +66,8 @@ namespace OpenDBDiff.Front
             this.btnCompare = new System.Windows.Forms.Button();
             this.PanelGlobal = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.PanelSource = new System.Windows.Forms.Panel();
-            this.PanelDestination = new System.Windows.Forms.Panel();
+            this.LeftDatabasePanel = new System.Windows.Forms.Panel();
+            this.RightDatabasePanel = new System.Windows.Forms.Panel();
             this.btnNewProject = new System.Windows.Forms.Button();
             this.btnSaveProject = new System.Windows.Forms.Button();
             this.btnProject = new System.Windows.Forms.Button();
@@ -290,8 +290,8 @@ namespace OpenDBDiff.Front
             //
             this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.schemaTreeView1.DatabaseDestination = null;
-            this.schemaTreeView1.DatabaseSource = null;
+            this.schemaTreeView1.RightDatabase = null;
+            this.schemaTreeView1.LeftDatabase = null;
             this.schemaTreeView1.Location = new System.Drawing.Point(7, 10);
             this.schemaTreeView1.Name = "schemaTreeView1";
             this.schemaTreeView1.ShowChangedItems = true;
@@ -474,8 +474,8 @@ namespace OpenDBDiff.Front
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.PanelSource, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.PanelDestination, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.LeftDatabasePanel, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.RightDatabasePanel, 1, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(126, 3);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -485,22 +485,22 @@ namespace OpenDBDiff.Front
             this.tableLayoutPanel1.Size = new System.Drawing.Size(814, 172);
             this.tableLayoutPanel1.TabIndex = 0;
             //
-            // PanelSource
+            // LeftDatabasePanel
             //
-            this.PanelSource.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PanelSource.Location = new System.Drawing.Point(410, 3);
-            this.PanelSource.Name = "PanelSource";
-            this.PanelSource.Size = new System.Drawing.Size(401, 166);
-            this.PanelSource.TabIndex = 10;
+            this.LeftDatabasePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.LeftDatabasePanel.Location = new System.Drawing.Point(410, 3);
+            this.LeftDatabasePanel.Name = "PanelSource";
+            this.LeftDatabasePanel.Size = new System.Drawing.Size(401, 166);
+            this.LeftDatabasePanel.TabIndex = 10;
             //
-            // PanelDestination
+            // RightDatabasePanel
             //
-            this.PanelDestination.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.PanelDestination.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PanelDestination.Location = new System.Drawing.Point(3, 3);
-            this.PanelDestination.Name = "PanelDestination";
-            this.PanelDestination.Size = new System.Drawing.Size(401, 166);
-            this.PanelDestination.TabIndex = 11;
+            this.RightDatabasePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.RightDatabasePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RightDatabasePanel.Location = new System.Drawing.Point(3, 3);
+            this.RightDatabasePanel.Name = "PanelDestination";
+            this.RightDatabasePanel.Size = new System.Drawing.Size(401, 166);
+            this.RightDatabasePanel.TabIndex = 11;
             //
             // btnNewProject
             //
@@ -695,8 +695,8 @@ namespace OpenDBDiff.Front
         private Panel panel1;
         private Scintilla txtSyncScript;
         private Panel PanelGlobal;
-        private Panel PanelSource;
-        private Panel PanelDestination;
+        private Panel LeftDatabasePanel;
+        private Panel RightDatabasePanel;
         private GroupBox groupBox2;
         private Panel panel3;
         private Panel panel4;

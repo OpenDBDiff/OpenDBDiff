@@ -1,36 +1,38 @@
-﻿using System;
+﻿using OpenDBDiff.Schema.Events;
+using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
-using OpenDBDiff.Schema.Events;
 
 namespace OpenDBDiff.Front
 {
     public partial class ProgressForm : Form
     {
-        private IGenerator SourceGenerator;
+        private IGenerator OriginGenerator;
         private IGenerator DestinationGenerator;
         private bool IsProcessing = false;
-        private Schema.Model.IDatabase origenClone = null;
+        private Schema.Model.IDatabase originClone = null;
         private readonly IDatabaseComparer Comparer;
 
         // TODO: thread-safe error reporting
 
-        public ProgressForm(string sourceDatabaseName, string destinationDatabaseName, IGenerator destinationGenerator, IGenerator sourceGenerator, IDatabaseComparer comparer)
+        public ProgressForm(KeyValuePair<string, IGenerator> originDatabase, KeyValuePair<string, IGenerator> destinationDatabase, IDatabaseComparer comparer)
         {
-            Destination = null;
-            Source = null;
             InitializeComponent();
-            sourceProgressControl.Maximum = sourceGenerator.GetMaxValue();
-            sourceProgressControl.DatabaseName = sourceDatabaseName;
-            this.SourceGenerator = sourceGenerator;
 
-            destinationProgressControl.Maximum = destinationGenerator.GetMaxValue();
-            destinationProgressControl.DatabaseName = destinationDatabaseName;
-            this.DestinationGenerator = destinationGenerator;
+            Origin = null;
+            Destination = null;
+            originProgressControl.Maximum = originDatabase.Value.GetMaxValue();
+            originProgressControl.DatabaseName = originDatabase.Key;
+            this.OriginGenerator = originDatabase.Value;
+
+            destinationProgressControl.Maximum = destinationDatabase.Value.GetMaxValue();
+            destinationProgressControl.DatabaseName = destinationDatabase.Key;
+            this.DestinationGenerator = destinationDatabase.Value;
 
             this.Comparer = comparer;
         }
 
-        public Schema.Model.IDatabase Source { get; private set; }
+        public Schema.Model.IDatabase Origin { get; private set; }
 
         public Schema.Model.IDatabase Destination { get; private set; }
 
@@ -56,22 +58,22 @@ namespace OpenDBDiff.Front
                 {
                     this.Refresh();
                     IsProcessing = false;
-                    SourceGenerator.OnProgress += new ProgressEventHandler.ProgressHandler(genData1_OnProgress);
+                    OriginGenerator.OnProgress += new ProgressEventHandler.ProgressHandler(genData1_OnProgress);
                     DestinationGenerator.OnProgress += handler;
 
                     this.ErrorLocation = "Loading " + destinationProgressControl.DatabaseName;
-                    Source = SourceGenerator.Process();
-                    sourceProgressControl.Message = "Complete";
-                    sourceProgressControl.Value = SourceGenerator.GetMaxValue();
+                    Origin = OriginGenerator.Process();
+                    originProgressControl.Message = "Complete";
+                    originProgressControl.Value = OriginGenerator.GetMaxValue();
 
-                    this.ErrorLocation = "Loading " + sourceProgressControl.DatabaseName;
+                    this.ErrorLocation = "Loading " + originProgressControl.DatabaseName;
                     Destination = DestinationGenerator.Process();
 
-                    origenClone = (Schema.Model.IDatabase)Source.Clone(null);
+                    originClone = (Schema.Model.IDatabase)Origin.Clone(null);
 
                     this.ErrorLocation = "Comparing Databases";
-                    Destination = Comparer.Compare(Source, Destination);
-                    Source = origenClone;
+                    Destination = Comparer.Compare(Origin, Destination);
+                    Origin = originClone;
 
                     destinationProgressControl.Message = "Complete";
                     destinationProgressControl.Value = DestinationGenerator.GetMaxValue();
@@ -83,13 +85,13 @@ namespace OpenDBDiff.Front
             }
             finally
             {
-                SourceGenerator.OnProgress -= handler;
+                OriginGenerator.OnProgress -= handler;
                 DestinationGenerator.OnProgress -= handler;
                 this.Dispose();
             }
         }
 
-        void genData2_OnProgress(ProgressEventArgs e)
+        private void genData2_OnProgress(ProgressEventArgs e)
         {
             if (e.Progress > -1 && destinationProgressControl.Value != e.Progress)
             {
@@ -104,16 +106,16 @@ namespace OpenDBDiff.Front
             this.ErrorMostRecentProgress = e.Message;
         }
 
-        void genData1_OnProgress(ProgressEventArgs e)
+        private void genData1_OnProgress(ProgressEventArgs e)
         {
-            if (e.Progress > -1 && sourceProgressControl.Value != e.Progress)
+            if (e.Progress > -1 && originProgressControl.Value != e.Progress)
             {
-                sourceProgressControl.Value = e.Progress;
+                originProgressControl.Value = e.Progress;
             }
 
-            if (String.Compare(sourceProgressControl.Message, e.Message) != 0)
+            if (String.Compare(originProgressControl.Message, e.Message) != 0)
             {
-                sourceProgressControl.Message = e.Message;
+                originProgressControl.Message = e.Message;
             }
 
             this.ErrorMostRecentProgress = e.Message;

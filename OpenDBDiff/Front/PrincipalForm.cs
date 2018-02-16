@@ -1,19 +1,17 @@
+using DiffPlex;
+using DiffPlex.DiffBuilder;
+using DiffPlex.DiffBuilder.Model;
 using OpenDBDiff.Schema;
 using OpenDBDiff.Schema.Misc;
 using OpenDBDiff.Schema.Model;
 using OpenDBDiff.Settings;
-using DiffPlex;
-using DiffPlex.DiffBuilder;
-using DiffPlex.DiffBuilder.Model;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Drawing.Text;
@@ -23,19 +21,14 @@ namespace OpenDBDiff.Front
 {
     public partial class PrincipalForm : Form
     {
-
         private Project ActiveProject;
-        private IFront SourceSelector;
-        private IFront DestinationSelector;
+        private IFront LeftDatabaseSelector;
+        private IFront RightDatabaseSelector;
         private IOption Options;
         private List<ISchemaBase> _selectedSchemas = new List<ISchemaBase>();
 
-        List<IProjectHandler> ProjectHandlers = new List<IProjectHandler>();
-        OpenDBDiff.Front.IProjectHandler ProjectSelectorHandler;
-
-
-        IDatabase selectedOrigin;
-        IDatabase selectedDestination;
+        private List<IProjectHandler> ProjectHandlers = new List<IProjectHandler>();
+        private OpenDBDiff.Front.IProjectHandler ProjectSelectorHandler;
 
         public PrincipalForm()
         {
@@ -44,7 +37,7 @@ namespace OpenDBDiff.Front
             this.Text += Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
-        private void StartComparision()
+        private void StartComparison()
         {
             ProgressForm progress = null;
             string errorLocation = null;
@@ -54,30 +47,35 @@ namespace OpenDBDiff.Front
                      (!String.IsNullOrEmpty(ProjectSelectorHandler.GetDestinationDatabaseName()))))
                 {
                     Options = Options ?? this.ProjectSelectorHandler.GetDefaultProjectOptions();
-                    IGenerator sourceGenerator = this.ProjectSelectorHandler.SetSourceGenerator(SourceSelector.ConnectionString, Options);
-                    IGenerator destinationGenerator = this.ProjectSelectorHandler.SetDestinationGenerator(DestinationSelector.ConnectionString, Options);
+                    var leftGenerator = this.ProjectSelectorHandler.SetSourceGenerator(LeftDatabaseSelector.ConnectionString, Options);
+                    var rightGenerator = this.ProjectSelectorHandler.SetDestinationGenerator(RightDatabaseSelector.ConnectionString, Options);
                     IDatabaseComparer databaseComparer = this.ProjectSelectorHandler.GetDatabaseComparer();
 
-                    progress = new ProgressForm("Source Database", "Destination Database", destinationGenerator, sourceGenerator, databaseComparer);
+                    var leftPair = new KeyValuePair<String, IGenerator>(LeftDatabaseSelector.ToString(), leftGenerator);
+                    var rightPair = new KeyValuePair<String, IGenerator>(RightDatabaseSelector.ToString(), rightGenerator);
+
+                    // The progress form will execute the comparer to generate action scripts to migrate the right to the left
+                    // Hence, inside the ProgressForm and deeper, right is the origin and left is the destination
+                    progress = new ProgressForm(rightPair, leftPair, databaseComparer);
                     progress.ShowDialog(this);
                     if (progress.Error != null)
                     {
                         throw new SchemaException(progress.Error.Message, progress.Error);
                     }
 
-                    selectedOrigin = progress.Source;
-                    selectedDestination = progress.Destination;
-
                     txtSyncScript.LexerLanguage = this.ProjectSelectorHandler.GetScriptLanguage();
                     txtSyncScript.ReadOnly = false;
                     errorLocation = "Generating Synchronized Script";
-                    txtSyncScript.Text = selectedDestination.ToSqlDiff(this._selectedSchemas).ToSQL();
+                    txtSyncScript.Text = progress.Destination.ToSqlDiff(this._selectedSchemas).ToSQL();
                     txtSyncScript.ReadOnly = true;
-                    schemaTreeView1.DatabaseSource = selectedDestination;
-                    schemaTreeView1.DatabaseDestination = selectedOrigin;
+
+                    // Notice again that left is destination, because we generated scripts to migrate the right database to the left.
+                    schemaTreeView1.LeftDatabase = progress.Destination;
+                    schemaTreeView1.RightDatabase = progress.Origin;
+
                     schemaTreeView1.OnSelectItem += new SchemaTreeView.SchemaHandler(schemaTreeView1_OnSelectItem);
                     schemaTreeView1_OnSelectItem(schemaTreeView1.SelectedNode);
-                    textBox1.Text = selectedOrigin.ActionMessage.Message;
+                    textBox1.Text = progress.Origin.ActionMessage.Message;
 
                     btnCopy.Enabled = true;
                     btnSaveAs.Enabled = true;
@@ -107,36 +105,37 @@ namespace OpenDBDiff.Front
             txtNewObject.Text = "";
             txtOldObject.Text = "";
 
-            IDatabase database = (IDatabase)schemaTreeView1.DatabaseSource;
-            if (database.Find(ObjectFullName) != null)
+            IDatabase database = (IDatabase)schemaTreeView1.LeftDatabase;
+
+            Enums.ObjectStatusType? status;
+
+            status = database.Find(ObjectFullName)?.Status;
+            if (status.HasValue && status.Value != Enums.ObjectStatusType.DropStatus)
             {
-                if (database.Find(ObjectFullName).Status != Enums.ObjectStatusType.DropStatus)
+                txtNewObject.Text = database.Find(ObjectFullName).ToSql();
+                if (database.Find(ObjectFullName).Status == Enums.ObjectStatusType.OriginalStatus)
                 {
-                    txtNewObject.Text = database.Find(ObjectFullName).ToSql();
-                    if (database.Find(ObjectFullName).Status == Enums.ObjectStatusType.OriginalStatus)
-                    {
-                        btnUpdate.Enabled = false;
-                    }
-                    else
-                    {
-                        btnUpdate.Enabled = true;
-                    }
-                    if (database.Find(ObjectFullName).ObjectType == Enums.ObjectType.Table)
-                    {
-                        btnCompareTableData.Enabled = true;
-                    }
-                    else
-                    {
-                        btnCompareTableData.Enabled = false;
-                    }
+                    btnUpdate.Enabled = false;
+                }
+                else
+                {
+                    btnUpdate.Enabled = true;
+                }
+                if (database.Find(ObjectFullName).ObjectType == Enums.ObjectType.Table)
+                {
+                    btnCompareTableData.Enabled = true;
+                }
+                else
+                {
+                    btnCompareTableData.Enabled = false;
                 }
             }
 
-            database = (IDatabase)schemaTreeView1.DatabaseDestination;
-            if (database.Find(ObjectFullName) != null)
+            database = (IDatabase)schemaTreeView1.RightDatabase;
+            status = database.Find(ObjectFullName)?.Status;
+            if (status.HasValue && status.Value != Enums.ObjectStatusType.CreateStatus)
             {
-                if (database.Find(ObjectFullName).Status != Enums.ObjectStatusType.CreateStatus)
-                    txtOldObject.Text = database.Find(ObjectFullName).ToSql();
+                txtOldObject.Text = database.Find(ObjectFullName).ToSql();
             }
             txtNewObject.ReadOnly = true;
             txtOldObject.ReadOnly = true;
@@ -195,7 +194,7 @@ namespace OpenDBDiff.Front
             }
         }
 
-        void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Refresh script when tab is shown
             if (tabControl1.SelectedIndex != 1)
@@ -203,7 +202,7 @@ namespace OpenDBDiff.Front
                 return;
             }
 
-            var db = schemaTreeView1.DatabaseSource as IDatabase;
+            var db = schemaTreeView1.LeftDatabase as IDatabase;
             if (db != null)
             {
                 this._selectedSchemas = this.schemaTreeView1.GetCheckedSchemas();
@@ -212,13 +211,15 @@ namespace OpenDBDiff.Front
                 this.txtSyncScript.ReadOnly = false;
             }
         }
+
         private void btnCompareTableData_Click(object sender, EventArgs e)
         {
             TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
             ISchemaBase selected = (ISchemaBase)tree.SelectedNode.Tag;
-            DataCompareForm dataCompare = new DataCompareForm(selected, SourceSelector.ConnectionString, DestinationSelector.ConnectionString);
+            DataCompareForm dataCompare = new DataCompareForm(selected, LeftDatabaseSelector.ConnectionString, RightDatabaseSelector.ConnectionString);
             dataCompare.Show();
         }
+
         private void btnCompare_Click(object sender, EventArgs e)
         {
             string errorLocation = "Processing Compare";
@@ -226,10 +227,10 @@ namespace OpenDBDiff.Front
             {
                 Cursor = Cursors.WaitCursor;
                 _selectedSchemas = schemaTreeView1.GetCheckedSchemas();
-                StartComparision();
+                StartComparison();
                 schemaTreeView1.SetCheckedSchemas(_selectedSchemas);
                 errorLocation = "Saving Connections";
-                Project.SaveLastConfiguration(SourceSelector.ConnectionString, DestinationSelector.ConnectionString);
+                Project.SaveLastConfiguration(LeftDatabaseSelector.ConnectionString, RightDatabaseSelector.ConnectionString);
             }
             catch (Exception ex)
             {
@@ -244,16 +245,14 @@ namespace OpenDBDiff.Front
         private void HandleException(string errorLocation, Exception ex)
         {
             var errorDialog = new ErrorForm(ex);
-
-            var dialogResult = errorDialog.ShowDialog(this);
         }
 
         private void UnloadProjectHandler()
         {
             if (ProjectSelectorHandler != null)
             {
-                PanelSource.Controls.Remove((Control)SourceSelector);
-                PanelDestination.Controls.Remove((Control)DestinationSelector);
+                LeftDatabasePanel.Controls.Remove((Control)LeftDatabaseSelector);
+                RightDatabasePanel.Controls.Remove((Control)RightDatabaseSelector);
                 ProjectSelectorHandler.Unload();
                 ProjectSelectorHandler = null;
             }
@@ -263,10 +262,10 @@ namespace OpenDBDiff.Front
         {
             UnloadProjectHandler();
             ProjectSelectorHandler = projectHandler;
-            SourceSelector = ProjectSelectorHandler.CreateSourceSelector();
-            DestinationSelector = ProjectSelectorHandler.CreateDestinationSelector();
-            PanelSource.Controls.Add(SourceSelector.Control);
-            PanelDestination.Controls.Add(DestinationSelector.Control);
+            LeftDatabaseSelector = ProjectSelectorHandler.CreateSourceSelector();
+            RightDatabaseSelector = ProjectSelectorHandler.CreateDestinationSelector();
+            LeftDatabasePanel.Controls.Add(LeftDatabaseSelector.Control);
+            RightDatabasePanel.Controls.Add(RightDatabaseSelector.Control);
         }
 
         private void LoadProjectHandler<T>() where T : IProjectHandler, new()
@@ -313,7 +312,7 @@ namespace OpenDBDiff.Front
                 saveFileDialog1.ShowDialog(this);
                 if (!String.IsNullOrEmpty(saveFileDialog1.FileName))
                 {
-                    var db = schemaTreeView1.DatabaseSource as IDatabase;
+                    var db = schemaTreeView1.LeftDatabase as IDatabase;
                     if (db != null)
                     {
                         using (StreamWriter writer = new StreamWriter(saveFileDialog1.FileName, false))
@@ -340,10 +339,7 @@ namespace OpenDBDiff.Front
             catch (Exception ex)
             {
                 MessageBox.Show("An error ocurred while trying to copying the text to the clipboard");
-                System.Diagnostics.Trace.WriteLine("ERROR: +" + ex.Message);
-            }
-            finally
-            {
+                Trace.WriteLine("ERROR: +" + ex.Message);
             }
         }
 
@@ -351,7 +347,7 @@ namespace OpenDBDiff.Front
         {
             TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
             TreeNode dbArm = tree.Nodes[0];
-            string result = "";
+            var sb = new StringBuilder();
 
             foreach (TreeNode node in dbArm.Nodes)
             {
@@ -364,7 +360,7 @@ namespace OpenDBDiff.Front
                             //ISchemaBase selected = (ISchemaBase)tree.SelectedNode.Tag;
                             ISchemaBase selected = (ISchemaBase)subnode.Tag;
 
-                            IDatabase database = (IDatabase)schemaTreeView1.DatabaseSource;
+                            IDatabase database = (IDatabase)schemaTreeView1.LeftDatabase;
 
                             if (database.Find(selected.FullName) != null)
                             {
@@ -374,54 +370,58 @@ namespace OpenDBDiff.Front
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                default: result += "Nothing could be found to do for table " + selected.Name + ".\r\n"; break;
+                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                default: sb.AppendLine($"Nothing could be found to do for table '{selected.Name}'"); break;
                                             }
                                         }
                                         break;
+
                                     case Enums.ObjectType.StoredProcedure:
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                default: result += "Nothing could be found to do for stored procedure " + selected.Name + ".\r\n"; break;
+                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                default: sb.AppendLine($"Nothing could be found to do for stored procedure '{selected.Name}'"); break;
                                             }
                                         }
                                         break;
+
                                     case Enums.ObjectType.Function:
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                default: result += "Nothing could be found to do for function " + selected.Name + ".\r\n"; break;
+                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                default: sb.AppendLine($"Nothing could be found to do for function '{selected.Name}'"); break;
                                             }
                                         }
                                         break;
+
                                     case Enums.ObjectType.View:
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: result += Updater.alter(selected, DestinationSelector.ConnectionString); break;
-                                                default: result += "Nothing could be found to do for view " + selected.Name + ".\r\n"; break;
+                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                default: sb.AppendLine($"Nothing could be found to do for view '{selected.Name}'"); break;
                                             }
                                         }
                                         break;
+
                                     default:
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: result += Updater.addNew(selected, DestinationSelector.ConnectionString); break;
-                                                default: result += "Nothing could be found to do for " + selected.Name + ".\r\n"; break;
+                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.addNew(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                default: sb.AppendLine($"Nothing could be found to do for '{selected.Name}'"); break;
                                             }
                                         }
                                         break;
@@ -432,15 +432,14 @@ namespace OpenDBDiff.Front
                 }
             }
 
-            if (result == string.Empty)
-            {
-                result = "All successful";
-            }
-            MessageBox.Show(result);
+            if (sb.Length == 0)
+                MessageBox.Show(this, "All successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else
+                MessageBox.Show(this, sb.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             if (Options.Comparison.ReloadComparisonOnUpdate)
             {
-                StartComparision();
+                StartComparison();
             }
 
             btnUpdate.Enabled = false;
@@ -452,7 +451,7 @@ namespace OpenDBDiff.Front
             {
                 TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
                 TreeNode database = tree.Nodes[0];
-                string result = "";
+                var sb = new StringBuilder();
                 foreach (TreeNode tn in database.Nodes)
                 {
                     foreach (TreeNode inner in tn.Nodes)
@@ -462,18 +461,19 @@ namespace OpenDBDiff.Front
                             ISchemaBase item = (ISchemaBase)inner.Tag;
                             switch (item.Status)
                             {
-                                case Enums.ObjectStatusType.CreateStatus: result += Updater.createNew(item, DestinationSelector.ConnectionString); break;
-                                case Enums.ObjectStatusType.AlterStatus: result += Updater.alter(item, DestinationSelector.ConnectionString); break;
+                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(item, RightDatabaseSelector.ConnectionString)); break;
+                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(item, RightDatabaseSelector.ConnectionString)); break;
                             }
                         }
                     }
                 }
-                if (result == string.Empty)
-                {
-                    result = "Update successful";
-                }
-                MessageBox.Show(result);
-                StartComparision();
+
+                if (sb.Length == 0)
+                    MessageBox.Show(this, "Update successful.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                    MessageBox.Show(this, sb.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                StartComparison();
             }
         }
 
@@ -504,10 +504,10 @@ namespace OpenDBDiff.Front
             Project LastConfiguration = Project.GetLastConfiguration();
             if (LastConfiguration != null)
             {
-                if (SourceSelector != null)
-                    SourceSelector.ConnectionString = LastConfiguration.ConnectionStringSource;
-                if (DestinationSelector != null)
-                    DestinationSelector.ConnectionString = LastConfiguration.ConnectionStringDestination;
+                if (LeftDatabaseSelector != null)
+                    LeftDatabaseSelector.ConnectionString = LastConfiguration.ConnectionStringSource;
+                if (RightDatabaseSelector != null)
+                    RightDatabaseSelector.ConnectionString = LastConfiguration.ConnectionStringDestination;
             }
             if (toolProjectTypes.SelectedItem == null && toolProjectTypes.Items.Count > 0)
             {
@@ -527,7 +527,6 @@ namespace OpenDBDiff.Front
             {
                 InitializeScintillaControls(scintilla);
             }
-
             txtSyncScript.Text = "";
         }
 
@@ -544,7 +543,7 @@ namespace OpenDBDiff.Front
                 preferredFont = fontNames.FirstOrDefault(fn => installedNames.Contains(fn));
                 if (string.IsNullOrEmpty(preferredFont))
                     preferredFont = "Courier";
-            }
+        }
             return preferredFont;
         }
 
@@ -659,14 +658,11 @@ namespace OpenDBDiff.Front
             try
             {
                 Project.Delete(itemSelected.Id);
-                if (ActiveProject != null)
+                if ((ActiveProject?.Id ?? int.MinValue) == itemSelected.Id)
                 {
-                    if (ActiveProject.Id == itemSelected.Id)
-                    {
-                        ActiveProject = null;
-                        SourceSelector.ConnectionString = "";
-                        DestinationSelector.ConnectionString = "";
-                    }
+                    ActiveProject = null;
+                    LeftDatabaseSelector.ConnectionString = "";
+                    RightDatabaseSelector.ConnectionString = "";
                 }
             }
             catch (Exception ex)
@@ -682,8 +678,8 @@ namespace OpenDBDiff.Front
                 if (itemSelected != null)
                 {
                     ActiveProject = itemSelected;
-                    SourceSelector.ConnectionString = itemSelected.ConnectionStringSource;
-                    DestinationSelector.ConnectionString = itemSelected.ConnectionStringDestination;
+                    LeftDatabaseSelector.ConnectionString = itemSelected.ConnectionStringSource;
+                    RightDatabaseSelector.ConnectionString = itemSelected.ConnectionStringDestination;
                 }
             }
             catch (Exception ex)
@@ -694,8 +690,8 @@ namespace OpenDBDiff.Front
 
         private void btnNewProject_Click(object sender, EventArgs e)
         {
-            SourceSelector.ConnectionString = "";
-            DestinationSelector.ConnectionString = "";
+            LeftDatabaseSelector.ConnectionString = "";
+            RightDatabaseSelector.ConnectionString = "";
             ActiveProject = null;
         }
 

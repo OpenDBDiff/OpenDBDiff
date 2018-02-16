@@ -1,11 +1,18 @@
-using System;
 using OpenDBDiff.Schema.Misc;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using System;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
 {
     internal static class CompareDatabase
     {
+        /// <summary>
+        /// Generates the differences to migrate a schema from origin to destination
+        /// </summary>
+        /// <param name="origin">The Origin schema is the schema before our generated actions are applied.</param>
+        /// <param name="destination">The Destination schema is the schema after our actions are applied.</param>
+        /// <returns></returns>
+        /// <exception cref="SchemaException"></exception>
         public static Database GenerateDifferences(Database origin, Database destination)
         {
             try

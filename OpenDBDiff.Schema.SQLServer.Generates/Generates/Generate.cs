@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
 using OpenDBDiff.Schema.Errors;
 using OpenDBDiff.Schema.Events;
 using OpenDBDiff.Schema.Misc;
@@ -8,13 +5,15 @@ using OpenDBDiff.Schema.SQLServer.Generates.Compare;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.Util;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Options;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 {
-    public class Generate 
+    public class Generate
     {
         private readonly List<MessageLog> messages;
-        private SqlOption options;
         private ProgressEventArgs currentlyReading;
 
         public Generate()
@@ -43,12 +42,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             }
         }
 
-        public SqlOption Options
-        {
-            set { options = value; }
-        }
+        public SqlOption Options { get; set; }
 
         private event ProgressEventHandler.ProgressHandler OnReading;
+
         public event ProgressEventHandler.ProgressHandler OnProgress;
 
         private void Generate_OnReading(ProgressEventArgs e)
@@ -81,9 +78,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             var databaseSchema = new Database();
 
             //tables.OnTableProgress += new Progress.ProgressHandler(tables_OnTableProgress);
-            databaseSchema.Options = options;
+            databaseSchema.Options = Options;
             databaseSchema.Name = Name;
-            databaseSchema.Info = (new GenerateDatabase(ConnectionString, options)).Get(databaseSchema);
+            databaseSchema.Info = (new GenerateDatabase(ConnectionString, Options)).Get(databaseSchema);
             /*Thread t1 = new Thread(delegate()
                 {
                     try
@@ -92,7 +89,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             (new GenerateTables(this)).Fill(databaseSchema, ConnectionString, messages);
             (new GenerateViews(this)).Fill(databaseSchema, ConnectionString, messages);
 
-            if (options.Ignore.FilterIndex)
+            if (Options.Ignore.FilterIndex)
             {
                 (new GenerateIndex(this)).Fill(databaseSchema, ConnectionString);
                 (new GenerateFullTextIndex(this)).Fill(databaseSchema, ConnectionString);
@@ -176,15 +173,18 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         internal static void RaiseOnCompareProgress(string formatString, params object[] formatParams)
         {
-            if (OnCompareProgress != null)
-            {
-                OnCompareProgress(new ProgressEventArgs(String.Format(formatString, formatParams), -1));
-            }
+            OnCompareProgress?.Invoke(new ProgressEventArgs(String.Format(formatString, formatParams), -1));
         }
 
-        public static Database Compare(Database databaseOriginalSchema, Database databaseCompareSchema)
+        /// <summary>
+        /// Generates the differences to migrate a schema from origin to destination
+        /// </summary>
+        /// <param name="origin">The Origin schema is the schema before our generated actions are applied.</param>
+        /// <param name="destination">The Destination schema is the schema after our actions are applied.</param>
+        /// <returns></returns>
+        public static Database Compare(Database origin, Database destination)
         {
-            Database merge = CompareDatabase.GenerateDifferences(databaseOriginalSchema, databaseCompareSchema);
+            Database merge = CompareDatabase.GenerateDifferences(origin, destination);
             return merge;
         }
     }

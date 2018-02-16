@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using OpenDBDiff.Schema;
 using OpenDBDiff.Schema.Model;
+using System.Text;
 
 namespace OpenDBDiff
 {
@@ -106,7 +107,7 @@ namespace OpenDBDiff
                     return "Cancelled.";
                 }
 
-                string result = string.Empty;
+                var sb = new StringBuilder();
                 SQLScriptList SqlDiff = target.ToSqlDiff(new List<ISchemaBase>());
                 string[] splitOn = { "GO" };
                 string[] tempList = SqlDiff.ToSQL().Split(splitOn, StringSplitOptions.RemoveEmptyEntries);
@@ -131,11 +132,11 @@ namespace OpenDBDiff
                     }
                     catch (Exception e)
                     {
-                        result += target.Name + ": " + e.Message + "\n\n";
+                        sb.AppendLine($"{target.Name}: {e.Message}");
                         connection.Close();
                     }
                 }
-                return result;
+                return sb.ToString();
             }
         }
 

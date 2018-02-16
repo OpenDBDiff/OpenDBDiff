@@ -127,7 +127,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             this.cboDatabase.Name = "cboDatabase";
             this.cboDatabase.Size = new System.Drawing.Size(223, 21);
             this.cboDatabase.TabIndex = 4;
-            this.cboDatabase.SelectedIndexChanged += new System.EventHandler(this.cboDatabase_SelectedIndexChanged);
             this.cboDatabase.DropDown += new System.EventHandler(this.cboDatabase_DropDown);
             //
             // label6

@@ -1,8 +1,8 @@
+using OpenDBDiff.Front;
+using OpenDBDiff.Schema.SQLServer.Generates.Front.Util;
 using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;
-using OpenDBDiff.Front;
-using OpenDBDiff.Schema.SQLServer.Generates.Front.Util;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 {
@@ -10,9 +10,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
     {
         private Boolean isDatabaseFilled = false;
         private Boolean isServerFilled = false;
-        private delegate void clearCombo();
-        private delegate void addCombo(string item);
 
+        private delegate void clearCombo();
+
+        private delegate void addCombo(string item);
 
         public SqlServerConnectFront()
         {
@@ -112,7 +113,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             return builder.ConnectionString;
         }
 
-
         public string ConnectionStringToDefaultDatabase
         {
             get
@@ -196,7 +196,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
                 MessageBox.Show(this, "Test successful!", "Test", MessageBoxButtons.OK, MessageBoxIcon.Information);
             else
                 MessageBox.Show(this, "Test failed!\r\n" + ErrorConnection, "Test", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
         }
 
         private void AddComboItem(string item)
@@ -294,7 +293,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             {
                 this.Cursor = Cursors.Default;
                 cboDatabase.Items.Clear();
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -302,14 +301,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             }
         }
 
-        private void cboDatabase_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void cboServer_TextChanged(object sender, EventArgs e)
         {
             isDatabaseFilled = false;
+        }
+
+        public override string ToString()
+        {
+            return string.Format($"Server: {ServerName}, Database: {DatabaseName}");
         }
     }
 }
