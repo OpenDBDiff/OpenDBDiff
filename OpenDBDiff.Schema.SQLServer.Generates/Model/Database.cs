@@ -196,40 +196,31 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             return sql;
         }
 
-        /*public List<ISchemaBase> FindAllByColumn(String ColumnName)
-        {
-            this.t
-        }*/
-        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
+        public override SQLScriptList ToSqlDiff(ICollection<ISchemaBase> schemas)
         {
             var isAzure10 = this.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10;
 
             var listDiff = new SQLScriptList();
-            listDiff.Add(new SQLScript(String.Format(@"/*
 
-    OpenDBDiff {0}
+            var header = $@"/*
+
+    OpenDBDiff {System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString()}
     https://github.com/OpenDBDiff/OpenDBDiff
 
-    Script created by {1}\{2} on {3} at {4}.
+    Script created by {Environment.UserDomainName}\{Environment.UserName} on {DateTime.Now.ToShortDateString()} at {DateTime.Now.ToLongTimeString()}.
 
-    Created on:  {5}
-    Source:      {6} on {7}
-    Destination: {8} on {9}
+    Created on:  {Environment.MachineName}
+    Source:      {SourceInfo?.Database ?? "Unknown"} on {SourceInfo?.Server ?? "Unknown"}
+    Destination: {Info?.Database ?? "Unknown"} on {Info?.Server ?? "Unknown"}
+
+    ### This script performs actions to change the Destination schema to the Source schema. ###
 
 */
 
-",
-                System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(),
-                Environment.UserDomainName,
-                Environment.UserName,
-                DateTime.Now.ToShortDateString(),
-                DateTime.Now.ToLongTimeString(),
-                Environment.MachineName,
-                SourceInfo != null ? SourceInfo.Database : "Unknown",
-                SourceInfo != null ? SourceInfo.Server : "Unknown",
-                Info != null ? Info.Database : "Unknown",
-                Info != null ? Info.Server : "Unknown",
-                0), 0, Enums.ScripActionType.None));
+";
+
+            listDiff.Add(new SQLScript(header, 0, Enums.ScripActionType.None));
+
             if (!isAzure10)
             {
                 listDiff.Add("USE [" + Name + "]\r\nGO\r\n\r\n", 0, Enums.ScripActionType.UseDatabase);
