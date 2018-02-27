@@ -10,7 +10,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             if (!node.Compare(originFields[node.FullName]))
             {
                 Rule newNode = node.Clone(originFields.Parent);
-                newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                newNode.Status = ObjectStatus.Alter;
                 originFields[node.FullName] = newNode;
             }
         }
@@ -18,7 +18,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
         protected override void DoNew<Root>(SchemaList<Rule, Root> originFields, Rule node)
         {
             Rule newNode = node.Clone(originFields.Parent);
-            newNode.Status = Enums.ObjectStatusType.CreateStatus;
+            newNode.Status = ObjectStatus.Create;
             originFields.Add(newNode);
         }
     }

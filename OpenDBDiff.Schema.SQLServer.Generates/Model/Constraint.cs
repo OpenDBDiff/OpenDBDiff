@@ -18,7 +18,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         }
 
         public Constraint(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.Constraint)
+            : base(parent, ObjectType.Constraint)
         {
             this.Columns = new ConstraintColumns(this);
             this.Index = new Index(parent);
@@ -163,7 +163,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             if (Index.Type == Index.IndexTypeEnum.Nonclustered) typeConstraint = "NONCLUSTERED";
             if (Index.Type == Index.IndexTypeEnum.XML) typeConstraint = "XML";
             if (Index.Type == Index.IndexTypeEnum.Heap) typeConstraint = "HEAP";
-            if (Parent.ObjectType != Enums.ObjectType.TableType)
+            if (Parent.ObjectType != ObjectType.TableType)
                 sql.Append("CONSTRAINT [" + Name + "] ");
             else
                 sql.Append("\t");
@@ -183,7 +183,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             }
             sql.Append("\t)");
             sql.Append(" WITH (");
-            if (Parent.ObjectType == Enums.ObjectType.TableType)
+            if (Parent.ObjectType == ObjectType.TableType)
                 if (Index.IgnoreDupKey) sql.Append("IGNORE_DUP_KEY = ON"); else sql.Append("IGNORE_DUP_KEY  = OFF");
             else
             {
@@ -257,7 +257,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             if (this.Type == ConstraintType.Check)
             {
                 string sqlcheck = "";
-                if (Parent.ObjectType != Enums.ObjectType.TableType)
+                if (Parent.ObjectType != ObjectType.TableType)
                     sqlcheck = "CONSTRAINT [" + Name + "] ";
 
                 return sqlcheck + "CHECK " + (NotForReplication ? "NOT FOR REPLICATION" : "") + " (" + Definition + ")";
@@ -277,11 +277,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScript Create()
         {
-            Enums.ScripActionType action = Enums.ScripActionType.AddConstraint;
+            ScriptAction action = ScriptAction.AddConstraint;
             if (this.Type == ConstraintType.ForeignKey)
-                action = Enums.ScripActionType.AddConstraintFK;
+                action = ScriptAction.AddConstraintFK;
             if (this.Type == ConstraintType.PrimaryKey)
-                action = Enums.ScripActionType.AddConstraintPK;
+                action = ScriptAction.AddConstraintPK;
             if (!GetWasInsertInDiffList(action))
             {
                 SetWasInsertInDiffList(action);
@@ -293,11 +293,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScript Drop()
         {
-            Enums.ScripActionType action = Enums.ScripActionType.DropConstraint;
+            ScriptAction action = ScriptAction.DropConstraint;
             if (this.Type == ConstraintType.ForeignKey)
-                action = Enums.ScripActionType.DropConstraintFK;
+                action = ScriptAction.DropConstraintFK;
             if (this.Type == ConstraintType.PrimaryKey)
-                action = Enums.ScripActionType.DropConstraintPK;
+                action = ScriptAction.DropConstraintPK;
             if (!GetWasInsertInDiffList(action))
             {
                 SetWasInsertInDiffList(action);
@@ -329,24 +329,24 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             SQLScriptList list = new SQLScriptList();
-            if (this.Status != Enums.ObjectStatusType.OriginalStatus)
+            if (this.Status != ObjectStatus.Original)
                 RootParent.ActionMessage[Parent.FullName].Add(this);
 
-            if (this.HasState(Enums.ObjectStatusType.DropStatus))
+            if (this.HasState(ObjectStatus.Drop))
             {
-                if (this.Parent.Status != Enums.ObjectStatusType.RebuildStatus)
+                if (this.Parent.Status != ObjectStatus.Rebuild)
                     list.Add(Drop());
             }
-            if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+            if (this.HasState(ObjectStatus.Create))
                 list.Add(Create());
-            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
+            if (this.HasState(ObjectStatus.Alter))
             {
                 list.Add(Drop());
                 list.Add(Create());
             }
-            if (this.HasState(Enums.ObjectStatusType.DisabledStatus))
+            if (this.HasState(ObjectStatus.Disabled))
             {
-                list.Add(this.ToSQLEnabledDisabled(), ((Table)Parent).DependenciesCount, Enums.ScripActionType.AlterConstraint);
+                list.Add(this.ToSQLEnabledDisabled(), ((Table)Parent).DependenciesCount, ScriptAction.AlterConstraint);
             }
             /*if (this.Status == StatusEnum.ObjectStatusType.ChangeFileGroup)
             {

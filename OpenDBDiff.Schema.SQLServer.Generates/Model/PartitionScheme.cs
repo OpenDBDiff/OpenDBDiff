@@ -7,7 +7,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class PartitionScheme : SQLServerSchemaBase
     {
         public PartitionScheme(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.PartitionFunction)
+            : base(parent, ObjectType.PartitionFunction)
         {
             FileGroups = new List<string>();
         }
@@ -41,18 +41,18 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == Enums.ObjectStatusType.DropStatus)
+            if (this.Status == ObjectStatus.Drop)
             {
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropPartitionScheme);
+                listDiff.Add(ToSqlDrop(), 0, ScriptAction.DropPartitionScheme);
             }
-            if (this.Status == Enums.ObjectStatusType.RebuildStatus)
+            if (this.Status == ObjectStatus.Rebuild)
             {
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropPartitionScheme);
-                listDiff.Add(ToSqlAdd(), 0, Enums.ScripActionType.AddPartitionScheme);
+                listDiff.Add(ToSqlDrop(), 0, ScriptAction.DropPartitionScheme);
+                listDiff.Add(ToSqlAdd(), 0, ScriptAction.AddPartitionScheme);
             }
-            if (this.Status == Enums.ObjectStatusType.CreateStatus)
+            if (this.Status == ObjectStatus.Create)
             {
-                listDiff.Add(ToSqlAdd(), 0, Enums.ScripActionType.AddPartitionScheme);
+                listDiff.Add(ToSqlAdd(), 0, ScriptAction.AddPartitionScheme);
             }
             return listDiff;
         }

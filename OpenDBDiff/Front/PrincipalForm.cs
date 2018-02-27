@@ -114,13 +114,13 @@ namespace OpenDBDiff.Front
 
                 IDatabase database = (IDatabase)schemaTreeView1.LeftDatabase;
 
-                Enums.ObjectStatusType? status;
+                ObjectStatus? status;
 
                 status = database.Find(nodeFullName)?.Status;
-                if (status.HasValue && status.Value != Enums.ObjectStatusType.DropStatus)
+                if (status.HasValue && status.Value != ObjectStatus.Drop)
                 {
                     txtNewObject.Text = database.Find(nodeFullName).ToSql();
-                    if (database.Find(nodeFullName).Status == Enums.ObjectStatusType.OriginalStatus)
+                    if (database.Find(nodeFullName).Status == ObjectStatus.Original)
                     {
                         btnUpdate.Enabled = false;
                     }
@@ -128,7 +128,7 @@ namespace OpenDBDiff.Front
                     {
                         btnUpdate.Enabled = true;
                     }
-                    if (database.Find(nodeFullName).ObjectType == Enums.ObjectType.Table)
+                    if (database.Find(nodeFullName).ObjectType == ObjectType.Table)
                     {
                         btnCompareTableData.Enabled = true;
                     }
@@ -140,7 +140,7 @@ namespace OpenDBDiff.Front
 
                 database = (IDatabase)schemaTreeView1.RightDatabase;
                 status = database.Find(nodeFullName)?.Status;
-                if (status.HasValue && status.Value != Enums.ObjectStatusType.CreateStatus)
+                if (status.HasValue && status.Value != ObjectStatus.Create)
                 {
                     txtOldObject.Text = database.Find(nodeFullName).ToSql();
                 }
@@ -380,51 +380,51 @@ namespace OpenDBDiff.Front
                             {
                                 switch (selected.ObjectType)
                                 {
-                                    case Enums.ObjectType.Table:
+                                    case ObjectType.Table:
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Create: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Alter: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.AlterWhitespace: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
                                                 default: sb.AppendLine($"Nothing could be found to do for table '{selected.Name}'"); break;
                                             }
                                         }
                                         break;
 
-                                    case Enums.ObjectType.StoredProcedure:
+                                    case ObjectType.StoredProcedure:
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Create: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Alter: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.AlterWhitespace: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
                                                 default: sb.AppendLine($"Nothing could be found to do for stored procedure '{selected.Name}'"); break;
                                             }
                                         }
                                         break;
 
-                                    case Enums.ObjectType.Function:
+                                    case ObjectType.Function:
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Create: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Alter: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.AlterWhitespace: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Alter | ObjectStatus.AlterBody: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
                                                 default: sb.AppendLine($"Nothing could be found to do for function '{selected.Name}'"); break;
                                             }
                                         }
                                         break;
 
-                                    case Enums.ObjectType.View:
+                                    case ObjectType.View:
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case Enums.ObjectStatusType.AlterWhitespaceStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case Enums.ObjectStatusType.AlterStatus | Enums.ObjectStatusType.AlterBodyStatus: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Create: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Alter: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.AlterWhitespace: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Alter | ObjectStatus.AlterBody: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
                                                 default: sb.AppendLine($"Nothing could be found to do for view '{selected.Name}'"); break;
                                             }
                                         }
@@ -434,7 +434,7 @@ namespace OpenDBDiff.Front
                                         {
                                             switch (selected.Status)
                                             {
-                                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.addNew(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Create: sb.Append(Updater.addNew(selected, RightDatabaseSelector.ConnectionString)); break;
                                                 default: sb.AppendLine($"Nothing could be found to do for '{selected.Name}'"); break;
                                             }
                                         }
@@ -475,8 +475,8 @@ namespace OpenDBDiff.Front
                             ISchemaBase item = (ISchemaBase)inner.Tag;
                             switch (item.Status)
                             {
-                                case Enums.ObjectStatusType.CreateStatus: sb.Append(Updater.createNew(item, RightDatabaseSelector.ConnectionString)); break;
-                                case Enums.ObjectStatusType.AlterStatus: sb.Append(Updater.alter(item, RightDatabaseSelector.ConnectionString)); break;
+                                case ObjectStatus.Create: sb.Append(Updater.createNew(item, RightDatabaseSelector.ConnectionString)); break;
+                                case ObjectStatus.Alter: sb.Append(Updater.alter(item, RightDatabaseSelector.ConnectionString)); break;
                             }
                         }
                     }

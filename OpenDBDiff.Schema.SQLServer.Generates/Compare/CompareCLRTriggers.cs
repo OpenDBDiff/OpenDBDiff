@@ -10,7 +10,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             if (!node.Compare(originFields[node.FullName]))
             {
                 CLRTrigger newNode = node;
-                newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                newNode.Status = ObjectStatus.Alter;
                 CompareExtendedProperties(newNode, originFields[node.FullName]);
                 originFields[node.FullName] = newNode;
             }

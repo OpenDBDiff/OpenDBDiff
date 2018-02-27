@@ -6,7 +6,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class ExtendedProperty : SQLServerSchemaBase, ISchemaBase
     {
         public ExtendedProperty(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.ExtendedProperty)
+            : base(parent, ObjectType.ExtendedProperty)
         {
         }
 
@@ -40,17 +40,17 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScript Create()
         {
-            Enums.ScripActionType action = Enums.ScripActionType.AddExtendedProperty;
+            ScriptAction action = ScriptAction.AddExtendedProperty;
             return new SQLScript(this.ToSqlAdd(), 0, action);
         }
 
         public override SQLScript Drop()
         {
-            Enums.ScripActionType action = Enums.ScripActionType.DropExtendedProperty;
+            ScriptAction action = ScriptAction.DropExtendedProperty;
             return new SQLScript(this.ToSqlDrop(), 0, action);
         }
 
-        public override Enums.ObjectStatusType Status { get; set; }
+        public override ObjectStatus Status { get; set; }
 
         public override string ToSqlAdd()
         {
@@ -84,11 +84,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             SQLScriptList list = new SQLScriptList();
-            if (this.Parent.Status != Enums.ObjectStatusType.CreateStatus)
+            if (this.Parent.Status != ObjectStatus.Create)
             {
-                if (this.Status == Enums.ObjectStatusType.CreateStatus)
+                if (this.Status == ObjectStatus.Create)
                     list.Add(this.Create());
-                if (this.Status == Enums.ObjectStatusType.DropStatus)
+                if (this.Status == ObjectStatus.Drop)
                     list.Add(this.Drop());
             }
             return list;

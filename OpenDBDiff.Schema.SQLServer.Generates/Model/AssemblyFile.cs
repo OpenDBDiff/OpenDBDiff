@@ -4,8 +4,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {
     public class AssemblyFile : SQLServerSchemaBase
     {
-        public AssemblyFile(ISchemaBase parent, AssemblyFile assemblyFile, Enums.ObjectStatusType status)
-            : base(parent, Enums.ObjectType.AssemblyFile)
+        public AssemblyFile(ISchemaBase parent, AssemblyFile assemblyFile, ObjectStatus status)
+            : base(parent, ObjectType.AssemblyFile)
         {
             this.Name = assemblyFile.Name;
             this.Content = assemblyFile.Content;
@@ -13,7 +13,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         }
 
         public AssemblyFile(ISchemaBase parent, string name, string content)
-            : base(parent, Enums.ObjectType.AssemblyFile)
+            : base(parent, ObjectType.AssemblyFile)
         {
             this.Name = name;
             this.Content = content;
@@ -52,14 +52,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == Enums.ObjectStatusType.DropStatus)
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropAssemblyFile);
-            if (this.Status == Enums.ObjectStatusType.CreateStatus)
-                listDiff.Add(ToSqlAdd(), 0, Enums.ScripActionType.AddAssemblyFile);
-            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
+            if (this.Status == ObjectStatus.Drop)
+                listDiff.Add(ToSqlDrop(), 0, ScriptAction.DropAssemblyFile);
+            if (this.Status == ObjectStatus.Create)
+                listDiff.Add(ToSqlAdd(), 0, ScriptAction.AddAssemblyFile);
+            if (this.HasState(ObjectStatus.Alter))
             {
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropAssemblyFile);
-                listDiff.Add(ToSqlAdd(), 0, Enums.ScripActionType.AddAssemblyFile);
+                listDiff.Add(ToSqlDrop(), 0, ScriptAction.DropAssemblyFile);
+                listDiff.Add(ToSqlAdd(), 0, ScriptAction.AddAssemblyFile);
             }
             return listDiff;
         }

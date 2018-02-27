@@ -10,7 +10,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             if (!node.Compare(originFields[node.FullName]))
             {
                 Role newNode = node;
-                newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                newNode.Status = ObjectStatus.Alter;
                 originFields[node.FullName] = newNode;
             }
         }

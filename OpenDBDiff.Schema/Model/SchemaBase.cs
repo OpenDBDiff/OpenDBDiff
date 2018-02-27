@@ -8,18 +8,18 @@ namespace OpenDBDiff.Schema.Model
     [DebuggerDisplay("Id: {Id} - Name: {Name} - Status: {status}")]
     public abstract class SchemaBase : ISchemaBase
     {
-        private Enums.ObjectStatusType status;
+        private ObjectStatus status;
         private ISchemaBase parent;
         private string nameCharacterOpen;
         private string nameCharacterClose;
         private Hashtable wasInsertInDiffList;
         private IDatabase rootParent = null;
 
-        protected SchemaBase(string nameCharacterOpen, string nameCharacterClose, Enums.ObjectType objectType)
+        protected SchemaBase(string nameCharacterOpen, string nameCharacterClose, ObjectType objectType)
         {
             this.Guid = System.Guid.NewGuid().ToString();
             this.ObjectType = objectType;
-            this.status = Enums.ObjectStatusType.OriginalStatus;
+            this.status = ObjectStatus.Original;
             this.nameCharacterClose = nameCharacterClose;
             this.nameCharacterOpen = nameCharacterOpen;
         }
@@ -144,12 +144,13 @@ namespace OpenDBDiff.Schema.Model
         {
             throw new NotImplementedException();
         }
+
         /// <summary>
         /// Returns if the obecet was already inserted in the list of scripts with differencies
         /// </summary>
         /// <param name="action">The action to check in the list</param>
         /// <returns>True if is already inserted. False if it wasn't</returns>
-        public Boolean GetWasInsertInDiffList(Enums.ScripActionType action)
+        public Boolean GetWasInsertInDiffList(ScriptAction action)
         {
             if (wasInsertInDiffList != null)
                 return (wasInsertInDiffList.ContainsKey(action));
@@ -160,7 +161,7 @@ namespace OpenDBDiff.Schema.Model
         /// <summary>
         /// Sets the object as inserted in the list of differences script
         /// </summary>
-        public void SetWasInsertInDiffList(Enums.ScripActionType action)
+        public void SetWasInsertInDiffList(ScriptAction action)
         {
             if (wasInsertInDiffList == null) wasInsertInDiffList = new Hashtable();
             if (!wasInsertInDiffList.ContainsKey(action))
@@ -178,9 +179,9 @@ namespace OpenDBDiff.Schema.Model
         public string Guid { get; set; }
 
         /// <summary>
-        /// Object type. <seealso cref="Enums.ObjectType"/>
+        /// Object type. <seealso cref="ObjectType"/>
         /// </summary>
-        public Enums.ObjectType ObjectType { get; set; }
+        public ObjectType ObjectType { get; set; }
 
         /// <summary>
         /// ID del objeto.
@@ -217,32 +218,30 @@ namespace OpenDBDiff.Schema.Model
         public Boolean IsSystem { get; set; }
 
         /// <summary>
-        /// Returns the status of the object. By default is set to <see cref="Enums.ObjectStatusType.OriginalStatus"/>. When setting a value, it also affects to the <see cref="Parent"/> status.
+        /// Returns the status of the object. By default is set to <see cref="ObjectStatus.Original"/>. When setting a value, it also affects to the <see cref="Parent"/> status.
         /// </summary>
-        public virtual Enums.ObjectStatusType Status
+        public virtual ObjectStatus Status
         {
             get { return status; }
             set
             {
-                if ((status != Enums.ObjectStatusType.RebuildStatus) && (status != Enums.ObjectStatusType.RebuildDependenciesStatus))
+                if ((status != ObjectStatus.Rebuild) && (status != ObjectStatus.RebuildDependencies))
                     status = value;
-                if (Parent != null)
+
+                // Si el estado de la tabla era el original, lo cambia, sino deja el actual estado.
+                if (Parent != null && Parent.Status == ObjectStatus.Original || value == ObjectStatus.Rebuild || value == ObjectStatus.RebuildDependencies)
                 {
-                    //Si el estado de la tabla era el original, lo cambia, sino deja el actual estado.
-                    if (Parent.Status == Enums.ObjectStatusType.OriginalStatus || value == Enums.ObjectStatusType.RebuildStatus || value == Enums.ObjectStatusType.RebuildDependenciesStatus)
-                    {
-                        if ((value != Enums.ObjectStatusType.OriginalStatus) && (value != Enums.ObjectStatusType.RebuildStatus) && (value != Enums.ObjectStatusType.RebuildDependenciesStatus))
-                            Parent.Status = Enums.ObjectStatusType.AlterStatus;
-                        if (value == Enums.ObjectStatusType.RebuildDependenciesStatus)
-                            Parent.Status = Enums.ObjectStatusType.RebuildDependenciesStatus;
-                        if (value == Enums.ObjectStatusType.RebuildStatus)
-                            Parent.Status = Enums.ObjectStatusType.RebuildStatus;
-                    }
+                    if ((value != ObjectStatus.Original) && (value != ObjectStatus.Rebuild) && (value != ObjectStatus.RebuildDependencies))
+                        Parent.Status = ObjectStatus.Alter;
+                    if (value == ObjectStatus.RebuildDependencies)
+                        Parent.Status = ObjectStatus.RebuildDependencies;
+                    if (value == ObjectStatus.Rebuild)
+                        Parent.Status = ObjectStatus.Rebuild;
                 }
             }
         }
 
-        public Boolean HasState(Enums.ObjectStatusType statusFind)
+        public Boolean HasState(ObjectStatus statusFind)
         {
             return ((this.Status & statusFind) == statusFind);
         }

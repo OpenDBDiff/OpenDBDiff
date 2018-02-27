@@ -8,7 +8,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class ColumnConstraint : SQLServerSchemaBase
     {
         public ColumnConstraint(Column parent)
-            : base(parent, Enums.ObjectType.Constraint)
+            : base(parent, ObjectType.Constraint)
         {
         }
 
@@ -86,7 +86,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScript Create()
         {
-            Enums.ScripActionType action = Enums.ScripActionType.AddConstraint;
+            ScriptAction action = ScriptAction.AddConstraint;
             if (!GetWasInsertInDiffList(action))
             {
                 SetWasInsertInDiffList(action);
@@ -99,7 +99,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScript Drop()
         {
-            Enums.ScripActionType action = Enums.ScripActionType.DropConstraint;
+            ScriptAction action = ScriptAction.DropConstraint;
             if (!GetWasInsertInDiffList(action))
             {
                 SetWasInsertInDiffList(action);
@@ -113,9 +113,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             get
             {
-                Enums.ObjectStatusType tableStatus = this.Parent.Parent.Status;
-                Enums.ObjectStatusType columnStatus = this.Parent.Status;
-                return ((columnStatus != Enums.ObjectStatusType.DropStatus) && (((tableStatus == Enums.ObjectStatusType.AlterStatus) || (tableStatus == Enums.ObjectStatusType.OriginalStatus) || (tableStatus == Enums.ObjectStatusType.RebuildDependenciesStatus)) && (this.Status == Enums.ObjectStatusType.OriginalStatus)));
+                ObjectStatus tableStatus = this.Parent.Parent.Status;
+                ObjectStatus columnStatus = this.Parent.Status;
+                return ((columnStatus != ObjectStatus.Drop) && (((tableStatus == ObjectStatus.Alter) || (tableStatus == ObjectStatus.Original) || (tableStatus == ObjectStatus.RebuildDependencies)) && (this.Status == ObjectStatus.Original)));
             }
         }
 
@@ -155,12 +155,12 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<OpenDBDiff.Schema.Model.ISchemaBase> schemas)
         {
             SQLScriptList list = new SQLScriptList();
-            if (this.HasState(Enums.ObjectStatusType.DropStatus))
+            if (this.HasState(ObjectStatus.Drop))
                 list.Add(Drop());
-            if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+            if (this.HasState(ObjectStatus.Create))
                 list.Add(Create());
 
-            if (this.Status == Enums.ObjectStatusType.AlterStatus)
+            if (this.Status == ObjectStatus.Alter)
             {
                 list.Add(Drop());
                 list.Add(Create());

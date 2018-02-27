@@ -9,9 +9,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             if ((originFields.DefaultConstraint == null) && (destinationFields.DefaultConstraint != null))
             {
                 originFields.DefaultConstraint = destinationFields.DefaultConstraint.Clone(originFields);
-                originFields.DefaultConstraint.Status = Enums.ObjectStatusType.CreateStatus;
-                originFields.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                originFields.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                originFields.DefaultConstraint.Status = ObjectStatus.Create;
+                originFields.DefaultConstraint.Parent.Status = ObjectStatus.Original;
+                originFields.DefaultConstraint.Parent.Parent.Status = ObjectStatus.Alter;
             }
             else
             {
@@ -21,26 +21,26 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                     {
                         originFields.DefaultConstraint = destinationFields.DefaultConstraint.Clone(originFields);
                         //Indico que hay un ALTER TABLE, pero sobre la columna, no seteo ningun estado.
-                        originFields.DefaultConstraint.Status = Enums.ObjectStatusType.AlterStatus;
-                        originFields.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                        originFields.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                        originFields.DefaultConstraint.Status = ObjectStatus.Alter;
+                        originFields.DefaultConstraint.Parent.Status = ObjectStatus.Original;
+                        originFields.DefaultConstraint.Parent.Parent.Status = ObjectStatus.Alter;
                     }
                 }
                 else
                     if ((originFields.DefaultConstraint != null) && (destinationFields.DefaultConstraint == null))
                 {
-                    originFields.DefaultConstraint.Status = Enums.ObjectStatusType.DropStatus;
-                    originFields.DefaultConstraint.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                    originFields.DefaultConstraint.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                    originFields.DefaultConstraint.Status = ObjectStatus.Drop;
+                    originFields.DefaultConstraint.Parent.Status = ObjectStatus.Original;
+                    originFields.DefaultConstraint.Parent.Parent.Status = ObjectStatus.Alter;
                 }
             }
             /*foreach (ColumnConstraint node in destinationFields)
             {
                 if (!originFields.Exists(node.FullName))
                 {
-                    node.Status = Enums.ObjectStatusType.CreateStatus;
-                    originFields.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                    originFields.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                    node.Status = ObjectStatusType.CreateStatus;
+                    originFields.Parent.Status = ObjectStatusType.OriginalStatus;
+                    originFields.Parent.Parent.Status = ObjectStatusType.AlterStatus;
                     originFields.Add(node);
                 }
                 else
@@ -49,9 +49,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                     {
                         ColumnConstraint newNode = node.Clone(originFields.Parent);
                         //Indico que hay un ALTER TABLE, pero sobre la columna, no seteo ningun estado.
-                        newNode.Status = Enums.ObjectStatusType.AlterStatus;
-                        newNode.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                        newNode.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                        newNode.Status = ObjectStatusType.AlterStatus;
+                        newNode.Parent.Status = ObjectStatusType.OriginalStatus;
+                        newNode.Parent.Parent.Status = ObjectStatusType.AlterStatus;
                         originFields[node.FullName] = newNode;
 
                     }
@@ -60,9 +60,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
 
             MarkDrop(originFields, destinationFields, node =>
             {
-                node.Status = Enums.ObjectStatusType.DropStatus;
-                originFields.Parent.Status = Enums.ObjectStatusType.OriginalStatus;
-                originFields.Parent.Parent.Status = Enums.ObjectStatusType.AlterStatus;
+                node.Status = ObjectStatusType.DropStatus;
+                originFields.Parent.Status = ObjectStatusType.OriginalStatus;
+                originFields.Parent.Parent.Status = ObjectStatusType.AlterStatus;
             }
             );
             */

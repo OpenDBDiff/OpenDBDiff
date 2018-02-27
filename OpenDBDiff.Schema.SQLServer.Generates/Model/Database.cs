@@ -12,7 +12,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     {
         private readonly List<DatabaseChangeStatus> _changesOptions;
 
-        public Database() : base(null, Enums.ObjectType.Database)
+        public Database() : base(null, ObjectType.Database)
         {
             AllObjects = new SearchSchemaBase();
             _changesOptions = new List<DatabaseChangeStatus>();
@@ -219,11 +219,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
 ";
 
-            listDiff.Add(new SQLScript(header, 0, Enums.ScripActionType.None));
+            listDiff.Add(new SQLScript(header, 0, ScriptAction.None));
 
             if (!isAzure10)
             {
-                listDiff.Add("USE [" + Name + "]\r\nGO\r\n\r\n", 0, Enums.ScripActionType.UseDatabase);
+                listDiff.Add("USE [" + Name + "]\r\nGO\r\n\r\n", 0, ScriptAction.UseDatabase);
                 listDiff.AddRange(Assemblies.ToSqlDiff(schemas));
                 listDiff.AddRange(UserTypes.ToSqlDiff(schemas));
             }
@@ -288,51 +288,51 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 {
                     return null;
                 }
-                Enums.ObjectType type = typeVal.Value;
+                ObjectType type = typeVal.Value;
 
 
                 string parentName = "";
 
                 switch (type)
                 {
-                    case Enums.ObjectType.Table:
+                    case ObjectType.Table:
                         return Tables[_FullName];
-                    case Enums.ObjectType.StoredProcedure:
+                    case ObjectType.StoredProcedure:
                         return Procedures[_FullName];
-                    case Enums.ObjectType.Function:
+                    case ObjectType.Function:
                         return Functions[_FullName];
-                    case Enums.ObjectType.View:
+                    case ObjectType.View:
                         return Views[_FullName];
-                    case Enums.ObjectType.Assembly:
+                    case ObjectType.Assembly:
                         return Assemblies[_FullName];
-                    case Enums.ObjectType.UserDataType:
+                    case ObjectType.UserDataType:
                         return UserTypes[_FullName];
-                    case Enums.ObjectType.TableType:
+                    case ObjectType.TableType:
                         return TablesTypes[_FullName];
-                    case Enums.ObjectType.XMLSchema:
+                    case ObjectType.XMLSchema:
                         return XmlSchemas[_FullName];
-                    case Enums.ObjectType.CLRStoredProcedure:
+                    case ObjectType.CLRStoredProcedure:
                         return CLRProcedures[_FullName];
-                    case Enums.ObjectType.CLRFunction:
+                    case ObjectType.CLRFunction:
                         return CLRFunctions[_FullName];
-                    case Enums.ObjectType.Synonym:
+                    case ObjectType.Synonym:
                         return Synonyms[_FullName];
-                    case Enums.ObjectType.FullText:
+                    case ObjectType.FullText:
                         return FullText[_FullName];
-                    case Enums.ObjectType.Rule:
+                    case ObjectType.Rule:
                         return Rules[_FullName];
-                    case Enums.ObjectType.PartitionFunction:
+                    case ObjectType.PartitionFunction:
                         return PartitionFunctions[_FullName];
-                    case Enums.ObjectType.PartitionScheme:
+                    case ObjectType.PartitionScheme:
                         return PartitionSchemes[_FullName];
-                    case Enums.ObjectType.Role:
+                    case ObjectType.Role:
                         return Roles[_FullName];
-                    case Enums.ObjectType.Schema:
+                    case ObjectType.Schema:
                         return Schemas[_FullName];
-                    case Enums.ObjectType.Constraint:
+                    case ObjectType.Constraint:
                         parentName = AllObjects.GetParentName(_FullName);
                         return Tables[parentName].Constraints[_FullName];
-                    case Enums.ObjectType.Index:
+                    case ObjectType.Index:
                         parentName = AllObjects.GetParentName(_FullName);
 
                         var typeName = AllObjects.GetType(parentName);
@@ -341,10 +341,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                             return null;
                         }
                         type = typeName.Value;
-                        if (type == Enums.ObjectType.Table)
+                        if (type == ObjectType.Table)
                             return Tables[parentName].Indexes[_FullName];
                         return Views[parentName].Indexes[_FullName];
-                    case Enums.ObjectType.Trigger:
+                    case ObjectType.Trigger:
                         parentName = AllObjects.GetParentName(_FullName);
                         var typeNameB = AllObjects.GetType(parentName);
                         if (!typeNameB.HasValue)
@@ -352,10 +352,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                             return null;
                         }
                         type = typeNameB.Value;
-                        if (type == Enums.ObjectType.Table)
+                        if (type == ObjectType.Table)
                             return Tables[parentName].Triggers[_FullName];
                         return Views[parentName].Triggers[_FullName];
-                    case Enums.ObjectType.CLRTrigger:
+                    case ObjectType.CLRTrigger:
                         parentName = AllObjects.GetParentName(_FullName);
                         var typeNameC = AllObjects.GetType(parentName);
                         if (!typeNameC.HasValue)
@@ -363,7 +363,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                             return null;
                         }
                         type = typeNameC.Value;
-                        if (type == Enums.ObjectType.Table)
+                        if (type == ObjectType.Table)
                             return Tables[parentName].CLRTriggers[_FullName];
                         return Views[parentName].CLRTriggers[_FullName];
                 }

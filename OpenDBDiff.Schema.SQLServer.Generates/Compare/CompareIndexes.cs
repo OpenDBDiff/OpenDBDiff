@@ -8,7 +8,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
         protected override void DoNew<Root>(SchemaList<Index, Root> originFields, Index node)
         {
             Index newNode = (Index)node.Clone(originFields.Parent);
-            newNode.Status = Enums.ObjectStatusType.CreateStatus;
+            newNode.Status = ObjectStatus.Create;
             originFields.Add(newNode);
         }
 
@@ -19,10 +19,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                 Index newNode = (Index)node.Clone(originFields.Parent);
                 if (!Index.CompareExceptIsDisabled(node, originFields[node.FullName]))
                 {
-                    newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                    newNode.Status = ObjectStatus.Alter;
                 }
                 else
-                    newNode.Status = Enums.ObjectStatusType.DisabledStatus;
+                    newNode.Status = ObjectStatus.Disabled;
                 originFields[node.FullName] = newNode;
             }
         }

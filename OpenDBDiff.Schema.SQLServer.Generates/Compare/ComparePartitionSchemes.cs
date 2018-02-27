@@ -10,7 +10,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             if (!PartitionScheme.Compare(node, originFields[node.FullName]))
             {
                 PartitionScheme newNode = node; //.Clone(originFields.Parent);
-                newNode.Status = Enums.ObjectStatusType.RebuildStatus;
+                newNode.Status = ObjectStatus.Rebuild;
                 originFields[node.FullName] = newNode;
             }
         }

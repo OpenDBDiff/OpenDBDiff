@@ -6,7 +6,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class FileGroup : SQLServerSchemaBase
     {
         public FileGroup(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.FileGroup)
+            : base(parent, ObjectType.FileGroup)
         {
             Files = new FileGroupFiles(this);
         }
@@ -93,12 +93,12 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == Enums.ObjectStatusType.DropStatus)
-                listDiff.Add(this.ToSqlDrop(), 1, Enums.ScripActionType.DropFileGroup);
-            if (this.Status == Enums.ObjectStatusType.CreateStatus)
-                listDiff.Add(this.ToSqlAdd(), 1, Enums.ScripActionType.AddFileGroup);
-            if (this.Status == Enums.ObjectStatusType.AlterStatus)
-                listDiff.Add(this.ToSQLAlter(), 1, Enums.ScripActionType.AlterFileGroup);
+            if (this.Status == ObjectStatus.Drop)
+                listDiff.Add(this.ToSqlDrop(), 1, ScriptAction.DropFileGroup);
+            if (this.Status == ObjectStatus.Create)
+                listDiff.Add(this.ToSqlAdd(), 1, ScriptAction.AddFileGroup);
+            if (this.Status == ObjectStatus.Alter)
+                listDiff.Add(this.ToSQLAlter(), 1, ScriptAction.AlterFileGroup);
 
             return listDiff;
         }
