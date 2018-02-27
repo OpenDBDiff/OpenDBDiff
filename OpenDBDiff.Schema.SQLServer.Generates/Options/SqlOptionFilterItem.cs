@@ -5,13 +5,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Options
 {
     public class SqlOptionFilterItem
     {
-        public SqlOptionFilterItem(Enums.ObjectType type, string filter)
+        public SqlOptionFilterItem(ObjectType type, string filter)
         {
             this.Filter = filter;
             this.Type = type;
         }
 
-        public Enums.ObjectType Type { get; set; }
+        public ObjectType Type { get; set; }
 
         public string Filter { get; set; }
 
@@ -23,7 +23,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Options
         public bool IsSchemaMatch(ISchemaBase item)
         {
             if (item.Owner == null) return false;
-            return this.Type == Enums.ObjectType.Schema && item.Owner.ToLower() == this.Filter.ToLower();
+            return this.Type == ObjectType.Schema && item.Owner.ToLower() == this.Filter.ToLower();
         }
 
         #region Overrides

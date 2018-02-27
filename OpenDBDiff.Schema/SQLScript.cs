@@ -4,7 +4,7 @@ namespace OpenDBDiff.Schema
 {
     public class SQLScript : IComparable<SQLScript>
     {
-        public SQLScript(int deepvalue, string sqlScript, int dependenciesCount, Enums.ScripActionType action)
+        public SQLScript(int deepvalue, string sqlScript, int dependenciesCount, ScriptAction action)
         {
             SQL = sqlScript;
             Dependencies = dependenciesCount;
@@ -13,7 +13,7 @@ namespace OpenDBDiff.Schema
             //childs = new SQLScriptList();
         }
 
-        public SQLScript(string sqlScript, int dependenciesCount, Enums.ScripActionType action)
+        public SQLScript(string sqlScript, int dependenciesCount, ScriptAction action)
         {
             SQL = sqlScript;
             Dependencies = dependenciesCount;
@@ -29,7 +29,7 @@ namespace OpenDBDiff.Schema
 
         public int Deep { get; set; }
 
-        public Enums.ScripActionType Status { get; set; }
+        public ScriptAction Status { get; set; }
 
         public int Dependencies { get; set; }
 
@@ -39,7 +39,7 @@ namespace OpenDBDiff.Schema
         {
             get
             {
-                return ((Status == Enums.ScripActionType.DropView) || (Status == Enums.ScripActionType.DropFunction) || (Status == Enums.ScripActionType.DropStoredProcedure));
+                return ((Status == ScriptAction.DropView) || (Status == ScriptAction.DropFunction) || (Status == ScriptAction.DropStoredProcedure));
             }
         }
 
@@ -47,7 +47,7 @@ namespace OpenDBDiff.Schema
         {
             get
             {
-                return ((Status == Enums.ScripActionType.AddView) || (Status == Enums.ScripActionType.AddFunction) || (Status == Enums.ScripActionType.AddStoredProcedure));
+                return ((Status == ScriptAction.AddView) || (Status == ScriptAction.AddFunction) || (Status == ScriptAction.AddStoredProcedure));
             }
         }
 
@@ -57,7 +57,7 @@ namespace OpenDBDiff.Schema
             {
                 if (this.Status == other.Status)
                 {
-                    if (this.Status == Enums.ScripActionType.DropTable || this.Status == Enums.ScripActionType.DropConstraint || this.Status == Enums.ScripActionType.DropTrigger)
+                    if (this.Status == ScriptAction.DropTable || this.Status == ScriptAction.DropConstraint || this.Status == ScriptAction.DropTrigger)
                         return other.Dependencies.CompareTo(this.Dependencies);
                     else
                         return this.Dependencies.CompareTo(other.Dependencies);

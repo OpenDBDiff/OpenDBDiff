@@ -16,7 +16,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         }
 
         public Index(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.Index)
+            : base(parent, ObjectType.Index)
         {
             FilterDefintion = "";
             Columns = new IndexColumns(parent);
@@ -183,7 +183,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             sql.Append(")");
             if (!String.IsNullOrEmpty(FilterDefintion)) sql.Append("\r\n WHERE " + FilterDefintion + "\r\n");
             sql.Append(" WITH (");
-            if (Parent.ObjectType == Enums.ObjectType.TableType)
+            if (Parent.ObjectType == ObjectType.TableType)
             {
                 if ((IgnoreDupKey) && (IsUniqueKey)) sql.Append("IGNORE_DUP_KEY = ON "); else sql.Append("IGNORE_DUP_KEY  = OFF ");
             }
@@ -238,7 +238,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScript Create()
         {
-            Enums.ScripActionType action = Enums.ScripActionType.AddIndex;
+            ScriptAction action = ScriptAction.AddIndex;
             if (!GetWasInsertInDiffList(action))
             {
                 SetWasInsertInDiffList(action);
@@ -249,7 +249,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScript Drop()
         {
-            Enums.ScripActionType action = Enums.ScripActionType.DropIndex;
+            ScriptAction action = ScriptAction.DropIndex;
             if (!GetWasInsertInDiffList(action))
             {
                 SetWasInsertInDiffList(action);
@@ -268,25 +268,25 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             SQLScriptList list = new SQLScriptList();
-            if (Status != Enums.ObjectStatusType.OriginalStatus)
+            if (Status != ObjectStatus.Original)
             {
                 var actionMessage = RootParent.ActionMessage[Parent.FullName];
                 if (actionMessage != null)
                     actionMessage.Add(this);
             }
 
-            if (HasState(Enums.ObjectStatusType.DropStatus))
+            if (HasState(ObjectStatus.Drop))
                 list.Add(Drop());
-            if (HasState(Enums.ObjectStatusType.CreateStatus))
+            if (HasState(ObjectStatus.Create))
                 list.Add(Create());
-            if (HasState(Enums.ObjectStatusType.AlterStatus))
+            if (HasState(ObjectStatus.Alter))
             {
                 list.Add(Drop());
                 list.Add(Create());
             }
-            if (Status == Enums.ObjectStatusType.DisabledStatus)
+            if (Status == ObjectStatus.Disabled)
             {
-                list.Add(ToSqlEnabled(), Parent.DependenciesCount, Enums.ScripActionType.AlterIndex);
+                list.Add(ToSqlEnabled(), Parent.DependenciesCount, ScriptAction.AlterIndex);
             }
             /*if (this.Status == StatusEnum.ObjectStatusType.ChangeFileGroup)
             {

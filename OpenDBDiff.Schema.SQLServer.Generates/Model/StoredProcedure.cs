@@ -7,7 +7,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class StoredProcedure : Code
     {
         public StoredProcedure(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.StoredProcedure, Enums.ScripActionType.AddStoredProcedure, Enums.ScripActionType.DropStoredProcedure)
+            : base(parent, ObjectType.StoredProcedure, ScriptAction.AddStoredProcedure, ScriptAction.DropStoredProcedure)
         {
 
         }
@@ -50,17 +50,17 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             SQLScriptList list = new SQLScriptList();
-            if (this.Status != Enums.ObjectStatusType.OriginalStatus)
+            if (this.Status != ObjectStatus.Original)
                 RootParent.ActionMessage.Add(this);
 
-            if (this.HasState(Enums.ObjectStatusType.DropStatus))
+            if (this.HasState(ObjectStatus.Drop))
                 list.Add(Drop());
-            if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+            if (this.HasState(ObjectStatus.Create))
                 list.Add(Create());
-            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
-                list.Add(ToSQLAlter(), 0, Enums.ScripActionType.AlterProcedure);
-            if (this.HasState(Enums.ObjectStatusType.AlterWhitespaceStatus))
-                list.Add(ToSQLAlter(), 0, Enums.ScripActionType.AlterProcedure);
+            if (this.HasState(ObjectStatus.Alter))
+                list.Add(ToSQLAlter(), 0, ScriptAction.AlterProcedure);
+            if (this.HasState(ObjectStatus.AlterWhitespace))
+                list.Add(ToSQLAlter(), 0, ScriptAction.AlterProcedure);
             return list;
         }
     }

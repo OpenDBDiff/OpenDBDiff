@@ -12,7 +12,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         }
 
         public Role(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.Role)
+            : base(parent, ObjectType.Role)
         {
         }
 
@@ -50,18 +50,18 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == Enums.ObjectStatusType.DropStatus)
+            if (this.Status == ObjectStatus.Drop)
             {
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropRole);
+                listDiff.Add(ToSqlDrop(), 0, ScriptAction.DropRole);
             }
-            if (this.Status == Enums.ObjectStatusType.CreateStatus)
+            if (this.Status == ObjectStatus.Create)
             {
-                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddRole);
+                listDiff.Add(ToSql(), 0, ScriptAction.AddRole);
             }
-            if ((this.Status & Enums.ObjectStatusType.AlterStatus) == Enums.ObjectStatusType.AlterStatus)
+            if ((this.Status & ObjectStatus.Alter) == ObjectStatus.Alter)
             {
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropRole);
-                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddRole);
+                listDiff.Add(ToSqlDrop(), 0, ScriptAction.DropRole);
+                listDiff.Add(ToSql(), 0, ScriptAction.AddRole);
             }
             return listDiff;
         }

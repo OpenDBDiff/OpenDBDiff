@@ -6,7 +6,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class FullText : SQLServerSchemaBase
     {
         public FullText(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.FullText)
+            : base(parent, ObjectType.FullText)
         {
 
         }
@@ -88,25 +88,25 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == Enums.ObjectStatusType.DropStatus)
+            if (this.Status == ObjectStatus.Drop)
             {
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropFullText);
+                listDiff.Add(ToSqlDrop(), 0, ScriptAction.DropFullText);
             }
-            if (this.Status == Enums.ObjectStatusType.CreateStatus)
+            if (this.Status == ObjectStatus.Create)
             {
-                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddFullText);
+                listDiff.Add(ToSql(), 0, ScriptAction.AddFullText);
             }
-            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
+            if (this.HasState(ObjectStatus.Alter))
             {
-                listDiff.Add(ToSqlAlter(), 0, Enums.ScripActionType.AddFullText);
+                listDiff.Add(ToSqlAlter(), 0, ScriptAction.AddFullText);
             }
-            if (this.HasState(Enums.ObjectStatusType.DisabledStatus))
+            if (this.HasState(ObjectStatus.Disabled))
             {
-                listDiff.Add(ToSqlAlterDefault(), 0, Enums.ScripActionType.AddFullText);
+                listDiff.Add(ToSqlAlterDefault(), 0, ScriptAction.AddFullText);
             }
-            if (this.HasState(Enums.ObjectStatusType.ChangeOwner))
+            if (this.HasState(ObjectStatus.ChangeOwner))
             {
-                listDiff.Add(ToSqlAlterOwner(), 0, Enums.ScripActionType.AddFullText);
+                listDiff.Add(ToSqlAlterOwner(), 0, ScriptAction.AddFullText);
             }
             return listDiff;
         }

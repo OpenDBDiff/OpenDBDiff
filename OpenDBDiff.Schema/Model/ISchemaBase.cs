@@ -8,15 +8,15 @@ namespace OpenDBDiff.Schema.Model
         int DependenciesCount { get; }
         string FullName { get; }
         int Id { get; set; }
-        Boolean HasState(Enums.ObjectStatusType statusFind);
+        Boolean HasState(ObjectStatus statusFind);
         string Name { get; set; }
         string Owner { get; set; }
         ISchemaBase Parent { get; set; }
-        Enums.ObjectStatusType Status { get; set; }
+        ObjectStatus Status { get; set; }
         Boolean IsSystem { get; set; }
-        Enums.ObjectType ObjectType { get; set; }
-        Boolean GetWasInsertInDiffList(Enums.ScripActionType action);
-        void SetWasInsertInDiffList(Enums.ScripActionType action);
+        ObjectType ObjectType { get; set; }
+        Boolean GetWasInsertInDiffList(ScriptAction action);
+        void SetWasInsertInDiffList(ScriptAction action);
         void ResetWasInsertInDiffList();
         string ToSqlDrop();
         string ToSqlAdd();

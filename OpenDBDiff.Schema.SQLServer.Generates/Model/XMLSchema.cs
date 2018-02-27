@@ -9,7 +9,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class XMLSchema : SQLServerSchemaBase
     {
         public XMLSchema(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.XMLSchema)
+            : base(parent, ObjectType.XMLSchema)
         {
             this.Dependencys = new List<ObjectDependency>();
         }
@@ -58,7 +58,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             Hashtable fields = new Hashtable();
             SQLScriptList list = new SQLScriptList();
-            if ((this.Status == Enums.ObjectStatusType.AlterStatus) || (this.Status == Enums.ObjectStatusType.RebuildStatus))
+            if ((this.Status == ObjectStatus.Alter) || (this.Status == ObjectStatus.Rebuild))
             {
                 foreach (ObjectDependency dependency in this.Dependencys)
                 {
@@ -67,20 +67,20 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                     {
                         list.AddRange(((ICode)itemDepens).Rebuild());
                     }
-                    if (dependency.Type == Enums.ObjectType.Table)
+                    if (dependency.Type == ObjectType.Table)
                     {
                         Column column = ((Table)itemDepens).Columns[dependency.ColumnName];
-                        if ((column.Parent.Status != Enums.ObjectStatusType.DropStatus) && (column.Parent.Status != Enums.ObjectStatusType.CreateStatus) && ((column.Status != Enums.ObjectStatusType.CreateStatus)))
+                        if ((column.Parent.Status != ObjectStatus.Drop) && (column.Parent.Status != ObjectStatus.Create) && ((column.Status != ObjectStatus.Create)))
                         {
                             if (!fields.ContainsKey(column.FullName))
                             {
                                 if (column.HasToRebuildOnlyConstraint)
-                                    column.Parent.Status = Enums.ObjectStatusType.RebuildDependenciesStatus;
+                                    column.Parent.Status = ObjectStatus.RebuildDependencies;
                                 list.AddRange(column.RebuildConstraint(true));
-                                list.Add("ALTER TABLE " + column.Parent.FullName + " ALTER COLUMN " + column.ToSQLRedefine(null, 0, "") + "\r\nGO\r\n", 0, Enums.ScripActionType.AlterColumn);
+                                list.Add("ALTER TABLE " + column.Parent.FullName + " ALTER COLUMN " + column.ToSQLRedefine(null, 0, "") + "\r\nGO\r\n", 0, ScriptAction.AlterColumn);
                                 /*Si la columna va a ser eliminada o la tabla va a ser reconstruida, no restaura la columna*/
-                                if ((column.Status != Enums.ObjectStatusType.DropStatus) && (column.Parent.Status != Enums.ObjectStatusType.RebuildStatus))
-                                    list.AddRange(column.Alter(Enums.ScripActionType.AlterColumnRestore));
+                                if ((column.Status != ObjectStatus.Drop) && (column.Parent.Status != ObjectStatus.Rebuild))
+                                    list.AddRange(column.Alter(ScriptAction.AlterColumnRestore));
                                 fields.Add(column.FullName, column.FullName);
                             }
                         }
@@ -97,18 +97,18 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList list = new SQLScriptList();
 
-            if (this.Status == Enums.ObjectStatusType.DropStatus)
+            if (this.Status == ObjectStatus.Drop)
             {
-                list.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropXMLSchema);
+                list.Add(ToSqlDrop(), 0, ScriptAction.DropXMLSchema);
             }
-            if (this.Status == Enums.ObjectStatusType.CreateStatus)
+            if (this.Status == ObjectStatus.Create)
             {
-                list.Add(ToSql(), 0, Enums.ScripActionType.AddXMLSchema);
+                list.Add(ToSql(), 0, ScriptAction.AddXMLSchema);
             }
-            if (this.Status == Enums.ObjectStatusType.AlterStatus)
+            if (this.Status == ObjectStatus.Alter)
             {
                 list.AddRange(ToSQLChangeColumns());
-                list.Add(ToSqlDrop() + ToSql(), 0, Enums.ScripActionType.AddXMLSchema);
+                list.Add(ToSqlDrop() + ToSql(), 0, ScriptAction.AddXMLSchema);
             }
             return list;
         }

@@ -13,7 +13,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         private Boolean? hasFileStream;
 
         public Table(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.Table)
+            : base(parent, ObjectType.Table)
         {
             dependenciesCount = -1;
             Columns = new Columns<Table>(this);
@@ -115,7 +115,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             {
                 if (dependenciesCount == -1)
                     dependenciesCount = ((Database)Parent).Dependencies.DependenciesCount(Id,
-                                                                                           Enums.ObjectType.Constraint);
+                                                                                           ObjectType.Constraint);
                 return dependenciesCount;
             }
         }
@@ -210,7 +210,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                     sql += ",\r\n";
                     Constraints.AsQueryable()
                         // Add the constraint if it's not in DropStatus
-                        .Where(c => !c.HasState(Enums.ObjectStatusType.DropStatus))
+                        .Where(c => !c.HasState(ObjectStatus.Drop))
                         .ToList()
                         .ForEach(item =>
                         {
@@ -300,21 +300,21 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                         {
                             if (cons.Index.Type == Index.IndexTypeEnum.Clustered)
                             {
-                                listDiff.Add(cons.ToSqlDrop(FileGroup), dependenciesCount, Enums.ScripActionType.DropConstraint);
-                                listDiff.Add(cons.ToSqlAdd(), dependenciesCount, Enums.ScripActionType.AddConstraint);
+                                listDiff.Add(cons.ToSqlDrop(FileGroup), dependenciesCount, ScripActionType.DropConstraint);
+                                listDiff.Add(cons.ToSqlAdd(), dependenciesCount, ScripActionType.AddConstraint);
                                 found = true;
                             }
                         }
                         if (!found)
                         {
-                            Status = Enums.ObjectStatusType.RebuildStatus;
+                            Status = ObjectStatusType.RebuildStatus;
                             listDiff = ToSqlDiff();
                         }
                     }
                     else
                     {
-                        listDiff.Add(clustered.ToSqlDrop(FileGroup), dependenciesCount, Enums.ScripActionType.DropIndex);
-                        listDiff.Add(clustered.ToSqlAdd(), dependenciesCount, Enums.ScripActionType.AddIndex);
+                        listDiff.Add(clustered.ToSqlDrop(FileGroup), dependenciesCount, ScripActionType.DropIndex);
+                        listDiff.Add(clustered.ToSqlAdd(), dependenciesCount, ScripActionType.AddIndex);
                     }
                     return listDiff;
                 }
@@ -327,21 +327,21 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             var listDiff = new SQLScriptList();
 
-            if (Status != Enums.ObjectStatusType.OriginalStatus)
+            if (Status != ObjectStatus.Original)
             {
                 if (((Database)Parent).Options.Ignore.FilterTable)
                     RootParent.ActionMessage.Add(this);
             }
 
-            if (Status == Enums.ObjectStatusType.DropStatus)
+            if (Status == ObjectStatus.Drop)
             {
                 if (((Database)Parent).Options.Ignore.FilterTable)
                 {
-                    listDiff.Add(ToSqlDrop(), dependenciesCount, Enums.ScripActionType.DropTable);
+                    listDiff.Add(ToSqlDrop(), dependenciesCount, ScriptAction.DropTable);
                     listDiff.AddRange(ToSQLDropFKBelow());
                 }
             }
-            if (Status == Enums.ObjectStatusType.CreateStatus)
+            if (Status == ObjectStatus.Create)
             {
                 string sql = "";
                 Constraints.ForEach(item =>
@@ -349,10 +349,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                                             if (item.Type == Constraint.ConstraintType.ForeignKey)
                                                 sql += item.ToSqlAdd() + "\r\n";
                                         });
-                listDiff.Add(ToSql(false), dependenciesCount, Enums.ScripActionType.AddTable);
-                listDiff.Add(sql, dependenciesCount, Enums.ScripActionType.AddConstraintFK);
+                listDiff.Add(ToSql(false), dependenciesCount, ScriptAction.AddTable);
+                listDiff.Add(sql, dependenciesCount, ScriptAction.AddConstraintFK);
             }
-            if (HasState(Enums.ObjectStatusType.RebuildDependenciesStatus))
+            if (HasState(ObjectStatus.RebuildDependencies))
             {
                 GenerateDependencis();
                 listDiff.AddRange(ToSQLDropDependencis());
@@ -365,7 +365,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 listDiff.AddRange(CLRTriggers.ToSqlDiff());
                 listDiff.AddRange(FullTextIndex.ToSqlDiff());
             }
-            if (HasState(Enums.ObjectStatusType.AlterStatus))
+            if (HasState(ObjectStatus.Alter))
             {
                 listDiff.AddRange(Columns.ToSqlDiff(schemas));
                 listDiff.AddRange(Constraints.ToSqlDiff());
@@ -375,7 +375,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 listDiff.AddRange(CLRTriggers.ToSqlDiff());
                 listDiff.AddRange(FullTextIndex.ToSqlDiff());
             }
-            if (HasState(Enums.ObjectStatusType.RebuildStatus))
+            if (HasState(ObjectStatus.Rebuild))
             {
                 GenerateDependencis();
                 listDiff.AddRange(ToSQLRebuild());
@@ -384,13 +384,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 listDiff.AddRange(Indexes.ToSqlDiff());
                 listDiff.AddRange(Options.ToSqlDiff());
                 //Como recrea la tabla, solo pone los nuevos triggers, por eso va ToSQL y no ToSQLDiff
-                listDiff.Add(Triggers.ToSql(), dependenciesCount, Enums.ScripActionType.AddTrigger);
-                listDiff.Add(CLRTriggers.ToSql(), dependenciesCount, Enums.ScripActionType.AddTrigger);
+                listDiff.Add(Triggers.ToSql(), dependenciesCount, ScriptAction.AddTrigger);
+                listDiff.Add(CLRTriggers.ToSql(), dependenciesCount, ScriptAction.AddTrigger);
                 listDiff.AddRange(FullTextIndex.ToSqlDiff());
             }
-            if (HasState(Enums.ObjectStatusType.DisabledStatus))
+            if (HasState(ObjectStatus.Disabled))
             {
-                listDiff.Add(ToSqlChangeTracking(), 0, Enums.ScripActionType.AlterTableChangeTracking);
+                listDiff.Add(ToSqlChangeTracking(), 0, ScriptAction.AlterTableChangeTracking);
             }
             return listDiff;
         }
@@ -404,21 +404,21 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             Boolean IsIdentityNew = false;
             foreach (Column column in Columns)
             {
-                if ((column.Status != Enums.ObjectStatusType.DropStatus) &&
-                    !((column.Status == Enums.ObjectStatusType.CreateStatus) && column.IsNullable))
+                if ((column.Status != ObjectStatus.Drop) &&
+                    !((column.Status == ObjectStatus.Create) && column.IsNullable))
                 {
                     if ((!column.IsComputed) && (!column.Type.ToLower().Equals("timestamp")))
                     {
                         /*Si la nueva columna a agregar es XML, no se inserta ese campo y debe ir a la coleccion de Warnings*/
                         /*Si la nueva columna a agregar es Identity, tampoco se debe insertar explicitamente*/
                         if (
-                            !((column.Status == Enums.ObjectStatusType.CreateStatus) &&
+                            !((column.Status == ObjectStatus.Create) &&
                               ((column.Type.ToLower().Equals("xml") || (column.IsIdentity)))))
                         {
                             listColumns += "[" + column.Name + "],";
                             if (column.HasToForceValue)
                             {
-                                if (column.HasState(Enums.ObjectStatusType.UpdateStatus))
+                                if (column.HasState(ObjectStatus.Update))
                                     listValues += "ISNULL([" + column.Name + "]," + column.DefaultForceValue + "),";
                                 else
                                     listValues += column.DefaultForceValue + ",";
@@ -451,7 +451,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                     Constraints.ForEach(item =>
                                             {
                                                 if ((item.Type == Constraint.ConstraintType.Unique) &&
-                                                    (item.Status != Enums.ObjectStatusType.DropStatus))
+                                                    (item.Status != ObjectStatus.Drop))
                                                 {
                                                     sql += "EXEC sp_rename N'[" + Owner + "].[Temp_XX_" + item.Name +
                                                            "]',N'" + item.Name + "', 'OBJECT'\r\nGO\r\n";
@@ -471,7 +471,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             var listDiff = new SQLScriptList();
             listDiff.AddRange(ToSQLDropDependencis());
-            listDiff.Add(ToSQLTableRebuild(), dependenciesCount, Enums.ScripActionType.RebuildTable);
+            listDiff.Add(ToSQLTableRebuild(), dependenciesCount, ScriptAction.RebuildTable);
             listDiff.AddRange(ToSQLCreateDependencis());
             return listDiff;
         }
@@ -485,7 +485,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
             for (int index = 0; index < Columns.Count; index++)
             {
-                if (Columns[index].Status != Enums.ObjectStatusType.DropStatus)
+                if (Columns[index].Status != ObjectStatus.Drop)
                 {
                     sql += "\t" + Columns[index].ToSql(true);
                     if (index != Columns.Count - 1)
@@ -500,11 +500,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 Constraints.ForEach(item =>
                                         {
                                             if ((item.Type == Constraint.ConstraintType.Unique) &&
-                                                (item.Status != Enums.ObjectStatusType.DropStatus))
+                                                (item.Status != ObjectStatus.Drop))
                                             {
                                                 item.Name = "Temp_XX_" + item.Name;
                                                 sql += "\t" + item.ToSql() + ",\r\n";
-                                                item.SetWasInsertInDiffList(Enums.ScripActionType.AddConstraint);
+                                                item.SetWasInsertInDiffList(ScriptAction.AddConstraint);
                                                 item.Name = item.Name.Substring(8, item.Name.Length - 8);
                                             }
                                         });
@@ -535,13 +535,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             List<ISchemaBase> myDependencis;
             /*Si el estado es AlterRebuildDependeciesStatus, busca las dependencias solamente en las columnas que fueron modificadas*/
-            if (Status == Enums.ObjectStatusType.RebuildDependenciesStatus)
+            if (Status == ObjectStatus.RebuildDependencies)
             {
                 myDependencis = new List<ISchemaBase>();
                 for (int ic = 0; ic < Columns.Count; ic++)
                 {
-                    if ((Columns[ic].Status == Enums.ObjectStatusType.RebuildDependenciesStatus) ||
-                        (Columns[ic].Status == Enums.ObjectStatusType.AlterStatus))
+                    if ((Columns[ic].Status == ObjectStatus.RebuildDependencies) ||
+                        (Columns[ic].Status == ObjectStatus.Alter))
                         myDependencis.AddRange(((Database)Parent).Dependencies.Find(Id, 0, Columns[ic].DataUserTypeId));
                 }
                 /*Si no encuentra ninguna, toma todas las de la tabla*/
@@ -555,17 +555,17 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             for (int j = 0; j < myDependencis.Count; j++)
             {
                 ISchemaBase item = null;
-                if (myDependencis[j].ObjectType == Enums.ObjectType.Index)
+                if (myDependencis[j].ObjectType == ObjectType.Index)
                     item = Indexes[myDependencis[j].FullName];
-                if (myDependencis[j].ObjectType == Enums.ObjectType.Constraint)
+                if (myDependencis[j].ObjectType == ObjectType.Constraint)
                     item =
                         ((Database)Parent).Tables[myDependencis[j].Parent.FullName].Constraints[
                             myDependencis[j].FullName];
-                if (myDependencis[j].ObjectType == Enums.ObjectType.Default)
+                if (myDependencis[j].ObjectType == ObjectType.Default)
                     item = Columns[myDependencis[j].FullName].DefaultConstraint;
-                if (myDependencis[j].ObjectType == Enums.ObjectType.View)
+                if (myDependencis[j].ObjectType == ObjectType.View)
                     item = ((Database)Parent).Views[myDependencis[j].FullName];
-                if (myDependencis[j].ObjectType == Enums.ObjectType.Function)
+                if (myDependencis[j].ObjectType == ObjectType.Function)
                     item = ((Database)Parent).Functions[myDependencis[j].FullName];
                 if (item != null)
                     dependencis.Add(item);
@@ -605,17 +605,17 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             //Se buscan todas las table constraints.
             for (int index = 0; index < dependencis.Count; index++)
             {
-                if ((dependencis[index].Status == Enums.ObjectStatusType.OriginalStatus) ||
-                    (dependencis[index].Status == Enums.ObjectStatusType.DropStatus))
+                if ((dependencis[index].Status == ObjectStatus.Original) ||
+                    (dependencis[index].Status == ObjectStatus.Drop))
                 {
                     addDependencie = true;
-                    if (dependencis[index].ObjectType == Enums.ObjectType.Constraint)
+                    if (dependencis[index].ObjectType == ObjectType.Constraint)
                     {
                         if ((((Constraint)dependencis[index]).Type == Constraint.ConstraintType.Unique) &&
                             ((HasFileStream) || (OriginalTable.HasFileStream)))
                             addDependencie = false;
                         if ((((Constraint)dependencis[index]).Type != Constraint.ConstraintType.ForeignKey) &&
-                            (dependencis[index].Status == Enums.ObjectStatusType.DropStatus))
+                            (dependencis[index].Status == ObjectStatus.Drop))
                             addDependencie = false;
                     }
                     if (addDependencie)
@@ -627,10 +627,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                                 {
                                     if (column.DefaultConstraint != null)
                                     {
-                                        if (((column.DefaultConstraint.Status == Enums.ObjectStatusType.OriginalStatus) ||
-                                             (column.DefaultConstraint.Status == Enums.ObjectStatusType.DropStatus) ||
-                                             (column.DefaultConstraint.Status == Enums.ObjectStatusType.AlterStatus)) &&
-                                            (column.Status != Enums.ObjectStatusType.CreateStatus))
+                                        if (((column.DefaultConstraint.Status == ObjectStatus.Original) ||
+                                             (column.DefaultConstraint.Status == ObjectStatus.Drop) ||
+                                             (column.DefaultConstraint.Status == ObjectStatus.Alter)) &&
+                                            (column.Status != ObjectStatus.Create))
                                             listDiff.Add(column.DefaultConstraint.Drop());
                                     }
                                 });
@@ -644,11 +644,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             //Las constraints de deben recorrer en el orden inverso.
             for (int index = dependencis.Count - 1; index >= 0; index--)
             {
-                if ((dependencis[index].Status == Enums.ObjectStatusType.OriginalStatus) &&
-                    (dependencis[index].Parent.Status != Enums.ObjectStatusType.DropStatus))
+                if ((dependencis[index].Status == ObjectStatus.Original) &&
+                    (dependencis[index].Parent.Status != ObjectStatus.Drop))
                 {
                     addDependencie = true;
-                    if (dependencis[index].ObjectType == Enums.ObjectType.Constraint)
+                    if (dependencis[index].ObjectType == ObjectType.Constraint)
                     {
                         if ((((Constraint)dependencis[index]).Type == Constraint.ConstraintType.Unique) &&
                             (HasFileStream))
@@ -664,7 +664,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 if (Columns[index].DefaultConstraint != null)
                 {
                     if ((Columns[index].DefaultConstraint.CanCreate) &&
-                        (Columns.Parent.Status != Enums.ObjectStatusType.RebuildStatus))
+                        (Columns.Parent.Status != ObjectStatus.Rebuild))
                         listDiff.Add(Columns[index].DefaultConstraint.Create());
                 }
             }

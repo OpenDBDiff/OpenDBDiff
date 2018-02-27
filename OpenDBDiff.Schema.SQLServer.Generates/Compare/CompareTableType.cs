@@ -7,7 +7,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
     {
         protected override void DoUpdate<Root>(SchemaList<TableType, Root> originFields, TableType node)
         {
-            if (node.Status != Enums.ObjectStatusType.DropStatus)
+            if (node.Status != ObjectStatus.Drop)
             {
                 TableType tablaOriginal = originFields[node.FullName];
                 (new CompareColumns()).GenerateDifferences<TableType>(tablaOriginal.Columns, node.Columns);
@@ -24,13 +24,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             {
                 if (!originTables.Exists(node.FullName))
                 {
-                    node.Status = Enums.ObjectStatusType.CreateStatus;
+                    node.Status = ObjectStatusType.CreateStatus;
                     node.Parent = originTables.Parent;
                     originTables.Add(node);
                 }
                 else
                 {
-                    if (node.Status != Enums.ObjectStatusType.DropStatus)
+                    if (node.Status != ObjectStatusType.DropStatus)
                     {
                         TableType tablaOriginal = originTables[node.FullName];
                         CompareColumns.GenerateDifferences<TableType>(tablaOriginal.Columns, node.Columns);

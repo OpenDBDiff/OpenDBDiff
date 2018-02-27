@@ -6,7 +6,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class Synonym : SQLServerSchemaBase
     {
         public Synonym(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.Synonym)
+            : base(parent, ObjectType.Synonym)
         {
         }
 
@@ -46,18 +46,18 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == Enums.ObjectStatusType.DropStatus)
+            if (this.Status == ObjectStatus.Drop)
             {
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropSynonyms);
+                listDiff.Add(ToSqlDrop(), 0, ScriptAction.DropSynonyms);
             }
-            if (this.Status == Enums.ObjectStatusType.CreateStatus)
+            if (this.Status == ObjectStatus.Create)
             {
-                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddSynonyms);
+                listDiff.Add(ToSql(), 0, ScriptAction.AddSynonyms);
             }
-            if (this.Status == Enums.ObjectStatusType.AlterStatus)
+            if (this.Status == ObjectStatus.Alter)
             {
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropSynonyms);
-                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddSynonyms);
+                listDiff.Add(ToSqlDrop(), 0, ScriptAction.DropSynonyms);
+                listDiff.Add(ToSql(), 0, ScriptAction.AddSynonyms);
             }
             return listDiff;
         }

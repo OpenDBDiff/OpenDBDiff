@@ -5,7 +5,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class TablePartition : SQLServerSchemaBase
     {
         public TablePartition(Table parent)
-            : base(parent, Enums.ObjectType.Partition)
+            : base(parent, ObjectType.Partition)
         {
         }
 

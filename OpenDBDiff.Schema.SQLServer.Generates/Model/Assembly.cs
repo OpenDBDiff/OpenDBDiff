@@ -6,7 +6,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class Assembly : Code
     {
         public Assembly(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.Assembly, Enums.ScripActionType.AddAssembly, Enums.ScripActionType.DropAssembly)
+            : base(parent, ObjectType.Assembly, ScriptAction.AddAssembly, ScriptAction.DropAssembly)
         {
             Files = new SchemaList<AssemblyFile, Assembly>(this);
         }
@@ -86,20 +86,20 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList list = new SQLScriptList();
 
-            if (this.Status == Enums.ObjectStatusType.DropStatus)
+            if (this.Status == ObjectStatus.Drop)
             {
                 list.AddRange(RebuildDependencys());
                 list.Add(Drop());
             }
-            if (this.Status == Enums.ObjectStatusType.CreateStatus)
+            if (this.Status == ObjectStatus.Create)
                 list.Add(Create());
-            if (this.HasState(Enums.ObjectStatusType.RebuildStatus))
+            if (this.HasState(ObjectStatus.Rebuild))
                 list.AddRange(Rebuild());
-            if (this.HasState(Enums.ObjectStatusType.ChangeOwner))
-                list.Add(ToSQLAlterOwner(), 0, Enums.ScripActionType.AlterAssembly);
-            if (this.HasState(Enums.ObjectStatusType.PermissionSet))
-                list.Add(ToSQLAlter(), 0, Enums.ScripActionType.AlterAssembly);
-            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
+            if (this.HasState(ObjectStatus.ChangeOwner))
+                list.Add(ToSQLAlterOwner(), 0, ScriptAction.AlterAssembly);
+            if (this.HasState(ObjectStatus.PermissionSet))
+                list.Add(ToSQLAlter(), 0, ScriptAction.AlterAssembly);
+            if (this.HasState(ObjectStatus.Alter))
                 list.AddRange(Files.ToSqlDiff());
             list.AddRange(this.ExtendedProperties.ToSqlDiff());
             return list;

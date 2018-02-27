@@ -8,13 +8,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
         protected override void DoNew<Root>(SchemaList<FileGroup, Root> originFields, FileGroup node)
         {
             FileGroup newNode = (FileGroup)node.Clone(originFields.Parent);
-            newNode.Status = Enums.ObjectStatusType.CreateStatus;
+            newNode.Status = ObjectStatus.Create;
             /*If the Logical File Name exists in another filegroup,
              * we must change the new Logical File Name.
              */
             originFields.ForEach(file =>
             {
-                if (file.Status != Enums.ObjectStatusType.DropStatus)
+                if (file.Status != ObjectStatus.Drop)
                 {
                     file.Files.ForEach(group =>
                     {
@@ -36,7 +36,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             if (!FileGroup.Compare(node, originFields[node.FullName]))
             {
                 FileGroup newNode = (FileGroup)node.Clone(originFields.Parent);
-                newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                newNode.Status = ObjectStatus.Alter;
                 originFields[node.FullName] = newNode;
             }
         }

@@ -6,7 +6,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class Trigger : Code
     {
         public Trigger(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.Trigger, Enums.ScripActionType.AddTrigger, Enums.ScripActionType.DropTrigger)
+            : base(parent, ObjectType.Trigger, ScriptAction.AddTrigger, ScriptAction.DropTrigger)
         {
             this.Parent = parent;
         }
@@ -72,14 +72,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             SQLScriptList list = new SQLScriptList();
-            if (this.Status == Enums.ObjectStatusType.DropStatus)
+            if (this.Status == ObjectStatus.Drop)
                 list.Add(Drop());
-            if (this.Status == Enums.ObjectStatusType.CreateStatus)
+            if (this.Status == ObjectStatus.Create)
                 list.Add(Create());
-            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
+            if (this.HasState(ObjectStatus.Alter))
                 list.AddRange(Rebuild());
-            if (this.HasState(Enums.ObjectStatusType.DisabledStatus))
-                list.Add(this.ToSQLEnabledDisabled(), 0, Enums.ScripActionType.EnabledTrigger);
+            if (this.HasState(ObjectStatus.Disabled))
+                list.Add(this.ToSQLEnabledDisabled(), 0, ScriptAction.EnabledTrigger);
             return list;
         }
 

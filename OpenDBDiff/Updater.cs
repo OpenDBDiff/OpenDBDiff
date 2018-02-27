@@ -119,7 +119,7 @@ namespace OpenDBDiff
                     //script = script.Replace("\r", "");
                     //script = script.Replace("\t", "");
                     //script = script.Replace("\n", " ");
-                    if (target.ObjectType == Enums.ObjectType.StoredProcedure)
+                    if (target.ObjectType == ObjectType.StoredProcedure)
                     {
                         script = sql.Replace("CREATE PROCEDURE", "ALTER PROCEDURE");
                     }
@@ -148,7 +148,7 @@ namespace OpenDBDiff
             List<string> scripts = new List<string>(tempList);
             string result = string.Empty;
             string script = scripts[0];
-            if (target.ObjectType == Enums.ObjectType.Table)
+            if (target.ObjectType == ObjectType.Table)
             {
                 script = script.Replace("CREATE TABLE", "ALTER TABLE");
             }

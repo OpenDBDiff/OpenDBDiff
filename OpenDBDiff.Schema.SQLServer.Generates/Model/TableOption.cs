@@ -6,14 +6,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class TableOption : SQLServerSchemaBase
     {
         public TableOption(string Name, string value, ISchemaBase parent)
-            : base(parent, Enums.ObjectType.TableOption)
+            : base(parent, ObjectType.TableOption)
         {
             this.Name = Name;
             this.Value = value;
         }
 
         public TableOption(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.TableOption)
+            : base(parent, ObjectType.TableOption)
         {
         }
 
@@ -65,7 +65,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 return "EXEC sp_tableoption " + Parent.Name + ", 'vardecimal storage format','1'\r\nGO\r\n";
             if (this.Name.Equals("LockEscalation"))
             {
-                if ((!this.Value.Equals("TABLE")) || (this.Status != Enums.ObjectStatusType.OriginalStatus))
+                if ((!this.Value.Equals("TABLE")) || (this.Status != ObjectStatus.Original))
                     return "ALTER TABLE " + Parent.Name + " SET (LOCK_ESCALATION = " + Value + ")\r\nGO\r\n";
             }
             return "";
@@ -80,14 +80,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == Enums.ObjectStatusType.DropStatus)
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.AddOptions);
-            if (this.Status == Enums.ObjectStatusType.CreateStatus)
-                listDiff.Add(ToSql(), 0, Enums.ScripActionType.DropOptions);
-            if (this.Status == Enums.ObjectStatusType.AlterStatus)
+            if (this.Status == ObjectStatus.Drop)
+                listDiff.Add(ToSqlDrop(), 0, ScriptAction.AddOptions);
+            if (this.Status == ObjectStatus.Create)
+                listDiff.Add(ToSql(), 0, ScriptAction.DropOptions);
+            if (this.Status == ObjectStatus.Alter)
             {
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropOptions);
-                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddOptions);
+                listDiff.Add(ToSqlDrop(), 0, ScriptAction.DropOptions);
+                listDiff.Add(ToSql(), 0, ScriptAction.AddOptions);
             }
             return listDiff;
         }

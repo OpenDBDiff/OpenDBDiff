@@ -9,7 +9,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class Column : SQLServerSchemaBase, IComparable<Column>
     {
         public Column(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.Column)
+            : base(parent, ObjectType.Column)
         {
             ComputedFormula = "";
             Collation = "";
@@ -304,7 +304,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             get
             {
-                return (this.HasState(Enums.ObjectStatusType.UpdateStatus)) || ((!this.IsNullable) && (this.Status == Enums.ObjectStatusType.CreateStatus));
+                return (this.HasState(ObjectStatus.Update)) || ((!this.IsNullable) && (this.Status == ObjectStatus.Create));
             }
         }
 
@@ -457,7 +457,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             }
             if ((sqlConstraint) && (DefaultConstraint != null))
             {
-                if (DefaultConstraint.Status != Enums.ObjectStatusType.DropStatus)
+                if (DefaultConstraint.Status != ObjectStatus.Drop)
                     sql += " " + DefaultConstraint.ToSql().Replace("\t", "").Trim();
             }
             return sql;
@@ -489,8 +489,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                     it = item.Index.Equals(index);
                 if (it)
                 {
-                    if (item.Status != Enums.ObjectStatusType.CreateStatus) list.Add(item.Drop());
-                    if (item.Status != Enums.ObjectStatusType.DropStatus) list.Add(item.Create());
+                    if (item.Status != ObjectStatus.Create) list.Add(item.Drop());
+                    if (item.Status != ObjectStatus.Drop) list.Add(item.Create());
                 }
             }
             );
@@ -505,8 +505,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 ConstraintColumn ic = item.Columns.Find(this.Id);
                 if (ic != null)
                 {
-                    if (item.Status != Enums.ObjectStatusType.CreateStatus) list.Add(item.Drop());
-                    if (item.Status != Enums.ObjectStatusType.DropStatus) list.Add(item.Create());
+                    if (item.Status != ObjectStatus.Create) list.Add(item.Drop());
+                    if (item.Status != ObjectStatus.Drop) list.Add(item.Create());
                     list.AddRange(RebuildFullTextIndex(item.Name));
                 }
             });
@@ -523,8 +523,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                         IndexColumn ic = item.Columns.Find(this.Id);
                         if (ic != null)
                         {
-                            if (item.Status != Enums.ObjectStatusType.CreateStatus) list.Add(item.Drop());
-                            if (item.Status != Enums.ObjectStatusType.DropStatus) list.Add(item.Create());
+                            if (item.Status != ObjectStatus.Create) list.Add(item.Drop());
+                            if (item.Status != ObjectStatus.Drop) list.Add(item.Create());
                             list.AddRange(RebuildFullTextIndex(item.Name));
                         }
                     });
@@ -549,18 +549,18 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             List<ISchemaBase> items = ((Database)this.Parent.Parent).Dependencies.Find(this.Parent.Id, this.Id, 0);
             items.ForEach(item =>
             {
-                if ((item.ObjectType == Enums.ObjectType.Function) || (item.ObjectType == Enums.ObjectType.View))
+                if ((item.ObjectType == ObjectType.Function) || (item.ObjectType == ObjectType.View))
                 {
-                    if (item.Status != Enums.ObjectStatusType.CreateStatus)
+                    if (item.Status != ObjectStatus.Create)
                         list.Add(item.Drop());
-                    if (item.Status != Enums.ObjectStatusType.DropStatus)
+                    if (item.Status != ObjectStatus.Drop)
                         list.Add(item.Create());
                 }
             });
             return list;
         }
 
-        public SQLScriptList Alter(Enums.ScripActionType typeStatus)
+        public SQLScriptList Alter(ScriptAction typeStatus)
         {
             SQLScriptList list = new SQLScriptList();
             string sql = "ALTER TABLE " + Parent.FullName + " ALTER COLUMN " + this.ToSql(false) + "\r\nGO\r\n";

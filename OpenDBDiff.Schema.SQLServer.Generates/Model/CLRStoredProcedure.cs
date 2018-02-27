@@ -7,7 +7,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class CLRStoredProcedure : CLRCode
     {
         public CLRStoredProcedure(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.CLRStoredProcedure, Enums.ScripActionType.AddStoredProcedure, Enums.ScripActionType.DropStoredProcedure)
+            : base(parent, ObjectType.CLRStoredProcedure, ScriptAction.AddStoredProcedure, ScriptAction.DropStoredProcedure)
         {
             Parameters = new List<Parameter>();
         }
@@ -32,11 +32,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList list = new SQLScriptList();
 
-            if (this.HasState(Enums.ObjectStatusType.DropStatus))
+            if (this.HasState(ObjectStatus.Drop))
                 list.Add(Drop());
-            if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+            if (this.HasState(ObjectStatus.Create))
                 list.Add(Create());
-            if (this.Status == Enums.ObjectStatusType.AlterStatus)
+            if (this.Status == ObjectStatus.Alter)
             {
                 list.AddRange(Rebuild());
             }

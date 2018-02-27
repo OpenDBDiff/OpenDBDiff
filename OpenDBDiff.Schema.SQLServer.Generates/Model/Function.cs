@@ -7,7 +7,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class Function : Code
     {
         public Function(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.Function, Enums.ScripActionType.AddFunction, Enums.ScripActionType.DropFunction)
+            : base(parent, ObjectType.Function, ScriptAction.AddFunction, ScriptAction.DropFunction)
         {
 
         }
@@ -48,29 +48,29 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             SQLScriptList list = new SQLScriptList();
-            if (this.Status != Enums.ObjectStatusType.OriginalStatus)
+            if (this.Status != ObjectStatus.Original)
                 RootParent.ActionMessage.Add(this);
 
-            if (this.HasState(Enums.ObjectStatusType.DropStatus))
+            if (this.HasState(ObjectStatus.Drop))
                 list.Add(Drop());
-            if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+            if (this.HasState(ObjectStatus.Create))
                 list.Add(Create());
-            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
+            if (this.HasState(ObjectStatus.Alter))
             {
-                if (this.HasState(Enums.ObjectStatusType.RebuildDependenciesStatus))
+                if (this.HasState(ObjectStatus.RebuildDependencies))
                     list.AddRange(RebuildDependencys());
 
-                if (!this.GetWasInsertInDiffList(Enums.ScripActionType.DropFunction))
+                if (!this.GetWasInsertInDiffList(ScriptAction.DropFunction))
                 {
-                    if (this.HasState(Enums.ObjectStatusType.RebuildStatus))
+                    if (this.HasState(ObjectStatus.Rebuild))
                     {
                         list.Add(Drop());
                         list.Add(Create());
                     }
-                    if (this.HasState(Enums.ObjectStatusType.AlterBodyStatus))
+                    if (this.HasState(ObjectStatus.AlterBody))
                     {
                         int iCount = DependenciesCount;
-                        list.Add(ToSQLAlter(), iCount, Enums.ScripActionType.AlterFunction);
+                        list.Add(ToSQLAlter(), iCount, ScriptAction.AlterFunction);
                     }
                 }
             }

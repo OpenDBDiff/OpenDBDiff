@@ -30,7 +30,7 @@ namespace OpenDBDiff.Schema
             if (item != null) list.Add(item);
         }
 
-        public void Add(string SQL, int dependencies, Enums.ScripActionType type)
+        public void Add(string SQL, int dependencies, ScriptAction type)
         {
             if (list == null) list = new List<SQLScript>();
             list.Add(new SQLScript(SQL, dependencies, type));
@@ -106,7 +106,7 @@ namespace OpenDBDiff.Schema
         public SQLScriptList FindAlter()
         {
             SQLScriptList alter = new SQLScriptList();
-            list.ForEach(item => { if ((item.Status == Enums.ScripActionType.AlterView) || (item.Status == Enums.ScripActionType.AlterFunction) || (item.Status == Enums.ScripActionType.AlterProcedure)) alter.Add(item); });
+            list.ForEach(item => { if ((item.Status == ScriptAction.AlterView) || (item.Status == ScriptAction.AlterFunction) || (item.Status == ScriptAction.AlterProcedure)) alter.Add(item); });
             return alter;
         }
     }
@@ -115,7 +115,7 @@ namespace OpenDBDiff.Schema
     {
         public static SQLScriptList WarnMissingScript(this SQLScriptList scriptList, ISchemaBase scriptSource)
         {
-            if (scriptList == null || scriptSource == null || scriptSource.Status == Enums.ObjectStatusType.OriginalStatus)
+            if (scriptList == null || scriptSource == null || scriptSource.Status == ObjectStatus.Original)
             {
                 return scriptList;
             }
@@ -128,7 +128,7 @@ namespace OpenDBDiff.Schema
                 }
             }
 
-            scriptList.Add(String.Format("\r\n--\r\n-- DIFF-ERROR 0x{0:x8}.{1:d3}: Missing {2} script for {3} '{4}'\r\n--\r\n\r\n", (int)scriptSource.Status, (int)scriptSource.ObjectType, scriptSource.Status, scriptSource.ObjectType, scriptSource.Name), 0, Enums.ScripActionType.None);
+            scriptList.Add(String.Format("\r\n--\r\n-- DIFF-ERROR 0x{0:x8}.{1:d3}: Missing {2} script for {3} '{4}'\r\n--\r\n\r\n", (int)scriptSource.Status, (int)scriptSource.ObjectType, scriptSource.Status, scriptSource.ObjectType, scriptSource.Name), 0, ScriptAction.None);
             return scriptList;
         }
     }

@@ -8,7 +8,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
         protected override void DoNew<Root>(SchemaList<FullTextIndex, Root> originFields, FullTextIndex node)
         {
             FullTextIndex newNode = (FullTextIndex)node.Clone(originFields.Parent);
-            newNode.Status = Enums.ObjectStatusType.CreateStatus;
+            newNode.Status = ObjectStatus.Create;
             originFields.Add(newNode);
         }
 
@@ -18,9 +18,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             {
                 FullTextIndex newNode = (FullTextIndex)node.Clone(originFields.Parent);
                 if (node.IsDisabled != originFields[node.FullName].IsDisabled)
-                    newNode.Status += (int)Enums.ObjectStatusType.DisabledStatus;
+                    newNode.Status += (int)ObjectStatus.Disabled;
                 else
-                    newNode.Status += (int)Enums.ObjectStatusType.AlterStatus;
+                    newNode.Status += (int)ObjectStatus.Alter;
                 originFields[node.FullName] = newNode;
             }
         }

@@ -13,17 +13,17 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         protected string typeName = "";
         private int deepMax = 0;
         private int deepMin = 0;
-        private Enums.ScripActionType addAction;
-        private Enums.ScripActionType dropAction;
+        private ScriptAction addAction;
+        private ScriptAction dropAction;
 
-        public Code(ISchemaBase parent, Enums.ObjectType type, Enums.ScripActionType addAction, Enums.ScripActionType dropAction)
+        public Code(ISchemaBase parent, ObjectType type, ScriptAction addAction, ScriptAction dropAction)
             : base(parent, type)
         {
             DependenciesIn = new List<String>();
             DependenciesOut = new List<String>();
             typeName = GetObjectTypeName(ObjectType);
             /*Por el momento, solo los Assemblys manejan deep de dependencias*/
-            if (this.ObjectType == Enums.ObjectType.Assembly)
+            if (this.ObjectType == ObjectType.Assembly)
             {
                 deepMax = 501;
                 deepMin = 500;
@@ -58,17 +58,17 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 return null;
         }
 
-        private static string GetObjectTypeName(Enums.ObjectType type)
+        private static string GetObjectTypeName(ObjectType type)
         {
-            if (type == Enums.ObjectType.Rule) return "RULE";
-            if (type == Enums.ObjectType.Trigger) return "TRIGGER";
-            if (type == Enums.ObjectType.View) return "VIEW";
-            if (type == Enums.ObjectType.Function) return "FUNCTION";
-            if (type == Enums.ObjectType.StoredProcedure) return "PROCEDURE";
-            if (type == Enums.ObjectType.CLRStoredProcedure) return "PROCEDURE";
-            if (type == Enums.ObjectType.CLRTrigger) return "TRIGGER";
-            if (type == Enums.ObjectType.CLRFunction) return "FUNCTION";
-            if (type == Enums.ObjectType.Assembly) return "ASSEMBLY";
+            if (type == ObjectType.Rule) return "RULE";
+            if (type == ObjectType.Trigger) return "TRIGGER";
+            if (type == ObjectType.View) return "VIEW";
+            if (type == ObjectType.Function) return "FUNCTION";
+            if (type == ObjectType.StoredProcedure) return "PROCEDURE";
+            if (type == ObjectType.CLRStoredProcedure) return "PROCEDURE";
+            if (type == ObjectType.CLRTrigger) return "TRIGGER";
+            if (type == ObjectType.CLRFunction) return "FUNCTION";
+            if (type == ObjectType.Assembly) return "ASSEMBLY";
             return "";
         }
 
@@ -139,7 +139,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                     ISchemaBase item = ((Database)Parent).Find(DependenciesIn[j]);
                     if (item != null)
                     {
-                        if ((item.Status == Enums.ObjectStatusType.RebuildStatus) || (item.Status == Enums.ObjectStatusType.RebuildDependenciesStatus))
+                        if ((item.Status == ObjectStatus.Rebuild) || (item.Status == ObjectStatus.RebuildDependencies))
                             return true;
                     }
                 };
@@ -157,19 +157,19 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 ISchemaBase item = ((Database)Parent).Find(depends[j]);
                 if (item != null)
                 {
-                    if ((item.Status != Enums.ObjectStatusType.CreateStatus) && (item.Status != Enums.ObjectStatusType.DropStatus))
+                    if ((item.Status != ObjectStatus.Create) && (item.Status != ObjectStatus.Drop))
                     {
-                        if ((item.ObjectType != Enums.ObjectType.CLRStoredProcedure) && (item.ObjectType != Enums.ObjectType.Assembly) && (item.ObjectType != Enums.ObjectType.UserDataType) && (item.ObjectType != Enums.ObjectType.View) && (item.ObjectType != Enums.ObjectType.Function))
+                        if ((item.ObjectType != ObjectType.CLRStoredProcedure) && (item.ObjectType != ObjectType.Assembly) && (item.ObjectType != ObjectType.UserDataType) && (item.ObjectType != ObjectType.View) && (item.ObjectType != ObjectType.Function))
                         {
                             newDeepMin = 0;
                             newDeepMax = 0;
                         }
-                        if (item.Status != Enums.ObjectStatusType.DropStatus)
+                        if (item.Status != ObjectStatus.Drop)
                         {
-                            if (!((item.Parent.HasState(Enums.ObjectStatusType.RebuildStatus)) && (item.ObjectType == Enums.ObjectType.Trigger)))
+                            if (!((item.Parent.HasState(ObjectStatus.Rebuild)) && (item.ObjectType == ObjectType.Trigger)))
                                 list.Add(item.Drop(), newDeepMin);
                         }
-                        if ((this.Status != Enums.ObjectStatusType.DropStatus) && (item.Status != Enums.ObjectStatusType.CreateStatus))
+                        if ((this.Status != ObjectStatus.Drop) && (item.Status != ObjectStatus.Create))
                             list.Add(item.Create(), newDeepMax);
                         if (item.IsCodeType)
                             list.AddRange(RebuildDependencys(((ICode)item).DependenciesOut, newDeepMin, newDeepMax));
@@ -187,8 +187,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList list = new SQLScriptList();
             list.AddRange(RebuildDependencys());
-            if (this.Status != Enums.ObjectStatusType.CreateStatus) list.Add(Drop(), deepMin);
-            if (this.Status != Enums.ObjectStatusType.DropStatus) list.Add(Create(), deepMax);
+            if (this.Status != ObjectStatus.Create) list.Add(Drop(), deepMin);
+            if (this.Status != ObjectStatus.Drop) list.Add(Create(), deepMax);
             return list;
         }
 

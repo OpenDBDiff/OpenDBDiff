@@ -9,10 +9,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
         protected override void DoNew<Root>(SchemaList<UserDataType, Root> originFields, UserDataType node)
         {
             UserDataType newNode = (UserDataType)node.Clone(originFields.Parent);
-            newNode.Status = Enums.ObjectStatusType.CreateStatus;
+            newNode.Status = ObjectStatus.Create;
             Boolean HasAssembly = originFields.Exists(item => item.AssemblyFullName.Equals(node.AssemblyFullName) && item.IsAssembly);
             if (HasAssembly)
-                newNode.Status += (int)Enums.ObjectStatusType.DropOlderStatus;
+                newNode.Status += (int)ObjectStatus.DropOlder;
             originFields.Add(newNode);
         }
 
@@ -26,23 +26,23 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                 if (!UserDataType.CompareDefault(node, originFields[node.FullName]))
                 {
                     if (!String.IsNullOrEmpty(node.Default.Name))
-                        newNode.Default.Status = Enums.ObjectStatusType.CreateStatus;
+                        newNode.Default.Status = ObjectStatus.Create;
                     else
-                        newNode.Default.Status = Enums.ObjectStatusType.DropStatus;
-                    newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                        newNode.Default.Status = ObjectStatus.Drop;
+                    newNode.Status = ObjectStatus.Alter;
                 }
                 else
                 {
                     if (!UserDataType.CompareRule(node, originFields[node.FullName]))
                     {
                         if (!String.IsNullOrEmpty(node.Rule.Name))
-                            newNode.Rule.Status = Enums.ObjectStatusType.CreateStatus;
+                            newNode.Rule.Status = ObjectStatus.Create;
                         else
-                            newNode.Rule.Status = Enums.ObjectStatusType.DropStatus;
-                        newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                            newNode.Rule.Status = ObjectStatus.Drop;
+                        newNode.Status = ObjectStatus.Alter;
                     }
                     else
-                        newNode.Status = Enums.ObjectStatusType.RebuildStatus;
+                        newNode.Status = ObjectStatus.Rebuild;
                 }
                 originFields[node.FullName] = newNode;
             }

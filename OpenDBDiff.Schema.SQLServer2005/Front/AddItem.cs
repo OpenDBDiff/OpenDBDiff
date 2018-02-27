@@ -52,7 +52,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 
         private void FillCombo()
         {
-            foreach (Enums.ObjectType state in Enum.GetValues(typeof(Enums.ObjectType)).Cast<Enums.ObjectType>())
+            foreach (ObjectType state in Enum.GetValues(typeof(ObjectType)).Cast<ObjectType>())
             {
                 var item = new ObjectTypeComboBoxItem();
                 item.Id = state.ToString();
@@ -77,7 +77,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
                 return;
             }
 
-            var fi = new SqlOptionFilterItem((Enums.ObjectType)Enum.Parse(typeof(Enums.ObjectType), cboObjects.SelectedValue.ToString(), true), txtFilter.Text);
+            var fi = new SqlOptionFilterItem((ObjectType)Enum.Parse(typeof(ObjectType), cboObjects.SelectedValue.ToString(), true), txtFilter.Text);
 
             if (sqlOption.Filters.Items.Contains(fi))
             {

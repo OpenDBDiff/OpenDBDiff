@@ -36,7 +36,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Devuelve todos las constraints dependientes de una tabla.
         /// </summary>
-        public List<ISchemaBase> FindNotOwner(int tableId, Enums.ObjectType type)
+        public List<ISchemaBase> FindNotOwner(int tableId, ObjectType type)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                     if (dependency.Type == type)
                     {
                         ISchemaBase item = (ISchemaBase)Database.Find(dependency.FullName);
-                        if (dependency.Type == Enums.ObjectType.Constraint)
+                        if (dependency.Type == ObjectType.Constraint)
                         {
                             if ((dependency.ObjectId == tableId) && (((Constraint)item).Type == Constraint.ConstraintType.ForeignKey))
                                 cons.Add(item);
@@ -73,7 +73,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             this.ForEach(item =>
             {
-                if (item.Type == Enums.ObjectType.Constraint)
+                if (item.Type == ObjectType.Constraint)
                     if ((item.ObjectId == tableId) && (item.ObjectSchema.Name.Equals(constraint.Name)))
                         item.ObjectSchema = constraint;
             });
@@ -87,13 +87,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             return Find(tableId, 0, 0);
         }
 
-        public int DependenciesCount(int objectId, Enums.ObjectType type)
+        public int DependenciesCount(int objectId, ObjectType type)
         {
             Dictionary<int, bool> depencyTracker = new Dictionary<int, bool>();
             return DependenciesCount(objectId, type, depencyTracker);
         }
 
-        private int DependenciesCount(int tableId, Enums.ObjectType type, Dictionary<int, bool> depencyTracker)
+        private int DependenciesCount(int tableId, ObjectType type, Dictionary<int, bool> depencyTracker)
         {
             int count = 0;
             bool putItem = false;
@@ -104,7 +104,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 ISchemaBase cons = constraints[index];
                 if (cons.ObjectType == type)
                 {
-                    if (type == Enums.ObjectType.Constraint)
+                    if (type == ObjectType.Constraint)
                     {
                         relationalTableId = ((Constraint)cons).RelationalTableId;
                         putItem = (relationalTableId == tableId);
@@ -131,11 +131,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             List<ISchemaBase> real = new List<ISchemaBase>();
 
             cons = (from depends in this
-                    where (depends.Type == Enums.ObjectType.Constraint || depends.Type == Enums.ObjectType.Index) &&
+                    where (depends.Type == ObjectType.Constraint || depends.Type == ObjectType.Index) &&
                     ((depends.DataTypeId == dataTypeId || dataTypeId == 0) && (depends.SubObjectId == columnId || columnId == 0) && (depends.ObjectId == tableId))
                     select depends.FullName)
                         .Concat(from depends in this
-                                where (depends.Type == Enums.ObjectType.View || depends.Type == Enums.ObjectType.Function) &&
+                                where (depends.Type == ObjectType.View || depends.Type == ObjectType.Function) &&
                                 (depends.ObjectId == tableId)
                                 select depends.FullName).ToList();
 

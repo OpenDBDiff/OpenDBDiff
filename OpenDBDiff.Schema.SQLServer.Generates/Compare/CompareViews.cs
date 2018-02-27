@@ -14,16 +14,16 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                 newNode.DependenciesOut.AddRange(original.DependenciesOut);
                 newNode.DependenciesIn.AddRange(original.DependenciesIn);
 
-                newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                newNode.Status = ObjectStatus.Alter;
                 newNode.Indexes = original.Indexes;
                 newNode.Triggers = original.Triggers;
 
                 if (newNode.IsSchemaBinding)
-                    newNode.Status += (int)Enums.ObjectStatusType.RebuildDependenciesStatus;
+                    newNode.Status += (int)ObjectStatus.RebuildDependencies;
                 if (newNode.HasToRebuild)
-                    newNode.Status += (int)Enums.ObjectStatusType.RebuildStatus;
+                    newNode.Status += (int)ObjectStatus.Rebuild;
                 else
-                    newNode.Status += (int)Enums.ObjectStatusType.AlterBodyStatus;
+                    newNode.Status += (int)ObjectStatus.AlterBody;
 
                 originFields[node.FullName] = newNode;
                 original = newNode;
@@ -35,7 +35,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
         protected override void DoNew<Root>(SchemaList<View, Root> originFields, View node)
         {
             View newNode = (View)node.Clone(originFields.Parent);
-            newNode.Status = Enums.ObjectStatusType.CreateStatus;
+            newNode.Status = ObjectStatus.Create;
             originFields.Add(newNode);
             newNode.DependenciesIn.ForEach(dep =>
             {

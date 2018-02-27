@@ -6,7 +6,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class IndexColumn : SQLServerSchemaBase, IComparable<IndexColumn>
     {
         public IndexColumn(ISchemaBase parentObject)
-            : base(parentObject, Enums.ObjectType.IndexColumn)
+            : base(parentObject, ObjectType.IndexColumn)
         {
         }
 

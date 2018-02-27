@@ -137,7 +137,7 @@ namespace OpenDBDiff.Schema.Model
             StringBuilder sql = new StringBuilder();
             this.ForEach(item =>
                 {
-                    if (item.Status != Enums.ObjectStatusType.DropStatus)
+                    if (item.Status != ObjectStatus.Drop)
                         sql.Append(item.ToSql() + "\r\n");
                 });
             return sql.ToString();
