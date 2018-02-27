@@ -1,0 +1,1 @@
+Application icon designed by Ervin Nagy ( http://github.com/beerwin ) 
