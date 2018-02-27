@@ -96,101 +96,115 @@ namespace OpenDBDiff.Front
             }
         }
 
-        private void schemaTreeView1_OnSelectItem(string ObjectFullName)
+        private void schemaTreeView1_OnSelectItem(string nodeFullName)
         {
-            if (ObjectFullName == null) return;
-
-            txtNewObject.ReadOnly = false;
-            txtOldObject.ReadOnly = false;
-            txtNewObject.Text = "";
-            txtOldObject.Text = "";
-
-            IDatabase database = (IDatabase)schemaTreeView1.LeftDatabase;
-
-            Enums.ObjectStatusType? status;
-
-            status = database.Find(ObjectFullName)?.Status;
-            if (status.HasValue && status.Value != Enums.ObjectStatusType.DropStatus)
+            try
             {
-                txtNewObject.Text = database.Find(ObjectFullName).ToSql();
-                if (database.Find(ObjectFullName).Status == Enums.ObjectStatusType.OriginalStatus)
+
+                txtNewObject.ReadOnly = false;
+                txtOldObject.ReadOnly = false;
+                txtDiff.ReadOnly = false;
+
+                txtNewObject.ClearAll();
+                txtOldObject.ClearAll();
+                txtDiff.ClearAll();
+
+                if (string.IsNullOrEmpty(nodeFullName))
+                    return;
+
+                IDatabase database = (IDatabase)schemaTreeView1.LeftDatabase;
+
+                Enums.ObjectStatusType? status;
+
+                status = database.Find(nodeFullName)?.Status;
+                if (status.HasValue && status.Value != Enums.ObjectStatusType.DropStatus)
                 {
-                    btnUpdate.Enabled = false;
+                    txtNewObject.Text = database.Find(nodeFullName).ToSql();
+                    if (database.Find(nodeFullName).Status == Enums.ObjectStatusType.OriginalStatus)
+                    {
+                        btnUpdate.Enabled = false;
+                    }
+                    else
+                    {
+                        btnUpdate.Enabled = true;
+                    }
+                    if (database.Find(nodeFullName).ObjectType == Enums.ObjectType.Table)
+                    {
+                        btnCompareTableData.Enabled = true;
+                    }
+                    else
+                    {
+                        btnCompareTableData.Enabled = false;
+                    }
                 }
-                else
+
+                database = (IDatabase)schemaTreeView1.RightDatabase;
+                status = database.Find(nodeFullName)?.Status;
+                if (status.HasValue && status.Value != Enums.ObjectStatusType.CreateStatus)
                 {
-                    btnUpdate.Enabled = true;
+                    txtOldObject.Text = database.Find(nodeFullName).ToSql();
                 }
-                if (database.Find(ObjectFullName).ObjectType == Enums.ObjectType.Table)
+                txtNewObject.ReadOnly = true;
+                txtOldObject.ReadOnly = true;
+
+                var diff = (new SideBySideDiffBuilder(new Differ())).BuildDiffModel(txtOldObject.Text, txtNewObject.Text);
+
+                var sb = new StringBuilder();
+                DiffPiece newLine, oldLine;
+                var markers = new Marker[] { txtDiff.Markers[0], txtDiff.Markers[1], txtDiff.Markers[2], txtDiff.Markers[3] };
+                foreach (var marker in markers) marker.Symbol = MarkerSymbol.Background;
+                markers[0].SetBackColor(Color.LightGreen); // Imaginary (?)
+                markers[1].SetBackColor(Color.LightCyan); // Modified
+                markers[2].SetBackColor(Color.LightSalmon); // Deleted
+                markers[3].SetBackColor(Color.PeachPuff); // Modified
+
+                var indexes = new List<int>[] { new List<int>(), new List<int>(), new List<int>(), new List<int>() };
+                var index = 0;
+                for (var i = 0; i < Math.Max(diff.NewText.Lines.Count, diff.OldText.Lines.Count); i++)
                 {
-                    btnCompareTableData.Enabled = true;
+                    newLine = i < diff.NewText.Lines.Count ? diff.NewText.Lines[i] : null;
+                    oldLine = i < diff.OldText.Lines.Count ? diff.OldText.Lines[i] : null;
+                    if (oldLine.Type == ChangeType.Inserted)
+                    {
+                        sb.AppendLine(" " + oldLine.Text);
+                    }
+                    else if (oldLine.Type == ChangeType.Deleted)
+                    {
+                        sb.AppendLine("- " + oldLine.Text);
+                        indexes[2].Add(index);
+                    }
+                    else if (oldLine.Type == ChangeType.Modified)
+                    {
+                        sb.AppendLine("* " + newLine.Text);
+                        indexes[1].Add(index++);
+                        sb.AppendLine("* " + oldLine.Text);
+                        indexes[3].Add(index);
+                    }
+                    else if (oldLine.Type == ChangeType.Imaginary)
+                    {
+                        sb.AppendLine("+ " + newLine.Text);
+                        indexes[0].Add(index);
+                    }
+                    else if (oldLine.Type == ChangeType.Unchanged)
+                    {
+                        sb.AppendLine("  " + oldLine.Text);
+                    }
+                    index++;
                 }
-                else
+                txtDiff.Text = sb.ToString();
+                for (var i = 0; i < 4; i++)
                 {
-                    btnCompareTableData.Enabled = false;
+                    foreach (var ind in indexes[i])
+                    {
+                        txtDiff.Lines[ind].MarkerAdd(i);
+                    }
                 }
             }
-
-            database = (IDatabase)schemaTreeView1.RightDatabase;
-            status = database.Find(ObjectFullName)?.Status;
-            if (status.HasValue && status.Value != Enums.ObjectStatusType.CreateStatus)
+            finally
             {
-                txtOldObject.Text = database.Find(ObjectFullName).ToSql();
-            }
-            txtNewObject.ReadOnly = true;
-            txtOldObject.ReadOnly = true;
-
-            var diff = (new SideBySideDiffBuilder(new Differ())).BuildDiffModel(txtOldObject.Text, txtNewObject.Text);
-
-            var sb = new StringBuilder();
-            DiffPiece newLine, oldLine;
-            var markers = new Marker[] { txtDiff.Markers[0], txtDiff.Markers[1], txtDiff.Markers[2], txtDiff.Markers[3] };
-            foreach (var marker in markers) marker.Symbol = MarkerSymbol.Background;
-            markers[0].SetBackColor(Color.LightGreen); // Imaginary (?)
-            markers[1].SetBackColor(Color.LightCyan); // Modified
-            markers[2].SetBackColor(Color.LightSalmon); // Deleted
-            markers[3].SetBackColor(Color.PeachPuff); // Modified
-
-            var indexes = new List<int>[] { new List<int>(), new List<int>(), new List<int>(), new List<int>() };
-            var index = 0;
-            for (var i = 0; i < Math.Max(diff.NewText.Lines.Count, diff.OldText.Lines.Count); i++)
-            {
-                newLine = i < diff.NewText.Lines.Count ? diff.NewText.Lines[i] : null;
-                oldLine = i < diff.OldText.Lines.Count ? diff.OldText.Lines[i] : null;
-                if (oldLine.Type == ChangeType.Inserted)
-                {
-                    sb.AppendLine(" " + oldLine.Text);
-                }
-                else if (oldLine.Type == ChangeType.Deleted)
-                {
-                    sb.AppendLine("- " + oldLine.Text);
-                    indexes[2].Add(index);
-                }
-                else if (oldLine.Type == ChangeType.Modified)
-                {
-                    sb.AppendLine("* " + newLine.Text);
-                    indexes[1].Add(index++);
-                    sb.AppendLine("* " + oldLine.Text);
-                    indexes[3].Add(index);
-                }
-                else if (oldLine.Type == ChangeType.Imaginary)
-                {
-                    sb.AppendLine("+ " + newLine.Text);
-                    indexes[0].Add(index);
-                }
-                else if (oldLine.Type == ChangeType.Unchanged)
-                {
-                    sb.AppendLine("  " + oldLine.Text);
-                }
-                index++;
-            }
-            txtDiff.Text = sb.ToString();
-            for (var i = 0; i < 4; i++)
-            {
-                foreach (var ind in indexes[i])
-                {
-                    txtDiff.Lines[ind].MarkerAdd(i);
-                }
+                txtNewObject.ReadOnly = true;
+                txtOldObject.ReadOnly = true;
+                txtDiff.ReadOnly = true;
             }
         }
 
