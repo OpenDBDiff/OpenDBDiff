@@ -234,6 +234,7 @@ namespace OpenDBDiff.Front
             }
             catch (Exception ex)
             {
+                Cursor = Cursors.Default;
                 HandleException(errorLocation, ex);
             }
             finally
@@ -245,6 +246,7 @@ namespace OpenDBDiff.Front
         private void HandleException(string errorLocation, Exception ex)
         {
             var errorDialog = new ErrorForm(ex);
+            errorDialog.ShowDialog(this);
         }
 
         private void UnloadProjectHandler()
