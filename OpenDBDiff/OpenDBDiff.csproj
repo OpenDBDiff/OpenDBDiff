@@ -80,6 +80,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionsSettings\ConnectionResource.cs" />
+    <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Front\DataCompareForm.cs">
       <SubType>Form</SubType>
     </Compile>
