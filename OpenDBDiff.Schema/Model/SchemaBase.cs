@@ -220,7 +220,7 @@ namespace OpenDBDiff.Schema.Model
         /// <summary>
         /// Returns the status of the object. By default is set to <see cref="ObjectStatus.Original"/>. When setting a value, it also affects to the <see cref="Parent"/> status.
         /// </summary>
-		public virtual ObjectStatus Status
+        public virtual ObjectStatus Status
         {
             get { return status; }
             set
