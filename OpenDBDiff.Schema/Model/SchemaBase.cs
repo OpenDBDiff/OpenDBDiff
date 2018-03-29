@@ -217,9 +217,9 @@ namespace OpenDBDiff.Schema.Model
         /// </summary>
         public Boolean IsSystem { get; set; }
 
-		/// <summary>
-		/// Returns the status of the object. By default is set to <see cref="ObjectStatus.Original"/>. When setting a value, it also affects to the <see cref="Parent"/> status.
-		/// </summary>
+        /// <summary>
+        /// Returns the status of the object. By default is set to <see cref="ObjectStatus.Original"/>. When setting a value, it also affects to the <see cref="Parent"/> status.
+        /// </summary>
 		public virtual ObjectStatus Status
         {
             get { return status; }
@@ -254,7 +254,7 @@ namespace OpenDBDiff.Schema.Model
             }
         }
 
-		public Boolean HasState(ObjectStatus statusFind)
+        public Boolean HasState(ObjectStatus statusFind)
         {
             return ((this.Status & statusFind) == statusFind);
         }
