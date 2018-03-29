@@ -1,9 +1,10 @@
-﻿using System;
-using System.Data.SqlClient;
-using OpenDBDiff.Schema.Events;
+﻿using OpenDBDiff.Schema.Events;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.Util;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using System;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 {
@@ -33,19 +34,24 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                     {
                         while (reader.Read())
                         {
-                            Parameter param = new Parameter();
-                            param.Name = reader["Name"].ToString();
-                            param.Type = reader["TypeName"].ToString();
-                            param.Size = (short)reader["max_length"];
-                            param.Scale = (byte)reader["scale"];
-                            param.Precision = (byte)reader["precision"];
-                            param.Output = (bool)reader["is_output"];
-                            if (param.Type.Equals("nchar") || param.Type.Equals("nvarchar"))
+                            var objectName = reader["ObjectName"].ToString();
+
+                            if (database.CLRFunctions.Exists(objectName))
                             {
-                                if (param.Size != -1)
-                                    param.Size = param.Size / 2;
+                                Parameter param = new Parameter();
+                                param.Name = reader["Name"].ToString();
+                                param.Type = reader["TypeName"].ToString();
+                                param.Size = (short)reader["max_length"];
+                                param.Scale = (byte)reader["scale"];
+                                param.Precision = (byte)reader["precision"];
+                                param.Output = (bool)reader["is_output"];
+                                if (param.Type.Equals("nchar") || param.Type.Equals("nvarchar"))
+                                {
+                                    if (param.Size != -1)
+                                        param.Size = param.Size / 2;
+                                }
+                                database.CLRFunctions[objectName].Parameters.Add(param);
                             }
-                            database.CLRFunctions[reader["ObjectName"].ToString()].Parameters.Add(param);
                         }
                     }
                 }
@@ -125,7 +131,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                     }
                 }
             }
-            if (database.CLRFunctions.Count > 0)
+            if (database.CLRFunctions.Any())
                 FillParameters(database, connectionString);
         }
     }

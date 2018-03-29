@@ -1,5 +1,5 @@
-﻿using System;
-using OpenDBDiff.Schema.Model;
+﻿using OpenDBDiff.Schema.Model;
+using System.Linq;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {
@@ -22,7 +22,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public override string ToSql()
         {
             string sql = "";
-            if (Columns.Count > 0)
+            if (Columns.Any())
             {
                 sql += "CREATE TYPE " + FullName + " AS TABLE\r\n(\r\n";
                 sql += Columns.ToSql() + "\r\n";
