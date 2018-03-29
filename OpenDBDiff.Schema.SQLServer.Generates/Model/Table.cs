@@ -1,8 +1,8 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using OpenDBDiff.Schema.Attributes;
 using OpenDBDiff.Schema.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {
@@ -135,7 +135,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             return other.Status.CompareTo(Status);
         }
 
-        #endregion
+        #endregion IComparable<Table> Members
 
         #region ITable<Table> Members
 
@@ -145,7 +145,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         [ShowItem("Columns", "Column")]
         public Columns<Table> Columns { get; set; }
 
-        #endregion
+        #endregion ITable<Table> Members
 
         /// <summary>
         /// Clona el objeto Table en una nueva instancia.
@@ -201,11 +201,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             string sqlPK = "";
             string sqlUC = "";
             string sqlFK = "";
-            if (Columns.Count > 0)
+            if (Columns.Any())
             {
                 sql += "CREATE TABLE " + FullName + "\r\n(\r\n";
                 sql += Columns.ToSql();
-                if (Constraints.Count > 0)
+                if (Constraints.Any())
                 {
                     sql += ",\r\n";
                     Constraints.AsQueryable()

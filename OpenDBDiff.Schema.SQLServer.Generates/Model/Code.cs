@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using OpenDBDiff.Schema.Model;
+﻿using OpenDBDiff.Schema.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Model.Util;
 using OpenDBDiff.Schema.SQLServer.Generates.Options;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {
@@ -43,7 +44,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             }
             else
                 return null;
-
         }
 
         public override SQLScript Drop()
@@ -91,7 +91,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             get
             {
                 int iCount = 0;
-                if (this.DependenciesOut.Count > 0)
+                if (this.DependenciesOut.Any())
                 {
                     Dictionary<string, bool> depencyTracker = new Dictionary<string, bool>();
                     iCount = DependenciesCountFilter(this.FullName, depencyTracker);

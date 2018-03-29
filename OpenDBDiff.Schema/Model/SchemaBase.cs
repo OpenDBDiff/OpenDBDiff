@@ -256,6 +256,11 @@ namespace OpenDBDiff.Schema.Model
             get { return 0; }
         }
 
+        public virtual bool HasDependencies
+        {
+            get { return DependenciesCount > 0; }
+        }
+
         /// <summary>
         /// Get if the SQL commands for the collection must build in one single statement
         /// or one statmente for each item of the collection.
