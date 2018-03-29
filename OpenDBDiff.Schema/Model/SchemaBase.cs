@@ -229,7 +229,7 @@ namespace OpenDBDiff.Schema.Model
                     status = value;
 
                 // Si el estado de la tabla era el original, lo cambia, sino deja el actual estado.
-                if (Parent != null && Parent.Status == ObjectStatus.Original || value == ObjectStatus.Rebuild || value == ObjectStatus.RebuildDependencies)
+                if (Parent != null && (Parent.Status == ObjectStatus.Original || value == ObjectStatus.Rebuild || value == ObjectStatus.RebuildDependencies))
                 {
                     if ((value != ObjectStatus.Original) && (value != ObjectStatus.Rebuild) && (value != ObjectStatus.RebuildDependencies))
                         Parent.Status = ObjectStatus.Alter;
