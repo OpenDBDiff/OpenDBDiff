@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using OpenDBDiff.Schema.Events;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.Util;
@@ -103,7 +104,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                                     item.Owner = (string)reader[ownerIndex];
                                     database.Procedures.Add(item);
                                 }
-                                if ((reader[typeIndex].ToString().Trim().Equals("PC")) && (database.Options.Ignore.FilterCLRStoredProcedure))
+
+                                var clrTypes = new List<string>() { "PC", "FS", "FT" };
+                                if ((clrTypes.Contains(reader[typeIndex].ToString().Trim())) && (database.Options.Ignore.FilterCLRStoredProcedure))
                                 {
                                     CLRStoredProcedure item = new CLRStoredProcedure(database);
                                     item.Id = (int)reader[object_idIndex];
