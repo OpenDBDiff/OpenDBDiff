@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Schema.SQLServer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Schema.SQLServer.GeneratesTests", "OpenDBDiff.Schema.SQLServer.GeneratesTests\OpenDBDiff.Schema.SQLServer.GeneratesTests.csproj", "{94F5C91A-6268-41E9-A15E-FA5451BB2B6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.SchemaTests", "OpenDBDiff.SchemaTests\OpenDBDiff.SchemaTests.csproj", "{9CBBBA4C-AA7E-41DE-B277-2F5CE7D31ACC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
