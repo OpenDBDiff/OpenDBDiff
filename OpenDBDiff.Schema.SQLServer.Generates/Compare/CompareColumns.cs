@@ -13,7 +13,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
 
             foreach (Column node in originFields)
             {
-                if (!destinationFields.Exists(node.FullName))
+                if (!destinationFields.Contains(node.FullName))
                 {
                     node.Status = ObjectStatus.Drop;
                     restPosition++;
@@ -23,7 +23,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             }
             foreach (Column node in destinationFields)
             {
-                if (!originFields.Exists(node.FullName))
+                if (!originFields.Contains(node.FullName))
                 {
                     Column newNode = node.Clone(originFields.Parent);
                     if ((newNode.Position == 1) || ((newNode.DefaultConstraint == null) && (!newNode.IsNullable) && (!newNode.IsComputed) && (!newNode.IsIdentity) && (!newNode.IsIdentityForReplication)))

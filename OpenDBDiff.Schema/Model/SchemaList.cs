@@ -82,7 +82,7 @@ namespace OpenDBDiff.Schema.Model
         /// Nombre del objecto a buscar.
         /// </param>
         /// <returns></returns>
-        public Boolean Exists(string name)
+        public Boolean Contains(string name)
         {
             if (IsCaseSensitive)
                 return nameMap.ContainsKey(name);

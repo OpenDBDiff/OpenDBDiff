@@ -6,7 +6,7 @@
     {
         void Add(T item);
         SchemaList<T, P> Clone(P parentObject);
-        bool Exists(string name);
+        bool Contains(string name);
         T Find(int id);
         T this[string name] { get; set; }
         T this[int index] { get; set; }

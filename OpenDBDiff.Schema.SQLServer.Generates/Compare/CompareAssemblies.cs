@@ -24,14 +24,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
 
                 originFields[node.FullName].Files.ForEach(item =>
                 {
-                    if (!newNode.Files.Exists(item.FullName))
+                    if (!newNode.Files.Contains(item.FullName))
                         newNode.Files.Add(new AssemblyFile(newNode, item, ObjectStatus.Drop));
                     else
                         item.Status = ObjectStatus.Alter;
                 });
                 newNode.Files.ForEach(item =>
                 {
-                    if (!originFields[node.FullName].Files.Exists(item.FullName))
+                    if (!originFields[node.FullName].Files.Contains(item.FullName))
                     {
                         item.Status = ObjectStatus.Create;
                     }

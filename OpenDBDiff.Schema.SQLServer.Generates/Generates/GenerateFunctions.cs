@@ -36,7 +36,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                         {
                             var objectName = reader["ObjectName"].ToString();
 
-                            if (database.CLRFunctions.Exists(objectName))
+                            if (database.CLRFunctions.Contains(objectName))
                             {
                                 Parameter param = new Parameter();
                                 param.Name = reader["Name"].ToString();

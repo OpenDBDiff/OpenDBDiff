@@ -43,7 +43,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                 {
                     node = destinationFields[destinationIndex];
                     Generate.RaiseOnCompareProgress("Comparing Destination {0}: [{1}]", node.ObjectType, node.Name);
-                    if (!originFields.Exists(node.FullName))
+                    if (!originFields.Contains(node.FullName))
                     {
                         Generate.RaiseOnCompareProgress("Adding {0}: [{1}]", node.ObjectType, node.Name);
                         DoNew<Root>(originFields, node);
@@ -62,7 +62,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                 {
                     node = originFields[originIndex];
                     Generate.RaiseOnCompareProgress("Comparing Source {0}: [{1}]", node.ObjectType, node.Name);
-                    if (!destinationFields.Exists(node.FullName))
+                    if (!destinationFields.Contains(node.FullName))
                     {
                         Generate.RaiseOnCompareProgress("Deleting {0}: [{1}]", node.ObjectType, node.Name);
                         DoDelete(node);
