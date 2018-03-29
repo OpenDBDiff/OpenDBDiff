@@ -217,31 +217,44 @@ namespace OpenDBDiff.Schema.Model
         /// </summary>
         public Boolean IsSystem { get; set; }
 
-        /// <summary>
-        /// Returns the status of the object. By default is set to <see cref="ObjectStatus.Original"/>. When setting a value, it also affects to the <see cref="Parent"/> status.
-        /// </summary>
-        public virtual ObjectStatus Status
-        {
-            get { return status; }
-            set
-            {
-                if ((status != ObjectStatus.Rebuild) && (status != ObjectStatus.RebuildDependencies))
-                    status = value;
+		/// <summary>
+		/// Returns the status of the object. By default is set to <see cref="ObjectStatus.Original"/>. When setting a value, it also affects to the <see cref="Parent"/> status.
+		/// </summary>
+		public virtual ObjectStatus Status
+		{
+			get { return status; }
+			set
+			{
+				if (status != ObjectStatus.Rebuild && status != ObjectStatus.RebuildDependencies)
+					status = value;
 
-                // Si el estado de la tabla era el original, lo cambia, sino deja el actual estado.
-                if (Parent != null && (Parent.Status == ObjectStatus.Original || value == ObjectStatus.Rebuild || value == ObjectStatus.RebuildDependencies))
-                {
-                    if ((value != ObjectStatus.Original) && (value != ObjectStatus.Rebuild) && (value != ObjectStatus.RebuildDependencies))
-                        Parent.Status = ObjectStatus.Alter;
-                    if (value == ObjectStatus.RebuildDependencies)
-                        Parent.Status = ObjectStatus.RebuildDependencies;
-                    if (value == ObjectStatus.Rebuild)
-                        Parent.Status = ObjectStatus.Rebuild;
-                }
-            }
-        }
+				if (Parent == null) return;
 
-        public Boolean HasState(ObjectStatus statusFind)
+				// Si el estado de la tabla era el original, lo cambia, sino deja el actual estado.
+				// If the state of the table was the original, it changes it, but leaves the current state. (Google translated)
+				if (Parent.Status == ObjectStatus.Original
+					|| value == ObjectStatus.Rebuild
+					|| value == ObjectStatus.RebuildDependencies)
+				{
+					switch (value)
+					{
+						case ObjectStatus.RebuildDependencies:
+						case ObjectStatus.Rebuild:
+							Parent.Status = value;
+							break;
+
+						case ObjectStatus.Original:
+							break;
+
+						default:
+							Parent.Status = ObjectStatus.Alter;
+							break;
+					}
+				}
+			}
+		}
+
+		public Boolean HasState(ObjectStatus statusFind)
         {
             return ((this.Status & statusFind) == statusFind);
         }
