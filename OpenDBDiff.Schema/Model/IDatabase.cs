@@ -4,7 +4,7 @@ namespace OpenDBDiff.Schema.Model
 {
     public interface IDatabase : ISchemaBase
     {
-        bool IsCaseSensity { get; }
+        bool IsCaseSensitive { get; }
         SqlAction ActionMessage { get; }
         IOption Options { get; }
 

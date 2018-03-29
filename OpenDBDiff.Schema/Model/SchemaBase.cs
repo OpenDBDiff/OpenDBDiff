@@ -93,7 +93,7 @@ namespace OpenDBDiff.Schema.Model
 
         public int CompareFullNameTo(string name, string myName)
         {
-            if (!RootParent.IsCaseSensity)
+            if (!RootParent.IsCaseSensitive)
                 return myName.ToUpper().CompareTo(name.ToUpper());
             else
                 return myName.CompareTo(name);

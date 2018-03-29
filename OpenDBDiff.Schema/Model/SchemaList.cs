@@ -11,7 +11,7 @@ namespace OpenDBDiff.Schema.Model
     {
         private Dictionary<string, int> nameMap = new Dictionary<string, int>();
         private SearchSchemaBase allObjects = null;
-        private bool IsCaseSensity = false;
+        private bool IsCaseSensitive = false;
 
         public SchemaList(P parent, SearchSchemaBase allObjects)
         {
@@ -53,8 +53,8 @@ namespace OpenDBDiff.Schema.Model
                 allObjects.Add(item);
 
             string name = item.FullName;
-            IsCaseSensity = item.RootParent.IsCaseSensity;
-            if (!IsCaseSensity)
+            IsCaseSensitive = item.RootParent.IsCaseSensitive;
+            if (!IsCaseSensitive)
                 name = name.ToUpper();
 
             if (!nameMap.ContainsKey(name))
@@ -84,7 +84,7 @@ namespace OpenDBDiff.Schema.Model
         /// <returns></returns>
         public Boolean Exists(string name)
         {
-            if (IsCaseSensity)
+            if (IsCaseSensitive)
                 return nameMap.ContainsKey(name);
             else
                 return nameMap.ContainsKey(name.ToUpper());
@@ -96,7 +96,7 @@ namespace OpenDBDiff.Schema.Model
             {
                 try
                 {
-                    if (IsCaseSensity)
+                    if (IsCaseSensitive)
                         return this[nameMap[name]];
                     else
                         return this[nameMap[name.ToUpper()]];
@@ -108,7 +108,7 @@ namespace OpenDBDiff.Schema.Model
             }
             set
             {
-                if (IsCaseSensity)
+                if (IsCaseSensitive)
                     base[nameMap[name]] = value;
                 else
                     base[nameMap[name.ToUpper()]] = value;

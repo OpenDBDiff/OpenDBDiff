@@ -154,7 +154,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public SqlAction ActionMessage { get; private set; }
 
-        public Boolean IsCaseSensity
+        public Boolean IsCaseSensitive
         {
             get
             {
