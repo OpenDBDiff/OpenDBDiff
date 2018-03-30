@@ -14,9 +14,9 @@ namespace OpenDBDiff.Settings
             SQLServer = 1
         }
 
-        private const string connectionFormatSQLLite = "Data Source={0};Pooling=true;FailIfMissing=false";
-        private const string connectionDBFileSQLLite = "Settings.conf";
-        private static bool stillCaringAboutSqlLiteProjectErrors = true;
+        private const string sqliteConnectionStringTemplate = "Data Source={0};Pooling=true;FailIfMissing=false";
+        private const string sqliteSettingsFile = "Settings.conf";
+        private static bool showSqliteErrors = true;
 
         public int Id { get; set; }
         public string ConnectionStringSource { get; set; }
@@ -25,15 +25,15 @@ namespace OpenDBDiff.Settings
         public ProjectType Type { get; set; }
         public string Name { get; set; }
 
-        private static void ReallyDoSqlSomething(string sqlCommand, Action<SQLiteDataReader> OnRead, params string[] sqlNonQueryBeforeReadCommand)
+        private static void ExecuteSqliteCommand(string sqlCommand, Action<SQLiteDataReader> OnRead, params string[] sqlNonQueryBeforeReadCommand)
         {
-            string dbFile = connectionDBFileSQLLite;
+            string dbFile = sqliteSettingsFile;
             if (!File.Exists(dbFile))
             {
                 dbFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), dbFile);
             }
 
-            using (var connection = new SQLiteConnection(String.Format(connectionFormatSQLLite, dbFile)))
+            using (var connection = new SQLiteConnection(String.Format(sqliteConnectionStringTemplate, dbFile)))
             {
                 // TODO: Don't know about Sqlite; hoping transaction is necessary?
                 connection.Open();
@@ -78,26 +78,38 @@ namespace OpenDBDiff.Settings
             }
         }
 
-        private static void DoSqlSomething(string sqlCommand, Action<SQLiteDataReader> OnRead, params string[] sqlNonQueryBeforeReadCommand)
+        private static bool TryExecuteSqliteCommand(string sqlCommand)
+        {
+            return TryExecuteSqliteCommand(sqlCommand, null);
+        }
+
+        private static bool TryExecuteSqliteCommand(string sqlCommand, Action<SQLiteDataReader> OnRead)
+        {
+            return TryExecuteSqliteCommand(sqlCommand, OnRead, null);
+        }
+
+        private static bool TryExecuteSqliteCommand(string sqlCommand, Action<SQLiteDataReader> OnRead, params string[] sqlNonQueryBeforeReadCommand)
         {
             try
             {
-                ReallyDoSqlSomething(sqlCommand, OnRead, sqlNonQueryBeforeReadCommand);
+                ExecuteSqliteCommand(sqlCommand, OnRead, sqlNonQueryBeforeReadCommand);
+                return true;
             }
-            catch (Exception terribleCatchAllErrorsClause)
+            catch (Exception ex)
             {
-                if (stillCaringAboutSqlLiteProjectErrors
-                    && DialogResult.No == MessageBox.Show(terribleCatchAllErrorsClause.Message + "\n\nDo you want to see further errors?", "Project Error", MessageBoxButtons.YesNo))
+                if (showSqliteErrors
+                    && DialogResult.No == MessageBox.Show(ex.Message + "\n\nDo you want to see further errors?", "Project error", MessageBoxButtons.YesNo, MessageBoxIcon.Error))
                 {
-                    stillCaringAboutSqlLiteProjectErrors = false;
+                    showSqliteErrors = false;
                 }
+                return false;
             }
         }
 
         private static int Add(Project item)
         {
             int maxId = 0;
-            DoSqlSomething(
+            TryExecuteSqliteCommand(
                 "SELECT MAX(ProjectId) AS NewId FROM Project WHERE Internal = 0",
                 reader => maxId = int.Parse(reader["NewId"].ToString()),
                 "INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('" + item.Name.Replace("'", "''") + "','" + item.ConnectionStringSource + "','" + item.ConnectionStringDestination + "','" + item.GetSerializedOptions() + "'," + ((int)item.Type).ToString() + ",0)");
@@ -111,15 +123,14 @@ namespace OpenDBDiff.Settings
 
         private static int Update(Project item)
         {
-            DoSqlSomething(
-                "UPDATE Project SET Name = '" + item.Name.Replace("'", "''") + "', ConnectionStringSource = '" + item.ConnectionStringSource + "', ConnectionStringDestination = '" + item.ConnectionStringDestination + "', Type = " + ((int)item.Type).ToString() + " WHERE ProjectId = " + item.Id.ToString(),
-                null);
+            TryExecuteSqliteCommand(
+                "UPDATE Project SET Name = '" + item.Name.Replace("'", "''") + "', ConnectionStringSource = '" + item.ConnectionStringSource + "', ConnectionStringDestination = '" + item.ConnectionStringDestination + "', Type = " + ((int)item.Type).ToString() + " WHERE ProjectId = " + item.Id.ToString());
             return item.Id;
         }
 
         public static void Delete(int Id)
         {
-            DoSqlSomething("DELETE FROM Project WHERE ProjectId = " + Id.ToString(), null);
+            TryExecuteSqliteCommand("DELETE FROM Project WHERE ProjectId = " + Id.ToString());
         }
 
         public static int Save(Project item)
@@ -134,18 +145,18 @@ namespace OpenDBDiff.Settings
         {
             if (GetLastConfiguration() != null)
             {
-                DoSqlSomething("UPDATE Project SET ConnectionStringSource = '" + ConnectionStringSource + "', ConnectionStringDestination = '" + ConnectionStringDestination + "' WHERE Internal = 1", null);
+                TryExecuteSqliteCommand("UPDATE Project SET ConnectionStringSource = '" + ConnectionStringSource + "', ConnectionStringDestination = '" + ConnectionStringDestination + "' WHERE Internal = 1");
             }
             else
             {
-                DoSqlSomething("INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('LastConfiguration','" + ConnectionStringSource + "','" + ConnectionStringDestination + "','',1,1)", null);
+                TryExecuteSqliteCommand("INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('LastConfiguration','" + ConnectionStringSource + "','" + ConnectionStringDestination + "','',1,1)");
             }
         }
 
         public static Project GetLastConfiguration()
         {
             Project item = null;
-            DoSqlSomething(
+            TryExecuteSqliteCommand(
                 "SELECT * FROM Project WHERE Internal = 1 ORDER BY Name",
                 reader => item = new Project
                 {
@@ -162,7 +173,7 @@ namespace OpenDBDiff.Settings
         public static List<Project> GetAll()
         {
             List<Project> items = new List<Project>();
-            DoSqlSomething(
+            TryExecuteSqliteCommand(
                 "SELECT * FROM Project WHERE Internal = 0 ORDER BY Name",
                 reader => items.Add(new Project
                 {

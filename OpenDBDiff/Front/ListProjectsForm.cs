@@ -50,15 +50,16 @@ namespace OpenDBDiff.Front
             {
                 if (listView1.SelectedItems.Count != 0)
                 {
-                    Project item = new Project();
-                    item.ConnectionStringDestination = projects[listView1.SelectedItems[0].Index].ConnectionStringDestination;
-                    item.ConnectionStringSource = projects[listView1.SelectedItems[0].Index].ConnectionStringSource;
-                    item.Id = projects[listView1.SelectedItems[0].Index].Id;
-                    item.Name = projects[listView1.SelectedItems[0].Index].Name;
-                    item.Options = projects[listView1.SelectedItems[0].Index].Options;
-                    item.Type = projects[listView1.SelectedItems[0].Index].Type;
-                    if (OnSelect != null)
-                        OnSelect(item);
+                    Project item = new Project
+                    {
+                        Id = projects[listView1.SelectedItems[0].Index].Id,
+                        ConnectionStringDestination = projects[listView1.SelectedItems[0].Index].ConnectionStringDestination,
+                        ConnectionStringSource = projects[listView1.SelectedItems[0].Index].ConnectionStringSource,
+                        Name = projects[listView1.SelectedItems[0].Index].Name,
+                        Options = projects[listView1.SelectedItems[0].Index].Options,
+                        Type = projects[listView1.SelectedItems[0].Index].Type,
+                    };
+                    OnSelect?.Invoke(item);
                 }
             }
             catch (Exception ex)
