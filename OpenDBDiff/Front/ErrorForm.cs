@@ -43,8 +43,11 @@ namespace OpenDBDiff.Front
             var mostInnerException = exceptions.Last();
 
             var stackTrace = mostInnerException
-                .StackTrace
-                .Replace(GetBuildPath(), string.Empty);
+                .StackTrace;
+
+            var buildPath = GetBuildPath();
+            if (!string.IsNullOrEmpty(buildPath))
+                stackTrace = stackTrace.Replace(buildPath, string.Empty);
 
             stackTrace = SystemExceptionsRegex.Replace(stackTrace, string.Empty);
 
@@ -73,18 +76,18 @@ namespace OpenDBDiff.Front
 
             exceptionErrorMessage.AppendFormat("\r\n\r\n{0}", searchHash);
 
-            ErrorInformation = @"
-1.  To report an error search first in the Github issues to see if it's already been reported.
-2a. If there is no issue, click 'New issue' and paste the error details
-    into the body of the issue. To copy the error press ""Copy error""
-    (At least email the details to opendbdiff@gmail.com)
-
-2b. If the issue exists, but your situation is different please leave a comment with the details.
-
-•   If possible, please attach a SQL script creating the two databases with
-    the minimum necessary to reproduce the problem.
-
-".Trim() + "\r\n\r\n" + exceptionErrorMessage.ToString();
+            ErrorInformation = string.Join("\r\n", 
+                "1.  To report an error search first in the Github issues to see if it's already been reported.",
+                "2a. If there is no issue, click 'New issue' and paste the error details",
+                "    into the body of the issue. To copy the error press \"Copy error\"",
+                "    (At least email the details to opendbdiff@gmail.com)",
+                "",
+                "2b. If the issue exists, but your situation is different please leave a comment with the details.",
+                "",
+                "•   If possible, please attach a SQL script creating the two databases with",
+                "    the minimum necessary to reproduce the problem.",
+                ""
+            ).Trim() + "\r\n\r\n" + exceptionErrorMessage.ToString();
             SearchTerm = queryString.ToString();
 
             this.ErrorInformationTextBox.Text = ErrorInformation;
