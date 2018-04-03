@@ -42,14 +42,18 @@ namespace OpenDBDiff.Front
 
             var mostInnerException = exceptions.Last();
 
-            var stackTrace = mostInnerException
-                .StackTrace;
+            string stackTrace = string.Empty;
+            if (mostInnerException.StackTrace != null)
+            {
+                stackTrace = mostInnerException
+                    .StackTrace;
 
-            var buildPath = GetBuildPath();
-            if (!string.IsNullOrEmpty(buildPath))
-                stackTrace = stackTrace.Replace(buildPath, string.Empty);
+                var buildPath = GetBuildPath();
+                if (!string.IsNullOrEmpty(buildPath))
+                    stackTrace = stackTrace.Replace(buildPath, string.Empty);
 
-            stackTrace = SystemExceptionsRegex.Replace(stackTrace, string.Empty);
+                stackTrace = SystemExceptionsRegex.Replace(stackTrace, string.Empty);
+            }
 
             exceptionErrorMessage.Append($"\r\n{mostInnerException.GetType().Name}: {mostInnerException.Message}\r\n{stackTrace}");
 
@@ -76,7 +80,7 @@ namespace OpenDBDiff.Front
 
             exceptionErrorMessage.AppendFormat("\r\n\r\n{0}", searchHash);
 
-            ErrorInformation = string.Join("\r\n", 
+            ErrorInformation = string.Join("\r\n",
                 "1.  To report an error search first in the Github issues to see if it's already been reported.",
                 "2a. If there is no issue, click 'New issue' and paste the error details",
                 "    into the body of the issue. To copy the error press \"Copy error\"",
