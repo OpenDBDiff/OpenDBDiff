@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using OpenDBDiff.Front;
+﻿using OpenDBDiff.Front;
 using OpenDBDiff.Schema.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Options;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 {
-    public class SQLServerProjectHandler : OpenDBDiff.Front.IProjectHandler
+    public class SQLServerProjectHandler : IProjectHandler
     {
         private SqlServerConnectFront DestinationControl;
         private SqlServerConnectFront SourceControl;
@@ -21,31 +18,41 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 
         public IFront CreateDestinationSelector()
         {
-            this.DestinationControl = new SqlServerConnectFront();
+            this.DestinationControl = new SqlServerConnectFront
+            {
+                ServerName = Properties.Settings.Default.SQLServerNameDestination,
+                UseWindowsAuthentication = Properties.Settings.Default.SQLServerUseWindowsAuthenticationDestination,
+                UserName = Properties.Settings.Default.SQLServerUserDestination,
+                Password = "",
+                DatabaseName = Properties.Settings.Default.SQLServerDatabaseDestination
+            };
+
             this.DestinationControl.Location = new Point(1, 1);
-            this.DestinationControl.Name = "mySqlConnectFront1";
+            this.DestinationControl.Name = "DestinationControl";
             this.DestinationControl.Anchor = (AnchorStyles)((int)AnchorStyles.Bottom + (int)AnchorStyles.Left + (int)AnchorStyles.Right);
             this.DestinationControl.TabIndex = 10;
-            this.DestinationControl.Text = "Destination Database:";
-            this.DestinationControl.UserName = "sa";
-            this.DestinationControl.Password = "";
-            this.DestinationControl.ServerName = "(local)";
-            this.DestinationControl.DatabaseIndex = 1;
+            this.DestinationControl.Text = "Destination database:";
+
             return this.DestinationControl;
         }
 
         public IFront CreateSourceSelector()
         {
-            this.SourceControl = new SqlServerConnectFront();
+            this.SourceControl = new SqlServerConnectFront
+            {
+                ServerName = Properties.Settings.Default.SQLServerNameOrigin,
+                UseWindowsAuthentication = Properties.Settings.Default.SQLServerUseWindowsAuthenticationOrigin,
+                UserName = Properties.Settings.Default.SQLServerUserOrigin,
+                Password = "",
+                DatabaseName = Properties.Settings.Default.SQLServerDatabaseOrigin
+            };
+
             SourceControl.Location = new Point(1, 1);
-            SourceControl.Name = "mySqlConnectFront1";
+            SourceControl.Name = "SourceControl";
             SourceControl.Anchor = (AnchorStyles)((int)AnchorStyles.Bottom + (int)AnchorStyles.Left + (int)AnchorStyles.Right);
             SourceControl.TabIndex = 10;
-            SourceControl.Text = "Source Database:";
-            SourceControl.UserName = "sa";
-            SourceControl.Password = "";
-            SourceControl.ServerName = "(local)";
-            SourceControl.DatabaseIndex = 1;
+            SourceControl.Text = "Source database:";
+
             return SourceControl;
         }
 
@@ -59,6 +66,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             DestinationGenerator = new SQLServerGenerator(connectionString, options);
             return DestinationGenerator;
         }
+
         public IGenerator SetSourceGenerator(string connectionString, IOption options)
         {
             SourceGenerator = new SQLServerGenerator(connectionString, options);
@@ -90,7 +98,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             return SourceControl.DatabaseName;
         }
 
-
         public string GetSourceServerName()
         {
             return SourceControl.ServerName;
@@ -104,6 +111,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             }
             return Option;
         }
+
         public void SetProjectOptions(IOption option)
         {
             if (option == null)

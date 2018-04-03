@@ -5,9 +5,6 @@
     <Setting Name="SQLServerUserOrigin" Type="System.String" Scope="User">
       <Value Profile="(Default)">sa</Value>
     </Setting>
-    <Setting Name="SQLServerUserDestination" Type="System.String" Scope="User">
-      <Value Profile="(Default)">sa</Value>
-    </Setting>
     <Setting Name="SQLServerConnectionTypeOrigin" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
@@ -20,11 +17,20 @@
     <Setting Name="SQLServerNameDestination" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SQLServerDatabaseOrigin" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">-1</Value>
+    <Setting Name="SQLServerDatabaseOrigin" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SQLServerDatabaseDestination" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">-1</Value>
+    <Setting Name="SQLServerDatabaseDestination" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SQLServerUserDestination" Type="System.String" Scope="User">
+      <Value Profile="(Default)">sa</Value>
+    </Setting>
+    <Setting Name="SQLServerUseWindowsAuthenticationOrigin" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SQLServerUseWindowsAuthenticationDestination" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>
