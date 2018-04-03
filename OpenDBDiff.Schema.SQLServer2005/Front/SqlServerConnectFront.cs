@@ -31,13 +31,15 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 
         public string ErrorConnection { get; private set; }
 
-        public int DatabaseIndex
+        public bool UseWindowsAuthentication
         {
-            get { return cboDatabase.SelectedIndex; }
+            get
+            {
+                return cboAuthentication.SelectedIndex == 0;
+            }
             set
             {
-                if (cboDatabase.Items.Count > 0)
-                    cboDatabase.SelectedIndex = value;
+                cboAuthentication.SelectedIndex = (value ? 0 : 1);
             }
         }
 

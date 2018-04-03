@@ -37,18 +37,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("sa")]
-        public string SQLServerUserDestination {
-            get {
-                return ((string)(this["SQLServerUserDestination"]));
-            }
-            set {
-                this["SQLServerUserDestination"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int SQLServerConnectionTypeOrigin {
             get {
@@ -97,10 +85,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
-        public int SQLServerDatabaseOrigin {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SQLServerDatabaseOrigin {
             get {
-                return ((int)(this["SQLServerDatabaseOrigin"]));
+                return ((string)(this["SQLServerDatabaseOrigin"]));
             }
             set {
                 this["SQLServerDatabaseOrigin"] = value;
@@ -109,13 +97,49 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
-        public int SQLServerDatabaseDestination {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SQLServerDatabaseDestination {
             get {
-                return ((int)(this["SQLServerDatabaseDestination"]));
+                return ((string)(this["SQLServerDatabaseDestination"]));
             }
             set {
                 this["SQLServerDatabaseDestination"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("sa")]
+        public string SQLServerUserDestination {
+            get {
+                return ((string)(this["SQLServerUserDestination"]));
+            }
+            set {
+                this["SQLServerUserDestination"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SQLServerUseWindowsAuthenticationOrigin {
+            get {
+                return ((bool)(this["SQLServerUseWindowsAuthenticationOrigin"]));
+            }
+            set {
+                this["SQLServerUseWindowsAuthenticationOrigin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SQLServerUseWindowsAuthenticationDestination {
+            get {
+                return ((bool)(this["SQLServerUseWindowsAuthenticationDestination"]));
+            }
+            set {
+                this["SQLServerUseWindowsAuthenticationDestination"] = value;
             }
         }
     }
