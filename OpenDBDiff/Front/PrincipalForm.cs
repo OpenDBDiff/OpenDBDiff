@@ -34,7 +34,7 @@ namespace OpenDBDiff.Front
         {
             InitializeComponent();
 
-            this.Text += Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            this.Text = string.Concat(nameof(OpenDBDiff), " v", Assembly.GetExecutingAssembly().GetName().Version.ToString());
         }
 
         private void StartComparison()
