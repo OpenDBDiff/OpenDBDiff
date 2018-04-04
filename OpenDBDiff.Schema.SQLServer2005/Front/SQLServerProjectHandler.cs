@@ -20,11 +20,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
         {
             this.DestinationControl = new SqlServerConnectFront
             {
-                ServerName = Properties.Settings.Default.SQLServerNameDestination,
-                UseWindowsAuthentication = Properties.Settings.Default.SQLServerUseWindowsAuthenticationDestination,
-                UserName = Properties.Settings.Default.SQLServerUserDestination,
+                ServerName = "(local)",
+                UseWindowsAuthentication = true,
+                UserName = "sa",
                 Password = "",
-                DatabaseName = Properties.Settings.Default.SQLServerDatabaseDestination
+                DatabaseName = ""
             };
 
             this.DestinationControl.Location = new Point(1, 1);
@@ -40,11 +40,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
         {
             this.SourceControl = new SqlServerConnectFront
             {
-                ServerName = Properties.Settings.Default.SQLServerNameOrigin,
-                UseWindowsAuthentication = Properties.Settings.Default.SQLServerUseWindowsAuthenticationOrigin,
-                UserName = Properties.Settings.Default.SQLServerUserOrigin,
+                ServerName = "(local)",
+                UseWindowsAuthentication = true,
+                UserName = "sa",
                 Password = "",
-                DatabaseName = Properties.Settings.Default.SQLServerDatabaseOrigin
+                DatabaseName = ""
             };
 
             SourceControl.Location = new Point(1, 1);
