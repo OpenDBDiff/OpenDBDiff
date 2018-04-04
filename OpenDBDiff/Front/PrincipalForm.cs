@@ -1,6 +1,7 @@
 using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
+using Essy.Tools.InputBox;
 using OpenDBDiff.Schema;
 using OpenDBDiff.Schema.Misc;
 using OpenDBDiff.Schema.Model;
@@ -10,12 +11,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using System.Reflection;
-using System.Drawing.Text;
-using System.Linq;
 
 namespace OpenDBDiff.Front
 {
@@ -100,7 +101,6 @@ namespace OpenDBDiff.Front
         {
             try
             {
-
                 txtNewObject.ReadOnly = false;
                 txtOldObject.ReadOnly = false;
                 txtDiff.ReadOnly = false;
@@ -547,8 +547,8 @@ namespace OpenDBDiff.Front
             txtSyncScript.Text = "";
         }
 
-
         private string preferredFont;
+
         private string PreferredFont()
         {
             if (string.IsNullOrEmpty(preferredFont))
@@ -560,7 +560,7 @@ namespace OpenDBDiff.Front
                 preferredFont = fontNames.FirstOrDefault(fn => installedNames.Contains(fn));
                 if (string.IsNullOrEmpty(preferredFont))
                     preferredFont = "Courier";
-        }
+            }
             return preferredFont;
         }
 
@@ -614,7 +614,7 @@ namespace OpenDBDiff.Front
             scintilla.Text = "";
         }
 
-        private void btnSaveProject_Click_1(object sender, EventArgs e)
+        private void btnSaveProject_Click(object sender, EventArgs e)
         {
             try
             {
@@ -634,6 +634,14 @@ namespace OpenDBDiff.Front
                         Options = Options ?? ProjectSelectorHandler.GetDefaultProjectOptions(),
                         Type = Project.ProjectType.SQLServer
                     };
+
+                    string newProjectName = ActiveProject.ProjectName.Trim();
+                    do
+                    {
+                        newProjectName = InputBox.ShowInputBox("Enter the project name.", newProjectName, false).Trim();
+                    }
+                    while (string.IsNullOrWhiteSpace(newProjectName));
+                    ActiveProject.ProjectName = newProjectName;
                 }
                 ActiveProject.Id = Project.Save(ActiveProject);
             }

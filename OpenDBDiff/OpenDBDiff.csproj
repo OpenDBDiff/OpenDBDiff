@@ -60,6 +60,10 @@
       <HintPath>..\packages\DiffPlex.1.1.0\lib\NET40\DiffPlex.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="InputBox, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Essy.Tools.InputBox.1.0.0\lib\net20\InputBox.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
       <Private>True</Private>
@@ -239,9 +243,6 @@
     <EmbeddedResource Include="Front\ListProjectsForm.resx">
       <DependentUpon>ListProjectsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Settings.conf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
