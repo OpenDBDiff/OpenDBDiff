@@ -517,17 +517,18 @@ namespace OpenDBDiff.Front
                 toolProjectTypes.Items.Add(projectHandler);
             }
 
-            Project LastConfiguration = Project.GetLastConfiguration();
+            if (toolProjectTypes.SelectedItem == null && toolProjectTypes.Items.Count > 0)
+            {
+                toolProjectTypes.SelectedIndex = 0;
+            }
+
+            var LastConfiguration = Project.GetLastConfiguration();
             if (LastConfiguration != null)
             {
                 if (LeftDatabaseSelector != null)
                     LeftDatabaseSelector.ConnectionString = LastConfiguration.ConnectionStringSource;
                 if (RightDatabaseSelector != null)
                     RightDatabaseSelector.ConnectionString = LastConfiguration.ConnectionStringDestination;
-            }
-            if (toolProjectTypes.SelectedItem == null && toolProjectTypes.Items.Count > 0)
-            {
-                toolProjectTypes.SelectedIndex = 0;
             }
 
             txtNewObject.LexerLanguage = "mssql";
@@ -623,12 +624,13 @@ namespace OpenDBDiff.Front
                     {
                         ConnectionStringSource = ProjectSelectorHandler.GetSourceConnectionString(),
                         ConnectionStringDestination = ProjectSelectorHandler.GetDestinationConnectionString(),
-                        Name = String.Format("[{0}].[{1}] - [{2}].[{3}]",
-
-                                                        ProjectSelectorHandler.GetSourceServerName(),
-                                                        ProjectSelectorHandler.GetSourceDatabaseName(),
-                                                        ProjectSelectorHandler.GetDestinationServerName(),
-                                                        ProjectSelectorHandler.GetDestinationDatabaseName()),
+                        ProjectName = String.Format(
+                            "[{0}].[{1}] - [{2}].[{3}]",
+                            ProjectSelectorHandler.GetSourceServerName(),
+                            ProjectSelectorHandler.GetSourceDatabaseName(),
+                            ProjectSelectorHandler.GetDestinationServerName(),
+                            ProjectSelectorHandler.GetDestinationDatabaseName()
+                        ),
                         Options = Options ?? ProjectSelectorHandler.GetDefaultProjectOptions(),
                         Type = Project.ProjectType.SQLServer
                     };
@@ -645,11 +647,17 @@ namespace OpenDBDiff.Front
         {
             try
             {
-                ListProjectsForm form = new ListProjectsForm(Project.GetAll());
-                form.OnSelect += new ListProjectHandler(form_OnSelect);
-                form.OnDelete += new ListProjectHandler(form_OnDelete);
-                form.OnRename += new ListProjectHandler(form_OnRename);
-                form.ShowDialog(this);
+                var projects = Project.GetAll();
+                if (projects.Any())
+                {
+                    var form = new ListProjectsForm(projects);
+                    form.OnSelect += new ListProjectHandler(form_OnSelect);
+                    form.OnDelete += new ListProjectHandler(form_OnDelete);
+                    form.OnRename += new ListProjectHandler(form_OnRename);
+                    form.ShowDialog(this);
+                }
+                else
+                    MessageBox.Show(this, "There are currently no saved projects.", "Projects", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
