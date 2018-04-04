@@ -148,30 +148,23 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             }
             set
             {
-                if (!String.IsNullOrEmpty(value))
+                if (!String.IsNullOrWhiteSpace(value))
                 {
-                    string[] items = value.Split(';');
-                    for (int j = 0; j < items.Length; j++)
+                    var builder = new SqlConnectionStringBuilder(value);
+
+                    ServerName = builder.DataSource;
+                    UseWindowsAuthentication = builder.IntegratedSecurity;
+                    if (UseWindowsAuthentication)
                     {
-                        string[] item = items[j].Split('=');
-                        if (item[0].Equals("User Id", StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            UserName = item[1];
-                            cboAuthentication.SelectedIndex = 1;
-                        }
-                        if (item[0].Equals("Password", StringComparison.InvariantCultureIgnoreCase))
-                            Password = item[1];
-                        if (item[0].Equals("Data Source", StringComparison.InvariantCultureIgnoreCase))
-                            ServerName = item[1];
-                        if (item[0].Equals("Initial Catalog", StringComparison.InvariantCultureIgnoreCase))
-                            DatabaseName = item[1];
-                        if (item[0].Equals("Integrated Security", StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            cboAuthentication.SelectedIndex = 0;
-                            UserName = "";
-                            Password = "";
-                        }
+                        UserName = "";
+                        Password = "";
                     }
+                    else
+                    {
+                        UserName = builder.UserID;
+                        Password = builder.Password;
+                    }
+                    DatabaseName = builder.InitialCatalog;
                 }
                 else
                 {
