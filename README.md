@@ -3,7 +3,7 @@ A database comparison tool for Microsoft SQL Server 2005+ that reports schema di
 
 [![Build status](https://ci.appveyor.com/api/projects/status/rdng91bfx3ao8ts6?svg=true)](https://ci.appveyor.com/project/OpenDBDiff/OpenDBDiff/branch/develop/artifacts)
 
-[💾 Download stable CI build](https://ci.appveyor.com/project/OpenDBDiff/OpenDBDiff/branch/master/artifacts)
+[💾 Download latest release](https://github.com/OpenDBDiff/OpenDBDiff/releases/latest)
 
 [💾 Download develop CI build](https://ci.appveyor.com/project/OpenDBDiff/OpenDBDiff/branch/develop/artifacts)
 
