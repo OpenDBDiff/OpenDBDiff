@@ -12,7 +12,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     {
         private readonly List<DatabaseChangeStatus> _changesOptions;
 
-        public Database() : base(null, Enums.ObjectType.Database)
+        public Database() : base(null, ObjectType.Database)
         {
             AllObjects = new SearchSchemaBase();
             _changesOptions = new List<DatabaseChangeStatus>();
@@ -154,7 +154,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public SqlAction ActionMessage { get; private set; }
 
-        public Boolean IsCaseSensity
+        public Boolean IsCaseSensitive
         {
             get
             {
@@ -196,43 +196,34 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             return sql;
         }
 
-        /*public List<ISchemaBase> FindAllByColumn(String ColumnName)
-        {
-            this.t
-        }*/
-        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
+        public override SQLScriptList ToSqlDiff(ICollection<ISchemaBase> schemas)
         {
             var isAzure10 = this.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10;
 
             var listDiff = new SQLScriptList();
-            listDiff.Add(new SQLScript(String.Format(@"/*
 
-    Open DBDiff {0}
+            var header = $@"/*
+
+    OpenDBDiff {System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString()}
     https://github.com/OpenDBDiff/OpenDBDiff
 
-    Script created by {1}\{2} on {3} at {4}.
+    Script created by {Environment.UserDomainName}\{Environment.UserName} on {DateTime.Now.ToShortDateString()} at {DateTime.Now.ToLongTimeString()}.
 
-    Created on:  {5}
-    Source:      {6} on {7}
-    Destination: {8} on {9}
+    Created on:  {Environment.MachineName}
+    Source:      {SourceInfo?.Database ?? "Unknown"} on {SourceInfo?.Server ?? "Unknown"}
+    Destination: {Info?.Database ?? "Unknown"} on {Info?.Server ?? "Unknown"}
+
+    ### This script performs actions to change the Destination schema to the Source schema. ###
 
 */
 
-",
-                System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(),
-                Environment.UserDomainName,
-                Environment.UserName,
-                DateTime.Now.ToShortDateString(),
-                DateTime.Now.ToLongTimeString(),
-                Environment.MachineName,
-                SourceInfo != null ? SourceInfo.Database : "Uknown",
-                SourceInfo != null ? SourceInfo.Server : "Uknown",
-                Info != null ? Info.Database : "Uknown",
-                Info != null ? Info.Server : "Uknown",
-                0), 0, Enums.ScripActionType.None));
+";
+
+            listDiff.Add(new SQLScript(header, 0, ScriptAction.None));
+
             if (!isAzure10)
             {
-                listDiff.Add("USE [" + Name + "]\r\nGO\r\n\r\n", 0, Enums.ScripActionType.UseDatabase);
+                listDiff.Add("USE [" + Name + "]\r\nGO\r\n\r\n", 0, ScriptAction.UseDatabase);
                 listDiff.AddRange(Assemblies.ToSqlDiff(schemas));
                 listDiff.AddRange(UserTypes.ToSqlDiff(schemas));
             }
@@ -297,51 +288,51 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 {
                     return null;
                 }
-                Enums.ObjectType type = typeVal.Value;
+                ObjectType type = typeVal.Value;
 
 
                 string parentName = "";
 
                 switch (type)
                 {
-                    case Enums.ObjectType.Table:
+                    case ObjectType.Table:
                         return Tables[_FullName];
-                    case Enums.ObjectType.StoredProcedure:
+                    case ObjectType.StoredProcedure:
                         return Procedures[_FullName];
-                    case Enums.ObjectType.Function:
+                    case ObjectType.Function:
                         return Functions[_FullName];
-                    case Enums.ObjectType.View:
+                    case ObjectType.View:
                         return Views[_FullName];
-                    case Enums.ObjectType.Assembly:
+                    case ObjectType.Assembly:
                         return Assemblies[_FullName];
-                    case Enums.ObjectType.UserDataType:
+                    case ObjectType.UserDataType:
                         return UserTypes[_FullName];
-                    case Enums.ObjectType.TableType:
+                    case ObjectType.TableType:
                         return TablesTypes[_FullName];
-                    case Enums.ObjectType.XMLSchema:
+                    case ObjectType.XMLSchema:
                         return XmlSchemas[_FullName];
-                    case Enums.ObjectType.CLRStoredProcedure:
+                    case ObjectType.CLRStoredProcedure:
                         return CLRProcedures[_FullName];
-                    case Enums.ObjectType.CLRFunction:
+                    case ObjectType.CLRFunction:
                         return CLRFunctions[_FullName];
-                    case Enums.ObjectType.Synonym:
+                    case ObjectType.Synonym:
                         return Synonyms[_FullName];
-                    case Enums.ObjectType.FullText:
+                    case ObjectType.FullText:
                         return FullText[_FullName];
-                    case Enums.ObjectType.Rule:
+                    case ObjectType.Rule:
                         return Rules[_FullName];
-                    case Enums.ObjectType.PartitionFunction:
+                    case ObjectType.PartitionFunction:
                         return PartitionFunctions[_FullName];
-                    case Enums.ObjectType.PartitionScheme:
+                    case ObjectType.PartitionScheme:
                         return PartitionSchemes[_FullName];
-                    case Enums.ObjectType.Role:
+                    case ObjectType.Role:
                         return Roles[_FullName];
-                    case Enums.ObjectType.Schema:
+                    case ObjectType.Schema:
                         return Schemas[_FullName];
-                    case Enums.ObjectType.Constraint:
+                    case ObjectType.Constraint:
                         parentName = AllObjects.GetParentName(_FullName);
                         return Tables[parentName].Constraints[_FullName];
-                    case Enums.ObjectType.Index:
+                    case ObjectType.Index:
                         parentName = AllObjects.GetParentName(_FullName);
 
                         var typeName = AllObjects.GetType(parentName);
@@ -350,10 +341,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                             return null;
                         }
                         type = typeName.Value;
-                        if (type == Enums.ObjectType.Table)
+                        if (type == ObjectType.Table)
                             return Tables[parentName].Indexes[_FullName];
                         return Views[parentName].Indexes[_FullName];
-                    case Enums.ObjectType.Trigger:
+                    case ObjectType.Trigger:
                         parentName = AllObjects.GetParentName(_FullName);
                         var typeNameB = AllObjects.GetType(parentName);
                         if (!typeNameB.HasValue)
@@ -361,10 +352,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                             return null;
                         }
                         type = typeNameB.Value;
-                        if (type == Enums.ObjectType.Table)
+                        if (type == ObjectType.Table)
                             return Tables[parentName].Triggers[_FullName];
                         return Views[parentName].Triggers[_FullName];
-                    case Enums.ObjectType.CLRTrigger:
+                    case ObjectType.CLRTrigger:
                         parentName = AllObjects.GetParentName(_FullName);
                         var typeNameC = AllObjects.GetType(parentName);
                         if (!typeNameC.HasValue)
@@ -372,7 +363,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                             return null;
                         }
                         type = typeNameC.Value;
-                        if (type == Enums.ObjectType.Table)
+                        if (type == ObjectType.Table)
                             return Tables[parentName].CLRTriggers[_FullName];
                         return Views[parentName].CLRTriggers[_FullName];
                 }

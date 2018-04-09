@@ -1,13 +1,13 @@
-﻿using System;
+﻿using OpenDBDiff.Schema;
+using OpenDBDiff.Schema.Attributes;
+using OpenDBDiff.Schema.Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using OpenDBDiff.Schema;
-using OpenDBDiff.Schema.Attributes;
-using OpenDBDiff.Schema.Model;
 
 namespace OpenDBDiff.Front
 {
@@ -16,6 +16,7 @@ namespace OpenDBDiff.Front
         private ISchemaBase databaseSource;
 
         public delegate void SchemaHandler(string ObjectFullName);
+
         public event SchemaHandler OnSelectItem;
 
         private bool busy = false;
@@ -25,9 +26,9 @@ namespace OpenDBDiff.Front
             InitializeComponent();
         }
 
-        public ISchemaBase DatabaseDestination { get; set; }
+        public ISchemaBase RightDatabase { get; set; }
 
-        public ISchemaBase DatabaseSource
+        public ISchemaBase LeftDatabase
         {
             get { return databaseSource; }
             set
@@ -39,6 +40,7 @@ namespace OpenDBDiff.Front
                 }
             }
         }
+
         public List<ISchemaBase> GetCheckedSchemas()
         {
             List<ISchemaBase> schemas = new List<ISchemaBase>();
@@ -48,10 +50,12 @@ namespace OpenDBDiff.Front
             }
             return schemas;
         }
+
         public void SetCheckedSchemas(List<ISchemaBase> schemas)
         {
             SetCheckedNodesFromList(schemas, treeView1.Nodes);
         }
+
         private void GetCheckedNodesToList(List<ISchemaBase> schemas, TreeNodeCollection nodes)
         {
             foreach (TreeNode node in nodes)
@@ -66,6 +70,7 @@ namespace OpenDBDiff.Front
                 GetCheckedNodesToList(schemas, node.Nodes);
             }
         }
+
         private void SetCheckedNodesFromList(List<ISchemaBase> schemas, TreeNodeCollection nodes)
         {
             foreach (TreeNode node in nodes)
@@ -106,27 +111,27 @@ namespace OpenDBDiff.Front
                 if (CanNodeAdd(item))
                 {
                     TreeNode subnode = node.Nodes.Add(item.Id.ToString(), (attr.IsFullName ? item.FullName : item.Name));
-                    if (item.Status == Enums.ObjectStatusType.DropStatus)
+                    if (item.Status == ObjectStatus.Drop)
                     {
                         subnode.ForeColor = Color.Red;
                         NodeColor = (NodeColor == Color.Black || NodeColor == Color.Red ? Color.Red : Color.Plum);
                     }
-                    if (item.Status == Enums.ObjectStatusType.CreateStatus)
+                    if (item.Status == ObjectStatus.Create)
                     {
                         subnode.ForeColor = Color.Green;
                         NodeColor = (NodeColor == Color.Black || NodeColor == Color.Green ? Color.Green : Color.Plum);
                     }
-                    if ((item.HasState(Enums.ObjectStatusType.AlterStatus)) || (item.HasState(Enums.ObjectStatusType.DisabledStatus)))
+                    if ((item.HasState(ObjectStatus.Alter)) || (item.HasState(ObjectStatus.Disabled)))
                     {
                         subnode.ForeColor = Color.Blue;
                         NodeColor = (NodeColor == Color.Black || NodeColor == Color.Blue ? Color.Blue : Color.Plum);
                     }
-                    if (item.HasState(Enums.ObjectStatusType.AlterWhitespaceStatus))
+                    if (item.HasState(ObjectStatus.AlterWhitespace))
                     {
                         subnode.ForeColor = Color.DarkGoldenrod;
                         NodeColor = (NodeColor == Color.Black || NodeColor == Color.DarkGoldenrod ? Color.DarkGoldenrod : Color.Plum);
                     }
-                    if (item.HasState(Enums.ObjectStatusType.RebuildStatus))
+                    if (item.HasState(ObjectStatus.Rebuild))
                     {
                         subnode.ForeColor = Color.Purple;
                         NodeColor = (NodeColor == Color.Black || NodeColor == Color.Purple ? Color.Purple : Color.Plum);
@@ -142,7 +147,6 @@ namespace OpenDBDiff.Front
 
         private void RebuildSchemaTree()
         {
-
             string currentlySelectedNode = treeView1.SelectedNode != null ? treeView1.SelectedNode.Name : null;
             string currentTopNode = treeView1.TopNode != null ? treeView1.TopNode.Name : null;
 
@@ -174,56 +178,55 @@ namespace OpenDBDiff.Front
 
         private Boolean CanNodeAdd(ISchemaBase item)
         {
-            Enums.ObjectStatusType checkedStatus = Enums.ObjectStatusType.OriginalStatus;
+            ObjectStatus checkedStatus = ObjectStatus.Original;
             // OriginalStatus == 0, so have to treat differently
-            if (item.Status == Enums.ObjectStatusType.OriginalStatus && ShowUnchangedItems) return true;
+            if (item.Status == ObjectStatus.Original && ShowUnchangedItems) return true;
 
-            if (item.HasState(Enums.ObjectStatusType.DropStatus) && ShowMissingItems) return true;
-            checkedStatus = checkedStatus | Enums.ObjectStatusType.DropStatus;
+            if (item.HasState(ObjectStatus.Drop) && ShowMissingItems) return true;
+            checkedStatus = checkedStatus | ObjectStatus.Drop;
 
-            if (item.HasState(Enums.ObjectStatusType.CreateStatus) && ShowNewItems) return true;
-            checkedStatus = checkedStatus | Enums.ObjectStatusType.CreateStatus;
+            if (item.HasState(ObjectStatus.Create) && ShowNewItems) return true;
+            checkedStatus = checkedStatus | ObjectStatus.Create;
 
-            if (item.HasState(Enums.ObjectStatusType.AlterStatus) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | Enums.ObjectStatusType.AlterStatus;
+            if (item.HasState(ObjectStatus.Alter) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | ObjectStatus.Alter;
 
-            if (item.HasState(Enums.ObjectStatusType.AlterWhitespaceStatus) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | Enums.ObjectStatusType.AlterWhitespaceStatus;
+            if (item.HasState(ObjectStatus.AlterWhitespace) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | ObjectStatus.AlterWhitespace;
 
-            if (item.HasState(Enums.ObjectStatusType.AlterBodyStatus) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | Enums.ObjectStatusType.AlterBodyStatus;
+            if (item.HasState(ObjectStatus.AlterBody) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | ObjectStatus.AlterBody;
 
-            if (item.HasState(Enums.ObjectStatusType.RebuildStatus) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | Enums.ObjectStatusType.RebuildStatus;
+            if (item.HasState(ObjectStatus.Rebuild) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | ObjectStatus.Rebuild;
 
-            if (item.HasState(Enums.ObjectStatusType.RebuildDependenciesStatus) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | Enums.ObjectStatusType.RebuildDependenciesStatus;
+            if (item.HasState(ObjectStatus.RebuildDependencies) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | ObjectStatus.RebuildDependencies;
 
-            if (item.HasState(Enums.ObjectStatusType.ChangeOwner) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | Enums.ObjectStatusType.ChangeOwner;
+            if (item.HasState(ObjectStatus.ChangeOwner) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | ObjectStatus.ChangeOwner;
 
-            if (item.HasState(Enums.ObjectStatusType.DropOlderStatus) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | Enums.ObjectStatusType.DropOlderStatus;
+            if (item.HasState(ObjectStatus.DropOlder) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | ObjectStatus.DropOlder;
 
-            if (item.HasState(Enums.ObjectStatusType.BindStatus) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | Enums.ObjectStatusType.BindStatus;
+            if (item.HasState(ObjectStatus.Bind) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | ObjectStatus.Bind;
 
-            if (item.HasState(Enums.ObjectStatusType.PermissionSet) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | Enums.ObjectStatusType.PermissionSet;
+            if (item.HasState(ObjectStatus.PermissionSet) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | ObjectStatus.PermissionSet;
 
-            if (item.HasState(Enums.ObjectStatusType.DisabledStatus) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | Enums.ObjectStatusType.DisabledStatus;
+            if (item.HasState(ObjectStatus.Disabled) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | ObjectStatus.Disabled;
 
-            if (item.HasState(Enums.ObjectStatusType.UpdateStatus) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | Enums.ObjectStatusType.UpdateStatus;
-
+            if (item.HasState(ObjectStatus.Update) && ShowChangedItems) return true;
+            checkedStatus = checkedStatus | ObjectStatus.Update;
 
             // At the end, we should have check all possible statuses.
-            Enums.ObjectStatusType expectedTotalStatus = Enums.ObjectStatusType.OriginalStatus;
-            Enum.GetValues(typeof(Enums.ObjectStatusType)).Cast<Enums.ObjectStatusType>().ToList().ForEach((s) => expectedTotalStatus = expectedTotalStatus | s);
+            ObjectStatus expectedTotalStatus = ObjectStatus.Original;
+            Enum.GetValues(typeof(ObjectStatus)).Cast<ObjectStatus>().ToList().ForEach((s) => expectedTotalStatus = expectedTotalStatus | s);
 
             if (expectedTotalStatus != checkedStatus)
-                throw new Exception(string.Format("The OjbectStatusType '{0:G}' wasn't implemented in the CanNodeAdd() method. Developer, please ensure that all values in the Enum are checked.", (Enums.ObjectStatusType)(expectedTotalStatus - checkedStatus)));
+                throw new Exception(string.Format("The OjbectStatusType '{0:G}' wasn't implemented in the CanNodeAdd() method. Developer, please ensure that all values in the Enum are checked.", (ObjectStatus)(expectedTotalStatus - checkedStatus)));
 
             return false;
         }
@@ -254,6 +257,8 @@ namespace OpenDBDiff.Front
 
         private void FilterCheckbox_CheckedChanged(object sender, EventArgs e)
         {
+            if (databaseSource == null) return;
+
             RebuildSchemaTree();
         }
 
@@ -264,12 +269,13 @@ namespace OpenDBDiff.Front
             ISchemaBase item = ((ISchemaBase)e.Node.Tag);
             if (item != null)
             {
-                if (item.ObjectType == Enums.ObjectType.Table
-                    || item.ObjectType == Enums.ObjectType.View)
+                if (item.ObjectType == ObjectType.Table
+                    || item.ObjectType == ObjectType.View)
                     ReadProperties(item.GetType(), e.Node.Nodes, item);
                 if (OnSelectItem != null) OnSelectItem(item.FullName);
             }
         }
+
         private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)
         {
             if (e.Node.Tag == null)

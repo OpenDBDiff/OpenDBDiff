@@ -5,13 +5,13 @@ namespace OpenDBDiff.Schema.Model
 {
     public class SearchSchemaBase
     {
-        private Dictionary<String, Enums.ObjectType> objectTypes;
+        private Dictionary<String, ObjectType> objectTypes;
         private Dictionary<String, String> objectParent;
         private Dictionary<Int32, String> objectId;
 
         public SearchSchemaBase()
         {
-            objectTypes = new Dictionary<string, Enums.ObjectType>();
+            objectTypes = new Dictionary<string, ObjectType>();
             objectParent = new Dictionary<string, string>();
             objectId = new Dictionary<Int32, string>();
         }
@@ -21,7 +21,7 @@ namespace OpenDBDiff.Schema.Model
             if (objectTypes.ContainsKey(item.FullName.ToUpper()))
                 objectTypes.Remove(item.FullName.ToUpper());
             objectTypes.Add(item.FullName.ToUpper(), item.ObjectType);
-            if ((item.ObjectType == Enums.ObjectType.Constraint) || (item.ObjectType == Enums.ObjectType.Index) || (item.ObjectType == Enums.ObjectType.Trigger) || (item.ObjectType == Enums.ObjectType.CLRTrigger))
+            if ((item.ObjectType == ObjectType.Constraint) || (item.ObjectType == ObjectType.Index) || (item.ObjectType == ObjectType.Trigger) || (item.ObjectType == ObjectType.CLRTrigger))
             {
                 if (objectParent.ContainsKey(item.FullName.ToUpper()))
                     objectParent.Remove(item.FullName.ToUpper());
@@ -34,7 +34,7 @@ namespace OpenDBDiff.Schema.Model
         }
 
 
-        public Nullable<Enums.ObjectType> GetType(string FullName)
+        public Nullable<ObjectType> GetType(string FullName)
         {
             if (objectTypes.ContainsKey(FullName.ToUpper()))
                 return objectTypes[FullName.ToUpper()];

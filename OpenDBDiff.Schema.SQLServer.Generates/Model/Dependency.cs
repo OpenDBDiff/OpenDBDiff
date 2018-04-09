@@ -6,7 +6,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public int DataTypeId { get; set; }
 
-        public Enums.ObjectType Type { get; set; }
+        public ObjectType Type { get; set; }
 
         public int SubObjectId { get; set; }
 

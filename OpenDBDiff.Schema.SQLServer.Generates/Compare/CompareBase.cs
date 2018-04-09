@@ -18,13 +18,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
         {
             T newNode = node;//.Clone(originFields.Parent);
             newNode.Parent = originFields.Parent;
-            newNode.Status = Enums.ObjectStatusType.CreateStatus;
+            newNode.Status = ObjectStatus.Create;
             originFields.Add(newNode);
         }
 
         protected void DoDelete(T node)
         {
-            node.Status = Enums.ObjectStatusType.DropStatus;
+            node.Status = ObjectStatus.Drop;
         }
 
         public void GenerateDifferences<Root>(SchemaList<T, Root> originFields, SchemaList<T, Root> destinationFields) where Root : ISchemaBase
@@ -43,7 +43,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                 {
                     node = destinationFields[destinationIndex];
                     Generate.RaiseOnCompareProgress("Comparing Destination {0}: [{1}]", node.ObjectType, node.Name);
-                    if (!originFields.Exists(node.FullName))
+                    if (!originFields.Contains(node.FullName))
                     {
                         Generate.RaiseOnCompareProgress("Adding {0}: [{1}]", node.ObjectType, node.Name);
                         DoNew<Root>(originFields, node);
@@ -62,7 +62,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                 {
                     node = originFields[originIndex];
                     Generate.RaiseOnCompareProgress("Comparing Source {0}: [{1}]", node.ObjectType, node.Name);
-                    if (!destinationFields.Exists(node.FullName))
+                    if (!destinationFields.Contains(node.FullName))
                     {
                         Generate.RaiseOnCompareProgress("Deleting {0}: [{1}]", node.ObjectType, node.Name);
                         DoDelete(node);
@@ -82,8 +82,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             List<ExtendedProperty> addList = (from node in destination.ExtendedProperties
                                               where !origin.ExtendedProperties.Exists(item => item.Name.Equals(node.Name, StringComparison.CurrentCultureIgnoreCase))
                                               select node).ToList<ExtendedProperty>();
-            dropList.ForEach(item => { item.Status = Enums.ObjectStatusType.DropStatus; });
-            addList.ForEach(item => { item.Status = Enums.ObjectStatusType.CreateStatus; });
+            dropList.ForEach(item => { item.Status = ObjectStatus.Drop; });
+            addList.ForEach(item => { item.Status = ObjectStatus.Create; });
             origin.ExtendedProperties.AddRange(addList);
         }
     }

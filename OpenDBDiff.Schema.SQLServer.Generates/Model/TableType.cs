@@ -1,12 +1,12 @@
-﻿using System;
-using OpenDBDiff.Schema.Model;
+﻿using OpenDBDiff.Schema.Model;
+using System.Linq;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {
     public class TableType : SQLServerSchemaBase, ITable<TableType>
     {
         public TableType(Database parent)
-            : base(parent, Enums.ObjectType.TableType)
+            : base(parent, ObjectType.TableType)
         {
             Columns = new Columns<TableType>(this);
             Constraints = new SchemaList<Constraint, TableType>(this, parent.AllObjects);
@@ -22,7 +22,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public override string ToSql()
         {
             string sql = "";
-            if (Columns.Count > 0)
+            if (Columns.Any())
             {
                 sql += "CREATE TYPE " + FullName + " AS TABLE\r\n(\r\n";
                 sql += Columns.ToSql() + "\r\n";
@@ -45,7 +45,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScript Create()
         {
-            Enums.ScripActionType action = Enums.ScripActionType.AddTableType;
+            ScriptAction action = ScriptAction.AddTableType;
             if (!GetWasInsertInDiffList(action))
             {
                 SetWasInsertInDiffList(action);
@@ -57,7 +57,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScript Drop()
         {
-            Enums.ScripActionType action = Enums.ScripActionType.DropTableType;
+            ScriptAction action = ScriptAction.DropTableType;
             if (!GetWasInsertInDiffList(action))
             {
                 SetWasInsertInDiffList(action);
@@ -72,17 +72,17 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             try
             {
                 SQLScriptList list = new SQLScriptList();
-                if (this.Status == Enums.ObjectStatusType.DropStatus)
+                if (this.Status == ObjectStatus.Drop)
                 {
                     list.Add(Drop());
                 }
-                if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+                if (this.HasState(ObjectStatus.Create))
                 {
                     list.Add(Create());
                 }
-                if (this.Status == Enums.ObjectStatusType.AlterStatus)
+                if (this.Status == ObjectStatus.Alter)
                 {
-                    list.Add(ToSqlDrop() + ToSql(), 0, Enums.ScripActionType.AddTableType);
+                    list.Add(ToSqlDrop() + ToSql(), 0, ScriptAction.AddTableType);
                 }
                 return list;
             }

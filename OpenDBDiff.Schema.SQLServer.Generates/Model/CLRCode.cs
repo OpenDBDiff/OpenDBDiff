@@ -5,7 +5,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {
     public abstract class CLRCode : Code
     {
-        public CLRCode(ISchemaBase parent, Enums.ObjectType type, Enums.ScripActionType addAction, Enums.ScripActionType dropAction)
+        public CLRCode(ISchemaBase parent, ObjectType type, ScriptAction addAction, ScriptAction dropAction)
             : base(parent, type, addAction, dropAction)
         {
         }

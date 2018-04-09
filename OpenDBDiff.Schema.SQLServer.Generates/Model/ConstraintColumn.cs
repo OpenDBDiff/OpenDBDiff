@@ -5,7 +5,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class ConstraintColumn : SQLServerSchemaBase, IComparable<ConstraintColumn>
     {
         public ConstraintColumn(Constraint parentObject)
-            : base(parentObject, Enums.ObjectType.ConstraintColumn)
+            : base(parentObject, ObjectType.ConstraintColumn)
         {
         }
 

@@ -1,7 +1,8 @@
-using System.Data.SqlClient;
 using OpenDBDiff.Schema.Events;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.Util;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 {
@@ -59,19 +60,24 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                     {
                         while (reader.Read())
                         {
-                            Parameter param = new Parameter();
-                            param.Name = reader["Name"].ToString();
-                            param.Type = reader["TypeName"].ToString();
-                            param.Size = (short)reader["max_length"];
-                            param.Scale = (byte)reader["scale"];
-                            param.Precision = (byte)reader["precision"];
-                            param.Output = (bool)reader["is_output"];
-                            if (param.Type.Equals("nchar") || param.Type.Equals("nvarchar"))
+                            var objectName = reader["ObjectName"].ToString();
+
+                            if (database.CLRProcedures.Contains(objectName))
                             {
-                                if (param.Size != -1)
-                                    param.Size = param.Size / 2;
+                                Parameter param = new Parameter();
+                                param.Name = reader["Name"].ToString();
+                                param.Type = reader["TypeName"].ToString();
+                                param.Size = (short)reader["max_length"];
+                                param.Scale = (byte)reader["scale"];
+                                param.Precision = (byte)reader["precision"];
+                                param.Output = (bool)reader["is_output"];
+                                if (param.Type.Equals("nchar") || param.Type.Equals("nvarchar"))
+                                {
+                                    if (param.Size != -1)
+                                        param.Size = param.Size / 2;
+                                }
+                                database.CLRProcedures[objectName].Parameters.Add(param);
                             }
-                            database.CLRProcedures[reader["ObjectName"].ToString()].Parameters.Add(param);
                         }
                     }
                 }
@@ -95,33 +101,43 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                             {
                                 InitIndex(reader);
                                 root.RaiseOnReadingOne(reader[NameIndex]);
-                                if ((reader[typeIndex].ToString().Trim().Equals("P")) && (database.Options.Ignore.FilterStoredProcedure))
+
+                                var objectType = reader[typeIndex].ToString().Trim();
+                                switch (objectType)
                                 {
-                                    StoredProcedure item = new StoredProcedure(database);
-                                    item.Id = (int)reader[object_idIndex];
-                                    item.Name = (string)reader[NameIndex];
-                                    item.Owner = (string)reader[ownerIndex];
-                                    database.Procedures.Add(item);
-                                }
-                                if ((reader[typeIndex].ToString().Trim().Equals("PC")) && (database.Options.Ignore.FilterCLRStoredProcedure))
-                                {
-                                    CLRStoredProcedure item = new CLRStoredProcedure(database);
-                                    item.Id = (int)reader[object_idIndex];
-                                    item.Name = reader[NameIndex].ToString();
-                                    item.Owner = reader[ownerIndex].ToString();
-                                    item.IsAssembly = true;
-                                    item.AssemblyId = (int)reader["assembly_id"];
-                                    item.AssemblyName = reader["assembly_name"].ToString();
-                                    item.AssemblyClass = reader["assembly_class"].ToString();
-                                    item.AssemblyExecuteAs = reader["ExecuteAs"].ToString();
-                                    item.AssemblyMethod = reader["assembly_method"].ToString();
-                                    database.CLRProcedures.Add(item);
+                                    case "P":
+                                        if (database.Options.Ignore.FilterStoredProcedure)
+                                        {
+                                            StoredProcedure item = new StoredProcedure(database);
+                                            item.Id = (int)reader[object_idIndex];
+                                            item.Name = (string)reader[NameIndex];
+                                            item.Owner = (string)reader[ownerIndex];
+                                            database.Procedures.Add(item);
+                                        }
+                                        break;
+
+                                    case "PC":
+                                        if (database.Options.Ignore.FilterCLRStoredProcedure)
+                                        {
+                                            CLRStoredProcedure item = new CLRStoredProcedure(database);
+                                            item.Id = (int)reader[object_idIndex];
+                                            item.Name = reader[NameIndex].ToString();
+                                            item.Owner = reader[ownerIndex].ToString();
+                                            item.IsAssembly = true;
+                                            item.AssemblyId = (int)reader["assembly_id"];
+                                            item.AssemblyName = reader["assembly_name"].ToString();
+                                            item.AssemblyClass = reader["assembly_class"].ToString();
+                                            item.AssemblyExecuteAs = reader["ExecuteAs"].ToString();
+                                            item.AssemblyMethod = reader["assembly_method"].ToString();
+                                            database.CLRProcedures.Add(item);
+                                        }
+                                        break;
                                 }
                             }
                         }
                     }
                 }
-                if (database.CLRProcedures.Count > 0)
+                if (database.CLRProcedures.Any())
                     FillParameters(database, connectionString);
             }
         }

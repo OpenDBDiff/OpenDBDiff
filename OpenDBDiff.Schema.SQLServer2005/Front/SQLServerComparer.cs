@@ -1,25 +1,25 @@
 ﻿using OpenDBDiff.Front;
-using System;
 using OpenDBDiff.Schema.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates;
+using System;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 {
     public class SQLServerComparer : IDatabaseComparer
     {
-        public IDatabase Compare(IDatabase source, IDatabase destination)
+        public IDatabase Compare(IDatabase origin, IDatabase destination)
         {
-            if (source is Model.Database && destination is Model.Database)
+            if (origin is Model.Database && destination is Model.Database)
             {
-                return Generate.Compare(destination as Model.Database, source as Model.Database);
+                return Generate.Compare(origin as Model.Database, destination as Model.Database);
             }
-            else if (!(source is Model.Database))
+            else if (!(origin is Model.Database))
             {
-                throw new NotSupportedException("Source Database type not supported: " + source.GetType());
+                throw new NotSupportedException("Origin database type not supported: " + origin.GetType());
             }
             else
             {
-                throw new NotSupportedException("Destination Database type not supported: " + source.GetType());
+                throw new NotSupportedException("Destination database type not supported: " + destination.GetType());
             }
         }
     }

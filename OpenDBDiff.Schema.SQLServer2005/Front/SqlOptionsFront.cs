@@ -253,7 +253,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
                 {
                     if (item.Selected)
                     {
-                        var type = (Enums.ObjectType)Enum.Parse(typeof(Enums.ObjectType), item.SubItems[1].Text);
+                        var type = (ObjectType)Enum.Parse(typeof(ObjectType), item.SubItems[1].Text);
                         var fi = new SqlOptionFilterItem(type, item.Text);
                         if (SQLOption.Filters.Items.Contains(fi))
                             SQLOption.Filters.Items.Remove(fi);

@@ -7,7 +7,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class CLRFunction : CLRCode
     {
         public CLRFunction(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.CLRFunction, Enums.ScripActionType.AddFunction, Enums.ScripActionType.DropFunction)
+            : base(parent, ObjectType.CLRFunction, ScriptAction.AddFunction, ScriptAction.DropFunction)
         {
             Parameters = new List<Parameter>();
             ReturnType = new Parameter();
@@ -41,11 +41,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList list = new SQLScriptList();
 
-            if (this.HasState(Enums.ObjectStatusType.DropStatus))
+            if (this.HasState(ObjectStatus.Drop))
                 list.Add(Drop());
-            if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+            if (this.HasState(ObjectStatus.Create))
                 list.Add(Create());
-            if (this.Status == Enums.ObjectStatusType.AlterStatus)
+            if (this.Status == ObjectStatus.Alter)
             {
                 list.AddRange(Rebuild());
             }

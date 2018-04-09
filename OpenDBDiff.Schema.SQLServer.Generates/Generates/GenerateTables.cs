@@ -1,14 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Globalization;
 using OpenDBDiff.Schema.Errors;
 using OpenDBDiff.Schema.Events;
 using OpenDBDiff.Schema.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.Util;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
 using Constraint = OpenDBDiff.Schema.SQLServer.Generates.Model.Constraint;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
@@ -207,7 +208,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             {
                 root.RaiseOnReading(new ProgressEventArgs("Reading tables...", Constants.READING_TABLES));
                 FillTables(database, connectionString);
-                if ((database.Tables.Count > 0) || (database.TablesTypes.Count > 0))
+                if (database.Tables.Any() || database.TablesTypes.Any())
                 {
                     if (database.Options.Ignore.FilterConstraint)
                         (new GenerateConstraint(root)).Fill(database, connectionString);
@@ -307,7 +308,5 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             }
             //tables.ToSQL();
         }
-
-
     }
 }

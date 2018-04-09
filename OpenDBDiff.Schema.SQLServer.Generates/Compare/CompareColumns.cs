@@ -13,9 +13,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
 
             foreach (Column node in originFields)
             {
-                if (!destinationFields.Exists(node.FullName))
+                if (!destinationFields.Contains(node.FullName))
                 {
-                    node.Status = Enums.ObjectStatusType.DropStatus;
+                    node.Status = ObjectStatus.Drop;
                     restPosition++;
                 }
                 else
@@ -23,16 +23,16 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             }
             foreach (Column node in destinationFields)
             {
-                if (!originFields.Exists(node.FullName))
+                if (!originFields.Contains(node.FullName))
                 {
                     Column newNode = node.Clone(originFields.Parent);
                     if ((newNode.Position == 1) || ((newNode.DefaultConstraint == null) && (!newNode.IsNullable) && (!newNode.IsComputed) && (!newNode.IsIdentity) && (!newNode.IsIdentityForReplication)))
                     {
-                        newNode.Status = Enums.ObjectStatusType.CreateStatus;
-                        newNode.Parent.Status = Enums.ObjectStatusType.RebuildStatus;
+                        newNode.Status = ObjectStatus.Create;
+                        newNode.Parent.Status = ObjectStatus.Rebuild;
                     }
                     else
-                        newNode.Status = Enums.ObjectStatusType.CreateStatus;
+                        newNode.Status = ObjectStatus.Create;
                     sumPosition++;
                     originFields.Add(newNode);
                 }
@@ -50,35 +50,35 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
 
                             if (node.HasToRebuildOnlyConstraint)
                             {
-                                node.Status = Enums.ObjectStatusType.AlterStatus;
+                                node.Status = ObjectStatus.Alter;
                                 if ((originField.IsNullable) && (!node.IsNullable))
-                                    node.Status += (int)Enums.ObjectStatusType.UpdateStatus;
+                                    node.Status += (int)ObjectStatus.Update;
                             }
                             else
                             {
                                 if (node.HasToRebuild(originField.Position + sumPosition, originField.Type, originField.IsFileStream))
-                                    node.Status = Enums.ObjectStatusType.RebuildStatus;
+                                    node.Status = ObjectStatus.Rebuild;
                                 else
                                 {
                                     if (!IsColumnEqual)
                                     {
-                                        node.Status = Enums.ObjectStatusType.AlterStatus;
+                                        node.Status = ObjectStatus.Alter;
                                         if ((originField.IsNullable) && (!node.IsNullable))
-                                            node.Status += (int)Enums.ObjectStatusType.UpdateStatus;
+                                            node.Status += (int)ObjectStatus.Update;
                                     }
                                 }
                             }
-                            if (node.Status != Enums.ObjectStatusType.RebuildStatus)
+                            if (node.Status != ObjectStatus.Rebuild)
                             {
                                 if (!Column.CompareRule(originField, node))
                                 {
-                                    node.Status += (int)Enums.ObjectStatusType.BindStatus;
+                                    node.Status += (int)ObjectStatus.Bind;
                                 }
                             }
                         }
                         else
                         {
-                            node.Status = Enums.ObjectStatusType.RebuildStatus;
+                            node.Status = ObjectStatus.Rebuild;
                         }
                         originFields[node.FullName] = node.Clone(originFields.Parent);
                     }

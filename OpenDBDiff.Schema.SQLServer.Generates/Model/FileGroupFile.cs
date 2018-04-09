@@ -6,7 +6,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class FileGroupFile : SQLServerSchemaBase
     {
         public FileGroupFile(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.File)
+            : base(parent, ObjectType.File)
         {
         }
 

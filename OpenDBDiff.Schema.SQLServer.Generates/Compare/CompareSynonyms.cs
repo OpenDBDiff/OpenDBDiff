@@ -10,7 +10,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             if (!Synonym.Compare(node, originFields[node.FullName]))
             {
                 Synonym newNode = node; //.Clone(originFields.Parent);
-                newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                newNode.Status = ObjectStatus.Alter;
                 originFields[node.FullName] = newNode;
             }
         }

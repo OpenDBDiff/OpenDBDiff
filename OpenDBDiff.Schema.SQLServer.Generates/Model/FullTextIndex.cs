@@ -7,7 +7,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class FullTextIndex : SQLServerSchemaBase
     {
         public FullTextIndex(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.FullTextIndex)
+            : base(parent, ObjectType.FullTextIndex)
         {
             Columns = new List<FullTextIndexColumn>();
         }
@@ -51,7 +51,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScript Create()
         {
-            Enums.ScripActionType action = Enums.ScripActionType.AddFullTextIndex;
+            ScriptAction action = ScriptAction.AddFullTextIndex;
             if (!GetWasInsertInDiffList(action))
             {
                 SetWasInsertInDiffList(action);
@@ -63,7 +63,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScript Drop()
         {
-            Enums.ScripActionType action = Enums.ScripActionType.DropFullTextIndex;
+            ScriptAction action = ScriptAction.DropFullTextIndex;
             if (!GetWasInsertInDiffList(action))
             {
                 SetWasInsertInDiffList(action);
@@ -117,21 +117,21 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             SQLScriptList list = new SQLScriptList();
-            if (this.Status != Enums.ObjectStatusType.OriginalStatus)
+            if (this.Status != ObjectStatus.Original)
                 RootParent.ActionMessage[Parent.FullName].Add(this);
 
-            if (this.HasState(Enums.ObjectStatusType.DropStatus))
+            if (this.HasState(ObjectStatus.Drop))
                 list.Add(Drop());
-            if (this.HasState(Enums.ObjectStatusType.CreateStatus))
+            if (this.HasState(ObjectStatus.Create))
                 list.Add(Create());
-            if (this.HasState(Enums.ObjectStatusType.AlterStatus))
+            if (this.HasState(ObjectStatus.Alter))
             {
                 list.Add(Drop());
                 list.Add(Create());
             }
-            if (this.Status == Enums.ObjectStatusType.DisabledStatus)
+            if (this.Status == ObjectStatus.Disabled)
             {
-                list.Add(this.ToSqlEnabled(), Parent.DependenciesCount, Enums.ScripActionType.AlterFullTextIndex);
+                list.Add(this.ToSqlEnabled(), Parent.DependenciesCount, ScriptAction.AlterFullTextIndex);
             }
             /*if (this.Status == StatusEnum.ObjectStatusType.ChangeFileGroup)
             {

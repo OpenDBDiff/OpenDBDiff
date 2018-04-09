@@ -8,7 +8,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class Rule : Code
     {
         public Rule(ISchemaBase parent)
-            : base(parent, Enums.ObjectType.Rule, Enums.ScripActionType.AddRule, Enums.ScripActionType.DropRule)
+            : base(parent, ObjectType.Rule, ScriptAction.AddRule, ScriptAction.DropRule)
         {
         }
 
@@ -26,7 +26,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public string ToSQLAddBind()
         {
             string sql;
-            if (this.Parent.ObjectType == Enums.ObjectType.Column)
+            if (this.Parent.ObjectType == ObjectType.Column)
                 sql = String.Format("EXEC sp_bindrule N'{0}', N'[{1}].[{2}]','futureonly'\r\nGO\r\n", Name, this.Parent.Parent.Name, this.Parent.Name);
             else
                 sql = String.Format("EXEC sp_bindrule N'{0}', N'{1}','futureonly'\r\nGO\r\n", Name, this.Parent.Name);
@@ -36,7 +36,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public string ToSQLAddUnBind()
         {
             string sql;
-            if (this.Parent.ObjectType == Enums.ObjectType.Column)
+            if (this.Parent.ObjectType == ObjectType.Column)
                 sql = String.Format("EXEC sp_unbindrule @objname=N'[{0}].[{1}]'\r\nGO\r\n", this.Parent.Parent.Name, this.Parent.Name);
             else
                 sql = String.Format("EXEC sp_unbindrule @objname=N'{0}'\r\nGO\r\n", this.Parent.Name);
@@ -53,17 +53,17 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 foreach (ObjectDependency dependency in item.Dependencys)
                 {
                     Column column = ((Database)this.Parent).Tables[dependency.Name].Columns[dependency.ColumnName];
-                    if ((!column.IsComputed) && (column.Status != Enums.ObjectStatusType.CreateStatus))
+                    if ((!column.IsComputed) && (column.Status != ObjectStatus.Create))
                     {
                         if (!items.ContainsKey(column.FullName))
                         {
-                            listDiff.Add("EXEC sp_unbindrule '" + column.FullName + "'\r\nGO\r\n", 0, Enums.ScripActionType.UnbindRuleColumn);
+                            listDiff.Add("EXEC sp_unbindrule '" + column.FullName + "'\r\nGO\r\n", 0, ScriptAction.UnbindRuleColumn);
                             items.Add(column.FullName, column.FullName);
                         }
                     }
                 }
-                if (item.Rule.Status != Enums.ObjectStatusType.CreateStatus)
-                    listDiff.Add("EXEC sp_unbindrule '" + item.FullName + "'\r\nGO\r\n", 0, Enums.ScripActionType.UnbindRuleType);
+                if (item.Rule.Status != ObjectStatus.Create)
+                    listDiff.Add("EXEC sp_unbindrule '" + item.FullName + "'\r\nGO\r\n", 0, ScriptAction.UnbindRuleType);
             }
             return listDiff;
         }
@@ -75,14 +75,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == Enums.ObjectStatusType.DropStatus)
+            if (this.Status == ObjectStatus.Drop)
             {
                 listDiff.AddRange(ToSQLUnBindAll());
                 listDiff.Add(Drop());
             }
-            if (this.Status == Enums.ObjectStatusType.CreateStatus)
+            if (this.Status == ObjectStatus.Create)
                 listDiff.Add(Create());
-            if (this.Status == Enums.ObjectStatusType.AlterStatus)
+            if (this.Status == ObjectStatus.Alter)
             {
                 listDiff.AddRange(ToSQLUnBindAll());
                 listDiff.AddRange(Rebuild());

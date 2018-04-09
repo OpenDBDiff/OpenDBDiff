@@ -2,7 +2,7 @@
 {
     public class ObjectDependency
     {
-        public ObjectDependency(string name, string Column, Enums.ObjectType type)
+        public ObjectDependency(string name, string Column, ObjectType type)
         {
             this.Name = name;
             this.ColumnName = Column;
@@ -19,11 +19,11 @@
 
         public string ColumnName { get; set; }
 
-        public Enums.ObjectType Type { get; set; }
+        public ObjectType Type { get; set; }
 
         public bool IsCodeType
         {
-            get { return ((Type == Enums.ObjectType.StoredProcedure) || (Type == Enums.ObjectType.Trigger) || (Type == Enums.ObjectType.View) || (Type == Enums.ObjectType.Function)); }
+            get { return ((Type == ObjectType.StoredProcedure) || (Type == ObjectType.Trigger) || (Type == ObjectType.View) || (Type == ObjectType.Function)); }
 
         }
     }

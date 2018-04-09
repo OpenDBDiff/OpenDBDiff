@@ -35,7 +35,7 @@ namespace OpenDBDiff.Front
             this.gradientPanel1 = new System.Windows.Forms.Panel();
             this.lblName = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.sourceProgressControl = new OpenDBDiff.Front.DatabaseProgressControl();
+            this.originProgressControl = new OpenDBDiff.Front.DatabaseProgressControl();
             this.destinationProgressControl = new OpenDBDiff.Front.DatabaseProgressControl();
             this.gradientPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -67,29 +67,29 @@ namespace OpenDBDiff.Front
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.destinationProgressControl);
-            this.panel1.Controls.Add(this.sourceProgressControl);
+            this.panel1.Controls.Add(this.originProgressControl);
             this.panel1.Location = new System.Drawing.Point(0, 57);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(499, 173);
             this.panel1.TabIndex = 30;
             //
-            // sourceProgressControl
+            // originProgressControl
             //
-            this.sourceProgressControl.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.sourceProgressControl.DatabaseName = "Source:";
-            this.sourceProgressControl.Location = new System.Drawing.Point(12, 15);
-            this.sourceProgressControl.Maximum = 100;
-            this.sourceProgressControl.Message = "";
-            this.sourceProgressControl.Name = "sourceProgressControl";
-            this.sourceProgressControl.Size = new System.Drawing.Size(472, 64);
-            this.sourceProgressControl.TabIndex = 35;
-            this.sourceProgressControl.Value = 0;
+            this.originProgressControl.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.originProgressControl.DatabaseName = "Source:";
+            this.originProgressControl.Location = new System.Drawing.Point(12, 92);
+            this.originProgressControl.Maximum = 100;
+            this.originProgressControl.Message = "";
+            this.originProgressControl.Name = "sourceProgressControl";
+            this.originProgressControl.Size = new System.Drawing.Size(472, 64);
+            this.originProgressControl.TabIndex = 35;
+            this.originProgressControl.Value = 0;
             //
             // destinationProgressControl
             //
             this.destinationProgressControl.BackColor = System.Drawing.Color.WhiteSmoke;
             this.destinationProgressControl.DatabaseName = "Destination:";
-            this.destinationProgressControl.Location = new System.Drawing.Point(12, 92);
+            this.destinationProgressControl.Location = new System.Drawing.Point(12, 15);
             this.destinationProgressControl.Maximum = 100;
             this.destinationProgressControl.Message = "";
             this.destinationProgressControl.Name = "destinationProgressControl";
@@ -127,6 +127,6 @@ namespace OpenDBDiff.Front
         private Label lblName;
         private Panel panel1;
         private DatabaseProgressControl destinationProgressControl;
-        private DatabaseProgressControl sourceProgressControl;
+        private DatabaseProgressControl originProgressControl;
     }
 }

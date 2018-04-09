@@ -10,7 +10,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             if (!PartitionFunction.Compare(node, originFields[node.FullName]))
             {
                 PartitionFunction newNode = node; //.Clone(originFields.Parent);
-                newNode.Status = Enums.ObjectStatusType.RebuildStatus;
+                newNode.Status = ObjectStatus.Rebuild;
                 originFields[node.FullName] = newNode;
             }
             else
@@ -19,9 +19,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                 {
                     PartitionFunction newNode = node.Clone(originFields.Parent);
                     if (newNode.Values.Count == originFields[node.FullName].Values.Count)
-                        newNode.Status = Enums.ObjectStatusType.RebuildStatus;
+                        newNode.Status = ObjectStatus.Rebuild;
                     else
-                        newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                        newNode.Status = ObjectStatus.Alter;
                     newNode.Old = originFields[node.FullName].Clone(originFields.Parent);
                     originFields[node.FullName] = newNode;
                 }

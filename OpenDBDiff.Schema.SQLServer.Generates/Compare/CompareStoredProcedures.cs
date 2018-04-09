@@ -13,11 +13,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
 
                 if (node.CompareExceptWhitespace(originFields[node.FullName]))
                 {
-                    newNode.Status = Enums.ObjectStatusType.AlterWhitespaceStatus;
+                    newNode.Status = ObjectStatus.AlterWhitespace;
                 }
                 else
                 {
-                    newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                    newNode.Status = ObjectStatus.Alter;
                 }
 
                 originFields[node.FullName] = newNode;

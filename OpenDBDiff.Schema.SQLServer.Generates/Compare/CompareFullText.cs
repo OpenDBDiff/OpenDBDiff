@@ -11,11 +11,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             {
                 FullText newNode = node; //.Clone(originFields.Parent);
                 if (node.IsDefault != originFields[node.FullName].IsDefault)
-                    newNode.Status += (int)Enums.ObjectStatusType.DisabledStatus;
+                    newNode.Status += (int)ObjectStatus.Disabled;
                 if (!node.Owner.Equals(originFields[node.FullName].Owner))
-                    newNode.Status += (int)Enums.ObjectStatusType.ChangeOwner;
+                    newNode.Status += (int)ObjectStatus.ChangeOwner;
                 if (node.IsAccentSensity != originFields[node.FullName].IsAccentSensity)
-                    newNode.Status += (int)Enums.ObjectStatusType.AlterStatus;
+                    newNode.Status += (int)ObjectStatus.Alter;
                 originFields[node.FullName] = newNode;
             }
         }

@@ -10,30 +10,30 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             if (!node.Compare(originFields[node.FullName]))
             {
                 Assembly newNode = (Assembly)node.Clone(originFields.Parent);
-                newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                newNode.Status = ObjectStatus.Alter;
 
                 if (node.Text.Equals(originFields[node.FullName].Text))
                 {
                     if (!node.PermissionSet.Equals(originFields[node.FullName].PermissionSet))
-                        newNode.Status += (int)Enums.ObjectStatusType.PermissionSet;
+                        newNode.Status += (int)ObjectStatus.PermissionSet;
                     if (!node.Owner.Equals(originFields[node.FullName].Owner))
-                        newNode.Status += (int)Enums.ObjectStatusType.ChangeOwner;
+                        newNode.Status += (int)ObjectStatus.ChangeOwner;
                 }
                 else
-                    newNode.Status = Enums.ObjectStatusType.RebuildStatus;
+                    newNode.Status = ObjectStatus.Rebuild;
 
                 originFields[node.FullName].Files.ForEach(item =>
                 {
-                    if (!newNode.Files.Exists(item.FullName))
-                        newNode.Files.Add(new AssemblyFile(newNode, item, Enums.ObjectStatusType.DropStatus));
+                    if (!newNode.Files.Contains(item.FullName))
+                        newNode.Files.Add(new AssemblyFile(newNode, item, ObjectStatus.Drop));
                     else
-                        item.Status = Enums.ObjectStatusType.AlterStatus;
+                        item.Status = ObjectStatus.Alter;
                 });
                 newNode.Files.ForEach(item =>
                 {
-                    if (!originFields[node.FullName].Files.Exists(item.FullName))
+                    if (!originFields[node.FullName].Files.Contains(item.FullName))
                     {
-                        item.Status = Enums.ObjectStatusType.CreateStatus;
+                        item.Status = ObjectStatus.Create;
                     }
                 });
                 CompareExtendedProperties(originFields[node.FullName], newNode);
@@ -50,7 +50,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                 pass = node.FullName.Equals("Microsoft.SqlServer.Types");
             if (pass)
             {
-                newNode.Status = Enums.ObjectStatusType.CreateStatus;
+                newNode.Status = ObjectStatus.Create;
                 originFields.Add(newNode);
             }
         }

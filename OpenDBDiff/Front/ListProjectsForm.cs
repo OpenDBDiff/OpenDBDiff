@@ -1,7 +1,8 @@
-﻿using System;
+﻿using OpenDBDiff.Settings;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
-using OpenDBDiff.Settings;
 
 namespace OpenDBDiff.Front
 {
@@ -10,60 +11,60 @@ namespace OpenDBDiff.Front
     public sealed partial class ListProjectsForm : Form
     {
         public event ListProjectHandler OnSelect;
+
         public event ListProjectHandler OnDelete;
+
         public event ListProjectHandler OnRename;
 
-        private readonly List<Project> projects;
+        private IList<Project> Projects { get; }
 
-        public ListProjectsForm(List<Project> item)
+        public ListProjectsForm(IList<Project> projects)
         {
             InitializeComponent();
-            projects = item;
-            item.ForEach(pro =>
-                             {
-                                 ListViewItem listViewItem = new ListViewItem();
-                                 listViewItem.ImageIndex = 0;
-                                 listViewItem.Text = pro.Name;
-                                 listView1.Items.Add(listViewItem);
-                             });
 
-            ContextMenu mnuContextMenu = new ContextMenu();
-            ContextMenu = mnuContextMenu;
-            MenuItem mnuItemDelete = new MenuItem();
-            MenuItem mnuItemOpen = new MenuItem();
-            MenuItem mnuItemRename = new MenuItem();
-            mnuItemOpen.Text = "&Open";
-            mnuItemRename.Text = "&Rename";
-            mnuItemDelete.Text = "&Delete";
-            mnuContextMenu.MenuItems.Add(mnuItemOpen);
-            mnuContextMenu.MenuItems.Add(mnuItemRename);
-            mnuContextMenu.MenuItems.Add(mnuItemDelete);
-            mnuItemDelete.Click += new EventHandler(mnuItemDelete_Click);
-            mnuItemOpen.Click += new EventHandler(mnuItemOpen_Click);
-            mnuItemRename.Click += new EventHandler(mnuItemRename_Click);
-            listView1.LabelEdit = true;
+            Projects = projects;
+
+            ProjectsListView.Items.Clear();
+
+            if (Projects.Any())
+            {
+                foreach (var p in Projects)
+                    ProjectsListView.Items.Add(new ListViewItem(items: new string[] { p.ProjectName, p.ConnectionStringSource, p.ConnectionStringDestination }, imageIndex: 0));
+
+                ProjectsListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            }
+            else
+            {
+                ProjectsListView.Items.Add(new ListViewItem
+                {
+                    Text = "There are no saved projects."
+                });
+            }
+
+            ProjectsListView.LabelEdit = true;
         }
 
         private void OpenProject()
         {
             try
             {
-                if (listView1.SelectedItems.Count != 0)
+                if (ProjectsListView.SelectedItems.Count != 0)
                 {
-                    Project item = new Project();
-                    item.ConnectionStringDestination = projects[listView1.SelectedItems[0].Index].ConnectionStringDestination;
-                    item.ConnectionStringSource = projects[listView1.SelectedItems[0].Index].ConnectionStringSource;
-                    item.Id = projects[listView1.SelectedItems[0].Index].Id;
-                    item.Name = projects[listView1.SelectedItems[0].Index].Name;
-                    item.Options = projects[listView1.SelectedItems[0].Index].Options;
-                    item.Type = projects[listView1.SelectedItems[0].Index].Type;
-                    if (OnSelect != null)
-                        OnSelect(item);
+                    var item = new Project
+                    {
+                        Id = Projects[ProjectsListView.SelectedItems[0].Index].Id,
+                        ConnectionStringDestination = Projects[ProjectsListView.SelectedItems[0].Index].ConnectionStringDestination,
+                        ConnectionStringSource = Projects[ProjectsListView.SelectedItems[0].Index].ConnectionStringSource,
+                        ProjectName = Projects[ProjectsListView.SelectedItems[0].Index].ProjectName,
+                        Options = Projects[ProjectsListView.SelectedItems[0].Index].Options,
+                        Type = Projects[ProjectsListView.SelectedItems[0].Index].Type,
+                    };
+                    OnSelect?.Invoke(item);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -71,42 +72,45 @@ namespace OpenDBDiff.Front
         {
             try
             {
-                if (listView1.SelectedItems.Count != 0)
+                if (ProjectsListView.SelectedItems.Count != 0)
                 {
-                    DialogResult result = MessageBox.Show(this,
-                                                          "Are you sure you want delete this Connection Project?",
-                                                          "ATENTION", MessageBoxButtons.YesNo,
-                                                          MessageBoxIcon.Question);
-                    if (result == DialogResult.Yes)
+                    if (MessageBox.Show(this,
+                                        "Are you sure you want delete this project?",
+                                        "Confirm project deletion", MessageBoxButtons.YesNo,
+                                        MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        if (OnDelete != null)
-                            OnDelete(projects[listView1.SelectedItems[0].Index]);
-                        projects.Remove(projects[listView1.SelectedItems[0].Index]);
-                        listView1.Items.Remove(listView1.SelectedItems[0]);
+                        OnDelete?.Invoke(Projects[ProjectsListView.SelectedItems[0].Index]);
+                        Projects.Remove(Projects[ProjectsListView.SelectedItems[0].Index]);
+                        ProjectsListView.Items.Remove(ProjectsListView.SelectedItems[0]);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void mnuItemRename_Click(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count != 0)
+            if (ProjectsListView.SelectedItems.Count != 0)
             {
-                listView1.SelectedItems[0].BeginEdit();
+                ProjectsListView.SelectedItems[0].BeginEdit();
             }
         }
 
-        private void listView1_AfterLabelEdit(object sender, LabelEditEventArgs e)
+        private void ProjectsListView_AfterLabelEdit(object sender, LabelEditEventArgs e)
         {
-            if (listView1.SelectedItems.Count != 0)
+            if (string.IsNullOrWhiteSpace(e.Label))
             {
-                projects[listView1.SelectedItems[0].Index].Name = e.Label;
-                if (OnRename != null)
-                    OnRename(projects[listView1.SelectedItems[0].Index]);
+                e.CancelEdit = true;
+                return;
+            }
+
+            if (ProjectsListView.SelectedItems.Count != 0)
+            {
+                Projects[ProjectsListView.SelectedItems[0].Index].ProjectName = e.Label.Trim();
+                OnRename?.Invoke(Projects[ProjectsListView.SelectedItems[0].Index]);
             }
         }
 
@@ -121,12 +125,12 @@ namespace OpenDBDiff.Front
             DeleteProject();
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ProjectsListView_SelectedIndexChanged(object sender, EventArgs e)
         {
             OpenProject();
         }
 
-        private void listView1_DoubleClick(object sender, EventArgs e)
+        private void ProjectsListView_DoubleClick(object sender, EventArgs e)
         {
             Dispose();
         }

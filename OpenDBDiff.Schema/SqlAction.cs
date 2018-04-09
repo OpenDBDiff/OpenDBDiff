@@ -7,7 +7,7 @@ namespace OpenDBDiff.Schema
     {
         public SqlAction(ISchemaBase item)
         {
-            if ((item.ObjectType == Enums.ObjectType.Column) || (item.ObjectType == Enums.ObjectType.Index) || (item.ObjectType == Enums.ObjectType.Constraint))
+            if ((item.ObjectType == ObjectType.Column) || (item.ObjectType == ObjectType.Index) || (item.ObjectType == ObjectType.Constraint))
                 this.Name = item.Name;
             else
                 this.Name = item.FullName;
@@ -36,24 +36,24 @@ namespace OpenDBDiff.Schema
 
         public string Name { get; private set; }
 
-        public Enums.ObjectType Type { get; set; }
+        public ObjectType Type { get; set; }
 
-        public Enums.ObjectStatusType Action { get; set; }
+        public ObjectStatus Action { get; set; }
 
         public List<SqlAction> Childs { get; private set; }
 
         private string GetTypeName()
         {
-            if (Type == Enums.ObjectType.Table) return "TABLE";
-            if (Type == Enums.ObjectType.Column) return "COLUMN";
-            if (Type == Enums.ObjectType.Constraint) return "CONSTRAINT";
-            if (Type == Enums.ObjectType.Index) return "INDEX";
-            if (Type == Enums.ObjectType.View) return "VIEW";
-            if (Type == Enums.ObjectType.StoredProcedure) return "STORED PROCEDURE";
-            if (Type == Enums.ObjectType.Synonym) return "SYNONYM";
-            if (Type == Enums.ObjectType.Function) return "FUNCTION";
-            if (Type == Enums.ObjectType.Assembly) return "ASSEMBLY";
-            if (Type == Enums.ObjectType.Trigger) return "TRIGGER";
+            if (Type == ObjectType.Table) return "TABLE";
+            if (Type == ObjectType.Column) return "COLUMN";
+            if (Type == ObjectType.Constraint) return "CONSTRAINT";
+            if (Type == ObjectType.Index) return "INDEX";
+            if (Type == ObjectType.View) return "VIEW";
+            if (Type == ObjectType.StoredProcedure) return "STORED PROCEDURE";
+            if (Type == ObjectType.Synonym) return "SYNONYM";
+            if (Type == ObjectType.Function) return "FUNCTION";
+            if (Type == ObjectType.Assembly) return "ASSEMBLY";
+            if (Type == ObjectType.Trigger) return "TRIGGER";
             return "";
         }
 
@@ -61,7 +61,7 @@ namespace OpenDBDiff.Schema
         {
             get
             {
-                return ((this.Type != Enums.ObjectType.Function) && (this.Type != Enums.ObjectType.StoredProcedure) && (this.Type != Enums.ObjectType.View) && (this.Type != Enums.ObjectType.Table) && (this.Type != Enums.ObjectType.Database));
+                return ((this.Type != ObjectType.Function) && (this.Type != ObjectType.StoredProcedure) && (this.Type != ObjectType.View) && (this.Type != ObjectType.Table) && (this.Type != ObjectType.Database));
             }
         }
 
@@ -70,11 +70,11 @@ namespace OpenDBDiff.Schema
             get
             {
                 string message = "";
-                if (Action == Enums.ObjectStatusType.DropStatus)
+                if (Action == ObjectStatus.Drop)
                     message = "DROP " + GetTypeName() + " " + Name + "\r\n";
-                if (Action == Enums.ObjectStatusType.CreateStatus)
+                if (Action == ObjectStatus.Create)
                     message = "ADD " + GetTypeName() + " " + Name + "\r\n";
-                if ((Action == Enums.ObjectStatusType.AlterStatus) || (Action == Enums.ObjectStatusType.RebuildStatus) || (Action == Enums.ObjectStatusType.RebuildDependenciesStatus))
+                if ((Action == ObjectStatus.Alter) || (Action == ObjectStatus.Rebuild) || (Action == ObjectStatus.RebuildDependencies))
                     message = "MODIFY " + GetTypeName() + " " + Name + "\r\n";
 
                 Childs.ForEach(item =>

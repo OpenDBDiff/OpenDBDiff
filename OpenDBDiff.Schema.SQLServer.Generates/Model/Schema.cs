@@ -5,7 +5,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     public class Schema : SQLServerSchemaBase
     {
         public Schema(Database parent)
-            : base(parent, Enums.ObjectType.Schema)
+            : base(parent, ObjectType.Schema)
         {
         }
 
@@ -35,13 +35,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             SQLScriptList listDiff = new SQLScriptList();
 
-            if (this.Status == Enums.ObjectStatusType.DropStatus)
+            if (this.Status == ObjectStatus.Drop)
             {
-                listDiff.Add(ToSqlDrop(), 0, Enums.ScripActionType.DropSchema);
+                listDiff.Add(ToSqlDrop(), 0, ScriptAction.DropSchema);
             }
-            if (this.Status == Enums.ObjectStatusType.CreateStatus)
+            if (this.Status == ObjectStatus.Create)
             {
-                listDiff.Add(ToSql(), 0, Enums.ScripActionType.AddSchema);
+                listDiff.Add(ToSql(), 0, ScriptAction.AddSchema);
             }
             return listDiff;
         }

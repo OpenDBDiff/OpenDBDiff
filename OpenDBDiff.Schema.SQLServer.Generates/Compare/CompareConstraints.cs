@@ -13,10 +13,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                 Constraint newNode = (Constraint)node.Clone(originFields.Parent);
                 if (node.IsDisabled == origin.IsDisabled)
                 {
-                    newNode.Status = Enums.ObjectStatusType.AlterStatus;
+                    newNode.Status = ObjectStatus.Alter;
                 }
                 else
-                    newNode.Status = Enums.ObjectStatusType.AlterStatus + (int)Enums.ObjectStatusType.DisabledStatus;
+                    newNode.Status = ObjectStatus.Alter + (int)ObjectStatus.Disabled;
                 originFields[node.FullName] = newNode;
             }
             else
@@ -24,7 +24,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                 if (node.IsDisabled != origin.IsDisabled)
                 {
                     Constraint newNode = (Constraint)node.Clone(originFields.Parent);
-                    newNode.Status = Enums.ObjectStatusType.DisabledStatus;
+                    newNode.Status = ObjectStatus.Disabled;
                     originFields[node.FullName] = newNode;
                 }
             }
@@ -33,7 +33,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
         protected override void DoNew<Root>(SchemaList<Constraint, Root> originFields, Constraint node)
         {
             Constraint newNode = (Constraint)node.Clone(originFields.Parent);
-            newNode.Status = Enums.ObjectStatusType.CreateStatus;
+            newNode.Status = ObjectStatus.Create;
             originFields.Add(newNode);
         }
     }

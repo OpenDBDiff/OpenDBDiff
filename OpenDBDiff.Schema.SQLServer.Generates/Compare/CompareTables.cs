@@ -7,7 +7,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
     {
         protected override void DoUpdate<Root>(SchemaList<Table, Root> originFields, Table node)
         {
-            if (node.Status != Enums.ObjectStatusType.DropStatus)
+            if (node.Status != ObjectStatus.Drop)
             {
                 Table tablaOriginal = originFields[node.FullName];
                 tablaOriginal.OriginalTable = (Table)originFields[node.FullName].Clone((Database)tablaOriginal.Parent);
@@ -23,18 +23,18 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                     tablaOriginal.FileGroup = node.FileGroup;
                     /*Esto solo aplica a las tablas heap, el resto hace el campo en el filegroup del indice clustered*/
                     if (!tablaOriginal.HasClusteredIndex)
-                        tablaOriginal.Status = Enums.ObjectStatusType.RebuildStatus;
+                        tablaOriginal.Status = ObjectStatus.Rebuild;
                 }
                 if (!Table.CompareFileGroupText(tablaOriginal, node))
                 {
                     tablaOriginal.FileGroupText = node.FileGroupText;
-                    tablaOriginal.Status = Enums.ObjectStatusType.RebuildStatus;
+                    tablaOriginal.Status = ObjectStatus.Rebuild;
                 }
                 if (node.HasChangeTracking != tablaOriginal.HasChangeTracking)
                 {
                     tablaOriginal.HasChangeTracking = node.HasChangeTracking;
                     tablaOriginal.HasChangeTrackingTrackColumn = node.HasChangeTrackingTrackColumn;
-                    tablaOriginal.Status += (int)Enums.ObjectStatusType.DisabledStatus;
+                    tablaOriginal.Status += (int)ObjectStatus.Disabled;
                 }
             }
         }
@@ -56,13 +56,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             {
                 if (!originTables.Exists(node.FullName))
                 {
-                    node.Status = Enums.ObjectStatusType.CreateStatus;
+                    node.Status = ObjectStatusType.CreateStatus;
                     node.Parent = originTables.Parent;
                     originTables.Add(node);
                 }
                 else
                 {
-                    if (node.Status != Enums.ObjectStatusType.DropStatus)
+                    if (node.Status != ObjectStatusType.DropStatus)
                     {
                         Table tablaOriginal = originTables[node.FullName];
                         tablaOriginal.OriginalTable = (Table)originTables[node.FullName].Clone((Database)tablaOriginal.Parent);
@@ -77,12 +77,12 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                             tablaOriginal.FileGroup = node.FileGroup;
                             //Esto solo aplica a las tablas heap, el resto hace el campo en el filegroup del indice clustered
                             if (!tablaOriginal.HasClusteredIndex)
-                                tablaOriginal.Status = Enums.ObjectStatusType.RebuildStatus;
+                                tablaOriginal.Status = ObjectStatusType.RebuildStatus;
                         }
                         if (!Table.CompareFileGroupText(tablaOriginal, node))
                         {
                             tablaOriginal.FileGroupText = node.FileGroupText;
-                            tablaOriginal.Status = Enums.ObjectStatusType.RebuildStatus;
+                            tablaOriginal.Status = ObjectStatusType.RebuildStatus;
                         }
                     }
                 }

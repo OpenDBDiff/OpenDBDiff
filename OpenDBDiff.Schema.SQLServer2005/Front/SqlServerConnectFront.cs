@@ -1,8 +1,8 @@
+using OpenDBDiff.Front;
+using OpenDBDiff.Schema.SQLServer.Generates.Front.Util;
 using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;
-using OpenDBDiff.Front;
-using OpenDBDiff.Schema.SQLServer.Generates.Front.Util;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 {
@@ -10,9 +10,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
     {
         private Boolean isDatabaseFilled = false;
         private Boolean isServerFilled = false;
-        private delegate void clearCombo();
-        private delegate void addCombo(string item);
 
+        private delegate void clearCombo();
+
+        private delegate void addCombo(string item);
 
         public SqlServerConnectFront()
         {
@@ -30,13 +31,15 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 
         public string ErrorConnection { get; private set; }
 
-        public int DatabaseIndex
+        public bool UseWindowsAuthentication
         {
-            get { return cboDatabase.SelectedIndex; }
+            get
+            {
+                return cboAuthentication.SelectedIndex == 0;
+            }
             set
             {
-                if (cboDatabase.Items.Count > 0)
-                    cboDatabase.SelectedIndex = value;
+                cboAuthentication.SelectedIndex = (value ? 0 : 1);
             }
         }
 
@@ -112,7 +115,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             return builder.ConnectionString;
         }
 
-
         public string ConnectionStringToDefaultDatabase
         {
             get
@@ -146,30 +148,23 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             }
             set
             {
-                if (!String.IsNullOrEmpty(value))
+                if (!String.IsNullOrWhiteSpace(value))
                 {
-                    string[] items = value.Split(';');
-                    for (int j = 0; j < items.Length; j++)
+                    var builder = new SqlConnectionStringBuilder(value);
+
+                    ServerName = builder.DataSource;
+                    UseWindowsAuthentication = builder.IntegratedSecurity;
+                    if (UseWindowsAuthentication)
                     {
-                        string[] item = items[j].Split('=');
-                        if (item[0].Equals("User Id", StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            UserName = item[1];
-                            cboAuthentication.SelectedIndex = 1;
-                        }
-                        if (item[0].Equals("Password", StringComparison.InvariantCultureIgnoreCase))
-                            Password = item[1];
-                        if (item[0].Equals("Data Source", StringComparison.InvariantCultureIgnoreCase))
-                            ServerName = item[1];
-                        if (item[0].Equals("Initial Catalog", StringComparison.InvariantCultureIgnoreCase))
-                            DatabaseName = item[1];
-                        if (item[0].Equals("Integrated Security", StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            cboAuthentication.SelectedIndex = 0;
-                            UserName = "";
-                            Password = "";
-                        }
+                        UserName = "";
+                        Password = "";
                     }
+                    else
+                    {
+                        UserName = builder.UserID;
+                        Password = builder.Password;
+                    }
+                    DatabaseName = builder.InitialCatalog;
                 }
                 else
                 {
@@ -196,7 +191,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
                 MessageBox.Show(this, "Test successful!", "Test", MessageBoxButtons.OK, MessageBoxIcon.Information);
             else
                 MessageBox.Show(this, "Test failed!\r\n" + ErrorConnection, "Test", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
         }
 
         private void AddComboItem(string item)
@@ -294,7 +288,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             {
                 this.Cursor = Cursors.Default;
                 cboDatabase.Items.Clear();
-                MessageBox.Show(this, ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -302,14 +296,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             }
         }
 
-        private void cboDatabase_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void cboServer_TextChanged(object sender, EventArgs e)
         {
             isDatabaseFilled = false;
+        }
+
+        public override string ToString()
+        {
+            return string.Format($"Server: {ServerName}, Database: {DatabaseName}");
         }
     }
 }

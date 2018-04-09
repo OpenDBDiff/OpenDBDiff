@@ -11,7 +11,7 @@ using System.Security.Permissions;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("OpenDBDiff.Schema.SQLServer")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("OpenDBDiff")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
