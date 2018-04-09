@@ -257,6 +257,8 @@ namespace OpenDBDiff.Front
 
         private void FilterCheckbox_CheckedChanged(object sender, EventArgs e)
         {
+            if (databaseSource == null) return;
+
             RebuildSchemaTree();
         }
 
