@@ -1,6 +1,7 @@
 using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
+using Essy.Tools.InputBox;
 using OpenDBDiff.Schema;
 using OpenDBDiff.Schema.Misc;
 using OpenDBDiff.Schema.Model;
@@ -10,12 +11,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using System.Reflection;
-using System.Drawing.Text;
-using System.Linq;
 
 namespace OpenDBDiff.Front
 {
@@ -100,7 +101,6 @@ namespace OpenDBDiff.Front
         {
             try
             {
-
                 txtNewObject.ReadOnly = false;
                 txtOldObject.ReadOnly = false;
                 txtDiff.ReadOnly = false;
@@ -517,17 +517,18 @@ namespace OpenDBDiff.Front
                 toolProjectTypes.Items.Add(projectHandler);
             }
 
-            Project LastConfiguration = Project.GetLastConfiguration();
+            if (toolProjectTypes.SelectedItem == null && toolProjectTypes.Items.Count > 0)
+            {
+                toolProjectTypes.SelectedIndex = 0;
+            }
+
+            var LastConfiguration = Project.GetLastConfiguration();
             if (LastConfiguration != null)
             {
                 if (LeftDatabaseSelector != null)
                     LeftDatabaseSelector.ConnectionString = LastConfiguration.ConnectionStringSource;
                 if (RightDatabaseSelector != null)
                     RightDatabaseSelector.ConnectionString = LastConfiguration.ConnectionStringDestination;
-            }
-            if (toolProjectTypes.SelectedItem == null && toolProjectTypes.Items.Count > 0)
-            {
-                toolProjectTypes.SelectedIndex = 0;
             }
 
             txtNewObject.LexerLanguage = "mssql";
@@ -546,8 +547,8 @@ namespace OpenDBDiff.Front
             txtSyncScript.Text = "";
         }
 
-
         private string preferredFont;
+
         private string PreferredFont()
         {
             if (string.IsNullOrEmpty(preferredFont))
@@ -559,7 +560,7 @@ namespace OpenDBDiff.Front
                 preferredFont = fontNames.FirstOrDefault(fn => installedNames.Contains(fn));
                 if (string.IsNullOrEmpty(preferredFont))
                     preferredFont = "Courier";
-        }
+            }
             return preferredFont;
         }
 
@@ -613,7 +614,7 @@ namespace OpenDBDiff.Front
             scintilla.Text = "";
         }
 
-        private void btnSaveProject_Click_1(object sender, EventArgs e)
+        private void btnSaveProject_Click(object sender, EventArgs e)
         {
             try
             {
@@ -623,15 +624,24 @@ namespace OpenDBDiff.Front
                     {
                         ConnectionStringSource = ProjectSelectorHandler.GetSourceConnectionString(),
                         ConnectionStringDestination = ProjectSelectorHandler.GetDestinationConnectionString(),
-                        Name = String.Format("[{0}].[{1}] - [{2}].[{3}]",
-
-                                                        ProjectSelectorHandler.GetSourceServerName(),
-                                                        ProjectSelectorHandler.GetSourceDatabaseName(),
-                                                        ProjectSelectorHandler.GetDestinationServerName(),
-                                                        ProjectSelectorHandler.GetDestinationDatabaseName()),
+                        ProjectName = String.Format(
+                            "[{0}].[{1}] - [{2}].[{3}]",
+                            ProjectSelectorHandler.GetSourceServerName(),
+                            ProjectSelectorHandler.GetSourceDatabaseName(),
+                            ProjectSelectorHandler.GetDestinationServerName(),
+                            ProjectSelectorHandler.GetDestinationDatabaseName()
+                        ),
                         Options = Options ?? ProjectSelectorHandler.GetDefaultProjectOptions(),
                         Type = Project.ProjectType.SQLServer
                     };
+
+                    string newProjectName = ActiveProject.ProjectName.Trim();
+                    do
+                    {
+                        newProjectName = InputBox.ShowInputBox("Enter the project name.", newProjectName, false).Trim();
+                    }
+                    while (string.IsNullOrWhiteSpace(newProjectName));
+                    ActiveProject.ProjectName = newProjectName;
                 }
                 ActiveProject.Id = Project.Save(ActiveProject);
             }
@@ -645,11 +655,17 @@ namespace OpenDBDiff.Front
         {
             try
             {
-                ListProjectsForm form = new ListProjectsForm(Project.GetAll());
-                form.OnSelect += new ListProjectHandler(form_OnSelect);
-                form.OnDelete += new ListProjectHandler(form_OnDelete);
-                form.OnRename += new ListProjectHandler(form_OnRename);
-                form.ShowDialog(this);
+                var projects = Project.GetAll();
+                if (projects.Any())
+                {
+                    var form = new ListProjectsForm(projects);
+                    form.OnSelect += new ListProjectHandler(form_OnSelect);
+                    form.OnDelete += new ListProjectHandler(form_OnDelete);
+                    form.OnRename += new ListProjectHandler(form_OnRename);
+                    form.ShowDialog(this);
+                }
+                else
+                    MessageBox.Show(this, "There are currently no saved projects.", "Projects", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {

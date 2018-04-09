@@ -15,7 +15,7 @@ namespace OpenDBDiff.Settings
         }
 
         private const string sqliteConnectionStringTemplate = "Data Source={0};Pooling=true;FailIfMissing=false";
-        private const string sqliteSettingsFile = "Settings.conf";
+        private const string sqliteSettingsFile = "settings.sqlite";
         private static bool showSqliteErrors = true;
 
         public int Id { get; set; }
@@ -23,85 +23,157 @@ namespace OpenDBDiff.Settings
         public string ConnectionStringDestination { get; set; }
         public Schema.Model.IOption Options { get; set; }
         public ProjectType Type { get; set; }
-        public string Name { get; set; }
+        public string ProjectName { get; set; }
+        public DateTime SavedDateTime { get; private set; }
 
-        private static void ExecuteSqliteCommand(string sqlCommand, Action<SQLiteDataReader> OnRead, params string[] sqlNonQueryBeforeReadCommand)
+        private static bool loading = false;
+
+        static Project()
         {
-            string dbFile = sqliteSettingsFile;
-            if (!File.Exists(dbFile))
-            {
-                dbFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), dbFile);
-            }
+            EnsureSqliteSettingsFileExists();
+        }
 
-            using (var connection = new SQLiteConnection(String.Format(sqliteConnectionStringTemplate, dbFile)))
+        private static void EnsureSqliteSettingsFileExists()
+        {
+            loading = true;
+            if (!File.Exists(SqliteSettingsFilePath) || !SchemaOk())
+            {
+                ExecuteSchema(SqliteSettingsFilePath);
+            }
+            loading = false;
+        }
+
+        private static bool SchemaOk()
+        {
+            try
+            {
+                bool tableExists = false;
+
+                return TryExecuteSqliteCommand
+                    (
+                        commandText: "SELECT count(name) tableCount FROM sqlite_master WHERE type='table' and name = 'project' COLLATE NOCASE;",
+                        onRead: r => tableExists = int.Parse(r["tableCount"].ToString()) == 1
+                    ) && tableExists;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static void ExecuteSchema(string sqliteSettingsFilePath)
+        {
+            TryExecuteSqliteCommand
+            (
+                commandText: @"
+                    CREATE TABLE [project] (
+                        ProjectId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        ProjectName VARCHAR(80) NOT NULL,
+                        ConnectionStringSource VARCHAR(500) NULL,
+                        ConnectionStringDestination VARCHAR(500) NULL,
+                        Options TEXT NULL,
+                        Type INTEGER NOT NULL,
+                        SavedDateTime TEXT NOT NULL,
+                        IsLastConfiguration BOOLEAN NULL
+                    )"
+            );
+
+            if (!SchemaOk())
+                throw new InvalidOperationException("Fatal error: Unable to create project settings file.");
+        }
+
+        private static string SqliteSettingsFilePath
+        {
+            get
+            {
+                var userLocalAppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), nameof(OpenDBDiff));
+                if (!Directory.Exists(userLocalAppDataDirectory)) Directory.CreateDirectory(userLocalAppDataDirectory);
+
+                return Path.Combine(userLocalAppDataDirectory, sqliteSettingsFile);
+            }
+        }
+
+
+        private static void ExecuteSqliteCommand(string commandText, Action<SQLiteDataReader> onRead, params string[] sqlNonQueryBeforeReadCommand)
+        {
+            if (!loading)
+                // This will execute a command to check if the project table exists
+                // It's maybe not required for every SQLite command that is executed?
+                // But if the file is deleted while OpenDBDiff is open, we don't want crashes, right?
+                EnsureSqliteSettingsFileExists();
+
+            using (var connection = new SQLiteConnection(String.Format(sqliteConnectionStringTemplate, SqliteSettingsFilePath)))
             {
                 // TODO: Don't know about Sqlite; hoping transaction is necessary?
                 connection.Open();
                 bool useTransaction = sqlNonQueryBeforeReadCommand != null && sqlNonQueryBeforeReadCommand.Length > 0 && !String.IsNullOrEmpty(sqlNonQueryBeforeReadCommand[0]);
                 using (var transaction = useTransaction ? connection.BeginTransaction() : null)
-                using (var command = new SQLiteCommand(sqlCommand, connection, null))
+                using (var command = new SQLiteCommand(commandText, connection, null))
                 {
-                    if (transaction != null)
+                    try
                     {
-                        foreach (string sqlBeforeCommand in sqlNonQueryBeforeReadCommand)
+                        if (transaction != null)
                         {
-                            if (!String.IsNullOrEmpty(sqlBeforeCommand))
+                            foreach (string sqlBeforeCommand in sqlNonQueryBeforeReadCommand)
                             {
-                                using (var beforeCommand = new SQLiteCommand(sqlBeforeCommand, connection, null))
+                                if (!String.IsNullOrEmpty(sqlBeforeCommand))
                                 {
-                                    beforeCommand.ExecuteNonQuery();
+                                    using (var beforeCommand = new SQLiteCommand(sqlBeforeCommand, connection, null))
+                                    {
+                                        beforeCommand.ExecuteNonQuery();
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if (OnRead != null)
-                    {
-                        using (var reader = command.ExecuteReader())
+                        if (onRead != null)
                         {
-                            while (reader.Read())
+                            using (var reader = command.ExecuteReader())
                             {
-                                OnRead(reader);
+                                while (reader.Read())
+                                {
+                                    onRead(reader);
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        command.ExecuteNonQuery();
-                    }
+                        else
+                        {
+                            command.ExecuteNonQuery();
+                        }
 
-                    if (transaction != null)
+                        transaction?.Commit();
+                    }
+                    catch
                     {
-                        transaction.Commit();
+                        transaction?.Rollback();
+                        throw;
                     }
                 }
             }
         }
 
-        private static bool TryExecuteSqliteCommand(string sqlCommand)
+        private static bool TryExecuteSqliteCommand(string commandText)
         {
-            return TryExecuteSqliteCommand(sqlCommand, null);
+            return TryExecuteSqliteCommand(commandText, null);
         }
 
-        private static bool TryExecuteSqliteCommand(string sqlCommand, Action<SQLiteDataReader> OnRead)
+        private static bool TryExecuteSqliteCommand(string commandText, Action<SQLiteDataReader> onRead)
         {
-            return TryExecuteSqliteCommand(sqlCommand, OnRead, null);
+            return TryExecuteSqliteCommand(commandText, onRead, null);
         }
 
-        private static bool TryExecuteSqliteCommand(string sqlCommand, Action<SQLiteDataReader> OnRead, params string[] sqlNonQueryBeforeReadCommand)
+        private static bool TryExecuteSqliteCommand(string commandText, Action<SQLiteDataReader> onRead, params string[] sqlNonQueryBeforeReadCommand)
         {
             try
             {
-                ExecuteSqliteCommand(sqlCommand, OnRead, sqlNonQueryBeforeReadCommand);
+                ExecuteSqliteCommand(commandText, onRead, sqlNonQueryBeforeReadCommand);
                 return true;
             }
             catch (Exception ex)
             {
-                if (showSqliteErrors
-                    && DialogResult.No == MessageBox.Show(ex.Message + "\n\nDo you want to see further errors?", "Project error", MessageBoxButtons.YesNo, MessageBoxIcon.Error))
-                {
-                    showSqliteErrors = false;
-                }
+                if (showSqliteErrors)
+                    showSqliteErrors = MessageBox.Show($"{ex.Message}\n\nDo you want to see further errors?\n\n{ex.ToString()}", "Project error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes;
+
                 return false;
             }
         }
@@ -110,9 +182,9 @@ namespace OpenDBDiff.Settings
         {
             int maxId = 0;
             TryExecuteSqliteCommand(
-                "SELECT MAX(ProjectId) AS NewId FROM Project WHERE Internal = 0",
-                reader => maxId = int.Parse(reader["NewId"].ToString()),
-                "INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('" + item.Name.Replace("'", "''") + "','" + item.ConnectionStringSource + "','" + item.ConnectionStringDestination + "','" + item.GetSerializedOptions() + "'," + ((int)item.Type).ToString() + ",0)");
+                "SELECT MAX(ProjectId) AS NewId FROM project WHERE IsLastConfiguration = 0",
+                r => maxId = int.Parse(r["NewId"].ToString()),
+                $"INSERT INTO project (ProjectName, ConnectionStringSource, ConnectionStringDestination, Options, Type, SavedDateTime, IsLastConfiguration) VALUES ('{item.ProjectName.Replace("'", "''")}','{item.ConnectionStringSource}','{item.ConnectionStringDestination}','{item.GetSerializedOptions()}',{(int)item.Type},'{DateTime.Now.ToString("o")}',0)");
             return maxId;
         }
 
@@ -124,13 +196,13 @@ namespace OpenDBDiff.Settings
         private static int Update(Project item)
         {
             TryExecuteSqliteCommand(
-                "UPDATE Project SET Name = '" + item.Name.Replace("'", "''") + "', ConnectionStringSource = '" + item.ConnectionStringSource + "', ConnectionStringDestination = '" + item.ConnectionStringDestination + "', Type = " + ((int)item.Type).ToString() + " WHERE ProjectId = " + item.Id.ToString());
+                $"UPDATE project SET ProjectName = '{item.ProjectName.Replace("'", "''")}', ConnectionStringSource = '{item.ConnectionStringSource}', ConnectionStringDestination = '{item.ConnectionStringDestination}', Type = {(int)item.Type}, SavedDateTime = '{DateTime.Now.ToString("o")}' WHERE ProjectId = {item.Id}");
             return item.Id;
         }
 
         public static void Delete(int Id)
         {
-            TryExecuteSqliteCommand("DELETE FROM Project WHERE ProjectId = " + Id.ToString());
+            TryExecuteSqliteCommand($"DELETE FROM project WHERE ProjectId = {Id}");
         }
 
         public static int Save(Project item)
@@ -145,11 +217,11 @@ namespace OpenDBDiff.Settings
         {
             if (GetLastConfiguration() != null)
             {
-                TryExecuteSqliteCommand("UPDATE Project SET ConnectionStringSource = '" + ConnectionStringSource + "', ConnectionStringDestination = '" + ConnectionStringDestination + "' WHERE Internal = 1");
+                TryExecuteSqliteCommand($"UPDATE project SET ConnectionStringSource = '{ConnectionStringSource}', ConnectionStringDestination = '{ConnectionStringDestination}', SavedDateTime = '{DateTime.Now.ToString("o")}' WHERE IsLastConfiguration = 1");
             }
             else
             {
-                TryExecuteSqliteCommand("INSERT INTO Project (Name, ConnectionStringSource, ConnectionStringDestination, Options, Type, Internal) VALUES ('LastConfiguration','" + ConnectionStringSource + "','" + ConnectionStringDestination + "','',1,1)");
+                TryExecuteSqliteCommand($"INSERT INTO project (ProjectName, ConnectionStringSource, ConnectionStringDestination, Options, Type, SavedDateTime, IsLastConfiguration) VALUES ('LastConfiguration','{ConnectionStringSource}','{ConnectionStringDestination}','',1,'{DateTime.Now.ToString("o")}',1)");
             }
         }
 
@@ -157,35 +229,36 @@ namespace OpenDBDiff.Settings
         {
             Project item = null;
             TryExecuteSqliteCommand(
-                "SELECT * FROM Project WHERE Internal = 1 ORDER BY Name",
-                reader => item = new Project
+                "SELECT * FROM project WHERE IsLastConfiguration = 1 ORDER BY ProjectName LIMIT 1",
+                r => item = new Project
                 {
-                    Id = int.Parse(reader["ProjectId"].ToString()),
-                    ConnectionStringSource = reader["ConnectionStringSource"].ToString(),
-                    ConnectionStringDestination = reader["ConnectionStringDestination"].ToString(),
-                    Type = (ProjectType)(long)reader["Type"],
+                    Id = int.Parse(r["ProjectId"].ToString()),
+                    ConnectionStringSource = r["ConnectionStringSource"].ToString(),
+                    ConnectionStringDestination = r["ConnectionStringDestination"].ToString(),
+                    Type = (ProjectType)(long)r["Type"],
                     //Options = (SqlOption) reader["Options"],
-                    Name = reader["Name"].ToString()
+                    ProjectName = r["ProjectName"].ToString(),
+                    SavedDateTime = DateTime.Parse(r["SavedDateTime"].ToString())
                 });
             return item;
         }
 
-        public static List<Project> GetAll()
+        public static IList<Project> GetAll()
         {
-            List<Project> items = new List<Project>();
+            var projects = new List<Project>();
             TryExecuteSqliteCommand(
-                "SELECT * FROM Project WHERE Internal = 0 ORDER BY Name",
-                reader => items.Add(new Project
+                "SELECT * FROM project WHERE IsLastConfiguration = 0 ORDER BY ProjectName",
+                r => projects.Add(new Project
                 {
-                    Id = int.Parse(reader["ProjectId"].ToString()),
-                    ConnectionStringSource = reader["ConnectionStringSource"].ToString(),
-                    ConnectionStringDestination =
-                       reader["ConnectionStringDestination"].ToString(),
-                    Type = (ProjectType)(long)reader["Type"],
+                    Id = int.Parse(r["ProjectId"].ToString()),
+                    ConnectionStringSource = r["ConnectionStringSource"].ToString(),
+                    ConnectionStringDestination = r["ConnectionStringDestination"].ToString(),
+                    Type = (ProjectType)(long)r["Type"],
                     //Options = (SqlOption) reader["Options"],
-                    Name = reader["Name"].ToString()
+                    ProjectName = r["ProjectName"].ToString(),
+                    SavedDateTime = DateTime.Parse(r["SavedDateTime"].ToString())
                 }));
-            return items;
+            return projects;
         }
     }
 }
