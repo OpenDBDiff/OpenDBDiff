@@ -214,14 +214,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             if (lstFilters.SelectedItems.Count > 0)
             {
                 AddItem itemForm = new AddItem(SQLOption, lstFilters.SelectedItems[0].Index);
-                itemForm.Show(this);
+                itemForm.ShowDialog(this);
             }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
             AddItem itemForm = new AddItem(SQLOption, -1);
-            itemForm.Show(this);
+            itemForm.ShowDialog(this);
         }
 
         private void chkConstraints_CheckedChanged(object sender, EventArgs e)
