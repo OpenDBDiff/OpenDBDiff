@@ -22,8 +22,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             indexFilter = Index;
             if (indexFilter != -1)
             {
-                txtFilter.Text = sqlOption.Filters.Items[indexFilter].Filter;
-                cboObjects.SelectedValue = sqlOption.Filters.Items[indexFilter].Type.ToString();
+                txtFilter.Text = sqlOption.Filters.Items[indexFilter].FilterPattern;
+                cboObjects.SelectedValue = sqlOption.Filters.Items[indexFilter].ObjectType.ToString();
             }
         }
 
@@ -72,7 +72,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 
             if (sqlOption.Filters.Items.Contains(fi))
             {
-                MessageBox.Show(this, string.Format("The list of name filters already includes an entry for text '{0}' of type '{1}'", fi.Filter, fi.Type.ToString()), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(this, string.Format("The list of name filters already includes an entry for text '{0}' of type '{1}'", fi.FilterPattern, fi.ObjectType.ToString()), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -80,8 +80,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
                 sqlOption.Filters.Items.Add(fi);
             else
             {
-                sqlOption.Filters.Items[indexFilter].Filter = fi.Filter;
-                sqlOption.Filters.Items[indexFilter].Type = fi.Type;
+                sqlOption.Filters.Items[indexFilter].FilterPattern = fi.FilterPattern;
+                sqlOption.Filters.Items[indexFilter].ObjectType = fi.ObjectType;
             }
             HandlerHelper.RaiseOnChange();
 
