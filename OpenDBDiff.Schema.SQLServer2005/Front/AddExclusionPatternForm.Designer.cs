@@ -36,8 +36,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             this.cboObjects = new System.Windows.Forms.ComboBox();
             this.txtFilter = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnApply = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
+            this.ApplyButton = new System.Windows.Forms.Button();
+            this.CancelFormButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -98,39 +98,39 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             this.label1.TabIndex = 0;
             this.label1.Text = "Filter Pattern:";
             // 
-            // btnApply
+            // ApplyButton
             // 
-            this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnApply.Location = new System.Drawing.Point(242, 80);
-            this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(75, 23);
-            this.btnApply.TabIndex = 1;
-            this.btnApply.Text = "Apply";
-            this.btnApply.UseVisualStyleBackColor = true;
-            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            this.ApplyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ApplyButton.Location = new System.Drawing.Point(242, 80);
+            this.ApplyButton.Name = "ApplyButton";
+            this.ApplyButton.Size = new System.Drawing.Size(75, 23);
+            this.ApplyButton.TabIndex = 1;
+            this.ApplyButton.Text = "Apply";
+            this.ApplyButton.UseVisualStyleBackColor = true;
+            this.ApplyButton.Click += new System.EventHandler(this.ApplyButton_Click);
             // 
-            // btnCancel
+            // CancelFormButton
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(161, 80);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 2;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.button2_Click);
+            this.CancelFormButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.CancelFormButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.CancelFormButton.Location = new System.Drawing.Point(161, 80);
+            this.CancelFormButton.Name = "CancelFormButton";
+            this.CancelFormButton.Size = new System.Drawing.Size(75, 23);
+            this.CancelFormButton.TabIndex = 2;
+            this.CancelFormButton.Text = "Cancel";
+            this.CancelFormButton.UseVisualStyleBackColor = true;
+            this.CancelFormButton.Click += new System.EventHandler(this.CancelFormButton_Click);
             // 
             // AddExclusionPatternForm
             // 
-            this.AcceptButton = this.btnApply;
+            this.AcceptButton = this.ApplyButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnCancel;
+            this.CancelButton = this.CancelFormButton;
             this.ClientSize = new System.Drawing.Size(324, 107);
             this.ControlBox = false;
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnApply);
+            this.Controls.Add(this.CancelFormButton);
+            this.Controls.Add(this.ApplyButton);
             this.Controls.Add(this.groupBox1);
             this.Name = "AddExclusionPatternForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -148,7 +148,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
         private Label label1;
         private ComboBox cboObjects;
         private Label label2;
-        private Button btnApply;
-        private Button btnCancel;
+        private Button ApplyButton;
+        private Button CancelFormButton;
     }
 }
