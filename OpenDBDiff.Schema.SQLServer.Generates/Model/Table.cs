@@ -45,16 +45,16 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public Table OriginalTable { get; set; }
 
-        [ShowItem("Constraints")]
+        [SchemaNode("Constraints")]
         public SchemaList<Constraint, Table> Constraints { get; private set; }
 
-        [ShowItem("Indexes", "Index")]
+        [SchemaNode("Indexes", "Index")]
         public SchemaList<Index, Table> Indexes { get; private set; }
 
-        [ShowItem("CLR Triggers")]
+        [SchemaNode("CLR Triggers")]
         public SchemaList<CLRTrigger, Table> CLRTriggers { get; private set; }
 
-        [ShowItem("Triggers")]
+        [SchemaNode("Triggers")]
         public SchemaList<Trigger, Table> Triggers { get; private set; }
 
         public SchemaList<FullTextIndex, Table> FullTextIndex { get; private set; }
@@ -143,7 +143,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Coleccion de campos de la tabla.
         /// </summary>
-        [ShowItem("Columns", "Column")]
+        [SchemaNode("Columns", "Column")]
         public Columns<Table> Columns { get; set; }
 
         #endregion ITable<Table> Members

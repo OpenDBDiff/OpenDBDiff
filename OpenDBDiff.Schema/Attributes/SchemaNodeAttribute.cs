@@ -3,21 +3,21 @@ using System;
 namespace OpenDBDiff.Schema.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
-    public sealed class ShowItemAttribute : Attribute
+    public sealed class SchemaNodeAttribute : Attribute
     {
-        public ShowItemAttribute(string name)
+        public SchemaNodeAttribute(string name)
         {
             this.Name = name;
             this.Image = "Folder";
         }
 
-        public ShowItemAttribute(string name, string image)
+        public SchemaNodeAttribute(string name, string image)
         {
             this.Name = name;
             this.Image = image;
         }
 
-        public ShowItemAttribute(string name, string image, Boolean isFullName)
+        public SchemaNodeAttribute(string name, string image, Boolean isFullName)
         {
             this.Name = name;
             this.Image = image;

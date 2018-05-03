@@ -89,10 +89,10 @@ namespace OpenDBDiff.Front
             nodes.Clear();
             foreach (PropertyInfo p in pi)
             {
-                object[] attrs = p.GetCustomAttributes(typeof(ShowItemAttribute), true);
+                object[] attrs = p.GetCustomAttributes(typeof(SchemaNodeAttribute), true);
                 if (attrs.Length > 0)
                 {
-                    ShowItemAttribute show = (ShowItemAttribute)attrs[0];
+                    SchemaNodeAttribute show = (SchemaNodeAttribute)attrs[0];
                     TreeNode node = nodes.Add(p.Name, show.Name);
                     node.ImageKey = "Folder";
                     ReadPropertyDetail(node, p, schema, show);
@@ -100,7 +100,7 @@ namespace OpenDBDiff.Front
             }
         }
 
-        private void ReadPropertyDetail(TreeNode node, PropertyInfo p, ISchemaBase schema, ShowItemAttribute attr)
+        private void ReadPropertyDetail(TreeNode node, PropertyInfo p, ISchemaBase schema, SchemaNodeAttribute attr)
         {
             Color NodeColor = Color.Black;
             IList items = (IList)p.GetValue(schema, null);

@@ -34,13 +34,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             return item;
         }
 
-        [ShowItem("CLR Triggers")]
+        [SchemaNode("CLR Triggers")]
         public SchemaList<CLRTrigger, View> CLRTriggers { get; set; }
 
-        [ShowItem("Triggers")]
+        [SchemaNode("Triggers")]
         public SchemaList<Trigger, View> Triggers { get; set; }
 
-        [ShowItem("Indexes", "Index")]
+        [SchemaNode("Indexes", "Index")]
         public SchemaList<Index, View> Indexes { get; set; }
 
         public override Boolean IsCodeType
