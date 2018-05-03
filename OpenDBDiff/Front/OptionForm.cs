@@ -7,15 +7,19 @@ namespace OpenDBDiff.Front
     {
         private IProjectHandler projectSelectorHandler;
         private Schema.Model.IOption SqlFilter;
+
         public event OptionControl.OptionEventHandler OptionSaved;
 
-
-        public OptionForm(IProjectHandler projectSelectorHandler)
+        public OptionForm(IProjectHandler projectSelectorHandler, Schema.Model.IOption filter)
         {
             this.projectSelectorHandler = projectSelectorHandler;
             sqlOptionsFront1 = projectSelectorHandler.CreateOptionControl();
             sqlOptionsFront1.OptionSaved += SqlOptionsFront1_OptionSaved;
+
             InitializeComponent();
+
+            SqlFilter = filter;
+            sqlOptionsFront1.Load(filter);
         }
 
         private void SqlOptionsFront1_OptionSaved(Schema.Model.IOption option)
@@ -23,22 +27,15 @@ namespace OpenDBDiff.Front
             OptionSaved?.Invoke(option);
         }
 
-        public void Show(IWin32Window owner, Schema.Model.IOption filter)
-        {
-            SqlFilter = filter;
-            sqlOptionsFront1.Load(filter);
-            this.Show(owner);
-        }
-
         private void btnApply_Click(object sender, EventArgs e)
         {
             sqlOptionsFront1.Save();
-            this.Dispose();
+            this.Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.Dispose();
+            this.Close();
         }
     }
 }

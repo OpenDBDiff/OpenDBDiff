@@ -87,7 +87,7 @@ namespace OpenDBDiff.Front
             {
                 OriginGenerator.OnProgress -= handler;
                 DestinationGenerator.OnProgress -= handler;
-                this.Dispose();
+                this.Close();
             }
         }
 
