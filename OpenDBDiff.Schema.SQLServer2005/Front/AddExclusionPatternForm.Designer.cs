@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 {
-    partial class AddItem
+    partial class AddExclusionPatternForm
     {
         /// <summary>
         /// Required designer variable.
@@ -121,7 +121,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.button2_Click);
             // 
-            // AddItem
+            // AddExclusionPatternForm
             // 
             this.AcceptButton = this.btnApply;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -132,7 +132,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.groupBox1);
-            this.Name = "AddItem";
+            this.Name = "AddExclusionPatternForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Filters";
             this.groupBox1.ResumeLayout(false);
