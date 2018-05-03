@@ -12,6 +12,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
         private SqlOption sqlOption;
         private int indexFilter;
 
+        public AddExclusionPatternForm(SqlOption sqlOption)
+            : this(sqlOption, -1)
+        { }
+
         public AddExclusionPatternForm(SqlOption sqlOption, int Index)
         {
             InitializeComponent();
@@ -23,7 +27,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             if (indexFilter != -1)
             {
                 txtFilter.Text = sqlOption.Filters.Items[indexFilter].FilterPattern;
-                cboObjects.SelectedValue = sqlOption.Filters.Items[indexFilter].ObjectType.ToString();
+                cboObjects.SelectedValue = sqlOption.Filters.Items[indexFilter].ObjectType;
             }
         }
 
