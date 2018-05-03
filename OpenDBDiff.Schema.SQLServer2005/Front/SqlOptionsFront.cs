@@ -262,5 +262,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
                 LoadFilters();
             }
         }
+
+        private void lstFilters_DoubleClick(object sender, EventArgs e)
+        {
+            if (lstFilters.SelectedItems.Count > 0)
+            {
+                AddExclusionPatternForm itemForm = new AddExclusionPatternForm(SQLOption, lstFilters.SelectedItems[0].Index);
+                itemForm.ShowDialog(this);
+            }
+        }
     }
 }
