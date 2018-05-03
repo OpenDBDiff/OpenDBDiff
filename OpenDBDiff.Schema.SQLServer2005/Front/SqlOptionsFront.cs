@@ -220,7 +220,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            AddExclusionPatternForm itemForm = new AddExclusionPatternForm(SQLOption, -1);
+            AddExclusionPatternForm itemForm = new AddExclusionPatternForm(SQLOption);
             itemForm.ShowDialog(this);
         }
 
