@@ -15,11 +15,23 @@ namespace OpenDBDiff.Front
             this.projectSelectorHandler = projectSelectorHandler;
             sqlOptionsFront1 = projectSelectorHandler.CreateOptionControl();
             sqlOptionsFront1.OptionSaved += SqlOptionsFront1_OptionSaved;
+            SqlFilter = filter;
+            sqlOptionsFront1.Load(filter);
 
             InitializeComponent();
 
-            SqlFilter = filter;
-            sqlOptionsFront1.Load(filter);
+            this.SuspendLayout();
+
+            this.sqlOptionsFront1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sqlOptionsFront1.Location = new System.Drawing.Point(3, 3);
+            this.sqlOptionsFront1.Name = "sqlOptionsFront1";
+            this.sqlOptionsFront1.Size = new System.Drawing.Size(586, 440);
+            this.sqlOptionsFront1.TabIndex = 0;
+            this.Controls.Add(this.sqlOptionsFront1);
+
+            this.ResumeLayout();
         }
 
         private void SqlOptionsFront1_OptionSaved(Schema.Model.IOption option)
