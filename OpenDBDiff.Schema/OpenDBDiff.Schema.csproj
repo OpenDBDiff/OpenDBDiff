@@ -63,6 +63,7 @@
     <Compile Include="..\OpenDBDiff\Properties\AssemblyVersionInfo.cs">
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Attributes\SchemaNodeAttribute.cs" />
     <Compile Include="Errors\MessageLog.cs" />
     <Compile Include="Events\ProgressEventArgs.cs" />
     <Compile Include="Events\ProgressEventHandler.cs" />
@@ -74,7 +75,6 @@
     <Compile Include="Misc\SchemaException.cs" />
     <Compile Include="Model\ISchemaBase.cs" />
     <Compile Include="Model\SchemaBase.cs" />
-    <Compile Include="Attributes\ShowCollection.cs" />
     <Compile Include="Model\SearchSchemaBase.cs" />
     <Compile Include="SqlAction.cs" />
     <Compile Include="SQLScript.cs" />

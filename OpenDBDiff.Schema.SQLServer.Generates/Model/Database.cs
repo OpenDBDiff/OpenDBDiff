@@ -43,67 +43,67 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         internal SearchSchemaBase AllObjects { get; private set; }
 
-        [ShowItem("Full Text Catalog", "FullText")]
+        [SchemaNode("Full Text Catalog", "FullText")]
         public SchemaList<FullText, Database> FullText { get; private set; }
 
-        [ShowItem("Table Type", "Table")]
+        [SchemaNode("Table Type", "Table")]
         public SchemaList<TableType, Database> TablesTypes { get; private set; }
 
-        [ShowItem("Partition Scheme", "PartitionScheme")]
+        [SchemaNode("Partition Scheme", "PartitionScheme")]
         public SchemaList<PartitionScheme, Database> PartitionSchemes { get; private set; }
 
-        [ShowItem("Partition Functions", "PartitionFunction")]
+        [SchemaNode("Partition Functions", "PartitionFunction")]
         public SchemaList<PartitionFunction, Database> PartitionFunctions { get; private set; }
 
-        [ShowItem("Defaults")]
+        [SchemaNode("Defaults")]
         public SchemaList<Default, Database> Defaults { get; private set; }
 
-        [ShowItem("Roles", "Rol")]
+        [SchemaNode("Roles", "Rol")]
         public SchemaList<Role, Database> Roles { get; private set; }
 
-        [ShowItem("Functions", "Function", true)]
+        [SchemaNode("Functions", "Function", true)]
         public SchemaList<Function, Database> Functions { get; private set; }
 
-        [ShowItem("Users", "User")]
+        [SchemaNode("Users", "User")]
         public SchemaList<User, Database> Users { get; private set; }
 
-        [ShowItem("Views", "View", true)]
+        [SchemaNode("Views", "View", true)]
         public SchemaList<View, Database> Views { get; private set; }
 
-        [ShowItem("Assemblies", "Assembly")]
+        [SchemaNode("Assemblies", "Assembly")]
         public SchemaList<Assembly, Database> Assemblies { get; private set; }
 
-        [ShowItem("Synonyms")]
+        [SchemaNode("Synonyms")]
         public SchemaList<Synonym, Database> Synonyms { get; private set; }
 
-        [ShowItem("DLL Triggers")]
+        [SchemaNode("DLL Triggers")]
         public SchemaList<Trigger, Database> DDLTriggers { get; private set; }
 
-        [ShowItem("File Groups")]
+        [SchemaNode("File Groups")]
         public SchemaList<FileGroup, Database> FileGroups { get; private set; }
 
-        [ShowItem("Rules")]
+        [SchemaNode("Rules")]
         public SchemaList<Rule, Database> Rules { get; private set; }
 
-        [ShowItem("Stored Procedures", "Procedure", true)]
+        [SchemaNode("Stored Procedures", "Procedure", true)]
         public SchemaList<StoredProcedure, Database> Procedures { get; private set; }
 
-        [ShowItem("CLR Stored Procedures", "CLRProcedure", true)]
+        [SchemaNode("CLR Stored Procedures", "CLRProcedure", true)]
         public SchemaList<CLRStoredProcedure, Database> CLRProcedures { get; private set; }
 
-        [ShowItem("CLR Functions", "CLRFunction", true)]
+        [SchemaNode("CLR Functions", "CLRFunction", true)]
         public SchemaList<CLRFunction, Database> CLRFunctions { get; private set; }
 
-        [ShowItem("Schemas", "Schema")]
+        [SchemaNode("Schemas", "Schema")]
         public SchemaList<Schema, Database> Schemas { get; private set; }
 
-        [ShowItem("XML Schemas", "XMLSchema")]
+        [SchemaNode("XML Schemas", "XMLSchema")]
         public SchemaList<XMLSchema, Database> XmlSchemas { get; private set; }
 
-        [ShowItem("Tables", "Table", true)]
+        [SchemaNode("Tables", "Table", true)]
         public SchemaList<Table, Database> Tables { get; private set; }
 
-        [ShowItem("User Types", "UDT")]
+        [SchemaNode("User Types", "UDT")]
         public SchemaList<UserDataType, Database> UserTypes { get; private set; }
 
         public SqlOption Options { get; set; }
