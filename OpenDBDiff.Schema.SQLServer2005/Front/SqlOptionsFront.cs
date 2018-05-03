@@ -87,6 +87,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             chkCompUsers.Checked = SQLOption.Ignore.FilterUsers;
             chkCompRoles.Checked = SQLOption.Ignore.FilterRoles;
             chkCompRules.Checked = SQLOption.Ignore.FilterRules;
+
+            IncludeSynonymsCheckBox.Checked = SQLOption.Ignore.FilterSynonyms;
+
             if (SQLOption.Script.AlterObjectOnSchemaBinding)
                 optScriptSchemaBindingAlter.Checked = true;
             else
@@ -165,6 +168,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             SQLOption.Ignore.FilterRules = chkCompRules.Checked;
             SQLOption.Ignore.FilterFullText = chkFullText.Checked;
             SQLOption.Ignore.FilterFullTextPath = chkFullTextPath.Checked;
+            SQLOption.Ignore.FilterSynonyms = IncludeSynonymsCheckBox.Checked;
 
             SQLOption.Ignore.FilterNotForReplication = chkIgnoreNotForReplication.Checked;
             SQLOption.Script.AlterObjectOnSchemaBinding = optScriptSchemaBindingAlter.Checked;
