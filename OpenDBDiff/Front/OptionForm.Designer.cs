@@ -59,16 +59,6 @@ namespace OpenDBDiff.Front
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             //
-            // sqlOptionsFront1
-            //
-            this.sqlOptionsFront1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sqlOptionsFront1.Location = new System.Drawing.Point(3, 3);
-            this.sqlOptionsFront1.Name = "sqlOptionsFront1";
-            this.sqlOptionsFront1.Size = new System.Drawing.Size(586, 440);
-            this.sqlOptionsFront1.TabIndex = 0;
-            //
             // OptionForm
             //
             this.AcceptButton = this.btnApply;
@@ -78,7 +68,6 @@ namespace OpenDBDiff.Front
             this.ClientSize = new System.Drawing.Size(592, 477);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnApply);
-            this.Controls.Add(this.sqlOptionsFront1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
