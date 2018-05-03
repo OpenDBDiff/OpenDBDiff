@@ -1070,6 +1070,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             this.lstFilters.TabIndex = 0;
             this.lstFilters.UseCompatibleStateImageBehavior = false;
             this.lstFilters.View = System.Windows.Forms.View.Details;
+            this.lstFilters.DoubleClick += new System.EventHandler(this.lstFilters_DoubleClick);
             //
             // columnHeader1
             //
