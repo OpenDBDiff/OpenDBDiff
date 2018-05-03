@@ -1,30 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using OpenDBDiff.Schema.SQLServer.Generates.Options;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using OpenDBDiff.Schema.SQLServer.Generates.Options;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 {
     public partial class AddExclusionPatternForm : Form
     {
-        private class ObjectTypeComboBoxItem
-        {
-            public string Id { get; set; }
-            public string Name { get; set; }
-        }
-
-        private IList<ObjectTypeComboBoxItem> items = new List<ObjectTypeComboBoxItem>();
-
         private SqlOption sqlOption;
         private int indexFilter;
 
         public AddExclusionPatternForm(SqlOption sqlOption, int Index)
         {
             InitializeComponent();
-            FillCombo();
+
+            PopulateObjectTypeDropDownList();
+
             this.sqlOption = sqlOption;
             indexFilter = Index;
             if (indexFilter != -1)
@@ -50,26 +43,24 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
                 return value.ToString();
         }
 
-        private void FillCombo()
+        private void PopulateObjectTypeDropDownList()
         {
-            foreach (ObjectType state in Enum.GetValues(typeof(ObjectType)).Cast<ObjectType>())
-            {
-                var item = new ObjectTypeComboBoxItem();
-                item.Id = state.ToString();
-                item.Name = GetEnumDescription(state);
-                items.Add(item);
-            }
-            cboObjects.DataSource = items.OrderBy(i => i.Name).ToList();
-            cboObjects.DisplayMember = "Name";
-            cboObjects.ValueMember = "Id";
+            var data = Enum.GetValues(typeof(ObjectType)).Cast<ObjectType>()
+                .Select(ot => new { ObjectType = ot, Description = GetEnumDescription(ot) })
+                .OrderBy(a => a.Description)
+                .ToList();
+
+            cboObjects.DataSource = data;
+            cboObjects.DisplayMember = "Description";
+            cboObjects.ValueMember = "ObjectType";
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void CancelFormButton_Click(object sender, EventArgs e)
         {
-            this.Dispose();
+            this.Close();
         }
 
-        private void btnApply_Click(object sender, EventArgs e)
+        private void ApplyButton_Click(object sender, EventArgs e)
         {
             if (cboObjects.SelectedItem == null)
             {
@@ -85,7 +76,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
                 return;
             }
 
-
             if (indexFilter == -1)
                 sqlOption.Filters.Items.Add(fi);
             else
@@ -94,7 +84,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
                 sqlOption.Filters.Items[indexFilter].Type = fi.Type;
             }
             HandlerHelper.RaiseOnChange();
-            this.Dispose();
+
+            this.Close();
         }
     }
 }
