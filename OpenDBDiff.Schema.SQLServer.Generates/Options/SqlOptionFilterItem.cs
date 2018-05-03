@@ -5,25 +5,25 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Options
 {
     public class SqlOptionFilterItem
     {
-        public SqlOptionFilterItem(ObjectType type, string filter)
+        public SqlOptionFilterItem(ObjectType objectType, string filterPattern)
         {
-            this.Filter = filter;
-            this.Type = type;
+            this.ObjectType = objectType;
+            this.FilterPattern = filterPattern;
         }
 
-        public ObjectType Type { get; set; }
+        public ObjectType ObjectType { get; set; }
 
-        public string Filter { get; set; }
+        public string FilterPattern { get; set; }
 
         public bool IsMatch(ISchemaBase item)
         {
-            return item.ObjectType == this.Type && item.Name.ToLower() == this.Filter.ToLower() || this.IsSchemaMatch(item);
+            return item.ObjectType.Equals(this.ObjectType) && item.Name.Equals(this.FilterPattern, StringComparison.OrdinalIgnoreCase) || this.IsSchemaMatch(item);
         }
 
         public bool IsSchemaMatch(ISchemaBase item)
         {
             if (item.Owner == null) return false;
-            return this.Type == ObjectType.Schema && item.Owner.ToLower() == this.Filter.ToLower();
+            return this.ObjectType.Equals(ObjectType.Schema) && item.Owner.Equals(this.FilterPattern, StringComparison.OrdinalIgnoreCase);
         }
 
         #region Overrides
@@ -48,13 +48,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Options
             {
                 return false;
             }
-            return this.Type.Equals(fi.Type) && this.Filter.Equals(fi.Filter);
+            return this.ObjectType.Equals(fi.ObjectType) && this.FilterPattern.Equals(fi.FilterPattern, StringComparison.OrdinalIgnoreCase);
         }
 
         public override int GetHashCode()
         {
             long hash = 13;
-            hash = hash + this.Type.GetHashCode() + this.Filter.GetHashCode();
+            hash = hash + this.ObjectType.GetHashCode() + this.FilterPattern.ToLowerInvariant().GetHashCode();
             return Convert.ToInt32(hash & 0x7fffffff);
         }
         #endregion

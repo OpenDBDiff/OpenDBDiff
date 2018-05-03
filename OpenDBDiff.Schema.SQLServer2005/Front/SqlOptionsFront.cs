@@ -26,8 +26,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             lstFilters.Items.Clear();
             foreach (SqlOptionFilterItem item in SQLOption.Filters.Items)
             {
-                ListViewItem lview = new ListViewItem(item.Filter);
-                lview.SubItems.Add(item.Type.ToString());
+                var lview = new ListViewItem(item.FilterPattern);
+                lview.SubItems.Add(item.ObjectType.ToString());
                 lstFilters.Items.Add(lview);
             };
         }
