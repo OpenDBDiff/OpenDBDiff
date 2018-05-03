@@ -231,7 +231,7 @@ namespace OpenDBDiff.Front
             TreeView tree = (TreeView)schemaTreeView1.Controls.Find("treeView1", true)[0];
             ISchemaBase selected = (ISchemaBase)tree.SelectedNode.Tag;
             DataCompareForm dataCompare = new DataCompareForm(selected, LeftDatabaseSelector.ConnectionString, RightDatabaseSelector.ConnectionString);
-            dataCompare.Show();
+            dataCompare.ShowDialog();
         }
 
         private void btnCompare_Click(object sender, EventArgs e)
@@ -496,9 +496,9 @@ namespace OpenDBDiff.Front
         private void btnOptions_Click(object sender, EventArgs e)
         {
             Options = Options ?? ProjectSelectorHandler.GetDefaultProjectOptions();
-            OptionForm form = new OptionForm(this.ProjectSelectorHandler);
+            OptionForm form = new OptionForm(this.ProjectSelectorHandler, Options);
             form.OptionSaved += new OptionControl.OptionEventHandler((option) => Options = option);
-            form.Show(Owner, Options);
+            form.ShowDialog(this);
         }
 
         private void LoadProjectHandlers()
