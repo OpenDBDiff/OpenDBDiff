@@ -8,7 +8,7 @@ using OpenDBDiff.Schema.SQLServer.Generates.Options;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 {
-    public partial class AddItem : Form
+    public partial class AddExclusionPatternForm : Form
     {
         private class ObjectTypeComboBoxItem
         {
@@ -21,7 +21,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
         private SqlOption sqlOption;
         private int indexFilter;
 
-        public AddItem(SqlOption sqlOption, int Index)
+        public AddExclusionPatternForm(SqlOption sqlOption, int Index)
         {
             InitializeComponent();
             FillCombo();

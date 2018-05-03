@@ -68,11 +68,11 @@
     <Compile Include="..\OpenDBDiff\Properties\AssemblyVersionInfo.cs">
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Front\AddItem.cs">
+    <Compile Include="Front\AddExclusionPatternForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Front\AddItem.Designer.cs">
-      <DependentUpon>AddItem.cs</DependentUpon>
+    <Compile Include="Front\AddExclusionPatternForm.Designer.cs">
+      <DependentUpon>AddExclusionPatternForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Front\HandlerHelper.cs" />
     <Compile Include="Front\SqlOptionsFront.cs">
@@ -119,8 +119,8 @@
     <None Include="OpenDBDiff.Schema.SQLServer.snk" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Front\AddItem.resx">
-      <DependentUpon>AddItem.cs</DependentUpon>
+    <EmbeddedResource Include="Front\AddExclusionPatternForm.resx">
+      <DependentUpon>AddExclusionPatternForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Front\SqlOptionsFront.resx">

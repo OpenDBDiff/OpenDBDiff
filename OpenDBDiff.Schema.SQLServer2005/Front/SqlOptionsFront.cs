@@ -213,14 +213,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
         {
             if (lstFilters.SelectedItems.Count > 0)
             {
-                AddItem itemForm = new AddItem(SQLOption, lstFilters.SelectedItems[0].Index);
+                AddExclusionPatternForm itemForm = new AddExclusionPatternForm(SQLOption, lstFilters.SelectedItems[0].Index);
                 itemForm.ShowDialog(this);
             }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            AddItem itemForm = new AddItem(SQLOption, -1);
+            AddExclusionPatternForm itemForm = new AddExclusionPatternForm(SQLOption, -1);
             itemForm.ShowDialog(this);
         }
 
