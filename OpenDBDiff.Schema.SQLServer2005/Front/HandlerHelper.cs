@@ -7,7 +7,7 @@
 
         public static void RaiseOnChange()
         {
-            if (OnChange != null) OnChange();
+            OnChange?.Invoke();
         }
     }
 }
