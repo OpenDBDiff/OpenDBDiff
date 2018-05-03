@@ -35,9 +35,9 @@ namespace OpenDBDiff.Front
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
+            //
             // btnCancel
-            // 
+            //
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(433, 450);
@@ -47,9 +47,9 @@ namespace OpenDBDiff.Front
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
+            //
             // btnApply
-            // 
+            //
             this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnApply.Location = new System.Drawing.Point(514, 450);
             this.btnApply.Name = "btnApply";
@@ -58,19 +58,19 @@ namespace OpenDBDiff.Front
             this.btnApply.Text = "Apply";
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
-            // 
+            //
             // sqlOptionsFront1
-            // 
-            this.sqlOptionsFront1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.sqlOptionsFront1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sqlOptionsFront1.Location = new System.Drawing.Point(3, 3);
             this.sqlOptionsFront1.Name = "sqlOptionsFront1";
             this.sqlOptionsFront1.Size = new System.Drawing.Size(586, 440);
             this.sqlOptionsFront1.TabIndex = 0;
-            // 
+            //
             // OptionForm
-            // 
+            //
             this.AcceptButton = this.btnApply;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -84,7 +84,7 @@ namespace OpenDBDiff.Front
             this.MinimizeBox = false;
             this.Name = "OptionForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Compare Options";
+            this.Text = "Comparison options";
             this.ResumeLayout(false);
 
         }
