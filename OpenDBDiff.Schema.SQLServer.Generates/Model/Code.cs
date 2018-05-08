@@ -147,7 +147,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             }
         }
 
-        private SQLScriptList RebuildDependencys(List<string> depends, int deepMin, int deepMax)
+        private SQLScriptList RebuildDependencies(List<string> depends, int deepMin, int deepMax)
         {
             int newDeepMax = (deepMax != 0) ? deepMax + 1 : 0;
             int newDeepMin = (deepMin != 0) ? deepMin - 1 : 0;
@@ -172,7 +172,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                         if ((this.Status != ObjectStatus.Drop) && (item.Status != ObjectStatus.Create))
                             list.Add(item.Create(), newDeepMax);
                         if (item.IsCodeType)
-                            list.AddRange(RebuildDependencys(((ICode)item).DependenciesOut, newDeepMin, newDeepMax));
+                            list.AddRange(RebuildDependencies(((ICode)item).DependenciesOut, newDeepMin, newDeepMax));
                     }
                 }
             };
@@ -186,7 +186,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public SQLScriptList Rebuild()
         {
             SQLScriptList list = new SQLScriptList();
-            list.AddRange(RebuildDependencys());
+            list.AddRange(RebuildDependencies());
             if (this.Status != ObjectStatus.Create) list.Add(Drop(), deepMin);
             if (this.Status != ObjectStatus.Drop) list.Add(Create(), deepMax);
             return list;
@@ -196,9 +196,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         /// Rebuilds the dependant objects.
         /// </summary>
         /// <returns></returns>
-        public SQLScriptList RebuildDependencys()
+        public SQLScriptList RebuildDependencies()
         {
-            return RebuildDependencys(this.DependenciesOut, deepMin, deepMax);
+            return RebuildDependencies(this.DependenciesOut, deepMin, deepMax);
         }
 
         public override string ToSql()

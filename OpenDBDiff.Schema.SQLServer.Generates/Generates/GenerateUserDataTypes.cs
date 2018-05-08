@@ -37,7 +37,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                     {
                         while (reader.Read())
                         {
-                            types[reader["TypeName"].ToString()].Dependencys.Add(new ObjectDependency(reader["TableName"].ToString(), reader["ColumnName"].ToString(), ConvertType.GetObjectType(reader["Type"].ToString())));
+                            types[reader["TypeName"].ToString()].Dependencies.Add(new ObjectDependency(reader["TableName"].ToString(), reader["ColumnName"].ToString(), ConvertType.GetObjectType(reader["Type"].ToString())));
                         }
                     }
                 }
