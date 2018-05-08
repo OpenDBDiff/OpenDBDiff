@@ -51,18 +51,16 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                                 var version = new Version(versionValue);
                                 item.VersionNumber = float.Parse(String.Format("{0}.{1}", version.Major, version.Minor), CultureInfo.InvariantCulture);
 
-                                int? edition = null;
                                 if (reader.FieldCount > 1 && !reader.IsDBNull(1))
                                 {
-                                    int validEdition;
-                                    string editionValue = reader[1].ToString();
-                                    if (!String.IsNullOrEmpty(editionValue) && int.TryParse(editionValue, out validEdition))
+                                    int edition;
+                                    if (int.TryParse(reader[1].ToString(), out edition)
+                                        && Enum.IsDefined(typeof(DatabaseInfo.SQLServerEdition), edition))
                                     {
-                                        edition = validEdition;
+                                        item.SetEdition((DatabaseInfo.SQLServerEdition)edition);
                                     }
                                 }
 
-                                item.SetEdition(edition);
                             }
                             catch (Exception notAGoodIdeaToCatchAllErrors)
                             {
@@ -79,7 +77,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                     }
                 }
 
-                using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.Get(item.Version, database), conn))
+                using (SqlCommand command = new SqlCommand(DatabaseSQLCommand.Get(item.Version, item.Edition, database), conn))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
                     {

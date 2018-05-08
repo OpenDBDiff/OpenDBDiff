@@ -1,21 +1,31 @@
-using System.Text;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using System.Text;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 {
     internal static class ViewSQLCommand
     {
-
         #region View
 
-        public static string GetView(DatabaseInfo.SQLServerVersion version)
+        public static string GetView(DatabaseInfo.SQLServerVersion version, DatabaseInfo.SQLServerEdition edition)
         {
-            if (version == DatabaseInfo.SQLServerVersion.SQLServer2000 ||
-                version == DatabaseInfo.SQLServerVersion.SQLServer2005 ||
-                version == DatabaseInfo.SQLServerVersion.SQLServer2008 ||
-                version == DatabaseInfo.SQLServerVersion.SQLServer2008R2) return GetViewSql2008();
-            //Fall back to highest compatible version
-            return GetViewSqlAzure();
+            switch (version)
+            {
+                case DatabaseInfo.SQLServerVersion.SQLServer2000:
+                case DatabaseInfo.SQLServerVersion.SQLServer2005:
+                case DatabaseInfo.SQLServerVersion.SQLServer2008:
+                case DatabaseInfo.SQLServerVersion.SQLServer2008R2:
+                    return GetViewSql2008();
+
+                case DatabaseInfo.SQLServerVersion.SQLServerAzure10:
+                    return GetViewSqlAzure();
+
+                default:
+                    if (edition == DatabaseInfo.SQLServerEdition.Azure)
+                        return GetViewSqlAzure();
+                    else
+                        return GetViewSql2008();
+            }
         }
 
         private static string GetViewSql2008()
@@ -53,8 +63,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             return sql.ToString();
         }
 
-
-        #endregion
-
+        #endregion View
     }
 }

@@ -26,7 +26,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             root.RaiseOnReading(new ProgressEventArgs("Reading Index...", Constants.READING_INDEXES));
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(IndexSQLCommand.Get(database.Info.Version), conn))
+                using (SqlCommand command = new SqlCommand(IndexSQLCommand.Get(database.Info.Version, database.Info.Edition), conn))
                 {
                     conn.Open();
                     command.CommandTimeout = 0;

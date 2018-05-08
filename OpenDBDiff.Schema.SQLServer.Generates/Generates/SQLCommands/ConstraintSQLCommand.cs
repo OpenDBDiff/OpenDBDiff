@@ -1,35 +1,51 @@
-using System.Text;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using System.Text;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 {
     internal static class ConstraintSQLCommand
     {
-        public static string GetUniqueKey(DatabaseInfo.SQLServerVersion version)
+        public static string GetUniqueKey(DatabaseInfo.SQLServerVersion version, DatabaseInfo.SQLServerEdition edition)
         {
-            if (version == DatabaseInfo.SQLServerVersion.SQLServer2005) return GetUniqueKey2005();
-            if (version == DatabaseInfo.SQLServerVersion.SQLServer2008 ||
-                version == DatabaseInfo.SQLServerVersion.SQLServer2008R2) return GetUniqueKey2008();
-            //Fall back to highest compatible version
-            return GetUniqueKeyAzure();
+            switch (version)
+            {
+                case DatabaseInfo.SQLServerVersion.SQLServer2005:
+                    return GetUniqueKey2005();
+
+                case DatabaseInfo.SQLServerVersion.SQLServerAzure10:
+                    return GetUniqueKeyAzure();
+
+                default:
+                    if (edition == DatabaseInfo.SQLServerEdition.Azure)
+                        return GetUniqueKeyAzure();
+                    else
+                        return GetUniqueKey2008();
+            }
         }
 
         public static string GetCheck(DatabaseInfo.SQLServerVersion version)
         {
             if (version == DatabaseInfo.SQLServerVersion.SQLServer2005) return GetCheck2005();
-            //Fall back to highest compatible version            
+            //Fall back to highest compatible version
             return GetCheck2008();
         }
 
         public static string GetPrimaryKey(DatabaseInfo.SQLServerVersion version, Table table)
         {
-            if (version == DatabaseInfo.SQLServerVersion.SQLServer2000) return GetPrimaryKey2000(table);
-            if (version == DatabaseInfo.SQLServerVersion.SQLServer2005) return GetPrimaryKey2005();
-            if (version == DatabaseInfo.SQLServerVersion.SQLServer2008 ||
-                version == DatabaseInfo.SQLServerVersion.SQLServer2008R2)
-                return GetPrimaryKey2008();
-            //Fall back to highest compatible version            
-            return GetPrimaryKeyAzure();
+            switch (version)
+            {
+                case DatabaseInfo.SQLServerVersion.SQLServer2000:
+                    return GetPrimaryKey2000(table);
+
+                case DatabaseInfo.SQLServerVersion.SQLServer2005:
+                    return GetPrimaryKey2005();
+
+                case DatabaseInfo.SQLServerVersion.SQLServerAzure10:
+                    return GetPrimaryKeyAzure();
+
+                default:
+                    return GetPrimaryKey2008();
+            }
         }
 
         private static string GetUniqueKeyAzure()
