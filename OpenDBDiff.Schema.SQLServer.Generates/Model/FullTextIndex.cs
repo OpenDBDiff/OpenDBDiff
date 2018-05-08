@@ -79,7 +79,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             Columns.ForEach(item => { sql += "[" + item.ColumnName + "] LANGUAGE [" + item.Language + "],"; });
             sql = sql.Substring(0, sql.Length - 1);
             sql += ")\r\n";
-            if (((Database)this.RootParent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+            if (((Database)this.RootParent).Info.Version == DatabaseInfo.SQLServerVersion.SQLServer2008)
             {
                 sql += "KEY INDEX " + Index + " ON ([" + FullText + "]";
                 sql += ", FILEGROUP [" + FileGroup + "]";

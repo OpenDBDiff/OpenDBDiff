@@ -4,10 +4,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 {
     internal static class UserDataTypeCommand
     {
-        public static string Get(DatabaseInfo.VersionTypeEnum version)
+        public static string Get(DatabaseInfo.SQLServerVersion version)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2000) return Get2000();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return Get2005();
+            if (version == DatabaseInfo.SQLServerVersion.SQLServer2000) return Get2000();
+            if (version == DatabaseInfo.SQLServerVersion.SQLServer2005) return Get2005();
             //Fall back to highest compatible version
             return Get2008();
         }

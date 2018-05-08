@@ -2,7 +2,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {
     public class DatabaseInfo
     {
-        public enum VersionTypeEnum
+        public enum SQLServerVersion
         {
             SQLServer2000 = 1,
             SQLServer2005 = 2,
@@ -18,14 +18,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public DatabaseInfo()
         {
-            Version = VersionTypeEnum.SQLServer2005;
+            Version = SQLServerVersion.SQLServer2005;
         }
 
         public string Server { get; set; }
 
         public string Database { get; set; }
 
-        public VersionTypeEnum Version { get; private set; }
+        public SQLServerVersion Version { get; private set; }
 
         public string Collation { get; set; }
 
@@ -47,12 +47,12 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             set
             {
                 versionNumber = value;
-                if ((versionNumber >= 8) && (versionNumber < 9)) Version = VersionTypeEnum.SQLServer2000;
-                if ((versionNumber >= 9) && (versionNumber < 10)) Version = VersionTypeEnum.SQLServer2005;
-                if ((versionNumber >= 10) && (versionNumber < 10.25)) Version = VersionTypeEnum.SQLServer2008;
-                if ((versionNumber >= 10.25) && (versionNumber < 10.5)) Version = VersionTypeEnum.SQLServerAzure10;
-                if ((versionNumber >= 10.5) && (versionNumber < 11)) Version = VersionTypeEnum.SQLServer2008R2;
-                if ((versionNumber >= 11.0) && (versionNumber < 13)) Version = VersionTypeEnum.SQLServer2008R2; // SQLServer2012, SQLServer2014
+                if ((versionNumber >= 8) && (versionNumber < 9)) Version = SQLServerVersion.SQLServer2000;
+                if ((versionNumber >= 9) && (versionNumber < 10)) Version = SQLServerVersion.SQLServer2005;
+                if ((versionNumber >= 10) && (versionNumber < 10.25)) Version = SQLServerVersion.SQLServer2008;
+                if ((versionNumber >= 10.25) && (versionNumber < 10.5)) Version = SQLServerVersion.SQLServerAzure10;
+                if ((versionNumber >= 10.5) && (versionNumber < 11)) Version = SQLServerVersion.SQLServer2008R2;
+                if ((versionNumber >= 11.0) && (versionNumber < 13)) Version = SQLServerVersion.SQLServer2008R2; // SQLServer2012, SQLServer2014
             }
         }
 
@@ -60,7 +60,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             if (edition.GetValueOrDefault() == 5)
             {
-                this.Version = VersionTypeEnum.SQLServerAzure10;
+                this.Version = SQLServerVersion.SQLServerAzure10;
             }
         }
     }

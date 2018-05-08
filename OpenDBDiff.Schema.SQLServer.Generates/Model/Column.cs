@@ -435,7 +435,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                     }
                 }
                 if (Type.Equals("numeric") || Type.Equals("decimal")) sql += " (" + Precision.ToString(CultureInfo.InvariantCulture) + "," + Scale.ToString(CultureInfo.InvariantCulture) + ")";
-                if (((Database)Parent.Parent).Info.Version >= DatabaseInfo.VersionTypeEnum.SQLServer2008)
+                if (((Database)Parent.Parent).Info.Version >= DatabaseInfo.SQLServerVersion.SQLServer2008)
                 {
                     if (Type.Equals("datetime2") || Type.Equals("datetimeoffset") || Type.Equals("time")) sql += "(" + Scale.ToString(CultureInfo.InvariantCulture) + ")";
                 }

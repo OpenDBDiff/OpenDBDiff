@@ -200,7 +200,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             if (database == null)
                 return string.Empty;
 
-            var isAzure10 = database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10;
+            var isAzure10 = database.Info.Version == DatabaseInfo.SQLServerVersion.SQLServerAzure10;
 
             string sql = "";
             string sqlPK = "";

@@ -6,9 +6,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
     internal static class TableSQLCommand
     {
         #region Table Count
-        public static string GetTableCount(DatabaseInfo.VersionTypeEnum version)
+        public static string GetTableCount(DatabaseInfo.SQLServerVersion version)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2000) return GetTableCount2000();
+            if (version == DatabaseInfo.SQLServerVersion.SQLServer2000) return GetTableCount2000();
             //Fall back to highest compatible version
             return GetTableCount2005();
         }
@@ -25,12 +25,12 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
         #endregion
 
         #region Table Detail
-        public static string GetTableDetail(DatabaseInfo.VersionTypeEnum version)
+        public static string GetTableDetail(DatabaseInfo.SQLServerVersion version)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2000) return GetTableDetail2000();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return GetTableDetail2005();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008 ||
-                version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2) return GetTableDetail2008();
+            if (version == DatabaseInfo.SQLServerVersion.SQLServer2000) return GetTableDetail2000();
+            if (version == DatabaseInfo.SQLServerVersion.SQLServer2005) return GetTableDetail2005();
+            if (version == DatabaseInfo.SQLServerVersion.SQLServer2008 ||
+                version == DatabaseInfo.SQLServerVersion.SQLServer2008R2) return GetTableDetail2008();
             //Fall back to highest compatible version
             return GetTableDetailAzure();
         }

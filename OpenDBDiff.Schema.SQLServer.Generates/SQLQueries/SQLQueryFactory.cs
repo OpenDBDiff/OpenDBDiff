@@ -9,7 +9,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.SQLQueries
     {
         private static Dictionary<string, string> queries = new Dictionary<string, string>();
 
-        public static string Get(string queryFullName, Model.DatabaseInfo.VersionTypeEnum version)
+        public static string Get(string queryFullName, Model.DatabaseInfo.SQLServerVersion version)
         {
             return Get($"{queryFullName}.{version}");
         }

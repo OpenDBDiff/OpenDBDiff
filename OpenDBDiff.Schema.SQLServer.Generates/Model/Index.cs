@@ -148,7 +148,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 database = current.Parent as Database;
                 current = current.Parent;
             }
-            var isAzure10 = database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10;
+            var isAzure10 = database.Info.Version == DatabaseInfo.SQLServerVersion.SQLServerAzure10;
 
             StringBuilder sql = new StringBuilder();
             string includes = "";

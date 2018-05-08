@@ -74,7 +74,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                     sqltype += " (" + Size.ToString(CultureInfo.InvariantCulture) + ")";
             }
             if (Type.Equals("numeric") || Type.Equals("decimal")) sqltype += " (" + Precision.ToString(CultureInfo.InvariantCulture) + "," + Scale.ToString(CultureInfo.InvariantCulture) + ")";
-            if (((Database)Parent).Info.Version >= DatabaseInfo.VersionTypeEnum.SQLServer2008)
+            if (((Database)Parent).Info.Version >= DatabaseInfo.SQLServerVersion.SQLServer2008)
             {
                 if (Type.Equals("datetime2") || Type.Equals("datetimeoffset") || Type.Equals("time")) sqltype += "(" + Scale.ToString(CultureInfo.InvariantCulture) + ")";
             }

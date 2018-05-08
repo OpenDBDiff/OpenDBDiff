@@ -19,9 +19,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             this.root = root;
         }
 
-        private static string GetSQL(DatabaseInfo.VersionTypeEnum version, SqlOption options)
+        private static string GetSQL(DatabaseInfo.SQLServerVersion version, SqlOption options)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
+            if (version == DatabaseInfo.SQLServerVersion.SQLServerAzure10)
             {
                 return SQLQueries.SQLQueryFactory.Get("GetTriggers", version);
             }

@@ -18,7 +18,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
         public void Fill(Database database, string connectionString)
         {
             //not supported in azure yet
-            if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10) return;
+            if (database.Info.Version == DatabaseInfo.SQLServerVersion.SQLServerAzure10) return;
 
             int parentId = 0;
             bool change = false;
@@ -53,7 +53,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                                 item.Index = reader["IndexName"].ToString();
                                 item.IsDisabled = !(bool)reader["is_enabled"];
                                 item.ChangeTrackingState = reader["ChangeTracking"].ToString();
-                                if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+                                if (database.Info.Version == DatabaseInfo.SQLServerVersion.SQLServer2008)
                                     item.FileGroup = reader["FileGroupName"].ToString();
                                 ((Table)parent).FullTextIndex.Add(item);
                             }
