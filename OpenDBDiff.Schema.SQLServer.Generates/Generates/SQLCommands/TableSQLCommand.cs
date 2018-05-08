@@ -1,16 +1,22 @@
-using System.Text;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using System.Text;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 {
     internal static class TableSQLCommand
     {
         #region Table Count
-        public static string GetTableCount(DatabaseInfo.SQLServerVersion version)
+
+        public static string GetTableCount(DatabaseInfo.SQLServerVersion version, DatabaseInfo.SQLServerEdition edition)
         {
-            if (version == DatabaseInfo.SQLServerVersion.SQLServer2000) return GetTableCount2000();
-            //Fall back to highest compatible version
-            return GetTableCount2005();
+            switch (version)
+            {
+                case DatabaseInfo.SQLServerVersion.SQLServer2000:
+                    return GetTableCount2000();
+
+                default:
+                    return GetTableCount2005();
+            }
         }
 
         private static string GetTableCount2000()
@@ -22,17 +28,34 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
         {
             return "SELECT Count(*) from sys.tables";
         }
-        #endregion
+
+        #endregion Table Count
 
         #region Table Detail
-        public static string GetTableDetail(DatabaseInfo.SQLServerVersion version)
+
+        public static string GetTableDetail(DatabaseInfo.SQLServerVersion version, DatabaseInfo.SQLServerEdition edition)
         {
-            if (version == DatabaseInfo.SQLServerVersion.SQLServer2000) return GetTableDetail2000();
-            if (version == DatabaseInfo.SQLServerVersion.SQLServer2005) return GetTableDetail2005();
-            if (version == DatabaseInfo.SQLServerVersion.SQLServer2008 ||
-                version == DatabaseInfo.SQLServerVersion.SQLServer2008R2) return GetTableDetail2008();
-            //Fall back to highest compatible version
-            return GetTableDetailAzure();
+            switch (version)
+            {
+                case DatabaseInfo.SQLServerVersion.SQLServer2000:
+                    return GetTableDetail2000();
+
+                case DatabaseInfo.SQLServerVersion.SQLServer2005:
+                    return GetTableDetail2005();
+
+                case DatabaseInfo.SQLServerVersion.SQLServer2008:
+                case DatabaseInfo.SQLServerVersion.SQLServer2008R2:
+                    return GetTableDetail2008();
+
+                case DatabaseInfo.SQLServerVersion.SQLServerAzure10:
+                    return GetTableDetailAzure();
+
+                default:
+                    if (edition == DatabaseInfo.SQLServerEdition.Azure)
+                        return GetTableDetailAzure();
+                    else
+                        return GetTableDetail2008();
+            }
         }
 
         private static string GetTableDetailAzure()
@@ -137,7 +160,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             sql += "INNER JOIN sysusers SU ON SU.uid = SO.uid WHERE type = 'U' ORDER BY SO.name";
             return sql;
         }
-        #endregion
 
+        #endregion Table Detail
     }
 }

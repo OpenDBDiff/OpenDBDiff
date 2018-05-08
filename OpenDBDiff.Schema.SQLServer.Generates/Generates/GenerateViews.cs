@@ -39,7 +39,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             int lastViewId = 0;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(ViewSQLCommand.GetView(database.Info.Version), conn))
+                using (SqlCommand command = new SqlCommand(ViewSQLCommand.GetView(database.Info.Version, database.Info.Edition), conn))
                 {
                     conn.Open();
                     command.CommandTimeout = 0;

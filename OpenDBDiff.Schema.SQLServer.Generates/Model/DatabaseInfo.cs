@@ -4,14 +4,28 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
     {
         public enum SQLServerVersion
         {
-            SQLServer2000 = 1,
-            SQLServer2005 = 2,
-            SQLServer2008 = 3,
-            SQLServer2008R2 = 4,
+            SQLServer2000,
+            SQLServer2005,
+            SQLServer2008,
+            SQLServer2008R2,
+
             // Azure will be reporting v11 instead of v10.25 soon...
             // http://social.msdn.microsoft.com/Forums/en-US/ssdsgetstarted/thread/ad7aae98-26ac-4979-848d-517a86c3fa5c/
-            SQLServerAzure10 = 5, /*Azure*/
-            SQLServer2012 = 6,
+            SQLServerAzure10, /*Azure*/
+
+            SQLServer2012,
+            SQLServer2014,
+            SQLServer2016,
+            SQLServer2017,
+        }
+
+        public enum SQLServerEdition
+        {
+            Personal = 1,
+            Standard = 2,
+            Enterprise = 3,
+            Express = 4,
+            Azure = 5
         }
 
         private float versionNumber;
@@ -26,6 +40,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public string Database { get; set; }
 
         public SQLServerVersion Version { get; private set; }
+
+        public SQLServerEdition Edition { get; private set; }
 
         public string Collation { get; set; }
 
@@ -47,18 +63,29 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             set
             {
                 versionNumber = value;
-                if ((versionNumber >= 8) && (versionNumber < 9)) Version = SQLServerVersion.SQLServer2000;
-                if ((versionNumber >= 9) && (versionNumber < 10)) Version = SQLServerVersion.SQLServer2005;
-                if ((versionNumber >= 10) && (versionNumber < 10.25)) Version = SQLServerVersion.SQLServer2008;
-                if ((versionNumber >= 10.25) && (versionNumber < 10.5)) Version = SQLServerVersion.SQLServerAzure10;
-                if ((versionNumber >= 10.5) && (versionNumber < 11)) Version = SQLServerVersion.SQLServer2008R2;
-                if ((versionNumber >= 11.0) && (versionNumber < 13)) Version = SQLServerVersion.SQLServer2008R2; // SQLServer2012, SQLServer2014
+
+                SQLServerVersion version = this.Version;
+
+                // https://buildnumbers.wordpress.com/sqlserver/
+                if (versionNumber >= 8) version = SQLServerVersion.SQLServer2000;
+                if (versionNumber >= 9) version = SQLServerVersion.SQLServer2005;
+                if (versionNumber >= 10) version = SQLServerVersion.SQLServer2008;
+                if (versionNumber >= 10.25) version = SQLServerVersion.SQLServerAzure10;
+                if (versionNumber >= 10.5) version = SQLServerVersion.SQLServer2008R2;
+                if (versionNumber >= 11.0) version = SQLServerVersion.SQLServer2012;
+                if (versionNumber >= 12.0) version = SQLServerVersion.SQLServer2014;
+                if (versionNumber >= 13.0) version = SQLServerVersion.SQLServer2016;
+                if (versionNumber >= 14.0) version = SQLServerVersion.SQLServer2017;
+
+                this.Version = version;
             }
         }
 
-        public void SetEdition(int? edition)
+        public void SetEdition(SQLServerEdition edition)
         {
-            if (edition.GetValueOrDefault() == 5)
+            this.Edition = edition;
+
+            if (edition == SQLServerEdition.Azure)
             {
                 this.Version = SQLServerVersion.SQLServerAzure10;
             }

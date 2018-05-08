@@ -1,5 +1,5 @@
-﻿using System.Text;
-using OpenDBDiff.Schema.SQLServer.Generates.Model;
+﻿using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using System.Text;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 {
@@ -7,10 +7,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
     {
         public static string Get(DatabaseInfo.SQLServerVersion version)
         {
-            if (version == DatabaseInfo.SQLServerVersion.SQLServer2005) return Get2005();
-            //Fall back to highest compatible version
-            return Get2008();
+            switch (version)
+            {
+                case DatabaseInfo.SQLServerVersion.SQLServer2005:
+                    return Get2005();
 
+                default:
+                    return Get2008();
+            }
         }
 
         private static string Get2005()

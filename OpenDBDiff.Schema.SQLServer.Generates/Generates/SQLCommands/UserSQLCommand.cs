@@ -1,20 +1,29 @@
-using System.Text;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using System.Text;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 {
     internal static class UserSQLCommand
     {
-        public static string Get(DatabaseInfo.SQLServerVersion version)
+        public static string Get(DatabaseInfo.SQLServerVersion version, DatabaseInfo.SQLServerEdition edition)
         {
-            if (version == DatabaseInfo.SQLServerVersion.SQLServer2005 ||
-                version == DatabaseInfo.SQLServerVersion.SQLServer2008 ||
-                version == DatabaseInfo.SQLServerVersion.SQLServer2008R2)
-                return Get2008();
+            switch (version)
+            {
+                case DatabaseInfo.SQLServerVersion.SQLServer2000:
+                case DatabaseInfo.SQLServerVersion.SQLServer2005:
+                case DatabaseInfo.SQLServerVersion.SQLServer2008:
+                case DatabaseInfo.SQLServerVersion.SQLServer2008R2:
+                    return Get2008();
 
-            //fall back to highest compatible version
-            return GetAzure();
+                case DatabaseInfo.SQLServerVersion.SQLServerAzure10:
+                    return GetAzure();
 
+                default:
+                    if (edition == DatabaseInfo.SQLServerEdition.Azure)
+                        return GetAzure();
+                    else
+                        return Get2008();
+            }
         }
 
         private static string Get2008()

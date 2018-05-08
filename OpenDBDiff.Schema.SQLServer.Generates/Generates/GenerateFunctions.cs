@@ -66,7 +66,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                 root.RaiseOnReading(new ProgressEventArgs("Reading functions...", Constants.READING_FUNCTIONS));
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand(FunctionSQLCommand.Get(database.Info.Version), conn))
+                    using (SqlCommand command = new SqlCommand(FunctionSQLCommand.Get(database.Info.Version, database.Info.Edition), conn))
                     {
                         conn.Open();
                         command.CommandTimeout = 0;

@@ -231,7 +231,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (SqlCommand command = new SqlCommand(TableSQLCommand.GetTableDetail(database.Info.Version), conn))
+                using (SqlCommand command = new SqlCommand(TableSQLCommand.GetTableDetail(database.Info.Version, database.Info.Edition), conn))
                 {
                     conn.Open();
                     command.CommandTimeout = 0;
