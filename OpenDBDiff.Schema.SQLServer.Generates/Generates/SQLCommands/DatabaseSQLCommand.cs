@@ -11,12 +11,12 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
             return sql;
         }
 
-        public static string Get(DatabaseInfo.VersionTypeEnum version, Database databaseSchema)
+        public static string Get(DatabaseInfo.SQLServerVersion version, Database databaseSchema)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return Get2005(databaseSchema);
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008) return Get2008(databaseSchema);
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2) return Get2008R2(databaseSchema);
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10) return GetAzure(databaseSchema);
+            if (version == DatabaseInfo.SQLServerVersion.SQLServer2005) return Get2005(databaseSchema);
+            if (version == DatabaseInfo.SQLServerVersion.SQLServer2008) return Get2008(databaseSchema);
+            if (version == DatabaseInfo.SQLServerVersion.SQLServer2008R2) return Get2008R2(databaseSchema);
+            if (version == DatabaseInfo.SQLServerVersion.SQLServerAzure10) return GetAzure(databaseSchema);
             return "";
         }
 

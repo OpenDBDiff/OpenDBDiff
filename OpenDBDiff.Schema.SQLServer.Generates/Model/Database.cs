@@ -198,7 +198,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public override SQLScriptList ToSqlDiff(ICollection<ISchemaBase> schemas)
         {
-            var isAzure10 = this.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10;
+            var isAzure10 = this.Info.Version == DatabaseInfo.SQLServerVersion.SQLServerAzure10;
 
             var listDiff = new SQLScriptList();
 

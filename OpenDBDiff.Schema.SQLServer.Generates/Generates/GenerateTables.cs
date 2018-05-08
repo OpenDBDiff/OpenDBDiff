@@ -80,7 +80,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                 HasVarDecimalIndex = reader.GetOrdinal("HasVarDecimal");
                 FileGroupIndex = reader.GetOrdinal("FileGroup");
                 FileGroupTextIndex = reader.GetOrdinal("FileGroupText");
-                if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+                if (database.Info.Version == DatabaseInfo.SQLServerVersion.SQLServer2008)
                 {
                     FileGroupStreamIndex = reader.GetOrdinal("FileGroupStream");
                     TableHasChangeTracking = reader.GetOrdinal("HasChangeTracking");
@@ -122,7 +122,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                 colIsIdentityIndex = reader.GetOrdinal("IsIdentity");
                 colIdentSeedIndex = reader.GetOrdinal("IdentSeed");
                 colIdentIncrementIndex = reader.GetOrdinal("IdentIncrement");
-                if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+                if (database.Info.Version == DatabaseInfo.SQLServerVersion.SQLServer2008)
                 {
                     colis_sparseIndex = reader.GetOrdinal("is_sparse");
                     colIs_FileStream = reader.GetOrdinal("is_filestream");
@@ -181,7 +181,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                 col.Type = "[" + (string)reader[colOwnerType] + "].[" + (string)reader[colTypeIndex] + "]";
             else
                 col.Type = (string)reader[colTypeIndex];
-            if (((Database)table.Parent).Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+            if (((Database)table.Parent).Info.Version == DatabaseInfo.SQLServerVersion.SQLServer2008)
             {
                 col.IsSparse = (bool)reader[colis_sparseIndex];
                 col.IsFileStream = (bool)reader[colIs_FileStream];
@@ -259,7 +259,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                                     {
                                         ((Table)item).FileGroup = (string)reader[FileGroupIndex];
                                         ((Table)item).FileGroupText = (string)reader[FileGroupTextIndex];
-                                        if (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008)
+                                        if (database.Info.Version == DatabaseInfo.SQLServerVersion.SQLServer2008)
                                         {
                                             if (database.Options.Ignore.FilterTableChangeTracking)
                                             {
@@ -275,7 +275,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                                         if (largeValues) ((Table)item).Options.Add(new TableOption("LargeValues", "1", item));
                                         if (varDecimal) ((Table)item).Options.Add(new TableOption("VarDecimal", "1", item));
                                     }
-                                    if ((database.Options.Ignore.FilterTableLockEscalation) && (database.Info.Version == DatabaseInfo.VersionTypeEnum.SQLServer2008))
+                                    if ((database.Options.Ignore.FilterTableLockEscalation) && (database.Info.Version == DatabaseInfo.SQLServerVersion.SQLServer2008))
                                         ((Table)item).Options.Add(new TableOption("LockEscalation", (string)reader[TableLockEscalation], item));
                                     else
                                         ((Table)item).Options.Add(new TableOption("LockEscalation", "TABLE", item));

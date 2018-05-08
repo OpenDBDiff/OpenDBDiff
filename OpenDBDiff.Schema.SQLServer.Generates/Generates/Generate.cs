@@ -109,7 +109,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                     {*/
 
             //not supported in azure yet
-            if (databaseSchema.Info.Version != DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
+            if (databaseSchema.Info.Version != DatabaseInfo.SQLServerVersion.SQLServerAzure10)
             {
                 (new GeneratePartitionFunctions(this)).Fill(databaseSchema, ConnectionString);
                 (new GeneratePartitionScheme(this)).Fill(databaseSchema, ConnectionString);
@@ -120,7 +120,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             (new GenerateSynonyms(this)).Fill(databaseSchema, ConnectionString);
 
             //not supported in azure yet
-            if (databaseSchema.Info.Version != DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
+            if (databaseSchema.Info.Version != DatabaseInfo.SQLServerVersion.SQLServerAzure10)
             {
                 (new GenerateAssemblies(this)).Fill(databaseSchema, ConnectionString);
                 (new GenerateFullText(this)).Fill(databaseSchema, ConnectionString);

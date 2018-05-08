@@ -5,11 +5,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 {
     internal static class FunctionSQLCommand
     {
-        public static string Get(DatabaseInfo.VersionTypeEnum version)
+        public static string Get(DatabaseInfo.SQLServerVersion version)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005) return Get2005();
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2008 ||
-               version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2) return Get2008();
+            if (version == DatabaseInfo.SQLServerVersion.SQLServer2005) return Get2005();
+            if (version == DatabaseInfo.SQLServerVersion.SQLServer2008 ||
+               version == DatabaseInfo.SQLServerVersion.SQLServer2008R2) return Get2008();
             //Fall back to highest compatible version            
             return GetAzure();
         }

@@ -36,11 +36,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
             return SQLQueries.SQLQueryFactory.Get("GetParameters");
         }
 
-        private static string GetSQL(DatabaseInfo.VersionTypeEnum version)
+        private static string GetSQL(DatabaseInfo.SQLServerVersion version)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServerAzure10)
+            if (version == DatabaseInfo.SQLServerVersion.SQLServerAzure10)
             {
-                return SQLQueries.SQLQueryFactory.Get("GetProcedures", DatabaseInfo.VersionTypeEnum.SQLServerAzure10);
+                return SQLQueries.SQLQueryFactory.Get("GetProcedures", DatabaseInfo.SQLServerVersion.SQLServerAzure10);
             }
             else
             {

@@ -8,12 +8,12 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 
         #region View
 
-        public static string GetView(DatabaseInfo.VersionTypeEnum version)
+        public static string GetView(DatabaseInfo.SQLServerVersion version)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2000 ||
-                version == DatabaseInfo.VersionTypeEnum.SQLServer2005 ||
-                version == DatabaseInfo.VersionTypeEnum.SQLServer2008 ||
-                version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2) return GetViewSql2008();
+            if (version == DatabaseInfo.SQLServerVersion.SQLServer2000 ||
+                version == DatabaseInfo.SQLServerVersion.SQLServer2005 ||
+                version == DatabaseInfo.SQLServerVersion.SQLServer2008 ||
+                version == DatabaseInfo.SQLServerVersion.SQLServer2008R2) return GetViewSql2008();
             //Fall back to highest compatible version
             return GetViewSqlAzure();
         }

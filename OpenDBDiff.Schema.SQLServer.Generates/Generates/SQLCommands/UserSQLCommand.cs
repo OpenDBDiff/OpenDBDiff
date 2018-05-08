@@ -5,11 +5,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands
 {
     internal static class UserSQLCommand
     {
-        public static string Get(DatabaseInfo.VersionTypeEnum version)
+        public static string Get(DatabaseInfo.SQLServerVersion version)
         {
-            if (version == DatabaseInfo.VersionTypeEnum.SQLServer2005 ||
-                version == DatabaseInfo.VersionTypeEnum.SQLServer2008 ||
-                version == DatabaseInfo.VersionTypeEnum.SQLServer2008R2)
+            if (version == DatabaseInfo.SQLServerVersion.SQLServer2005 ||
+                version == DatabaseInfo.SQLServerVersion.SQLServer2008 ||
+                version == DatabaseInfo.SQLServerVersion.SQLServer2008R2)
                 return Get2008();
 
             //fall back to highest compatible version
