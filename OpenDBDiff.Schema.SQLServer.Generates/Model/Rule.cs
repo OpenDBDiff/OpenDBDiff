@@ -50,7 +50,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             List<UserDataType> useDataTypes = ((Database)this.Parent).UserTypes.FindAll(item => { return item.Rule.FullName.Equals(this.FullName); });
             foreach (UserDataType item in useDataTypes)
             {
-                foreach (ObjectDependency dependency in item.Dependencys)
+                foreach (ObjectDependency dependency in item.Dependencies)
                 {
                     Column column = ((Database)this.Parent).Tables[dependency.Name].Columns[dependency.ColumnName];
                     if ((!column.IsComputed) && (column.Status != ObjectStatus.Create))

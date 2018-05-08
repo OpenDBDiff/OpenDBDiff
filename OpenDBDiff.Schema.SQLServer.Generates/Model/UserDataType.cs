@@ -13,10 +13,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             Default = new Default(this);
             Rule = new Rule(this);
-            Dependencys = new List<ObjectDependency>();
+            Dependencies = new List<ObjectDependency>();
         }
 
-        public List<ObjectDependency> Dependencys { get; private set; }
+        public List<ObjectDependency> Dependencies { get; private set; }
 
         public Rule Rule { get; private set; }
 
@@ -74,7 +74,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                 Type = Type,
                 Default = Default.Clone(this),
                 Rule = Rule.Clone(this),
-                Dependencys = Dependencys,
+                Dependencies = Dependencies,
                 IsAssembly = IsAssembly,
                 AssemblyClass = AssemblyClass,
                 AssemblyId = AssemblyId,
@@ -150,7 +150,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             return sql;
         }
 
-        private SQLScriptList RebuildDependencys(Table table)
+        private SQLScriptList RebuildDependencies(Table table)
         {
             var list = new SQLScriptList();
             List<ISchemaBase> items = ((Database)table.Parent).Dependencies.Find(table.Id);
@@ -167,10 +167,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         {
             var fields = new Hashtable();
             var list = new SQLScriptList();
-            var listDependencys = new SQLScriptList();
+            var listDependencies = new SQLScriptList();
             if ((Status == ObjectStatus.Alter) || (Status == ObjectStatus.Rebuild))
             {
-                foreach (ObjectDependency dependency in Dependencys)
+                foreach (ObjectDependency dependency in Dependencies)
                 {
                     ISchemaBase itemDepens = ((Database)Parent).Find(dependency.Name);
                     /*Si la dependencia es una funcion o una vista, reconstruye el objecto*/
@@ -189,7 +189,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                         {
                             if (!fields.ContainsKey(column.FullName))
                             {
-                                listDependencys.AddRange(RebuildDependencys((Table)itemDepens));
+                                listDependencies.AddRange(RebuildDependencies((Table)itemDepens));
                                 if (column.HasToRebuildOnlyConstraint)
                                     //column.Parent.Status = ObjectStatusType.AlterRebuildDependenciesStatus;
                                     list.AddRange(column.RebuildDependencies());
@@ -237,7 +237,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
                     }
                 }
             }
-            list.AddRange(listDependencys);
+            list.AddRange(listDependencies);
             return list;
         }
 

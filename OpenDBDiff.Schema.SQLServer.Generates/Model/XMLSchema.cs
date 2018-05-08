@@ -11,7 +11,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         public XMLSchema(ISchemaBase parent)
             : base(parent, ObjectType.XMLSchema)
         {
-            this.Dependencys = new List<ObjectDependency>();
+            this.Dependencies = new List<ObjectDependency>();
         }
 
         /// <summary>
@@ -26,11 +26,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             item.Id = this.Id;
             item.Owner = this.Owner;
             item.Guid = this.Guid;
-            item.Dependencys = this.Dependencys;
+            item.Dependencies = this.Dependencies;
             return item;
         }
 
-        public List<ObjectDependency> Dependencys { get; set; }
+        public List<ObjectDependency> Dependencies { get; set; }
 
         public string Text { get; set; }
 
@@ -60,7 +60,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             SQLScriptList list = new SQLScriptList();
             if ((this.Status == ObjectStatus.Alter) || (this.Status == ObjectStatus.Rebuild))
             {
-                foreach (ObjectDependency dependency in this.Dependencys)
+                foreach (ObjectDependency dependency in this.Dependencies)
                 {
                     ISchemaBase itemDepens = ((Database)this.Parent).Find(dependency.Name);
                     if (dependency.IsCodeType)

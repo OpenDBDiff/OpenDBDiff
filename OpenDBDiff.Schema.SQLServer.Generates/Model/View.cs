@@ -101,7 +101,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             if (this.HasState(ObjectStatus.Alter))
             {
                 if (this.HasState(ObjectStatus.RebuildDependencies))
-                    list.AddRange(RebuildDependencys());
+                    list.AddRange(RebuildDependencies());
                 if (this.HasState(ObjectStatus.Rebuild))
                 {
                     list.Add(Drop());

@@ -21,7 +21,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
             if (!node.Compare(originFields[node.FullName]))
             {
                 UserDataType newNode = (UserDataType)node.Clone(originFields.Parent);
-                newNode.Dependencys.AddRange(originFields[node.FullName].Dependencys);
+                newNode.Dependencies.AddRange(originFields[node.FullName].Dependencies);
 
                 if (!UserDataType.CompareDefault(node, originFields[node.FullName]))
                 {
