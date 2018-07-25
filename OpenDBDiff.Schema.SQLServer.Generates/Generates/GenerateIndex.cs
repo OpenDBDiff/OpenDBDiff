@@ -51,13 +51,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
                             if (parent != null)
                             {
-                                if (indexid != (int)reader["Index_id"] || change)
+                                if (indexid != (int)reader["index_id"] || change)
                                 {
                                     item = new Index(parent);
                                     item.Name = reader["Name"].ToString();
                                     item.Owner = parent.Owner;
                                     item.Type = (Index.IndexTypeEnum)(byte)reader["type"];
-                                    item.Id = (int)reader["Index_id"];
+                                    item.Id = (int)reader["index_id"];
                                     item.IgnoreDupKey = (bool)reader["ignore_dup_key"];
                                     item.IsAutoStatistics = (bool)reader["NoAutomaticRecomputation"];
                                     item.IsDisabled = (bool)reader["is_disabled"];
@@ -80,7 +80,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                                     {
                                         item.FilterDefintion = reader["FilterDefinition"].ToString();
                                     }
-                                    indexid = (int)reader["Index_id"];
+                                    indexid = (int)reader["index_id"];
                                     if (type.Equals("V"))
                                         ((View)parent).Indexes.Add(item);
                                     else
