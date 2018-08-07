@@ -25,5 +25,7 @@ build:
 artifacts:
 - path: OpenDBDiff\bin\Debug
   name: OpenDBDiff.CI
-- path: OpenDBDiffCmd\bin\Debug
-  name: OpenDBDiff.OCDB.CI
+- path: OpenDBDiffCmd\bin\Debug\net452
+  name: OpenDBDiff.OCDB.CI.net452
+- path: OpenDBDiffCmd\bin\Debug\netcoreapp2.0
+  name: OpenDBDiff.OCDB.CI.netcoreapp2.0

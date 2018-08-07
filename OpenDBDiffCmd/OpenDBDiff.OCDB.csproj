@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net452</TargetFrameworks>
+    <TargetFrameworks>net452;netcoreapp2.0</TargetFrameworks>
     <NoWarn>$(NoWarn);NU1605</NoWarn>
 
     <AssemblyTitle>OpenDBDiff Console</AssemblyTitle>
@@ -10,8 +10,17 @@
     <Copyright>OpenDBDiff</Copyright>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\.editorconfig" Link=".editorconfig" />
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
+    <Reference Include="System.Configuration" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,8 +28,10 @@
 
     <ProjectReference Include="..\OpenDBDiff.Schema\OpenDBDiff.Schema.csproj" />
     <ProjectReference Include="..\OpenDBDiff.Schema.SQLServer.Generates\OpenDBDiff.Schema.SQLServer.Generates.csproj" />
+  </ItemGroup>
 
-    <Reference Include="System.Configuration" />
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
 </Project>
