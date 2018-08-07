@@ -10,6 +10,10 @@ assembly_info:
   assembly_file_version: "{version}"
   assembly_informational_version: "{version}"
 
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+
 before_build:
 - cmd: nuget restore OpenDBDiff.sln
 
