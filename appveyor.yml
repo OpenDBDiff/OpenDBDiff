@@ -17,15 +17,22 @@ dotnet_csproj:
 before_build:
 - cmd: nuget restore OpenDBDiff.sln
 
+configuration: Release
+
 build:
   parallel: true # enable MSBuild parallel builds
   project: OpenDBDiff.sln
   verbosity: minimal
 
+after_build:
+- cmd:  dotnet publish -c Release -f netcoreapp2.0 OpenDBDiffCmd
+
 artifacts:
-- path: OpenDBDiff\bin\Debug
+- path: OpenDBDiff\bin\Release
   name: OpenDBDiff.CI
-- path: OpenDBDiffCmd\bin\Debug\net452
+
+- path: OpenDBDiffCmd\bin\Release\net452
   name: OpenDBDiff.OCDB.CI.net452
-- path: OpenDBDiffCmd\bin\Debug\netcoreapp2.0
+
+- path: OpenDBDiffCmd\bin\Release\netcoreapp2.0\publish
   name: OpenDBDiff.OCDB.CI.netcoreapp2.0
