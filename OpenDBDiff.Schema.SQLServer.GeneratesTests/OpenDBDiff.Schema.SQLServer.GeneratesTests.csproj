@@ -58,12 +58,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpenDBDiff.Schema.SQLServer.Generates\OpenDBDiff.Schema.SQLServer.Generates.csproj">
-      <Project>{32AC9AF6-DB93-4354-B69F-6DBC65C70867}</Project>
-      <Name>DBDiff.Schema.SQLServer.Generates</Name>
+      <Project>{f2b93221-27fa-405c-9835-8cc92a539308}</Project>
+      <Name>OpenDBDiff.Schema.SQLServer.Generates</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenDBDiff.Schema\OpenDBDiff.Schema.csproj">
-      <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
-      <Name>DBDiff.Schema</Name>
+      <Project>{7D32FFBF-C2B2-422F-8284-FC10952C4C4F}</Project>
+      <Name>OpenDBDiff.Schema</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
