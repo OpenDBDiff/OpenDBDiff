@@ -258,7 +258,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         /// Gets or sets the identity seed (only if the field is Identity).
         /// </summary>
         /// <value>The identity seed.</value>
-        public int IdentitySeed { get; set; }
+        public long IdentitySeed { get; set; }
 
         /// <summary>
         /// Indica si el campo es Row Guid

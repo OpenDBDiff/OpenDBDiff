@@ -149,9 +149,10 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                 if ((col.IsIdentity) || (col.IsIdentityForReplication))
                 {
                     if (!reader.IsDBNull(colIdentSeedIndex))
-                        col.IdentitySeed = (int)(decimal)reader[colIdentSeedIndex];
+                        col.IdentitySeed = (long)(decimal)reader[colIdentSeedIndex];
                     else
                         col.IdentitySeed = 1;
+
                     if (!reader.IsDBNull(colIdentIncrementIndex))
                         col.IdentityIncrement = (int)(decimal)reader[colIdentIncrementIndex];
                     else
