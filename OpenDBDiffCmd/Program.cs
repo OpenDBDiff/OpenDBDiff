@@ -1,4 +1,5 @@
-﻿using OpenDBDiff.Schema.SQLServer.Generates.Generates;
+﻿using CommandLine;
+using OpenDBDiff.Schema.SQLServer.Generates.Generates;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Options;
 using System;
@@ -18,18 +19,18 @@ namespace OpenDBDiff.OCDB
         {
             bool completedSuccessfully = false;
 
-            var options = new CommandlineOptions();
-            if (CommandLine.Parser.Default.ParseArguments(args, options))
-            {
-                try
+            var parserResult = Parser.Default.ParseArguments<CommandlineOptions>(args)
+                .WithParsed(options =>
                 {
-                    completedSuccessfully = Work(options);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
+                    try
+                    {
+                        completedSuccessfully = Work(options);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
 
             if (Debugger.IsAttached)
             {

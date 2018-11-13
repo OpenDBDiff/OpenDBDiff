@@ -100,16 +100,16 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpenDBDiff.Front\OpenDBDiff.Front.csproj">
-      <Project>{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}</Project>
-      <Name>DBDiff.Front</Name>
+      <Project>{538330EE-538F-45E6-B247-133DD9033556}</Project>
+      <Name>OpenDBDiff.Front</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenDBDiff.Schema.SQLServer.Generates\OpenDBDiff.Schema.SQLServer.Generates.csproj">
-      <Project>{32ac9af6-db93-4354-b69f-6dbc65c70867}</Project>
-      <Name>DBDiff.Schema.SQLServer.Generates</Name>
+      <Project>{F2B93221-27FA-405C-9835-8CC92A539308}</Project>
+      <Name>OpenDBDiff.Schema.SQLServer.Generates</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenDBDiff.Schema\OpenDBDiff.Schema.csproj">
-      <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
-      <Name>DBDiff.Schema</Name>
+      <Project>{7D32FFBF-C2B2-422F-8284-FC10952C4C4F}</Project>
+      <Name>OpenDBDiff.Schema</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -138,34 +138,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
+    <Content Include="Resources\database_yellow.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagrams.cd" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\database_yellow.png" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
