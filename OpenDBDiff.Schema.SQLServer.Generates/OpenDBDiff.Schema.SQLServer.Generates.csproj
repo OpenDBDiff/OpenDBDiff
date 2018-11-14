@@ -112,6 +112,7 @@
     <Compile Include="Generates\SQLCommands\UserDataTypeCommand.cs" />
     <Compile Include="Generates\SQLCommands\UserSQLCommand.cs" />
     <Compile Include="Generates\SQLCommands\ViewSQLCommand.cs" />
+    <Compile Include="Generates\Util\ByteToHexEncoder.cs" />
     <Compile Include="Generates\Util\Constants.cs" />
     <Compile Include="Generates\Util\ConvertType.cs" />
     <Compile Include="Model\Assembly.cs" />
