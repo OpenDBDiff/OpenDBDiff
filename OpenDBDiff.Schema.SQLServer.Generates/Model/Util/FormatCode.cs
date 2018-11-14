@@ -6,6 +6,8 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Util
 {
     internal static class FormatCode
     {
+        private static readonly char[] TrimCharacters = { ' ', '\r', '\n', '\t' };
+
         private class SearchItem
         {
             public int FindPosition;
@@ -13,23 +15,16 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Util
         }
 
         /// <summary>
-        /// Borra todos los caracteres innecesarios que estan despues de la sentencia END del body
+        /// Clears all unnecessary characters that are after the END statement of the body, and whitespaces at the beginning.
         /// </summary>
         private static string CleanLast(string body)
         {
-            if (String.IsNullOrEmpty(body))
+            if (string.IsNullOrEmpty(body))
             {
-                return String.Empty;
+                return string.Empty;
             }
 
-            for (int i = body.Length - 1; i >= 0; i--)
-            {
-                if ((body[i] == '\r') || (body[i] == '\n') || (body[i] == '\t'))
-                    body = body.Substring(0, i);
-                else
-                    break;
-            }
-            return body.Trim();
+            return body.TrimStart().TrimEnd(TrimCharacters);
         }
 
         /// <summary>
