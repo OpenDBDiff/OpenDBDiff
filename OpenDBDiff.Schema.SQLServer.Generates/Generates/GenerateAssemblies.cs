@@ -1,6 +1,6 @@
 using System;
 using System.Data.SqlClient;
-using System.Text;
+using OpenDBDiff.Schema.SQLServer.Generates.Generates.Util;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
@@ -26,10 +26,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 
         private static string ToHex(byte[] stream)
         {
-            StringBuilder sHex = new StringBuilder(2 * stream.Length);
-            for (int i = 0; i < stream.Length; i++)
-                sHex.AppendFormat("{0:X2} ", stream[i]);
-            return "0x" + sHex.ToString().Replace(" ", String.Empty);
+            return ByteToHexEncoder.ByteArrayToHex(stream);
         }
 
         private static void FillFiles(Database database, string connectionString)
