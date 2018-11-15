@@ -180,7 +180,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
                 sql.Append("\t\t[" + this.Columns[j].Name + "]");
                 if (this.Columns[j].Order) sql.Append(" DESC"); else sql.Append(" ASC");
                 if (j != this.Columns.Count - 1) sql.Append(",");
-                sql.Append("\r\n");
+                sql.AppendLine();
             }
             sql.Append("\t)");
             sql.Append(" WITH (");
@@ -235,8 +235,8 @@ namespace OpenDBDiff.SqlServer.Schema.Model
                         sql.Append(",");
                         sqlReference.Append(",");
                     }
-                    sql.Append("\r\n");
-                    sqlReference.Append("\r\n");
+                    sql.AppendLine();
+                    sqlReference.AppendLine();
                     indexc++;
                 }
                 sql.Append("\t)\r\n");

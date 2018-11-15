@@ -203,17 +203,17 @@ namespace OpenDBDiff.SqlServer.Schema.Model
 
             var isAzure10 = database.Info.Version == DatabaseInfo.SQLServerVersion.SQLServerAzure10;
 
-            string sql = "";
+            var sql = new StringBuilder();
             string sqlPK = "";
             string sqlUC = "";
             string sqlFK = "";
             if (Columns.Any())
             {
-                sql += "CREATE TABLE " + FullName + "\r\n(\r\n";
-                sql += Columns.ToSql();
+                sql.AppendLine("CREATE TABLE " + FullName + "\r\n(");
+                sql.Append(Columns.ToSql());
                 if (Constraints.Any())
                 {
-                    sql += ",\r\n";
+                    sql.AppendLine(",");
                     Constraints.AsQueryable()
                         // Add the constraint if it's not in DropStatus
                         .Where(c => !c.HasState(ObjectStatus.Drop))
@@ -227,59 +227,59 @@ namespace OpenDBDiff.SqlServer.Schema.Model
                             if (showFK && item.Type == Constraint.ConstraintType.ForeignKey)
                                 sqlFK += "\t" + item.ToSql() + ",\r\n";
                         });
-                    sql += sqlPK + sqlUC + sqlFK;
-                    sql = sql.Substring(0, sql.Length - 3) + "\r\n";
+                    sql.Append(sqlPK + sqlUC + sqlFK);
+                    sql = new StringBuilder(sql.ToString(0, sql.Length - 3)).AppendLine();
                 }
                 else
                 {
-                    sql += "\r\n";
+                    sql.AppendLine();
                     if (!String.IsNullOrEmpty(CompressType))
-                        sql += "WITH (DATA_COMPRESSION = " + CompressType + ")\r\n";
+                        sql.AppendLine("WITH (DATA_COMPRESSION = " + CompressType + ")");
                 }
-                sql += ")";
+                sql.Append(")");
 
                 if (!isAzure10)
                 {
-                    if (!String.IsNullOrEmpty(FileGroup)) sql += " ON [" + FileGroup + "]";
+                    if (!String.IsNullOrEmpty(FileGroup)) sql.Append(" ON [" + FileGroup + "]");
 
                     if (!String.IsNullOrEmpty(FileGroupText))
                     {
                         if (HasBlobColumn)
-                            sql += " TEXTIMAGE_ON [" + FileGroupText + "]";
+                            sql.Append(" TEXTIMAGE_ON [" + FileGroupText + "]");
                     }
                     if ((!String.IsNullOrEmpty(FileGroupStream)) && (HasFileStream))
-                        sql += " FILESTREAM_ON [" + FileGroupStream + "]";
+                        sql.Append(" FILESTREAM_ON [" + FileGroupStream + "]");
                 }
-                sql += "\r\n";
-                sql += "GO\r\n";
+                sql.AppendLine();
+                sql.AppendLine("GO");
                 Constraints.ForEach(item =>
                                         {
                                             if (item.Type == Constraint.ConstraintType.Check)
-                                                sql += item.ToSqlAdd() + "\r\n";
+                                                sql.AppendLine(item.ToSqlAdd());
                                         });
                 if (HasChangeTracking)
-                    sql += ToSqlChangeTracking();
-                sql += Indexes.ToSql();
-                sql += FullTextIndex.ToSql();
-                sql += Options.ToSql();
-                sql += Triggers.ToSql();
+                    sql.Append(ToSqlChangeTracking());
+                sql.Append(Indexes.ToSql());
+                sql.Append(FullTextIndex.ToSql());
+                sql.Append(Options.ToSql());
+                sql.Append(Triggers.ToSql());
             }
-            return sql;
+            return sql.ToString();
         }
 
         private string ToSqlChangeTracking()
         {
-            string sql;
+            var sql = new StringBuilder();
             if (HasChangeTracking)
             {
-                sql = "ALTER TABLE " + FullName + " ENABLE CHANGE_TRACKING";
+                sql.Append("ALTER TABLE " + FullName + " ENABLE CHANGE_TRACKING");
                 if (HasChangeTrackingTrackColumn)
-                    sql += " WITH(TRACK_COLUMNS_UPDATED = ON)";
+                    sql.Append(" WITH(TRACK_COLUMNS_UPDATED = ON)");
             }
             else
-                sql = "ALTER TABLE " + FullName + " DISABLE CHANGE_TRACKING";
+                sql.Append("ALTER TABLE " + FullName + " DISABLE CHANGE_TRACKING");
 
-            return sql + "\r\nGO\r\n";
+            return sql.Append("\r\nGO\r\n").ToString();
         }
 
         public override string ToSqlAdd()
@@ -348,14 +348,14 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             }
             if (Status == ObjectStatus.Create)
             {
-                string sql = "";
+                var sql = new StringBuilder();
                 Constraints.ForEach(item =>
-                                        {
-                                            if (item.Type == Constraint.ConstraintType.ForeignKey)
-                                                sql += item.ToSqlAdd() + "\r\n";
-                                        });
+                {
+                    if (item.Type == Constraint.ConstraintType.ForeignKey)
+                        sql.AppendLine(item.ToSqlAdd());
+                });
                 listDiff.Add(ToSql(false), dependenciesCount, ScriptAction.AddTable);
-                listDiff.Add(sql, dependenciesCount, ScriptAction.AddConstraintFK);
+                listDiff.Add(sql.ToString(), dependenciesCount, ScriptAction.AddConstraintFK);
             }
             if (HasState(ObjectStatus.RebuildDependencies))
             {
@@ -402,7 +402,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
 
         private string ToSQLTableRebuild()
         {
-            string sql = "";
+            var sql = new StringBuilder();
             string tempTable = "Temp" + Name;
             Boolean IsIdentityNew = false;
 
@@ -459,14 +459,14 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             {
                 var listColumns = columnNamesStringBuilder.ToString(0, columnNamesStringBuilder.Length - 1);
                 var listValues = valuesStringBuilder.ToString(0, valuesStringBuilder.Length - 1);
-                sql += ToSQLTemp(tempTable) + "\r\n";
+                sql.AppendLine(ToSQLTemp(tempTable));
                 if ((HasIdentityColumn) && (!IsIdentityNew))
-                    sql += "SET IDENTITY_INSERT [" + Owner + "].[" + tempTable + "] ON\r\n";
-                sql += "INSERT INTO [" + Owner + "].[" + tempTable + "] (" + listColumns + ")" + " SELECT " +
-                       listValues + " FROM " + FullName + "\r\n";
+                    sql.AppendLine("SET IDENTITY_INSERT [" + Owner + "].[" + tempTable + "] ON");
+                sql.AppendLine("INSERT INTO [" + Owner + "].[" + tempTable + "] (" + listColumns + ")" + " SELECT " +
+                       listValues + " FROM " + FullName );
                 if ((HasIdentityColumn) && (!IsIdentityNew))
-                    sql += "SET IDENTITY_INSERT [" + Owner + "].[" + tempTable + "] OFF\r\nGO\r\n\r\n";
-                sql += "DROP TABLE " + FullName + "\r\nGO\r\n";
+                    sql.AppendLine("SET IDENTITY_INSERT [" + Owner + "].[" + tempTable + "] OFF\r\nGO\r\n");
+                sql.AppendLine("DROP TABLE " + FullName + "\r\nGO");
 
                 if (HasFileStream)
                 {
@@ -475,18 +475,18 @@ namespace OpenDBDiff.SqlServer.Schema.Model
                         if (item.Type == Constraint.ConstraintType.Unique &&
                             item.Status != ObjectStatus.Drop)
                         {
-                            sql += "EXEC sp_rename N'[" + Owner + "].[Temp_XX_" + item.Name +
-                                    "]',N'" + item.Name + "', 'OBJECT'\r\nGO\r\n";
+                            sql.AppendLine("EXEC sp_rename N'[" + Owner + "].[Temp_XX_" + item.Name +
+                                    "]',N'" + item.Name + "', 'OBJECT'\r\nGO");
                         }
                     });
                 }
-                sql += "EXEC sp_rename N'[" + Owner + "].[" + tempTable + "]',N'" + Name +
-                       "', 'OBJECT'\r\nGO\r\n\r\n";
-                sql += OriginalTable.Options.ToSql();
+                sql.AppendLine("EXEC sp_rename N'[" + Owner + "].[" + tempTable + "]',N'" + Name +
+                       "', 'OBJECT'\r\nGO\r\n");
+                sql.Append(OriginalTable.Options.ToSql());
             }
             else
-                sql = "";
-            return sql;
+                sql = new StringBuilder();
+            return sql.ToString();
         }
 
         private SQLScriptList ToSQLRebuild()
@@ -500,18 +500,18 @@ namespace OpenDBDiff.SqlServer.Schema.Model
 
         private string ToSQLTemp(String TableName)
         {
-            string sql = "";
+            var sql = new StringBuilder();
 
             // Drop constraints first, to avoid duplicate constraints created in temp table
             foreach (var column in Columns.Where(c => !string.IsNullOrWhiteSpace(c.DefaultConstraint?.Name)))
             {
-                sql += $"ALTER TABLE {this.FullName} DROP CONSTRAINT [{column.DefaultConstraint.Name}]\r\n";
+                sql.Append($"ALTER TABLE {this.FullName} DROP CONSTRAINT [{column.DefaultConstraint.Name}]\r\n");
             }
 
-            if (!string.IsNullOrWhiteSpace(sql))
-                sql += "\r\n";
+            if (!string.IsNullOrWhiteSpace(sql.ToString()))
+                sql.AppendLine();
 
-            sql += "CREATE TABLE [" + Owner + "].[" + TableName + "]\r\n(\r\n";
+            sql.AppendLine("CREATE TABLE [" + Owner + "].[" + TableName + "]\r\n(");
 
             Columns.Sort();
 
@@ -519,49 +519,49 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             {
                 if (Columns[index].Status != ObjectStatus.Drop)
                 {
-                    sql += "\t" + Columns[index].ToSql(true);
+                    sql.Append("\t" + Columns[index].ToSql(true));
                     if (index != Columns.Count - 1)
-                        sql += ",";
-                    sql += "\r\n";
+                        sql.Append(",");
+                    sql.AppendLine();
                 }
             }
             if (HasFileStream)
             {
-                sql = sql.Substring(0, sql.Length - 2);
-                sql += ",\r\n";
+                sql = new StringBuilder(sql.ToString(0, sql.Length - 2));
+                sql.AppendLine(",");
                 Constraints.ForEach(item =>
                 {
                     if (item.Type == Constraint.ConstraintType.Unique &&
                         item.Status != ObjectStatus.Drop)
                     {
                         item.Name = "Temp_XX_" + item.Name;
-                        sql += "\t" + item.ToSql() + ",\r\n";
+                        sql.AppendLine("\t" + item.ToSql() + ",");
                         item.SetWasInsertInDiffList(ScriptAction.AddConstraint);
                         item.Name = item.Name.Substring(8, item.Name.Length - 8);
                     }
                 });
-                sql = sql.Substring(0, sql.Length - 3) + "\r\n";
+                sql = new StringBuilder(sql.ToString(0, sql.Length - 3)).AppendLine();
             }
             else
             {
-                sql += "\r\n";
+                sql.AppendLine();
                 if (!String.IsNullOrEmpty(CompressType))
-                    sql += "WITH (DATA_COMPRESSION = " + CompressType + ")\r\n";
+                    sql.AppendLine("WITH (DATA_COMPRESSION = " + CompressType + ")");
             }
-            sql += ")";
+            sql.Append(")");
 
-            if (!String.IsNullOrEmpty(FileGroup)) sql += " ON [" + FileGroup + "]";
+            if (!String.IsNullOrEmpty(FileGroup)) sql.Append(" ON [" + FileGroup + "]");
 
             if (!String.IsNullOrEmpty(FileGroupText) && HasBlobColumn)
-                sql += " TEXTIMAGE_ON [" + FileGroupText + "]";
+                sql.Append(" TEXTIMAGE_ON [" + FileGroupText + "]");
             
             if (!String.IsNullOrEmpty(FileGroupStream) && HasFileStream)
-                sql += " FILESTREAM_ON [" + FileGroupStream + "]";
+                sql.Append(" FILESTREAM_ON [" + FileGroupStream + "]");
 
-            sql += "\r\n";
-            sql += "GO\r\n";
+            sql.AppendLine();
+            sql.AppendLine("GO");
 
-            return sql;
+            return sql.ToString();
         }
 
         private void GenerateDependencies()
