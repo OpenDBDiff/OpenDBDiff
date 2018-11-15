@@ -47,6 +47,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TSQL_Parser, Version=1.5.2.0, Culture=neutral, PublicKeyToken=09a45a2da17eccd6, processorArchitecture=MSIL">
+      <HintPath>..\packages\TSQL.Parser.1.5.2\lib\net452\TSQL_Parser.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\OpenDBDiff\Properties\AssemblyVersionInfo.cs">
@@ -254,6 +257,7 @@
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj">
