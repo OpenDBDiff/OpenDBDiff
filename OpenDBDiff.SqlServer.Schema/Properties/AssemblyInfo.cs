@@ -23,3 +23,5 @@ using System.Runtime.InteropServices;
 [assembly: Guid("32ac9af6-db93-4354-b69f-6dbc65c70867")]
 
 [assembly: System.CLSCompliant(true)]
+
+[assembly:InternalsVisibleTo("OpenDBDiff.Tests")]
