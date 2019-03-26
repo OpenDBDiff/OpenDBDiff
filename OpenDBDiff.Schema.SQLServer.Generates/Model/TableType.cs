@@ -5,12 +5,33 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {
     public class TableType : SQLServerSchemaBase, ITable<TableType>
     {
-        public TableType(Database parent)
+        public TableType(ISchemaBase parent)
             : base(parent, ObjectType.TableType)
         {
             Columns = new Columns<TableType>(this);
-            Constraints = new SchemaList<Constraint, TableType>(this, parent.AllObjects);
-            Indexes = new SchemaList<Index, TableType>(this, parent.AllObjects);
+            Constraints = new SchemaList<Constraint, TableType>(this, ((Database)parent).AllObjects);
+            Indexes = new SchemaList<Index, TableType>(this, ((Database)parent).AllObjects);
+        }
+
+        public override ISchemaBase Clone(ISchemaBase parent)
+        {
+            var tableType = new TableType(parent)
+            {
+                Owner = this.Owner,
+                Name = this.Name,
+                Id = this.Id,
+                Guid = this.Guid,
+                Status = this.Status,
+                Columns = null,
+                Constraints = null,
+                Indexes = null
+            };
+             
+            tableType.Columns = this.Columns.Clone(tableType);
+            tableType.Constraints = this.Constraints.Clone(tableType);
+            tableType.Indexes = this.Indexes.Clone(tableType);
+
+            return tableType;
         }
 
         public Columns<TableType> Columns { get; private set; }
