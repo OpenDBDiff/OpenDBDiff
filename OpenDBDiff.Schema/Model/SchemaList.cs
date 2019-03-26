@@ -134,13 +134,13 @@ namespace OpenDBDiff.Schema.Model
 
         public virtual string ToSql()
         {
-            StringBuilder sql = new StringBuilder();
-            this.ForEach(item =>
-                {
-                    if (item.Status != ObjectStatus.Drop)
-                        sql.Append(item.ToSql() + "\r\n");
-                });
-            return sql.ToString();
+            return string.Join
+            (
+                "\r\n",
+                this
+                    .Where(item => !item.HasState(ObjectStatus.Drop))
+                    .Select(item => item.ToSql())
+            );
         }
     }
 }

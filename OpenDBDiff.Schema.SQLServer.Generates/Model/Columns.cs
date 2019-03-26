@@ -1,6 +1,7 @@
-using System;
-using System.Text;
 using OpenDBDiff.Schema.Model;
+using System;
+using System.Linq;
+using System.Text;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {
@@ -25,21 +26,13 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 
         public override string ToSql()
         {
-            StringBuilder sql = new StringBuilder();
-            for (int index = 0; index < this.Count; index++)
-            {
-                // Add the coloumn if it's not in DropStatus
-                if (!this[index].HasState(ObjectStatus.Drop))
-                {
-                    sql.Append("\t" + this[index].ToSql(true));
-                    if (index != this.Count - 1)
-                    {
-                        sql.Append(",");
-                        sql.Append("\r\n");
-                    }
-                }
-            }
-            return sql.ToString();
+            return string.Join
+            (
+                ",\r\n",
+                this
+                    .Where(c => !c.HasState(ObjectStatus.Drop))
+                    .Select(c => "\t" + c.ToSql(true))
+            );
         }
 
         public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
