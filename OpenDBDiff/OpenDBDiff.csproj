@@ -84,6 +84,7 @@
     <Compile Include="ConnectionsSettings\ConnectionResource.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Extensions\ScintillaExtensions.cs" />
     <Compile Include="Front\DataCompareForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -174,6 +175,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Settings\Project.cs" />
+    <Compile Include="Utils\GraphicsUtils.cs" />
     <Compile Include="XmlConfig\ConfigProvider.cs" />
     <Compile Include="XmlConfig\ConfigProviders.cs" />
   </ItemGroup>
