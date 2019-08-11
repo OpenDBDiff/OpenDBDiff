@@ -222,7 +222,7 @@ namespace OpenDBDiff.Front
                 this._selectedSchemas = this.schemaTreeView1.GetCheckedSchemas();
                 this.txtSyncScript.ReadOnly = false;
                 this.txtSyncScript.Text = db.ToSqlDiff(this._selectedSchemas).ToSQL();
-                this.txtSyncScript.ReadOnly = false;
+                this.txtSyncScript.ReadOnly = true;
             }
         }
 
