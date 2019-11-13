@@ -56,10 +56,24 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
                                     item.Type = reader["TypeName"].ToString();
                                     database.PartitionFunctions.Add(item);
                                 }
-                                if (item.Type.Equals("binary") || item.Type.Equals("varbinary"))
-                                    item.Values.Add(ToHex((byte[])reader["value"]));
-                                else
-                                    item.Values.Add(reader["value"].ToString());
+
+                                switch (item.Type) {
+                                    case "binary":
+                                    case "varbinary":
+                                        item.Values.Add(ToHex((byte[])reader["value"]));
+                                        break;
+                                    case "date":
+                                        item.Values.Add(String.Format("'{0:yyyy/MM/dd}'", (DateTime)reader["value"]));
+                                        break;
+                                    case "smalldatetime":
+                                    case "datetime":
+                                        item.Values.Add(String.Format("'{0:yyyy/MM/dd HH:mm:ss.fff}'", (DateTime)reader["value"]));
+                                        break;
+                                    default:
+                                        item.Values.Add(reader["value"].ToString());
+                                        break;
+                                }
+                                    
                             }
                         }
                     }
