@@ -61,6 +61,7 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
                                         else
                                             parent = database.Tables.Find(parentId);
                                     }
+                                    if (parent == null) { continue; }
                                     if (reader["type"].Equals("TR"))
                                     {
                                         Trigger item = new Trigger(parent);
