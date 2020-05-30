@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace OpenDBDiff.OCDB
+namespace OpenDBDiff.Commandline
 {
     public class CommandlineOptions
     {

@@ -51,9 +51,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="..\OpenDBDiff\Properties\AssemblyVersionInfo.cs">
-      <Link>Properties\AssemblyVersionInfo.cs</Link>
-    </Compile>
     <Compile Include="Generates\Util\ByteToHexEncoderTests.cs" />
     <Compile Include="Model\ColumnsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
