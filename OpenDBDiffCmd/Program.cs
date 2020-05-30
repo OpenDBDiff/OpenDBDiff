@@ -1,4 +1,5 @@
-﻿using OpenDBDiff.Schema.SQLServer.Generates.Generates;
+﻿using CommandLine;
+using OpenDBDiff.Schema.SQLServer.Generates.Generates;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Options;
 using System;
@@ -6,30 +7,32 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 
-namespace OpenDBDiff.OCDB
+namespace OpenDBDiff.Commandline
 {
     public class Program
     {
-        private static SqlOption SqlFilter = new SqlOption();
+        private static readonly SqlOption SqlFilter = new SqlOption();
 
-        protected Program() { }
+        protected Program()
+        {
+        }
 
         private static int Main(string[] args)
         {
             bool completedSuccessfully = false;
 
-            var options = new CommandlineOptions();
-            if (CommandLine.Parser.Default.ParseArguments(args, options))
-            {
-                try
+            Parser.Default.ParseArguments<CommandlineOptions>(args)
+                .WithParsed(options =>
                 {
-                    completedSuccessfully = Work(options);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
+                    try
+                    {
+                        completedSuccessfully = Work(options);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
 
             if (Debugger.IsAttached)
             {
