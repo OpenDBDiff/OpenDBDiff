@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenDBDiff.Schema.SQLServer.Generates</RootNamespace>
     <AssemblyName>OpenDBDiff.Schema.SQLServer</AssemblyName>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>OpenDBDiff.Schema.SQLServer.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -116,7 +117,6 @@
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
     </None>
-    <None Include="OpenDBDiff.Schema.SQLServer.snk" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Front\AddExclusionPatternForm.resx">
