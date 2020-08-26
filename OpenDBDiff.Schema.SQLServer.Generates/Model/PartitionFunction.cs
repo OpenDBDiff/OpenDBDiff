@@ -1,9 +1,10 @@
-﻿using System;
+﻿using OpenDBDiff.Abstractions.Schema;
+using OpenDBDiff.Abstractions.Schema.Model;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using OpenDBDiff.Schema.Model;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {

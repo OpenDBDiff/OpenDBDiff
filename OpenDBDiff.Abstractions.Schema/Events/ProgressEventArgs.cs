@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenDBDiff.Schema.Events
+namespace OpenDBDiff.Abstractions.Schema.Events
 {
     public class ProgressEventArgs : EventArgs
     {

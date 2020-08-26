@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using OpenDBDiff.Schema.Errors;
-using OpenDBDiff.Schema.Events;
-using OpenDBDiff.Schema.Model;
+using OpenDBDiff.Abstractions.Schema.Errors;
+using OpenDBDiff.Abstractions.Schema.Events;
+using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.Util;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 {

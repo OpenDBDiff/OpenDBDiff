@@ -1,4 +1,4 @@
-using OpenDBDiff.Schema.Misc;
+using OpenDBDiff.Abstractions.Schema.Misc;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
 using System;
 
@@ -40,10 +40,6 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
                 (new CompareFullText()).GenerateDifferences<Database>(origin.FullText, destination.FullText);
                 data.SourceInfo = destination.Info;
                 return data;
-            }
-            catch (SchemaException)
-            {
-                throw;
             }
             catch (Exception ex)
             {

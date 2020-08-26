@@ -1,4 +1,6 @@
-﻿namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.Util
+﻿using OpenDBDiff.Abstractions.Schema;
+
+namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.Util
 {
     internal static class ConvertType
     {

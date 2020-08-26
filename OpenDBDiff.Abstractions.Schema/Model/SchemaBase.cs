@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace OpenDBDiff.Schema.Model
+namespace OpenDBDiff.Abstractions.Schema.Model
 {
     [DebuggerDisplay("Id: {Id} - Name: {Name} - Status: {status}")]
     public abstract class SchemaBase : ISchemaBase

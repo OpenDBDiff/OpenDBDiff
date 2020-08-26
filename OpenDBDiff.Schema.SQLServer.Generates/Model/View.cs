@@ -1,7 +1,8 @@
-﻿using System;
-using OpenDBDiff.Schema.Attributes;
-using OpenDBDiff.Schema.Model;
+﻿using OpenDBDiff.Abstractions.Schema;
+using OpenDBDiff.Abstractions.Schema.Attributes;
+using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Model.Util;
+using System;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {

@@ -1,6 +1,6 @@
-using OpenDBDiff.Schema.Errors;
-using OpenDBDiff.Schema.Events;
-using OpenDBDiff.Schema.Misc;
+using OpenDBDiff.Abstractions.Schema.Errors;
+using OpenDBDiff.Abstractions.Schema.Events;
+using OpenDBDiff.Abstractions.Schema.Misc;
 using OpenDBDiff.Schema.SQLServer.Generates.Compare;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.Util;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;

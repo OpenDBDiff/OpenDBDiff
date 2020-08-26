@@ -1,4 +1,5 @@
-﻿using OpenDBDiff.Schema.Events;
+﻿using OpenDBDiff.Abstractions.Schema.Events;
+using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.Abstractions.Ui;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace OpenDBDiff.UI
         private IGenerator OriginGenerator;
         private IGenerator DestinationGenerator;
         private bool IsProcessing = false;
-        private Schema.Model.IDatabase originClone = null;
+        private IDatabase originClone = null;
         private readonly IDatabaseComparer Comparer;
 
         // TODO: thread-safe error reporting
@@ -33,9 +34,9 @@ namespace OpenDBDiff.UI
             this.Comparer = comparer;
         }
 
-        public Schema.Model.IDatabase Origin { get; private set; }
+        public Abstractions.Schema.Model.IDatabase Origin { get; private set; }
 
-        public Schema.Model.IDatabase Destination { get; private set; }
+        public Abstractions.Schema.Model.IDatabase Destination { get; private set; }
 
         public string ErrorLocation { get; private set; }
 
@@ -70,7 +71,7 @@ namespace OpenDBDiff.UI
                     this.ErrorLocation = "Loading " + originProgressControl.DatabaseName;
                     Destination = DestinationGenerator.Process();
 
-                    originClone = (Schema.Model.IDatabase)Origin.Clone(null);
+                    originClone = (IDatabase)Origin.Clone(null);
 
                     this.ErrorLocation = "Comparing Databases";
                     Destination = Comparer.Compare(Origin, Destination);

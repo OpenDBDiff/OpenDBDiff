@@ -1,9 +1,9 @@
+using OpenDBDiff.Abstractions.Schema.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenDBDiff.Schema.Model;
 
-namespace OpenDBDiff.Schema
+namespace OpenDBDiff.Abstractions.Schema
 {
     public class SQLScriptList
     {

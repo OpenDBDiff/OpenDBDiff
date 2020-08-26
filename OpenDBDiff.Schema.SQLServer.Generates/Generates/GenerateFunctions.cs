@@ -1,4 +1,4 @@
-﻿using OpenDBDiff.Schema.Events;
+﻿using OpenDBDiff.Abstractions.Schema.Events;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.Util;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;

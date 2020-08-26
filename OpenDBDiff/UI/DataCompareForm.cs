@@ -1,8 +1,8 @@
+using OpenDBDiff.Abstractions.Schema.Model;
 using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using OpenDBDiff.Schema.Model;
 
 namespace OpenDBDiff.UI
 {

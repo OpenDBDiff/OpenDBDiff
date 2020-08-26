@@ -100,6 +100,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj">
+      <Project>{406558a0-1b98-4d0e-b8b6-2013700b065a}</Project>
+      <Name>OpenDBDiff.Abstractions.Schema</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OpenDBDiff.Abstractions.Ui\OpenDBDiff.Abstractions.Ui.csproj">
       <Project>{e82cfc94-de8c-4edd-aa0c-f78abae03768}</Project>
       <Name>OpenDBDiff.Abstractions.Ui</Name>
@@ -107,10 +111,6 @@
     <ProjectReference Include="..\OpenDBDiff.Schema.SQLServer.Generates\OpenDBDiff.Schema.SQLServer.Generates.csproj">
       <Project>{32ac9af6-db93-4354-b69f-6dbc65c70867}</Project>
       <Name>OpenDBDiff.Schema.SQLServer.Generates</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OpenDBDiff.Schema\OpenDBDiff.Schema.csproj">
-      <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
-      <Name>OpenDBDiff.Schema</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

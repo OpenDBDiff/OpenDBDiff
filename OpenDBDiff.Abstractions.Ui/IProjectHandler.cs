@@ -1,5 +1,4 @@
-﻿using OpenDBDiff.Schema.Model;
-using OpenDBDiff.Abstractions.Ui;
+﻿using OpenDBDiff.Abstractions.Schema.Model;
 
 namespace OpenDBDiff.Abstractions.Ui
 {

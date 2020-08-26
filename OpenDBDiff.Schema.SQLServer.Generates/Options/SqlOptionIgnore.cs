@@ -1,10 +1,10 @@
+using OpenDBDiff.Abstractions.Schema.Model;
 using System;
 using System.Collections.Generic;
-using OpenDBDiff.Schema.Model;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Options
 {
-    public class SqlOptionIgnore : Schema.Model.IOptionsContainer<bool>
+    public class SqlOptionIgnore : IOptionsContainer<bool>
     {
         public SqlOptionIgnore(bool defaultValue)
         {

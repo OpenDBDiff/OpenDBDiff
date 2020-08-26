@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using OpenDBDiff.Schema.Model;
+﻿using OpenDBDiff.Abstractions.Schema.Model;
+using System.Collections.Generic;
 
-namespace OpenDBDiff.Schema
+namespace OpenDBDiff.Abstractions.Schema
 {
     public class SqlAction
     {

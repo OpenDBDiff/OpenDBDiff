@@ -1,4 +1,4 @@
-﻿using OpenDBDiff.Schema;
+﻿using OpenDBDiff.Abstractions.Schema;
 using OpenDBDiff.Schema.SQLServer.Generates.Options;
 using System;
 using System.ComponentModel;

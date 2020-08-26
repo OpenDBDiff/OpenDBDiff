@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace OpenDBDiff.Schema.Misc
+namespace OpenDBDiff.Abstractions.Schema.Misc
 {
     [Serializable]
     public class SchemaException : Exception

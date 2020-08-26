@@ -8,8 +8,8 @@
     <ProjectGuid>{406558A0-1B98-4D0E-B8B6-2013700B065A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenDBDiff.Schema</RootNamespace>
-    <AssemblyName>OpenDBDiff.Schema</AssemblyName>
+    <RootNamespace>OpenDBDiff.Abstractions.Schema</RootNamespace>
+    <AssemblyName>OpenDBDiff.Abstractions.Schema</AssemblyName>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>

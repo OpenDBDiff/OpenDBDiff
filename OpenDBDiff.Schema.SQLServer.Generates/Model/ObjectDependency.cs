@@ -1,4 +1,6 @@
-﻿namespace OpenDBDiff.Schema.SQLServer.Generates.Model
+﻿using OpenDBDiff.Abstractions.Schema;
+
+namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {
     public class ObjectDependency
     {

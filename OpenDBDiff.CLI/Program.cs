@@ -1,4 +1,5 @@
-﻿using OpenDBDiff.Schema.SQLServer.Generates.Generates;
+﻿using OpenDBDiff.Abstractions.Schema.Model;
+using OpenDBDiff.Schema.SQLServer.Generates.Generates;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Options;
 using System;
@@ -72,10 +73,10 @@ namespace OpenDBDiff.CLI
                     Console.WriteLine("Comparing databases schemas...");
                     origin = Generate.Compare(origin, destination);
                     // temporary work-around: run twice just like GUI
-                    origin.ToSqlDiff(new System.Collections.Generic.List<Schema.Model.ISchemaBase>());
+                    origin.ToSqlDiff(new System.Collections.Generic.List<ISchemaBase>());
 
                     Console.WriteLine("Generating SQL file...");
-                    var script = origin.ToSqlDiff(new System.Collections.Generic.List<Schema.Model.ISchemaBase>()).ToSQL();
+                    var script = origin.ToSqlDiff(new System.Collections.Generic.List<ISchemaBase>()).ToSQL();
                     if (!string.IsNullOrWhiteSpace(options.OutputFile))
                     {
                         Console.WriteLine("Writing action script to {0}", options.OutputFile);

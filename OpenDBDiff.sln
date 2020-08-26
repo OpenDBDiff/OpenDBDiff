@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff", "OpenDBDiff\Op
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65} = {E794AA28-EE68-44BD-827B-1BFD9C106B65}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Schema", "OpenDBDiff.Schema\OpenDBDiff.Schema.csproj", "{406558A0-1B98-4D0E-B8B6-2013700B065A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Abstractions.Schema", "OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj", "{406558A0-1B98-4D0E-B8B6-2013700B065A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.SqlServer.Ui", "OpenDBDiff.SqlServer.Ui\OpenDBDiff.SqlServer.Ui.csproj", "{EF2F571E-A7AD-40BE-8500-50A039159FC1}"
 EndProject

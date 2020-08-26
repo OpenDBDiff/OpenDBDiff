@@ -58,13 +58,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj">
+      <Project>{406558a0-1b98-4d0e-b8b6-2013700b065a}</Project>
+      <Name>OpenDBDiff.Abstractions.Schema</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OpenDBDiff.Schema.SQLServer.Generates\OpenDBDiff.Schema.SQLServer.Generates.csproj">
       <Project>{32AC9AF6-DB93-4354-B69F-6DBC65C70867}</Project>
       <Name>OpenDBDiff.Schema.SQLServer.Generates</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OpenDBDiff.Schema\OpenDBDiff.Schema.csproj">
-      <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
-      <Name>OpenDBDiff.Schema</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,11 @@
-using System;
-using System.Data.SqlClient;
-using System.Globalization;
-using OpenDBDiff.Schema.Misc;
+using OpenDBDiff.Abstractions.Schema.Misc;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.SQLCommands;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Options;
+using System;
+using System.Data.SqlClient;
+using System.Globalization;
 #if DEBUG
-using System.Runtime.InteropServices;
 #endif
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates

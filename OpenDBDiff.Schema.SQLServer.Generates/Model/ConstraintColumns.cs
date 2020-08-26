@@ -1,5 +1,5 @@
+using OpenDBDiff.Abstractions.Schema.Model;
 using System;
-using OpenDBDiff.Schema.Model;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {

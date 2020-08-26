@@ -1,3 +1,5 @@
+using OpenDBDiff.Abstractions.Schema;
+using OpenDBDiff.Abstractions.Schema.Model;
 using System;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Model
@@ -152,7 +154,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
             return "ALTER TABLE " + ((Table)Parent.Parent).FullName + " DROP CONSTRAINT [" + Name + "]\r\nGO\r\n";
         }
 
-        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<OpenDBDiff.Schema.Model.ISchemaBase> schemas)
+        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             SQLScriptList list = new SQLScriptList();
             if (this.HasState(ObjectStatus.Drop))

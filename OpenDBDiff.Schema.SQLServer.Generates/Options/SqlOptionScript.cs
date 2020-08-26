@@ -1,10 +1,10 @@
-﻿using System;
+﻿using OpenDBDiff.Abstractions.Schema.Model;
+using System;
 using System.Collections.Generic;
-using OpenDBDiff.Schema.Model;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Options
 {
-    public class SqlOptionScript : Schema.Model.IOptionsContainer<bool>
+    public class SqlOptionScript : IOptionsContainer<bool>
     {
         private Boolean alterObjectOnSchemaBinding = true;
 

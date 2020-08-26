@@ -1,3 +1,4 @@
+using OpenDBDiff.Abstractions.Schema;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Compare

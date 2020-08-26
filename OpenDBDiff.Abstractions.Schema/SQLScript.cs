@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenDBDiff.Schema
+namespace OpenDBDiff.Abstractions.Schema
 {
     public class SQLScript : IComparable<SQLScript>
     {

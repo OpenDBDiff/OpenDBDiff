@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OpenDBDiff.Schema.Model
+namespace OpenDBDiff.Abstractions.Schema.Model
 {
     public class SchemaList<T, P> : List<T>, ISchemaList<T, P>
         where T : ISchemaBase

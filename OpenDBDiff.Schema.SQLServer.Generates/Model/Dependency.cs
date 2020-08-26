@@ -1,3 +1,5 @@
+using OpenDBDiff.Abstractions.Schema;
+
 namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {
     internal class Dependency

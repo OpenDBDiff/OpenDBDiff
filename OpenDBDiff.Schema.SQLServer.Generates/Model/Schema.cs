@@ -1,3 +1,5 @@
+using OpenDBDiff.Abstractions.Schema;
+using OpenDBDiff.Abstractions.Schema.Model;
 using System.Text;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Model
@@ -31,7 +33,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model
         /// <summary>
         /// Devuelve el schema de diferencias del Schema en formato SQL.
         /// </summary>
-        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<OpenDBDiff.Schema.Model.ISchemaBase> schemas)
+        public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
         {
             SQLScriptList listDiff = new SQLScriptList();
 

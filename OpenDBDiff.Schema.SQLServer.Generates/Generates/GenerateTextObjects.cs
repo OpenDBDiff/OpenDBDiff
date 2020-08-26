@@ -1,10 +1,10 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.Text.RegularExpressions;
-using OpenDBDiff.Schema.Events;
+﻿using OpenDBDiff.Abstractions.Schema.Events;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates.Util;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Options;
+using System;
+using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 {

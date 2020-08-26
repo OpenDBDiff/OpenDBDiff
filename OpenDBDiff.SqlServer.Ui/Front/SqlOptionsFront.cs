@@ -1,9 +1,8 @@
-using System;
-using System.Linq;
-using System.Windows.Forms;
-using OpenDBDiff.Schema;
-using OpenDBDiff.Schema.Model;
+using OpenDBDiff.Abstractions.Schema;
+using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Options;
+using System;
+using System.Windows.Forms;
 
 namespace OpenDBDiff.SqlServer.Ui
 {
@@ -33,7 +32,7 @@ namespace OpenDBDiff.SqlServer.Ui
             };
         }
 
-        public override void Load(Schema.Model.IOption option)
+        public override void Load(IOption option)
         {
             this.SQLOption = new SqlOption(option);
             txtBlob.Text = SQLOption.Defaults.DefaultBlobValue;
@@ -191,7 +190,7 @@ namespace OpenDBDiff.SqlServer.Ui
 
             FireOptionChanged(SQLOption);
         }
-        public Schema.Model.IOption GetOption()
+        public Abstractions.Schema.Model.IOption GetOption()
         {
             return SQLOption;
         }

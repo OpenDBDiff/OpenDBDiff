@@ -1,10 +1,10 @@
+using OpenDBDiff.Abstractions.Schema.Model;
 using System;
 using System.Collections.Generic;
-using OpenDBDiff.Schema.Model;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Options
 {
-    public class SqlOptionDefault : Schema.Model.IOptionsContainer<string>
+    public class SqlOptionDefault : IOptionsContainer<string>
     {
         private string defaultIntegerValue = "0";
         private string defaultRealValue = "0.0";

@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenDBDiff.Schema
+namespace OpenDBDiff.Abstractions.Schema
 {
     /// <summary>
     /// Original = The object has no modifications.

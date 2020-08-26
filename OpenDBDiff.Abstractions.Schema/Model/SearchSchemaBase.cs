@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OpenDBDiff.Schema.Model
+namespace OpenDBDiff.Abstractions.Schema.Model
 {
     public class SearchSchemaBase
     {

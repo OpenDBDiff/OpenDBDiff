@@ -1,4 +1,5 @@
-﻿using OpenDBDiff.Abstractions.Ui;
+﻿using OpenDBDiff.Abstractions.Schema.Model;
+using OpenDBDiff.Abstractions.Ui;
 using System;
 using System.Windows.Forms;
 
@@ -7,11 +8,11 @@ namespace OpenDBDiff.UI
     public partial class OptionForm : Form
     {
         private IProjectHandler projectSelectorHandler;
-        private Schema.Model.IOption SqlFilter;
+        private IOption SqlFilter;
 
         public event OptionControl.OptionEventHandler OptionSaved;
 
-        public OptionForm(IProjectHandler projectSelectorHandler, Schema.Model.IOption filter)
+        public OptionForm(IProjectHandler projectSelectorHandler, IOption filter)
         {
             this.projectSelectorHandler = projectSelectorHandler;
             sqlOptionsFront1 = projectSelectorHandler.CreateOptionControl();
@@ -35,7 +36,7 @@ namespace OpenDBDiff.UI
             this.ResumeLayout();
         }
 
-        private void SqlOptionsFront1_OptionSaved(Schema.Model.IOption option)
+        private void SqlOptionsFront1_OptionSaved(IOption option)
         {
             OptionSaved?.Invoke(option);
         }

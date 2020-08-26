@@ -1,12 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using OpenDBDiff.Abstractions.Schema;
+using OpenDBDiff.Abstractions.Schema.Model;
+using OpenDBDiff.Schema.SQLServer.Generates.Compare;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenDBDiff.Schema.Model;
-using OpenDBDiff.Schema.SQLServer.Generates.Compare;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Tests
 {

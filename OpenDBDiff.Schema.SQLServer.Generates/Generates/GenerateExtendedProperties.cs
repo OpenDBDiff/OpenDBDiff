@@ -1,9 +1,9 @@
-﻿using System;
+﻿using OpenDBDiff.Abstractions.Schema.Errors;
+using OpenDBDiff.Abstractions.Schema.Model;
+using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using OpenDBDiff.Schema.Errors;
-using OpenDBDiff.Schema.Model;
-using OpenDBDiff.Schema.SQLServer.Generates.Model;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates
 {

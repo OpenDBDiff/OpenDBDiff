@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using OpenDBDiff.Schema.Model;
+﻿using OpenDBDiff.Abstractions.Schema;
+using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates;
 using OpenDBDiff.Schema.SQLServer.Generates.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Compare
 {

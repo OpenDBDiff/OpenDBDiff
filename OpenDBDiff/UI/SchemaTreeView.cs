@@ -1,6 +1,6 @@
-﻿using OpenDBDiff.Schema;
-using OpenDBDiff.Schema.Attributes;
-using OpenDBDiff.Schema.Model;
+﻿using OpenDBDiff.Abstractions.Schema;
+using OpenDBDiff.Abstractions.Schema.Attributes;
+using OpenDBDiff.Abstractions.Schema.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;

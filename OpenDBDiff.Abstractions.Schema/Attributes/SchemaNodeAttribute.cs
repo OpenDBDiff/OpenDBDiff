@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenDBDiff.Schema.Attributes
+namespace OpenDBDiff.Abstractions.Schema.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public sealed class SchemaNodeAttribute : Attribute

@@ -1,4 +1,4 @@
-﻿namespace OpenDBDiff.Schema.Errors
+﻿namespace OpenDBDiff.Abstractions.Schema.Errors
 {
     public class MessageLog
     {

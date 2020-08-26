@@ -1,10 +1,11 @@
+using OpenDBDiff.Abstractions.Schema;
+using OpenDBDiff.Abstractions.Schema.Attributes;
+using OpenDBDiff.Abstractions.Schema.Model;
+using OpenDBDiff.Schema.SQLServer.Generates.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using OpenDBDiff.Schema.Attributes;
-using OpenDBDiff.Schema.Model;
-using OpenDBDiff.Schema.SQLServer.Generates.Options;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Model
 {

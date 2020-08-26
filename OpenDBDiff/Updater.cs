@@ -1,11 +1,11 @@
+using OpenDBDiff.Abstractions.Schema;
+using OpenDBDiff.Abstractions.Schema.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Windows.Forms;
-using OpenDBDiff.Schema;
-using OpenDBDiff.Schema.Model;
 using System.Text;
+using System.Windows.Forms;
 
 namespace OpenDBDiff
 {

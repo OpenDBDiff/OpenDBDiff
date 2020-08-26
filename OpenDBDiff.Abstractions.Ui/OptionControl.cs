@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using OpenDBDiff.Schema.Model;
+﻿using OpenDBDiff.Abstractions.Schema.Model;
+using System;
 
 namespace OpenDBDiff.Abstractions.Ui
 {

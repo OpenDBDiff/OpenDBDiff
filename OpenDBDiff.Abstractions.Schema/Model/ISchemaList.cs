@@ -1,4 +1,4 @@
-﻿namespace OpenDBDiff.Schema.Model
+﻿namespace OpenDBDiff.Abstractions.Schema.Model
 {
     public interface ISchemaList<T, P>
         where T : ISchemaBase
