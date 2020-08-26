@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace OpenDBDiff.Front
+namespace OpenDBDiff.UI
 {
     partial class ProgressForm
     {
@@ -35,8 +35,8 @@ namespace OpenDBDiff.Front
             this.gradientPanel1 = new System.Windows.Forms.Panel();
             this.lblName = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.originProgressControl = new OpenDBDiff.Front.DatabaseProgressControl();
-            this.destinationProgressControl = new OpenDBDiff.Front.DatabaseProgressControl();
+            this.originProgressControl = new OpenDBDiff.UI.DatabaseProgressControl();
+            this.destinationProgressControl = new OpenDBDiff.UI.DatabaseProgressControl();
             this.gradientPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();

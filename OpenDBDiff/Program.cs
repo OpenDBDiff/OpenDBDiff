@@ -1,6 +1,6 @@
+using OpenDBDiff.UI;
 using System;
 using System.Windows.Forms;
-using OpenDBDiff.Front;
 
 namespace OpenDBDiff
 {

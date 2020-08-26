@@ -85,77 +85,77 @@
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\ScintillaExtensions.cs" />
-    <Compile Include="Front\DataCompareForm.cs">
+    <Compile Include="UI\DataCompareForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Front\DataCompareForm.Designer.cs">
+    <Compile Include="UI\DataCompareForm.Designer.cs">
       <DependentUpon>DataCompareForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Front\ErrorForm.cs">
+    <Compile Include="UI\ErrorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Front\ErrorForm.Designer.cs">
+    <Compile Include="UI\ErrorForm.Designer.cs">
       <DependentUpon>ErrorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Front\MainForm.cs">
+    <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Front\MainForm.Designer.cs">
+    <Compile Include="UI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Updater.cs" />
-    <Compile Include="Front\DatabaseProgressControl.cs">
+    <Compile Include="UI\DatabaseProgressControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Front\DatabaseProgressControl.Designer.cs">
+    <Compile Include="UI\DatabaseProgressControl.Designer.cs">
       <DependentUpon>DatabaseProgressControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Front\ListProjectsForm.cs">
+    <Compile Include="UI\ListProjectsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Front\ListProjectsForm.Designer.cs">
+    <Compile Include="UI\ListProjectsForm.Designer.cs">
       <DependentUpon>ListProjectsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Front\OptionForm.cs">
+    <Compile Include="UI\OptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Front\OptionForm.Designer.cs">
+    <Compile Include="UI\OptionForm.Designer.cs">
       <DependentUpon>OptionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Front\ProgressForm.cs">
+    <Compile Include="UI\ProgressForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Front\ProgressForm.Designer.cs">
+    <Compile Include="UI\ProgressForm.Designer.cs">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Front\SchemaTreeView.cs">
+    <Compile Include="UI\SchemaTreeView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Front\SchemaTreeView.Designer.cs">
+    <Compile Include="UI\SchemaTreeView.Designer.cs">
       <DependentUpon>SchemaTreeView.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Front\DatabaseProgressControl.resx">
+    <EmbeddedResource Include="UI\DatabaseProgressControl.resx">
       <DependentUpon>DatabaseProgressControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Front\DataCompareForm.resx">
+    <EmbeddedResource Include="UI\DataCompareForm.resx">
       <DependentUpon>DataCompareForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Front\ErrorForm.resx">
+    <EmbeddedResource Include="UI\ErrorForm.resx">
       <DependentUpon>ErrorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Front\MainForm.resx">
+    <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Front\OptionForm.resx">
+    <EmbeddedResource Include="UI\OptionForm.resx">
       <DependentUpon>OptionForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Front\ProgressForm.resx">
+    <EmbeddedResource Include="UI\ProgressForm.resx">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Front\SchemaTreeView.resx">
+    <EmbeddedResource Include="UI\SchemaTreeView.resx">
       <DependentUpon>SchemaTreeView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -239,7 +239,7 @@
     <None Include="Resources\table_edit.png" />
     <None Include="Resources\setting_tools.png" />
     <None Include="Resources\compare.png" />
-    <EmbeddedResource Include="Front\ListProjectsForm.resx">
+    <EmbeddedResource Include="UI\ListProjectsForm.resx">
       <DependentUpon>ListProjectsForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

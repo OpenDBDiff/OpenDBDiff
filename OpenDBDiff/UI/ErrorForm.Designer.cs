@@ -1,4 +1,4 @@
-﻿namespace OpenDBDiff.Front
+﻿namespace OpenDBDiff.UI
 {
     partial class ErrorForm
     {

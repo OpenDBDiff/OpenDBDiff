@@ -1,7 +1,8 @@
-﻿using System;
+﻿using OpenDBDiff.Front;
+using System;
 using System.Windows.Forms;
 
-namespace OpenDBDiff.Front
+namespace OpenDBDiff.UI
 {
     public partial class OptionForm : Form
     {

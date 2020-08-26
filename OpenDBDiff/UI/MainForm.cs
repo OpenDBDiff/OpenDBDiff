@@ -3,6 +3,7 @@ using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
 using Essy.Tools.InputBox;
 using OpenDBDiff.Extensions;
+using OpenDBDiff.Front;
 using OpenDBDiff.Schema;
 using OpenDBDiff.Schema.Misc;
 using OpenDBDiff.Schema.Model;
@@ -18,7 +19,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
-namespace OpenDBDiff.Front
+namespace OpenDBDiff.UI
 {
     public partial class MainForm : Form
     {

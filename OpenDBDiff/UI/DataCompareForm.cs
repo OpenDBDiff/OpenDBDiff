@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using OpenDBDiff.Schema.Model;
 
-namespace OpenDBDiff.Front
+namespace OpenDBDiff.UI
 {
     public partial class DataCompareForm : Form
     {

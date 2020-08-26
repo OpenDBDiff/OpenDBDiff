@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace OpenDBDiff.Front
+namespace OpenDBDiff.UI
 {
     public partial class SchemaTreeView : UserControl
     {

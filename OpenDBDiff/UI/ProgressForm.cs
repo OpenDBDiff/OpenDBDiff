@@ -1,9 +1,10 @@
-﻿using OpenDBDiff.Schema.Events;
+﻿using OpenDBDiff.Front;
+using OpenDBDiff.Schema.Events;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace OpenDBDiff.Front
+namespace OpenDBDiff.UI
 {
     public partial class ProgressForm : Form
     {
