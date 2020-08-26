@@ -35,7 +35,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Util
             string prevText = code;
             try
             {
-                if (!prevText.Substring(prevText.Length - 2, 2).Equals("\r\n"))
+                if (!prevText.EndsWith("\r\n"))
                     prevText += "\r\n";
                 return prevText + "GO\r\n";
             }
@@ -51,14 +51,14 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Util
         /// </summary>
         private static SearchItem FindCreate(string ObjectType, ISchemaBase item, string prevText)
         {
-            SearchItem sitem = new SearchItem();
+            var searchItem = new SearchItem();
             Regex regex = new Regex(@"((/\*)(\w|\s|\d|\[|\]|\.)*(\*/))|((\-\-)(.)*)", RegexOptions.IgnoreCase);
-            Regex reg2 = new Regex(@"CREATE " + ObjectType + @"(\s|\r|\n|\t|\w|\/|\*|-|@|_|&|#)*((\[)?" + item.Owner + @"(\])?((\s)*)?\.)?((\s)*)?(\[)?" + item.Name + @"(\])?", (RegexOptions)((int)RegexOptions.IgnoreCase + (int)RegexOptions.Multiline));
+            Regex reg2 = new Regex(@"CREATE " + ObjectType + @"(\s|\r|\n|\t|\w|\/|\*|-|@|_|&|#)*((\[)?" + item.Owner + @"(\])?((\s)*)?\.)?((\s)*)?(\[)?" + item.Name + @"(\])?", RegexOptions.IgnoreCase | RegexOptions.Multiline);
             Regex reg3 = new Regex(@"((\[)?" + item.Owner + @"(\])?\.)?((\s)+\.)?(\s)*(\[)?" + item.Name + @"(\])?", RegexOptions.IgnoreCase);
             Regex reg4 = new Regex(@"( )*\[");
             //Regex reg3 = new Regex(@"((\[)?" + item.Owner + @"(\])?.)?(\[)?" + item.Name + @"(\])?", RegexOptions.Multiline);
 
-            MatchCollection abiertas = regex.Matches(prevText);
+            var matches = regex.Matches(prevText);
             Boolean finish = false;
             int indexStart = 0;
             int indexBegin = 0;
@@ -71,11 +71,11 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Util
                     iAux = match.Index;
                 else
                     iAux = -1;
-                if ((abiertas.Count == indexStart) || (match.Success))
+                if ((matches.Count == indexStart) || (match.Success))
                     finish = true;
                 else
                 {
-                    if ((iAux < abiertas[indexStart].Index) || (iAux > abiertas[indexStart].Index + abiertas[indexStart].Length))
+                    if ((iAux < matches[indexStart].Index) || (iAux > matches[indexStart].Index + matches[indexStart].Length))
                         finish = true;
                     else
                     {
@@ -87,9 +87,9 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Util
             }
             string result = reg3.Replace(prevText, " " + item.FullName, 1, iAux + 1);
             if (iAux != -1)
-                sitem.Body = reg4.Replace(result, " [", 1, iAux);
-            sitem.FindPosition = iAux;
-            return sitem;
+                searchItem.Body = reg4.Replace(result, " [", 1, iAux);
+            searchItem.FindPosition = iAux;
+            return searchItem;
         }
 
         public static string FormatCreate(string ObjectType, string body, ISchemaBase item)
