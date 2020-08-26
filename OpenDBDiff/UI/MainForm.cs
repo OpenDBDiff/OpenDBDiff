@@ -575,12 +575,11 @@ namespace OpenDBDiff.UI
                         Type = Project.ProjectType.SQLServer
                     };
 
-                    string newProjectName = ActiveProject.ProjectName.Trim();
-                    do
-                    {
-                        newProjectName = InputBox.ShowInputBox("Enter the project name.", newProjectName, false).Trim();
-                    }
-                    while (string.IsNullOrWhiteSpace(newProjectName));
+                    var newProjectName = InputBox.ShowInputBox("Enter the project name.", ActiveProject.ProjectName.Trim(), false)?.Trim();
+
+                    if (string.IsNullOrWhiteSpace(newProjectName))
+                        return;
+
                     ActiveProject.ProjectName = newProjectName;
                 }
                 Project.Upsert(ActiveProject);
