@@ -583,7 +583,7 @@ namespace OpenDBDiff.UI
                     while (string.IsNullOrWhiteSpace(newProjectName));
                     ActiveProject.ProjectName = newProjectName;
                 }
-                ActiveProject.Id = Project.Save(ActiveProject);
+                Project.Upsert(ActiveProject);
             }
             catch (Exception ex)
             {
@@ -617,7 +617,7 @@ namespace OpenDBDiff.UI
         {
             try
             {
-                Project.Save(itemSelected);
+                Project.Upsert(itemSelected);
             }
             catch (Exception ex)
             {
@@ -630,7 +630,7 @@ namespace OpenDBDiff.UI
             try
             {
                 Project.Delete(itemSelected.Id);
-                if ((ActiveProject?.Id ?? int.MinValue) == itemSelected.Id)
+                if ((ActiveProject?.Id).HasValue && ActiveProject.Id == itemSelected.Id)
                 {
                     ActiveProject = null;
                     LeftDatabaseSelector.ConnectionString = "";
