@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.CLI", "OpenDBDif
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{87023747-4D77-4CCA-A435-4FA32D133639}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Schema.SQLServer.Generates", "OpenDBDiff.Schema.SQLServer.Generates\OpenDBDiff.Schema.SQLServer.Generates.csproj", "{32AC9AF6-DB93-4354-B69F-6DBC65C70867}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.SqlServer.Schema", "OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj", "{32AC9AF6-DB93-4354-B69F-6DBC65C70867}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Schema.SQLServer.GeneratesTests", "OpenDBDiff.Schema.SQLServer.GeneratesTests\OpenDBDiff.Schema.SQLServer.GeneratesTests.csproj", "{94F5C91A-6268-41E9-A15E-FA5451BB2B6F}"
 EndProject

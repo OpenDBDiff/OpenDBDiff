@@ -1,6 +1,7 @@
 ﻿using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.Abstractions.Ui;
-using OpenDBDiff.Schema.SQLServer.Generates.Generates;
+using OpenDBDiff.SqlServer.Schema.Generates;
+using OpenDBDiff.SqlServer.Schema.Model;
 using System;
 
 namespace OpenDBDiff.SqlServer.Ui
@@ -9,11 +10,11 @@ namespace OpenDBDiff.SqlServer.Ui
     {
         public IDatabase Compare(IDatabase origin, IDatabase destination)
         {
-            if (origin is Schema.SQLServer.Generates.Model.Database && destination is Schema.SQLServer.Generates.Model.Database)
+            if (origin is Database && destination is Database)
             {
-                return Generate.Compare(origin as Schema.SQLServer.Generates.Model.Database, destination as Schema.SQLServer.Generates.Model.Database);
+                return Generate.Compare(origin as Database, destination as Database);
             }
-            else if (!(origin is Schema.SQLServer.Generates.Model.Database))
+            else if (!(origin is Database))
             {
                 throw new NotSupportedException("Origin database type not supported: " + origin.GetType());
             }

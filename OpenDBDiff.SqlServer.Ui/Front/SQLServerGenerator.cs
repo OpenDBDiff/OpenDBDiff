@@ -1,7 +1,8 @@
 ﻿using OpenDBDiff.Abstractions.Schema.Events;
 using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.Abstractions.Ui;
-using OpenDBDiff.Schema.SQLServer.Generates.Generates;
+using OpenDBDiff.SqlServer.Schema.Generates;
+using OpenDBDiff.SqlServer.Schema.Options;
 
 namespace OpenDBDiff.SqlServer.Ui
 {
@@ -16,7 +17,7 @@ namespace OpenDBDiff.SqlServer.Ui
             this.Generate = new Generate()
             {
                 ConnectionString = connectionString,
-                Options = new Schema.SQLServer.Generates.Options.SqlOption(option)
+                Options = new SqlOption(option)
             };
             this.Generate.OnProgress += new ProgressEventHandler.ProgressHandler(args =>
             {

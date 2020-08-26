@@ -62,9 +62,9 @@
       <Project>{406558a0-1b98-4d0e-b8b6-2013700b065a}</Project>
       <Name>OpenDBDiff.Abstractions.Schema</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenDBDiff.Schema.SQLServer.Generates\OpenDBDiff.Schema.SQLServer.Generates.csproj">
+    <ProjectReference Include="..\OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj">
       <Project>{32AC9AF6-DB93-4354-B69F-6DBC65C70867}</Project>
-      <Name>OpenDBDiff.Schema.SQLServer.Generates</Name>
+      <Name>OpenDBDiff.SqlServer.Schema</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

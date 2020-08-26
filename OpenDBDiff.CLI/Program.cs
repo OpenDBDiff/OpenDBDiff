@@ -1,7 +1,7 @@
 ﻿using OpenDBDiff.Abstractions.Schema.Model;
-using OpenDBDiff.Schema.SQLServer.Generates.Generates;
-using OpenDBDiff.Schema.SQLServer.Generates.Model;
-using OpenDBDiff.Schema.SQLServer.Generates.Options;
+using OpenDBDiff.SqlServer.Schema.Generates;
+using OpenDBDiff.SqlServer.Schema.Model;
+using OpenDBDiff.SqlServer.Schema.Options;
 using System;
 using System.Data.SqlClient;
 using System.Diagnostics;

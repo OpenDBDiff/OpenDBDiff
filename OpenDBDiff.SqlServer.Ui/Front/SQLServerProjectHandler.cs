@@ -1,6 +1,6 @@
 ﻿using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.Abstractions.Ui;
-using OpenDBDiff.Schema.SQLServer.Generates.Options;
+using OpenDBDiff.SqlServer.Schema.Options;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -107,7 +107,7 @@ namespace OpenDBDiff.SqlServer.Ui
         {
             if (Option == null)
             {
-                Option = new Schema.SQLServer.Generates.Options.SqlOption();
+                Option = new SqlOption();
             }
             return Option;
         }

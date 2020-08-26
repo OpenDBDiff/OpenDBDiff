@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenDBDiff.Schema.SQLServer.Generates.Generates.Util;
+using OpenDBDiff.SqlServer.Schema.Generates.Util;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.Utils.Tests
 {

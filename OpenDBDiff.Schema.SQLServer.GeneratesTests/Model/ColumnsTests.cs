@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDBDiff.Abstractions.Schema;
 using OpenDBDiff.Abstractions.Schema.Model;
-using OpenDBDiff.Schema.SQLServer.Generates.Compare;
+using OpenDBDiff.SqlServer.Schema.Compare;
+using OpenDBDiff.SqlServer.Schema.Model;
+using OpenDBDiff.SqlServer.Schema.Options;
 using System;
 using System.Collections.Generic;
 
@@ -21,7 +23,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Tests
             {
                 Collation = "SQL_Latin1_General_CP1_CI_AS",
             };
-            originDatabase.Options = new Options.SqlOption();
+            originDatabase.Options = new SqlOption();
             originDatabase.Id = getId();
             Table originTable = new Table(originDatabase);
             originTable.Name = "Example";
@@ -56,7 +58,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Tests
                 Collation = "SQL_Latin1_General_CP1_CI_AS"
             };
             destinationDatabase.Id = getId();
-            destinationDatabase.Options = new Options.SqlOption();
+            destinationDatabase.Options = new SqlOption();
             Table destinationTable = new Table(destinationDatabase);
             destinationTable.Name = "Example";
             destinationTable.Id = getId();
@@ -95,7 +97,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Tests
                 Collation = "SQL_Latin1_General_CP1_CI_AS"
             };
             originDatabase.Id = getId();
-            originDatabase.Options = new Options.SqlOption();
+            originDatabase.Options = new SqlOption();
             Table originTable = new Table(originDatabase);
             originTable.Name = "Example";
             originTable.Id = getId();
@@ -129,7 +131,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Tests
                 Collation = "SQL_Latin1_General_CP1_CI_AS"
             };
             destinationDatabase.Id = getId();
-            destinationDatabase.Options = new Options.SqlOption();
+            destinationDatabase.Options = new SqlOption();
             Table destinationTable = new Table(destinationDatabase);
             destinationTable.Name = "Example";
             destinationTable.Id = getId();
@@ -168,7 +170,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Tests
                 Collation = "SQL_Latin1_General_CP1_CI_AS"
             };
             originDatabase.Id = getId();
-            originDatabase.Options = new Options.SqlOption();
+            originDatabase.Options = new SqlOption();
             Table originTable = new Table(originDatabase);
             originTable.Name = "Example";
             originTable.Id = getId();
@@ -202,7 +204,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Tests
                 Collation = "SQL_Latin1_General_CP1_CI_AS"
             };
             destinationDatabase.Id = getId();
-            destinationDatabase.Options = new Options.SqlOption();
+            destinationDatabase.Options = new SqlOption();
             Table destinationTable = new Table(destinationDatabase);
             destinationTable.Name = "Example";
             destinationTable.Id = getId();
