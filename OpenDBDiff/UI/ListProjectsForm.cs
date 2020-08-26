@@ -18,11 +18,11 @@ namespace OpenDBDiff.UI
 
         private IList<Project> Projects { get; }
 
-        public ListProjectsForm(IList<Project> projects)
+        public ListProjectsForm(IEnumerable<Project> projects)
         {
             InitializeComponent();
 
-            Projects = projects;
+            Projects = projects.ToList();
 
             ProjectsListView.Items.Clear();
 

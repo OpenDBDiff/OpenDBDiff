@@ -9,6 +9,8 @@ namespace OpenDBDiff.SqlServer.Schema.Options
 {
     public class SqlOptionFilterItem
     {
+        public SqlOptionFilterItem() { }
+
         public SqlOptionFilterItem(ObjectType objectType, string filterPattern)
         {
             this.ObjectType = objectType;
