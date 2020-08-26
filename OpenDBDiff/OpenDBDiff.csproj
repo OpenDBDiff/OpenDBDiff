@@ -56,8 +56,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DiffPlex, Version=1.4.4.0, Culture=neutral, PublicKeyToken=1d35e91d1bd7bc0f, processorArchitecture=MSIL">
-      <HintPath>..\packages\DiffPlex.1.4.4\lib\net40\DiffPlex.dll</HintPath>
+    <Reference Include="DiffPlex, Version=1.6.3.0, Culture=neutral, PublicKeyToken=1d35e91d1bd7bc0f, processorArchitecture=MSIL">
+      <HintPath>..\packages\DiffPlex.1.6.3\lib\net40\DiffPlex.dll</HintPath>
     </Reference>
     <Reference Include="InputBox, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Essy.Tools.InputBox.1.0.0\lib\net20\InputBox.dll</HintPath>
@@ -71,8 +71,8 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.111.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.111.0\lib\net451\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.113.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.113.1\lib\net451\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Deployment" />
     <Reference Include="System.Design" />
@@ -85,78 +85,77 @@
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\ScintillaExtensions.cs" />
-    <Compile Include="Front\DataCompareForm.cs">
+    <Compile Include="UI\DataCompareForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Front\DataCompareForm.Designer.cs">
+    <Compile Include="UI\DataCompareForm.Designer.cs">
       <DependentUpon>DataCompareForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Front\ErrorForm.cs">
+    <Compile Include="UI\ErrorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Front\ErrorForm.Designer.cs">
+    <Compile Include="UI\ErrorForm.Designer.cs">
       <DependentUpon>ErrorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Updater.cs" />
-    <Compile Include="Front\DatabaseProgressControl.cs">
+    <Compile Include="UI\DatabaseProgressControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Front\DatabaseProgressControl.Designer.cs">
+    <Compile Include="UI\DatabaseProgressControl.Designer.cs">
       <DependentUpon>DatabaseProgressControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Front\ListProjectsForm.cs">
+    <Compile Include="UI\ListProjectsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Front\ListProjectsForm.Designer.cs">
+    <Compile Include="UI\ListProjectsForm.Designer.cs">
       <DependentUpon>ListProjectsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Front\OptionForm.cs">
+    <Compile Include="UI\OptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Front\OptionForm.Designer.cs">
+    <Compile Include="UI\OptionForm.Designer.cs">
       <DependentUpon>OptionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Front\PrincipalForm.cs">
+    <Compile Include="UI\ProgressForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Front\PrincipalForm.Designer.cs">
-      <DependentUpon>PrincipalForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Front\ProgressForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Front\ProgressForm.Designer.cs">
+    <Compile Include="UI\ProgressForm.Designer.cs">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Front\SchemaTreeView.cs">
+    <Compile Include="UI\SchemaTreeView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Front\SchemaTreeView.Designer.cs">
+    <Compile Include="UI\SchemaTreeView.Designer.cs">
       <DependentUpon>SchemaTreeView.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Front\DatabaseProgressControl.resx">
+    <EmbeddedResource Include="UI\DatabaseProgressControl.resx">
       <DependentUpon>DatabaseProgressControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Front\DataCompareForm.resx">
+    <EmbeddedResource Include="UI\DataCompareForm.resx">
       <DependentUpon>DataCompareForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Front\ErrorForm.resx">
+    <EmbeddedResource Include="UI\ErrorForm.resx">
       <DependentUpon>ErrorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Front\OptionForm.resx">
+    <EmbeddedResource Include="UI\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\OptionForm.resx">
       <DependentUpon>OptionForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Front\PrincipalForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>PrincipalForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Front\ProgressForm.resx">
+    <EmbeddedResource Include="UI\ProgressForm.resx">
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Front\SchemaTreeView.resx">
+    <EmbeddedResource Include="UI\SchemaTreeView.resx">
       <DependentUpon>SchemaTreeView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -180,21 +179,17 @@
     <Compile Include="XmlConfig\ConfigProviders.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OpenDBDiff.Front\OpenDBDiff.Front.csproj">
-      <Project>{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}</Project>
-      <Name>DBDiff.Front</Name>
+    <ProjectReference Include="..\OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj">
+      <Project>{406558a0-1b98-4d0e-b8b6-2013700b065a}</Project>
+      <Name>OpenDBDiff.Abstractions.Schema</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenDBDiff.Schema.SQLServer.Generates\OpenDBDiff.Schema.SQLServer.Generates.csproj">
-      <Project>{32ac9af6-db93-4354-b69f-6dbc65c70867}</Project>
-      <Name>DBDiff.Schema.SQLServer.Generates</Name>
+    <ProjectReference Include="..\OpenDBDiff.Abstractions.Ui\OpenDBDiff.Abstractions.Ui.csproj">
+      <Project>{e82cfc94-de8c-4edd-aa0c-f78abae03768}</Project>
+      <Name>OpenDBDiff.Abstractions.Ui</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenDBDiff.Schema.SQLServer2005\OpenDBDiff.Schema.SQLServer.csproj">
+    <ProjectReference Include="..\OpenDBDiff.SqlServer.Ui\OpenDBDiff.SqlServer.Ui.csproj">
       <Project>{ef2f571e-a7ad-40be-8500-50a039159fc1}</Project>
-      <Name>DBDiff.Schema.SQLServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OpenDBDiff.Schema\OpenDBDiff.Schema.csproj">
-      <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
-      <Name>DBDiff.Schema</Name>
+      <Name>OpenDBDiff.SqlServer.Ui</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -240,7 +235,7 @@
     <None Include="Resources\table_edit.png" />
     <None Include="Resources\setting_tools.png" />
     <None Include="Resources\compare.png" />
-    <EmbeddedResource Include="Front\ListProjectsForm.resx">
+    <EmbeddedResource Include="UI\ListProjectsForm.resx">
       <DependentUpon>ListProjectsForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -256,11 +251,11 @@
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\System.Data.SQLite.Core.1.0.111.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.111.0\build\net451\System.Data.SQLite.Core.targets')" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.113.1\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.113.1\build\net451\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.111.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.111.0\build\net451\System.Data.SQLite.Core.targets'))" />
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.113.1\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.113.1\build\net451\System.Data.SQLite.Core.targets'))" />
   </Target>
 </Project>

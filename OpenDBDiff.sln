@@ -13,19 +13,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff", "OpenDBDiff\Op
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65} = {E794AA28-EE68-44BD-827B-1BFD9C106B65}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Schema", "OpenDBDiff.Schema\OpenDBDiff.Schema.csproj", "{406558A0-1B98-4D0E-B8B6-2013700B065A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Abstractions.Schema", "OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj", "{406558A0-1B98-4D0E-B8B6-2013700B065A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Schema.SQLServer", "OpenDBDiff.Schema.SQLServer2005\OpenDBDiff.Schema.SQLServer.csproj", "{EF2F571E-A7AD-40BE-8500-50A039159FC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.SqlServer.Ui", "OpenDBDiff.SqlServer.Ui\OpenDBDiff.SqlServer.Ui.csproj", "{EF2F571E-A7AD-40BE-8500-50A039159FC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Front", "OpenDBDiff.Front\OpenDBDiff.Front.csproj", "{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Abstractions.Ui", "OpenDBDiff.Abstractions.Ui\OpenDBDiff.Abstractions.Ui.csproj", "{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.OCDB", "OpenDBDiffCmd\OpenDBDiff.OCDB.csproj", "{E794AA28-EE68-44BD-827B-1BFD9C106B65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.CLI", "OpenDBDiff.CLI\OpenDBDiff.CLI.csproj", "{E794AA28-EE68-44BD-827B-1BFD9C106B65}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{87023747-4D77-4CCA-A435-4FA32D133639}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Schema.SQLServer.Generates", "OpenDBDiff.Schema.SQLServer.Generates\OpenDBDiff.Schema.SQLServer.Generates.csproj", "{32AC9AF6-DB93-4354-B69F-6DBC65C70867}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.SqlServer.Schema", "OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj", "{32AC9AF6-DB93-4354-B69F-6DBC65C70867}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Schema.SQLServer.GeneratesTests", "OpenDBDiff.Schema.SQLServer.GeneratesTests\OpenDBDiff.Schema.SQLServer.GeneratesTests.csproj", "{94F5C91A-6268-41E9-A15E-FA5451BB2B6F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Tests", "OpenDBDiff.Tests\OpenDBDiff.Tests.csproj", "{94F5C91A-6268-41E9-A15E-FA5451BB2B6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

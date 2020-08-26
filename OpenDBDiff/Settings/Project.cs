@@ -1,8 +1,8 @@
-﻿using System;
+﻿using OpenDBDiff.Abstractions.Schema.Model;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace OpenDBDiff.Settings
@@ -21,7 +21,7 @@ namespace OpenDBDiff.Settings
         public int Id { get; set; }
         public string ConnectionStringSource { get; set; }
         public string ConnectionStringDestination { get; set; }
-        public Schema.Model.IOption Options { get; set; }
+        public IOption Options { get; set; }
         public ProjectType Type { get; set; }
         public string ProjectName { get; set; }
         public DateTime SavedDateTime { get; private set; }

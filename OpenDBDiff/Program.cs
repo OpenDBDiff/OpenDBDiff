@@ -1,6 +1,6 @@
+using OpenDBDiff.UI;
 using System;
 using System.Windows.Forms;
-using OpenDBDiff.Front;
 
 namespace OpenDBDiff
 {
@@ -14,7 +14,7 @@ namespace OpenDBDiff
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PrincipalForm());
+            Application.Run(new MainForm());
         }
     }
 }
