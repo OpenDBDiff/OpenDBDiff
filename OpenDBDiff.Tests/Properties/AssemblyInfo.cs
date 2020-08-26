@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OpenDBDiff.Schema.SQLServer.GeneratesTests")]
+[assembly: AssemblyTitle("OpenDBDiff.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OpenDBDiff.Schema.SQLServer.GeneratesTests")]
+[assembly: AssemblyProduct("OpenDBDiff.Tests")]
 [assembly: AssemblyCopyright("OpenDBDiff")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

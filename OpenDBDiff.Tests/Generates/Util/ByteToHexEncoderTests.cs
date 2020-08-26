@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDBDiff.SqlServer.Schema.Generates.Util;
 
-namespace OpenDBDiff.Schema.SQLServer.Generates.Generates.Utils.Tests
+namespace OpenDBDiff.Tests.Generates.Utils.Tests
 {
     [TestClass]
     public class ByteToHexEncoderTests

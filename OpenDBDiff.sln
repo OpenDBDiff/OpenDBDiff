@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{870237
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.SqlServer.Schema", "OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj", "{32AC9AF6-DB93-4354-B69F-6DBC65C70867}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Schema.SQLServer.GeneratesTests", "OpenDBDiff.Schema.SQLServer.GeneratesTests\OpenDBDiff.Schema.SQLServer.GeneratesTests.csproj", "{94F5C91A-6268-41E9-A15E-FA5451BB2B6F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Tests", "OpenDBDiff.Tests\OpenDBDiff.Tests.csproj", "{94F5C91A-6268-41E9-A15E-FA5451BB2B6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

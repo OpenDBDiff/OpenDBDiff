@@ -7,7 +7,7 @@ using OpenDBDiff.SqlServer.Schema.Options;
 using System;
 using System.Collections.Generic;
 
-namespace OpenDBDiff.Schema.SQLServer.Generates.Model.Tests
+namespace OpenDBDiff.Tests.Model.Tests
 {
     [TestClass()]
     public class ColumnsTests

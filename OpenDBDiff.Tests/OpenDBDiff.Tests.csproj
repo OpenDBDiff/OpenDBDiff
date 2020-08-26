@@ -6,8 +6,8 @@
     <ProjectGuid>{94F5C91A-6268-41E9-A15E-FA5451BB2B6F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenDBDiff.Schema.SQLServer.GeneratesTests</RootNamespace>
-    <AssemblyName>OpenDBDiff.Schema.SQLServer.GeneratesTests</AssemblyName>
+    <RootNamespace>OpenDBDiff.Tests</RootNamespace>
+    <AssemblyName>OpenDBDiff.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
