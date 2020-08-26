@@ -12,13 +12,16 @@ assembly_info:
 before_build:
 - cmd: nuget restore OpenDBDiff.sln
 
+configuration: 
+- Release
+
 build:
   parallel: true # enable MSBuild parallel builds
   project: OpenDBDiff.sln
   verbosity: minimal
 
 artifacts:
-- path: OpenDBDiff\bin\Debug
+- path: OpenDBDiff\bin\Release
   name: OpenDBDiff.CI
-- path: OpenDBDiff.CLI\bin\Debug
+- path: OpenDBDiff.CLI\bin\Release
   name: OpenDBDiff.CLI.CI
