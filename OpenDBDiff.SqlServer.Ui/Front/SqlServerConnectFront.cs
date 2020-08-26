@@ -1,10 +1,10 @@
-using OpenDBDiff.Schema.SQLServer.Generates.Front.Util;
+using OpenDBDiff.SqlServer.Ui.Util;
 using OpenDBDiff.Abstractions.Ui;
 using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace OpenDBDiff.Schema.SQLServer.Generates.Front
+namespace OpenDBDiff.SqlServer.Ui
 {
     public partial class SqlServerConnectFront : UserControl, IFront
     {

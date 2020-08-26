@@ -3,7 +3,7 @@ using OpenDBDiff.Schema.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates;
 using OpenDBDiff.Abstractions.Ui;
 
-namespace OpenDBDiff.Schema.SQLServer.Generates.Front
+namespace OpenDBDiff.SqlServer.Ui
 {
     public class SQLServerGenerator : IGenerator
     {
@@ -16,7 +16,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
             this.Generate = new Generate()
             {
                 ConnectionString = connectionString,
-                Options = new Options.SqlOption(option)
+                Options = new Schema.SQLServer.Generates.Options.SqlOption(option)
             };
             this.Generate.OnProgress += new ProgressEventHandler.ProgressHandler(args =>
             {

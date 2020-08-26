@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.Sql;
 
-namespace OpenDBDiff.Schema.SQLServer.Generates.Front.Util
+namespace OpenDBDiff.SqlServer.Ui.Util
 {
     internal static class SqlServerList
     {

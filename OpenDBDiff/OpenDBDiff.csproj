@@ -187,13 +187,13 @@
       <Project>{32ac9af6-db93-4354-b69f-6dbc65c70867}</Project>
       <Name>DBDiff.Schema.SQLServer.Generates</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenDBDiff.Schema.SQLServer2005\OpenDBDiff.Schema.SQLServer.csproj">
-      <Project>{ef2f571e-a7ad-40be-8500-50a039159fc1}</Project>
-      <Name>DBDiff.Schema.SQLServer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\OpenDBDiff.Schema\OpenDBDiff.Schema.csproj">
       <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
       <Name>DBDiff.Schema</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenDBDiff.SqlServer.Ui\OpenDBDiff.SqlServer.Ui.csproj">
+      <Project>{ef2f571e-a7ad-40be-8500-50a039159fc1}</Project>
+      <Name>OpenDBDiff.SqlServer.Ui</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

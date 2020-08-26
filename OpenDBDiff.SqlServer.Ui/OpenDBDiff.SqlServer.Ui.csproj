@@ -8,8 +8,8 @@
     <ProjectGuid>{EF2F571E-A7AD-40BE-8500-50A039159FC1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenDBDiff.Schema.SQLServer.Generates</RootNamespace>
-    <AssemblyName>OpenDBDiff.Schema.SQLServer</AssemblyName>
+    <RootNamespace>OpenDBDiff.SqlServer.Ui</RootNamespace>
+    <AssemblyName>OpenDBDiff.SqlServer.Ui</AssemblyName>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>

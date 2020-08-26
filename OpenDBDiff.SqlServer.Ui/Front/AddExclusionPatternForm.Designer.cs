@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace OpenDBDiff.Schema.SQLServer.Generates.Front
+namespace OpenDBDiff.SqlServer.Ui
 {
     partial class AddExclusionPatternForm
     {

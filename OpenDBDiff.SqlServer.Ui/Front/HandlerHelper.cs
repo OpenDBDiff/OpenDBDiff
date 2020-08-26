@@ -1,4 +1,4 @@
-﻿namespace OpenDBDiff.Schema.SQLServer.Generates.Front
+﻿namespace OpenDBDiff.SqlServer.Ui
 {
     public static class HandlerHelper
     {

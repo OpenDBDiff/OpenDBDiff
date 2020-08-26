@@ -6,11 +6,11 @@ using System.Security.Permissions;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OpenDBDiff.Schema.SQLServer")]
+[assembly: AssemblyTitle("OpenDBDiff.SqlServer.Ui")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OpenDBDiff.Schema.SQLServer")]
+[assembly: AssemblyProduct("OpenDBDiff.SqlServer.Ui")]
 [assembly: AssemblyCopyright("OpenDBDiff")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

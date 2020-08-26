@@ -513,7 +513,7 @@ namespace OpenDBDiff.UI
             ProjectHandlers.Clear();
             toolProjectTypes.Items.Clear();
 
-            ProjectHandlers.Add(new OpenDBDiff.Schema.SQLServer.Generates.Front.SQLServerProjectHandler());
+            ProjectHandlers.Add(new SqlServer.Ui.SQLServerProjectHandler());
         }
 
         private void MainForm_Load(object sender, EventArgs e)

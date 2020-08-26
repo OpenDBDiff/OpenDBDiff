@@ -1,11 +1,12 @@
-﻿using OpenDBDiff.Schema.SQLServer.Generates.Options;
+﻿using OpenDBDiff.Schema;
+using OpenDBDiff.Schema.SQLServer.Generates.Options;
 using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace OpenDBDiff.Schema.SQLServer.Generates.Front
+namespace OpenDBDiff.SqlServer.Ui
 {
     public partial class AddExclusionPatternForm : Form
     {

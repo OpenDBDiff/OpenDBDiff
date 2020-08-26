@@ -5,7 +5,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace OpenDBDiff.Schema.SQLServer.Generates.Front
+namespace OpenDBDiff.SqlServer.Ui
 {
     public class SQLServerProjectHandler : IProjectHandler
     {
@@ -107,7 +107,7 @@ namespace OpenDBDiff.Schema.SQLServer.Generates.Front
         {
             if (Option == null)
             {
-                Option = new Options.SqlOption();
+                Option = new Schema.SQLServer.Generates.Options.SqlOption();
             }
             return Option;
         }

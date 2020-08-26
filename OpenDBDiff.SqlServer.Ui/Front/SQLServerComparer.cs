@@ -3,17 +3,17 @@ using OpenDBDiff.Schema.SQLServer.Generates.Generates;
 using OpenDBDiff.Abstractions.Ui;
 using System;
 
-namespace OpenDBDiff.Schema.SQLServer.Generates.Front
+namespace OpenDBDiff.SqlServer.Ui
 {
     public class SQLServerComparer : IDatabaseComparer
     {
         public IDatabase Compare(IDatabase origin, IDatabase destination)
         {
-            if (origin is Model.Database && destination is Model.Database)
+            if (origin is Schema.SQLServer.Generates.Model.Database && destination is Schema.SQLServer.Generates.Model.Database)
             {
-                return Generate.Compare(origin as Model.Database, destination as Model.Database);
+                return Generate.Compare(origin as Schema.SQLServer.Generates.Model.Database, destination as Schema.SQLServer.Generates.Model.Database);
             }
-            else if (!(origin is Model.Database))
+            else if (!(origin is Schema.SQLServer.Generates.Model.Database))
             {
                 throw new NotSupportedException("Origin database type not supported: " + origin.GetType());
             }
