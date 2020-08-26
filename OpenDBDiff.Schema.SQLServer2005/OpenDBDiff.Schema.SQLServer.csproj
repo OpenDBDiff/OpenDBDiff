@@ -99,9 +99,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OpenDBDiff.Front\OpenDBDiff.Front.csproj">
-      <Project>{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}</Project>
-      <Name>DBDiff.Front</Name>
+    <ProjectReference Include="..\OpenDBDiff.Abstractions.Ui\OpenDBDiff.Abstractions.Ui.csproj">
+      <Project>{e82cfc94-de8c-4edd-aa0c-f78abae03768}</Project>
+      <Name>OpenDBDiff.Abstractions.Ui</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenDBDiff.Schema.SQLServer.Generates\OpenDBDiff.Schema.SQLServer.Generates.csproj">
       <Project>{32ac9af6-db93-4354-b69f-6dbc65c70867}</Project>

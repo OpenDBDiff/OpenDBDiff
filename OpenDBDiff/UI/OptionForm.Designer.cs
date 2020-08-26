@@ -1,4 +1,4 @@
-﻿using OpenDBDiff.Front;
+﻿using OpenDBDiff.Abstractions.Ui;
 using System.ComponentModel;
 using System.Windows.Forms;
 

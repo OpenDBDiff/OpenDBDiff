@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using OpenDBDiff.Schema.Model;
 
-namespace OpenDBDiff.Front
+namespace OpenDBDiff.Abstractions.Ui
 {
     public class OptionControl : System.Windows.Forms.UserControl
     {

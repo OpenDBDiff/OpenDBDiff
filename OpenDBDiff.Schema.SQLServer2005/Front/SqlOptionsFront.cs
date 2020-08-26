@@ -6,7 +6,7 @@ using OpenDBDiff.Schema.SQLServer.Generates.Options;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Front
 {
-    public partial class SqlOptionsFront : OpenDBDiff.Front.OptionControl
+    public partial class SqlOptionsFront : OpenDBDiff.Abstractions.Ui.OptionControl
     {
         private SqlOption SQLOption;
 

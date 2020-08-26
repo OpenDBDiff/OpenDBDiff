@@ -1,6 +1,6 @@
 ﻿using OpenDBDiff.Schema.Model;
 
-namespace OpenDBDiff.Front
+namespace OpenDBDiff.Abstractions.Ui
 {
     public interface IDatabaseComparer
     {

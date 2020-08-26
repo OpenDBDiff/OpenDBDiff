@@ -1,5 +1,5 @@
-using OpenDBDiff.Front;
 using OpenDBDiff.Schema.SQLServer.Generates.Front.Util;
+using OpenDBDiff.Abstractions.Ui;
 using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;

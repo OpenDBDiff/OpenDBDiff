@@ -8,6 +8,7 @@ using OpenDBDiff.Schema;
 using OpenDBDiff.Schema.Misc;
 using OpenDBDiff.Schema.Model;
 using OpenDBDiff.Settings;
+using OpenDBDiff.Abstractions.Ui;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace OpenDBDiff.UI
         private List<ISchemaBase> _selectedSchemas = new List<ISchemaBase>();
 
         private List<IProjectHandler> ProjectHandlers = new List<IProjectHandler>();
-        private OpenDBDiff.Front.IProjectHandler ProjectSelectorHandler;
+        private IProjectHandler ProjectSelectorHandler;
 
         public MainForm()
         {

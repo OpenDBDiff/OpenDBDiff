@@ -1,6 +1,6 @@
-﻿using OpenDBDiff.Front;
-using OpenDBDiff.Schema.Model;
+﻿using OpenDBDiff.Schema.Model;
 using OpenDBDiff.Schema.SQLServer.Generates.Generates;
+using OpenDBDiff.Abstractions.Ui;
 using System;
 
 namespace OpenDBDiff.Schema.SQLServer.Generates.Front

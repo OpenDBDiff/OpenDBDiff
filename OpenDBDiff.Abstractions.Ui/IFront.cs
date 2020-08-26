@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace OpenDBDiff.Front
+namespace OpenDBDiff.Abstractions.Ui
 {
     public interface IFront
     {

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Windows.Forms;
-using OpenDBDiff.Schema.Model;
+﻿using OpenDBDiff.Schema.Model;
+using OpenDBDiff.Abstractions.Ui;
 
-namespace OpenDBDiff.Front
+namespace OpenDBDiff.Abstractions.Ui
 {
     public interface IProjectHandler
     {

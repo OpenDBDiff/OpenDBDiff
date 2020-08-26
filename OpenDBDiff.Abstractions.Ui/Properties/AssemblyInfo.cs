@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OpenDBDiff.Front")]
+[assembly: AssemblyTitle("OpenDBDiff.Abstractions.Ui")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OpenDBDiff.Front")]
+[assembly: AssemblyProduct("OpenDBDiff.Abstractions.Ui")]
 [assembly: AssemblyCopyright("OpenDBDiff")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -1,5 +1,5 @@
-﻿using OpenDBDiff.Front;
-using OpenDBDiff.Schema.Events;
+﻿using OpenDBDiff.Schema.Events;
+using OpenDBDiff.Abstractions.Ui;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
