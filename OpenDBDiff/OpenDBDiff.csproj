@@ -222,6 +222,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
+    <Content Include="Resources\arrow_ew.png" />
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Resources\folder.png" />

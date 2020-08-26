@@ -305,5 +305,35 @@ namespace OpenDBDiff.SqlServer.Ui
         {
             return string.Format($"Server: {ServerName}, Database: {DatabaseName}");
         }
+
+        public object Clone()
+        {
+            var clone = new SqlServerConnectFront
+            {
+                ServerName = this.ServerName,
+                UseWindowsAuthentication = this.UseWindowsAuthentication,
+                UserName = this.UserName,
+                Password = this.Password,
+                DatabaseName = this.DatabaseName
+            };
+
+            clone.Location = new System.Drawing.Point(1, 1);
+            clone.Name = "SourceControl";
+            clone.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+
+            return clone;
+        }
+
+        public void SetSettingsFrom(IFront other)
+        {
+            if (other is SqlServerConnectFront sql)
+            {
+                this.ServerName = sql.ServerName;
+                this.DatabaseName = sql.DatabaseName;
+                this.UseWindowsAuthentication = sql.UseWindowsAuthentication;
+                this.UserName = sql.UserName;
+                this.Password = sql.Password;
+            }
+        }
     }
 }
