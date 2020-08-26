@@ -1,4 +1,5 @@
-version: 0.11.0.{build}
+version: 0.12.0.{build}
+image: Visual Studio 2019
 
 # enable patching of AssemblyInfo.* files
 assembly_info:
