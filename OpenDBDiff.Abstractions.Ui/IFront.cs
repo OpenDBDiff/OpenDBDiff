@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace OpenDBDiff.Abstractions.Ui
 {
-    public interface IFront
+    public interface IFront : ICloneable
     {
         Point Location { get; set; }
         string Name { get; set; }
@@ -18,6 +18,7 @@ namespace OpenDBDiff.Abstractions.Ui
         string DatabaseName { get; }
         string Text { get; set; }
         AnchorStyles Anchor { get; set; }
-        Control Control { get;  }
+        Control Control { get; }
+        void SetSettingsFrom(IFront other);
     }
 }

@@ -675,5 +675,12 @@ namespace OpenDBDiff.UI
                 LoadProjectHandler(handler);
             }
         }
+
+        private void SwapButton_Click(object sender, EventArgs e)
+        {
+            var temp = RightDatabaseSelector.Clone() as IFront;
+            RightDatabaseSelector.SetSettingsFrom(LeftDatabaseSelector);
+            LeftDatabaseSelector.SetSettingsFrom(temp);
+        }
     }
 }
