@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 
-namespace OpenDBDiff.OCDB
+namespace OpenDBDiff.CLI
 {
     public class Program
     {

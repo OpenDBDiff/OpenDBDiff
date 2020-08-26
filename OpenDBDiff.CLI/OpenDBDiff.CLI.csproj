@@ -8,8 +8,8 @@
     <ProjectGuid>{E794AA28-EE68-44BD-827B-1BFD9C106B65}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenDBDiff.OCDB</RootNamespace>
-    <AssemblyName>OCDB</AssemblyName>
+    <RootNamespace>OpenDBDiff.CLI</RootNamespace>
+    <AssemblyName>OpenDBDiff.CLI</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>

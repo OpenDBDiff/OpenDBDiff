@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 
-namespace OpenDBDiff.OCDB
+namespace OpenDBDiff.CLI
 {
     public class CommandlineOptions
     {
