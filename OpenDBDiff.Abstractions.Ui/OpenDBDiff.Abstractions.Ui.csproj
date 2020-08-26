@@ -100,7 +100,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OpenDBDiff.Schema\OpenDBDiff.Schema.csproj">
       <Project>{406558a0-1b98-4d0e-b8b6-2013700b065a}</Project>
-      <Name>DBDiff.Schema</Name>
+      <Name>OpenDBDiff.Schema</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

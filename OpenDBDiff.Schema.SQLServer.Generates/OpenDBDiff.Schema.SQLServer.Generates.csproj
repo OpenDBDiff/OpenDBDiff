@@ -250,7 +250,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OpenDBDiff.Schema\OpenDBDiff.Schema.csproj">
       <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
-      <Name>DBDiff.Schema</Name>
+      <Name>OpenDBDiff.Schema</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

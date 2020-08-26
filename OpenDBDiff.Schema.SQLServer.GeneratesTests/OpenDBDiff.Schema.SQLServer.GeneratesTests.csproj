@@ -60,11 +60,11 @@
   <ItemGroup>
     <ProjectReference Include="..\OpenDBDiff.Schema.SQLServer.Generates\OpenDBDiff.Schema.SQLServer.Generates.csproj">
       <Project>{32AC9AF6-DB93-4354-B69F-6DBC65C70867}</Project>
-      <Name>DBDiff.Schema.SQLServer.Generates</Name>
+      <Name>OpenDBDiff.Schema.SQLServer.Generates</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenDBDiff.Schema\OpenDBDiff.Schema.csproj">
       <Project>{406558A0-1B98-4D0E-B8B6-2013700B065A}</Project>
-      <Name>DBDiff.Schema</Name>
+      <Name>OpenDBDiff.Schema</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
