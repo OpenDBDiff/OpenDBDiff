@@ -97,6 +97,12 @@
     <Compile Include="Front\ErrorForm.Designer.cs">
       <DependentUpon>ErrorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Front\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Front\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Updater.cs" />
     <Compile Include="Front\DatabaseProgressControl.cs">
       <SubType>UserControl</SubType>
@@ -115,12 +121,6 @@
     </Compile>
     <Compile Include="Front\OptionForm.Designer.cs">
       <DependentUpon>OptionForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Front\PrincipalForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Front\PrincipalForm.Designer.cs">
-      <DependentUpon>PrincipalForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Front\ProgressForm.cs">
       <SubType>Form</SubType>
@@ -145,13 +145,12 @@
     <EmbeddedResource Include="Front\ErrorForm.resx">
       <DependentUpon>ErrorForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Front\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Front\OptionForm.resx">
       <DependentUpon>OptionForm.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Front\PrincipalForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>PrincipalForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Front\ProgressForm.resx">
       <DependentUpon>ProgressForm.cs</DependentUpon>

@@ -20,7 +20,7 @@ using System.Windows.Forms;
 
 namespace OpenDBDiff.Front
 {
-    public partial class PrincipalForm : Form
+    public partial class MainForm : Form
     {
         private Project ActiveProject;
         private IFront LeftDatabaseSelector;
@@ -31,7 +31,7 @@ namespace OpenDBDiff.Front
         private List<IProjectHandler> ProjectHandlers = new List<IProjectHandler>();
         private OpenDBDiff.Front.IProjectHandler ProjectSelectorHandler;
 
-        public PrincipalForm()
+        public MainForm()
         {
             InitializeComponent();
 
@@ -514,7 +514,7 @@ namespace OpenDBDiff.Front
             ProjectHandlers.Add(new OpenDBDiff.Schema.SQLServer.Generates.Front.SQLServerProjectHandler());
         }
 
-        private void PrincipalForm_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             LoadProjectHandlers();
             foreach (var projectHandler in ProjectHandlers)

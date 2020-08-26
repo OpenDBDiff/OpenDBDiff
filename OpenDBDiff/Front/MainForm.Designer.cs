@@ -4,7 +4,7 @@ using ScintillaNET;
 
 namespace OpenDBDiff.Front
 {
-    partial class PrincipalForm
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -32,7 +32,7 @@ namespace OpenDBDiff.Front
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrincipalForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.lblMessage = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -635,7 +635,7 @@ namespace OpenDBDiff.Front
             this.PanelActions.Size = new System.Drawing.Size(98, 483);
             this.PanelActions.TabIndex = 17;
             // 
-            // PrincipalForm
+            // MainForm
             // 
             this.AcceptButton = this.btnCompare;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -646,10 +646,10 @@ namespace OpenDBDiff.Front
             this.Controls.Add(this.PanelGlobal);
             this.Controls.Add(this.toolMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "PrincipalForm";
+            this.Name = "MainForm";
             this.Text = "OpenDBDiff";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.PrincipalForm_Load);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
