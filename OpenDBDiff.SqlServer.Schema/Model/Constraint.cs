@@ -19,10 +19,16 @@ namespace OpenDBDiff.SqlServer.Schema.Model
         }
 
         public Constraint(ISchemaBase parent)
+            : this(parent, false)
+        {
+        }
+
+        public Constraint(ISchemaBase parent, bool hasIndex)
             : base(parent, ObjectType.Constraint)
         {
             this.Columns = new ConstraintColumns(this);
-            this.Index = new Index(parent);
+            if (hasIndex)
+                this.Index = new Index(parent);
         }
 
         /// <summary>
@@ -42,7 +48,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             col.OnUpdateCascade = this.OnUpdateCascade;
             col.Owner = this.Owner;
             col.Columns = this.Columns.Clone();
-            col.Index = (Index)this.Index.Clone(parent);
+            col.Index = (Index)this.Index?.Clone(parent);
             col.IsDisabled = this.IsDisabled;
             col.Definition = this.Definition;
             col.Guid = this.Guid;
@@ -160,18 +166,23 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             var isAzure10 = database.Info.Version == DatabaseInfo.SQLServerVersion.SQLServerAzure10;
             string typeConstraint = "";
             StringBuilder sql = new StringBuilder();
-            if (Index.Type == Index.IndexTypeEnum.Clustered) typeConstraint = "CLUSTERED";
-            if (Index.Type == Index.IndexTypeEnum.Nonclustered) typeConstraint = "NONCLUSTERED";
-            if (Index.Type == Index.IndexTypeEnum.XML) typeConstraint = "XML";
-            if (Index.Type == Index.IndexTypeEnum.Heap) typeConstraint = "HEAP";
             if (Parent.ObjectType != ObjectType.TableType)
                 sql.Append("CONSTRAINT [" + Name + "] ");
             else
                 sql.Append("\t");
+
             if (consType == ConstraintType.PrimaryKey)
-                sql.Append("PRIMARY KEY " + typeConstraint + "\r\n\t(\r\n");
+                sql.Append("PRIMARY KEY");
             else
-                sql.Append("UNIQUE " + typeConstraint + "\r\n\t(\r\n");
+                sql.Append("UNIQUE");
+
+            if (Index != null)
+            {
+                sql.Append(" ");
+                sql.Append(Index.Type.ToString().ToUpperInvariant());
+            }
+
+            sql.Append("\r\n\t(\r\n");
 
             this.Columns.Sort();
 
@@ -183,29 +194,34 @@ namespace OpenDBDiff.SqlServer.Schema.Model
                 sql.AppendLine();
             }
             sql.Append("\t)");
-            sql.Append(" WITH (");
-            if (Parent.ObjectType == ObjectType.TableType)
-                if (Index.IgnoreDupKey) sql.Append("IGNORE_DUP_KEY = ON"); else sql.Append("IGNORE_DUP_KEY  = OFF");
-            else
+
+            if (Index != null)
             {
+                sql.Append(" WITH (");
+                if (Parent.ObjectType == ObjectType.TableType)
+                    if (Index.IgnoreDupKey) sql.Append("IGNORE_DUP_KEY = ON"); else sql.Append("IGNORE_DUP_KEY  = OFF");
+                else
+                {
+                    if (!isAzure10)
+                    {
+                        if (Index.IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");
+                    }
+                    if (Index.IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON"); else sql.Append("STATISTICS_NORECOMPUTE  = OFF");
+                    if (Index.IgnoreDupKey) sql.Append(", IGNORE_DUP_KEY = ON"); else sql.Append(", IGNORE_DUP_KEY  = OFF");
+                    if (!isAzure10)
+                    {
+                        if (Index.AllowRowLocks) sql.Append(", ALLOW_ROW_LOCKS = ON"); else sql.Append(", ALLOW_ROW_LOCKS  = OFF");
+                        if (Index.AllowPageLocks) sql.Append(", ALLOW_PAGE_LOCKS = ON"); else sql.Append(", ALLOW_PAGE_LOCKS  = OFF");
+                        if (Index.FillFactor != 0) sql.Append(", FILLFACTOR = " + Index.FillFactor.ToString(CultureInfo.InvariantCulture));
+                    }
+                }
+                sql.Append(")");
                 if (!isAzure10)
                 {
-                    if (Index.IsPadded) sql.Append("PAD_INDEX = ON, "); else sql.Append("PAD_INDEX  = OFF, ");
-                }
-                if (Index.IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON"); else sql.Append("STATISTICS_NORECOMPUTE  = OFF");
-                if (Index.IgnoreDupKey) sql.Append(", IGNORE_DUP_KEY = ON"); else sql.Append(", IGNORE_DUP_KEY  = OFF");
-                if (!isAzure10)
-                {
-                    if (Index.AllowRowLocks) sql.Append(", ALLOW_ROW_LOCKS = ON"); else sql.Append(", ALLOW_ROW_LOCKS  = OFF");
-                    if (Index.AllowPageLocks) sql.Append(", ALLOW_PAGE_LOCKS = ON"); else sql.Append(", ALLOW_PAGE_LOCKS  = OFF");
-                    if (Index.FillFactor != 0) sql.Append(", FILLFACTOR = " + Index.FillFactor.ToString(CultureInfo.InvariantCulture));
+                    if (!String.IsNullOrEmpty(Index.FileGroup)) sql.Append(" ON [" + Index.FileGroup + "]");
                 }
             }
-            sql.Append(")");
-            if (!isAzure10)
-            {
-                if (!String.IsNullOrEmpty(Index.FileGroup)) sql.Append(" ON [" + Index.FileGroup + "]");
-            }
+
             return sql.ToString();
         }
 

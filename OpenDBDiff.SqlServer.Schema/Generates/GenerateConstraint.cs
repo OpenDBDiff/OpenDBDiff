@@ -170,25 +170,37 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
                             {
                                 if ((lastId != (int)reader["Index_id"]) || (change))
                                 {
-                                    con = new Constraint(table);
+                                    con = new Constraint(table, database.Options.Ignore.FilterIndex);
                                     con.Name = reader["Name"].ToString();
                                     con.Owner = (string)reader["Owner"];
                                     con.Id = (int)reader["Index_id"];
                                     con.Type = Constraint.ConstraintType.Unique;
-                                    con.Index.Id = (int)reader["Index_id"];
-                                    con.Index.AllowPageLocks = (bool)reader["allow_page_locks"];
-                                    con.Index.AllowRowLocks = (bool)reader["allow_row_locks"];
-                                    con.Index.FillFactor = (byte)reader["fill_factor"];
-                                    con.Index.IgnoreDupKey = (bool)reader["ignore_dup_key"];
-                                    con.Index.IsAutoStatistics = (bool)reader["ignore_dup_key"];
-                                    con.Index.IsDisabled = (bool)reader["is_disabled"];
-                                    con.Index.IsPadded = (bool)reader["is_padded"];
-                                    con.Index.IsPrimaryKey = false;
-                                    con.Index.IsUniqueKey = true;
-                                    con.Index.Type = (Index.IndexTypeEnum)(byte)reader["type"];
-                                    con.Index.Name = con.Name;
-                                    if (database.Options.Ignore.FilterTableFileGroup)
-                                        con.Index.FileGroup = reader["FileGroup"].ToString();
+
+                                    if (database.Options.Ignore.FilterIndex)
+                                    {
+                                        con.Index.Id = (int)reader["Index_id"];
+                                        if (database.Options.Ignore.FilterIndexRowLock)
+                                        {
+                                            con.Index.AllowPageLocks = (bool)reader["allow_page_locks"];
+                                            con.Index.AllowRowLocks = (bool)reader["allow_row_locks"];
+                                        }
+
+                                        if (database.Options.Ignore.FilterIndexFillFactor)
+                                        {
+                                            con.Index.FillFactor = (byte)reader["fill_factor"];
+                                            con.Index.IsPadded = (bool)reader["is_padded"];
+                                        }
+                                        con.Index.IgnoreDupKey = (bool)reader["ignore_dup_key"];
+                                        con.Index.IsAutoStatistics = (bool)reader["ignore_dup_key"];
+                                        con.Index.IsDisabled = (bool)reader["is_disabled"];
+                                        con.Index.IsPrimaryKey = false;
+                                        con.Index.IsUniqueKey = true;
+                                        con.Index.Type = (Index.IndexTypeEnum)(byte)reader["type"];
+                                        con.Index.Name = con.Name;
+                                        if (database.Options.Ignore.FilterTableFileGroup)
+                                            con.Index.FileGroup = reader["FileGroup"].ToString();
+                                    }
+
                                     lastId = (int)reader["Index_id"];
                                     if (reader["ObjectType"].ToString().Trim().Equals("U"))
                                         ((Table)table).Constraints.Add(con);
@@ -245,25 +257,39 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
                             {
                                 if ((lastId != (int)reader["Index_id"]) || (change)) 
                                 {
-                                    con = new Constraint(table);
+                                    con = new Constraint(table, database.Options.Ignore.FilterIndex);
                                     con.Id = (int)reader["Index_id"];
                                     con.Name = (string)reader["Name"];
                                     con.Owner = (string)reader["Owner"];
                                     con.Type = Constraint.ConstraintType.PrimaryKey;
-                                    con.Index.Id = (int)reader["Index_id"];
-                                    con.Index.AllowPageLocks = (bool)reader["allow_page_locks"];
-                                    con.Index.AllowRowLocks = (bool)reader["allow_row_locks"];
-                                    con.Index.FillFactor = (byte)reader["fill_factor"];
-                                    con.Index.IgnoreDupKey = (bool)reader["ignore_dup_key"];
-                                    con.Index.IsAutoStatistics = (bool)reader["ignore_dup_key"];
-                                    con.Index.IsDisabled = (bool)reader["is_disabled"];
-                                    con.Index.IsPadded = (bool)reader["is_padded"];
-                                    con.Index.IsPrimaryKey = true;
-                                    con.Index.IsUniqueKey = false;
-                                    con.Index.Type = (Index.IndexTypeEnum)(byte)reader["type"];
-                                    con.Index.Name = con.Name;
-                                    if (database.Options.Ignore.FilterTableFileGroup)
-                                        con.Index.FileGroup = reader["FileGroup"].ToString();
+
+                                    if (database.Options.Ignore.FilterIndex)
+                                    {
+                                        con.Index.Id = (int)reader["Index_id"];
+
+                                        if (database.Options.Ignore.FilterIndexRowLock)
+                                        {
+                                            con.Index.AllowPageLocks = (bool)reader["allow_page_locks"];
+                                            con.Index.AllowRowLocks = (bool)reader["allow_row_locks"];
+                                        }
+
+                                        if (database.Options.Ignore.FilterIndexFillFactor)
+                                        {
+                                            con.Index.FillFactor = (byte)reader["fill_factor"];
+                                            con.Index.IsPadded = (bool)reader["is_padded"];
+                                        }
+
+                                        con.Index.IgnoreDupKey = (bool)reader["ignore_dup_key"];
+                                        con.Index.IsAutoStatistics = (bool)reader["ignore_dup_key"];
+                                        con.Index.IsDisabled = (bool)reader["is_disabled"];
+                                        con.Index.IsPrimaryKey = true;
+                                        con.Index.IsUniqueKey = false;
+                                        con.Index.Type = (Index.IndexTypeEnum)(byte)reader["type"];
+                                        con.Index.Name = con.Name;
+                                        if (database.Options.Ignore.FilterTableFileGroup)
+                                            con.Index.FileGroup = reader["FileGroup"].ToString();
+                                    }
+
                                     lastId = (int)reader["Index_id"];
                                     if (reader["ObjectType"].ToString().Trim().Equals("U"))
                                         ((Table)table).Constraints.Add(con);
