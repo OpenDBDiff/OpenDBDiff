@@ -18,6 +18,7 @@ namespace OpenDBDiff.Abstractions.Ui
         IGenerator SetDestinationGenerator(string connectionString, IOption options);
         IDatabaseComparer GetDatabaseComparer();
         IOption GetDefaultProjectOptions();
+        void SetProjectOptions(IOption options);
         string GetScriptLanguage();
         void Unload();
     }

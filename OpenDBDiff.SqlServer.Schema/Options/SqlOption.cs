@@ -1,5 +1,4 @@
 using OpenDBDiff.Abstractions.Schema.Model;
-using System;
 
 namespace OpenDBDiff.SqlServer.Schema.Options
 {
@@ -14,7 +13,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             Comparison = new SqlOptionComparison();
         }
 
-        public SqlOption(Boolean defaultFilter)
+        public SqlOption(bool defaultFilter)
         {
             Defaults = new SqlOptionDefault();
             Ignore = new SqlOptionIgnore(defaultFilter);
@@ -41,7 +40,6 @@ namespace OpenDBDiff.SqlServer.Schema.Options
         /// </summary>
         /// <value>The option filter.</value>
         public SqlOptionIgnore Ignore { get; set; }
-
         /// <summary>
         /// Gets or sets the option default.
         /// </summary>

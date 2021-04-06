@@ -19,6 +19,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <ApplicationIcon>App.ico</ApplicationIcon>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -33,8 +35,6 @@
     <ApplicationVersion>0.8.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -91,6 +91,15 @@
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\ScintillaExtensions.cs" />
+    <Compile Include="Settings\Schema\Assemblies.cs" />
+    <Compile Include="Settings\Schema\Constraints.cs" />
+    <Compile Include="Settings\Schema\Indexes.cs" />
+    <Compile Include="Settings\Schema\OptionComparison.cs" />
+    <Compile Include="Settings\Schema\OptionDefault.cs" />
+    <Compile Include="Settings\Schema\OptionFilter.cs" />
+    <Compile Include="Settings\Schema\OptionIgnore.cs" />
+    <Compile Include="Settings\Schema\OptionScript.cs" />
+    <Compile Include="Settings\Schema\Tables.cs" />
     <Compile Include="UI\DataCompareForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -193,6 +202,10 @@
       <Project>{e82cfc94-de8c-4edd-aa0c-f78abae03768}</Project>
       <Name>OpenDBDiff.Abstractions.Ui</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj">
+      <Project>{32ac9af6-db93-4354-b69f-6dbc65c70867}</Project>
+      <Name>OpenDBDiff.SqlServer.Schema</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OpenDBDiff.SqlServer.Ui\OpenDBDiff.SqlServer.Ui.csproj">
       <Project>{ef2f571e-a7ad-40be-8500-50a039159fc1}</Project>
       <Name>OpenDBDiff.SqlServer.Ui</Name>
@@ -246,6 +259,7 @@
       <DependentUpon>ListProjectsForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

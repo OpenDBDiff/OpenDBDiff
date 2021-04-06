@@ -45,7 +45,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             }
         }
 
-        public IList<SqlOptionFilterItem> Items { get; private set; }
+        public IList<SqlOptionFilterItem> Items { get; set; }
 
         public IDictionary<string, string> GetOptions()
         {

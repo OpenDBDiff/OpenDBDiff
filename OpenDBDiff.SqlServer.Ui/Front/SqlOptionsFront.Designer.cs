@@ -37,9 +37,9 @@ namespace OpenDBDiff.SqlServer.Ui
             this.chkConstraintsUK = new System.Windows.Forms.CheckBox();
             this.chkConstraintsFK = new System.Windows.Forms.CheckBox();
             this.chkConstraintsPK = new System.Windows.Forms.CheckBox();
-            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.checkPartitionSchemas = new System.Windows.Forms.CheckBox();
             this.checkPartitionFunction = new System.Windows.Forms.CheckBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.chkCompCLRAggregates = new System.Windows.Forms.CheckBox();
             this.chkCompCLRUDT = new System.Windows.Forms.CheckBox();
             this.chkCompCLRFunctions = new System.Windows.Forms.CheckBox();
             this.chkCompCLRTrigger = new System.Windows.Forms.CheckBox();
@@ -92,9 +92,10 @@ namespace OpenDBDiff.SqlServer.Ui
             this.gradientPanel6 = new System.Windows.Forms.Panel();
             this.chkIgnoreNotForReplication = new System.Windows.Forms.CheckBox();
             this.gradientPanel5 = new System.Windows.Forms.Panel();
+            this.IncludeSynonymsCheckBox = new System.Windows.Forms.CheckBox();
             this.gradientPanel4 = new System.Windows.Forms.Panel();
             this.gradientPanel3 = new System.Windows.Forms.Panel();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.chkCompPermissions = new System.Windows.Forms.CheckBox();
             this.gradientPanel2 = new System.Windows.Forms.Panel();
             this.chkTableChangeTracking = new System.Windows.Forms.CheckBox();
             this.chkTableLockEscalation = new System.Windows.Forms.CheckBox();
@@ -137,7 +138,6 @@ namespace OpenDBDiff.SqlServer.Ui
             this.rdoCaseAutomatic = new System.Windows.Forms.RadioButton();
             this.rdoCaseInsensitive = new System.Windows.Forms.RadioButton();
             this.chkReloadDB = new System.Windows.Forms.CheckBox();
-            this.IncludeSynonymsCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.gradientPanel6.SuspendLayout();
@@ -241,18 +241,18 @@ namespace OpenDBDiff.SqlServer.Ui
             this.chkConstraintsPK.Text = "Primary key";
             this.chkConstraintsPK.UseVisualStyleBackColor = true;
             // 
-            // checkBox5
+            // checkPartitionSchemas
             // 
-            this.checkBox5.AutoSize = true;
-            this.checkBox5.Checked = true;
-            this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox5.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkBox5.Location = new System.Drawing.Point(13, 75);
-            this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(109, 17);
-            this.checkBox5.TabIndex = 27;
-            this.checkBox5.Text = "Partition schemas";
-            this.checkBox5.UseVisualStyleBackColor = true;
+            this.checkPartitionSchemas.AutoSize = true;
+            this.checkPartitionSchemas.Checked = true;
+            this.checkPartitionSchemas.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkPartitionSchemas.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.checkPartitionSchemas.Location = new System.Drawing.Point(13, 75);
+            this.checkPartitionSchemas.Name = "checkPartitionSchemas";
+            this.checkPartitionSchemas.Size = new System.Drawing.Size(109, 17);
+            this.checkPartitionSchemas.TabIndex = 27;
+            this.checkPartitionSchemas.Text = "Partition schemas";
+            this.checkPartitionSchemas.UseVisualStyleBackColor = true;
             // 
             // checkPartitionFunction
             // 
@@ -267,18 +267,18 @@ namespace OpenDBDiff.SqlServer.Ui
             this.checkPartitionFunction.Text = "Partition functions";
             this.checkPartitionFunction.UseVisualStyleBackColor = true;
             // 
-            // checkBox4
+            // chkCompCLRAggregates
             // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Checked = true;
-            this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkBox4.Location = new System.Drawing.Point(28, 27);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(103, 17);
-            this.checkBox4.TabIndex = 35;
-            this.checkBox4.Text = "CLR aggregates";
-            this.checkBox4.UseVisualStyleBackColor = true;
+            this.chkCompCLRAggregates.AutoSize = true;
+            this.chkCompCLRAggregates.Checked = true;
+            this.chkCompCLRAggregates.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCompCLRAggregates.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkCompCLRAggregates.Location = new System.Drawing.Point(28, 27);
+            this.chkCompCLRAggregates.Name = "chkCompCLRAggregates";
+            this.chkCompCLRAggregates.Size = new System.Drawing.Size(103, 17);
+            this.chkCompCLRAggregates.TabIndex = 35;
+            this.chkCompCLRAggregates.Text = "CLR aggregates";
+            this.chkCompCLRAggregates.UseVisualStyleBackColor = true;
             // 
             // chkCompCLRUDT
             // 
@@ -882,7 +882,7 @@ namespace OpenDBDiff.SqlServer.Ui
             // gradientPanel5
             // 
             this.gradientPanel5.Controls.Add(this.IncludeSynonymsCheckBox);
-            this.gradientPanel5.Controls.Add(this.checkBox5);
+            this.gradientPanel5.Controls.Add(this.checkPartitionSchemas);
             this.gradientPanel5.Controls.Add(this.chkCompFunciones);
             this.gradientPanel5.Controls.Add(this.checkPartitionFunction);
             this.gradientPanel5.Controls.Add(this.chkCompVistas);
@@ -897,11 +897,24 @@ namespace OpenDBDiff.SqlServer.Ui
             this.gradientPanel5.Size = new System.Drawing.Size(171, 338);
             this.gradientPanel5.TabIndex = 6;
             // 
+            // IncludeSynonymsCheckBox
+            // 
+            this.IncludeSynonymsCheckBox.AutoSize = true;
+            this.IncludeSynonymsCheckBox.Checked = true;
+            this.IncludeSynonymsCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.IncludeSynonymsCheckBox.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.IncludeSynonymsCheckBox.Location = new System.Drawing.Point(13, 144);
+            this.IncludeSynonymsCheckBox.Name = "IncludeSynonymsCheckBox";
+            this.IncludeSynonymsCheckBox.Size = new System.Drawing.Size(74, 17);
+            this.IncludeSynonymsCheckBox.TabIndex = 28;
+            this.IncludeSynonymsCheckBox.Text = "Synonyms";
+            this.IncludeSynonymsCheckBox.UseVisualStyleBackColor = true;
+            // 
             // gradientPanel4
             // 
             this.gradientPanel4.Controls.Add(this.chkCompCLRStore);
             this.gradientPanel4.Controls.Add(this.chkCompAssemblys);
-            this.gradientPanel4.Controls.Add(this.checkBox4);
+            this.gradientPanel4.Controls.Add(this.chkCompCLRAggregates);
             this.gradientPanel4.Controls.Add(this.chkCompCLRTrigger);
             this.gradientPanel4.Controls.Add(this.chkCompCLRUDT);
             this.gradientPanel4.Controls.Add(this.chkCompCLRFunctions);
@@ -912,7 +925,7 @@ namespace OpenDBDiff.SqlServer.Ui
             // 
             // gradientPanel3
             // 
-            this.gradientPanel3.Controls.Add(this.checkBox1);
+            this.gradientPanel3.Controls.Add(this.chkCompPermissions);
             this.gradientPanel3.Controls.Add(this.chkFullTextPath);
             this.gradientPanel3.Controls.Add(this.chkCompUsers);
             this.gradientPanel3.Controls.Add(this.chkCompSchemas);
@@ -924,18 +937,18 @@ namespace OpenDBDiff.SqlServer.Ui
             this.gradientPanel3.Size = new System.Drawing.Size(171, 137);
             this.gradientPanel3.TabIndex = 4;
             // 
-            // checkBox1
+            // chkCompPermissions
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkBox1.Location = new System.Drawing.Point(10, 120);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(81, 17);
-            this.checkBox1.TabIndex = 37;
-            this.checkBox1.Text = "Permissions";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.chkCompPermissions.AutoSize = true;
+            this.chkCompPermissions.Checked = true;
+            this.chkCompPermissions.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCompPermissions.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkCompPermissions.Location = new System.Drawing.Point(10, 120);
+            this.chkCompPermissions.Name = "chkCompPermissions";
+            this.chkCompPermissions.Size = new System.Drawing.Size(81, 17);
+            this.chkCompPermissions.TabIndex = 37;
+            this.chkCompPermissions.Text = "Permissions";
+            this.chkCompPermissions.UseVisualStyleBackColor = true;
             // 
             // gradientPanel2
             // 
@@ -1066,6 +1079,7 @@ namespace OpenDBDiff.SqlServer.Ui
             this.columnHeader3,
             this.columnHeader4});
             this.lstFilters.FullRowSelect = true;
+            this.lstFilters.HideSelection = false;
             this.lstFilters.Location = new System.Drawing.Point(7, 8);
             this.lstFilters.Name = "lstFilters";
             this.lstFilters.Size = new System.Drawing.Size(509, 333);
@@ -1073,7 +1087,7 @@ namespace OpenDBDiff.SqlServer.Ui
             this.lstFilters.UseCompatibleStateImageBehavior = false;
             this.lstFilters.View = System.Windows.Forms.View.Details;
             this.lstFilters.DoubleClick += new System.EventHandler(this.lstFilters_DoubleClick);
-            //
+            // 
             // columnHeader1
             // 
             this.columnHeader1.Text = "Exclusion pattern";
@@ -1399,19 +1413,6 @@ namespace OpenDBDiff.SqlServer.Ui
             this.chkReloadDB.Text = "Reload database comparison after each update";
             this.chkReloadDB.UseVisualStyleBackColor = false;
             // 
-            // IncludeSynonymsCheckBox
-            // 
-            this.IncludeSynonymsCheckBox.AutoSize = true;
-            this.IncludeSynonymsCheckBox.Checked = true;
-            this.IncludeSynonymsCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.IncludeSynonymsCheckBox.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.IncludeSynonymsCheckBox.Location = new System.Drawing.Point(13, 144);
-            this.IncludeSynonymsCheckBox.Name = "IncludeSynonymsCheckBox";
-            this.IncludeSynonymsCheckBox.Size = new System.Drawing.Size(74, 17);
-            this.IncludeSynonymsCheckBox.TabIndex = 28;
-            this.IncludeSynonymsCheckBox.Text = "Synonyms";
-            this.IncludeSynonymsCheckBox.UseVisualStyleBackColor = true;
-            // 
             // SqlOptionsFront
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1521,9 +1522,9 @@ namespace OpenDBDiff.SqlServer.Ui
         private CheckBox chkCompCLRTrigger;
         private CheckBox chkCompCLRFunctions;
         private CheckBox chkCompCLRUDT;
-        private CheckBox checkBox4;
+        private CheckBox chkCompCLRAggregates;
         private CheckBox checkPartitionFunction;
-        private CheckBox checkBox5;
+        private CheckBox checkPartitionSchemas;
         private TabPage tabPage5;
         private RadioButton rdoCaseAutomatic;
         private RadioButton rdoCaseSensitive;
@@ -1556,7 +1557,7 @@ namespace OpenDBDiff.SqlServer.Ui
         private Panel gradientPanel10;
         private CheckBox chkTableLockEscalation;
         private CheckBox chkTableChangeTracking;
-        private CheckBox checkBox1;
+        private CheckBox chkCompPermissions;
         private Panel gradientPanel12;
         private Label label13;
         private Panel gradientPanel11;
