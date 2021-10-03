@@ -6,6 +6,7 @@ using OpenDBDiff.Abstractions.Schema;
 using OpenDBDiff.Abstractions.Schema.Misc;
 using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.Abstractions.Ui;
+using OpenDBDiff.Encrypt;
 using OpenDBDiff.Extensions;
 using OpenDBDiff.Settings;
 using ScintillaNET;
@@ -464,6 +465,8 @@ namespace OpenDBDiff.UI
                 StartComparison();
             }
 
+            EncryptProcedures();
+
             btnUpdate.Enabled = false;
         }
 
@@ -495,7 +498,27 @@ namespace OpenDBDiff.UI
                 else
                     MessageBox.Show(this, sb.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+                EncryptProcedures();
+
                 StartComparison();
+            }
+        }
+
+        private void EncryptProcedures()
+        {
+            if (chkEncryptProcedures.Checked)
+            {
+                EncryptObjects encryptObjects = new EncryptObjects();
+                encryptObjects.ConnectionStrings = new string[] { RightDatabaseSelector.ConnectionString };
+
+                encryptObjects.EncryptProcedures();
+
+                if (encryptObjects.OperationSummary != null && encryptObjects.OperationSummary.Count < 2)
+                    MessageBox.Show(encryptObjects.OperationSummary[0].Value);
+                else
+                {
+                    MessageBox.Show("Update completed with errors ", string.Join(",", encryptObjects.OperationSummary.ToArray()));
+                }
             }
         }
 
