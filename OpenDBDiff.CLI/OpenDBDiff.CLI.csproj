@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFrameworks>net5.0;net6.0</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<Nullable>disable</Nullable>
@@ -21,8 +21,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="CommandLineParser" Version="2.8.0" />
-		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="appsettings.json" />
