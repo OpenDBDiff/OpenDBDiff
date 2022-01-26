@@ -1,31 +1,32 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DBEC6CD3-5B8F-427C-8304-9BFD223C8B1D}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		appveyor.yml = appveyor.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff", "OpenDBDiff\OpenDBDiff.csproj", "{99A26820-E71D-4E01-ADF2-E6AB25B03FA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDBDiff", "OpenDBDiff\OpenDBDiff.csproj", "{99A26820-E71D-4E01-ADF2-E6AB25B03FA0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E794AA28-EE68-44BD-827B-1BFD9C106B65} = {E794AA28-EE68-44BD-827B-1BFD9C106B65}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Abstractions.Schema", "OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj", "{406558A0-1B98-4D0E-B8B6-2013700B065A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDBDiff.Abstractions.Schema", "OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj", "{406558A0-1B98-4D0E-B8B6-2013700B065A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.SqlServer.Ui", "OpenDBDiff.SqlServer.Ui\OpenDBDiff.SqlServer.Ui.csproj", "{EF2F571E-A7AD-40BE-8500-50A039159FC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDBDiff.SqlServer.Ui", "OpenDBDiff.SqlServer.Ui\OpenDBDiff.SqlServer.Ui.csproj", "{EF2F571E-A7AD-40BE-8500-50A039159FC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Abstractions.Ui", "OpenDBDiff.Abstractions.Ui\OpenDBDiff.Abstractions.Ui.csproj", "{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDBDiff.Abstractions.Ui", "OpenDBDiff.Abstractions.Ui\OpenDBDiff.Abstractions.Ui.csproj", "{E82CFC94-DE8C-4EDD-AA0C-F78ABAE03768}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.CLI", "OpenDBDiff.CLI\OpenDBDiff.CLI.csproj", "{E794AA28-EE68-44BD-827B-1BFD9C106B65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDBDiff.CLI", "OpenDBDiff.CLI\OpenDBDiff.CLI.csproj", "{E794AA28-EE68-44BD-827B-1BFD9C106B65}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{87023747-4D77-4CCA-A435-4FA32D133639}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.SqlServer.Schema", "OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj", "{32AC9AF6-DB93-4354-B69F-6DBC65C70867}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDBDiff.SqlServer.Schema", "OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj", "{32AC9AF6-DB93-4354-B69F-6DBC65C70867}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Tests", "OpenDBDiff.Tests\OpenDBDiff.Tests.csproj", "{94F5C91A-6268-41E9-A15E-FA5451BB2B6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDBDiff.Tests", "OpenDBDiff.Tests\OpenDBDiff.Tests.csproj", "{94F5C91A-6268-41E9-A15E-FA5451BB2B6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -114,5 +115,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8F9B623-17D0-40A7-A780-B66713267194}
 	EndGlobalSection
 EndGlobal
