@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Microsoft.Extensions.Configuration;
 using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.SqlServer.Schema.Generates;
 using OpenDBDiff.SqlServer.Schema.Model;
@@ -20,6 +21,9 @@ namespace OpenDBDiff.CLI
 
         private static int Main(string[] args)
         {
+            // DEBUG SETTINGS.
+            Work(null);
+
             bool completedSuccessfully = false;
 
             Parser.Default.ParseArguments<CommandlineOptions>(args)
@@ -59,6 +63,9 @@ namespace OpenDBDiff.CLI
         {
             try
             {
+                // DEBUG SETTINGS.
+                throw new NotImplementedException();
+
                 Database origin;
                 Database destination;
                 if (TestConnection(options.Before)
@@ -96,8 +103,8 @@ namespace OpenDBDiff.CLI
             }
             catch (Exception ex)
             {
-                string newIssueUri = System.Configuration.ConfigurationManager.AppSettings["OpenDBDiff.NewIssueUri"];
-                if (string.IsNullOrEmpty(newIssueUri))
+                string newIssueUri = ConfigurationFactory.Instance?.GetValue<string>("OpenDBDiff:NewIssueUri");
+                if (string.IsNullOrWhiteSpace(newIssueUri))
                     newIssueUri = "https://github.com/OpenDBDiff/OpenDBDiff/issues/new";
 
                 Console.WriteLine($"{ex.Message}\r\n{ex.StackTrace}\r\n\r\nPlease report this issue at {newIssueUri}.");
