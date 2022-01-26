@@ -44,9 +44,9 @@ namespace OpenDBDiff.CLI
             return completedSuccessfully ? 0 : 1;
         }
 
-        private static Boolean TestConnection(string connectionString1)
+        private static bool TestConnection(string connectionString1)
         {
-            using (SqlConnection connection = new SqlConnection())
+            using (var connection = new SqlConnection())
             {
                 connection.ConnectionString = connectionString1;
                 connection.Open();
@@ -109,11 +109,11 @@ namespace OpenDBDiff.CLI
 
         private static void SaveFile(string filenmame, string sql)
         {
-            if (!String.IsNullOrEmpty(filenmame))
+            if (!string.IsNullOrWhiteSpace(filenmame))
             {
-                StreamWriter writer = new StreamWriter(filenmame, false);
+                using var fs = new FileStream(filenmame, FileMode.Create);
+                using var writer = new StreamWriter(fs);
                 writer.Write(sql);
-                writer.Close();
             }
         }
     }
