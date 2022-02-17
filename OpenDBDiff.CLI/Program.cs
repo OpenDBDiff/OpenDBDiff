@@ -65,11 +65,21 @@ namespace OpenDBDiff.CLI
                     && TestConnection(options.After))
                 {
                     Generate sql = new Generate();
+                    sql.Options = SqlFilter;
+                    if (options.IgnoreFilters != "") {
+                      Console.WriteLine("Apply ignore filters...");
+                      var ignoreDict = sql.Options.Ignore.GetOptions();
+                      foreach (string opts in options.IgnoreFilters.Split(';')) {
+                        if (opts.Trim() != "") {
+                          string[] opt = opts.Split('=');
+                          ignoreDict[opt[0].Trim()] = (bool)(bool.Parse(opt[1].Trim()));
+                        }
+                      }
+                      sql.Options.Ignore.SetOptions(ignoreDict);
+                    }
                     sql.ConnectionString = options.Before;
                     Console.WriteLine("Reading first database...");
-                    sql.Options = SqlFilter;
                     origin = sql.Process();
-
                     sql.ConnectionString = options.After;
                     Console.WriteLine("Reading second database...");
                     destination = sql.Process();
