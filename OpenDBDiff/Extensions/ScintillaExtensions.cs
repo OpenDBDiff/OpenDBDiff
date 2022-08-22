@@ -61,7 +61,7 @@ namespace OpenDBDiff.Extensions
 
             var fontName = scintilla.Styles[Style.Default].Font;
             var fontSize = scintilla.Styles[Style.Default].SizeF;
-            var lineNumberWidth = GraphicsUtils.GetTextDimensions($"{lineCount.ToString()}XX", fontName, fontSize).Width;
+            var lineNumberWidth = GraphicsUtils.GetTextDimensions($"{lineCount}XX", fontName, fontSize).Width;
 
             scintilla.Margins[0].Width = Math.Max(20, (int)lineNumberWidth);
         }
