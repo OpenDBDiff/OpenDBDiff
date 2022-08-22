@@ -29,7 +29,7 @@ namespace OpenDBDiff.UI
         private IOption Options;
         private List<ISchemaBase> _selectedSchemas = new List<ISchemaBase>();
 
-        private List<IProjectHandler> ProjectHandlers = new List<IProjectHandler>();
+        private readonly List<IProjectHandler> ProjectHandlers = new List<IProjectHandler>();
         private IProjectHandler ProjectSelectorHandler;
 
         public MainForm()
@@ -110,6 +110,9 @@ namespace OpenDBDiff.UI
                 txtNewObject.ClearAll();
                 txtOldObject.ClearAll();
                 txtDiff.ClearAll();
+                lblDiffAdditions.Text = "";
+                lblDiffDeletions.Text = "";
+                lblDiffModifications.Text = "";
 
                 if (string.IsNullOrEmpty(nodeFullName))
                     return;
@@ -164,6 +167,9 @@ namespace OpenDBDiff.UI
 
                 var indexes = new List<int>[] { new List<int>(), new List<int>(), new List<int>(), new List<int>() };
                 var index = 0;
+                var additions = 0;
+                var deletions = 0;
+                var modifications = 0;
                 for (var i = 0; i < Math.Max(diff.NewText.Lines.Count, diff.OldText.Lines.Count); i++)
                 {
                     newLine = i < diff.NewText.Lines.Count ? diff.NewText.Lines[i] : null;
@@ -176,6 +182,7 @@ namespace OpenDBDiff.UI
                     {
                         sb.AppendLine("- " + oldLine.Text);
                         indexes[2].Add(index);
+                        ++deletions;
                     }
                     else if (oldLine.Type == ChangeType.Modified)
                     {
@@ -183,11 +190,13 @@ namespace OpenDBDiff.UI
                         indexes[1].Add(index++);
                         sb.AppendLine("* " + oldLine.Text);
                         indexes[3].Add(index);
+                        ++modifications;
                     }
                     else if (oldLine.Type == ChangeType.Imaginary)
                     {
                         sb.AppendLine("+ " + newLine.Text);
                         indexes[0].Add(index);
+                        ++additions;
                     }
                     else if (oldLine.Type == ChangeType.Unchanged)
                     {
@@ -204,6 +213,9 @@ namespace OpenDBDiff.UI
                         txtDiff.Lines[ind].MarkerAdd(i);
                     }
                 }
+                lblDiffAdditions.Text = $"+ {additions}";
+                lblDiffDeletions.Text = $"- {deletions}";
+                lblDiffModifications.Text = modifications.ToString();
             }
             finally
             {
@@ -681,6 +693,47 @@ namespace OpenDBDiff.UI
             var temp = RightDatabaseSelector.Clone() as IFront;
             RightDatabaseSelector.SetSettingsFrom(LeftDatabaseSelector);
             LeftDatabaseSelector.SetSettingsFrom(temp);
+        }
+
+        private void BtnDiffDown_Click(object sender, EventArgs e)
+        {
+            var lastLine = txtDiff.Lines.Count - 1;
+            if (txtDiff.CurrentLine == lastLine) return;
+
+            for (var i = txtDiff.CurrentLine + 1; i < lastLine; i++)
+            {
+                if (txtDiff.Lines[i].Text.CharAtOrDefault(0, defaultValue: ' ') != ' ')
+                {
+                    txtDiff.Lines[i].Goto();
+                    txtDiff.FirstVisibleLine = i;
+                    return;
+                }
+            }
+            txtDiff.Lines[lastLine].Goto();
+            txtDiff.FirstVisibleLine = lastLine;
+        }
+
+        private void BtnDiffUp_Click(object sender, EventArgs e)
+        {
+            if (txtDiff.CurrentLine == 0) return;
+
+            for (var i = txtDiff.CurrentLine - 1; i >= 1; i--)
+            {
+                if (txtDiff.Lines[i].Text.CharAtOrDefault(0, defaultValue: ' ') != ' ')
+                {
+                    txtDiff.Lines[i].Goto();
+                    txtDiff.FirstVisibleLine = i;
+                    return;
+                }
+            }
+            txtDiff.Lines[0].Goto();
+            txtDiff.FirstVisibleLine = 0;
+        }
+
+        private void tabControl2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            BtnDiffDown.Visible = tabControl2.SelectedIndex == 2;
+            BtnDiffUp.Visible = tabControl2.SelectedIndex == 2;
         }
     }
 }
