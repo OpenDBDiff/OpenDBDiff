@@ -700,13 +700,23 @@ namespace OpenDBDiff.UI
             var lastLine = txtDiff.Lines.Count - 1;
             if (txtDiff.CurrentLine == lastLine) return;
 
+            // If the current position is a modification, consider it part of a block
+            var inFirstBlock = txtDiff.Lines[txtDiff.CurrentLine].Text.CharAtOrDefault(0, defaultValue: ' ') != ' ';
+
             for (var i = txtDiff.CurrentLine + 1; i < lastLine; i++)
             {
                 if (txtDiff.Lines[i].Text.CharAtOrDefault(0, defaultValue: ' ') != ' ')
                 {
+                    // If still part of the first block, will skip it as we want to reach the next block of changes
+                    if (inFirstBlock) continue;
+
                     txtDiff.Lines[i].Goto();
                     txtDiff.FirstVisibleLine = i;
                     return;
+                }
+                else
+                {
+                    inFirstBlock = false;
                 }
             }
             txtDiff.Lines[lastLine].Goto();
@@ -717,13 +727,29 @@ namespace OpenDBDiff.UI
         {
             if (txtDiff.CurrentLine == 0) return;
 
+            // If the current position is a modification, consider it part of a block
+            var inFirstBlock = txtDiff.Lines[txtDiff.CurrentLine].Text.CharAtOrDefault(0, defaultValue: ' ') != ' ';
+            var inSecondBlock = false;
+
             for (var i = txtDiff.CurrentLine - 1; i >= 1; i--)
             {
                 if (txtDiff.Lines[i].Text.CharAtOrDefault(0, defaultValue: ' ') != ' ')
                 {
-                    txtDiff.Lines[i].Goto();
-                    txtDiff.FirstVisibleLine = i;
+                    // If still part of the first block, will skip it as we want to reach the next block of changes
+                    if (inFirstBlock) continue;
+
+                    // Once we find the bottom of the block, we want to continue up until the beginning of it
+                    inSecondBlock = true;
+                }
+                else if (inSecondBlock)
+                {
+                    txtDiff.Lines[i + 1].Goto();
+                    txtDiff.FirstVisibleLine = i + 1;
                     return;
+                }
+                else
+                {
+                    inFirstBlock = false;
                 }
             }
             txtDiff.Lines[0].Goto();
