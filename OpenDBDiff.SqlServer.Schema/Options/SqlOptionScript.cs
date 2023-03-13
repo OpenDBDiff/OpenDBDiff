@@ -1,12 +1,11 @@
 ﻿using OpenDBDiff.Abstractions.Schema.Model;
-using System;
 using System.Collections.Generic;
 
 namespace OpenDBDiff.SqlServer.Schema.Options
 {
     public class SqlOptionScript : IOptionsContainer<bool>
     {
-        private Boolean alterObjectOnSchemaBinding = true;
+        private bool alterObjectOnSchemaBinding = true;
 
         public SqlOptionScript()
         {
@@ -17,7 +16,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             AlterObjectOnSchemaBinding = optionsContainer.GetOptions()["AlterObjectOnSchemaBinding"];
         }
 
-        public Boolean AlterObjectOnSchemaBinding
+        public bool AlterObjectOnSchemaBinding
         {
             get { return alterObjectOnSchemaBinding; }
             set { alterObjectOnSchemaBinding = value; }

@@ -1,5 +1,4 @@
 using OpenDBDiff.Abstractions.Schema.Model;
-using System;
 using System.Collections.Generic;
 
 namespace OpenDBDiff.SqlServer.Schema.Options
@@ -8,31 +7,32 @@ namespace OpenDBDiff.SqlServer.Schema.Options
     {
         public SqlOptionIgnore(bool defaultValue)
         {
-            FilterPartitionFunction = true;
-            FilterPartitionScheme = true;
-            FilterIndexFilter = true;
-            FilterIndex = true;
-            FilterConstraintPK = true;
-            FilterConstraintFK = true;
-            FilterConstraintUK = true;
-            FilterConstraintCheck = true;
-            FilterIndexFillFactor = true;
-            FilterIndexIncludeColumns = true;
-            FilterIndexRowLock = true;
-            FilterColumnOrder = true;
-            FilterColumnIdentity = true;
-            FilterColumnCollation = true;
-            FilterNotForReplication = true;
-            FilterUsers = true;
-            FilterRoles = true;
-            FilterCLRFunction = true;
-            FilterCLRTrigger = true;
-            FilterCLRUDT = true;
-            FilterCLRStoredProcedure = true;
-            FilterFullText = true;
-            FilterFullTextPath = false;
-            FilterTableLockEscalation = true;
-            FilterTableChangeTracking = true;
+            FilterPartitionFunction = defaultValue;
+            FilterPartitionScheme = defaultValue;
+            FilterIndexFilter = defaultValue;
+            FilterIndex = defaultValue;
+            FilterConstraintPK = defaultValue;
+            FilterConstraintFK = defaultValue;
+            FilterConstraintUK = defaultValue;
+            FilterConstraintCheck = defaultValue;
+            FilterIndexFillFactor = defaultValue;
+            FilterIndexIncludeColumns = defaultValue;
+            FilterIndexRowLock = defaultValue;
+            FilterColumnOrder = defaultValue;
+            FilterColumnIdentity = defaultValue;
+            FilterColumnCollation = defaultValue;
+            FilterNotForReplication = defaultValue;
+            FilterUsers = defaultValue;
+            FilterRoles = defaultValue;
+            FilterCLRAggregate = defaultValue;
+            FilterCLRFunction = defaultValue;
+            FilterCLRTrigger = defaultValue;
+            FilterCLRUDT = defaultValue;
+            FilterCLRStoredProcedure = defaultValue;
+            FilterFullText = defaultValue;
+            FilterFullTextPath = defaultValue;
+            FilterTableLockEscalation = defaultValue;
+            FilterTableChangeTracking = defaultValue;
             FilterConstraint = defaultValue;
             FilterFunction = defaultValue;
             FilterStoredProcedure = defaultValue;
@@ -42,6 +42,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             FilterUserDataType = defaultValue;
             FilterTrigger = defaultValue;
             FilterSchema = defaultValue;
+            FilterPermission = defaultValue;
             FilterXMLSchema = defaultValue;
             FilterTableFileGroup = defaultValue;
             FilterExtendedProperties = defaultValue;
@@ -71,6 +72,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             FilterNotForReplication = options["FilterNotForReplication"];
             FilterUsers = options["FilterUsers"];
             FilterRoles = options["FilterRoles"];
+            FilterCLRAggregate = options["FilterCLRAggregate"];
             FilterCLRFunction = options["FilterCLRFunction"];
             FilterCLRTrigger = options["FilterCLRTrigger"];
             FilterCLRUDT = options["FilterCLRUDT"];
@@ -88,6 +90,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             FilterUserDataType = options["FilterUserDataType"];
             FilterTrigger = options["FilterTrigger"];
             FilterSchema = options["FilterSchema"];
+            FilterPermission = options["FilterPermission"];
             FilterXMLSchema = options["FilterXMLSchema"];
             FilterTableFileGroup = options["FilterTableFileGroup"];
             FilterExtendedProperties = options["FilterExtendedProperties"];
@@ -98,87 +101,91 @@ namespace OpenDBDiff.SqlServer.Schema.Options
 
         }
 
-        public Boolean FilterTableChangeTracking { get; set; }
+        public bool FilterTableChangeTracking { get; set; }
 
-        public Boolean FilterTableLockEscalation { get; set; }
+        public bool FilterTableLockEscalation { get; set; }
 
-        public Boolean FilterFullTextPath { get; set; }
+        public bool FilterFullTextPath { get; set; }
 
-        public Boolean FilterFullText { get; set; }
+        public bool FilterFullText { get; set; }
 
-        public Boolean FilterCLRStoredProcedure { get; set; }
+        public bool FilterCLRAggregate { get; set; }
 
-        public Boolean FilterCLRUDT { get; set; }
+        public bool FilterCLRStoredProcedure { get; set; }
 
-        public Boolean FilterCLRTrigger { get; set; }
+        public bool FilterCLRUDT { get; set; }
 
-        public Boolean FilterCLRFunction { get; set; }
+        public bool FilterCLRTrigger { get; set; }
 
-        public Boolean FilterRoles { get; set; }
+        public bool FilterCLRFunction { get; set; }
 
-        public Boolean FilterUsers { get; set; }
+        public bool FilterRoles { get; set; }
 
-        public Boolean FilterNotForReplication { get; set; }
+        public bool FilterUsers { get; set; }
 
-        public Boolean FilterColumnCollation { get; set; }
+        public bool FilterNotForReplication { get; set; }
 
-        public Boolean FilterColumnIdentity { get; set; }
+        public bool FilterColumnCollation { get; set; }
 
-        public Boolean FilterColumnOrder { get; set; }
+        public bool FilterColumnIdentity { get; set; }
 
-        public Boolean FilterIndexRowLock { get; set; }
+        public bool FilterColumnOrder { get; set; }
 
-        public Boolean FilterIndexIncludeColumns { get; set; }
+        public bool FilterIndexRowLock { get; set; }
 
-        public Boolean FilterIndexFillFactor { get; set; }
+        public bool FilterIndexIncludeColumns { get; set; }
 
-        public Boolean FilterAssemblies { get; set; }
+        public bool FilterIndexFillFactor { get; set; }
 
-        public Boolean FilterRules { get; set; }
+        public bool FilterAssemblies { get; set; }
 
-        public Boolean FilterSynonyms { get; set; }
+        public bool FilterRules { get; set; }
 
-        public Boolean FilterDDLTriggers { get; set; }
+        public bool FilterSynonyms { get; set; }
 
-        public Boolean FilterExtendedProperties { get; set; }
+        public bool FilterDDLTriggers { get; set; }
 
-        public Boolean FilterTableFileGroup { get; set; }
+        public bool FilterExtendedProperties { get; set; }
 
-        public Boolean FilterFunction { get; set; }
+        public bool FilterTableFileGroup { get; set; }
 
-        public Boolean FilterStoredProcedure { get; set; }
+        public bool FilterFunction { get; set; }
 
-        public Boolean FilterView { get; set; }
+        public bool FilterStoredProcedure { get; set; }
 
-        public Boolean FilterTable { get; set; }
+        public bool FilterView { get; set; }
 
-        public Boolean FilterTableOption { get; set; }
+        public bool FilterTable { get; set; }
 
-        public Boolean FilterUserDataType { get; set; }
+        public bool FilterTableOption { get; set; }
 
-        public Boolean FilterTrigger { get; set; }
+        public bool FilterUserDataType { get; set; }
 
-        public Boolean FilterXMLSchema { get; set; }
+        public bool FilterTrigger { get; set; }
 
-        public Boolean FilterSchema { get; set; }
+        public bool FilterXMLSchema { get; set; }
 
-        public Boolean FilterConstraint { get; set; }
+        public bool FilterSchema { get; set; }
 
-        public Boolean FilterConstraintCheck { get; set; }
+        public bool FilterPermission { get; set; }
 
-        public Boolean FilterConstraintUK { get; set; }
+        public bool FilterConstraint { get; set; }
 
-        public Boolean FilterConstraintFK { get; set; }
+        public bool FilterConstraintCheck { get; set; }
 
-        public Boolean FilterConstraintPK { get; set; }
+        public bool FilterConstraintUK { get; set; }
 
-        public Boolean FilterIndex { get; set; }
+        public bool FilterConstraintFK { get; set; }
 
-        public Boolean FilterIndexFilter { get; set; }
+        public bool FilterConstraintPK { get; set; }
 
-        public Boolean FilterPartitionScheme { get; set; }
+        public bool FilterIndex { get; set; }
 
-        public Boolean FilterPartitionFunction { get; set; }
+        public bool FilterIndexFilter { get; set; }
+
+        public bool FilterPartitionScheme { get; set; }
+
+        public bool FilterPartitionFunction { get; set; }
 
         public IDictionary<string, bool> GetOptions()
         {
@@ -201,6 +208,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             options.Add("FilterNotForReplication", FilterNotForReplication);
             options.Add("FilterUsers", FilterUsers);
             options.Add("FilterRoles", FilterRoles);
+            options.Add("FilterCLRAggregate", FilterCLRAggregate);
             options.Add("FilterCLRFunction", FilterCLRFunction);
             options.Add("FilterCLRTrigger", FilterCLRTrigger);
             options.Add("FilterCLRUDT", FilterCLRUDT);
@@ -218,6 +226,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             options.Add("FilterUserDataType", FilterUserDataType);
             options.Add("FilterTrigger", FilterTrigger);
             options.Add("FilterSchema", FilterSchema);
+            options.Add("FilterPermission", FilterPermission);
             options.Add("FilterXMLSchema", FilterXMLSchema);
             options.Add("FilterTableFileGroup", FilterTableFileGroup);
             options.Add("FilterExtendedProperties", FilterExtendedProperties);

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using OpenDBDiff.SqlServer.Schema.Options;
 
 namespace OpenDBDiff.Settings
 {
@@ -32,6 +33,17 @@ namespace OpenDBDiff.Settings
         public DateTime SavedDateTime { get; private set; }
 
         public ProjectType Type { get; set; }
+
+        public Schema.OptionIgnore SqlOptionIgnore { get; set; }
+        //public SqlOptionIgnore OptionIgnore { get; set; }
+
+        public Schema.OptionDefault SqlOptionDefault { get; set; }
+
+        public Schema.OptionScript SqlOptionScript { get; set; }
+
+        public Schema.OptionComparison SqlOptionComparison { get; set; }
+
+        public Schema.OptionFilter SqlOptionFilter { get; set; }
 
         private static string SettingsFilePath
         {
@@ -73,7 +85,7 @@ namespace OpenDBDiff.Settings
             }
         }
 
-        public static void SaveLastConfiguration(String connectionStringSource, String connectionStringDestination)
+        public static void SaveLastConfiguration(string connectionStringSource, string connectionStringDestination, IOption option)
         {
             var last = GetLastConfiguration() ?? new Project
             {
@@ -84,6 +96,124 @@ namespace OpenDBDiff.Settings
             };
             last.ConnectionStringSource = connectionStringSource;
             last.ConnectionStringDestination = connectionStringDestination;
+
+            //last.OptionIgnore = (SqlOptionIgnore)option.Ignore;
+
+            SqlOptionIgnore Ignore = (SqlOptionIgnore)option.Ignore;
+            SqlOptionDefault Default = (SqlOptionDefault)option.Defaults;
+            SqlOptionScript Script = (SqlOptionScript)option.Script;
+            SqlOptionComparison Comparison = (SqlOptionComparison)option.Comparison;
+            SqlOptionFilter Filter = (SqlOptionFilter)option.Filters;
+
+            Schema.Assemblies assemblies = new Schema.Assemblies
+            {
+                CLRAggregates = Ignore.FilterCLRAggregate,
+                CLRFunctions = Ignore.FilterCLRFunction,
+                CLRStore = Ignore.FilterCLRStoredProcedure,
+                CLRUDT = Ignore.FilterCLRUDT,
+                CLRTrigger = Ignore.FilterCLRTrigger
+            };
+            Schema.Constraints constraints = new Schema.Constraints
+            {
+                ConstraintPK = Ignore.FilterConstraintPK,
+                ConstraintFK = Ignore.FilterConstraintFK,
+                ConstraintUK = Ignore.FilterConstraintUK,
+                ConstraintCheck = Ignore.FilterConstraintCheck
+            };
+            Schema.Indexes indexes = new Schema.Indexes
+            {
+                RowLock = Ignore.FilterIndexRowLock,
+                FillFactor = Ignore.FilterIndexFillFactor,
+                IncludeColumns = Ignore.FilterIndexIncludeColumns,
+                FilterColumns = Ignore.FilterIndexFilter
+            };
+            Schema.Tables tables = new Schema.Tables
+            {
+                ColumnCollation = Ignore.FilterColumnCollation,
+                ColumnOrder = Ignore.FilterColumnOrder,
+                ColumnIdentity = Ignore.FilterColumnIdentity,
+                TableOption = Ignore.FilterTableOption,
+                LockEscalation = Ignore.FilterTableLockEscalation,
+                ChangeTracking = Ignore.FilterTableChangeTracking,
+            };
+
+            Schema.OptionIgnore optionIgnore = new Schema.OptionIgnore
+            {
+                Assemblies = assemblies,
+                Constraints = constraints,
+                Indexes = indexes,
+                Tables = tables,
+
+                Assemblie = Ignore.FilterAssemblies,
+                Constraint = Ignore.FilterConstraint,
+                Index = Ignore.FilterIndex,
+                Table = Ignore.FilterTable,
+
+                TableFileGroup = Ignore.FilterTableFileGroup,
+                FullText = Ignore.FilterFullText,
+                FullTextPath = Ignore.FilterFullTextPath,
+                Users = Ignore.FilterUsers,
+                Roles = Ignore.FilterRoles,
+                Schema = Ignore.FilterSchema,
+                Permission = Ignore.FilterPermission,
+
+                DDLTriggers = Ignore.FilterDDLTriggers,
+                Function = Ignore.FilterFunction,
+                PartitionFunction = Ignore.FilterPartitionFunction,
+                PartitionScheme = Ignore.FilterPartitionScheme,
+                Rules = Ignore.FilterRules,
+                StoredProcedure = Ignore.FilterStoredProcedure,
+                Synonyms = Ignore.FilterSynonyms,
+                Trigger = Ignore.FilterTrigger,
+                UserDataType = Ignore.FilterUserDataType,
+                View = Ignore.FilterView,
+                XMLSchema = Ignore.FilterXMLSchema,
+
+                NotForReplication = Ignore.FilterNotForReplication,
+                ExtendedProperties = Ignore.FilterExtendedProperties,
+            };
+
+            Schema.OptionDefault optionDefault = new Schema.OptionDefault
+            {
+                DefaultIntegerValue = Default.DefaultIntegerValue,
+                DefaultRealValue = Default.DefaultRealValue,
+                DefaultTextValue = Default.DefaultTextValue,
+                DefaultDateValue = Default.DefaultDateValue,
+                DefaultVariantValue = Default.DefaultVariantValue,
+                DefaultNTextValue = Default.DefaultNTextValue,
+                DefaultBlobValue = Default.DefaultBlobValue,
+                DefaultUniqueValue = Default.DefaultUniqueValue,
+                UseDefaultValueIfExists = Default.UseDefaultValueIfExists,
+                DefaultTime = Default.DefaultTime,
+                DefaultXml = Default.DefaultXml
+            };
+
+            Schema.OptionScript optionScript = new Schema.OptionScript
+            {
+                AlterObjectOnSchemaBinding = Script.AlterObjectOnSchemaBinding
+            };
+
+            Schema.OptionComparison optionComparison = new Schema.OptionComparison
+            {
+                IgnoreWhiteSpacesInCode = Comparison.IgnoreWhiteSpacesInCode,
+                ReloadComparisonOnUpdate = Comparison.ReloadComparisonOnUpdate,
+                CaseSensityInCode = Comparison.CaseSensityInCode,
+                CaseSensityType = Comparison.CaseSensityType
+            };
+
+            Schema.OptionFilter optionFilter = new Schema.OptionFilter
+            {
+                Items = Filter.Items
+            };
+
+            last.SqlOptionIgnore = optionIgnore;
+            last.SqlOptionDefault = optionDefault;
+            last.SqlOptionScript = optionScript;
+            last.SqlOptionComparison = optionComparison;
+            last.SqlOptionFilter = optionFilter;
+
+            //last.Options = option;
+
             Upsert(last);
         }
 

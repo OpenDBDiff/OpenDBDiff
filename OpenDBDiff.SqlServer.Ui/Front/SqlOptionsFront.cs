@@ -46,6 +46,7 @@ namespace OpenDBDiff.SqlServer.Ui
             txtXML.Text = SQLOption.Defaults.DefaultXml;
 
             chkCompAssemblys.Checked = SQLOption.Ignore.FilterAssemblies;
+            chkCompCLRAggregates.Checked = SQLOption.Ignore.FilterCLRAggregate;
             chkCompCLRFunctions.Checked = SQLOption.Ignore.FilterCLRFunction;
             chkCompCLRStore.Checked = SQLOption.Ignore.FilterCLRStoredProcedure;
             chkCompCLRTrigger.Checked = SQLOption.Ignore.FilterCLRTrigger;
@@ -57,19 +58,23 @@ namespace OpenDBDiff.SqlServer.Ui
             chkConstraintsUK.Checked = SQLOption.Ignore.FilterConstraintUK;
             chkConstraintsCheck.Checked = SQLOption.Ignore.FilterConstraintCheck;
 
-            chkCompExtendedProperties.Checked = SQLOption.Ignore.FilterExtendedProperties;
-            chkCompFunciones.Checked = SQLOption.Ignore.FilterFunction;
             chkIndex.Checked = SQLOption.Ignore.FilterIndex;
+            chkIndexRowLock.Checked = SQLOption.Ignore.FilterIndexRowLock;
             chkIndexFillFactor.Checked = SQLOption.Ignore.FilterIndexFillFactor;
             chkIndexIncludeColumns.Checked = SQLOption.Ignore.FilterIndexIncludeColumns;
             chkIndexFilter.Checked = SQLOption.Ignore.FilterIndexFilter;
+
+            chkCompExtendedProperties.Checked = SQLOption.Ignore.FilterExtendedProperties;
+            chkCompFunciones.Checked = SQLOption.Ignore.FilterFunction;
             chkFullText.Checked = SQLOption.Ignore.FilterFullText;
             chkFullTextPath.Checked = SQLOption.Ignore.FilterFullTextPath;
 
             chkCompSchemas.Checked = SQLOption.Ignore.FilterSchema;
+            chkCompPermissions.Checked = SQLOption.Ignore.FilterPermission;
             chkCompStoredProcedure.Checked = SQLOption.Ignore.FilterStoredProcedure;
-            chkTableOption.Checked = SQLOption.Ignore.FilterTableOption;
+
             chkTables.Checked = SQLOption.Ignore.FilterTable;
+            chkTableOption.Checked = SQLOption.Ignore.FilterTableOption;
             chkTablesColumnIdentity.Checked = SQLOption.Ignore.FilterColumnIdentity;
             chkTablesColumnCollation.Checked = SQLOption.Ignore.FilterColumnCollation;
             chkTableLockEscalation.Checked = SQLOption.Ignore.FilterTableLockEscalation;
@@ -87,6 +92,8 @@ namespace OpenDBDiff.SqlServer.Ui
             chkCompUsers.Checked = SQLOption.Ignore.FilterUsers;
             chkCompRoles.Checked = SQLOption.Ignore.FilterRoles;
             chkCompRules.Checked = SQLOption.Ignore.FilterRules;
+            checkPartitionFunction.Checked = SQLOption.Ignore.FilterPartitionFunction;
+            checkPartitionSchemas.Checked = SQLOption.Ignore.FilterPartitionScheme;
 
             IncludeSynonymsCheckBox.Checked = SQLOption.Ignore.FilterSynonyms;
 
@@ -127,25 +134,28 @@ namespace OpenDBDiff.SqlServer.Ui
             SQLOption.Defaults.DefaultXml = txtXML.Text;
 
             SQLOption.Ignore.FilterAssemblies = chkCompAssemblys.Checked;
+            SQLOption.Ignore.FilterCLRAggregate = chkCompCLRAggregates.Checked && chkCompAssemblys.Checked;
             SQLOption.Ignore.FilterCLRFunction = chkCompCLRFunctions.Checked && chkCompAssemblys.Checked;
             SQLOption.Ignore.FilterCLRStoredProcedure = chkCompCLRStore.Checked && chkCompAssemblys.Checked;
             SQLOption.Ignore.FilterCLRTrigger = chkCompCLRTrigger.Checked && chkCompAssemblys.Checked;
             SQLOption.Ignore.FilterCLRUDT = chkCompCLRUDT.Checked && chkCompAssemblys.Checked;
 
             SQLOption.Ignore.FilterConstraint = chkConstraints.Checked;
-            SQLOption.Ignore.FilterConstraintPK = chkConstraintsPK.Checked;
-            SQLOption.Ignore.FilterConstraintFK = chkConstraintsFK.Checked;
-            SQLOption.Ignore.FilterConstraintUK = chkConstraintsUK.Checked;
-            SQLOption.Ignore.FilterConstraintCheck = chkConstraintsCheck.Checked;
+            SQLOption.Ignore.FilterConstraintPK = chkConstraintsPK.Checked && chkConstraints.Checked;
+            SQLOption.Ignore.FilterConstraintFK = chkConstraintsFK.Checked && chkConstraints.Checked;
+            SQLOption.Ignore.FilterConstraintUK = chkConstraintsUK.Checked && chkConstraints.Checked;
+            SQLOption.Ignore.FilterConstraintCheck = chkConstraintsCheck.Checked && chkConstraints.Checked;
 
             SQLOption.Ignore.FilterFunction = chkCompFunciones.Checked;
 
             SQLOption.Ignore.FilterIndex = chkIndex.Checked;
+            SQLOption.Ignore.FilterIndexRowLock = chkIndexRowLock.Checked && chkIndex.Checked;
             SQLOption.Ignore.FilterIndexFillFactor = chkIndexFillFactor.Checked && chkIndex.Checked;
             SQLOption.Ignore.FilterIndexIncludeColumns = chkIndexIncludeColumns.Checked && chkIndex.Checked;
             SQLOption.Ignore.FilterIndexFilter = chkIndexFilter.Checked && chkIndex.Checked;
 
             SQLOption.Ignore.FilterSchema = chkCompSchemas.Checked;
+            SQLOption.Ignore.FilterPermission = chkCompPermissions.Checked;
             SQLOption.Ignore.FilterStoredProcedure = chkCompStoredProcedure.Checked;
 
             SQLOption.Ignore.FilterTable = chkTables.Checked;
@@ -169,6 +179,8 @@ namespace OpenDBDiff.SqlServer.Ui
             SQLOption.Ignore.FilterFullText = chkFullText.Checked;
             SQLOption.Ignore.FilterFullTextPath = chkFullTextPath.Checked;
             SQLOption.Ignore.FilterSynonyms = IncludeSynonymsCheckBox.Checked;
+            SQLOption.Ignore.FilterPartitionFunction = checkPartitionFunction.Checked;
+            SQLOption.Ignore.FilterPartitionScheme = checkPartitionSchemas.Checked;
 
             SQLOption.Ignore.FilterNotForReplication = chkIgnoreNotForReplication.Checked;
             SQLOption.Script.AlterObjectOnSchemaBinding = optScriptSchemaBindingAlter.Checked;
@@ -197,20 +209,32 @@ namespace OpenDBDiff.SqlServer.Ui
 
         private void chkCompIndices_CheckedChanged(object sender, EventArgs e)
         {
-            chkIndexFillFactor.Enabled = chkIndex.Checked;
-            chkIndexIncludeColumns.Enabled = chkIndex.Checked;
-            chkIndexFilter.Enabled = chkIndex.Checked;
-            chkIndexRowLock.Enabled = chkIndex.Checked;
+            bool ValueParent = chkIndex.Checked;
+            chkIndexRowLock.Enabled = ValueParent;
+            chkIndexRowLock.Checked = ValueParent;
+            chkIndexFillFactor.Enabled = ValueParent;
+            chkIndexFillFactor.Checked = ValueParent;
+            chkIndexIncludeColumns.Enabled = ValueParent;
+            chkIndexIncludeColumns.Checked = ValueParent;
+            chkIndexFilter.Enabled = ValueParent;
+            chkIndexFilter.Checked = ValueParent;
         }
 
         private void chkCompTablas_CheckedChanged(object sender, EventArgs e)
         {
-            chkTablesColumnCollation.Enabled = chkTables.Checked;
-            chkTablesColumnIdentity.Enabled = chkTables.Checked;
-            chkTablesColumnOrder.Enabled = chkTables.Checked;
-            chkTableChangeTracking.Enabled = chkTables.Checked;
-            chkTableLockEscalation.Enabled = chkTables.Checked;
-            chkTableOption.Enabled = chkTables.Checked;
+            bool ValueParent = chkTables.Checked;
+            chkTablesColumnCollation.Enabled = ValueParent;
+            chkTablesColumnCollation.Checked = ValueParent;
+            chkTablesColumnOrder.Enabled = ValueParent;
+            chkTablesColumnOrder.Checked = ValueParent;
+            chkTablesColumnIdentity.Enabled = ValueParent;
+            chkTablesColumnIdentity.Checked = ValueParent;
+            chkTableOption.Enabled = ValueParent;
+            chkTableOption.Checked = ValueParent;
+            chkTableLockEscalation.Enabled = ValueParent;
+            chkTableLockEscalation.Checked = ValueParent;
+            chkTableChangeTracking.Enabled = ValueParent;
+            chkTableChangeTracking.Checked = ValueParent;
         }
 
         private void btnApply_Click(object sender, EventArgs e)
@@ -230,23 +254,37 @@ namespace OpenDBDiff.SqlServer.Ui
 
         private void chkConstraints_CheckedChanged(object sender, EventArgs e)
         {
-            chkConstraintsFK.Enabled = chkConstraints.Checked;
-            chkConstraintsPK.Enabled = chkConstraints.Checked;
-            chkConstraintsUK.Enabled = chkConstraints.Checked;
-            chkConstraintsCheck.Enabled = chkConstraints.Checked;
+            bool ValueParent = chkConstraints.Checked;
+            chkConstraintsPK.Enabled = ValueParent;
+            chkConstraintsPK.Checked = ValueParent;
+            chkConstraintsFK.Enabled = ValueParent;
+            chkConstraintsFK.Checked = ValueParent;
+            chkConstraintsUK.Enabled = ValueParent;
+            chkConstraintsUK.Checked = ValueParent;
+            chkConstraintsCheck.Enabled = ValueParent;
+            chkConstraintsCheck.Checked = ValueParent;
         }
 
         private void chkFullText_CheckedChanged(object sender, EventArgs e)
         {
-            chkFullTextPath.Enabled = chkFullText.Checked;
+            bool ValueParent = chkFullText.Checked;
+            chkFullTextPath.Enabled = ValueParent;
+            chkFullTextPath.Checked = ValueParent;
         }
 
         private void chkCompAssemblys_CheckedChanged(object sender, EventArgs e)
         {
-            chkCompCLRStore.Enabled = chkCompAssemblys.Checked;
-            chkCompCLRTrigger.Enabled = chkCompAssemblys.Checked;
-            chkCompCLRFunctions.Enabled = chkCompAssemblys.Checked;
-            chkCompCLRUDT.Enabled = chkCompAssemblys.Checked;
+            bool ValueParent = chkCompAssemblys.Checked;
+            chkCompCLRAggregates.Enabled = ValueParent;
+            chkCompCLRAggregates.Checked = ValueParent;
+            chkCompCLRStore.Enabled = ValueParent;
+            chkCompCLRStore.Checked = ValueParent;
+            chkCompCLRTrigger.Enabled = ValueParent;
+            chkCompCLRTrigger.Checked = ValueParent;
+            chkCompCLRFunctions.Enabled = ValueParent;
+            chkCompCLRFunctions.Checked = ValueParent;
+            chkCompCLRUDT.Enabled = ValueParent;
+            chkCompCLRUDT.Checked = ValueParent;
         }
 
         private void DeleteNameFilterButton_Click(object sender, EventArgs e)

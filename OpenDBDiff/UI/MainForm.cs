@@ -8,6 +8,7 @@ using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.Abstractions.Ui;
 using OpenDBDiff.Extensions;
 using OpenDBDiff.Settings;
+using OpenDBDiff.SqlServer.Schema.Options;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
@@ -250,7 +251,8 @@ namespace OpenDBDiff.UI
                 StartComparison();
                 schemaTreeView1.SetCheckedSchemas(_selectedSchemas);
                 errorLocation = "Saving Connections";
-                Project.SaveLastConfiguration(LeftDatabaseSelector.ConnectionString, RightDatabaseSelector.ConnectionString);
+                Options = Options ?? this.ProjectSelectorHandler.GetDefaultProjectOptions();
+                Project.SaveLastConfiguration(LeftDatabaseSelector.ConnectionString, RightDatabaseSelector.ConnectionString, Options);
             }
             catch (Exception ex)
             {
@@ -535,6 +537,111 @@ namespace OpenDBDiff.UI
                     LeftDatabaseSelector.ConnectionString = LastConfiguration.ConnectionStringSource;
                 if (RightDatabaseSelector != null)
                     RightDatabaseSelector.ConnectionString = LastConfiguration.ConnectionStringDestination;
+                if (LastConfiguration.SqlOptionIgnore != null)
+                {
+                    Settings.Schema.OptionIgnore optionIgnore = LastConfiguration.SqlOptionIgnore;
+                    Settings.Schema.OptionDefault optionDefault = LastConfiguration.SqlOptionDefault;
+                    Settings.Schema.OptionScript optionScript = LastConfiguration.SqlOptionScript;
+                    Settings.Schema.OptionComparison optionComparison = LastConfiguration.SqlOptionComparison;
+                    Settings.Schema.OptionFilter optionFilter = LastConfiguration.SqlOptionFilter;
+
+                    SqlOptionIgnore sqlOptionIgnore = new SqlOptionIgnore(true)
+                    {
+                        FilterTable = optionIgnore.Table,
+                        FilterColumnCollation = optionIgnore.Tables.ColumnCollation,
+                        FilterColumnOrder = optionIgnore.Tables.ColumnOrder,
+                        FilterColumnIdentity = optionIgnore.Tables.ColumnIdentity,
+                        FilterTableOption = optionIgnore.Tables.TableOption,
+                        FilterTableLockEscalation = optionIgnore.Tables.LockEscalation,
+                        FilterTableChangeTracking = optionIgnore.Tables.ChangeTracking,
+
+                        FilterIndex = optionIgnore.Index,
+                        FilterIndexRowLock = optionIgnore.Indexes.RowLock,
+                        FilterIndexFillFactor = optionIgnore.Indexes.FillFactor,
+                        FilterIndexIncludeColumns = optionIgnore.Indexes.IncludeColumns,
+                        FilterIndexFilter = optionIgnore.Indexes.FilterColumns,
+
+                        FilterConstraint = optionIgnore.Constraint,
+                        FilterConstraintPK = optionIgnore.Constraints.ConstraintPK,
+                        FilterConstraintFK = optionIgnore.Constraints.ConstraintFK,
+                        FilterConstraintUK = optionIgnore.Constraints.ConstraintUK,
+                        FilterConstraintCheck = optionIgnore.Constraints.ConstraintCheck,
+
+                        FilterAssemblies = optionIgnore.Assemblie,
+                        FilterCLRAggregate = optionIgnore.Assemblies.CLRAggregates,
+                        FilterCLRFunction = optionIgnore.Assemblies.CLRFunctions,
+                        FilterCLRStoredProcedure = optionIgnore.Assemblies.CLRStore,
+                        FilterCLRUDT = optionIgnore.Assemblies.CLRUDT,
+                        FilterCLRTrigger = optionIgnore.Assemblies.CLRTrigger,
+
+                        FilterTableFileGroup = optionIgnore.TableFileGroup,
+                        FilterFullText = optionIgnore.FullText,
+                        FilterFullTextPath = optionIgnore.FullTextPath,
+                        FilterUsers = optionIgnore.Users,
+                        FilterRoles = optionIgnore.Roles,
+                        FilterSchema = optionIgnore.Schema,
+                        FilterPermission = optionIgnore.Permission,
+
+                        FilterDDLTriggers = optionIgnore.DDLTriggers,
+                        FilterFunction = optionIgnore.Function,
+                        FilterPartitionFunction = optionIgnore.PartitionFunction,
+                        FilterPartitionScheme = optionIgnore.PartitionScheme,
+                        FilterRules = optionIgnore.Rules,
+                        FilterStoredProcedure = optionIgnore.StoredProcedure,
+                        FilterSynonyms = optionIgnore.Synonyms,
+                        FilterTrigger = optionIgnore.Trigger,
+                        FilterUserDataType = optionIgnore.UserDataType,
+                        FilterView = optionIgnore.View,
+                        FilterXMLSchema = optionIgnore.XMLSchema,
+
+                        FilterNotForReplication = optionIgnore.NotForReplication,
+                        FilterExtendedProperties = optionIgnore.ExtendedProperties,
+                    };
+
+                    SqlOptionDefault sqlOptionDefault = new SqlOptionDefault
+                    {
+                        DefaultIntegerValue = optionDefault.DefaultIntegerValue,
+                        DefaultRealValue = optionDefault.DefaultRealValue,
+                        DefaultTextValue = optionDefault.DefaultTextValue,
+                        DefaultDateValue = optionDefault.DefaultDateValue,
+                        DefaultVariantValue = optionDefault.DefaultVariantValue,
+                        DefaultNTextValue = optionDefault.DefaultNTextValue,
+                        DefaultBlobValue = optionDefault.DefaultBlobValue,
+                        DefaultUniqueValue = optionDefault.DefaultUniqueValue,
+                        UseDefaultValueIfExists = optionDefault.UseDefaultValueIfExists,
+                        DefaultTime = optionDefault.DefaultTime,
+                        DefaultXml = optionDefault.DefaultXml
+                    };
+
+                    SqlOptionScript sqlOptionScript = new SqlOptionScript
+                    {
+                        AlterObjectOnSchemaBinding = optionScript.AlterObjectOnSchemaBinding
+                    };
+
+                    SqlOptionComparison sqlOptionComparison = new SqlOptionComparison
+                    {
+                        IgnoreWhiteSpacesInCode = optionComparison.IgnoreWhiteSpacesInCode,
+                        ReloadComparisonOnUpdate = optionComparison.ReloadComparisonOnUpdate,
+                        CaseSensityInCode = optionComparison.CaseSensityInCode,
+                        CaseSensityType = optionComparison.CaseSensityType
+                    };
+
+                    SqlOptionFilter sqlOptionFilter = new SqlOptionFilter
+                    {
+                        Items = optionFilter.Items
+                    };
+
+                    SqlOption SQLOption = new SqlOption
+                    {
+                        Ignore = sqlOptionIgnore,
+                        Defaults = sqlOptionDefault,
+                        Script = sqlOptionScript,
+                        Comparison = sqlOptionComparison,
+                        Filters = sqlOptionFilter
+                    };
+
+                    Options = new SqlOption(SQLOption);
+                }
             }
 
             txtNewObject.LexerLanguage = "mssql";
@@ -571,7 +678,7 @@ namespace OpenDBDiff.UI
                             ProjectSelectorHandler.GetDestinationServerName(),
                             ProjectSelectorHandler.GetDestinationDatabaseName()
                         ),
-                        Options = Options ?? ProjectSelectorHandler.GetDefaultProjectOptions(),
+                        //Options = Options ?? ProjectSelectorHandler.GetDefaultProjectOptions(),
                         Type = Project.ProjectType.SQLServer
                     };
 
@@ -681,6 +788,12 @@ namespace OpenDBDiff.UI
             var temp = RightDatabaseSelector.Clone() as IFront;
             RightDatabaseSelector.SetSettingsFrom(LeftDatabaseSelector);
             LeftDatabaseSelector.SetSettingsFrom(temp);
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Options = Options ?? this.ProjectSelectorHandler.GetDefaultProjectOptions();
+            Project.SaveLastConfiguration(LeftDatabaseSelector.ConnectionString, RightDatabaseSelector.ConnectionString, Options);
         }
     }
 }

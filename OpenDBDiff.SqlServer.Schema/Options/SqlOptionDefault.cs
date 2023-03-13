@@ -1,5 +1,4 @@
 using OpenDBDiff.Abstractions.Schema.Model;
-using System;
 using System.Collections.Generic;
 
 namespace OpenDBDiff.SqlServer.Schema.Options
@@ -14,7 +13,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
         private string defaultNTextValue = "N''";
         private string defaultBlobValue = "0x";
         private string defaultUniqueValue = "NEWID()";
-        private Boolean useDefaultValueIfExists = true;
+        private bool useDefaultValueIfExists = true;
         private string defaultTime = "00:00:00";
         private string defaultXml = "";
 
@@ -56,7 +55,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             options.Add("defaultIntegerValue", defaultIntegerValue);
             options.Add("defaultRealValue", defaultRealValue);
             options.Add("defaultTextValue", defaultTextValue);
-            options.Add("defaultDateValue", defaultDateValue); 
+            options.Add("defaultDateValue", defaultDateValue);
             options.Add("defaultVariantValue", defaultVariantValue);
             options.Add("defaultNTextValue", defaultNTextValue);
             options.Add("defaultBlobValue", defaultBlobValue);
@@ -72,7 +71,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
         /// <value>
         /// 	<c>true</c> if use default value if exists; otherwise, <c>false</c>.
         /// </value>
-        public Boolean UseDefaultValueIfExists
+        public bool UseDefaultValueIfExists
         {
             get { return useDefaultValueIfExists; }
             set { useDefaultValueIfExists = value; }
