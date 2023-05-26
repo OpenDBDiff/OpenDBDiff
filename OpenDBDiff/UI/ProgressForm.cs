@@ -3,6 +3,7 @@ using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.Abstractions.Ui;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace OpenDBDiff.UI
@@ -51,76 +52,104 @@ namespace OpenDBDiff.UI
             this.Cursor = Cursors.Default;
         }
 
-        private void ProgressForm_Activated(object sender, EventArgs e)
+        private async void ProgressForm_Activated(object sender, EventArgs e)
         {
-            var handler = new ProgressEventHandler.ProgressHandler(genData2_OnProgress);
-            try
+            if (!IsProcessing)
             {
-                if (!IsProcessing)
+                var originHandler = new ProgressEventHandler.ProgressHandler(genData1_OnProgress);
+                var destinationHandler = new ProgressEventHandler.ProgressHandler(genData2_OnProgress);
+
+                try
                 {
                     this.Refresh();
-                    IsProcessing = false;
-                    OriginGenerator.OnProgress += new ProgressEventHandler.ProgressHandler(genData1_OnProgress);
-                    DestinationGenerator.OnProgress += handler;
+                    IsProcessing = true;
+                    OriginGenerator.OnProgress += originHandler;
+                    DestinationGenerator.OnProgress += destinationHandler;
 
                     this.ErrorLocation = "Loading " + destinationProgressControl.DatabaseName;
-                    Origin = OriginGenerator.Process();
-                    originProgressControl.Message = "Complete";
-                    originProgressControl.Value = OriginGenerator.GetMaxValue();
+
+                    Destination = await Task.Run(() => DestinationGenerator.Process());
+
+                    // Update destinationProgressControl on the UI thread
+                    destinationProgressControl.Invoke(new Action(() =>
+                    {
+                        destinationProgressControl.Message = "Complete";
+                        destinationProgressControl.Value = DestinationGenerator.GetMaxValue();
+                    }));
 
                     this.ErrorLocation = "Loading " + originProgressControl.DatabaseName;
-                    Destination = DestinationGenerator.Process();
 
-                    originClone = (IDatabase)Origin.Clone(null);
+                    Origin = await Task.Run(() => OriginGenerator.Process());
+
+                    // Update originProgressControl on the UI thread
+                    originProgressControl.Invoke(new Action(() =>
+                    {
+                        originProgressControl.Message = "Complete";
+                        originProgressControl.Value = OriginGenerator.GetMaxValue();
+                    }));
+
+                    originClone = await Task.Run(() => (IDatabase)Origin.Clone(null));
 
                     this.ErrorLocation = "Comparing Databases";
-                    Destination = Comparer.Compare(Origin, Destination);
+                    Destination = await Task.Run(() => Comparer.Compare(Origin, Destination));
                     Origin = originClone;
 
-                    destinationProgressControl.Message = "Complete";
-                    destinationProgressControl.Value = DestinationGenerator.GetMaxValue();
+                }
+                catch (Exception err)
+                {
+                    this.Error = err;
+                }
+                finally
+                {
+                    OriginGenerator.OnProgress -= originHandler;
+                    DestinationGenerator.OnProgress -= destinationHandler;
+                    this.Close();
                 }
             }
-            catch (Exception err)
+        }
+
+        private void genData1_OnProgress(ProgressEventArgs e)
+        {
+            if (originProgressControl.IsHandleCreated)
             {
-                this.Error = err;
-            }
-            finally
-            {
-                OriginGenerator.OnProgress -= handler;
-                DestinationGenerator.OnProgress -= handler;
-                this.Close();
+                // Marshal UI updates to the UI thread
+                Invoke((MethodInvoker)delegate
+                {
+                    if (e.Progress > -1 && originProgressControl.Value != e.Progress)
+                    {
+                        originProgressControl.Value = e.Progress;
+                    }
+
+                    if (string.Compare(originProgressControl.Message, e.Message) != 0)
+                    {
+                        originProgressControl.Message = e.Message;
+                    }
+
+                    this.ErrorMostRecentProgress = e.Message;
+                });
             }
         }
 
         private void genData2_OnProgress(ProgressEventArgs e)
         {
-            if (e.Progress > -1 && destinationProgressControl.Value != e.Progress)
+            // Marshal UI updates to the UI thread
+            if (destinationProgressControl.IsHandleCreated)
             {
-                destinationProgressControl.Value = e.Progress;
+                destinationProgressControl.Invoke((MethodInvoker)delegate
+                {
+                    if (e.Progress > -1 && destinationProgressControl.Value != e.Progress)
+                    {
+                        destinationProgressControl.Value = e.Progress;
+                    }
+
+                    if (string.Compare(destinationProgressControl.Message, e.Message) != 0)
+                    {
+                        destinationProgressControl.Message = e.Message;
+                    }
+
+                    this.ErrorMostRecentProgress = e.Message;
+                });
             }
-
-            if (String.Compare(destinationProgressControl.Message, e.Message) != 0)
-            {
-                destinationProgressControl.Message = e.Message;
-            }
-
-            this.ErrorMostRecentProgress = e.Message;
-        }
-
-        private void genData1_OnProgress(ProgressEventArgs e)
-        {
-            if (e.Progress > -1 && originProgressControl.Value != e.Progress)
-            {
-                originProgressControl.Value = e.Progress;
-            }
-
-            if (String.Compare(originProgressControl.Message, e.Message) != 0)
-            {
-                originProgressControl.Message = e.Message;
-            }
-
-            this.ErrorMostRecentProgress = e.Message;
         }
     }
 }
