@@ -65,6 +65,11 @@ namespace OpenDBDiff.UI
                         throw new SchemaException(progress.Error.Message, progress.Error);
                     }
 
+                    if (progress.Destination == null || progress.Origin == null)
+                    {
+                        return;
+                    }
+
                     txtSyncScript.LexerLanguage = this.ProjectSelectorHandler.GetScriptLanguage();
                     txtSyncScript.ReadOnly = false;
                     errorLocation = "Generating Synchronized Script";

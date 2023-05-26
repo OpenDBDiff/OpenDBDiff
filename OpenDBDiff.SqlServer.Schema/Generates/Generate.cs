@@ -8,6 +8,7 @@ using OpenDBDiff.SqlServer.Schema.Options;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Threading;
 
 namespace OpenDBDiff.SqlServer.Schema.Generates
 {
@@ -15,11 +16,13 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
     {
         private readonly List<MessageLog> messages;
         private ProgressEventArgs currentlyReading;
+        private SynchronizationContext syncContext;
 
         public Generate()
         {
             messages = new List<MessageLog>();
             OnReading += Generate_OnReading;
+            syncContext = SynchronizationContext.Current;
         }
 
         public static int MaxValue
@@ -55,8 +58,15 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
 
         public void RaiseOnReading(ProgressEventArgs e)
         {
+            //this.currentlyReading = e;
+            //if (OnReading != null) OnReading(e);
+
             this.currentlyReading = e;
-            if (OnReading != null) OnReading(e);
+
+            if (OnReading != null)
+            {
+                syncContext.Post(state => OnReading((ProgressEventArgs)state), e);
+            }
         }
 
         public void RaiseOnReadingOne(object name)
@@ -81,77 +91,62 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
             databaseSchema.Options = Options;
             databaseSchema.Name = Name;
             databaseSchema.Info = (new GenerateDatabase(ConnectionString, Options)).Get(databaseSchema);
-            /*Thread t1 = new Thread(delegate()
-                {
-                    try
-                    {*/
-            (new GenerateRules(this)).Fill(databaseSchema, ConnectionString);
-            (new GenerateTables(this)).Fill(databaseSchema, ConnectionString, messages);
-            (new GenerateViews(this)).Fill(databaseSchema, ConnectionString, messages);
 
-            if (Options.Ignore.FilterIndex)
-            {
-                (new GenerateIndex(this)).Fill(databaseSchema, ConnectionString);
-                (new GenerateFullTextIndex(this)).Fill(databaseSchema, ConnectionString);
-            }
+            //0
+            (new GenerateRules(this)).Fill(databaseSchema, ConnectionString);
+            //1 & 2
+            (new GenerateTables(this)).Fill(databaseSchema, ConnectionString, messages);            
+            //3
             (new GenerateUserDataTypes(this)).Fill(databaseSchema, ConnectionString, messages);
+            //4
             (new GenerateXMLSchemas(this)).Fill(databaseSchema, ConnectionString);
+            //5
             (new GenerateSchemas(this)).Fill(databaseSchema, ConnectionString);
-            /*}
-                    catch (Exception ex)
-                    {
-                        error = ex.StackTrace;
-                    }
-                });
-                Thread t2 = new Thread(delegate()
-                {
-                    try
-                    {*/
+            //6
+            (new GenerateUsers(this)).Fill(databaseSchema, ConnectionString);
 
             //not supported in azure yet
             if (databaseSchema.Info.Version != DatabaseInfo.SQLServerVersion.SQLServerAzure10)
             {
+                //7
                 (new GeneratePartitionFunctions(this)).Fill(databaseSchema, ConnectionString);
+                //8
                 (new GeneratePartitionScheme(this)).Fill(databaseSchema, ConnectionString);
+                //9
                 (new GenerateFileGroups(this)).Fill(databaseSchema, ConnectionString);
             }
 
+            //10
             (new GenerateDDLTriggers(this)).Fill(databaseSchema, ConnectionString);
+            //11
             (new GenerateSynonyms(this)).Fill(databaseSchema, ConnectionString);
 
             //not supported in azure yet
             if (databaseSchema.Info.Version != DatabaseInfo.SQLServerVersion.SQLServerAzure10)
             {
+                //12
                 (new GenerateAssemblies(this)).Fill(databaseSchema, ConnectionString);
+                //
                 (new GenerateFullText(this)).Fill(databaseSchema, ConnectionString);
             }
-            /*}
-                    catch (Exception ex)
-                    {
-                        error = ex.StackTrace;
-                    }
-                });
-                Thread t3 = new Thread(delegate()
-                {
-                    try
-                    {*/
+
+            //13
             (new GenerateStoredProcedures(this)).Fill(databaseSchema, ConnectionString);
-            (new GenerateFunctions(this)).Fill(databaseSchema, ConnectionString);
+            //14
+            (new GenerateViews(this)).Fill(databaseSchema, ConnectionString, messages);
+            //15
+            (new GenerateFunctions(this)).Fill(databaseSchema, ConnectionString);            
+            //16
+            if (Options.Ignore.FilterIndex)
+            {
+                (new GenerateIndex(this)).Fill(databaseSchema, ConnectionString);
+                (new GenerateFullTextIndex(this)).Fill(databaseSchema, ConnectionString);
+            }
+            //17
             (new GenerateTriggers(this)).Fill(databaseSchema, ConnectionString, messages);
+            //18
             (new GenerateTextObjects(this)).Fill(databaseSchema, ConnectionString);
-            (new GenerateUsers(this)).Fill(databaseSchema, ConnectionString);
-            /*}
-                    catch (Exception ex)
-                    {
-                        error = ex.StackTrace;
-                    }
-                });
-                t1.Start();
-                t2.Start();
-                t3.Start();
-                t1.Join();
-                t2.Join();
-                t3.Join();*/
+
             if (String.IsNullOrEmpty(error))
             {
                 /*Las propiedades extendidas deben ir despues de haber capturado el resto de los objetos de la base*/
@@ -170,12 +165,12 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
 
         // TODO: Static because Compare method is static; static events are not my favorite
         public static event ProgressEventHandler.ProgressHandler OnCompareProgress;
-
+        
         internal static void RaiseOnCompareProgress(string formatString, params object[] formatParams)
         {
             OnCompareProgress?.Invoke(new ProgressEventArgs(String.Format(formatString, formatParams), -1));
         }
-
+        
         /// <summary>
         /// Generates the differences to migrate a schema from origin to destination
         /// </summary>
