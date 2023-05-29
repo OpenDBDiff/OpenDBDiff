@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Resources;
 
 namespace OpenDBDiff.SqlServer.Schema.SQLQueries
 {
@@ -33,6 +30,21 @@ namespace OpenDBDiff.SqlServer.Schema.SQLQueries
 
         private static string FetchQuery(string queryFullName)
         {
+            // New SDK-style .csproj format: each <Resource /> embedded within OpenDBDiff.SqlServer.Schema.g.resources
+            var assembly = typeof(SQLQueryFactory).Assembly;
+            string fileName = $"/{queryFullName.Substring(typeof(SQLQueryFactory).Namespace.Length + 1)}.sql";
+            using var sdkStyleResources = assembly.GetManifestResourceStream(assembly.GetManifestResourceNames().First());
+            using var resourceReader = new ResourceReader(sdkStyleResources);
+            var enumerator = resourceReader.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (enumerator.Key.ToString().EndsWith(fileName, StringComparison.OrdinalIgnoreCase)) // "sqlqueries/*.sql"
+                {
+                    using var stringReader = new StreamReader(enumerator.Value as Stream); // UnmanagedMemoryStream (PinnedBufferMemoryStream)
+                    return stringReader.ReadToEnd();
+                }
+            }
+
             string resourceName = queryFullName + ".sql";
             using (System.IO.Stream stream = typeof(SQLQueryFactory).Assembly.GetManifestResourceStream(resourceName))
             {
