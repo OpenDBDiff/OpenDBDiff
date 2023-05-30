@@ -1,4 +1,8 @@
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Resources;
 
@@ -210,14 +214,16 @@ namespace OpenDBDiff.Tests.Utils
             if (_stream == null)
             {
                 // New SDK-style .csproj format: each <Resource /> embedded within OpenDBDiff.Tests.g.resources
-                using var sdkStyleResources = Assembly.GetManifestResourceStream(Assembly.GetManifestResourceNames().First());
-                using var resourceReader = new ResourceReader(sdkStyleResources);
-                var enumerator = resourceReader.GetEnumerator();
-                while (enumerator.MoveNext())
+                using (var sdkStyleResources = Assembly.GetManifestResourceStream(Assembly.GetManifestResourceNames().First()))
+                using (var resourceReader = new ResourceReader(sdkStyleResources))
                 {
-                    if (enumerator.Key.ToString().EndsWith(fileName, StringComparison.OrdinalIgnoreCase)) // "sqlsnippets/triggers/*.sql"
+                    var enumerator = resourceReader.GetEnumerator();
+                    while (enumerator.MoveNext())
                     {
-                        return enumerator.Value as Stream; // UnmanagedMemoryStream (PinnedBufferMemoryStream)
+                        if (enumerator.Key.ToString().EndsWith(fileName, StringComparison.OrdinalIgnoreCase)) // "sqlsnippets/triggers/*.sql"
+                        {
+                            return enumerator.Value as Stream; // UnmanagedMemoryStream (PinnedBufferMemoryStream)
+                        }
                     }
                 }
             }
