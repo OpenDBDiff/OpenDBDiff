@@ -2,7 +2,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Resources;
 
 namespace OpenDBDiff.Tests.Utils
 {
@@ -209,6 +211,22 @@ namespace OpenDBDiff.Tests.Utils
         {
             string _nameResFile = AssemblyName + ResourceFilePath + fileName;
             Stream _stream = Assembly.GetManifestResourceStream(_nameResFile);
+            if (_stream == null)
+            {
+                // New SDK-style .csproj format: each <Resource /> embedded within OpenDBDiff.Tests.g.resources
+                using (var sdkStyleResources = Assembly.GetManifestResourceStream(Assembly.GetManifestResourceNames().First()))
+                using (var resourceReader = new ResourceReader(sdkStyleResources))
+                {
+                    var enumerator = resourceReader.GetEnumerator();
+                    while (enumerator.MoveNext())
+                    {
+                        if (enumerator.Key.ToString().EndsWith(fileName, StringComparison.OrdinalIgnoreCase)) // "sqlsnippets/triggers/*.sql"
+                        {
+                            return enumerator.Value as Stream; // UnmanagedMemoryStream (PinnedBufferMemoryStream)
+                        }
+                    }
+                }
+            }
 
             #region Not found
 
