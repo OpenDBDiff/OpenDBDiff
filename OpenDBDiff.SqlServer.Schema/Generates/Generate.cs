@@ -158,14 +158,15 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
         private void tables_OnTableProgress(object sender, ProgressEventArgs e)
         {
             ProgressEventHandler.RaiseOnChange(e);
+            OnCompareProgress?.Invoke(e); // Raise the OnCompareProgress event
         }
 
         // TODO: Static because Compare method is static; static events are not my favorite
         public static event ProgressEventHandler.ProgressHandler OnCompareProgress;
 
-        internal static void RaiseOnCompareProgress(string formatString, params object[] formatParams)
+        internal static void RaiseOnCompareProgress(int value, string formatString, params object[] formatParams)
         {
-            OnCompareProgress?.Invoke(new ProgressEventArgs(String.Format(formatString, formatParams), -1));
+            OnCompareProgress?.Invoke(new ProgressEventArgs(String.Format(formatString, formatParams), value));
         }
 
         /// <summary>

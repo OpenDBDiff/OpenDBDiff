@@ -43,18 +43,19 @@ namespace OpenDBDiff.SqlServer.Schema.Compare
                 if (destinationCount > destinationIndex)
                 {
                     node = destinationFields[destinationIndex];
-                    Generate.RaiseOnCompareProgress("Comparing Destination {0}: [{1}]", node.ObjectType, node.Name);
+                    Generate.RaiseOnCompareProgress(CompareProgress.Value, "Comparing Destination {0}: [{1}]", node.ObjectType, node.Name);
                     if (!originFields.Contains(node.FullName))
                     {
-                        Generate.RaiseOnCompareProgress("Adding {0}: [{1}]", node.ObjectType, node.Name);
+                        Generate.RaiseOnCompareProgress(CompareProgress.Value, "Adding {0}: [{1}]", node.ObjectType, node.Name);
                         DoNew<Root>(originFields, node);
                     }
                     else
                     {
-                        Generate.RaiseOnCompareProgress("Updating {0}: [{1}]", node.ObjectType, node.Name);
+                        Generate.RaiseOnCompareProgress(CompareProgress.Value, "Updating {0}: [{1}]", node.ObjectType, node.Name);
                         DoUpdate<Root>(originFields, node);
                     }
 
+                    CompareProgress.Value++;
                     destinationIndex++;
                     has = true;
                 }
@@ -62,13 +63,14 @@ namespace OpenDBDiff.SqlServer.Schema.Compare
                 if (originCount > originIndex)
                 {
                     node = originFields[originIndex];
-                    Generate.RaiseOnCompareProgress("Comparing Source {0}: [{1}]", node.ObjectType, node.Name);
+                    Generate.RaiseOnCompareProgress(CompareProgress.Value, "Comparing Source {0}: [{1}]", node.ObjectType, node.Name);
                     if (!destinationFields.Contains(node.FullName))
                     {
-                        Generate.RaiseOnCompareProgress("Deleting {0}: [{1}]", node.ObjectType, node.Name);
+                        Generate.RaiseOnCompareProgress(CompareProgress.Value, "Deleting {0}: [{1}]", node.ObjectType, node.Name);
                         DoDelete(node);
                     }
 
+                    CompareProgress.Value++;
                     originIndex++;
                     has = true;
                 }

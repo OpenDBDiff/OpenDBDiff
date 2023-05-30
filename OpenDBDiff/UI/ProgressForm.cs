@@ -1,10 +1,14 @@
 ﻿using OpenDBDiff.Abstractions.Schema.Events;
 using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.Abstractions.Ui;
+using OpenDBDiff.SqlServer.Schema.Generates;
+using OpenDBDiff.SqlServer.Schema.Compare;
+using OpenDBDiff.SqlServer.Schema.Model;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data;
 
 namespace OpenDBDiff.UI
 {
@@ -13,7 +17,7 @@ namespace OpenDBDiff.UI
         private IGenerator OriginGenerator;
         private IGenerator DestinationGenerator;
         private bool IsProcessing = false;
-        private IDatabase originClone = null;
+        //private IDatabase originClone = null;
         private readonly IDatabaseComparer Comparer;
 
         // TODO: thread-safe error reporting
@@ -58,6 +62,7 @@ namespace OpenDBDiff.UI
             {
                 var originHandler = new ProgressEventHandler.ProgressHandler(genData1_OnProgress);
                 var destinationHandler = new ProgressEventHandler.ProgressHandler(genData2_OnProgress);
+                Generate.OnCompareProgress += Generator_OnCompareProgress;
 
                 try
                 {
@@ -88,11 +93,15 @@ namespace OpenDBDiff.UI
                         originProgressControl.Value = OriginGenerator.GetMaxValue();
                     }));
 
-                    originClone = await Task.Run(() => (IDatabase)Origin.Clone(null));
+                    //originClone = await Task.Run(() => (IDatabase)Origin.Clone(null));
 
                     this.ErrorLocation = "Comparing Databases";
+
+                    compareProgressControl.Maximum = GetCount(Origin as Database, Destination as Database);
+
                     Destination = await Task.Run(() => Comparer.Compare(Origin, Destination));
-                    Origin = originClone;
+
+                    //Origin = originClone;
 
                 }
                 catch (Exception err)
@@ -103,9 +112,91 @@ namespace OpenDBDiff.UI
                 {
                     OriginGenerator.OnProgress -= originHandler;
                     DestinationGenerator.OnProgress -= destinationHandler;
+                    Generate.OnCompareProgress -= Generator_OnCompareProgress;
                     this.Close();
                 }
             }
+        }
+
+        private int GetCount(Database Origin, Database Destination)
+        {
+            int count = 0;
+            count += (Origin.Tables.Count + Destination.Tables.Count +
+                Origin.Assemblies.Count + Destination.Assemblies.Count +
+                Origin.UserTypes.Count + Destination.UserTypes.Count +
+                Origin.XmlSchemas.Count + Destination.XmlSchemas.Count +
+                Origin.Schemas.Count + Destination.Schemas.Count +
+                Origin.FileGroups.Count + Destination.FileGroups.Count +
+                Origin.Rules.Count + Destination.Rules.Count +
+                Origin.DDLTriggers.Count + Destination.DDLTriggers.Count +
+                Origin.Synonyms.Count + Destination.Synonyms.Count +
+                Origin.Users.Count + Destination.Users.Count +
+                Origin.Procedures.Count + Destination.Procedures.Count +
+                Origin.CLRProcedures.Count + Destination.CLRProcedures.Count +
+                Origin.CLRFunctions.Count + Destination.CLRFunctions.Count +
+                Origin.Views.Count + Destination.Views.Count +
+                Origin.Functions.Count + Destination.Functions.Count +
+                Origin.Roles.Count + Destination.Roles.Count +
+                Origin.PartitionFunctions.Count + Destination.PartitionFunctions.Count +
+                Origin.PartitionSchemes.Count + Destination.PartitionSchemes.Count +
+                Origin.TablesTypes.Count + Destination.TablesTypes.Count +
+                Origin.FullText.Count + Destination.FullText.Count);
+
+            var oTables = Origin.Tables;
+            foreach (var item in oTables)
+            {
+                //count += item.Columns.Count;
+                count += item.Constraints.Count;
+                count += item.Indexes.Count;
+                count += item.Options.Count;
+                count += item.Triggers.Count;
+                count += item.CLRTriggers.Count;
+                count += item.FullTextIndex.Count;
+            }
+
+            var oViews = Origin.Views;
+            foreach (var item in oViews)
+            {
+                count += item.Indexes.Count;
+                count += item.Triggers.Count;
+            }
+
+            var oTableTypes = Origin.TablesTypes;
+            foreach (var item in oTableTypes)
+            {
+                //count += item.Columns.Count;
+                count += item.Constraints.Count;
+                count += item.Indexes.Count;
+            }
+
+            var dTables = Destination.Tables;
+            foreach (var item in dTables)
+            {
+                //count += item.Columns.Count;
+                count += item.Constraints.Count;
+                count += item.Indexes.Count;
+                count += item.Options.Count;
+                count += item.Triggers.Count;
+                count += item.CLRTriggers.Count;
+                count += item.FullTextIndex.Count;
+            }
+
+            var dViews = Destination.Views;
+            foreach (var item in dViews)
+            {
+                count += item.Indexes.Count;
+                count += item.Triggers.Count;
+            }
+
+            var dTableTypes = Destination.TablesTypes;
+            foreach (var item in dTableTypes)
+            {
+                //count += item.Columns.Count;
+                count += item.Constraints.Count;
+                count += item.Indexes.Count;
+            }
+
+            return count;
         }
 
         private void genData1_OnProgress(ProgressEventArgs e)
@@ -149,6 +240,23 @@ namespace OpenDBDiff.UI
 
                     this.ErrorMostRecentProgress = e.Message;
                 });
+            }
+        }
+
+        private void Generator_OnCompareProgress(ProgressEventArgs e)
+        {
+            if (compareProgressControl.IsHandleCreated)
+            {
+                // Update the label on the UI thread
+                compareProgressControl.Invoke(new Action(() =>
+                {
+                    compareProgressControl.Message = e.Message;
+
+                    if (e.Progress < compareProgressControl.Maximum && compareProgressControl.Value != e.Progress)
+                    {
+                        compareProgressControl.Value = e.Progress;
+                    }
+                }));
             }
         }
     }
