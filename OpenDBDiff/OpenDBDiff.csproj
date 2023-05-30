@@ -89,6 +89,12 @@
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\ScintillaExtensions.cs" />
+    <Compile Include="UI\CompareProgressControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\CompareProgressControl.Designer.cs">
+      <DependentUpon>CompareProgressControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\DataCompareForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,6 +146,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="UI\CompareProgressControl.resx">
+      <DependentUpon>CompareProgressControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\DatabaseProgressControl.resx">
       <DependentUpon>DatabaseProgressControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -190,6 +199,10 @@
     <ProjectReference Include="..\OpenDBDiff.Abstractions.Ui\OpenDBDiff.Abstractions.Ui.csproj">
       <Project>{e82cfc94-de8c-4edd-aa0c-f78abae03768}</Project>
       <Name>OpenDBDiff.Abstractions.Ui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj">
+      <Project>{32AC9AF6-DB93-4354-B69F-6DBC65C70867}</Project>
+      <Name>OpenDBDiff.SqlServer.Schema</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenDBDiff.SqlServer.Ui\OpenDBDiff.SqlServer.Ui.csproj">
       <Project>{ef2f571e-a7ad-40be-8500-50a039159fc1}</Project>

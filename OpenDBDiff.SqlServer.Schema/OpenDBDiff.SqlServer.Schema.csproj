@@ -72,6 +72,7 @@
     <Compile Include="Compare\CompareIndexes.cs" />
     <Compile Include="Compare\ComparePartitionFunction.cs" />
     <Compile Include="Compare\ComparePartitionSchemes.cs" />
+    <Compile Include="Compare\CompareProgress.cs" />
     <Compile Include="Compare\CompareRoles.cs" />
     <Compile Include="Compare\CompareRules.cs" />
     <Compile Include="Compare\CompareSchemas.cs" />
