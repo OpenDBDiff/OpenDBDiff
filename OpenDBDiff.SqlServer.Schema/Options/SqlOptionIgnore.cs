@@ -1,6 +1,7 @@
 using OpenDBDiff.Abstractions.Schema.Model;
 using System;
 using System.Collections.Generic;
+using System.Security.AccessControl;
 
 namespace OpenDBDiff.SqlServer.Schema.Options
 {
@@ -8,6 +9,8 @@ namespace OpenDBDiff.SqlServer.Schema.Options
     {
         public SqlOptionIgnore(bool defaultValue)
         {
+            FilterSecurity = true;
+            FilterProgrammability = true;
             FilterPartitionFunction = true;
             FilterPartitionScheme = true;
             FilterIndexFilter = true;
@@ -28,6 +31,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             FilterCLRFunction = true;
             FilterCLRTrigger = true;
             FilterCLRUDT = true;
+            FilterCLRAggregates = true;
             FilterCLRStoredProcedure = true;
             FilterFullText = true;
             FilterFullTextPath = false;
@@ -49,11 +53,14 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             FilterSynonyms = defaultValue;
             FilterRules = defaultValue;
             FilterAssemblies = defaultValue;
+            FilterPermissions = defaultValue;
         }
 
         public SqlOptionIgnore(IOptionsContainer<bool> optionsContainer)
         {
             var options = optionsContainer.GetOptions();
+            FilterSecurity = options["FilterSecurity"];
+            FilterProgrammability = options["FilterProgrammability"];
             FilterPartitionFunction = options["FilterPartitionFunction"];
             FilterPartitionScheme = options["FilterPartitionScheme"];
             FilterIndexFilter = options["FilterIndexFilter"];
@@ -74,6 +81,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             FilterCLRFunction = options["FilterCLRFunction"];
             FilterCLRTrigger = options["FilterCLRTrigger"];
             FilterCLRUDT = options["FilterCLRUDT"];
+            FilterCLRAggregates = options["FilterCLRAggregates"];
             FilterCLRStoredProcedure = options["FilterCLRStoredProcedure"];
             FilterFullText = options["FilterFullText"];
             FilterFullTextPath = options["FilterFullTextPath"];
@@ -95,7 +103,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             FilterSynonyms = options["FilterSynonyms"];
             FilterRules = options["FilterRules"];
             FilterAssemblies = options["FilterAssemblies"];
-
+            FilterPermissions = options["FilterPermissions"];
         }
 
         public Boolean FilterTableChangeTracking { get; set; }
@@ -109,6 +117,8 @@ namespace OpenDBDiff.SqlServer.Schema.Options
         public Boolean FilterCLRStoredProcedure { get; set; }
 
         public Boolean FilterCLRUDT { get; set; }
+
+        public Boolean FilterCLRAggregates { get; set; }
 
         public Boolean FilterCLRTrigger { get; set; }
 
@@ -133,6 +143,8 @@ namespace OpenDBDiff.SqlServer.Schema.Options
         public Boolean FilterIndexFillFactor { get; set; }
 
         public Boolean FilterAssemblies { get; set; }
+
+        public Boolean FilterPermissions { get; set; }
 
         public Boolean FilterRules { get; set; }
 
@@ -178,12 +190,18 @@ namespace OpenDBDiff.SqlServer.Schema.Options
 
         public Boolean FilterPartitionScheme { get; set; }
 
+        public Boolean FilterProgrammability { get; set; }
+
         public Boolean FilterPartitionFunction { get; set; }
+
+        public Boolean FilterSecurity { get; set; }
 
         public IDictionary<string, bool> GetOptions()
         {
 
             Dictionary<string, bool> options = new Dictionary<string, bool>();
+            options.Add("FilterSecurity", FilterSecurity);
+            options.Add("FilterProgrammability", FilterProgrammability);
             options.Add("FilterPartitionFunction", FilterPartitionFunction);
             options.Add("FilterPartitionScheme", FilterPartitionScheme);
             options.Add("FilterIndexFilter", FilterIndexFilter);
@@ -205,6 +223,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             options.Add("FilterCLRTrigger", FilterCLRTrigger);
             options.Add("FilterCLRUDT", FilterCLRUDT);
             options.Add("FilterCLRStoredProcedure", FilterCLRStoredProcedure);
+            options.Add("FilterCLRAggregates", FilterCLRAggregates);
             options.Add("FilterFullText", FilterFullText);
             options.Add("FilterFullTextPath", FilterFullTextPath);
             options.Add("FilterTableLockEscalation", FilterTableLockEscalation);
@@ -225,6 +244,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             options.Add("FilterSynonyms", FilterSynonyms);
             options.Add("FilterRules", FilterRules);
             options.Add("FilterAssemblies", FilterAssemblies);
+            options.Add("FilterPermissions", FilterPermissions);
             return options;
         }
     }
