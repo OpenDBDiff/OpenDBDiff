@@ -17,7 +17,7 @@ namespace OpenDBDiff.UI
         private IGenerator OriginGenerator;
         private IGenerator DestinationGenerator;
         private bool IsProcessing = false;
-        //private IDatabase originClone = null;
+        private IDatabase originClone = null;
         private readonly IDatabaseComparer Comparer;
 
         // TODO: thread-safe error reporting
@@ -93,7 +93,7 @@ namespace OpenDBDiff.UI
                         originProgressControl.Value = OriginGenerator.GetMaxValue();
                     }));
 
-                    //originClone = await Task.Run(() => (IDatabase)Origin.Clone(null));
+                    originClone = await Task.Run(() => (IDatabase)Origin.Clone(null));
 
                     this.ErrorLocation = "Comparing Databases";
 
@@ -101,7 +101,7 @@ namespace OpenDBDiff.UI
 
                     Destination = await Task.Run(() => Comparer.Compare(Origin, Destination));
 
-                    //Origin = originClone;
+                    Origin = originClone;
 
                 }
                 catch (Exception err)
