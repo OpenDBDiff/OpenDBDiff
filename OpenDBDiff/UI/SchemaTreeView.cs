@@ -104,7 +104,6 @@ namespace OpenDBDiff.UI
         {
             Color NodeColor = Color.Black;
             IList items = (IList)p.GetValue(schema, null);
-            node.Text = node.Text + " (" + items.Count + ")";
             node.Nodes.Clear();
             foreach (ISchemaBase item in items)
             {
@@ -142,6 +141,7 @@ namespace OpenDBDiff.UI
                 }
             }
 
+            node.Text = node.Text + " (" + node.Nodes.Count + ")";
             node.ForeColor = NodeColor;
         }
 
