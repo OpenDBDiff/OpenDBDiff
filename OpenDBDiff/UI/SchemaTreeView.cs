@@ -141,7 +141,7 @@ namespace OpenDBDiff.UI
                 }
             }
 
-            node.Text = node.Text + " (" + node.Nodes.Count + ")";
+            node.Text += items.Count == node.Nodes.Count ? $" ({items.Count})" : $" ({node.Nodes.Count} of {items.Count})";
             node.ForeColor = NodeColor;
         }
 
