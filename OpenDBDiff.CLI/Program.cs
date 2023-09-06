@@ -21,9 +21,6 @@ namespace OpenDBDiff.CLI
 
         private static int Main(string[] args)
         {
-            // DEBUG SETTINGS.
-            Work(null);
-
             bool completedSuccessfully = false;
 
             Parser.Default.ParseArguments<CommandlineOptions>(args)
@@ -63,9 +60,6 @@ namespace OpenDBDiff.CLI
         {
             try
             {
-                // DEBUG SETTINGS.
-                throw new NotImplementedException();
-
                 Database origin;
                 Database destination;
                 if (TestConnection(options.Before)
