@@ -1,11 +1,11 @@
 ﻿using CommandLine;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.SqlServer.Schema.Generates;
 using OpenDBDiff.SqlServer.Schema.Model;
 using OpenDBDiff.SqlServer.Schema.Options;
 using System;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 
@@ -118,8 +118,8 @@ namespace OpenDBDiff.CLI
         {
             if (!string.IsNullOrWhiteSpace(filenmame))
             {
-                using var fs = new FileStream(filenmame, FileMode.Create);
-                using var writer = new StreamWriter(fs);
+                using (var fs = new FileStream(filenmame, FileMode.Create))
+                using (var writer = new StreamWriter(fs))
                 writer.Write(sql);
             }
         }

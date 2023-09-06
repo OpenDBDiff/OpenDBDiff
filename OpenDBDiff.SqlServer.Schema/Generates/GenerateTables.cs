@@ -1,3 +1,4 @@
+using Microsoft.Data.SqlClient;
 using OpenDBDiff.Abstractions.Schema.Errors;
 using OpenDBDiff.Abstractions.Schema.Events;
 using OpenDBDiff.Abstractions.Schema.Model;
@@ -7,7 +8,6 @@ using OpenDBDiff.SqlServer.Schema.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Constraint = OpenDBDiff.SqlServer.Schema.Model.Constraint;
