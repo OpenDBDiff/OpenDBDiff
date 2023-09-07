@@ -102,6 +102,7 @@ namespace OpenDBDiff.SqlServer.Ui
                 builder.InitialCatalog = database.Trim();
 
             builder.IntegratedSecurity = true;
+            builder.TrustServerCertificate = true;
             return builder.ConnectionString;
         }
 
@@ -112,6 +113,7 @@ namespace OpenDBDiff.SqlServer.Ui
             builder.IntegratedSecurity = false;
             builder.UserID = username;
             builder.Password = password;
+            builder.TrustServerCertificate = true;
             return builder.ConnectionString;
         }
 
