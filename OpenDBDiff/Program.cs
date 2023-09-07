@@ -1,4 +1,4 @@
-﻿using OpenDBDiff.UI;
+using OpenDBDiff.UI;
 using System;
 using System.Windows.Forms;
 
