@@ -1,10 +1,11 @@
 ﻿using CommandLine;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.SqlServer.Schema.Generates;
 using OpenDBDiff.SqlServer.Schema.Model;
 using OpenDBDiff.SqlServer.Schema.Options;
 using System;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 
@@ -44,9 +45,9 @@ namespace OpenDBDiff.CLI
             return completedSuccessfully ? 0 : 1;
         }
 
-        private static Boolean TestConnection(string connectionString1)
+        private static bool TestConnection(string connectionString1)
         {
-            using (SqlConnection connection = new SqlConnection())
+            using (var connection = new SqlConnection())
             {
                 connection.ConnectionString = connectionString1;
                 connection.Open();
@@ -96,8 +97,8 @@ namespace OpenDBDiff.CLI
             }
             catch (Exception ex)
             {
-                string newIssueUri = System.Configuration.ConfigurationManager.AppSettings["OpenDBDiff.NewIssueUri"];
-                if (string.IsNullOrEmpty(newIssueUri))
+                string newIssueUri = ConfigurationFactory.Instance?.GetValue<string>("OpenDBDiff:NewIssueUri");
+                if (string.IsNullOrWhiteSpace(newIssueUri))
                     newIssueUri = "https://github.com/OpenDBDiff/OpenDBDiff/issues/new";
 
                 Console.WriteLine($"{ex.Message}\r\n{ex.StackTrace}\r\n\r\nPlease report this issue at {newIssueUri}.");
@@ -109,11 +110,11 @@ namespace OpenDBDiff.CLI
 
         private static void SaveFile(string filenmame, string sql)
         {
-            if (!String.IsNullOrEmpty(filenmame))
+            if (!string.IsNullOrWhiteSpace(filenmame))
             {
-                StreamWriter writer = new StreamWriter(filenmame, false);
+                using (var fs = new FileStream(filenmame, FileMode.Create))
+                using (var writer = new StreamWriter(fs))
                 writer.Write(sql);
-                writer.Close();
             }
         }
     }

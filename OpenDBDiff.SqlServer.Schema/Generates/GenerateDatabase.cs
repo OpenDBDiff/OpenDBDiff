@@ -1,9 +1,9 @@
+using Microsoft.Data.SqlClient;
 using OpenDBDiff.Abstractions.Schema.Misc;
 using OpenDBDiff.SqlServer.Schema.Generates.SQLCommands;
 using OpenDBDiff.SqlServer.Schema.Model;
 using OpenDBDiff.SqlServer.Schema.Options;
 using System;
-using System.Data.SqlClient;
 using System.Globalization;
 #if DEBUG
 #endif

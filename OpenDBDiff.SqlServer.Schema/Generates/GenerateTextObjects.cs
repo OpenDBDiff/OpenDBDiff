@@ -1,9 +1,9 @@
-﻿using OpenDBDiff.Abstractions.Schema.Events;
+﻿using Microsoft.Data.SqlClient;
+using OpenDBDiff.Abstractions.Schema.Events;
 using OpenDBDiff.SqlServer.Schema.Generates.Util;
 using OpenDBDiff.SqlServer.Schema.Model;
 using OpenDBDiff.SqlServer.Schema.Options;
 using System;
-using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 
 namespace OpenDBDiff.SqlServer.Schema.Generates

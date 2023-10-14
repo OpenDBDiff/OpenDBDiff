@@ -1,7 +1,7 @@
+using Microsoft.Data.SqlClient;
 using OpenDBDiff.SqlServer.Ui.Util;
 using OpenDBDiff.Abstractions.Ui;
 using System;
-using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace OpenDBDiff.SqlServer.Ui
@@ -102,6 +102,7 @@ namespace OpenDBDiff.SqlServer.Ui
                 builder.InitialCatalog = database.Trim();
 
             builder.IntegratedSecurity = true;
+            builder.TrustServerCertificate = true;
             return builder.ConnectionString;
         }
 
