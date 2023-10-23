@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using OpenDBDiff.Abstractions.Schema.Model;
+using OpenDBDiff.CLI.Extensions;
 using OpenDBDiff.SqlServer.Schema.Generates;
 using OpenDBDiff.SqlServer.Schema.Model;
 using OpenDBDiff.SqlServer.Schema.Options;
@@ -69,6 +70,7 @@ namespace OpenDBDiff.CLI
                     sql.ConnectionString = options.Before;
                     Console.WriteLine("Reading first database...");
                     sql.Options = SqlFilter;
+                    sql.Options.Ignore.SetOptions(options);
                     origin = sql.Process();
 
                     sql.ConnectionString = options.After;
