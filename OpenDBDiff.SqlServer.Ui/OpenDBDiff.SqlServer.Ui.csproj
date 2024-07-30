@@ -13,7 +13,7 @@
   <ItemGroup>
     <Using Remove="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.3" />
     <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
     <Compile Include="..\OpenDBDiff\Properties\AssemblyVersionInfo.cs" Link="Properties\AssemblyVersionInfo.cs" />
     <ProjectReference Include="..\OpenDBDiff.Abstractions.Ui\OpenDBDiff.Abstractions.Ui.csproj" />
