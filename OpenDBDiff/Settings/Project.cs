@@ -112,6 +112,85 @@ namespace OpenDBDiff.Settings
             return Options.Serialize();
         }
 
-        private static LiteDatabase GetDatabase() => new LiteDatabase(SettingsFilePath);
+        private static ProjectDb GetDatabase() => new ProjectDb(SettingsFilePath);
+    }
+
+    // Naively use Windows CurrentUser DPAPI with race conditions instead of building a UI for a LiteDB encryption password
+    internal class ProjectDb : IDisposable
+    {
+        LiteDatabase db;
+        string file;
+
+        internal ProjectDb(string file)
+        {
+            this.file = file;
+            if (File.Exists(file))
+            {
+                try
+                {
+                    System.IO.File.WriteAllBytes(file,
+                        System.Security.Cryptography.ProtectedData.Unprotect(
+                            System.IO.File.ReadAllBytes(file), null, 0));
+                }
+                catch (Exception _)
+                {
+                    Console.WriteLine(@"OpenDBDiff\settings.liteDb unprotect: {0}", _); // Expected once
+                }
+            }
+
+            try
+            {
+                db = new LiteDatabase(file);
+            }
+            catch (Exception _)
+            {
+                Console.WriteLine(@"OpenDBDiff\settings.liteDb open: {0}", _);
+                try
+                {
+                    File.Delete(file); // the Android ~Froyo method of fixing SQL db issues
+                }
+                catch (Exception __)
+                {
+                    Console.WriteLine(@"OpenDBDiff\settings.liteDb reset: {0}", __);
+                }
+
+                db = new LiteDatabase(file);
+            }
+        }
+
+        internal ILiteCollection<T> GetCollection<T>(string name) => db.GetCollection<T>(name);
+
+        public void Dispose()
+        {
+            lock (typeof(ProjectDb))
+            {
+                if (db != null)
+                {
+                    try
+                    {
+                        db.Dispose();
+                        db = null;
+                    }
+                    catch (Exception _)
+                    {
+                        Console.WriteLine(@"OpenDBDiff\settings.liteDb close: {0}", _);
+                    }
+
+                    if (db == null)
+                    {
+                        try
+                        {
+                            System.IO.File.WriteAllBytes(file,
+                                System.Security.Cryptography.ProtectedData.Protect(
+                                    System.IO.File.ReadAllBytes(file), null, 0));
+                        }
+                        catch (Exception _)
+                        {
+                            Console.WriteLine(@"OpenDBDiff\settings.liteDb protect: {0}", _);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

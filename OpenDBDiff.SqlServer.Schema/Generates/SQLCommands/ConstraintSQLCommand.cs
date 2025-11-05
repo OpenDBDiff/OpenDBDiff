@@ -146,7 +146,7 @@ namespace OpenDBDiff.SqlServer.Schema.Generates.SQLCommands
             sql.Append("INNER JOIN sys.index_columns IC ON IC.index_id = I.index_id AND IC.object_id = I.object_id ");
             sql.Append("INNER JOIN sys.columns C ON C.column_id = IC.column_id AND IC.object_id = C.object_id ");
             //sql.Append("LEFT JOIN sys.data_spaces AS dsidx ON dsidx.data_space_id = I.data_space_id ");
-            sql.Append("WHERE is_primary_key = 1 AND O.type <> 'TF' ORDER BY I.object_id");
+            sql.Append("WHERE is_primary_key = 1 AND O.type <> 'TF' ORDER BY I.object_id, IC.key_ordinal");
             return sql.ToString();
         }
 
@@ -160,7 +160,7 @@ namespace OpenDBDiff.SqlServer.Schema.Generates.SQLCommands
             sql.Append("INNER JOIN sys.index_columns IC ON IC.index_id = I.index_id AND IC.object_id = I.object_id ");
             sql.Append("INNER JOIN sys.columns C ON C.column_id = IC.column_id AND IC.object_id = C.object_id ");
             sql.Append("LEFT JOIN sys.data_spaces AS dsidx ON dsidx.data_space_id = I.data_space_id ");
-            sql.Append("WHERE is_primary_key = 1 AND O.type <> 'TF' ORDER BY I.object_id");
+            sql.Append("WHERE is_primary_key = 1 AND O.type <> 'TF' ORDER BY I.object_id, IC.key_ordinal");
             return sql.ToString();
         }
 
@@ -174,7 +174,7 @@ namespace OpenDBDiff.SqlServer.Schema.Generates.SQLCommands
             sql.Append("INNER JOIN sys.index_columns IC ON IC.index_id = I.index_id AND IC.object_id = I.object_id ");
             sql.Append("INNER JOIN sys.columns C ON C.column_id = IC.column_id AND IC.object_id = C.object_id ");
             sql.Append("INNER JOIN sys.data_spaces AS dsidx ON dsidx.data_space_id = I.data_space_id ");
-            sql.Append("WHERE is_primary_key = 1 AND O.type <> 'TF' ORDER BY I.object_id");
+            sql.Append("WHERE is_primary_key = 1 AND O.type <> 'TF' ORDER BY I.object_id, IC.key_ordinal");
             return sql.ToString();
         }
 

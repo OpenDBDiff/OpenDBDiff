@@ -26,7 +26,16 @@ namespace OpenDBDiff.SqlServer.Schema.Options
                 //new SqlOptionFilterItem(ObjectType.Schema, "dbo"),
                 new SqlOptionFilterItem(ObjectType.Schema, "guest"),
                 new SqlOptionFilterItem(ObjectType.Schema, "INFORMATION_SCHEMA"),
-                new SqlOptionFilterItem(ObjectType.Schema, "sys")
+                new SqlOptionFilterItem(ObjectType.Schema, "sys"),
+                new SqlOptionFilterItem(ObjectType.Table, "sysdiagrams"),
+                new SqlOptionFilterItem(ObjectType.Function, "fn_diagramobjects"),
+                new SqlOptionFilterItem(ObjectType.StoredProcedure, "sp_alterdiagram"),
+                new SqlOptionFilterItem(ObjectType.StoredProcedure, "sp_creatediagram"),
+                new SqlOptionFilterItem(ObjectType.StoredProcedure, "sp_dropdiagram"),
+                new SqlOptionFilterItem(ObjectType.StoredProcedure, "sp_helpdiagramdefinition"),
+                new SqlOptionFilterItem(ObjectType.StoredProcedure, "sp_helpdiagrams"),
+                new SqlOptionFilterItem(ObjectType.StoredProcedure, "sp_renamediagram"),
+                new SqlOptionFilterItem(ObjectType.StoredProcedure, "sp_upgraddiagrams"),
             };
         }
 

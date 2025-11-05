@@ -1,7 +1,7 @@
-using System;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using OpenDBDiff.SqlServer.Schema.Generates.Util;
 using OpenDBDiff.SqlServer.Schema.Model;
+using System;
 
 namespace OpenDBDiff.SqlServer.Schema.Generates
 {
