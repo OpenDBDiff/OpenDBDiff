@@ -67,16 +67,30 @@ namespace OpenDBDiff.CLI
                 {
                     Generate sql = new Generate();
                     sql.Options = SqlFilter;
-                    if (options.IgnoreFilters != "") {
+                    if (options.IgnoreFilters != "")
+                    {
                       Console.WriteLine("Apply ignore filters...");
                       var ignoreDict = sql.Options.Ignore.GetOptions();
-                      foreach (string opts in options.IgnoreFilters.Split(';')) {
-                        if (opts.Trim() != "") {
+                      foreach (string opts in options.IgnoreFilters.Split(';'))
+                      {
+                        if (opts.Trim() != "")
+                        {
                           string[] opt = opts.Split('=');
                           ignoreDict[opt[0].Trim()] = (bool)(bool.Parse(opt[1].Trim()));
                         }
                       }
                       sql.Options.Ignore.SetOptions(ignoreDict);
+                    }
+                    if (options.ScriptOptions != "") {
+                      Console.WriteLine("Apply script options...");
+                      var scriptDict = sql.Options.Script.GetOptions();
+                      foreach (string opts in options.ScriptOptions.Split(';')) {
+                        if (opts.Trim() != "") {
+                          string[] opt = opts.Split('=');
+                          scriptDict[opt[0].Trim()] = (bool)(bool.Parse(opt[1].Trim()));
+                        }
+                      }
+                      sql.Options.Script.SetOptions(scriptDict);
                     }
                     sql.ConnectionString = options.Before;
                     Console.WriteLine("Reading first database...");

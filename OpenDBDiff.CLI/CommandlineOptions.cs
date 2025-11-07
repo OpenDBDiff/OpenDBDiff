@@ -16,5 +16,8 @@ namespace OpenDBDiff.CLI
         
         [Option('i', "ignorefilters", Required = false, HelpText = "String that encodes ignore filters to be apply for the comparison. Example: FilterColumnOrder=False;FilterColumnCollation=False")]
         public string IgnoreFilters { get; set; }
+        
+        [Option('s', "scriptoptions", Required = false, HelpText = "String that encodes script options to be apply for the comparison. Example: AlterObjectOnSchemaBinding=True;UseAlterInsteadRebuildForTables=True")]
+        public string ScriptOptions { get; set; }
     }
 }
