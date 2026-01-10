@@ -1,0 +1,37 @@
+name: build
+
+on:
+  push:
+    branches: [ "master", "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+    runs-on: windows-2019  # .NET 4.x SDK
+
+    steps:
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2 2026-01-09
+
+    - name: date and short hash
+      run: |
+        echo "date=$((get-date).ToString('yyyymmdd'))" >> $env:GITHUB_ENV
+        echo "shorthash=$(git rev-parse --short HEAD)" >> $env:GITHUB_ENV
+
+    - uses: actions/setup-dotnet@2016bd2012dba4e32de620c46fe006a3ac9f0602 # v5.0.1 2025-11-24
+
+    - run: dotnet build -c Release
+
+    - name: GUI
+      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0 2025-12-12
+      with:
+        name: OpenDBDiff-WinFormsGUI-${{ env.date }}-${{ env.shorthash }}
+        path: |
+          OpenDBDiff\bin\Release\net48
+        # OpenDBDiff.CLI\bin\Release\net48\OpenDBDiff.CLI.*
+
+    - name: CLI
+      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+      with:
+        name: OpenDBDiff-CLI-${{ env.date }}-${{ env.shorthash }}
+        path: OpenDBDiff.CLI\bin\Release\net8.0
