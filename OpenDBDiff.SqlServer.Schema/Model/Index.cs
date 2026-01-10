@@ -197,7 +197,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
 
                 if (IsAutoStatistics) sql.Append("STATISTICS_NORECOMPUTE = ON"); else sql.Append("STATISTICS_NORECOMPUTE  = OFF");
                 if (Type != IndexTypeEnum.XML)
-                    if ((IgnoreDupKey) && (IsUniqueKey)) sql.Append("IGNORE_DUP_KEY = ON, "); else sql.Append(", IGNORE_DUP_KEY  = OFF");
+                    if ((IgnoreDupKey) && (IsUniqueKey)) sql.Append(", IGNORE_DUP_KEY = ON"); else sql.Append(", IGNORE_DUP_KEY  = OFF");
 
                 if (!isAzure10)
                 {
