@@ -94,7 +94,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
                 Values.ForEach(item => { sqlvalues += "N'" + item + "',"; });
             else
                 if (valueType == IS_DATE)
-                Values.ForEach(item => { sqlvalues += "'" + DateTime.Parse(item).ToString("yyyyMMdd HH:mm:ss.fff") + "',"; });
+                Values.ForEach(item => { sqlvalues += "'" + DateTime.Parse(item, CultureInfo.InvariantCulture).ToString("yyyyMMdd HH:mm:ss.fff") + "',"; });
             else
                     if (valueType == IS_UNIQUE)
                 Values.ForEach(item => { sqlvalues += "'{" + item + "}',"; });
@@ -133,7 +133,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
                     sqlmergue += "N'" + item + "'";
                 else
                     if (valueType == IS_DATE)
-                    sqlmergue += "'" + DateTime.Parse(item).ToString("yyyyMMdd HH:mm:ss.fff") + "'";
+                    sqlmergue += "'" + DateTime.Parse(item, CultureInfo.InvariantCulture).ToString("yyyyMMdd HH:mm:ss.fff") + "'";
                 else
                         if (valueType == IS_UNIQUE)
                     sqlmergue += "'{" + item + "}'";
@@ -152,7 +152,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
                     sqsplit += "N'" + item + "'";
                 else
                     if (valueType == IS_DATE)
-                    sqsplit += "'" + DateTime.Parse(item).ToString("yyyyMMdd HH:mm:ss.fff") + "'";
+                    sqsplit += "'" + DateTime.Parse(item, CultureInfo.InvariantCulture).ToString("yyyyMMdd HH:mm:ss.fff") + "'";
                 else
                         if (valueType == IS_UNIQUE)
                     sqsplit += "'{" + item + "}'";
