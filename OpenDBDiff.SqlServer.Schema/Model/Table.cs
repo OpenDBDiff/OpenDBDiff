@@ -359,26 +359,34 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             }
             if (HasState(ObjectStatus.RebuildDependencies))
             {
-                GenerateDependencies();
-                listDiff.AddRange(ToSQLDropDependencies());
-                listDiff.AddRange(Columns.ToSqlDiff(schemas));
-                listDiff.AddRange(ToSQLCreateDependencies());
-                listDiff.AddRange(Constraints.ToSqlDiff());
-                listDiff.AddRange(Indexes.ToSqlDiff());
-                listDiff.AddRange(Options.ToSqlDiff());
-                listDiff.AddRange(Triggers.ToSqlDiff());
-                listDiff.AddRange(CLRTriggers.ToSqlDiff());
-                listDiff.AddRange(FullTextIndex.ToSqlDiff());
+              GenerateDependencies();
+              listDiff.AddRange(ToSQLDropDependencies());
+              listDiff.AddRange(Columns.ToSqlDiff(schemas));
+              listDiff.AddRange(ToSQLCreateDependencies());
+              listDiff.AddRange(Constraints.ToSqlDiff());
+              listDiff.AddRange(Indexes.ToSqlDiff());
+              listDiff.AddRange(Options.ToSqlDiff());
+              listDiff.AddRange(Triggers.ToSqlDiff());
+              listDiff.AddRange(CLRTriggers.ToSqlDiff());
+              listDiff.AddRange(FullTextIndex.ToSqlDiff());
+            }
+            if (HasState(ObjectStatus.Rebuild))
+            {
+              if (((Database)Parent).Options.Script.UseAlterInsteadRebuildForTables)
+              {
+                RemoveState(ObjectStatus.Rebuild);
+                AddState(ObjectStatus.Alter);
+              }
             }
             if (HasState(ObjectStatus.Alter))
             {
-                listDiff.AddRange(Columns.ToSqlDiff(schemas));
-                listDiff.AddRange(Constraints.ToSqlDiff());
-                listDiff.AddRange(Indexes.ToSqlDiff());
-                listDiff.AddRange(Options.ToSqlDiff());
-                listDiff.AddRange(Triggers.ToSqlDiff());
-                listDiff.AddRange(CLRTriggers.ToSqlDiff());
-                listDiff.AddRange(FullTextIndex.ToSqlDiff());
+              listDiff.AddRange(Columns.ToSqlDiff(schemas));
+              listDiff.AddRange(Constraints.ToSqlDiff());
+              listDiff.AddRange(Indexes.ToSqlDiff());
+              listDiff.AddRange(Options.ToSqlDiff());
+              listDiff.AddRange(Triggers.ToSqlDiff());
+              listDiff.AddRange(CLRTriggers.ToSqlDiff());
+              listDiff.AddRange(FullTextIndex.ToSqlDiff());
             }
             if (HasState(ObjectStatus.Rebuild))
             {

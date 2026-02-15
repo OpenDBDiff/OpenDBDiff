@@ -227,5 +227,50 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             options.Add("FilterAssemblies", FilterAssemblies);
             return options;
         }
+
+        public void SetOptions(IDictionary<string, bool> options)
+        {
+            FilterPartitionFunction = options["FilterPartitionFunction"];
+            FilterPartitionScheme = options["FilterPartitionScheme"];
+            FilterIndexFilter = options["FilterIndexFilter"];
+            FilterIndex = options["FilterIndex"];
+            FilterConstraintPK = options["FilterConstraintPK"];
+            FilterConstraintFK = options["FilterConstraintFK"];
+            FilterConstraintUK = options["FilterConstraintUK"];
+            FilterConstraintCheck = options["FilterConstraintCheck"];
+            FilterIndexFillFactor = options["FilterIndexFillFactor"];
+            FilterIndexIncludeColumns = options["FilterIndexIncludeColumns"];
+            FilterIndexRowLock = options["FilterIndexRowLock"];
+            FilterColumnOrder = options["FilterColumnOrder"];
+            FilterColumnIdentity = options["FilterColumnIdentity"];
+            FilterColumnCollation = options["FilterColumnCollation"];
+            FilterNotForReplication = options["FilterNotForReplication"];
+            FilterUsers = options["FilterUsers"];
+            FilterRoles = options["FilterRoles"];
+            FilterCLRFunction = options["FilterCLRFunction"];
+            FilterCLRTrigger = options["FilterCLRTrigger"];
+            FilterCLRUDT = options["FilterCLRUDT"];
+            FilterCLRStoredProcedure = options["FilterCLRStoredProcedure"];
+            FilterFullText = options["FilterFullText"];
+            FilterFullTextPath = options["FilterFullTextPath"];
+            FilterTableLockEscalation = options["FilterTableLockEscalation"];
+            FilterTableChangeTracking = options["FilterTableChangeTracking"];
+            FilterConstraint = options["FilterConstraint"];
+            FilterFunction = options["FilterFunction"];
+            FilterStoredProcedure = options["FilterStoredProcedure"];
+            FilterView = options["FilterView"];
+            FilterTable = options["FilterTable"];
+            FilterTableOption = options["FilterTableOption"];
+            FilterUserDataType = options["FilterUserDataType"];
+            FilterTrigger = options["FilterTrigger"];
+            FilterSchema = options["FilterSchema"];
+            FilterXMLSchema = options["FilterXMLSchema"];
+            FilterTableFileGroup = options["FilterTableFileGroup"];
+            FilterExtendedProperties = options["FilterExtendedProperties"];
+            FilterDDLTriggers = options["FilterDDLTriggers"];
+            FilterSynonyms = options["FilterSynonyms"];
+            FilterRules = options["FilterRules"];
+            FilterAssemblies = options["FilterAssemblies"];
+        }
     }
 }
