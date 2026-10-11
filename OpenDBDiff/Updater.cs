@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace OpenDBDiff
@@ -16,47 +17,42 @@ namespace OpenDBDiff
     {
         public static string createNew(ISchemaBase target, string connectionString)
         {
-            string script = target.ToSql();
-            script = script.Replace("GO", "");
-            //script = script.Replace("\r", "");
-            //script = script.Replace("\t", "");
-            //script = script.Replace("\n", "");
-            string result = string.Empty;
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(script, connection);
-
-                try
-                {
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.Close();
-                }
-                catch (Exception e)
-                {
-                    result = e.Message + "\n";
-                }
-            }
-            return result;
+            return execute(target.ToSql(), connectionString);
         }
 
         public static string addNew(ISchemaBase target, string connectionString)
         {
-            string result = string.Empty;
-            string script = target.ToSqlAdd();
-            script = script.Replace("GO", "");
-            //script = script.Replace("\r", "");
-            //script = script.Replace("\t", "");
-            //script = script.Replace("\n", "");
+            return execute(target.ToSqlAdd(), connectionString);
+        }
 
+        /// <summary>
+        /// Splits a script into batches on lines that contain only GO, like SSMS and sqlcmd do.
+        /// A plain split on "GO" would also cut words such as GOTO or CATEGORY.
+        /// </summary>
+        private static List<string> splitBatches(string script)
+        {
+            var batches = new List<string>();
+            foreach (string batch in Regex.Split(script, @"^[ \t]*GO[ \t]*\r?$", RegexOptions.Multiline | RegexOptions.IgnoreCase))
+            {
+                if (!string.IsNullOrWhiteSpace(batch))
+                    batches.Add(batch);
+            }
+            return batches;
+        }
+
+        private static string execute(string script, string connectionString)
+        {
+            string result = string.Empty;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand command = new SqlCommand(script, connection);
-
                 try
                 {
                     connection.Open();
-                    command.ExecuteNonQuery();
+                    foreach (string batch in splitBatches(script))
+                    {
+                        SqlCommand command = new SqlCommand(batch, connection);
+                        command.ExecuteNonQuery();
+                    }
                     connection.Close();
                 }
                 catch (Exception e)
@@ -109,9 +105,7 @@ namespace OpenDBDiff
 
                 var sb = new StringBuilder();
                 SQLScriptList SqlDiff = target.ToSqlDiff(new List<ISchemaBase>());
-                string[] splitOn = { "GO" };
-                string[] tempList = SqlDiff.ToSQL().Split(splitOn, StringSplitOptions.RemoveEmptyEntries);
-                List<string> scripts = new List<string>(tempList);
+                List<string> scripts = splitBatches(SqlDiff.ToSQL());
 
                 foreach (string sql in scripts)
                 {
@@ -143,9 +137,7 @@ namespace OpenDBDiff
         public static string rebuild(ISchemaBase target, string connectionString)
         {
             SQLScriptList SqlDiff = target.ToSqlDiff(new List<ISchemaBase>());
-            string[] splitOn = { "GO" };
-            string[] tempList = SqlDiff.ToSQL().Split(splitOn, StringSplitOptions.RemoveEmptyEntries);
-            List<string> scripts = new List<string>(tempList);
+            List<string> scripts = splitBatches(SqlDiff.ToSQL());
             string result = string.Empty;
             string script = scripts[0];
             if (target.ObjectType == ObjectType.Table)
