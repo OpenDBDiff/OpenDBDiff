@@ -47,8 +47,8 @@ namespace OpenDBDiff.SqlServer.Schema.Compare
             bool pass = true;
             Assembly newNode = (Assembly)node.Clone(originFields.Parent);
             if ((((Database)newNode.RootParent).Info.Version == DatabaseInfo.SQLServerVersion.SQLServer2005)
-                && (((Database)node.RootParent).Info.Version == DatabaseInfo.SQLServerVersion.SQLServer2008))
-                pass = node.FullName.Equals("Microsoft.SqlServer.Types");
+                && (((Database)node.RootParent).Info.Version >= DatabaseInfo.SQLServerVersion.SQLServer2008))
+                pass = !node.Name.Equals("Microsoft.SqlServer.Types");
             if (pass)
             {
                 newNode.Status = ObjectStatus.Create;
