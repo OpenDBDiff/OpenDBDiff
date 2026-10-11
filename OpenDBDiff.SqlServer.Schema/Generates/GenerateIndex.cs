@@ -76,7 +76,8 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
                                     if ((database.Options.Ignore.FilterTableFileGroup) && (item.Type != Index.IndexTypeEnum.XML))
                                         item.FileGroup = reader["FileGroup"].ToString();
 
-                                    if ((database.Info.Version == DatabaseInfo.SQLServerVersion.SQLServer2008) && (database.Options.Ignore.FilterIndexFilter))
+                                    // filter_definition exists from SQL Server 2008 on; every query except the 2005 one selects it
+                                    if ((database.Info.Version >= DatabaseInfo.SQLServerVersion.SQLServer2008) && (database.Options.Ignore.FilterIndexFilter))
                                     {
                                         item.FilterDefintion = reader["FilterDefinition"].ToString();
                                     }
