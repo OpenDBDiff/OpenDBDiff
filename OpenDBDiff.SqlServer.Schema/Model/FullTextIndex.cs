@@ -80,10 +80,12 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             Columns.ForEach(item => { sql += "[" + item.ColumnName + "] LANGUAGE [" + item.Language + "],"; });
             sql = sql.Substring(0, sql.Length - 1);
             sql += ")\r\n";
-            if (((Database)this.RootParent).Info.Version == DatabaseInfo.SQLServerVersion.SQLServer2008)
+            var version = ((Database)this.RootParent).Info.Version;
+            if (version >= DatabaseInfo.SQLServerVersion.SQLServer2008 && version != DatabaseInfo.SQLServerVersion.SQLServerAzure10)
             {
                 sql += "KEY INDEX " + Index + " ON ([" + FullText + "]";
-                sql += ", FILEGROUP [" + FileGroup + "]";
+                if (!String.IsNullOrEmpty(FileGroup))
+                    sql += ", FILEGROUP [" + FileGroup + "]";
                 sql += ") WITH (CHANGE_TRACKING " + ChangeTrackingState + ")";
             }
             else
