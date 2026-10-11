@@ -22,6 +22,8 @@ jobs:
 
     - run: dotnet build -c Release
 
+    - run: dotnet test -c Release --no-build
+
     - name: GUI
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0 2025-12-12
       with:
