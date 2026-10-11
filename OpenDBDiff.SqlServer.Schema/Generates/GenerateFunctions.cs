@@ -77,7 +77,9 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
                             while (reader.Read())
                             {
                                 root.RaiseOnReadingOne(reader["name"]);
-                                if ((!reader["type"].ToString().Trim().Equals("FS")) && (database.Options.Ignore.FilterFunction))
+                                string type = reader["type"].ToString().Trim();
+                                bool isCLR = type.Equals("FS") || type.Equals("FT");
+                                if ((!isCLR) && (database.Options.Ignore.FilterFunction))
                                 {
                                     if (lastViewId != (int)reader["object_id"])
                                     {
@@ -99,7 +101,7 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
                                             itemF.DependenciesOut.Add(reader["DependOut"].ToString());
                                     }
                                 }
-                                if ((reader["type"].ToString().Trim().Equals("FS")) && (database.Options.Ignore.FilterCLRFunction))
+                                if ((isCLR) && (database.Options.Ignore.FilterCLRFunction))
                                 {
                                     itemC = new CLRFunction(database);
                                     if (lastViewId != (int)reader["object_id"])
@@ -113,14 +115,18 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
                                         itemC.AssemblyClass = reader["assembly_class"].ToString();
                                         itemC.AssemblyExecuteAs = reader["ExecuteAs"].ToString();
                                         itemC.AssemblyMethod = reader["assembly_method"].ToString();
-                                        itemC.ReturnType.Type = reader["ReturnType"].ToString();
-                                        itemC.ReturnType.Size = (short)reader["max_length"];
-                                        itemC.ReturnType.Scale = (byte)reader["Scale"];
-                                        itemC.ReturnType.Precision = (byte)reader["precision"];
-                                        if (itemC.ReturnType.Type.Equals("nchar") || itemC.ReturnType.Type.Equals("nvarchar"))
+                                        itemC.IsTableValued = type.Equals("FT");
+                                        if (!itemC.IsTableValued)
                                         {
-                                            if (itemC.ReturnType.Size != -1)
-                                                itemC.ReturnType.Size = itemC.ReturnType.Size / 2;
+                                            itemC.ReturnType.Type = reader["ReturnType"].ToString();
+                                            itemC.ReturnType.Size = (short)reader["max_length"];
+                                            itemC.ReturnType.Scale = (byte)reader["Scale"];
+                                            itemC.ReturnType.Precision = (byte)reader["precision"];
+                                            if (itemC.ReturnType.Type.Equals("nchar") || itemC.ReturnType.Type.Equals("nvarchar"))
+                                            {
+                                                if (itemC.ReturnType.Size != -1)
+                                                    itemC.ReturnType.Size = itemC.ReturnType.Size / 2;
+                                            }
                                         }
                                         database.CLRFunctions.Add(itemC);
                                         lastViewId = itemC.Id;
@@ -133,6 +139,43 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
             }
             if (database.CLRFunctions.Any())
                 FillParameters(database, connectionString);
+            if (database.CLRFunctions.Any(item => item.IsTableValued))
+                FillReturnColumns(database, connectionString);
+        }
+
+        private static void FillReturnColumns(Database database, string connectionString)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(SQLQueries.SQLQueryFactory.Get("GetCLRFunctionColumns"), conn))
+                {
+                    conn.Open();
+                    command.CommandTimeout = 0;
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var objectName = reader["ObjectName"].ToString();
+
+                            if (database.CLRFunctions.Contains(objectName))
+                            {
+                                Parameter column = new Parameter();
+                                column.Name = reader["Name"].ToString();
+                                column.Type = reader["TypeName"].ToString();
+                                column.Size = (short)reader["max_length"];
+                                column.Scale = (byte)reader["scale"];
+                                column.Precision = (byte)reader["precision"];
+                                if (column.Type.Equals("nchar") || column.Type.Equals("nvarchar"))
+                                {
+                                    if (column.Size != -1)
+                                        column.Size = column.Size / 2;
+                                }
+                                database.CLRFunctions[objectName].ReturnColumns.Add(column);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

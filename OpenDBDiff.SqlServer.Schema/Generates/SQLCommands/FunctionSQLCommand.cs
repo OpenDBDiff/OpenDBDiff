@@ -49,7 +49,7 @@ namespace OpenDBDiff.SqlServer.Schema.Generates.SQLCommands
             sql += "LEFT JOIN sys.assemblies AF ON AF.assembly_id = AM.assembly_id ";
             sql += "LEFT JOIN sys.parameters PP ON PP.object_id = AM.object_id AND PP.parameter_id = 0 and PP.is_output = 1 ";
             sql += "LEFT JOIN sys.types T ON T.system_type_id = PP.system_type_id ";
-            sql += "WHERE P.type IN ('IF','FN','TF','FS') ORDER BY P.object_id";
+            sql += "WHERE P.type IN ('IF','FN','TF','FS','FT') ORDER BY P.object_id";
             return sql;
         }
 
@@ -76,7 +76,7 @@ namespace OpenDBDiff.SqlServer.Schema.Generates.SQLCommands
             sql.AppendLine("LEFT JOIN sys.assemblies AF ON AF.assembly_id = AM.assembly_id ");
             sql.AppendLine("LEFT JOIN sys.parameters PP ON PP.object_id = AM.object_id AND PP.parameter_id = 0 and PP.is_output = 1 ");
             sql.AppendLine("LEFT JOIN sys.types T ON T.system_type_id = PP.system_type_id ");
-            sql.AppendLine("WHERE P.type IN ('IF','FN','TF','FS') ORDER BY P.object_id");
+            sql.AppendLine("WHERE P.type IN ('IF','FN','TF','FS','FT') ORDER BY P.object_id");
             return sql.ToString();
         }
 
@@ -104,7 +104,7 @@ namespace OpenDBDiff.SqlServer.Schema.Generates.SQLCommands
             sql.AppendLine("CROSS JOIN (SELECT null AS name) AS AF");
             sql.AppendLine("LEFT JOIN sys.parameters PP ON PP.object_id = AM.object_id AND PP.parameter_id = 0 and PP.is_output = 1 ");
             sql.AppendLine("LEFT JOIN sys.types T ON T.system_type_id = PP.system_type_id ");
-            sql.AppendLine("WHERE P.type IN ('IF','FN','TF','FS') ORDER BY P.object_id");
+            sql.AppendLine("WHERE P.type IN ('IF','FN','TF','FS','FT') ORDER BY P.object_id");
             return sql.ToString();
         }
     }
