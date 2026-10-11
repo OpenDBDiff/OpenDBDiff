@@ -19,6 +19,7 @@
   <ItemGroup>
     <EmbeddedResource Include="SQLQueries\GetAssemblies.sql" />
     <EmbeddedResource Include="SQLQueries\GetAssemblyFiles.sql" />
+    <EmbeddedResource Include="SQLQueries\GetCLRFunctionColumns.sql" />
     <EmbeddedResource Include="SQLQueries\GetDatabaseFile.sql" />
     <EmbeddedResource Include="SQLQueries\GetDDLTriggers.sql" />
     <EmbeddedResource Include="SQLQueries\GetDefaults.sql" />

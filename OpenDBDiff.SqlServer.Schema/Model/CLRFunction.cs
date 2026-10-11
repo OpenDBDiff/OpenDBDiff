@@ -12,11 +12,19 @@ namespace OpenDBDiff.SqlServer.Schema.Model
         {
             Parameters = new List<Parameter>();
             ReturnType = new Parameter();
+            ReturnColumns = new List<Parameter>();
         }
 
         public List<Parameter> Parameters { get; set; }
 
         public Parameter ReturnType { get; private set; }
+
+        /// <summary>
+        /// True for a CLR table-valued function (type FT), which returns ReturnColumns instead of ReturnType.
+        /// </summary>
+        public bool IsTableValued { get; set; }
+
+        public List<Parameter> ReturnColumns { get; private set; }
 
         public override string ToSql()
         {
@@ -30,7 +38,16 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             }
             else
                 sql += "()\r\n";
-            sql += "RETURNS " + ReturnType.ToSql() + " ";
+            if (IsTableValued)
+            {
+                string columns = "";
+                ReturnColumns.ForEach(item => columns += item.ToSql() + ",");
+                if (!String.IsNullOrEmpty(columns))
+                    columns = columns.Substring(0, columns.Length - 1);
+                sql += "RETURNS TABLE (" + columns + ") ";
+            }
+            else
+                sql += "RETURNS " + ReturnType.ToSql() + " ";
             sql += "WITH EXECUTE AS " + AssemblyExecuteAs + "\r\n";
             sql += "AS\r\n";
             sql += "EXTERNAL NAME [" + AssemblyName + "].[" + AssemblyClass + "].[" + AssemblyMethod + "]\r\n";
