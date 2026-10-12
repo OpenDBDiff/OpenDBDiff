@@ -148,7 +148,9 @@ namespace OpenDBDiff.Abstractions.Schema
         DropFile = 75,
         DropFileGroup = 76,
         AddExtendedProperty = 77,
-        DropExtendedProperty = 78
+        DropExtendedProperty = 78,
+        RevokePermission = 79,
+        GrantPermission = 80
     }
 
     public enum ObjectType
@@ -226,6 +228,8 @@ namespace OpenDBDiff.Abstractions.Schema
         TableType = 34,
 
         [Description("Full Text Index")]
-        FullTextIndex = 35
+        FullTextIndex = 35,
+
+        Permission = 36
     }
 }

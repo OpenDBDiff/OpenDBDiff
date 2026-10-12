@@ -156,6 +156,7 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
             {
                 /*Las propiedades extendidas deben ir despues de haber capturado el resto de los objetos de la base*/
                 (new GenerateExtendedProperties(this)).Fill(databaseSchema, ConnectionString, messages);
+                (new GeneratePermissions(this)).Fill(databaseSchema, ConnectionString);
                 databaseSchema.BuildDependency();
                 return databaseSchema;
             }

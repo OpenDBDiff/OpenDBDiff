@@ -94,7 +94,7 @@ namespace OpenDBDiff.SqlServer.Ui
             this.gradientPanel5 = new System.Windows.Forms.Panel();
             this.gradientPanel4 = new System.Windows.Forms.Panel();
             this.gradientPanel3 = new System.Windows.Forms.Panel();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.chkCompPermissions = new System.Windows.Forms.CheckBox();
             this.gradientPanel2 = new System.Windows.Forms.Panel();
             this.chkTableChangeTracking = new System.Windows.Forms.CheckBox();
             this.chkTableLockEscalation = new System.Windows.Forms.CheckBox();
@@ -912,7 +912,7 @@ namespace OpenDBDiff.SqlServer.Ui
             // 
             // gradientPanel3
             // 
-            this.gradientPanel3.Controls.Add(this.checkBox1);
+            this.gradientPanel3.Controls.Add(this.chkCompPermissions);
             this.gradientPanel3.Controls.Add(this.chkFullTextPath);
             this.gradientPanel3.Controls.Add(this.chkCompUsers);
             this.gradientPanel3.Controls.Add(this.chkCompSchemas);
@@ -924,18 +924,18 @@ namespace OpenDBDiff.SqlServer.Ui
             this.gradientPanel3.Size = new System.Drawing.Size(171, 137);
             this.gradientPanel3.TabIndex = 4;
             // 
-            // checkBox1
+            // chkCompPermissions
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkBox1.Location = new System.Drawing.Point(10, 120);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(81, 17);
-            this.checkBox1.TabIndex = 37;
-            this.checkBox1.Text = "Permissions";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.chkCompPermissions.AutoSize = true;
+            this.chkCompPermissions.Checked = true;
+            this.chkCompPermissions.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCompPermissions.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkCompPermissions.Location = new System.Drawing.Point(10, 120);
+            this.chkCompPermissions.Name = "chkCompPermissions";
+            this.chkCompPermissions.Size = new System.Drawing.Size(81, 17);
+            this.chkCompPermissions.TabIndex = 37;
+            this.chkCompPermissions.Text = "Permissions";
+            this.chkCompPermissions.UseVisualStyleBackColor = true;
             // 
             // gradientPanel2
             // 
@@ -1556,7 +1556,7 @@ namespace OpenDBDiff.SqlServer.Ui
         private Panel gradientPanel10;
         private CheckBox chkTableLockEscalation;
         private CheckBox chkTableChangeTracking;
-        private CheckBox checkBox1;
+        private CheckBox chkCompPermissions;
         private Panel gradientPanel12;
         private Label label13;
         private Panel gradientPanel11;
