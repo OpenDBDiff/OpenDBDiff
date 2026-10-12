@@ -81,7 +81,10 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             sql = sql.Substring(0, sql.Length - 1);
             sql += ")\r\n";
             var version = ((Database)this.RootParent).Info.Version;
-            if (version >= DatabaseInfo.SQLServerVersion.SQLServer2008 && version != DatabaseInfo.SQLServerVersion.SQLServerAzure10)
+            var isAzure10 = version == DatabaseInfo.SQLServerVersion.SQLServerAzure10;
+            // Azure SQL Database has no filegroups, so it keeps the catalog-only form;
+            // a FILEGROUP clause fails there with "filegroup ... does not exist".
+            if (version >= DatabaseInfo.SQLServerVersion.SQLServer2008 && !isAzure10)
             {
                 sql += "KEY INDEX " + Index + " ON ([" + FullText + "]";
                 if (!String.IsNullOrEmpty(FileGroup))
