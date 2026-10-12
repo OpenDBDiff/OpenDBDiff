@@ -36,7 +36,32 @@ namespace OpenDBDiff.UI
         {
             InitializeComponent();
 
+            // Not in the designer: setting these while the SplitContainer still has its default 150px width throws
+            splitSchema.Panel1MinSize = 150;
+            splitSchema.Panel2MinSize = 200;
+
             this.Text = string.Concat(nameof(OpenDBDiff), " v", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            // Restore after the form has its final (maximized) size, so the saved distance isn't clamped
+            var distance = UiSettings.Load().SchemaSplitterDistance;
+            var max = splitSchema.Width - splitSchema.SplitterWidth - splitSchema.Panel2MinSize;
+            if (distance >= splitSchema.Panel1MinSize && distance <= max)
+                splitSchema.SplitterDistance = distance;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            if (e.Cancel) return;
+
+            var settings = UiSettings.Load();
+            settings.SchemaSplitterDistance = splitSchema.SplitterDistance;
+            settings.Save();
         }
 
         private void StartComparison()

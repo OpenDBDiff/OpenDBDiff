@@ -112,7 +112,7 @@ namespace OpenDBDiff.Settings
             return Options.Serialize();
         }
 
-        private static ProjectDb GetDatabase() => new ProjectDb(SettingsFilePath);
+        internal static ProjectDb GetDatabase() => new ProjectDb(SettingsFilePath);
     }
 
     // Naively use Windows CurrentUser DPAPI with race conditions instead of building a UI for a LiteDB encryption password
