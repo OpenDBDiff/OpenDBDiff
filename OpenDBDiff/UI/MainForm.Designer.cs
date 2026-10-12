@@ -37,6 +37,7 @@ namespace OpenDBDiff.UI
             this.lblMessage = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.splitSchema = new System.Windows.Forms.SplitContainer();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.txtNewObject = new ScintillaNET.Scintilla();
@@ -85,6 +86,10 @@ namespace OpenDBDiff.UI
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitSchema)).BeginInit();
+            this.splitSchema.Panel1.SuspendLayout();
+            this.splitSchema.Panel2.SuspendLayout();
+            this.splitSchema.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage5.SuspendLayout();
@@ -125,9 +130,7 @@ namespace OpenDBDiff.UI
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.tabControl2);
-            this.tabPage2.Controls.Add(this.groupBox2);
-            this.tabPage2.Controls.Add(this.groupBox1);
+            this.tabPage2.Controls.Add(this.splitSchema);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -135,7 +138,27 @@ namespace OpenDBDiff.UI
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Schema";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
+            //
+            // splitSchema
+            //
+            this.splitSchema.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitSchema.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitSchema.Location = new System.Drawing.Point(3, 3);
+            this.splitSchema.Name = "splitSchema";
+            //
+            // splitSchema.Panel1
+            //
+            this.splitSchema.Panel1.Controls.Add(this.groupBox1);
+            //
+            // splitSchema.Panel2
+            //
+            this.splitSchema.Panel2.Controls.Add(this.tabControl2);
+            this.splitSchema.Panel2.Controls.Add(this.groupBox2);
+            this.splitSchema.Size = new System.Drawing.Size(828, 451);
+            this.splitSchema.SplitterDistance = 340;
+            this.splitSchema.SplitterWidth = 6;
+            this.splitSchema.TabIndex = 0;
+            //
             // tabControl2
             // 
             this.tabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -144,7 +167,7 @@ namespace OpenDBDiff.UI
             this.tabControl2.Controls.Add(this.tabPage4);
             this.tabControl2.Controls.Add(this.tabPage5);
             this.tabControl2.Controls.Add(this.tabPage6);
-            this.tabControl2.Location = new System.Drawing.Point(350, 50);
+            this.tabControl2.Location = new System.Drawing.Point(1, 47);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(477, 402);
@@ -218,7 +241,7 @@ namespace OpenDBDiff.UI
             this.groupBox2.Controls.Add(this.panel5);
             this.groupBox2.Controls.Add(this.panel4);
             this.groupBox2.Controls.Add(this.panel3);
-            this.groupBox2.Location = new System.Drawing.Point(350, 5);
+            this.groupBox2.Location = new System.Drawing.Point(1, 2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(478, 40);
             this.groupBox2.TabIndex = 2;
@@ -280,10 +303,11 @@ namespace OpenDBDiff.UI
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.schemaTreeView1);
-            this.groupBox1.Location = new System.Drawing.Point(6, 4);
+            this.groupBox1.Location = new System.Drawing.Point(3, 1);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(335, 445);
             this.groupBox1.TabIndex = 1;
@@ -637,8 +661,9 @@ namespace OpenDBDiff.UI
             // 
             // schemaTreeView1
             // 
-            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.schemaTreeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.schemaTreeView1.LeftDatabase = null;
             this.schemaTreeView1.Location = new System.Drawing.Point(7, 10);
             this.schemaTreeView1.Name = "schemaTreeView1";
@@ -667,6 +692,10 @@ namespace OpenDBDiff.UI
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.splitSchema.Panel1.ResumeLayout(false);
+            this.splitSchema.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitSchema)).EndInit();
+            this.splitSchema.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
@@ -703,6 +732,7 @@ namespace OpenDBDiff.UI
         private Button btnUpdateAll;
         private Button btnOptions;
         private TabPage tabPage2;
+        private SplitContainer splitSchema;
         private SchemaTreeView schemaTreeView1;
         private GroupBox groupBox1;
         private TabPage tabPage3;
