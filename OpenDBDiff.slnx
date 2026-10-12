@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="OpenDBDiff.Abstractions.Schema/OpenDBDiff.Abstractions.Schema.csproj" />
+  <Project Path="OpenDBDiff.Abstractions.Ui/OpenDBDiff.Abstractions.Ui.csproj" />
+  <Project Path="OpenDBDiff.CLI/OpenDBDiff.CLI.csproj" />
+  <Project Path="OpenDBDiff.SqlServer.Schema/OpenDBDiff.SqlServer.Schema.csproj" />
+  <Project Path="OpenDBDiff.SqlServer.Ui/OpenDBDiff.SqlServer.Ui.csproj" />
+  <Project Path="OpenDBDiff.Tests/OpenDBDiff.Tests.csproj" />
+  <Project Path="OpenDBDiff/OpenDBDiff.csproj" />
+</Solution>
