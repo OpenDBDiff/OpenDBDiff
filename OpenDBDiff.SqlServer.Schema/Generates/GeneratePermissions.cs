@@ -1,4 +1,5 @@
 using Microsoft.Data.SqlClient;
+using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.SqlServer.Schema.Model;
 using System;
 
@@ -23,6 +24,19 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
             if (type.Equals("R")) return "ROLE";
             if (type.Equals("A")) return "APPLICATION ROLE";
             return "USER";
+        }
+
+        /// <summary>
+        /// True when a name filter excludes the database principal, so permissions granted to or on it are not compared.
+        /// </summary>
+        public static bool IsPrincipalExcluded(Database database, string name, string type)
+        {
+            ISchemaBase principal;
+            if (type.Equals("R") || type.Equals("A"))
+                principal = new Role(database) { Name = name };
+            else
+                principal = new User(database) { Name = name };
+            return !database.Options.Filters.IsItemIncluded(principal);
         }
 
         /// <summary>
@@ -72,6 +86,10 @@ namespace OpenDBDiff.SqlServer.Schema.Generates
                                 }
                                 // Skip permissions on objects that are not compared, such as excluded or filtered objects.
                                 if (item.Class == Permission.SecurableClass.Object && database.Find(item.SecurableName) == null)
+                                    continue;
+                                if (IsPrincipalExcluded(database, item.Grantee, reader["grantee_type"].ToString()))
+                                    continue;
+                                if (item.Class == Permission.SecurableClass.DatabasePrincipal && IsPrincipalExcluded(database, name, reader["securable_principal_type"].ToString()))
                                     continue;
                                 item.SetName();
                                 // The same id for the same permission in both databases, unique among the permissions.

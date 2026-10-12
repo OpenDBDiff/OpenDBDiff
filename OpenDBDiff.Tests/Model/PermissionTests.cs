@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenDBDiff.Abstractions.Schema;
 using OpenDBDiff.Abstractions.Schema.Model;
+using OpenDBDiff.SqlServer.Schema.Generates;
 using OpenDBDiff.SqlServer.Schema.Model;
 using OpenDBDiff.SqlServer.Schema.Options;
 using System.Collections.Generic;
@@ -136,6 +137,27 @@ namespace OpenDBDiff.Tests.Model.Tests
             user.Status = ObjectStatus.Alter;
 
             Assert.AreEqual("GRANT EXECUTE ON OBJECT::[dbo].[MyProc] TO [MyUser]\r\nGO\r\n", ToSqlDiff(permission));
+        }
+
+        [TestMethod]
+        public void IsPrincipalExcluded_UserWildcardFilter_ShouldExcludeMatchingUsersOnly()
+        {
+            Database database = CreateDatabase();
+            database.Options.Filters.Items.Add(new SqlOptionFilterItem(ObjectType.User, "Temp*"));
+
+            Assert.IsTrue(GeneratePermissions.IsPrincipalExcluded(database, "TempUser1", "U"));
+            Assert.IsFalse(GeneratePermissions.IsPrincipalExcluded(database, "AppUser", "S"));
+            Assert.IsFalse(GeneratePermissions.IsPrincipalExcluded(database, "TempRole1", "R"));
+        }
+
+        [TestMethod]
+        public void IsPrincipalExcluded_RoleFilter_ShouldExcludeRoles()
+        {
+            Database database = CreateDatabase();
+            database.Options.Filters.Items.Add(new SqlOptionFilterItem(ObjectType.Role, "Reporting*"));
+
+            Assert.IsTrue(GeneratePermissions.IsPrincipalExcluded(database, "ReportingReaders", "R"));
+            Assert.IsFalse(GeneratePermissions.IsPrincipalExcluded(database, "ReportingUser", "U"));
         }
 
         [TestMethod]
