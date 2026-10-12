@@ -25,6 +25,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             FilterNotForReplication = true;
             FilterUsers = true;
             FilterRoles = true;
+            FilterPermissions = true;
             FilterCLRFunction = true;
             FilterCLRTrigger = true;
             FilterCLRUDT = true;
@@ -71,6 +72,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             FilterNotForReplication = options["FilterNotForReplication"];
             FilterUsers = options["FilterUsers"];
             FilterRoles = options["FilterRoles"];
+            FilterPermissions = options["FilterPermissions"];
             FilterCLRFunction = options["FilterCLRFunction"];
             FilterCLRTrigger = options["FilterCLRTrigger"];
             FilterCLRUDT = options["FilterCLRUDT"];
@@ -115,6 +117,8 @@ namespace OpenDBDiff.SqlServer.Schema.Options
         public Boolean FilterCLRFunction { get; set; }
 
         public Boolean FilterRoles { get; set; }
+
+        public Boolean FilterPermissions { get; set; }
 
         public Boolean FilterUsers { get; set; }
 
@@ -201,6 +205,7 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             options.Add("FilterNotForReplication", FilterNotForReplication);
             options.Add("FilterUsers", FilterUsers);
             options.Add("FilterRoles", FilterRoles);
+            options.Add("FilterPermissions", FilterPermissions);
             options.Add("FilterCLRFunction", FilterCLRFunction);
             options.Add("FilterCLRTrigger", FilterCLRTrigger);
             options.Add("FilterCLRUDT", FilterCLRUDT);

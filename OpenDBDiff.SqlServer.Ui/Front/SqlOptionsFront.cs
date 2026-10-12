@@ -86,6 +86,7 @@ namespace OpenDBDiff.SqlServer.Ui
             chkFileGroups.Checked = SQLOption.Ignore.FilterTableFileGroup;
             chkCompUsers.Checked = SQLOption.Ignore.FilterUsers;
             chkCompRoles.Checked = SQLOption.Ignore.FilterRoles;
+            chkCompPermissions.Checked = SQLOption.Ignore.FilterPermissions;
             chkCompRules.Checked = SQLOption.Ignore.FilterRules;
 
             IncludeSynonymsCheckBox.Checked = SQLOption.Ignore.FilterSynonyms;
@@ -165,6 +166,7 @@ namespace OpenDBDiff.SqlServer.Ui
             SQLOption.Ignore.FilterExtendedProperties = chkCompExtendedProperties.Checked;
             SQLOption.Ignore.FilterUsers = chkCompUsers.Checked;
             SQLOption.Ignore.FilterRoles = chkCompRoles.Checked;
+            SQLOption.Ignore.FilterPermissions = chkCompPermissions.Checked;
             SQLOption.Ignore.FilterRules = chkCompRules.Checked;
             SQLOption.Ignore.FilterFullText = chkFullText.Checked;
             SQLOption.Ignore.FilterFullTextPath = chkFullTextPath.Checked;

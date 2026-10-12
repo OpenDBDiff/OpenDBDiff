@@ -54,6 +54,7 @@ namespace OpenDBDiff.Abstractions.Schema
             if (Type == ObjectType.Function) return "FUNCTION";
             if (Type == ObjectType.Assembly) return "ASSEMBLY";
             if (Type == ObjectType.Trigger) return "TRIGGER";
+            if (Type == ObjectType.Permission) return "PERMISSION";
             return "";
         }
 

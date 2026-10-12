@@ -38,6 +38,7 @@ namespace OpenDBDiff.SqlServer.Schema.Compare
                 (new ComparePartitionSchemes()).GenerateDifferences<Database>(origin.PartitionSchemes, destination.PartitionSchemes);
                 (new CompareTableType()).GenerateDifferences<Database>(origin.TablesTypes, destination.TablesTypes);
                 (new CompareFullText()).GenerateDifferences<Database>(origin.FullText, destination.FullText);
+                (new ComparePermissions()).GenerateDifferences<Database>(origin.Permissions, destination.Permissions);
                 data.SourceInfo = destination.Info;
                 return data;
             }

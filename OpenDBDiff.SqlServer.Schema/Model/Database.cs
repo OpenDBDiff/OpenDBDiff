@@ -37,6 +37,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             PartitionFunctions = new SchemaList<PartitionFunction, Database>(this, AllObjects);
             PartitionSchemes = new SchemaList<PartitionScheme, Database>(this, AllObjects);
             Roles = new SchemaList<Role, Database>(this);
+            Permissions = new SchemaList<Permission, Database>(this, AllObjects);
             Tables = new SchemaList<Table, Database>(this, AllObjects);
             Defaults = new SchemaList<Default, Database>(this, AllObjects);
             ActionMessage = new SqlAction(this);
@@ -67,6 +68,9 @@ namespace OpenDBDiff.SqlServer.Schema.Model
 
         [SchemaNode("Users", "User")]
         public SchemaList<User, Database> Users { get; private set; }
+
+        [SchemaNode("Permissions", "User")]
+        public SchemaList<Permission, Database> Permissions { get; private set; }
 
         [SchemaNode("Views", "View", true)]
         public SchemaList<View, Database> Views { get; private set; }
@@ -194,6 +198,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             sql += Users.ToSql();
             sql += PartitionFunctions.ToSql();
             sql += FullText.ToSql();
+            sql += Permissions.ToSql();
             return sql;
         }
 
@@ -252,6 +257,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             {
                 listDiff.AddRange(FullText.ToSqlDiff(schemas));
             }
+            listDiff.AddRange(Permissions.ToSqlDiff(schemas));
             return listDiff;
         }
 
@@ -330,6 +336,8 @@ namespace OpenDBDiff.SqlServer.Schema.Model
                         return Roles[_FullName];
                     case ObjectType.Schema:
                         return Schemas[_FullName];
+                    case ObjectType.Permission:
+                        return Permissions[_FullName];
                     case ObjectType.Constraint:
                         parentName = AllObjects.GetParentName(_FullName);
                         return Tables[parentName].Constraints[_FullName];
