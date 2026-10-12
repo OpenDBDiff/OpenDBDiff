@@ -3,6 +3,7 @@ SELECT
     P.permission_name,
     P.state,
     grantee.name AS grantee_name,
+    grantee.type AS grantee_type,
     COALESCE(OS.name, S.name, TS.name, XS.name) AS securable_schema,
     COALESCE(O.name, S.name, DP.name, A.name, T.name, X.name) AS securable_name,
     DP.type AS securable_principal_type,
