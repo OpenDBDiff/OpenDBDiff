@@ -59,13 +59,18 @@ namespace OpenDBDiff.SqlServer.Schema.Options
             // if criteria is a regular expression, use regex
             if (pattern.IndexOfAny(new[] { '*', '?' }) > -1)
             {
+                // every character that is not a wildcard or escape sequence is matched literally,
+                // so a pattern like DOMAIN\* doesn't turn into the regex DOMAIN\.*
                 var regex = Regex.Replace(
                     pattern,
                     "(" + string.Join(
                             "|",
                             patternReplacements.Value.Values.Select(t => t.Item1))
-                    + ")",
-                    m => patternReplacements.Value[m.Value].Item2);
+                    + "|.)",
+                    m => patternReplacements.Value.TryGetValue(m.Value, out var replacement)
+                        ? replacement.Item2
+                        : Regex.Escape(m.Value),
+                    RegexOptions.Singleline);
                 regex = $"^{regex}$";
 
                 return Regex.IsMatch(value, regex, RegexOptions.IgnoreCase);
