@@ -1,5 +1,6 @@
 using OpenDBDiff.Abstractions.Schema;
 using OpenDBDiff.Abstractions.Schema.Model;
+using OpenDBDiff.SqlServer.Schema.Model.Util;
 using System;
 using System.Text;
 
@@ -82,7 +83,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
         {
             get
             {
-                return Parent.FullName + ".[" + Name + "]";
+                return Parent.FullName + "." + SqlIdentifier.Quote(Name);
             }
         }
 
@@ -158,14 +159,14 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             if ((Type == IndexTypeEnum.Nonclustered) && (IsUniqueKey)) sql.Append("CREATE UNIQUE NONCLUSTERED ");
             if ((Type == IndexTypeEnum.Nonclustered) && (!IsUniqueKey)) sql.Append("CREATE NONCLUSTERED ");
             if (Type == IndexTypeEnum.XML) sql.Append("CREATE PRIMARY XML ");
-            sql.AppendLine("INDEX [" + Name + "] ON " + Parent.FullName + "\r\n(");
+            sql.AppendLine("INDEX " + SqlIdentifier.Quote(Name) + " ON " + Parent.FullName + "\r\n(");
             /*Ordena la coleccion de campos del Indice en funcion de la propieda IsIncluded*/
             Columns.Sort();
             for (int j = 0; j < Columns.Count; j++)
             {
                 if (!Columns[j].IsIncluded)
                 {
-                    sql.Append("\t[" + Columns[j].Name + "]");
+                    sql.Append("\t" + SqlIdentifier.Quote(Columns[j].Name));
                     if (Type != IndexTypeEnum.XML)
                     {
                         if (Columns[j].Order) sql.Append(" DESC"); else sql.Append(" ASC");
@@ -176,7 +177,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
                 else
                 {
                     if (String.IsNullOrEmpty(includes)) includes = ") INCLUDE (";
-                    includes += "[" + Columns[j].Name + "],";
+                    includes += SqlIdentifier.Quote(Columns[j].Name) + ",";
                 }
             }
             if (!String.IsNullOrEmpty(includes)) includes = includes.Substring(0, includes.Length - 1);
@@ -213,7 +214,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
             }
             sql.AppendLine("\r\nGO");
             if (IsDisabled)
-                sql.AppendLine("ALTER INDEX [" + Name + "] ON " + ((Table)Parent).FullName + " DISABLE\r\nGO");
+                sql.AppendLine("ALTER INDEX " + SqlIdentifier.Quote(Name) + " ON " + ((Table)Parent).FullName + " DISABLE\r\nGO");
 
             sql.Append(ExtendedProperties.ToSql());
             return sql.ToString();
@@ -231,7 +232,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
 
         private string ToSqlDrop(string FileGroupName)
         {
-            var sql = new StringBuilder("DROP INDEX [" + Name + "] ON " + Parent.FullName);
+            var sql = new StringBuilder("DROP INDEX " + SqlIdentifier.Quote(Name) + " ON " + Parent.FullName);
             if (!String.IsNullOrEmpty(FileGroupName)) sql.Append(" WITH (MOVE TO [" + FileGroupName + "])");
             sql.AppendLine("\r\nGO");
             return sql.ToString();
@@ -262,8 +263,8 @@ namespace OpenDBDiff.SqlServer.Schema.Model
         private string ToSqlEnabled()
         {
             if (IsDisabled)
-                return "ALTER INDEX [" + Name + "] ON " + Parent.FullName + " DISABLE\r\nGO\r\n";
-            return "ALTER INDEX [" + Name + "] ON " + Parent.FullName + " REBUILD\r\nGO\r\n";
+                return "ALTER INDEX " + SqlIdentifier.Quote(Name) + " ON " + Parent.FullName + " DISABLE\r\nGO\r\n";
+            return "ALTER INDEX " + SqlIdentifier.Quote(Name) + " ON " + Parent.FullName + " REBUILD\r\nGO\r\n";
         }
 
         public override SQLScriptList ToSqlDiff(System.Collections.Generic.ICollection<ISchemaBase> schemas)
