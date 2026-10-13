@@ -125,5 +125,17 @@ namespace OpenDBDiff.Tests.Model.Tests
             Assert.AreEqual(75, findResult.TypeEndPosition);
             Assert.AreEqual(100, findResult.NameEndPosition);
         }
+
+        [TestMethod]
+        public void FindCreate_CommentBetweenCreateAndType_ShouldSkipComment()
+        {
+            const string body = "\r\nCREATE \r\n--DROP\r\nVIEW /* c */ [dbo].[vwTest]\r\nAS SELECT 1";
+            var findResult = FormatCode.FindCreate(body);
+
+            Assert.IsNotNull(findResult);
+            Assert.AreEqual(body.IndexOf("CREATE"), findResult.CreateBeginPosition);
+            Assert.AreEqual(body.IndexOf("VIEW") + 3, findResult.TypeEndPosition);
+            Assert.AreEqual(body.IndexOf("[vwTest]") + 7, findResult.NameEndPosition);
+        }
     }
 }
