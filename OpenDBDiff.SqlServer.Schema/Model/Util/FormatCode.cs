@@ -43,29 +43,31 @@ namespace OpenDBDiff.SqlServer.Schema.Model.Util
 
             var createToken = tokenizer.Current.AsKeyword;
 
-            tokenizer.MoveNext();
+            MoveNextSkipComments(tokenizer);
 
-            var typeKeyword = tokenizer.Current.AsKeyword;
+            var typeKeyword = tokenizer.Current?.AsKeyword;
 
-            tokenizer.MoveNext();
+            MoveNextSkipComments(tokenizer);
 
             // the object owner is optional
             var token0 = tokenizer.Current;
-            tokenizer.MoveNext();
+            MoveNextSkipComments(tokenizer);
             var token1 = tokenizer.Current;
-            tokenizer.MoveNext();
+            MoveNextSkipComments(tokenizer);
             var token2 = tokenizer.Current;
-            tokenizer.MoveNext();
 
             TSQLIdentifier entityNameToken;
-            if (token1.AsCharacter?.Text == ".")
+            if (token1?.AsCharacter?.Text == ".")
             {
-                entityNameToken = token2.AsIdentifier;
+                entityNameToken = token2?.AsIdentifier;
             }
             else
             {
-                entityNameToken = token0.AsIdentifier;
+                entityNameToken = token0?.AsIdentifier;
             }
+
+            if (typeKeyword == null || entityNameToken == null)
+                return null;
 
             return new FindCreateStatementResult
             {
@@ -73,6 +75,17 @@ namespace OpenDBDiff.SqlServer.Schema.Model.Util
                 TypeEndPosition = typeKeyword.EndPosition,
                 NameEndPosition = entityNameToken.EndPosition
             };
+        }
+
+        private static void MoveNextSkipComments(TSQLTokenizer tokenizer)
+        {
+            do
+            {
+                tokenizer.MoveNext();
+            }
+            while (tokenizer.Current != null &&
+                   (tokenizer.Current.Type == TSQLTokenType.SingleLineComment ||
+                    tokenizer.Current.Type == TSQLTokenType.MultilineComment));
         }
 
         public static string FormatAlter(string ObjectType, string body, ISchemaBase item, Boolean quitSchemaBinding)
