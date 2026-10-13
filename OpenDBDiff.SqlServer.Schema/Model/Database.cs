@@ -78,7 +78,7 @@ namespace OpenDBDiff.SqlServer.Schema.Model
         [SchemaNode("Assemblies", "Assembly")]
         public SchemaList<Assembly, Database> Assemblies { get; private set; }
 
-        [SchemaNode("Synonyms", "Assembly")] // We don't have an icon for synonyms at the moment.
+        [SchemaNode("Synonyms", "Assembly", true)] // We don't have an icon for synonyms at the moment.
         public SchemaList<Synonym, Database> Synonyms { get; private set; }
 
         [SchemaNode("DLL Triggers")]
