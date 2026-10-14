@@ -19,6 +19,8 @@ jobs:
         echo "shorthash=$(git rev-parse --short HEAD)" >> $env:GITHUB_ENV
 
     - uses: actions/setup-dotnet@2016bd2012dba4e32de620c46fe006a3ac9f0602 # v5.0.1 2025-11-24
+      with:
+        dotnet-version: 10.0.x
 
     - run: dotnet build -c Release
 
@@ -37,3 +39,19 @@ jobs:
       with:
         name: OpenDBDiff-CLI-${{ env.date }}-${{ env.shorthash }}
         path: OpenDBDiff.CLI\bin\Release\net8.0
+
+  test-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2 2026-01-09
+
+    - uses: actions/setup-dotnet@2016bd2012dba4e32de620c46fe006a3ac9f0602 # v5.0.1 2025-11-24
+      with:
+        dotnet-version: 10.0.x
+
+    # The test project targets net48;net10.0. Only the net10.0 leg and the netstandard2.0
+    # projects it references build on Linux - the WinForms projects are Windows-only, so
+    # build and run the test project on its own rather than the whole solution.
+    - run: dotnet test OpenDBDiff.Tests/OpenDBDiff.Tests.csproj -c Release -f net10.0
+
