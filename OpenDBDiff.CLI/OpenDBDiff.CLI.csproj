@@ -4,10 +4,11 @@
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net48;net8.0</TargetFrameworks>
     <RollForward>Major</RollForward>
+    <AssemblyTitle>OpenDBDiff Console</AssemblyTitle>
+    <Product>OpenDBDiff Console</Product>
     <LangVersion>7</LangVersion>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,7 +18,6 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="CommandLineParser" Version="2.8.0.0" />
-    <Compile Include="..\OpenDBDiff\Properties\AssemblyVersionInfo.cs" Link="Properties\AssemblyVersionInfo.cs" />
     <ProjectReference Include="..\OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj" />
   </ItemGroup>
 
