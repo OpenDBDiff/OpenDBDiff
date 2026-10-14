@@ -132,7 +132,7 @@ namespace OpenDBDiff.SqlServer.Ui
 
         public string GetScriptLanguage()
         {
-            return "mssql";
+            return "sql";
         }
 
         public void Unload()

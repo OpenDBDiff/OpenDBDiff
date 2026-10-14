@@ -90,7 +90,7 @@ namespace OpenDBDiff.UI
                         throw new SchemaException(progress.Error.Message, progress.Error);
                     }
 
-                    txtSyncScript.LexerLanguage = this.ProjectSelectorHandler.GetScriptLanguage();
+                    txtSyncScript.LexerName = this.ProjectSelectorHandler.GetScriptLanguage();
                     txtSyncScript.ReadOnly = false;
                     errorLocation = "Generating Synchronized Script";
                     txtSyncScript.Text = progress.Destination.ToSqlDiff(this._selectedSchemas).ToSQL();
@@ -562,11 +562,11 @@ namespace OpenDBDiff.UI
                     RightDatabaseSelector.ConnectionString = LastConfiguration.ConnectionStringDestination;
             }
 
-            txtNewObject.LexerLanguage = "mssql";
+            txtNewObject.LexerName = "sql";
             txtNewObject.ReadOnly = false;
-            txtOldObject.LexerLanguage = "mssql";
+            txtOldObject.LexerName = "sql";
             txtOldObject.ReadOnly = false;
-            txtDiff.LexerLanguage = "mssql";
+            txtDiff.LexerName = "sql";
             txtDiff.ReadOnly = false;
             txtDiff.Margins[0].Width = 20;
 
