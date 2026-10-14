@@ -1,0 +1,207 @@
+name: release
+
+# Tag a commit on develop with v<major>.<minor>.<patch> (annotated or lightweight) and push it:
+#   git tag v0.14.0 && git push origin v0.14.0
+# The build job stamps that tag into every assembly, tests, packages and checksums the artifacts.
+# The release job then opens a DRAFT GitHub release; a maintainer reviews the notes and publishes it.
+on:
+  push:
+    # GitHub tag filters are globs, not regex - the exact version shape is validated in the build job.
+    tags: [ "v*" ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to rehearse, e.g. v0.14.0'
+        required: true
+        type: string
+      dry_run:
+        description: 'Build and package only - do not create a draft release'
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DOTNET_VERSION: 10.0.x
+
+jobs:
+  build:
+    name: build
+    runs-on: windows-2022
+    timeout-minutes: 30
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        # Full history so the tag can be checked against develop and the notes can be ranged.
+        fetch-depth: 0
+
+    - name: resolve and check the tag
+      id: version
+      shell: bash
+      run: |
+        set -euo pipefail
+        tag="${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}"
+
+        if [[ ! "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+          echo "::error::'$tag' is not a version tag of the form v<major>.<minor>.<patch>"
+          exit 1
+        fi
+
+        version="${tag#v}"
+        echo "tag=$tag" >> "$GITHUB_OUTPUT"
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+
+        # Directory.Build.props holds the development version; the tag is what gets released.
+        declared="$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' Directory.Build.props | head -1)"
+        if [ "$declared" != "$version" ]; then
+          echo "::notice::Directory.Build.props declares $declared, releasing $version - bump it on develop so local builds agree with the release"
+        fi
+
+        # Releases come off develop; if the tag is somewhere else, that is a decision, not an accident.
+        if git merge-base --is-ancestor "$GITHUB_SHA" origin/develop 2>/dev/null; then
+          echo "Tagged commit is on develop."
+        else
+          echo "::warning::The tagged commit is not an ancestor of develop."
+        fi
+
+    - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        cache: true
+        cache-dependency-path: '**/*.csproj'
+
+    - name: build
+      run: dotnet build -c Release -p:Version=${{ steps.version.outputs.version }} -p:ContinuousIntegrationBuild=true
+
+    - name: test
+      run: dotnet test -c Release --no-build
+
+    - name: package
+      shell: pwsh
+      run: |
+        $ErrorActionPreference = 'Stop'
+        $version = '${{ steps.version.outputs.version }}'
+        New-Item -ItemType Directory -Force -Path package | Out-Null
+
+        # The GUI: the net48 folder the WinForms application ships as.
+        Compress-Archive -Path 'OpenDBDiff\bin\Release\net48\*' -DestinationPath "package\OpenDBDiff_$version.zip"
+
+        # The CLI: net48, so it runs on a stock Windows install without a .NET runtime download.
+        Compress-Archive -Path 'OpenDBDiff.CLI\bin\Release\net48\*' -DestinationPath "package\OpenDBDiff.CLI_$version.zip"
+
+        Get-ChildItem package\*.zip | ForEach-Object {
+          Write-Host "$($_.Name) - $([math]::Round($_.Length / 1MB, 2)) MB"
+        }
+
+    # An upload of a path that matched nothing still "succeeds", so check the archives themselves
+    # rather than trusting the build to have produced what the zip step expects.
+    - name: verify the archives
+      shell: pwsh
+      run: |
+        $ErrorActionPreference = 'Stop'
+        $version = '${{ steps.version.outputs.version }}'
+        $expected = @{
+          "package\OpenDBDiff_$version.zip"     = @('OpenDBDiff.exe', 'OpenDBDiff.SqlServer.Schema.dll', 'OpenDBDiff.SqlServer.Ui.dll')
+          "package\OpenDBDiff.CLI_$version.zip" = @('OpenDBDiff.CLI.exe', 'OpenDBDiff.SqlServer.Schema.dll')
+        }
+
+        foreach ($zip in $expected.Keys) {
+          if (-not (Test-Path $zip)) { throw "$zip was not created" }
+          $dir = Join-Path 'verify' [IO.Path]::GetFileNameWithoutExtension($zip)
+          Expand-Archive -Path $zip -DestinationPath $dir -Force
+          foreach ($file in $expected[$zip]) {
+            if (-not (Test-Path (Join-Path $dir $file))) {
+              throw "$zip does not contain $file"
+            }
+          }
+          $count = (Get-ChildItem $dir -Recurse -File).Count
+          Write-Host "$zip`: $count files, all required files present"
+        }
+
+    - name: checksums
+      shell: pwsh
+      run: |
+        $ErrorActionPreference = 'Stop'
+        $lines = Get-ChildItem package\*.zip | Sort-Object Name | ForEach-Object {
+          $hash = (Get-FileHash -Algorithm SHA256 $_.FullName).Hash.ToLower()
+          "$hash  $($_.Name)"
+        }
+        # No BOM: sha256sum -c cannot read a UTF-8 BOM on Linux.
+        [IO.File]::WriteAllLines("$PWD\package\SHA256SUMS.txt", $lines, (New-Object Text.UTF8Encoding $false))
+        Get-Content package\SHA256SUMS.txt | ForEach-Object { Write-Host $_ }
+
+    - name: upload packages
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: release-package
+        path: |
+          package/*.zip
+          package/SHA256SUMS.txt
+        if-no-files-found: error
+        retention-days: 14
+
+  release:
+    name: release
+    needs: build
+    # Only a tag push publishes; a workflow_dispatch run rehearses the build and packaging above.
+    if: ${{ github.event_name == 'push' || inputs.dry_run == false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write       # create the draft release
+      id-token: write       # OIDC token for the provenance attestation
+      attestations: write   # store the attestation
+
+    steps:
+    - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+      with:
+        name: release-package
+        path: artifacts
+
+    - name: attest build provenance
+      uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+      with:
+        subject-path: 'artifacts/*.zip'
+
+    - name: create the draft release
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TAG: ${{ needs.build.outputs.tag }}
+        VERSION: ${{ needs.build.outputs.version }}
+      run: |
+        set -euo pipefail
+        ls -l artifacts
+
+        # Re-running a tag build replaces the previous draft rather than failing on it.
+        if gh release view "$TAG" >/dev/null 2>&1; then
+          echo "Replacing the existing release for $TAG"
+          gh release delete "$TAG" --yes
+        fi
+
+        args=(--draft --title "$TAG" --generate-notes)
+        previous="$(gh release list --exclude-drafts --limit 1 --json tagName --jq '.[0].tagName // empty')"
+        if [ -n "$previous" ]; then
+          echo "Release notes will cover $previous..$TAG"
+          args+=(--notes-start-tag "$previous")
+        fi
+
+        # shellcheck disable=SC2086
+        gh release create "$TAG" "${args[@]}" artifacts/*.zip artifacts/SHA256SUMS.txt
+
+        echo "Draft release ready: $(gh release view "$TAG" --json url --jq .url)"
+        {
+          echo "### Draft release $TAG"
+          echo
+          echo "Version $VERSION, built and tested from \`$GITHUB_SHA\`."
+          echo "Review the generated notes and publish at https://github.com/$GITHUB_REPOSITORY/releases"
+        } >> "$GITHUB_STEP_SUMMARY"

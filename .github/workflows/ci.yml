@@ -1,0 +1,84 @@
+name: ci
+
+on:
+  push:
+    branches: [ "develop", "master" ]
+  pull_request:
+    branches: [ "develop" ]
+  workflow_dispatch:
+
+# Read-only by default; the release workflow asks for more when it publishes.
+permissions:
+  contents: read
+
+# A new push to a PR supersedes the run in flight; branch builds run to completion.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  DOTNET_VERSION: 10.0.x
+
+jobs:
+  test-windows:
+    name: test-windows
+    runs-on: windows-2022
+    timeout-minutes: 20
+
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - name: date and short hash
+      run: |
+        echo "date=$((get-date).ToString('yyyymmdd'))" >> $env:GITHUB_ENV
+        echo "shorthash=$(git rev-parse --short HEAD)" >> $env:GITHUB_ENV
+
+    - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        cache: true
+        cache-dependency-path: '**/*.csproj'
+
+    # The WinForms GUI, the SQL Server UI and the net48 legs only build on Windows,
+    # so the whole solution is built here.
+    - run: dotnet build -c Release -p:ContinuousIntegrationBuild=true
+
+    # Runs both legs of the test project: net48 (the runtime the GUI ships on) and net10.0.
+    - run: dotnet test -c Release --no-build
+
+    - name: GUI
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: OpenDBDiff-WinFormsGUI-${{ env.date }}-${{ env.shorthash }}
+        path: OpenDBDiff\bin\Release\net48
+        retention-days: 14
+
+    - name: CLI
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: OpenDBDiff-CLI-${{ env.date }}-${{ env.shorthash }}
+        path: OpenDBDiff.CLI\bin\Release\net*
+        retention-days: 14
+
+  test-linux:
+    name: test-linux
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        cache: true
+        cache-dependency-path: '**/*.csproj'
+
+    # The whole solution builds on Linux as well: the SDK pulls the .NET Framework reference
+    # assemblies for the net48 projects, so a broken WinForms or UI build fails on both jobs.
+    - name: build
+      run: dotnet build -c Release -p:ContinuousIntegrationBuild=true
+
+    # Only the net10.0 leg; the net48 leg needs the .NET Framework runtime Windows provides.
+    - name: test
+      run: dotnet test OpenDBDiff.Tests/OpenDBDiff.Tests.csproj -c Release -f net10.0 --no-build
