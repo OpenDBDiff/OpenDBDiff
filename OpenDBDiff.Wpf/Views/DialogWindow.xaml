@@ -1,0 +1,13 @@
+<Window x:Class="OpenDBDiff.Wpf.Views.DialogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        Title="{Binding Title}">
+    <!--
+      Shell for the dialogs the main window opens. Its content is chosen by data template, so a view
+      model decides what a dialog looks like without this window knowing about any of them.
+    -->
+    <ContentControl Content="{Binding}" />
+</Window>

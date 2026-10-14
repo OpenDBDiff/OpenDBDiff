@@ -1,0 +1,34 @@
+<UserControl x:Class="OpenDBDiff.Wpf.Views.DataCompareView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+      Table data: the source rows read-only, the destination rows editable. Both grids are the same
+      DataTable contents the WinForms DataCompareForm put in its grids.
+    -->
+    <Grid Margin="14" Width="900" Height="560">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="{Binding Caption}" FontWeight="Bold" Margin="0,0,0,8" />
+
+        <TextBlock Grid.Row="1" Text="Source" Margin="0,0,0,2" />
+        <DataGrid Grid.Row="2" ItemsSource="{Binding SourceData}" IsReadOnly="True"
+                  AutoGenerateColumns="True" CanUserAddRows="False" />
+
+        <TextBlock Grid.Row="3" Text="Destination (editable)" Margin="0,8,0,2" />
+        <DataGrid Grid.Row="4" ItemsSource="{Binding DestinationData}"
+                  AutoGenerateColumns="True" CanUserAddRows="False" />
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center" Margin="0,0,12,0" />
+            <Button Content="Commit" Width="90" Padding="6,3" Command="{Binding CommitCommand}" Margin="0,0,8,0" />
+            <Button Content="Close" Width="90" Padding="6,3" Command="{Binding CloseCommand}" />
+        </StackPanel>
+    </Grid>
+</UserControl>
