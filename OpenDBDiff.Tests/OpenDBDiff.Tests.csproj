@@ -11,10 +11,10 @@
 
   <ItemGroup>
     <Using Remove="System.Net.Http" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.6.4" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.6.4" />
-    <PackageReference Include="Moq" Version="4.7.145" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.5.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.5.1" />
+    <PackageReference Include="Moq" Version="4.21.0" />
     <Compile Include="..\OpenDBDiff\Properties\AssemblyVersionInfo.cs" Link="Properties\AssemblyVersionInfo.cs" />
     <ProjectReference Include="..\OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj" />
   </ItemGroup>

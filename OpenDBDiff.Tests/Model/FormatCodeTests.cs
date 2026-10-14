@@ -18,13 +18,13 @@ namespace OpenDBDiff.Tests.Model.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void FindAndNormalizeCreate_BrokenThrowsException()
         {
             var triggerItemMock = new Mock<ISchemaBase>();
             triggerItemMock.Setup(x => x.FullName).Returns("[dbo].[iutrgTriggerName]");
 
-            FormatCode.FindAndNormalizeCreate(triggerItemMock.Object, extractor.ReadFileFromResource("broken.sql"));
+            Assert.ThrowsExactly<InvalidOperationException>(
+                () => FormatCode.FindAndNormalizeCreate(triggerItemMock.Object, extractor.ReadFileFromResource("broken.sql")));
         }
 
         [TestMethod]
