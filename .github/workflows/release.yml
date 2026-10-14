@@ -176,6 +176,7 @@ jobs:
     - name: create the draft release
       env:
         GH_TOKEN: ${{ github.token }}
+        GH_REPO: ${{ github.repository }}
         TAG: ${{ needs.build.outputs.tag }}
         VERSION: ${{ needs.build.outputs.version }}
       run: |
