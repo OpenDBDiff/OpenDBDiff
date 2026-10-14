@@ -1,0 +1,17 @@
+<Project>
+
+  <!--
+    Single source of truth for the version and the assembly metadata that every project shares.
+    Bump <Version> on develop as part of the release PR; a release is then tagged v<Version> and the
+    release workflow passes -p:Version=<tag>, which stamps the tagged version into every assembly
+    without editing a file. Project-specific values (a different product name, for example) are set in
+    the project file and override what is here.
+  -->
+  <PropertyGroup>
+    <Version>0.14.0</Version>
+    <Company>OpenDBDiff</Company>
+    <Product>OpenDBDiff</Product>
+    <Copyright>OpenDBDiff</Copyright>
+  </PropertyGroup>
+
+</Project>
