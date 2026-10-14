@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using OpenDBDiff.Wpf.ViewModels;
@@ -5,10 +6,14 @@ using OpenDBDiff.Wpf.ViewModels;
 namespace OpenDBDiff.Wpf.Views
 {
     /// <summary>
-    /// One database connection panel. The three handlers are for events with no bindable equivalent:
-    /// the combo boxes are filled when they are opened, as the WinForms control did on drop-down, and
-    /// a PasswordBox cannot bind its content.
+    /// One database connection panel.
     /// </summary>
+    /// <remarks>
+    /// The handlers here are for events WPF has no bindable equivalent for. The database list is read
+    /// from the drop-down handler, as the WinForms control did, but that read is asynchronous - so the
+    /// popup is reopened once the list arrives, otherwise the first drop-down shows an empty list and
+    /// the databases appear only on the second attempt.
+    /// </remarks>
     public partial class ConnectionPanel : UserControl
     {
         public ConnectionPanel()
@@ -21,20 +26,26 @@ namespace OpenDBDiff.Wpf.Views
             get { return DataContext as ConnectionViewModel; }
         }
 
-        private async void Server_DropDownOpened(object sender, System.EventArgs e)
+        private void Server_DropDownOpened(object sender, EventArgs e)
         {
-            if (ViewModel != null)
-            {
-                ViewModel.LoadServers();
-                await ViewModel.LoadDatabasesAsync().ConfigureAwait(true);
-            }
+            ViewModel?.LoadServers();
         }
 
-        private async void Database_DropDownOpened(object sender, System.EventArgs e)
+        private async void Database_DropDownOpened(object sender, EventArgs e)
         {
-            if (ViewModel != null)
+            if (ViewModel is null || sender is not ComboBox combo)
             {
-                await ViewModel.LoadDatabasesAsync().ConfigureAwait(true);
+                return;
+            }
+
+            var needsReading = !ViewModel.HasDatabases;
+
+            await ViewModel.LoadDatabasesAsync().ConfigureAwait(true);
+
+            // The popup opened before the read finished; open it again now there is something in it.
+            if (needsReading && !combo.IsDropDownOpen && combo.IsKeyboardFocusWithin)
+            {
+                combo.IsDropDownOpen = true;
             }
         }
 

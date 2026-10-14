@@ -1,6 +1,10 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:OpenDBDiff.Wpf.Converters"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <converters:NullToVisibilityConverter x:Key="NullToVisibility" />
+    <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
 
     <!--
       Semantic colours, taken from the WinForms front end so a schema difference looks the same in

@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using OpenDBDiff.SqlServer.Driver;
 using OpenDBDiff.Wpf.Infrastructure;
 using PropertyChanged;
 
@@ -11,14 +12,19 @@ namespace OpenDBDiff.Wpf.ViewModels
     /// One database connection panel: server, database, authentication, credentials.
     /// </summary>
     /// <remarks>
-    /// This is the WPF replacement for SqlServerConnectFront. The connection string is built and
-    /// parsed exactly as that control did — Windows authentication sets IntegratedSecurity and
-    /// TrustServerCertificate, SQL authentication adds UserID and Password — so saved connection
-    /// strings and the reconnect behaviour stay compatible.
+    /// This is the WPF replacement for SqlServerConnectFront, and the three things that control did
+    /// which this class has to reproduce, because leaving any of them out breaks the database list:
+    /// it is read once per server and credential combination (its isDatabaseFilled flag, reset when the
+    /// server, the authentication mode or the credentials change), it is read over a connection with no
+    /// InitialCatalog so a database that happens to be offline cannot stop it, and a failed read is
+    /// reported rather than left as an unexplained empty list.
     /// </remarks>
     [AddINotifyPropertyChangedInterface]
     public sealed class ConnectionViewModel
     {
+        private bool isServerFilled;
+        private bool isDatabaseFilled;
+
         public ConnectionViewModel(string caption)
         {
             Caption = caption;
@@ -57,6 +63,19 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         public bool IsBusy { get; private set; }
 
+        /// <summary>True once the database list has been read for the current server and credentials.</summary>
+        public bool HasDatabases
+        {
+            get { return isDatabaseFilled; }
+        }
+
+        /// <summary>
+        /// Why the database list is empty, when it is. Shown on the panel: the WinForms control put
+        /// this in a message box, and a list that fails to fill without saying so is indistinguishable
+        /// from a server that has no databases.
+        /// </summary>
+        public string? DatabaseError { get; private set; }
+
         public string? TestMessage { get; private set; }
 
         public string? ErrorConnection { get; private set; }
@@ -67,45 +86,13 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         public AsyncRelayCommand TestCommand { get; }
 
-        /// <summary>
-        /// Runs the connection test and reports the outcome on the panel rather than in a message
-        /// box, which is the one behaviour change from the WinForms control.
-        /// </summary>
-        private async Task TestAsync()
-        {
-            IsBusy = true;
-
-            try
-            {
-                var ok = await Task.Run(TestConnection).ConfigureAwait(true);
-                TestMessage = ok ? "Connection successful." : ErrorConnection;
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
-        /// <summary>
-        /// Server names the user can pick from. Automatic discovery (the WinForms control used
-        /// SqlDataSourceEnumerator) is not ported yet, so this starts with the local instance and
-        /// accepts any name typed in; the list also collects the servers already in use.
-        /// </summary>
-        public void LoadServers()
-        {
-            if (!string.IsNullOrWhiteSpace(ServerName) && !Servers.Contains(ServerName))
-            {
-                Servers.Add(ServerName);
-            }
-        }
-
         public string ConnectionString
         {
             get
             {
                 return IsSqlAuthenticationEnabled
-                    ? Build(ServerName, DatabaseName, UserName, Password)
-                    : Build(ServerName, DatabaseName);
+                    ? SqlConnectionStrings.ForDatabase(ServerName, DatabaseName, UserName, Password)
+                    : SqlConnectionStrings.ForDatabase(ServerName, DatabaseName);
             }
             set
             {
@@ -119,23 +106,13 @@ namespace OpenDBDiff.Wpf.ViewModels
                     return;
                 }
 
-                var builder = new SqlConnectionStringBuilder(value);
+                var settings = SqlConnectionStrings.Parse(value);
 
-                ServerName = builder.DataSource;
-                AuthenticationIndex = builder.IntegratedSecurity ? 0 : 1;
-
-                if (builder.IntegratedSecurity)
-                {
-                    UserName = string.Empty;
-                    Password = string.Empty;
-                }
-                else
-                {
-                    UserName = builder.UserID;
-                    Password = builder.Password;
-                }
-
-                DatabaseName = builder.InitialCatalog;
+                ServerName = settings.ServerName;
+                AuthenticationIndex = settings.IntegratedSecurity ? 0 : 1;
+                UserName = settings.UserName;
+                Password = settings.Password;
+                DatabaseName = settings.DatabaseName;
             }
         }
 
@@ -163,50 +140,68 @@ namespace OpenDBDiff.Wpf.ViewModels
             }
         }
 
-        private static string Build(string server, string? database)
-        {
-            var builder = new SqlConnectionStringBuilder
-            {
-                DataSource = server.Trim(),
-                IntegratedSecurity = true,
-                TrustServerCertificate = true
-            };
-
-            // Without a database the connection lands on the login's default database.
-            if (!string.IsNullOrEmpty(database))
-            {
-                builder.InitialCatalog = database!.Trim();
-            }
-
-            return builder.ConnectionString;
-        }
-
-        private static string Build(string server, string? database, string? username, string? password)
-        {
-            var builder = new SqlConnectionStringBuilder(Build(server, database))
-            {
-                IntegratedSecurity = false,
-                UserID = username,
-                Password = password
-            };
-
-            return builder.ConnectionString;
-        }
-
         /// <summary>
-        /// Fills the database list from the server, the way the server combo did when it was dropped
-        /// down. Errors are reported through <see cref="ErrorConnection"/> instead of a message box.
+        /// Runs the connection test and reports the outcome on the panel rather than in a message
+        /// box, which is the one behaviour change from the WinForms control.
         /// </summary>
-        public async Task LoadDatabasesAsync()
+        private async Task TestAsync()
         {
             IsBusy = true;
 
             try
             {
-                Databases.Clear();
+                var ok = await Task.Run(TestConnection).ConfigureAwait(true);
+                TestMessage = ok ? "Connection successful." : ErrorConnection;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
 
-                using (var connection = new SqlConnection(Build(ServerName, null, AuthenticationIndex == 1 ? UserName : null,
-                                                                 AuthenticationIndex == 1 ? Password : null)))
+        /// <summary>
+        /// Server names the user can pick from. Automatic discovery (the WinForms control used
+        /// SqlDataSourceEnumerator) is not ported yet, so this lists the servers already in use and
+        /// accepts any name typed in.
+        /// </summary>
+        public void LoadServers()
+        {
+            if (isServerFilled)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(ServerName) && !Servers.Contains(ServerName))
+            {
+                Servers.Add(ServerName);
+            }
+
+            isServerFilled = true;
+        }
+
+        /// <summary>
+        /// Reads the database list from the server, once per server and credential combination, over a
+        /// connection with no InitialCatalog - which is what the WinForms control did when its database
+        /// box was dropped down.
+        /// </summary>
+        public async Task LoadDatabasesAsync()
+        {
+            if (isDatabaseFilled || IsBusy)
+            {
+                return;
+            }
+
+            IsBusy = true;
+            DatabaseError = null;
+
+            try
+            {
+                var databases = new ObservableCollection<string>();
+                var connectionString = IsSqlAuthenticationEnabled
+                    ? SqlConnectionStrings.ForDefaultDatabase(ServerName, UserName, Password)
+                    : SqlConnectionStrings.ForDefaultDatabase(ServerName);
+
+                using (var connection = new SqlConnection(connectionString))
                 {
                     await connection.OpenAsync().ConfigureAwait(true);
 
@@ -215,22 +210,62 @@ namespace OpenDBDiff.Wpf.ViewModels
                     {
                         while (await reader.ReadAsync().ConfigureAwait(true))
                         {
-                            Databases.Add(reader.GetString(0));
+                            databases.Add(reader.GetString(0));
                         }
                     }
                 }
 
-                ErrorConnection = null;
+                // Only replace the list once the read has succeeded, so a failed refresh cannot wipe a
+                // list that was working.
+                Databases.Clear();
+
+                foreach (var database in databases)
+                {
+                    Databases.Add(database);
+                }
+
+                isDatabaseFilled = true;
             }
             catch (Exception ex)
             {
-                Databases.Clear();
-                ErrorConnection = ex.Message;
+                // Kept on the panel rather than thrown: the caller is a drop-down handler and has
+                // nowhere to put an exception.
+                DatabaseError = string.Format("Could not list the databases on {0}: {1}", ServerName, ex.Message);
             }
             finally
             {
                 IsBusy = false;
             }
+        }
+
+        /// <summary>
+        /// The list depends on the server and the credentials, so changing either makes it stale -
+        /// the same invalidation the WinForms control did from its server box and credential fields.
+        /// </summary>
+        private void OnServerNameChanged()
+        {
+            InvalidateDatabases();
+        }
+
+        private void OnAuthenticationIndexChanged()
+        {
+            InvalidateDatabases();
+        }
+
+        private void OnUserNameChanged()
+        {
+            InvalidateDatabases();
+        }
+
+        private void OnPasswordChanged()
+        {
+            InvalidateDatabases();
+        }
+
+        private void InvalidateDatabases()
+        {
+            isDatabaseFilled = false;
+            DatabaseError = null;
         }
     }
 }

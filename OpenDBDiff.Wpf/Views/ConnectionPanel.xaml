@@ -37,6 +37,12 @@
                   ItemsSource="{Binding Databases}"
                   DropDownOpened="Database_DropDownOpened" />
 
+        <!-- Why the list is empty, when it is: an empty drop-down with no explanation reads as a
+             server with no databases rather than as a failed read. -->
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding DatabaseError}"
+                   Foreground="Red" TextWrapping="Wrap" Margin="0,24,0,4"
+                   Visibility="{Binding DatabaseError, Converter={StaticResource NullToVisibility}}" />
+
         <TextBlock Grid.Row="3" Grid.Column="0" Text="Authentication:" VerticalAlignment="Center" Margin="0,0,6,4" />
         <ComboBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,4"
                   SelectedIndex="{Binding AuthenticationIndex, Mode=TwoWay}">
