@@ -178,57 +178,23 @@ namespace OpenDBDiff.UI
 
         private Boolean CanNodeAdd(ISchemaBase item)
         {
-            ObjectStatus checkedStatus = ObjectStatus.Original;
-            // OriginalStatus == 0, so have to treat differently
-            if (item.Status == ObjectStatus.Original && ShowUnchangedItems) return true;
+            var visibility = SchemaVisibility.None;
 
-            if (item.HasState(ObjectStatus.Drop) && ShowMissingItems) return true;
-            checkedStatus = checkedStatus | ObjectStatus.Drop;
+            if (ShowNewItems) visibility |= SchemaVisibility.New;
+            if (ShowMissingItems) visibility |= SchemaVisibility.Missing;
+            if (ShowChangedItems) visibility |= SchemaVisibility.Changed;
+            if (ShowUnchangedItems) visibility |= SchemaVisibility.Unchanged;
 
-            if (item.HasState(ObjectStatus.Create) && ShowNewItems) return true;
-            checkedStatus = checkedStatus | ObjectStatus.Create;
+            // At the end, we should have checked all possible statuses. The rules live in the schema
+            // library so both front ends share them; this is where a status nobody taught the tree
+            // about is caught, which the test suite also checks.
+            var unhandled = SchemaVisibilityEvaluator.UnhandledStatuses();
+            if (unhandled.Count > 0)
+            {
+                throw new Exception(string.Format("The OjbectStatusType '{0:G}' wasn't implemented in the CanNodeAdd() method. Developer, please ensure that all values in the Enum are checked.", unhandled.First()));
+            }
 
-            if (item.HasState(ObjectStatus.Alter) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | ObjectStatus.Alter;
-
-            if (item.HasState(ObjectStatus.AlterWhitespace) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | ObjectStatus.AlterWhitespace;
-
-            if (item.HasState(ObjectStatus.AlterBody) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | ObjectStatus.AlterBody;
-
-            if (item.HasState(ObjectStatus.Rebuild) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | ObjectStatus.Rebuild;
-
-            if (item.HasState(ObjectStatus.RebuildDependencies) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | ObjectStatus.RebuildDependencies;
-
-            if (item.HasState(ObjectStatus.ChangeOwner) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | ObjectStatus.ChangeOwner;
-
-            if (item.HasState(ObjectStatus.DropOlder) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | ObjectStatus.DropOlder;
-
-            if (item.HasState(ObjectStatus.Bind) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | ObjectStatus.Bind;
-
-            if (item.HasState(ObjectStatus.PermissionSet) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | ObjectStatus.PermissionSet;
-
-            if (item.HasState(ObjectStatus.Disabled) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | ObjectStatus.Disabled;
-
-            if (item.HasState(ObjectStatus.Update) && ShowChangedItems) return true;
-            checkedStatus = checkedStatus | ObjectStatus.Update;
-
-            // At the end, we should have check all possible statuses.
-            ObjectStatus expectedTotalStatus = ObjectStatus.Original;
-            Enum.GetValues(typeof(ObjectStatus)).Cast<ObjectStatus>().ToList().ForEach((s) => expectedTotalStatus = expectedTotalStatus | s);
-
-            if (expectedTotalStatus != checkedStatus)
-                throw new Exception(string.Format("The OjbectStatusType '{0:G}' wasn't implemented in the CanNodeAdd() method. Developer, please ensure that all values in the Enum are checked.", (ObjectStatus)(expectedTotalStatus - checkedStatus)));
-
-            return false;
+            return SchemaVisibilityEvaluator.IsVisible(item, visibility);
         }
 
         public Boolean ShowNewItems
