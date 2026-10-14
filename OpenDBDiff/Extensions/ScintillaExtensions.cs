@@ -16,8 +16,9 @@ namespace OpenDBDiff.Extensions
             scintilla.Styles[Style.Default].SizeF = 9f;
             scintilla.StyleClearAll();
 
-            // Set the SQL Lexer
-            scintilla.Lexer = Lexer.Sql;
+            // Set the SQL Lexer. Scintilla 5 loads lexers from Lexilla by name, so there is no
+            // Lexer property to assign any more; the enum value resolves to the name Lexilla wants.
+            scintilla.LexerName = scintilla.GetLexerIDFromLexer(Lexer.SCLEX_SQL);
 
             // Set the Styles
             scintilla.Styles[Style.Sql.Identifier].ForeColor = Color.SeaGreen;
