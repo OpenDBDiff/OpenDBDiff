@@ -117,7 +117,7 @@ jobs:
 
         foreach ($zip in $expected.Keys) {
           if (-not (Test-Path $zip)) { throw "$zip was not created" }
-          $dir = Join-Path 'verify' [IO.Path]::GetFileNameWithoutExtension($zip)
+          $dir = Join-Path 'verify' ([IO.Path]::GetFileNameWithoutExtension($zip))
           Expand-Archive -Path $zip -DestinationPath $dir -Force
           foreach ($file in $expected[$zip]) {
             if (-not (Test-Path (Join-Path $dir $file))) {
@@ -184,7 +184,11 @@ jobs:
 
         # Re-running a tag build replaces the previous draft rather than failing on it.
         if gh release view "$TAG" >/dev/null 2>&1; then
-          echo "Replacing the existing release for $TAG"
+          if [ "$(gh release view "$TAG" --json isDraft --jq .isDraft)" != "true" ]; then
+            echo "::error::$TAG already has a published release; bump the version instead of re-running this one"
+            exit 1
+          fi
+          echo "Replacing the existing draft for $TAG"
           gh release delete "$TAG" --yes
         fi
 
