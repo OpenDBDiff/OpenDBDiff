@@ -1,4 +1,5 @@
 using OpenDBDiff.Abstractions.Schema.Model;
+using OpenDBDiff.SqlServer.Driver;
 using System;
 using System.Data;
 using System.Drawing;
@@ -20,8 +21,8 @@ namespace OpenDBDiff.UI
 
         private void doCompare()
         {
-            DataTable srcTable = Updater.getData(selected, srcConnectionString);
-            DataTable destTable = Updater.getData(selected, destConnectionString);
+            DataTable srcTable = Updater.getData(selected, srcConnectionString, WinFormsUpdateConfirmation.Instance);
+            DataTable destTable = Updater.getData(selected, destConnectionString, WinFormsUpdateConfirmation.Instance);
 
             srcDgv.MultiSelect = false;
             srcDgv.ReadOnly = true;
@@ -58,7 +59,7 @@ namespace OpenDBDiff.UI
         {
             DataTable destination = (DataTable)destDgv.DataSource;
             DataTable edits = destination.GetChanges();
-            if (Updater.CommitTable(edits, selected.FullName, destConnectionString))
+            if (Updater.CommitTable(edits, selected.FullName, destConnectionString, WinFormsUpdateConfirmation.Instance))
             {
                 destination.AcceptChanges();
                 doCompare();
