@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>OpenDBDiff.Launcher</RootNamespace>
+    <!-- The file users double-click, so it takes the application's own name. The front end it starts
+         keeps OpenDBDiff.Wpf.exe, and the two never ship without each other. -->
+    <AssemblyName>OpenDBDiff</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <ApplicationIcon>..\OpenDBDiff.Wpf\App.ico</ApplicationIcon>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+
+    <!-- NativeAOT: the point of this project is to run on a machine that has no .NET at all, so it
+         cannot itself be a framework dependent build. The shim is a few hundred kilobytes and needs
+         a Windows toolchain, which is why it is published on the Windows job. -->
+    <PublishAot>true</PublishAot>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <StripSymbols>true</StripSymbols>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+</Project>
