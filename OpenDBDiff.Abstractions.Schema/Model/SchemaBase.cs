@@ -256,7 +256,17 @@ namespace OpenDBDiff.Abstractions.Schema.Model
 
         public Boolean HasState(ObjectStatus statusFind)
         {
-            return ((this.Status & statusFind) == statusFind);
+          return ((this.Status & statusFind) == statusFind);
+        }
+        
+        public void AddState(ObjectStatus statusAdd)
+        {
+          this.status |= statusAdd;
+        }
+
+        public void RemoveState(ObjectStatus statusRemove)
+        {
+          this.status &= ~statusRemove;
         }
 
         public virtual Boolean IsCodeType
