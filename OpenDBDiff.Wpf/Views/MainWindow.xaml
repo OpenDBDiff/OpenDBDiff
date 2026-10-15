@@ -4,6 +4,7 @@
         xmlns:converters="clr-namespace:OpenDBDiff.Wpf.Converters"
         xmlns:views="clr-namespace:OpenDBDiff.Wpf.Views"
         Title="OpenDBDiff"
+        Icon="App.ico"
         Width="1440" Height="900" MinWidth="1024" MinHeight="640"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource Bg}"
