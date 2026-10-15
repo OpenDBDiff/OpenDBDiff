@@ -75,9 +75,11 @@ namespace OpenDBDiff.Ui.Model
             new ShortcutRow("Space", "Space", string.Empty, "Toggle inclusion for the focused row", ShortcutWiring.CodeBehind),
             new ShortcutRow("Left", "Left", string.Empty, "Collapse the focused group", ShortcutWiring.CodeBehind),
             new ShortcutRow("Right", "Right", string.Empty, "Expand the focused group", ShortcutWiring.CodeBehind),
-            new ShortcutRow("Ctrl+A", "A", "Control", "Select all visible differences", ShortcutWiring.KeyBinding),
-            new ShortcutRow("Ctrl+Z", "Z", "Control", "Undo a selection change", ShortcutWiring.KeyBinding),
-            new ShortcutRow("Ctrl+Y", "Y", "Control", "Redo a selection change", ShortcutWiring.KeyBinding),
+            // The three editing keys are code-behind because they act on the selection, which a Window-level
+            // KeyBinding cannot see: the list owns what is selected.
+            new ShortcutRow("Ctrl+A", "A", "Control", "Select all visible differences", ShortcutWiring.CodeBehind),
+            new ShortcutRow("Ctrl+Z", "Z", "Control", "Undo a selection change", ShortcutWiring.CodeBehind),
+            new ShortcutRow("Ctrl+Y", "Y", "Control", "Redo a selection change", ShortcutWiring.CodeBehind),
             new ShortcutRow("F1", "F1", string.Empty, "Show this list", ShortcutWiring.CodeBehind),
             new ShortcutRow("Up / Down", "Up", string.Empty, "Move the focus in the review list", ShortcutWiring.Native),
             new ShortcutRow("Tab", "Tab", string.Empty, "Move through the regions in order", ShortcutWiring.Native)
