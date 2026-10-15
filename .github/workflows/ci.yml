@@ -70,6 +70,22 @@ jobs:
         if-no-files-found: error
         retention-days: 14
 
+    # The same front end with the desktop runtime inside it, so it starts on a machine that has no
+    # .NET installed at all - which is the only way to warn about a missing runtime before managed
+    # code can run: the apphost checks, and it can only check for something it can be given.
+    - name: publish self-contained
+      run: dotnet publish OpenDBDiff.Wpf/OpenDBDiff.Wpf.csproj -c Release -r win-x64 --self-contained true -o publish/win-x64
+
+    # Uploaded as the folder: the action archives it itself, and zipping it here as well would leave a
+    # zip inside a zip, which some extractors handle badly.
+    - name: WPF self-contained
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: OpenDBDiff-Wpf-win-x64-self-contained-${{ env.date }}-${{ env.shorthash }}
+        path: publish/win-x64
+        if-no-files-found: error
+        retention-days: 14
+
   test-linux:
     name: test-linux
     runs-on: ubuntu-latest
