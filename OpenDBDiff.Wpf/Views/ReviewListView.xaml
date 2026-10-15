@@ -38,9 +38,35 @@
             </Border>
         </DataTemplate>
 
-        <!-- Section 6.4.3: the item row. -->
+        <!-- Section 6.4.3: the item row, with the context menu of section 7.3. -->
         <DataTemplate x:Key="ItemTemplate" DataType="{x:Type vm:ResultsRowViewModel}">
             <Border Height="38" Padding="8,0" Background="{Binding IsSelected, Converter={StaticResource SelectionBrush}}">
+                <Border.ContextMenu>
+                    <!-- The commands live on the shell, so every parameter is the object's key: the row
+                         itself is a view of the item, not the item. -->
+                    <ContextMenu>
+                        <MenuItem Header="Include only this"
+                                  Command="{Binding DataContext.IncludeOnlyCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                  CommandParameter="{Binding Item.Key}" />
+                        <Separator />
+                        <MenuItem Header="Include all of this type"
+                                  Command="{Binding DataContext.IncludeTypeCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                  CommandParameter="{Binding Item.Key}" />
+                        <MenuItem Header="Exclude all of this type"
+                                  Command="{Binding DataContext.ExcludeTypeCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                  CommandParameter="{Binding Item.Key}" />
+                        <Separator />
+                        <MenuItem Header="Copy name"
+                                  Command="{Binding DataContext.CopyNameCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                  CommandParameter="{Binding Item.Key}" />
+                        <MenuItem Header="Copy script"
+                                  Command="{Binding DataContext.CopyItemScriptCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                  CommandParameter="{Binding Item.Key}" />
+                        <MenuItem Header="Show dependencies&#x2026;"
+                                  Command="{Binding DataContext.ShowDependenciesCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                  CommandParameter="{Binding Item.Key}" />
+                    </ContextMenu>
+                </Border.ContextMenu>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -130,6 +156,7 @@
         </Border>
 
         <ListBox x:Name="Rows"
+                 PreviewKeyDown="Rows_PreviewKeyDown"
                  Grid.Row="1"
                  ItemsSource="{Binding Results.Rows}"
                  SelectedItem="{Binding Results.SelectedRow, Mode=TwoWay}"

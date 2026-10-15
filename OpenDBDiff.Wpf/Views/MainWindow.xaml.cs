@@ -168,6 +168,10 @@ namespace OpenDBDiff.Wpf.Views
                 {
                     viewModel.CloseScriptPreviewCommand.Execute(null);
                 }
+                else if (viewModel.IsDependenciesOpen)
+                {
+                    viewModel.CloseDependenciesCommand.Execute(null);
+                }
                 else if (viewModel.Results != null && !string.IsNullOrEmpty(viewModel.Results.SearchText))
                 {
                     viewModel.Results.SearchText = string.Empty;

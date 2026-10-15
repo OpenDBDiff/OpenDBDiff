@@ -139,7 +139,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
-            <Button Style="{StaticResource SecondaryButton}" Content="Cancel" Margin="0,0,10,0"
+            <Button x:Name="CancelButton" Style="{StaticResource SecondaryButton}" Content="Cancel" Margin="0,0,10,0"
                     Click="Cancel_Click" IsDefault="True" IsCancel="True" />
             <Button Content="{Binding ApplyLabel}" Click="Apply_Click" IsEnabled="{Binding CanApply}">
                 <Button.Style>

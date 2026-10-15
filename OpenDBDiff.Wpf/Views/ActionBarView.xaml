@@ -72,6 +72,11 @@
                                     <DataTrigger Binding="{Binding HasBlockingWarnings}" Value="True">
                                         <Setter Property="Background" Value="{StaticResource BorderStrong}" />
                                     </DataTrigger>
+                                    <!-- Section 6.7.2: saving a script is not destructive, whatever the
+                                         script contains, because nothing is sent to the server. -->
+                                    <DataTrigger Binding="{Binding IsScriptOnlyMode}" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource Accent}" />
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>

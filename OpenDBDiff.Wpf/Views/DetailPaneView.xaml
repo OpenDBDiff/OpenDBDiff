@@ -222,10 +222,14 @@
                 BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,1,0,0"
                 Visibility="{Binding HasDependencyBanner, Converter={StaticResource BoolToVisibility}}">
             <DockPanel>
-                <Button DockPanel.Dock="Right" Style="{StaticResource SecondaryButton}" Padding="12,4" MinHeight="28"
-                        Content="{Binding DependencyFixLabel}" Command="{Binding FixWarningCommand}"
-                        CommandParameter="{Binding FocusedWarning}"
-                        IsEnabled="{Binding HasDependencyFix}" />
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <Button Style="{StaticResource SecondaryButton}" Padding="12,4" MinHeight="28" Margin="0,0,8,0"
+                            Content="{Binding DependencyFixLabel}" Command="{Binding FixWarningCommand}"
+                            CommandParameter="{Binding FocusedWarning}"
+                            IsEnabled="{Binding HasDependencyFix}" />
+                    <Button Style="{StaticResource SecondaryButton}" Padding="12,4" MinHeight="28"
+                            Content="Show dependencies&#x2026;" Command="{Binding ShowFocusedDependenciesCommand}" />
+                </StackPanel>
                 <TextBlock Text="{Binding DependencyMessage}" Foreground="{StaticResource WarningFg}"
                            TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,12,0" />
             </DockPanel>

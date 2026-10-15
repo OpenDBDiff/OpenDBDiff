@@ -1,0 +1,66 @@
+<UserControl x:Class="OpenDBDiff.Wpf.Views.DependenciesPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Section 7.3's "Show dependencies…", shown over the detail pane the way section 6.7.1's script
+         preview is, because section 6.10 allows a message-box modal only for the confirmation dialog. -->
+    <Border Background="{StaticResource Surface}" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="1"
+            Margin="8">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="18" ShadowDepth="2" Opacity="0.18" />
+        </Border.Effect>
+
+        <Grid Margin="14">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0" Margin="0,0,0,8">
+                <Button DockPanel.Dock="Right" Style="{StaticResource SecondaryButton}" Content="Close"
+                        Command="{Binding CloseDependenciesCommand}" />
+                <StackPanel>
+                    <TextBlock Style="{StaticResource PaneHeading}" Text="{Binding DependencyPanel.Title}" />
+                    <TextBlock Style="{StaticResource MutedText}" Text="{Binding DependencyPanel.Summary}"
+                               Margin="0,4,0,0" />
+                </StackPanel>
+            </DockPanel>
+
+            <TextBlock Grid.Row="1" Style="{StaticResource MutedText}" Text="{Binding DependencyPanel.Caveat}"
+                       TextWrapping="Wrap" Margin="0,0,0,10" />
+
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <StackPanel Visibility="{Binding DependencyPanel.HasNeeds, Converter={StaticResource BoolToVisibility}}">
+                        <TextBlock Text="Needs" Style="{StaticResource SmallCapsLabel}" Margin="0,0,0,6" />
+                        <ItemsControl ItemsSource="{Binding DependencyPanel.Needs}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" FontFamily="{StaticResource CodeFont}" FontSize="12"
+                                               TextWrapping="Wrap" Margin="0,0,0,3" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,14,0,0"
+                                Visibility="{Binding DependencyPanel.HasNeededBy, Converter={StaticResource BoolToVisibility}}">
+                        <TextBlock Text="Needed by" Style="{StaticResource SmallCapsLabel}" Margin="0,0,0,6" />
+                        <ItemsControl ItemsSource="{Binding DependencyPanel.NeededBy}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" FontFamily="{StaticResource CodeFont}" FontSize="12"
+                                               TextWrapping="Wrap" Margin="0,0,0,3" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+
+            <TextBlock Grid.Row="3" Style="{StaticResource MutedText}" Margin="0,10,0,0"
+                       Text="Esc closes this panel." />
+        </Grid>
+    </Border>
+</UserControl>

@@ -17,6 +17,10 @@ namespace OpenDBDiff.Wpf.Views
         {
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
+
+            // Section 6.8 and AC-08: the focus starts on Cancel, so a keyboard user who presses Enter
+            // because a dialog appeared cancels rather than applying.
+            Loaded += (sender, e) => CancelButton.Focus();
         }
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)

@@ -83,6 +83,18 @@ namespace OpenDBDiff.Wpf.ViewModels
         /// <summary>0 = Windows authentication, 1 = SQL Server authentication, as the combo box entries.</summary>
         public int AuthenticationIndex { get; set; }
 
+        /// <summary>
+        /// Section 6.7.2: set on the destination, the Apply button becomes "Save script… →" and nothing
+        /// is ever written to this database by this tool.
+        /// </summary>
+        /// <remarks>
+        /// This is deliberately not routed through the edit path the other fields use. Marking the results
+        /// stale when it changes would disable the very button the user just asked for, and nothing about
+        /// the comparison changes when a destination is declared read-only for this tool. The shell
+        /// listens for this one property instead.
+        /// </remarks>
+        public bool NeverWriteToDatabase { get; set; }
+
         public bool UseWindowsAuthentication
         {
             get { return AuthenticationIndex == 0; }
@@ -498,6 +510,7 @@ namespace OpenDBDiff.Wpf.ViewModels
                 UserName = string.IsNullOrEmpty(connection.UserName) ? "sa" : connection.UserName;
                 environmentKind = connection.Environment;
                 customEnvironment = string.Empty;
+                NeverWriteToDatabase = connection.NeverWrite;
             }
             finally
             {
@@ -608,7 +621,7 @@ namespace OpenDBDiff.Wpf.ViewModels
             if (handler != null)
             {
                 handler(this, new SavedConnectionEventArgs(
-                    new SavedConnection(name.Trim(), ServerName, DatabaseName, UseWindowsAuthentication, UserName, Environment.Kind)));
+                    new SavedConnection(name.Trim(), ServerName, DatabaseName, UseWindowsAuthentication, UserName, Environment.Kind, NeverWriteToDatabase)));
             }
         }
 
@@ -699,6 +712,7 @@ namespace OpenDBDiff.Wpf.ViewModels
         {
             MarkEdited();
         }
+
 
         private void OnAuthenticationIndexChanged()
         {

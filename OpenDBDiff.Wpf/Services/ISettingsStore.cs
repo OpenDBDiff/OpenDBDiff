@@ -21,6 +21,9 @@ namespace OpenDBDiff.Wpf.Services
         public bool IntegratedSecurity { get; set; } = true;
 
         public EnvironmentKind Environment { get; set; } = EnvironmentKind.None;
+
+        /// <summary>Section 6.7.2's "Never write to this database from OpenDBDiff".</summary>
+        public bool NeverWrite { get; set; }
     }
 
     /// <summary>One recent source/destination pair (section 6.1.6).</summary>

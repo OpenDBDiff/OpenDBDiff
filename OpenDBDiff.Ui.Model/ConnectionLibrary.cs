@@ -16,6 +16,11 @@ namespace OpenDBDiff.Ui.Model
     public sealed class SavedConnection
     {
         public SavedConnection(string name, string host, string database, bool integratedSecurity, string userName, EnvironmentKind environment)
+            : this(name, host, database, integratedSecurity, userName, environment, false)
+        {
+        }
+
+        public SavedConnection(string name, string host, string database, bool integratedSecurity, string userName, EnvironmentKind environment, bool neverWrite)
         {
             Name = name ?? string.Empty;
             Host = host ?? string.Empty;
@@ -36,6 +41,12 @@ namespace OpenDBDiff.Ui.Model
         public string UserName { get; }
 
         public EnvironmentKind Environment { get; }
+
+        /// <summary>
+        /// Section 6.7.2: the per-connection "Never write to this database from OpenDBDiff". It is stored
+        /// with the connection because it is a standing decision about that database, not a session one.
+        /// </summary>
+        public bool NeverWrite { get; }
 
         /// <summary>What the picker lists next to the name.</summary>
         public string Description

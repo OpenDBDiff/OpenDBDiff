@@ -225,6 +225,11 @@
                          a window, so the list and the selection stay visible under it. -->
                     <views:ScriptPreviewPanelView DataContext="{Binding}"
                                                   Visibility="{Binding IsScriptPreviewOpen, Converter={StaticResource BoolToVisibility}}" />
+
+                    <!-- Section 7.3's "Show dependencies…", shown the same way, because section 6.10
+                         allows no extra message-box modal. -->
+                    <views:DependenciesPanelView DataContext="{Binding}"
+                                                 Visibility="{Binding IsDependenciesOpen, Converter={StaticResource BoolToVisibility}}" />
                 </Grid>
             </Grid>
 

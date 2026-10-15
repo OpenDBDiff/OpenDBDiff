@@ -145,6 +145,12 @@
                 </TextBlock.Style>
             </TextBlock>
 
+            <!-- Section 6.7.2: a per-connection standing decision, stored with the connection. Set on
+                 the destination it replaces Apply with Save script… and skips the confirmation. -->
+            <CheckBox Content="Never write to this database from OpenDBDiff" Margin="14,0,0,0"
+                      VerticalAlignment="Center" IsChecked="{Binding NeverWriteToDatabase, Mode=TwoWay}"
+                      ToolTip="Save the script instead of applying it; nothing is ever written to this database" />
+
             <!-- 7. Save as: stores this card as a saved connection. -->
             <Button Style="{StaticResource TextLinkButton}" Content="Save as&#x2026;" Margin="12,0,0,0"
                     Command="{Binding SaveAsCommand}" VerticalAlignment="Center" />

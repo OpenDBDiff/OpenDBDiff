@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -77,6 +78,7 @@ namespace OpenDBDiff.Wpf.ViewModels
             Destination = new ConnectionViewModel("Destination database:", dialogs);
             Progress = new ProgressViewModel(string.Empty, string.Empty);
 
+            Destination.PropertyChanged += OnDestinationPropertyChanged;
             Source.Edited += OnConnectionEdited;
             Destination.Edited += OnConnectionEdited;
             Source.Saved += OnConnectionSaved;
@@ -125,6 +127,14 @@ namespace OpenDBDiff.Wpf.ViewModels
             FixWarningCommand = new RelayCommand<DependencyWarning>(FixWarning);
             FixAllCommand = new RelayCommand(FixAll, () => CanFixAllBlocking);
             ToggleDestructiveFilterCommand = new RelayCommand(ToggleDestructiveFilter, () => Results != null && Results.HasDestructive);
+            IncludeOnlyCommand = new RelayCommand<DiffItemKey>(IncludeOnly, IsKnownKey);
+            IncludeTypeCommand = new RelayCommand<DiffItemKey>(key => SetTypeIncluded(key, true), IsKnownKey);
+            ExcludeTypeCommand = new RelayCommand<DiffItemKey>(key => SetTypeIncluded(key, false), IsKnownKey);
+            CopyNameCommand = new RelayCommand<DiffItemKey>(CopyName, IsKnownKey);
+            CopyItemScriptCommand = new RelayCommand<DiffItemKey>(CopyItemScript, IsKnownKey);
+            ShowDependenciesCommand = new RelayCommand<DiffItemKey>(ShowDependencies, IsKnownKey);
+            ShowFocusedDependenciesCommand = new RelayCommand(() => ShowDependencies(Results?.FocusedItem?.Key), () => Results?.FocusedItem != null);
+            CloseDependenciesCommand = new RelayCommand(CloseDependencies, () => IsDependenciesOpen);
             CopyReportCommand = new RelayCommand(CopyReport, () => IsReport);
             SaveReportCommand = new RelayCommand(SaveReport, () => IsReport);
             RetryFailedCommand = new AsyncRelayCommand(RetryFailedAsync, () => IsReport && (Report?.CanRetryFailed ?? false));
@@ -289,6 +299,29 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         public RelayCommand ToggleDestructiveFilterCommand { get; }
 
+        // ---- Section 7.3: the row context menu -------------------------------------------------------
+
+        public RelayCommand<DiffItemKey> IncludeOnlyCommand { get; }
+
+        public RelayCommand<DiffItemKey> IncludeTypeCommand { get; }
+
+        public RelayCommand<DiffItemKey> ExcludeTypeCommand { get; }
+
+        public RelayCommand<DiffItemKey> CopyNameCommand { get; }
+
+        public RelayCommand<DiffItemKey> CopyItemScriptCommand { get; }
+
+        public RelayCommand<DiffItemKey> ShowDependenciesCommand { get; }
+
+        public RelayCommand ShowFocusedDependenciesCommand { get; }
+
+        public RelayCommand CloseDependenciesCommand { get; }
+
+        /// <summary>Section 7.3's dependency listing, which is a panel rather than a dialog (section 6.10).</summary>
+        public DependencyPanelViewModel? DependencyPanel { get; private set; }
+
+        public bool IsDependenciesOpen { get; private set; }
+
         // ---- Section 6.9: the report state --------------------------------------------------------
 
         public RelayCommand CopyReportCommand { get; }
@@ -300,6 +333,16 @@ namespace OpenDBDiff.Wpf.ViewModels
         public RelayCommand BackToResultsCommand { get; }
 
         public RelayCommand OpenReportFolderCommand { get; }
+
+        /// <summary>
+        /// Section 6.7.2: this destination is marked "Never write to this database from OpenDBDiff", so
+        /// the primary action saves the script instead of applying it and no confirmation is asked for,
+        /// because nothing is going to happen to the database.
+        /// </summary>
+        public bool IsScriptOnlyMode
+        {
+            get { return Destination.NeverWriteToDatabase; }
+        }
 
         /// <summary>The report of the last apply, which is what the REPORT state shows.</summary>
         public ApplyReportViewModel? Report { get; private set; }
@@ -744,12 +787,28 @@ namespace OpenDBDiff.Wpf.ViewModels
             {
                 var set = Results?.DiffSet;
 
+                if (IsScriptOnlyMode)
+                {
+                    return ScriptOnlyLabel;
+                }
+
                 return set == null
                     ? "Review and apply changes"
                     : set.ApplyLabel(
                         string.IsNullOrEmpty(Destination.DatabaseName) ? "destination" : Destination.DatabaseName,
                         ServerOf(Destination));
             }
+        }
+
+        /// <summary>Section 6.7.2's replacement label for the primary action.</summary>
+        public string ScriptOnlyLabel
+        {
+            get { return "Save script\u2026 \u2192"; }
+        }
+
+        public string ScriptOnlyTooltip
+        {
+            get { return "This destination is marked never-write, so the script is saved instead of applied."; }
         }
 
         public bool CanApply
@@ -788,6 +847,11 @@ namespace OpenDBDiff.Wpf.ViewModels
                 if (!decision.CanApply)
                 {
                     return decision.DisabledReason;
+                }
+
+                if (IsScriptOnlyMode)
+                {
+                    return ScriptOnlyTooltip;
                 }
 
                 // Section 6.7: the tooltip repeats the label and the environment tag.
@@ -922,6 +986,7 @@ namespace OpenDBDiff.Wpf.ViewModels
             OnPropertyChanged(nameof(HasDependencyFix));
             OnPropertyChanged(nameof(ChangePosition));
             OnPropertyChanged(nameof(HasChanges));
+            ShowFocusedDependenciesCommand.RaiseCanExecuteChanged();
         }
 
         public string SetupGuidance
@@ -984,7 +1049,8 @@ namespace OpenDBDiff.Wpf.ViewModels
                     Database = connection.Database,
                     IntegratedSecurity = connection.IntegratedSecurity,
                     UserName = connection.UserName,
-                    Environment = connection.Environment
+                    Environment = connection.Environment,
+                    NeverWrite = connection.NeverWrite
                 })
                 .ToList();
 
@@ -1028,7 +1094,7 @@ namespace OpenDBDiff.Wpf.ViewModels
                 .Where(entry => !string.IsNullOrWhiteSpace(entry.Name))
                 .Select(entry => new SavedConnection(
                     entry.Name!, entry.Host ?? string.Empty, entry.Database ?? string.Empty,
-                    entry.IntegratedSecurity, entry.UserName ?? string.Empty, entry.Environment))
+                    entry.IntegratedSecurity, entry.UserName ?? string.Empty, entry.Environment, entry.NeverWrite))
                 .ToList();
 
             recentPairs = (state.RecentPairs ?? new List<RecentPairState>())
@@ -1667,6 +1733,155 @@ namespace OpenDBDiff.Wpf.ViewModels
                 : "Showing everything.";
         }
 
+        private DiffItem ItemOf(DiffItemKey key)
+        {
+            var results = Results;
+
+            if (key == null || results == null)
+            {
+                return null;
+            }
+
+            return results.DiffSet.AllItems.FirstOrDefault(item => item.Key.Equals(key));
+        }
+
+        private bool IsKnownKey(DiffItemKey key)
+        {
+            return ItemOf(key) != null;
+        }
+
+        /// <summary>Section 7.3: "Include only this", as one undoable step like every other inclusion change.</summary>
+        private void IncludeOnly(DiffItemKey key)
+        {
+            var results = Results;
+
+            if (results == null || !IsKnownKey(key))
+            {
+                return;
+            }
+
+            results.ApplyInclusionChange(new List<DiffItemKey> { key }, "Include only " + key.FullName);
+        }
+
+        /// <summary>
+        /// Section 7.3's include or exclude a whole type. It is one step rather than one per object, so a
+        /// single Ctrl+Z takes the whole decision back.
+        /// </summary>
+        private void SetTypeIncluded(DiffItemKey key, bool included)
+        {
+            var results = Results;
+            var item = ItemOf(key);
+
+            if (results == null || item == null)
+            {
+                return;
+            }
+
+            var type = key.ObjectType;
+            var wanted = new HashSet<DiffItemKey>(results.DiffSet.IncludedKeys);
+            var changed = 0;
+
+            foreach (var candidate in results.DiffSet.AllItems.Where(candidate => candidate.Key.ObjectType == type && candidate.IsSelectable))
+            {
+                changed += included ? (wanted.Add(candidate.Key) ? 1 : 0) : (wanted.Remove(candidate.Key) ? 1 : 0);
+            }
+
+            if (changed == 0)
+            {
+                return;
+            }
+
+            results.ApplyInclusionChange(wanted.ToList(), (included ? "Include all " : "Exclude all ") + TypeNames.Plural(type));
+        }
+
+        private void CopyName(DiffItemKey key)
+        {
+            var item = ItemOf(key);
+
+            if (item == null)
+            {
+                return;
+            }
+
+            try
+            {
+                Clipboard.SetText(key.FullName);
+                StatusMessage = "Copied " + key.FullName + " to the clipboard.";
+                ShowToast(StatusMessage);
+            }
+            catch (Exception ex)
+            {
+                dialogs.ShowError("Copying the name", ex);
+            }
+        }
+
+        /// <summary>Section 7.3's "Copy script": this object's statements, not the whole selection's.</summary>
+        private void CopyItemScript(DiffItemKey key)
+        {
+            var item = ItemOf(key);
+
+            if (item == null)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(item.Script))
+            {
+                StatusMessage = key.FullName + " has no script of its own.";
+                ShowToast(StatusMessage);
+                return;
+            }
+
+            try
+            {
+                Clipboard.SetText(item.Script);
+                StatusMessage = "Copied the script for " + key.FullName + ".";
+                ShowToast(StatusMessage);
+            }
+            catch (Exception ex)
+            {
+                dialogs.ShowError("Copying the object's script", ex);
+            }
+        }
+
+        /// <summary>
+        /// Section 7.3's "Show dependencies…": what this object needs and what needs it, from the engine's
+        /// graph. Shown as a panel because section 6.10 allows no extra message-box modal.
+        /// </summary>
+        private void ShowDependencies(DiffItemKey key)
+        {
+            if (!IsKnownKey(key))
+            {
+                return;
+            }
+
+            var graph = dependencies;
+
+            FocusItem(key);
+
+            DependencyPanel = new DependencyPanelViewModel(
+                key.FullName,
+                graph == null ? new List<DiffItemKey>() : graph.DependenciesOf(key),
+                graph == null ? new List<DiffItemKey>() : graph.DependentsOf(key));
+
+            IsDependenciesOpen = true;
+            RaiseDependencyPanelState();
+        }
+
+        private void CloseDependencies()
+        {
+            IsDependenciesOpen = false;
+            RaiseDependencyPanelState();
+        }
+
+        private void RaiseDependencyPanelState()
+        {
+            OnPropertyChanged(nameof(DependencyPanel));
+            OnPropertyChanged(nameof(IsDependenciesOpen));
+            ShowFocusedDependenciesCommand.RaiseCanExecuteChanged();
+            CloseDependenciesCommand.RaiseCanExecuteChanged();
+        }
+
         /// <summary>Section 6.5.3: F7 and Shift+F7 walk the changes of the focused object.</summary>
         private void MoveChange(int direction)
         {
@@ -1691,6 +1906,14 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         private async Task ApplyAsync()
         {
+            // Section 6.7.2: a destination marked never-write gets the script, not the statements, and no
+            // confirmation dialog, because there is nothing to confirm.
+            if (IsScriptOnlyMode)
+            {
+                SaveScriptAs();
+                return;
+            }
+
             var set = Results?.DiffSet;
 
             if (set == null || !CanApply)
@@ -2003,6 +2226,8 @@ namespace OpenDBDiff.Wpf.ViewModels
         {
             OnPropertyChanged(nameof(IsScriptPreviewOpen));
             OnPropertyChanged(nameof(ScriptPreview));
+            OnPropertyChanged(nameof(IsDependenciesOpen));
+            OnPropertyChanged(nameof(DependencyPanel));
             CloseScriptPreviewCommand.RaiseCanExecuteChanged();
         }
 
@@ -2225,6 +2450,21 @@ namespace OpenDBDiff.Wpf.ViewModels
             OnPropertyChanged(nameof(PanelHeading));
         }
 
+        /// <summary>
+        /// Section 6.7.2's checkbox changes what the primary action does and nothing else, so it refreshes
+        /// the action bar directly rather than through the connection-changed path, which would mark the
+        /// results stale and disable the button the user just asked for.
+        /// </summary>
+        private void OnDestinationPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ConnectionViewModel.NeverWriteToDatabase))
+            {
+                OnPropertyChanged(nameof(IsScriptOnlyMode));
+                OnPropertyChanged(nameof(ApplyLabel));
+                OnPropertyChanged(nameof(ApplyTooltip));
+            }
+        }
+
         private void OnConnectionEdited(object? sender, EventArgs e)
         {
             OnPropertyChanged(nameof(CanInvokeCompare));
@@ -2440,7 +2680,8 @@ namespace OpenDBDiff.Wpf.ViewModels
                 Database = connection.DatabaseName,
                 IntegratedSecurity = connection.UseWindowsAuthentication,
                 UserName = connection.UserName,
-                Environment = connection.Environment.Text
+                Environment = connection.Environment.Text,
+                NeverWrite = connection.NeverWriteToDatabase
             };
         }
 
@@ -2468,7 +2709,8 @@ namespace OpenDBDiff.Wpf.ViewModels
                 stored.Database ?? string.Empty,
                 stored.IntegratedSecurity,
                 stored.UserName ?? string.Empty,
-                environment));
+                environment,
+                stored.NeverWrite));
 
             if (environment == EnvironmentKind.Custom)
             {

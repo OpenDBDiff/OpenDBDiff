@@ -17,6 +17,12 @@ namespace OpenDBDiff.Wpf.Services
 
         /// <summary>The environment tag's text, empty for none (section 6.1.4).</summary>
         public string? Environment { get; set; }
+
+        /// <summary>
+        /// Section 6.7.2's "Never write to this database from OpenDBDiff". An additive field in the sense
+        /// of section 11.1: a reader that does not know it ignores it, and a file without it means false.
+        /// </summary>
+        public bool NeverWrite { get; set; }
     }
 
     /// <summary>
