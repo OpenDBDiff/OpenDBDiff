@@ -1,0 +1,99 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Section 13: colour tokens (13.2), typography (13.1), spacing and radii (13.3). -->
+
+    <SolidColorBrush x:Key="Bg" Color="#F4F5F7" />
+    <SolidColorBrush x:Key="Surface" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="SurfaceAlt" Color="#EEF0F4" />
+    <SolidColorBrush x:Key="BorderSubtle" Color="#DDE2EA" />
+    <SolidColorBrush x:Key="BorderStrong" Color="#CBD2DE" />
+    <SolidColorBrush x:Key="Text" Color="#1B2230" />
+    <SolidColorBrush x:Key="TextMuted" Color="#5B6577" />
+    <SolidColorBrush x:Key="TextFaint" Color="#8A93A5" />
+    <SolidColorBrush x:Key="Accent" Color="#2F5BEA" />
+    <SolidColorBrush x:Key="AccentBg" Color="#E5ECFF" />
+    <SolidColorBrush x:Key="AccentFg" Color="#1F4FD1" />
+    <SolidColorBrush x:Key="SelectionBg" Color="#EEF3FF" />
+    <SolidColorBrush x:Key="WarningBg" Color="#FFF8E6" />
+    <SolidColorBrush x:Key="WarningFg" Color="#7A4A00" />
+    <SolidColorBrush x:Key="Danger" Color="#B42318" />
+    <SolidColorBrush x:Key="Highlight" Color="#FFE58F" />
+    <SolidColorBrush x:Key="HoverBg" Color="#F2F4F8" />
+
+    <SolidColorBrush x:Key="StatusCreateBg" Color="#E3F4EA" />
+    <SolidColorBrush x:Key="StatusCreateFg" Color="#0F6B38" />
+    <SolidColorBrush x:Key="StatusCreateBorder" Color="#9BD3B4" />
+    <SolidColorBrush x:Key="StatusAlterBg" Color="#E5ECFF" />
+    <SolidColorBrush x:Key="StatusAlterFg" Color="#1F4FD1" />
+    <SolidColorBrush x:Key="StatusAlterBorder" Color="#A9BDF5" />
+    <SolidColorBrush x:Key="StatusDropBg" Color="#FDE8E6" />
+    <SolidColorBrush x:Key="StatusDropFg" Color="#A5210F" />
+    <SolidColorBrush x:Key="StatusDropBorder" Color="#F2A9A0" />
+
+    <FontFamily x:Key="UiFont">Segoe UI Variable Text, Segoe UI</FontFamily>
+    <FontFamily x:Key="CodeFont">Cascadia Mono, Consolas</FontFamily>
+    <sys:Double x:Key="BodySize">14</sys:Double>
+    <sys:Double x:Key="CodeSize">13</sys:Double>
+
+    <Style x:Key="SmallCapsLabel" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+    </Style>
+
+    <Style x:Key="PaneHeading" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource Text}" />
+    </Style>
+
+    <Style x:Key="MutedText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+
+    <Style x:Key="StatusBadge" TargetType="Border">
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="Padding" Value="7,2" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="StatusBadgeText" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style x:Key="SecondaryButton" TargetType="Button">
+        <Setter Property="Padding" Value="14,7" />
+        <Setter Property="MinHeight" Value="34" />
+        <Setter Property="Foreground" Value="{StaticResource Text}" />
+        <Setter Property="Background" Value="{StaticResource Surface}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderStrong}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <Style x:Key="PrimaryButton" TargetType="Button">
+        <Setter Property="Padding" Value="16,9" />
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="{StaticResource Accent}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style x:Key="DestructiveButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+        <Setter Property="Background" Value="{StaticResource Danger}" />
+    </Style>
+
+    <Style x:Key="StatusChip" TargetType="ToggleButton">
+        <Setter Property="Height" Value="34" />
+        <Setter Property="Padding" Value="14,0" />
+        <Setter Property="Margin" Value="0,0,8,0" />
+        <Setter Property="MinWidth" Value="86" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+
+</ResourceDictionary>

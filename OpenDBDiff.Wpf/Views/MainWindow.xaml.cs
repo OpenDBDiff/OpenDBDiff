@@ -1,14 +1,13 @@
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Input;
 using OpenDBDiff.Wpf.ViewModels;
 
 namespace OpenDBDiff.Wpf.Views
 {
     /// <summary>
-    /// The main window. There is deliberately almost no logic here: bindings do the work, and the two
-    /// handlers below exist only for events that a TreeView and a TabControl do not expose as
-    /// bindable properties.
+    /// The shell window. Everything in it is bound except two things a Window cannot bind: the save on
+    /// close, and Ctrl+F, which has to move focus to the search box.
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -22,26 +21,12 @@ namespace OpenDBDiff.Wpf.Views
             get { return DataContext as MainViewModel; }
         }
 
-        /// <summary>
-        /// TreeView.SelectedItem is read-only, so the selection is pushed to the view model here.
-        /// </summary>
-        private void SchemaTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (ViewModel != null)
+            if (e.Key == Key.F && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
-                ViewModel.Tree.SelectedNode = e.NewValue as SchemaNodeViewModel;
-            }
-        }
-
-        /// <summary>
-        /// The synchronized script is regenerated for the current selection when its tab is shown,
-        /// which is what the WinForms front end did in its SelectedIndexChanged handler.
-        /// </summary>
-        private void WorkTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.Source is TabControl tabs && tabs.SelectedIndex == 1 && ViewModel != null)
-            {
-                ViewModel.RefreshSyncScriptCommand.Execute(null);
+                SummaryBar.FocusSearch();
+                e.Handled = true;
             }
         }
 

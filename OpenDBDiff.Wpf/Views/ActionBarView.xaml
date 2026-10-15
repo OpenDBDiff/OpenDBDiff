@@ -1,0 +1,48 @@
+<UserControl x:Class="OpenDBDiff.Wpf.Views.ActionBarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Region F: the action bar (section 6.7). -->
+    <Border Background="{StaticResource Surface}" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,1,0,0"
+            Padding="14,12">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"
+                       Text="{Binding Results.SelectionText}" />
+
+            <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="Bold"
+                       Foreground="{StaticResource Danger}"
+                       Text="{Binding Results.DestructiveText}"
+                       ToolTip="{Binding Results.DestructiveTooltip}"
+                       Visibility="{Binding Results.HasDestructive, Converter={StaticResource BoolToVisibility}}" />
+
+            <StackPanel Grid.Column="3" Orientation="Horizontal">
+                <Button Style="{StaticResource SecondaryButton}" Content="Preview script" Margin="0,0,8,0"
+                        Command="{Binding PreviewScriptCommand}" />
+                <Button Style="{StaticResource SecondaryButton}" Content="Copy script" Margin="0,0,8,0"
+                        Command="{Binding CopyScriptCommand}" />
+                <Button Style="{StaticResource SecondaryButton}" Content="Save as…" Margin="0,0,8,0"
+                        Command="{Binding SaveScriptAsCommand}" />
+                <Button x:Name="ApplyButton"
+                        Command="{Binding ApplyCommand}" MinWidth="260"
+                        ToolTip="{Binding ApplyTooltip}"
+                        Content="{Binding ApplyLabel}">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Results.HasDestructive}" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource Danger}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

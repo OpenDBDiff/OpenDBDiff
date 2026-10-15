@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,6 +9,7 @@ using OpenDBDiff.Abstractions.Schema;
 using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.SqlServer.Driver;
 using OpenDBDiff.SqlServer.Schema.Options;
+using OpenDBDiff.Ui.Model;
 using OpenDBDiff.Wpf.Infrastructure;
 using OpenDBDiff.Wpf.Services;
 using PropertyChanged;
@@ -16,18 +17,23 @@ using PropertyChanged;
 namespace OpenDBDiff.Wpf.ViewModels
 {
     /// <summary>
-    /// The main window.
+    /// The shell of the redesigned window: the four regions of section 5.1 - summary bar, review list,
+    /// detail pane and action bar - over the rules that live in OpenDBDiff.Ui.Model.
     /// </summary>
     /// <remarks>
-    /// Behaviour is carried over from MainForm: comparing loads the right-hand database first and the
-    /// left-hand one second, the comparer marks the left-hand snapshot up so that the generated script
-    /// migrates the left database to match the right one, the ticked objects survive a re-compare, and
-    /// "Update selected"/"Update all" run their script against the right-hand connection. The
-    /// inversion is the one the WinForms front end had; it is kept rather than "fixed" so that both
-    /// produce the same script for the same inputs.
+    /// The comparison pipeline is unchanged from the previous front end: the right-hand panel is loaded
+    /// first and the left-hand second, and the comparer marks the left-hand snapshot up as the desired
+    /// state. In the specification's words (section 3) the left-hand panel is the Source, whose
+    /// definitions are the desired state, and the right-hand panel is the Destination that an apply
+    /// modifies - which is what the detail pane's column headers and the apply button say.
+    ///
+    /// Phases 2 to 4 of the specification are not here: the connection strip, streaming progress and
+    /// per-side status, stale results, dependency checks, typed confirmation, the apply report and the
+    /// keyboard map beyond F5 and Ctrl+F. The connection panels are therefore still the ones from the
+    /// previous layout, which is what Phase 1 allows.
     /// </remarks>
     [AddINotifyPropertyChangedInterface]
-    public sealed class MainViewModel
+    public sealed class MainViewModel : Infrastructure.ObservableObject
     {
         private readonly IComparisonService comparisons;
         private readonly ISettingsStore settings;
@@ -35,8 +41,8 @@ namespace OpenDBDiff.Wpf.ViewModels
         private readonly IUpdateConfirmation updateConfirmation;
         private readonly SqlOption options;
 
-        private IDatabase? comparedDatabase;
-        private IDatabase? originDatabase;
+        private IDatabase? sourceDatabase;
+        private IDatabase? destinationDatabase;
 
         public MainViewModel(IComparisonService comparisons, ISettingsStore settings, IDialogService dialogs)
         {
@@ -49,26 +55,22 @@ namespace OpenDBDiff.Wpf.ViewModels
 
             Source = new ConnectionViewModel("Source database:");
             Destination = new ConnectionViewModel("Destination database:");
-            Tree = new SchemaTreeViewModel();
-            Diff = new DiffViewModel();
-
-            Tree.SelectedObjectChanged += (_, fullName) => ShowObject(fullName);
 
             CompareCommand = new AsyncRelayCommand(CompareAsync);
             SwapCommand = new RelayCommand(Swap);
             OptionsCommand = new RelayCommand(ShowOptions);
-            SaveScriptAsCommand = new RelayCommand(SaveScriptAs, () => HasResult);
-            CopyScriptCommand = new RelayCommand(CopyScript, () => HasResult);
-            RefreshSyncScriptCommand = new RelayCommand(BuildSyncScript, () => HasResult);
-            UpdateSelectedCommand = new AsyncRelayCommand(UpdateSelectedAsync, () => HasResult);
-            UpdateAllCommand = new AsyncRelayCommand(UpdateAllAsync, () => HasResult);
-            CompareDataCommand = new RelayCommand(CompareData, () => HasResult && Diff.CanCompareData);
-            SaveProjectCommand = new RelayCommand(SaveProject);
-            OpenProjectCommand = new RelayCommand(() => InformNotPorted("Opening a saved project"));
+            ApplyCommand = new AsyncRelayCommand(ApplyAsync, () => CanApply);
+            PreviewScriptCommand = new RelayCommand(PreviewScript, () => HasScript);
+            CopyScriptCommand = new RelayCommand(CopyScript, () => HasScript);
+            SaveScriptAsCommand = new RelayCommand(SaveScriptAs, () => HasScript);
+            ShowSideBySideCommand = new RelayCommand(() => SetDetailMode(DetailMode.SideBySide));
+            ShowInlineCommand = new RelayCommand(() => SetDetailMode(DetailMode.Inline));
+            ShowScriptCommand = new RelayCommand(() => SetDetailMode(DetailMode.Script));
+            OpenProjectCommand = new RelayCommand(() => dialogs.Inform("Open project", "Named project files are not ported to this front end yet."));
             NewProjectCommand = new RelayCommand(ResetProject);
+            SaveProjectCommand = new RelayCommand(SaveProject);
 
             var state = settings.Load();
-            SplitterDistance = state.SchemaSplitterDistance;
 
             if (!string.IsNullOrEmpty(state.SourceConnectionString))
             {
@@ -80,40 +82,24 @@ namespace OpenDBDiff.Wpf.ViewModels
                 Destination.ConnectionString = state.DestinationConnectionString!;
             }
 
-            StatusMessage = "Select a source and a destination database, then compare.";
+            StatusMessage = "Choose a source and destination, then compare.";
         }
 
         public ConnectionViewModel Source { get; }
 
         public ConnectionViewModel Destination { get; }
 
-        public SchemaTreeViewModel Tree { get; }
-
-        public DiffViewModel Diff { get; }
-
-        public string Title
-        {
-            get
-            {
-                return string.Format(CultureInfo.InvariantCulture, "OpenDBDiff v{0}",
-                    typeof(MainViewModel).Assembly.GetName().Version);
-            }
-        }
-
-        /// <summary>The script that brings the source database in line with the destination.</summary>
-        public string SyncScript { get; private set; } = string.Empty;
-
-        /// <summary>What the comparison did, as the schema library reported it.</summary>
-        public string ActionReport { get; private set; } = string.Empty;
+        /// <summary>What the summary bar, review list, detail pane and action bar bind to.</summary>
+        public ResultsViewModel? Results { get; private set; }
 
         public string StatusMessage { get; private set; }
 
         public bool IsBusy { get; private set; }
 
-        public bool HasResult { get; private set; }
-
-        /// <summary>Width of the schema tree pane, persisted with the rest of the window state.</summary>
-        public int SplitterDistance { get; set; }
+        public bool HasResults
+        {
+            get { return Results != null; }
+        }
 
         public AsyncRelayCommand CompareCommand { get; }
 
@@ -121,34 +107,107 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         public RelayCommand OptionsCommand { get; }
 
-        public RelayCommand SaveScriptAsCommand { get; }
+        public AsyncRelayCommand ApplyCommand { get; }
+
+        public RelayCommand PreviewScriptCommand { get; }
 
         public RelayCommand CopyScriptCommand { get; }
 
-        public RelayCommand RefreshSyncScriptCommand { get; }
+        public RelayCommand SaveScriptAsCommand { get; }
 
-        public AsyncRelayCommand UpdateSelectedCommand { get; }
+        public RelayCommand ShowSideBySideCommand { get; }
 
-        public AsyncRelayCommand UpdateAllCommand { get; }
+        public RelayCommand ShowInlineCommand { get; }
 
-        public RelayCommand CompareDataCommand { get; }
-
-        public RelayCommand SaveProjectCommand { get; }
+        public RelayCommand ShowScriptCommand { get; }
 
         public RelayCommand OpenProjectCommand { get; }
 
         public RelayCommand NewProjectCommand { get; }
+
+        public RelayCommand SaveProjectCommand { get; }
 
         public IOption Options
         {
             get { return options; }
         }
 
-        /// <summary>Called by the window when it closes, so the splitter position survives.</summary>
+        /// <summary>Width of the review list, remembered per user (section 11).</summary>
+        public double ReviewListWidth { get; set; } = 400;
+
+        /// <summary>"SOURCE · {server}", as section 6.5.2 labels the left column.</summary>
+        public string SourceColumnHeader
+        {
+            get { return string.Format("SOURCE \u00b7 {0}", ServerOf(Source)); }
+        }
+
+        /// <summary>"DESTINATION · {server} (will be changed)".</summary>
+        public string DestinationColumnHeader
+        {
+            get { return string.Format("DESTINATION \u00b7 {0} (will be changed)", ServerOf(Destination)); }
+        }
+
+        public string PreSelectionHeading
+        {
+            get
+            {
+                var results = Results;
+
+                return results == null
+                    ? "No comparison yet"
+                    : string.Format("{0} differences across {1} object types", results.DifferenceCount, results.DiffSet.Groups.Count);
+            }
+        }
+
+        public string ApplyLabel
+        {
+            get
+            {
+                var set = Results?.DiffSet;
+
+                return set == null
+                    ? "Review and apply changes"
+                    : set.ApplyLabel(
+                        string.IsNullOrEmpty(Destination.DatabaseName) ? "destination" : Destination.DatabaseName,
+                        ServerOf(Destination));
+            }
+        }
+
+        public bool CanApply
+        {
+            get
+            {
+                var set = Results?.DiffSet;
+
+                return set != null && set.CanApply(AppState.Results, false, IsDestinationUsable(), false).CanApply;
+            }
+        }
+
+        public string ApplyTooltip
+        {
+            get
+            {
+                var set = Results?.DiffSet;
+
+                if (set == null)
+                {
+                    return "Compare two databases first.";
+                }
+
+                var decision = set.CanApply(AppState.Results, false, IsDestinationUsable(), false);
+
+                return decision.CanApply ? ApplyLabel : decision.DisabledReason;
+            }
+        }
+
+        private bool HasScript
+        {
+            get { return Results != null && Results.DiffSet.SelectedCount > 0; }
+        }
+
         public void SaveWindowState()
         {
             var state = settings.Load();
-            state.SchemaSplitterDistance = SplitterDistance;
             state.SourceConnectionString = Source.ConnectionString;
             state.DestinationConnectionString = Destination.ConnectionString;
             settings.Save(state);
@@ -156,22 +215,21 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         private async Task CompareAsync()
         {
-            // The pipeline's origin is the right-hand panel and its destination the left-hand one.
             var request = new ComparisonRequest(Destination.ConnectionString, Source.ConnectionString, options);
             var progress = new ProgressViewModel(Destination.Describe(), Source.Describe());
 
             dialogs.ShowModeless(progress);
 
-            // Ticks made before the comparison are re-applied afterwards, as MainForm did.
-            var previouslyChecked = Tree.GetCheckedSchemas();
+            var previousIncluded = Results?.DiffSet.IncludedKeys;
+            var previousExcluded = Results?.DiffSet.ExcludedKeys;
 
             IsBusy = true;
             StatusMessage = "Comparing " + Source.Describe() + " with " + Destination.Describe() + "...";
 
             try
             {
-                originDatabase = null;
-                comparedDatabase = null;
+                sourceDatabase = null;
+                destinationDatabase = null;
 
                 var result = await comparisons
                     .CompareAsync(
@@ -181,21 +239,21 @@ namespace OpenDBDiff.Wpf.ViewModels
                         CancellationToken.None)
                     .ConfigureAwait(true);
 
-                originDatabase = result.Origin;
-                comparedDatabase = result.Destination;
+                sourceDatabase = result.Destination;
+                destinationDatabase = result.Origin;
 
-                Tree.Database = comparedDatabase;
-                Tree.SetCheckedSchemas(previouslyChecked);
+                var diffSet = new DiffSet(DiffItemBuilder.Build(sourceDatabase, destinationDatabase));
 
-                Diff.Clear();
-                ActionReport = originDatabase.ActionMessage.Message;
-                HasResult = true;
+                if (previousIncluded != null)
+                {
+                    diffSet.CarryInclusionFrom(previousIncluded, previousExcluded);
+                }
 
-                BuildSyncScript();
+                Results = new ResultsViewModel(diffSet);
+                FocusFirstDifference();
 
                 progress.Complete();
-                StatusMessage = string.Format(CultureInfo.CurrentCulture, "Compared. {0} objects loaded.",
-                    CountNodes(Tree.Nodes));
+                StatusMessage = BuildCompletionStatus(diffSet);
 
                 SaveWindowState();
             }
@@ -214,33 +272,186 @@ namespace OpenDBDiff.Wpf.ViewModels
             finally
             {
                 IsBusy = false;
+                RaiseResultState();
             }
         }
 
-        /// <summary>
-        /// Regenerates the synchronized script for the objects currently ticked. Called when the
-        /// script tab is shown, as the WinForms front end did.
-        /// </summary>
-        private void BuildSyncScript()
+        /// <summary>Section 9.1 step 5: focus the first Drop if there is one, otherwise the first difference.</summary>
+        private void FocusFirstDifference()
         {
-            if (comparedDatabase is null)
+            var set = Results?.DiffSet;
+
+            if (set == null || set.TotalDifferenceCount == 0)
             {
                 return;
             }
 
-            SyncScript = comparedDatabase.ToSqlDiff(Tree.GetCheckedSchemas()).ToSQL();
+            var first = set.AllItems.FirstOrDefault(item => item.Status == DiffStatus.Drop)
+                        ?? set.AllItems.FirstOrDefault(item => item.Status != DiffStatus.Identical);
+
+            if (first != null)
+            {
+                Results!.Focus(first.Key);
+            }
         }
 
-        private void ShowObject(string? fullName)
+        private async Task ApplyAsync()
         {
-            if (comparedDatabase is null || originDatabase is null)
+            var set = Results?.DiffSet;
+
+            if (set == null || !CanApply)
             {
-                Diff.Clear();
+                dialogs.Inform("Apply", ApplyTooltip);
                 return;
             }
 
-            Diff.Show(comparedDatabase, originDatabase, fullName);
-            CompareDataCommand.RaiseCanExecuteChanged();
+            var confirmation = new ConfirmationViewModel(
+                set,
+                string.IsNullOrEmpty(Destination.DatabaseName) ? "(unknown)" : Destination.DatabaseName,
+                ServerOf(Destination),
+                Source.Describe(),
+                string.Empty);
+
+            dialogs.ShowDialog(confirmation);
+
+            if (!confirmation.Confirmed)
+            {
+                StatusMessage = "Apply cancelled.";
+                return;
+            }
+
+            IsBusy = true;
+            StatusMessage = "Applying " + set.SelectedCount + " changes...";
+
+            var total = set.SelectedCount;
+
+            try
+            {
+                var failures = await Task.Run(() => Apply(set)).ConfigureAwait(true);
+
+                StatusMessage = failures == 0
+                    ? string.Format("Applied {0} of {0} changes.", total)
+                    : string.Format("Applied {0} of {1} changes.", total - failures, total);
+
+                dialogs.Inform("Apply", StatusMessage);
+            }
+            catch (Exception ex)
+            {
+                dialogs.ShowError("Applying changes", ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        /// <summary>Runs each included item's script against the destination and counts the failures.</summary>
+        private int Apply(DiffSet set)
+        {
+            var connectionString = Destination.ConnectionString;
+            var failures = 0;
+
+            foreach (var item in set.IncludedItems)
+            {
+                var target = ItemFor(item);
+
+                var report = item.Status == DiffStatus.Create
+                    ? Updater.createNew(target, connectionString, updateConfirmation)
+                    : Updater.alter(target, connectionString, updateConfirmation);
+
+                if (!string.IsNullOrWhiteSpace(report))
+                {
+                    failures++;
+                }
+            }
+
+            return failures;
+        }
+
+        private ISchemaBase ItemFor(DiffItem item)
+        {
+            var found = sourceDatabase?.Find(item.Key.FullName);
+
+            if (found == null)
+            {
+                throw new InvalidOperationException("The object " + item.Key.FullName + " is no longer part of the comparison.");
+            }
+
+            return found;
+        }
+
+        private void PreviewScript()
+        {
+            var set = Results?.DiffSet;
+
+            if (set != null)
+            {
+                dialogs.ShowDialog(new ScriptPreviewViewModel(BuildScript(set), set.SelectedCount));
+            }
+        }
+
+        private void CopyScript()
+        {
+            try
+            {
+                Clipboard.SetText(BuildScript(Results!.DiffSet));
+                StatusMessage = string.Format("Script copied \u00b7 {0} objects", Results.DiffSet.SelectedCount);
+            }
+            catch (Exception ex)
+            {
+                dialogs.ShowError("Copying the script", ex);
+            }
+        }
+
+        private void SaveScriptAs()
+        {
+            var set = Results?.DiffSet;
+
+            if (set == null)
+            {
+                return;
+            }
+
+            var path = dialogs.AskSaveScriptPath(string.Format("{0}-{1}.sql",
+                string.IsNullOrEmpty(Source.DatabaseName) ? "script" : Source.DatabaseName,
+                DateTime.Now.ToString("yyyyMMdd-HHmm", CultureInfo.InvariantCulture)));
+
+            if (path == null)
+            {
+                return;
+            }
+
+            try
+            {
+                System.IO.File.WriteAllText(path, BuildScript(set));
+                StatusMessage = "Script written to " + path;
+            }
+            catch (Exception ex)
+            {
+                dialogs.ShowError("Save script as", ex);
+            }
+        }
+
+        private static string BuildScript(DiffSet set)
+        {
+            var builder = new StringBuilder();
+
+            foreach (var item in set.IncludedItems)
+            {
+                builder.AppendLine(string.Format("-- {0} {1}", StatusVocabulary.Badge(item.Status), item.Key.FullName));
+                builder.AppendLine(item.Script);
+                builder.AppendLine();
+            }
+
+            return builder.ToString();
+        }
+
+        private void SetDetailMode(DetailMode mode)
+        {
+            if (Results != null)
+            {
+                Results.DetailMode = mode;
+            }
         }
 
         private void Swap()
@@ -248,7 +459,8 @@ namespace OpenDBDiff.Wpf.ViewModels
             var source = Source.ConnectionString;
             Source.ConnectionString = Destination.ConnectionString;
             Destination.ConnectionString = source;
-            StatusMessage = "Swapped source and destination.";
+            StatusMessage = "Swapped source and destination. Compare again to refresh the results.";
+            RaiseResultState();
         }
 
         private void ShowOptions()
@@ -257,217 +469,52 @@ namespace OpenDBDiff.Wpf.ViewModels
             StatusMessage = "Options changed. Compare again to apply them.";
         }
 
-        private void SaveScriptAs()
-        {
-            var path = dialogs.AskSaveScriptPath(SuggestedScriptFileName());
-
-            if (path is null)
-            {
-                return;
-            }
-
-            try
-            {
-                BuildSyncScript();
-                System.IO.File.WriteAllText(path, SyncScript);
-                StatusMessage = "Script written to " + path;
-            }
-            catch (Exception ex)
-            {
-                dialogs.ShowError("Save Script As", ex);
-            }
-        }
-
-        private void CopyScript()
-        {
-            try
-            {
-                BuildSyncScript();
-                Clipboard.SetText(SyncScript);
-                StatusMessage = "Script copied to the clipboard.";
-            }
-            catch (Exception ex)
-            {
-                dialogs.ShowError("Copying the script to the clipboard", ex);
-            }
-        }
-
-        /// <summary>
-        /// Runs the change script for the ticked objects against the destination connection, and
-        /// reports what failed rather than stopping at the first failure.
-        /// </summary>
-        private async Task UpdateSelectedAsync()
-        {
-            var connectionString = Destination.ConnectionString;
-            var report = new System.Text.StringBuilder();
-            var updated = 0;
-
-            foreach (var item in Tree.GetCheckedSchemas())
-            {
-                var target = comparedDatabase?.Find(item.FullName) as ISchemaBase;
-
-                if (target is null)
-                {
-                    report.AppendLine("Nothing could be found to do for '" + item.Name + "'");
-                    continue;
-                }
-
-                switch (target.ObjectType)
-                {
-                    case ObjectType.Table:
-                    case ObjectType.StoredProcedure:
-                        report.Append(target.Status == ObjectStatus.Create
-                            ? Updater.createNew(target, connectionString, updateConfirmation)
-                            : Updater.alter(target, connectionString, updateConfirmation));
-                        updated++;
-                        break;
-
-                    case ObjectType.Function:
-                    case ObjectType.View:
-                        report.Append(target.Status == ObjectStatus.Create
-                            ? Updater.createNew(target, connectionString, updateConfirmation)
-                            : Updater.alter(target, connectionString, updateConfirmation));
-                        updated++;
-                        break;
-
-                    default:
-                        if (target.Status == ObjectStatus.Create)
-                        {
-                            report.Append(Updater.addNew(target, connectionString, updateConfirmation));
-                            updated++;
-                        }
-                        else
-                        {
-                            report.AppendLine("Nothing could be found to do for '" + target.Name + "'");
-                        }
-
-                        break;
-                }
-            }
-
-            ReportUpdate(report, updated, "All successful.");
-
-            if (options.Comparison.ReloadComparisonOnUpdate)
-            {
-                await CompareAsync().ConfigureAwait(true);
-            }
-        }
-
-        private async Task UpdateAllAsync()
-        {
-            if (!dialogs.Confirm("Are you sure you want to update all?", "Confirm update"))
-            {
-                return;
-            }
-
-            var connectionString = Destination.ConnectionString;
-            var report = new System.Text.StringBuilder();
-            var updated = 0;
-
-            foreach (var node in Tree.Nodes.SelectMany(Walk))
-            {
-                var item = node.Item;
-
-                if (item is null)
-                {
-                    continue;
-                }
-
-                switch (item.Status)
-                {
-                    case ObjectStatus.Create:
-                        report.Append(Updater.createNew(item, connectionString, updateConfirmation));
-                        updated++;
-                        break;
-
-                    case ObjectStatus.Alter:
-                        report.Append(Updater.alter(item, connectionString, updateConfirmation));
-                        updated++;
-                        break;
-                }
-            }
-
-            ReportUpdate(report, updated, "Update successful.");
-
-            await CompareAsync().ConfigureAwait(true);
-        }
-
-        private void ReportUpdate(System.Text.StringBuilder report, int updated, string successMessage)
-        {
-            if (report.Length == 0)
-            {
-                dialogs.Inform("Success", successMessage);
-                StatusMessage = string.Format(CultureInfo.CurrentCulture, "{0} object(s) updated.", updated);
-            }
-            else
-            {
-                dialogs.Inform("Error", report.ToString());
-                StatusMessage = "Some objects could not be updated.";
-            }
-        }
-
-        private void CompareData()
-        {
-            var item = Diff.ObjectFullName is null ? null : comparedDatabase?.Find(Diff.ObjectFullName);
-
-            if (item is null)
-            {
-                dialogs.Inform("Compare data", "Select a table in the schema tree first.");
-                return;
-            }
-
-            var viewModel = new DataCompareViewModel(
-                item,
-                Source.ConnectionString,
-                Destination.ConnectionString,
-                dialogs,
-                updateConfirmation);
-
-            dialogs.ShowDialog(viewModel);
-        }
-
         private void SaveProject()
         {
             SaveWindowState();
-            dialogs.Inform("Projects",
-                "The connection strings and window layout were saved. Named project files, which the " +
-                "WinForms front end keeps in its LiteDB store, are not ported yet.");
+            dialogs.Inform("Projects", "The connection strings were saved. Named project files are not ported to this front end yet.");
         }
 
         private void ResetProject()
         {
             Source.ConnectionString = string.Empty;
             Destination.ConnectionString = string.Empty;
+            Results = null;
             StatusMessage = "Cleared the connections.";
+            RaiseResultState();
         }
 
-        private void InformNotPorted(string what)
+        private bool IsDestinationUsable()
         {
-            dialogs.Inform(what, "Not ported to this front end yet; the WinForms front end still does it.");
+            return !string.IsNullOrEmpty(Destination.ServerName) && !string.IsNullOrEmpty(Destination.DatabaseName);
         }
 
-        private string SuggestedScriptFileName()
+        private static string ServerOf(ConnectionViewModel connection)
         {
-            var database = string.IsNullOrEmpty(Source.DatabaseName) ? "script" : Source.DatabaseName;
-            return database + "_sync.sql";
+            return string.IsNullOrEmpty(connection.ServerName) ? "(not set)" : connection.ServerName;
         }
 
-        private static IEnumerable<SchemaNodeViewModel> Walk(SchemaNodeViewModel node)
+        private static string BuildCompletionStatus(DiffSet set)
         {
-            yield return node;
+            var counts = set.Counts;
 
-            foreach (var child in node.Children)
-            {
-                foreach (var descendant in Walk(child))
-                {
-                    yield return descendant;
-                }
-            }
+            return string.Format(CultureInfo.CurrentCulture,
+                "Comparison complete: {0} new, {1} changed, {2} missing",
+                counts.Create, counts.Alter, counts.Drop);
         }
 
-        private static int CountNodes(IEnumerable<SchemaNodeViewModel> nodes)
+        private void RaiseResultState()
         {
-            return nodes.SelectMany(Walk).Count(node => node.Item != null);
+            OnPropertyChanged(nameof(Results));
+            OnPropertyChanged(nameof(HasResults));
+            OnPropertyChanged(nameof(CanApply));
+            OnPropertyChanged(nameof(ApplyLabel));
+            OnPropertyChanged(nameof(ApplyTooltip));
+            OnPropertyChanged(nameof(PreSelectionHeading));
+            ApplyCommand.RaiseCanExecuteChanged();
+            PreviewScriptCommand.RaiseCanExecuteChanged();
+            CopyScriptCommand.RaiseCanExecuteChanged();
+            SaveScriptAsCommand.RaiseCanExecuteChanged();
         }
     }
 }

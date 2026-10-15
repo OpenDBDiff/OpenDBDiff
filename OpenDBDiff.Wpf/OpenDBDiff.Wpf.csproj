@@ -28,6 +28,7 @@
     <ProjectReference Include="..\OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj" />
     <ProjectReference Include="..\OpenDBDiff.SqlServer.Driver\OpenDBDiff.SqlServer.Driver.csproj" />
     <ProjectReference Include="..\OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj" />
+    <ProjectReference Include="..\OpenDBDiff.Ui.Model\OpenDBDiff.Ui.Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>

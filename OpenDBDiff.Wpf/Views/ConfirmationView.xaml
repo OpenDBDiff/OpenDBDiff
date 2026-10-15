@@ -1,0 +1,83 @@
+<UserControl x:Class="OpenDBDiff.Wpf.Views.ConfirmationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="18" Width="640" MaxHeight="620">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,0,0,12">
+            <Border DockPanel.Dock="Right" Background="{StaticResource EnvProdBg}" CornerRadius="4" Padding="7,2"
+                    Visibility="{Binding HasEnvironmentTag, Converter={StaticResource BoolToVisibility}}">
+                <TextBlock Text="{Binding EnvironmentTag}" Foreground="{StaticResource EnvProdFg}"
+                           FontSize="11" FontWeight="Bold" />
+            </Border>
+            <TextBlock Style="{StaticResource PaneHeading}" Text="{Binding Title}" />
+        </DockPanel>
+
+        <!-- Target summary card (section 6.8). -->
+        <Border Grid.Row="1" Background="{StaticResource SurfaceAlt}" CornerRadius="8" Padding="12" Margin="0,0,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource SmallCapsLabel}" Text="Server" Margin="0,0,12,2" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Server}" Margin="0,0,0,2" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource SmallCapsLabel}" Text="Database" Margin="0,0,12,2" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Database}" Margin="0,0,0,2" />
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource SmallCapsLabel}" Text="Source" Margin="0,0,12,0" />
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SourceDescription}" />
+            </Grid>
+        </Border>
+
+        <StackPanel Grid.Row="2" Margin="0,0,0,12">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding CreateCount, StringFormat={}{0} Create}" Foreground="{StaticResource StatusCreateFg}"
+                           FontWeight="Bold" Margin="0,0,16,0" />
+                <TextBlock Text="{Binding AlterCount, StringFormat={}{0} Alter}" Foreground="{StaticResource StatusAlterFg}"
+                           FontWeight="Bold" Margin="0,0,16,0" />
+                <TextBlock Text="{Binding DropCount, StringFormat={}{0} Drop}" Foreground="{StaticResource StatusDropFg}"
+                           FontWeight="Bold" />
+            </StackPanel>
+
+            <Border Background="{StaticResource StatusDropBg}" CornerRadius="6" Padding="10" Margin="0,10,0,0"
+                    Visibility="{Binding HasDestructive, Converter={StaticResource BoolToVisibility}}">
+                <TextBlock Text="{Binding DestructiveCallout}" Foreground="{StaticResource StatusDropFg}" TextWrapping="Wrap" />
+            </Border>
+        </StackPanel>
+
+        <TextBox Grid.Row="3" Text="{Binding ScriptText, Mode=OneWay}" IsReadOnly="True" MinHeight="200"
+                 FontFamily="{StaticResource CodeFont}" FontSize="13" AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                 Background="{StaticResource Surface}" />
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+            <Button Style="{StaticResource SecondaryButton}" Content="Cancel" Margin="0,0,10,0"
+                    Click="Cancel_Click" IsDefault="True" />
+            <Button Content="{Binding ApplyLabel}" Click="Apply_Click">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasDestructive}" Value="True">
+                                <Setter Property="Background" Value="{StaticResource Danger}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

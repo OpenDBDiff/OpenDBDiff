@@ -1,0 +1,61 @@
+<UserControl x:Class="OpenDBDiff.Wpf.Views.SummaryBarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:OpenDBDiff.Wpf.Converters"
+             Height="62">
+    <UserControl.Resources>
+        <converters:StatusBrushConverter x:Key="StatusBrush" />
+    </UserControl.Resources>
+
+    <!-- Region C: the summary bar (section 6.3). Chips are toggles; counts are totals. -->
+    <Grid Background="{StaticResource Surface}" Margin="14,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <ItemsControl Grid.Column="0" ItemsSource="{Binding Results.Chips}" VerticalAlignment="Center">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ToggleButton Style="{StaticResource StatusChip}"
+                                  IsChecked="{Binding IsOn, Mode=TwoWay}"
+                                  ToolTip="{Binding Tooltip}"
+                                  Background="{Binding Status, Converter={StaticResource StatusBrush}, ConverterParameter=bg}"
+                                  Foreground="{Binding Status, Converter={StaticResource StatusBrush}, ConverterParameter=fg}"
+                                  BorderBrush="{Binding Status, Converter={StaticResource StatusBrush}, ConverterParameter=border}">
+                        <ToggleButton.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="8" Height="8" VerticalAlignment="Center" Margin="0,0,6,0"
+                                         Fill="{Binding Status, Converter={StaticResource StatusBrush}, ConverterParameter=fg}" />
+                                <TextBlock Text="{Binding Text}" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </ToggleButton.Content>
+                    </ToggleButton>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+            <CheckBox Content="Also search definitions" VerticalAlignment="Center" Margin="0,0,12,0"
+                      IsChecked="{Binding Results.SearchDefinitions, Mode=TwoWay}"
+                      ToolTip="Match text inside object definitions. Slower than searching names." />
+            <Border Width="300" BorderBrush="{StaticResource BorderStrong}" BorderThickness="1" CornerRadius="6" Background="{StaticResource Surface}">
+                <Grid>
+                    <TextBox x:Name="SearchBox" BorderThickness="0" Background="Transparent" Padding="8,6"
+                             VerticalContentAlignment="Center"
+                             Text="{Binding Results.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=150}"
+                             ToolTip="Search objects by name, qualified name or type" />
+                    <TextBlock Text="Search objects…  Ctrl+F" Margin="10,0,0,0" VerticalAlignment="Center"
+                               Foreground="{StaticResource TextFaint}" IsHitTestVisible="False"
+                               Visibility="{Binding Results.SearchText, Converter={StaticResource NullToVisibility}}" />
+                </Grid>
+            </Border>
+        </StackPanel>
+    </Grid>
+</UserControl>
