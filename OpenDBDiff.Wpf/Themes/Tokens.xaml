@@ -30,6 +30,11 @@
     <SolidColorBrush x:Key="StatusAlterBorder" Color="#A9BDF5" />
     <SolidColorBrush x:Key="StatusDropBg" Color="#FDE8E6" />
     <SolidColorBrush x:Key="StatusDropFg" Color="#A5210F" />
+
+    <!-- Environment tag (section 6.8): production is the one that must look like production. The
+         staging and development tags arrive with the connection strip in Phase 2. -->
+    <SolidColorBrush x:Key="EnvProdBg" Color="#FDE8E6" />
+    <SolidColorBrush x:Key="EnvProdFg" Color="#A5210F" />
     <SolidColorBrush x:Key="StatusDropBorder" Color="#F2A9A0" />
 
     <FontFamily x:Key="UiFont">Segoe UI Variable Text, Segoe UI</FontFamily>
