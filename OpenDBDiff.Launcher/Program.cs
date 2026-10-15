@@ -135,16 +135,26 @@ namespace OpenDBDiff.Launcher
             return newest;
         }
 
-        /// <summary>The folders a .NET installation can live in, environment first.</summary>
+        /// <summary>
+        /// The folders a .NET installation can live in: the environment first, then the three layouts the
+        /// installers use. The user-local one matters - installing .NET "for me only" puts it under
+        /// LocalApplicationData, and missing it would report a runtime that is present as absent.
+        /// </summary>
         private static IEnumerable<string> DotNetRoots()
         {
             var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-            var fromEnvironment = Environment.GetEnvironmentVariable("DOTNET_ROOT");
-
-            if (!string.IsNullOrEmpty(fromEnvironment) && seen.Add(fromEnvironment))
+            var fromEnvironment = new List<string?>
             {
-                yield return fromEnvironment;
+                Environment.GetEnvironmentVariable("DOTNET_ROOT"),
+                Environment.GetEnvironmentVariable("DOTNET_ROOT(x86)"),
+            };
+
+            foreach (var root in fromEnvironment)
+            {
+                if (!string.IsNullOrEmpty(root) && seen.Add(root!))
+                {
+                    yield return root!;
+                }
             }
 
             var folders = new[] { Environment.SpecialFolder.ProgramFiles, Environment.SpecialFolder.ProgramFilesX86 };
@@ -153,16 +163,26 @@ namespace OpenDBDiff.Launcher
             {
                 var programFiles = Environment.GetFolderPath(folder);
 
-                if (string.IsNullOrEmpty(programFiles))
+                if (!string.IsNullOrEmpty(programFiles))
                 {
-                    continue;
+                    var dotnet = Path.Combine(programFiles, "dotnet");
+
+                    if (seen.Add(dotnet))
+                    {
+                        yield return dotnet;
+                    }
                 }
+            }
 
-                var dotnet = Path.Combine(programFiles, "dotnet");
+            var userProfile = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-                if (seen.Add(dotnet))
+            if (!string.IsNullOrEmpty(userProfile))
+            {
+                var userLocal = Path.Combine(userProfile, "Microsoft", "dotnet");
+
+                if (seen.Add(userLocal))
                 {
-                    yield return dotnet;
+                    yield return userLocal;
                 }
             }
         }
