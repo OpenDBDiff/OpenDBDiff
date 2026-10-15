@@ -17,6 +17,12 @@ namespace OpenDBDiff.Wpf.Views
             InitializeComponent();
         }
 
+        /// <summary>Section 6.3: clearing the search returns the focus here, not to an empty box.</summary>
+        public void FocusList()
+        {
+            Rows.Focus();
+        }
+
         private void Rows_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             var row = Rows.SelectedItem as ResultsRowViewModel;

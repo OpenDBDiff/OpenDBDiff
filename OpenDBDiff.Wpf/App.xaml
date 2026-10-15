@@ -27,6 +27,7 @@
             <converters:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVisibility" />
             <converters:NullToVisibilityConverter x:Key="NullToVisibility" />
             <converters:EmptyToVisibilityConverter x:Key="EmptyToVisibility" />
+            <converters:NotEmptyToVisibilityConverter x:Key="NotEmptyToVisibility" />
             <converters:HexBrushConverter x:Key="HexBrush" />
             <converters:ValidityDotConverter x:Key="ValidityDot" />
             <converters:WordRunBrushConverter x:Key="WordRunBrush" />

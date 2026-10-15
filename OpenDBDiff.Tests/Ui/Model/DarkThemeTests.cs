@@ -43,6 +43,14 @@ namespace OpenDBDiff.Tests.Ui.Model
             AssertAtLeast("Drop badge", dark.DropForeground, dark.DropBackground);
             AssertAtLeast("warning", dark.WarningForeground, dark.WarningBackground);
             AssertAtLeast("white on danger", "#FFFFFF", dark.Danger);
+
+            // Section 6.3's highlighted search match: the text inside the highlight has to stay readable,
+            // and the highlight has to be distinguishable from the row it sits in.
+            AssertAtLeast("text on the search highlight", dark.Text, dark.Highlight);
+            Assert.IsTrue(Contrast(dark.Highlight, dark.Surface) >= 2.0,
+                "the search highlight is "
+                    + Contrast(dark.Highlight, dark.Surface).ToString("0.00")
+                    + ":1 against the row, too close to see");
             AssertAtLeast("Dev tag", dark.EnvironmentDevForeground, dark.EnvironmentDevBackground);
             AssertAtLeast("Test tag", dark.EnvironmentTestForeground, dark.EnvironmentTestBackground);
             AssertAtLeast("UAT tag", dark.EnvironmentUatForeground, dark.EnvironmentUatBackground);

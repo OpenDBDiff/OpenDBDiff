@@ -40,6 +40,10 @@ namespace OpenDBDiff.Wpf.ViewModels
             Kind = ResultsRowKind.Item;
             Item = item;
             Name = item.Key.FullName;
+
+            // Section 6.3: the name is cut into runs against the search in force, so the row can mark what
+            // matched. The rows are rebuilt whenever the search changes, which is what keeps this current.
+            NameRuns = Highlight.Split(Name, owner.DiffSet.SearchText);
             Status = item.Status;
             IsUnsupported = item.Applicability == Applicability.Unsupported;
         }
@@ -57,6 +61,9 @@ namespace OpenDBDiff.Wpf.ViewModels
         public string CountText { get; private set; } = string.Empty;
 
         public string Name { get; private set; } = string.Empty;
+
+        /// <summary>Section 6.3's highlighted name, as the row template draws it.</summary>
+        public IReadOnlyList<HighlightRun> NameRuns { get; private set; } = new List<HighlightRun>();
 
         public DiffStatus Status { get; }
 

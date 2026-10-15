@@ -109,9 +109,34 @@
                                    Foreground="{Binding Status, Converter={StaticResource StatusBrush}, ConverterParameter=fg}" />
                     </Border>
 
-                    <TextBlock Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center"
-                               TextTrimming="CharacterEllipsis"
-                               ToolTip="{Binding Name}" />
+                    <!-- Section 6.3: the matched part of the name is bold on the highlight token, and the
+                         runs reconstruct the name exactly, so a row reads the same as before when nothing
+                         is being searched for. -->
+                    <ItemsControl Grid.Column="2" ItemsSource="{Binding NameRuns}" VerticalAlignment="Center"
+                                  ToolTip="{Binding Name}"
+                                  AutomationProperties.Name="{Binding Name}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Text}" TextTrimming="CharacterEllipsis">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsMatch}" Value="True">
+                                                    <Setter Property="FontWeight" Value="Bold" />
+                                                    <Setter Property="Background" Value="{StaticResource Highlight}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
                     <TextBlock Grid.Column="3" VerticalAlignment="Center" Margin="6,0,0,0"
                                Foreground="{StaticResource WarningFg}" FontWeight="Bold"

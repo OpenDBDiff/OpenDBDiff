@@ -59,6 +59,26 @@ namespace OpenDBDiff.Wpf.Converters
     /// Shows an element only while the bound value is missing or empty - the complement of
     /// <see cref="NullToVisibilityConverter"/>, which the search box's placeholder needs.
     /// </summary>
+    /// <summary>
+    /// Section 6.3's clear button: visible only while there is something to clear. It is the mirror of the
+    /// converter above rather than a parameter on it, because the placeholder and the button are two
+    /// elements with opposite needs and a parameter would make both call sites harder to read.
+    /// </summary>
+    public sealed class NotEmptyToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var empty = value is null || (value is string text && text.Length == 0);
+
+            return empty ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
     public sealed class EmptyToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -109,6 +109,7 @@ namespace OpenDBDiff.Wpf.ViewModels
             ApplyCommand = new AsyncRelayCommand(ApplyAsync, () => CanApply);
             PreviewScriptCommand = new RelayCommand(PreviewScript, () => HasScript);
             CloseScriptPreviewCommand = new RelayCommand(CloseScriptPreview, () => IsScriptPreviewOpen);
+            ClearSearchCommand = new RelayCommand(ClearSearch, () => Results != null && !string.IsNullOrEmpty(Results.SearchText));
             CopyScriptCommand = new RelayCommand(CopyScript, () => HasScript);
             SaveScriptAsCommand = new RelayCommand(SaveScriptAs, () => HasScript);
             ShowSideBySideCommand = new RelayCommand(() => SetDetailMode(DetailMode.SideBySide));
@@ -370,6 +371,15 @@ namespace OpenDBDiff.Wpf.ViewModels
         public bool IsScriptPreviewOpen { get; private set; }
 
         public RelayCommand CloseScriptPreviewCommand { get; }
+
+        /// <summary>Section 6.3's clear button, disabled whenever there is nothing to clear.</summary>
+        public RelayCommand ClearSearchCommand { get; }
+
+        /// <summary>
+        /// Raised after the search is cleared, so the window can put the focus back in the review list,
+        /// which section 6.3 asks for and a view model cannot do for itself.
+        /// </summary>
+        public event EventHandler? SearchCleared;
 
         public bool IsReport
         {
@@ -2207,6 +2217,31 @@ namespace OpenDBDiff.Wpf.ViewModels
             }
 
             return found;
+        }
+
+        /// <summary>
+        /// Section 6.3's clear button and the Esc key that does the same thing. Clearing is the view
+        /// model's; sending the focus back to the list is the window's, which is why it is announced
+        /// rather than done here.
+        /// </summary>
+        private void ClearSearch()
+        {
+            var results = Results;
+
+            if (results == null)
+            {
+                return;
+            }
+
+            results.SearchText = string.Empty;
+            ClearSearchCommand.RaiseCanExecuteChanged();
+
+            var handler = SearchCleared;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
         }
 
         private void PreviewScript()

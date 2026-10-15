@@ -68,6 +68,15 @@
                     <TextBlock Text="Search objects&#x2026;  Ctrl+F" Margin="10,0,0,0" VerticalAlignment="Center"
                                Foreground="{StaticResource TextFaint}" IsHitTestVisible="False"
                                Visibility="{Binding Results.SearchText, Converter={StaticResource EmptyToVisibility}}" />
+
+                    <!-- Section 6.3: the clear button appears with the text, and clearing returns the focus
+                         to the list so the keyboard user carries on where they were. -->
+                    <Button Style="{StaticResource TextLinkButton}" Content="&#x2715;" HorizontalAlignment="Right"
+                            Margin="0,0,8,0" VerticalAlignment="Center" Padding="4,0"
+                            Command="{Binding ClearSearchCommand}"
+                            AutomationProperties.Name="Clear search"
+                            ToolTip="Clear the search (Esc)"
+                            Visibility="{Binding Results.SearchText, Converter={StaticResource NotEmptyToVisibility}}" />
                 </Grid>
             </Border>
         </StackPanel>

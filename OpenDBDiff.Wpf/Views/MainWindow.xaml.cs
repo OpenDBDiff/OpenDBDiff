@@ -21,11 +21,51 @@ namespace OpenDBDiff.Wpf.Views
         {
             InitializeComponent();
             Loaded += Window_Loaded;
+            DataContextChanged += OnDataContextChanged;
+            Unloaded += OnUnloaded;
         }
 
         private MainViewModel? ViewModel
         {
             get { return DataContext as MainViewModel; }
+        }
+
+        private MainViewModel? subscribed;
+
+        /// <summary>
+        /// Section 6.3: clearing the search returns the focus to the review list. The view model owns the
+        /// clearing and announces it; only a window can move the focus.
+        /// </summary>
+        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            Unsubscribe();
+
+            var viewModel = ViewModel;
+
+            if (viewModel != null)
+            {
+                subscribed = viewModel;
+                viewModel.SearchCleared += OnSearchCleared;
+            }
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            Unsubscribe();
+        }
+
+        private void Unsubscribe()
+        {
+            if (subscribed != null)
+            {
+                subscribed.SearchCleared -= OnSearchCleared;
+                subscribed = null;
+            }
+        }
+
+        private void OnSearchCleared(object? sender, EventArgs e)
+        {
+            ReviewList.FocusList();
         }
 
         /// <summary>Section 11: the bounds are restored only if they still fall on a monitor.</summary>
@@ -174,7 +214,9 @@ namespace OpenDBDiff.Wpf.Views
                 }
                 else if (viewModel.Results != null && !string.IsNullOrEmpty(viewModel.Results.SearchText))
                 {
-                    viewModel.Results.SearchText = string.Empty;
+                    // Through the command, so clearing by Esc and clearing by the button do the same thing,
+                    // including sending the focus back to the list.
+                    viewModel.ClearSearchCommand.Execute(null);
                 }
 
                 e.Handled = true;

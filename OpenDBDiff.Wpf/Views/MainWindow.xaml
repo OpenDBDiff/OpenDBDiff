@@ -7,6 +7,7 @@
         Width="1440" Height="900" MinWidth="1024" MinHeight="640"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource Bg}"
+        Foreground="{StaticResource Text}"
         PreviewKeyDown="Window_PreviewKeyDown"
         SizeChanged="Window_SizeChanged"
         Closing="Window_Closing">
@@ -211,7 +212,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Column="0" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,0,1,0" Background="{StaticResource Surface}">
-                    <views:ReviewListView DataContext="{Binding}" />
+                    <views:ReviewListView x:Name="ReviewList" DataContext="{Binding}" />
                 </Border>
 
                 <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch"
