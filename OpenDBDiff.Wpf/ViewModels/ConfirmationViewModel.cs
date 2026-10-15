@@ -8,23 +8,23 @@ using PropertyChanged;
 namespace OpenDBDiff.Wpf.ViewModels
 {
     /// <summary>
-    /// The confirmation dialog of section 6.8, in its Phase 1 form: target, counts, the destructive
-    /// callout and the script, with Cancel as the default. The typed confirmation for production and
-    /// destructive changes arrives with Phase 3.
+    /// The confirmation dialog of section 6.8, in its Phase 2 form: target, counts, the destructive
+    /// callout, the script and the destination's environment tag in the title bar. The typed
+    /// confirmation for production and destructive changes arrives with Phase 3.
     /// </summary>
     [AddINotifyPropertyChangedInterface]
     public sealed class ConfirmationViewModel : DialogViewModelBase
     {
         private readonly DiffSet diffSet;
 
-        public ConfirmationViewModel(DiffSet diffSet, string database, string server, string sourceDescription, string environmentTag)
+        public ConfirmationViewModel(DiffSet diffSet, string database, string server, string sourceDescription, EnvironmentTag? environment)
         {
             this.diffSet = diffSet;
 
             Database = database;
             Server = server;
             SourceDescription = sourceDescription;
-            EnvironmentTag = environmentTag;
+            Environment = environment ?? EnvironmentTag.None;
 
             var counts = diffSet.Counts;
 
@@ -53,11 +53,27 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         public string SourceDescription { get; }
 
-        public string EnvironmentTag { get; }
+        /// <summary>Section 6.8: the tag of the destination, which is the database an apply would change.</summary>
+        public EnvironmentTag Environment { get; }
 
         public bool HasEnvironmentTag
         {
-            get { return !string.IsNullOrEmpty(EnvironmentTag); }
+            get { return Environment.HasValue; }
+        }
+
+        public string EnvironmentText
+        {
+            get { return Environment.Text; }
+        }
+
+        public string EnvironmentBackground
+        {
+            get { return EnvironmentPalette.Background(Environment.Kind); }
+        }
+
+        public string EnvironmentForeground
+        {
+            get { return EnvironmentPalette.Foreground(Environment.Kind); }
         }
 
         public int CreateCount { get; }
@@ -113,7 +129,7 @@ namespace OpenDBDiff.Wpf.ViewModels
                 builder.AppendLine();
             }
 
-            return builder.ToString().TrimEnd() + Environment.NewLine;
+            return builder.ToString().TrimEnd() + System.Environment.NewLine;
         }
     }
 }

@@ -115,6 +115,7 @@
                  SelectedItem="{Binding Results.SelectedRow, Mode=TwoWay}"
                  ItemTemplateSelector="{StaticResource RowSelector}"
                  BorderThickness="0" Background="{StaticResource Surface}"
+                 IsEnabled="{Binding IsNotComparing}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  VirtualizingPanel.IsVirtualizing="True"
                  VirtualizingPanel.VirtualizationMode="Recycling">

@@ -26,5 +26,15 @@ namespace OpenDBDiff.Wpf.Services
         string? AskSaveScriptPath(string suggestedFileName);
 
         string? AskOpenProjectPath();
+
+        /// <summary>Where File → Save project as… should write (section 12).</summary>
+        string? AskSaveProjectPath(string suggestedFileName);
+
+        /// <summary>
+        /// Asks for a short line of text (a connection name, a project name). Returns null when the
+        /// user cancelled. Section 6.1.1's "Save as…" needs this and a MessageBox would break section
+        /// 6.10's rule against message-box modals.
+        /// </summary>
+        string? AskText(string title, string prompt, string initialValue);
     }
 }

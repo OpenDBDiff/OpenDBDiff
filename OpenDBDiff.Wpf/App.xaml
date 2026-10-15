@@ -10,8 +10,11 @@
                 <ResourceDictionary Source="Themes/Icons.xaml" />
                 <ResourceDictionary Source="Themes/Tokens.xaml" />
                 <!-- The previous layout's styles, still used by the panels it contributed: the
-                     connection panels and the progress, options, error and data compare dialogs. -->
+                     connection panels and the options, error and data compare dialogs. -->
                 <ResourceDictionary Source="Themes/Theme.xaml" />
+                <!-- Phase 2's styles: the connection strip, chip, environment tag, menu bar and toast.
+                     Merged last so it can build on the tokens and the previous styles. -->
+                <ResourceDictionary Source="Themes/Strip.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <!-- The redesign's converters, available to every view in it. -->
@@ -23,13 +26,12 @@
             <converters:GroupedViewIndexConverter x:Key="GroupedIndex" />
             <converters:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVisibility" />
             <converters:NullToVisibilityConverter x:Key="NullToVisibility" />
+            <converters:EmptyToVisibilityConverter x:Key="EmptyToVisibility" />
+            <converters:HexBrushConverter x:Key="HexBrush" />
+            <converters:ValidityDotConverter x:Key="ValidityDot" />
             <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
 
             <!-- View model to view mapping, so no code names a view for a dialog. -->
-            <DataTemplate DataType="{x:Type viewModels:ProgressViewModel}">
-                <views:ProgressView />
-            </DataTemplate>
-
             <DataTemplate DataType="{x:Type viewModels:OptionsViewModel}">
                 <views:OptionsView />
             </DataTemplate>
@@ -48,6 +50,18 @@
 
             <DataTemplate DataType="{x:Type viewModels:ScriptPreviewViewModel}">
                 <views:ScriptPreviewView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:TextPromptViewModel}">
+                <views:TextPromptView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:ShortcutsViewModel}">
+                <views:ShortcutsView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:AboutViewModel}">
+                <views:AboutView />
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

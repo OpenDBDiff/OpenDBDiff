@@ -7,11 +7,13 @@
         <converters:StatusBrushConverter x:Key="StatusBrush" />
     </UserControl.Resources>
 
-    <!-- Region C: the summary bar (section 6.3). Chips are toggles; counts are totals. -->
+    <!-- Region C: the summary bar (section 6.3). Chips are toggles; counts are totals. Section 6.2 puts
+         the running comparison's status text and its Cancel button on the right, before Search. -->
     <Grid Background="{StaticResource Surface}" Margin="14,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
@@ -41,7 +43,19 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+        <!-- Section 6.2: the status text is a polite live region and Cancel sits beside it. -->
+        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0"
+                    Visibility="{Binding IsProgressActive, Converter={StaticResource BoolToVisibility}}"
+                    AutomationProperties.LiveSetting="Polite">
+            <TextBlock Text="{Binding Progress.StatusText}" Foreground="{StaticResource TextMuted}"
+                       VerticalAlignment="Center" />
+            <Button Style="{StaticResource TextLinkButton}" Content="Cancel" Margin="10,0,0,0"
+                    VerticalAlignment="Center" Command="{Binding CancelCommand}"
+                    ToolTip="Stop the comparison"
+                    Visibility="{Binding IsComparing, Converter={StaticResource BoolToVisibility}}" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
             <CheckBox Content="Also search definitions" VerticalAlignment="Center" Margin="0,0,12,0"
                       IsChecked="{Binding Results.SearchDefinitions, Mode=TwoWay}"
                       ToolTip="Match text inside object definitions. Slower than searching names." />
@@ -51,9 +65,9 @@
                              VerticalContentAlignment="Center"
                              Text="{Binding Results.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=150}"
                              ToolTip="Search objects by name, qualified name or type" />
-                    <TextBlock Text="Search objects…  Ctrl+F" Margin="10,0,0,0" VerticalAlignment="Center"
+                    <TextBlock Text="Search objects&#x2026;  Ctrl+F" Margin="10,0,0,0" VerticalAlignment="Center"
                                Foreground="{StaticResource TextFaint}" IsHitTestVisible="False"
-                               Visibility="{Binding Results.SearchText, Converter={StaticResource NullToVisibility}}" />
+                               Visibility="{Binding Results.SearchText, Converter={StaticResource EmptyToVisibility}}" />
                 </Grid>
             </Border>
         </StackPanel>

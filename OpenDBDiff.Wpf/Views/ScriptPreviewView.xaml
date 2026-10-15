@@ -1,9 +1,11 @@
 <UserControl x:Class="OpenDBDiff.Wpf.Views.ScriptPreviewView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!-- Section 6.7.1: the script for the current selection. -->
+    <!-- Section 6.7.1: the script for the current selection. Section 9.6 adds the ribbon that says the
+         script came from an earlier comparison. -->
     <Grid Margin="18" Width="760" Height="560">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -11,12 +13,18 @@
 
         <TextBlock Style="{StaticResource PaneHeading}" Text="{Binding Title}" Margin="0,0,0,10" />
 
-        <TextBox Grid.Row="1" Text="{Binding Script, Mode=OneWay}" IsReadOnly="True"
+        <Border Grid.Row="1" Background="{StaticResource WarningBg}" CornerRadius="6" Padding="10,6"
+                Margin="0,0,0,8"
+                Visibility="{Binding IsStale, Converter={StaticResource BoolToVisibility}}">
+            <TextBlock Text="{Binding RibbonText}" Foreground="{StaticResource WarningFg}" FontWeight="SemiBold" />
+        </Border>
+
+        <TextBox Grid.Row="2" Text="{Binding Script, Mode=OneWay}" IsReadOnly="True"
                  FontFamily="{StaticResource CodeFont}" FontSize="13" AcceptsReturn="True"
                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                  Background="{StaticResource Surface}" />
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
             <Button Style="{StaticResource SecondaryButton}" Content="Copy" Margin="0,0,8,0"
                     Command="{Binding CopyCommand}" />
             <Button Style="{StaticResource SecondaryButton}" Content="Close" Click="Close_Click" />

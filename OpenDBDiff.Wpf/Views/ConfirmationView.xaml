@@ -11,9 +11,13 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0" Margin="0,0,0,12">
-            <Border DockPanel.Dock="Right" Background="{StaticResource EnvProdBg}" CornerRadius="4" Padding="7,2"
+            <!-- Section 6.8: the destination's environment tag sits in the title bar, in the tag's own
+                 colours rather than a fixed production palette. -->
+            <Border DockPanel.Dock="Right" CornerRadius="4" Padding="7,2"
+                    Background="{Binding EnvironmentBackground, Converter={StaticResource HexBrush}}"
                     Visibility="{Binding HasEnvironmentTag, Converter={StaticResource BoolToVisibility}}">
-                <TextBlock Text="{Binding EnvironmentTag}" Foreground="{StaticResource EnvProdFg}"
+                <TextBlock Text="{Binding EnvironmentText}"
+                           Foreground="{Binding EnvironmentForeground, Converter={StaticResource HexBrush}}"
                            FontSize="11" FontWeight="Bold" />
             </Border>
             <TextBlock Style="{StaticResource PaneHeading}" Text="{Binding Title}" />

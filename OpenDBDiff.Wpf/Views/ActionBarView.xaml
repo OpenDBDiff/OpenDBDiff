@@ -12,8 +12,16 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
+            <!-- Section 6.7: the selection count. Section 6.2 replaces it with "Comparing…" and makes the
+                 list read-only while a comparison is running. -->
             <TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"
-                       Text="{Binding Results.SelectionText}" />
+                       Text="{Binding Results.SelectionText}"
+                       Visibility="{Binding IsComparing, Converter={StaticResource InverseBoolToVisibility}}" />
+
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"
+                       Foreground="{StaticResource TextMuted}"
+                       Text="Comparing&#x2026;"
+                       Visibility="{Binding IsComparing, Converter={StaticResource BoolToVisibility}}" />
 
             <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="Bold"
                        Foreground="{StaticResource Danger}"

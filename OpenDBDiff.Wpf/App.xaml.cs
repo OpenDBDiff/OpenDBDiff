@@ -32,6 +32,9 @@ namespace OpenDBDiff.Wpf
             // The view model does not own Window, but it needs to raise dialogs for the owner window.
             dialogs.Owner = window;
 
+            // File → Exit is a command on the view model; only the window can actually close.
+            viewModel.WindowClosingRequested += (_, _) => window.Close();
+
             MainWindow = window;
             window.Show();
         }

@@ -17,12 +17,14 @@ namespace OpenDBDiff.Wpf.ViewModels
         private readonly PropertyInfo property;
         private readonly object target;
         private readonly Func<bool> read;
+        private readonly Action? changed;
 
-        public IgnoreFilterViewModel(string caption, PropertyInfo property, object target)
+        public IgnoreFilterViewModel(string caption, PropertyInfo property, object target, Action? changed = null)
         {
             Caption = caption;
             this.property = property;
             this.target = target;
+            this.changed = changed;
             read = () => (bool)(property.GetValue(target, null) ?? false);
         }
 
@@ -35,7 +37,15 @@ namespace OpenDBDiff.Wpf.ViewModels
         public bool IsIgnored
         {
             get { return read(); }
-            set { property.SetValue(target, value, null); }
+            set
+            {
+                property.SetValue(target, value, null);
+
+                if (changed != null)
+                {
+                    changed();
+                }
+            }
         }
     }
 
@@ -96,12 +106,38 @@ namespace OpenDBDiff.Wpf.ViewModels
             IgnoreFilters = typeof(SqlOptionIgnore)
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(property => property.PropertyType == typeof(bool))
-                .Select(property => new IgnoreFilterViewModel(CaptionOf(property.Name), property, option.Ignore))
+                .Select(property => new IgnoreFilterViewModel(CaptionOf(property.Name), property, option.Ignore, OnChanged))
                 .ToList();
 
             ExclusionPatterns = option.Filters.Items
                 .Select(item => new ExclusionPatternViewModel(item))
                 .ToList();
+        }
+
+        /// <summary>
+        /// Raised when a setting that affects the comparison changed, so the shell can mark the visible
+        /// results stale (section 9.6). Options that only affect presentation are not wired here.
+        /// </summary>
+        public event EventHandler? Changed;
+
+        private void OnChanged()
+        {
+            Changed?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnIgnoreWhiteSpacesInCodeChanged()
+        {
+            OnChanged();
+        }
+
+        private void OnCaseSensityInCodeChanged()
+        {
+            OnChanged();
+        }
+
+        private void OnCaseSensitiveInCodeChanged()
+        {
+            OnChanged();
         }
 
         public SqlOption Option

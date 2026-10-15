@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using OpenDBDiff.Abstractions.Schema;
 using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.SqlServer.Driver;
@@ -17,24 +20,26 @@ using PropertyChanged;
 namespace OpenDBDiff.Wpf.ViewModels
 {
     /// <summary>
-    /// The shell of the redesigned window: the four regions of section 5.1 - summary bar, review list,
-    /// detail pane and action bar - over the rules that live in OpenDBDiff.Ui.Model.
+    /// The shell of the redesigned window: the connection strip and its panel (section 6.1), the
+    /// progress bar (6.2), the summary bar, review list, detail pane and action bar of section 5.1,
+    /// the stale-results rules of 9.6, and the menus of section 12.
     /// </summary>
     /// <remarks>
     /// The comparison pipeline is unchanged from the previous front end: the right-hand panel is loaded
     /// first and the left-hand second, and the comparer marks the left-hand snapshot up as the desired
     /// state. In the specification's words (section 3) the left-hand panel is the Source, whose
     /// definitions are the desired state, and the right-hand panel is the Destination that an apply
-    /// modifies - which is what the detail pane's column headers and the apply button say.
+    /// modifies - which is what the strip, the detail pane's column headers and the apply button say.
     ///
-    /// Phases 2 to 4 of the specification are not here: the connection strip, streaming progress and
-    /// per-side status, stale results, dependency checks, typed confirmation, the apply report and the
-    /// keyboard map beyond F5 and Ctrl+F. The connection panels are therefore still the ones from the
-    /// previous layout, which is what Phase 1 allows.
+    /// Later phases are still missing and deliberately so: dependency checks and destructive detection
+    /// (Phase 3), the apply report and history (Phase 3), streaming results, the flat list minimap and
+    /// the dark theme (Phase 4).
     /// </remarks>
     [AddINotifyPropertyChangedInterface]
     public sealed class MainViewModel : Infrastructure.ObservableObject
     {
+        private const int MaxRecentProjects = 10;
+
         private readonly IComparisonService comparisons;
         private readonly ISettingsStore settings;
         private readonly IDialogService dialogs;
@@ -43,6 +48,15 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         private IDatabase? sourceDatabase;
         private IDatabase? destinationDatabase;
+
+        private CancellationTokenSource? cancellation;
+        private Task<ComparisonResult>? runningCompare;
+        private int compareGeneration;
+        private int applyGeneration;
+
+        private List<SavedConnection> savedConnections = new List<SavedConnection>();
+        private List<RecentPair> recentPairs = new List<RecentPair>();
+        private List<string> recentProjects = new List<string>();
 
         public MainViewModel(IComparisonService comparisons, ISettingsStore settings, IDialogService dialogs)
         {
@@ -53,11 +67,19 @@ namespace OpenDBDiff.Wpf.ViewModels
             options = new SqlOption(true);
             updateConfirmation = new WpfUpdateConfirmation(dialogs);
 
-            Source = new ConnectionViewModel("Source database:");
-            Destination = new ConnectionViewModel("Destination database:");
+            Source = new ConnectionViewModel("Source database:", dialogs);
+            Destination = new ConnectionViewModel("Destination database:", dialogs);
+            Progress = new ProgressViewModel(string.Empty, string.Empty);
 
-            CompareCommand = new AsyncRelayCommand(CompareAsync);
-            SwapCommand = new RelayCommand(Swap);
+            Source.Edited += OnConnectionEdited;
+            Destination.Edited += OnConnectionEdited;
+            Source.Saved += OnConnectionSaved;
+            Destination.Saved += OnConnectionSaved;
+
+            CompareCommand = new AsyncRelayCommand(CompareAsync, () => CanInvokeCompare && !IsRunning);
+            CompareAgainCommand = new AsyncRelayCommand(CompareAsync, () => CanInvokeCompare && !IsRunning);
+            CancelCommand = new RelayCommand(CancelCompare, () => State == AppState.Comparing);
+            SwapCommand = new RelayCommand(Swap, () => !IsRunning);
             OptionsCommand = new RelayCommand(ShowOptions);
             ApplyCommand = new AsyncRelayCommand(ApplyAsync, () => CanApply);
             PreviewScriptCommand = new RelayCommand(PreviewScript, () => HasScript);
@@ -66,46 +88,118 @@ namespace OpenDBDiff.Wpf.ViewModels
             ShowSideBySideCommand = new RelayCommand(() => SetDetailMode(DetailMode.SideBySide));
             ShowInlineCommand = new RelayCommand(() => SetDetailMode(DetailMode.Inline));
             ShowScriptCommand = new RelayCommand(() => SetDetailMode(DetailMode.Script));
-            OpenProjectCommand = new RelayCommand(() => dialogs.Inform("Open project", "Named project files are not ported to this front end yet."));
+            ShowGroupedCommand = new RelayCommand(() => SetListViewMode(true));
+            ShowFlatCommand = new RelayCommand(() => SetListViewMode(false));
+            ToggleShowIdenticalCommand = new RelayCommand(ToggleShowIdentical);
+            ResetLayoutCommand = new RelayCommand(ResetLayout);
             NewProjectCommand = new RelayCommand(ResetProject);
+            OpenProjectCommand = new RelayCommand(OpenProject);
             SaveProjectCommand = new RelayCommand(SaveProject);
+            SaveProjectAsCommand = new RelayCommand(SaveProjectAs);
+            EditConnectionsCommand = new RelayCommand(OpenPanel, () => !IsRunning);
+            OpenPanelCommand = new RelayCommand<object>(OpenPanelFor);
+            ClosePanelCommand = new RelayCommand(ClosePanel);
+            DonePanelCommand = new AsyncRelayCommand(DonePanelAsync);
+            ModeSchemaCommand = new RelayCommand(() => SetMode(CompareMode.Schema));
+            ModeDataCommand = new RelayCommand(OpenDataCompare, () => IsDataModeEnabled);
+            ShowShortcutsCommand = new RelayCommand(ShowShortcuts);
+            OpenReportsFolderCommand = new RelayCommand(OpenReportsFolder);
+            OpenDocumentationCommand = new RelayCommand(OpenDocumentation);
+            AboutCommand = new RelayCommand(ShowAbout);
+            ThemeCommand = new RelayCommand<string>(SetTheme);
+            ExitCommand = new RelayCommand(() => WindowClosingRequested?.Invoke(this, EventArgs.Empty));
 
             var state = settings.Load();
 
-            if (!string.IsNullOrEmpty(state.SourceConnectionString))
-            {
-                Source.ConnectionString = state.SourceConnectionString!;
-            }
+            Restore(state);
 
-            if (!string.IsNullOrEmpty(state.DestinationConnectionString))
-            {
-                Destination.ConnectionString = state.DestinationConnectionString!;
-            }
-
-            StatusMessage = "Choose a source and destination, then compare.";
+            StatusMessage = SetupGuidance;
         }
+
+        /// <summary>Raised by the Exit menu item, which only the window can carry out.</summary>
+        public event EventHandler? WindowClosingRequested;
 
         public ConnectionViewModel Source { get; }
 
         public ConnectionViewModel Destination { get; }
 
+        /// <summary>Section 4: the window is a state machine and only one state is active.</summary>
+        public AppState State { get; private set; } = AppState.Setup;
+
+        public bool IsSetup
+        {
+            get { return State == AppState.Setup; }
+        }
+
+        public bool IsComparing
+        {
+            get { return State == AppState.Comparing; }
+        }
+
+        public bool IsResults
+        {
+            get { return State == AppState.Results; }
+        }
+
+        /// <summary>A compare or an apply is in flight; the controls that must not run twice read this.</summary>
+        public bool IsRunning
+        {
+            get { return State == AppState.Comparing || State == AppState.Applying; }
+        }
+
+        /// <summary>
+        /// Section 6.2: while COMPARING the review list is read-only. The previous results stay visible
+        /// (section 9.1) but nothing in the list can be selected or included until the run finishes.
+        /// </summary>
+        public bool IsNotComparing
+        {
+            get { return State != AppState.Comparing; }
+        }
+
         /// <summary>What the summary bar, review list, detail pane and action bar bind to.</summary>
         public ResultsViewModel? Results { get; private set; }
 
+        public ProgressViewModel Progress { get; }
+
         public string StatusMessage { get; private set; }
 
-        public bool IsBusy { get; private set; }
+        public ObservableCollection<ToastViewModel> Toasts { get; } = new ObservableCollection<ToastViewModel>();
 
-        public bool HasResults
+        public ObservableCollection<RecentPairViewModel> RecentPairs { get; } = new ObservableCollection<RecentPairViewModel>();
+
+        public ObservableCollection<SavedConnection> SavedConnections { get; private set; } = new ObservableCollection<SavedConnection>();
+
+        public ObservableCollection<RecentProjectViewModel> RecentProjects { get; } = new ObservableCollection<RecentProjectViewModel>();
+
+        public bool HasRecentPairs
         {
-            get { return Results != null; }
+            get { return RecentPairs.Count > 0; }
         }
 
+        public bool HasRecentProjects
+        {
+            get { return RecentProjects.Count > 0; }
+        }
+
+        // ---- Region A: the connection strip (section 6.1) -------------------------------------------
+
         public AsyncRelayCommand CompareCommand { get; }
+
+        public AsyncRelayCommand CompareAgainCommand { get; }
+
+        public RelayCommand CancelCommand { get; }
 
         public RelayCommand SwapCommand { get; }
 
         public RelayCommand OptionsCommand { get; }
+
+        public RelayCommand EditConnectionsCommand { get; }
+
+        public RelayCommand<object> OpenPanelCommand { get; }
+
+        public RelayCommand ClosePanelCommand { get; }
+
+        public AsyncRelayCommand DonePanelCommand { get; }
 
         public AsyncRelayCommand ApplyCommand { get; }
 
@@ -121,42 +215,243 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         public RelayCommand ShowScriptCommand { get; }
 
-        public RelayCommand OpenProjectCommand { get; }
+        public RelayCommand ModeSchemaCommand { get; }
+
+        public RelayCommand ModeDataCommand { get; }
+
+        public RelayCommand ShowGroupedCommand { get; }
+
+        public RelayCommand ShowFlatCommand { get; }
+
+        public RelayCommand ToggleShowIdenticalCommand { get; }
+
+        public RelayCommand ResetLayoutCommand { get; }
 
         public RelayCommand NewProjectCommand { get; }
 
+        public RelayCommand OpenProjectCommand { get; }
+
         public RelayCommand SaveProjectCommand { get; }
 
-        public IOption Options
-        {
-            get { return options; }
-        }
+        public RelayCommand SaveProjectAsCommand { get; }
 
-        /// <summary>Width of the review list, remembered per user (section 11).</summary>
-        public double ReviewListWidth { get; set; } = 400;
+        public RelayCommand ShowShortcutsCommand { get; }
 
-        /// <summary>"SOURCE · {server}", as section 6.5.2 labels the left column.</summary>
-        public string SourceColumnHeader
-        {
-            get { return string.Format("SOURCE \u00b7 {0}", ServerOf(Source)); }
-        }
+        public RelayCommand OpenReportsFolderCommand { get; }
 
-        /// <summary>"DESTINATION · {server} (will be changed)".</summary>
-        public string DestinationColumnHeader
-        {
-            get { return string.Format("DESTINATION \u00b7 {0} (will be changed)", ServerOf(Destination)); }
-        }
+        public RelayCommand OpenDocumentationCommand { get; }
 
-        public string PreSelectionHeading
+        public RelayCommand AboutCommand { get; }
+
+        public RelayCommand<string> ThemeCommand { get; }
+
+        public RelayCommand ExitCommand { get; }
+
+        /// <summary>Section 6.1 item 9: "Compare" in SETUP, "Compare again  F5" in RESULTS, "Cancel" while COMPARING.</summary>
+        public string CompareLabel
         {
             get
             {
-                var results = Results;
+                if (State == AppState.Comparing)
+                {
+                    return "Cancel";
+                }
 
-                return results == null
-                    ? "No comparison yet"
-                    : string.Format("{0} differences across {1} object types", results.DifferenceCount, results.DiffSet.Groups.Count);
+                return Results == null ? "Compare" : "Compare again  F5";
             }
+        }
+
+        public string CompareTooltip
+        {
+            get
+            {
+                if (State == AppState.Comparing)
+                {
+                    return "Stop the comparison (Esc)";
+                }
+
+                if (!CanInvokeCompare)
+                {
+                    return "Set up both connections first. Open the panel to fix them.";
+                }
+
+                if (ConnectionRules.ShouldTestBothBeforeCompare(Source.Validity, Destination.Validity))
+                {
+                    return "Test both connections, then compare (F5)";
+                }
+
+                return "Compare the two databases (F5)";
+            }
+        }
+
+        /// <summary>Section 6.1 item 3: the tooltip states the new direction.</summary>
+        public string SwapTooltip
+        {
+            get
+            {
+                return string.Format(
+                    "Swap source and destination. Source will become {0}",
+                    ConnectionRules.ChipTooltip(Destination.ServerName, Destination.DatabaseName));
+            }
+        }
+
+        public bool CanInvokeCompare
+        {
+            get { return ConnectionRules.CanInvokeCompare(Source.Validity, Destination.Validity); }
+        }
+
+        // ---- Region A: the connection panel (section 6.1.1) ----------------------------------------
+
+        public bool IsConnectionPanelOpen { get; private set; } = true;
+
+        /// <summary>Section 6.1.1: expanded inline in SETUP, a popover below the strip in every other state.</summary>
+        public bool IsConnectionPanelInline
+        {
+            get { return IsConnectionPanelOpen && State == AppState.Setup; }
+        }
+
+        public bool IsConnectionPanelPopover
+        {
+            get { return IsConnectionPanelOpen && State != AppState.Setup; }
+        }
+
+        public ConnectionSide FocusedSide { get; private set; } = ConnectionSide.Source;
+
+        public bool IsSourceFocused
+        {
+            get { return FocusedSide == ConnectionSide.Source; }
+        }
+
+        public bool IsDestinationFocused
+        {
+            get { return FocusedSide == ConnectionSide.Destination; }
+        }
+
+        public string PanelHeading
+        {
+            get { return IsConnectionPanelInline ? "Connect" : "Connections"; }
+        }
+
+        // ---- Region C: the mode switch (section 6.1.5) ---------------------------------------------
+
+        public CompareMode Mode { get; private set; } = CompareMode.Schema;
+
+        public bool IsSchemaMode
+        {
+            get { return Mode == CompareMode.Schema; }
+        }
+
+        public bool IsDataMode
+        {
+            get { return Mode == CompareMode.Data; }
+        }
+
+        /// <summary>Section 6.1.5: enabled only after a schema compare found a table on both sides.</summary>
+        public bool IsDataModeEnabled { get; private set; }
+
+        public string DataModeTooltip
+        {
+            get { return IsDataModeEnabled ? "Compare the rows of tables that exist on both sides" : CompareModeRules.DataDisabledTooltip; }
+        }
+
+        private void SetMode(CompareMode mode)
+        {
+            Mode = mode;
+            OnPropertyChanged(nameof(Mode));
+            OnPropertyChanged(nameof(IsSchemaMode));
+            OnPropertyChanged(nameof(IsDataMode));
+        }
+
+        /// <summary>
+        /// Section 6.1.5: Data mode compares the rows of a table that exists on both sides. It reuses the
+        /// existing data-comparison component rather than reimplementing it, so the component is opened
+        /// for the table the detail pane is showing.
+        /// </summary>
+        private void OpenDataCompare()
+        {
+            SetMode(CompareMode.Data);
+
+            var focused = Results?.DiffSet.FocusedItem;
+
+            if (focused == null || focused.Key.ObjectType != ObjectType.Table)
+            {
+                StatusMessage = "Select a table in the list to compare its rows.";
+                return;
+            }
+
+            var table = sourceDatabase?.Find(focused.Key.FullName);
+
+            if (table == null)
+            {
+                StatusMessage = "That table is no longer part of the comparison.";
+                return;
+            }
+
+            try
+            {
+                dialogs.ShowDialog(new DataCompareViewModel(
+                    table,
+                    Source.ConnectionString,
+                    Destination.ConnectionString,
+                    dialogs,
+                    updateConfirmation));
+            }
+            catch (Exception ex)
+            {
+                dialogs.ShowError("Compare data", ex);
+            }
+        }
+
+        // ---- Region B: the progress bar (section 6.2) -----------------------------------------------
+
+        public bool IsProgressActive
+        {
+            get { return Progress.IsActive; }
+        }
+
+        // ---- Section 9.6: stale results -------------------------------------------------------------
+
+        public bool IsStale { get; private set; }
+
+        public CompareStaleness Staleness { get; private set; } = CompareStaleness.Fresh;
+
+        public bool IsStaleBannerVisible
+        {
+            get { return IsStale && Results != null; }
+        }
+
+        public string StaleBannerText
+        {
+            get { return StaleRules.BannerText; }
+        }
+
+        public string StaleReasonText
+        {
+            get
+            {
+                switch (Staleness)
+                {
+                    case CompareStaleness.ConnectionChanged:
+                        return "A connection changed after the comparison.";
+                    case CompareStaleness.DirectionSwapped:
+                        return "Source and destination were swapped.";
+                    case CompareStaleness.OptionsChanged:
+                        return "Comparison options changed.";
+                    case CompareStaleness.ProjectLoaded:
+                        return "A different project was loaded.";
+                    case CompareStaleness.Applied:
+                        return "The destination was modified by an apply.";
+                    default:
+                        return string.Empty;
+                }
+            }
+        }
+
+        // ---- Region F: the action bar (section 6.7) -------------------------------------------------
+
+        public bool HasResults
+        {
+            get { return Results != null; }
         }
 
         public string ApplyLabel
@@ -179,7 +474,7 @@ namespace OpenDBDiff.Wpf.ViewModels
             {
                 var set = Results?.DiffSet;
 
-                return set != null && set.CanApply(AppState.Results, false, IsDestinationUsable(), false).CanApply;
+                return set != null && set.CanApply(State, IsStale, IsDestinationValid, false).CanApply;
             }
         }
 
@@ -194,10 +489,155 @@ namespace OpenDBDiff.Wpf.ViewModels
                     return "Compare two databases first.";
                 }
 
-                var decision = set.CanApply(AppState.Results, false, IsDestinationUsable(), false);
+                var decision = set.CanApply(State, IsStale, IsDestinationValid, false);
 
-                return decision.CanApply ? ApplyLabel : decision.DisabledReason;
+                if (!decision.CanApply)
+                {
+                    return decision.DisabledReason;
+                }
+
+                // Section 6.7: the tooltip repeats the label and the environment tag.
+                return Destination.Environment.HasValue
+                    ? ApplyLabel + "  \u00b7  " + Destination.Environment.Text
+                    : ApplyLabel;
             }
+        }
+
+        public bool IsDestinationValid
+        {
+            get { return Destination.Validity == ConnectionValidity.Valid; }
+        }
+
+        public string SourceColumnHeader
+        {
+            get { return string.Format("SOURCE \u00b7 {0}", ServerOf(Source)); }
+        }
+
+        /// <summary>Section 6.5.2: the destination column header repeats the environment tag.</summary>
+        public string DestinationColumnHeader
+        {
+            get
+            {
+                var header = string.Format("DESTINATION \u00b7 {0} (will be changed)", ServerOf(Destination));
+
+                return Destination.Environment.HasValue ? header + "  \u00b7  " + Destination.Environment.Text : header;
+            }
+        }
+
+        /// <summary>
+        /// Section 6.5.4: the hint under the pre-selection heading. In SETUP it is the setup guidance
+        /// rather than "select an object", because there is nothing to select yet.
+        /// </summary>
+        public string PreSelectionHint
+        {
+            get
+            {
+                return IsSetup && Results == null
+                    ? SetupGuidance
+                    : "Select an object on the left to see its differences.";
+            }
+        }
+
+        public string PreSelectionHeading
+        {
+            get
+            {
+                var results = Results;
+
+                return results == null
+                    ? "No comparison yet"
+                    : string.Format(CultureInfo.CurrentCulture, "{0} differences across {1} object types",
+                        results.DifferenceCount, results.DiffSet.Groups.Count);
+            }
+        }
+
+        /// <summary>Width of the review list, remembered per user (section 11).</summary>
+        public double ReviewListWidth { get; set; } = 400;
+
+        /// <summary>
+        /// Section 12: the menu bar collapses to a ≡ button at narrow widths. Section 5.3 puts the
+        /// boundary at 1180; the window itself never goes below 1024.
+        /// </summary>
+        public bool IsNarrow { get; private set; }
+
+        public void UpdateWidth(double width)
+        {
+            var narrow = width < 1180;
+
+            if (narrow == IsNarrow)
+            {
+                return;
+            }
+
+            IsNarrow = narrow;
+            OnPropertyChanged(nameof(IsNarrow));
+        }
+
+        // The View menu's check marks. They are computed from the results, so they are refreshed
+        // whenever a view setting changes rather than bound through a nullable Results.
+        public bool IsIdenticalShown
+        {
+            get { return Results != null && Results.DiffSet.ShowIdentical; }
+        }
+
+        public bool IsGroupedView
+        {
+            get { return Results == null || Results.DiffSet.ViewMode == ListViewMode.Grouped; }
+        }
+
+        public bool IsFlatView
+        {
+            get { return Results != null && Results.DiffSet.ViewMode == ListViewMode.Flat; }
+        }
+
+        public bool IsSideBySideDetail
+        {
+            get { return Results == null || Results.DiffSet.DetailMode == DetailMode.SideBySide; }
+        }
+
+        public bool IsInlineDetail
+        {
+            get { return Results != null && Results.DiffSet.DetailMode == DetailMode.Inline; }
+        }
+
+        public bool IsScriptDetail
+        {
+            get { return Results != null && Results.DiffSet.DetailMode == DetailMode.Script; }
+        }
+
+        private void RaiseViewState()
+        {
+            OnPropertyChanged(nameof(IsIdenticalShown));
+            OnPropertyChanged(nameof(IsGroupedView));
+            OnPropertyChanged(nameof(IsFlatView));
+            OnPropertyChanged(nameof(IsSideBySideDetail));
+            OnPropertyChanged(nameof(IsInlineDetail));
+            OnPropertyChanged(nameof(IsScriptDetail));
+        }
+
+        public string SetupGuidance
+        {
+            get { return "Choose a source and destination, then compare."; }
+        }
+
+        // ---- Window bounds, filled in by the window before it saves (section 11) --------------------
+
+        public double? WindowLeft { get; set; }
+
+        public double? WindowTop { get; set; }
+
+        public double? WindowWidth { get; set; }
+
+        public double? WindowHeight { get; set; }
+
+        public string? WindowStateText { get; set; }
+
+        /// <summary>"Light", "Dark" or "System" (section 11). Remembered; dark rendering is Phase 4.</summary>
+        public string Theme { get; private set; } = "System";
+
+        public IOption Options
+        {
+            get { return options; }
         }
 
         private bool HasScript
@@ -205,78 +645,364 @@ namespace OpenDBDiff.Wpf.ViewModels
             get { return Results != null && Results.DiffSet.SelectedCount > 0; }
         }
 
+        // ---- Persistence (section 11) ---------------------------------------------------------------
+
         public void SaveWindowState()
         {
             var state = settings.Load();
+
             state.SourceConnectionString = Source.ConnectionString;
             state.DestinationConnectionString = Destination.ConnectionString;
+            state.ReviewListWidth = (int)Math.Round(ReviewListWidth);
+            state.DetailMode = (Results?.DiffSet.DetailMode ?? DetailMode.SideBySide).ToString();
+            state.ListViewMode = (Results?.DiffSet.ViewMode ?? ListViewMode.Grouped).ToString();
+            state.ShowIdentical = Results != null && Results.DiffSet.ShowIdentical;
+            state.SourceEnvironment = Source.Environment.Text;
+            state.DestinationEnvironment = Destination.Environment.Text;
+            state.ConnectionPanelOpen = IsConnectionPanelOpen;
+            state.Theme = Theme;
+            state.WindowLeft = WindowLeft;
+            state.WindowTop = WindowTop;
+            state.WindowWidth = WindowWidth;
+            state.WindowHeight = WindowHeight;
+            state.WindowState = WindowStateText;
+
+            state.SavedConnections = savedConnections
+                .Select(connection => new SavedConnectionState
+                {
+                    Name = connection.Name,
+                    Host = connection.Host,
+                    Database = connection.Database,
+                    IntegratedSecurity = connection.IntegratedSecurity,
+                    UserName = connection.UserName,
+                    Environment = connection.Environment
+                })
+                .ToList();
+
+            state.RecentPairs = recentPairs
+                .Select(pair => new RecentPairState
+                {
+                    SourceHost = pair.SourceHost,
+                    SourceDatabase = pair.SourceDatabase,
+                    DestinationHost = pair.DestinationHost,
+                    DestinationDatabase = pair.DestinationDatabase,
+                    LastRunUtc = pair.LastRunUtc
+                })
+                .ToList();
+
+            state.RecentProjects = recentProjects.ToList();
+
             settings.Save(state);
         }
 
+        private void Restore(UiState state)
+        {
+            if (!string.IsNullOrEmpty(state.SourceConnectionString))
+            {
+                Source.ConnectionString = state.SourceConnectionString!;
+            }
+
+            if (!string.IsNullOrEmpty(state.DestinationConnectionString))
+            {
+                Destination.ConnectionString = state.DestinationConnectionString!;
+            }
+
+            Source.Environment = ParseEnvironment(state.SourceEnvironment);
+            Destination.Environment = ParseEnvironment(state.DestinationEnvironment);
+
+            if (state.ReviewListWidth > 0)
+            {
+                ReviewListWidth = state.ReviewListWidth;
+            }
+
+            savedConnections = (state.SavedConnections ?? new List<SavedConnectionState>())
+                .Where(entry => !string.IsNullOrWhiteSpace(entry.Name))
+                .Select(entry => new SavedConnection(
+                    entry.Name!, entry.Host ?? string.Empty, entry.Database ?? string.Empty,
+                    entry.IntegratedSecurity, entry.UserName ?? string.Empty, entry.Environment))
+                .ToList();
+
+            recentPairs = (state.RecentPairs ?? new List<RecentPairState>())
+                .Select(entry => new RecentPair(
+                    entry.SourceHost ?? string.Empty, entry.SourceDatabase ?? string.Empty,
+                    entry.DestinationHost ?? string.Empty, entry.DestinationDatabase ?? string.Empty,
+                    entry.LastRunUtc))
+                .ToList();
+
+            recentProjects = (state.RecentProjects ?? new List<string>()).ToList();
+
+            ShareSavedConnections();
+            RefreshRecentPairs();
+            RefreshRecentProjects();
+
+            // Section 6.1.1: the panel is what has to be open to make the app usable, so a remembered
+            // "closed" only stands when the two connections can actually start a comparison.
+            IsConnectionPanelOpen = state.ConnectionPanelOpen
+                || !ConnectionRules.CanInvokeCompare(Source.Validity, Destination.Validity);
+
+            // Restored so the window can put itself back where it was, subject to the current monitors
+            // (section 11).
+            WindowLeft = state.WindowLeft;
+            WindowTop = state.WindowTop;
+            WindowWidth = state.WindowWidth;
+            WindowHeight = state.WindowHeight;
+            WindowStateText = state.WindowState;
+            Theme = string.IsNullOrEmpty(state.Theme) ? "System" : state.Theme!;
+
+            Staleness = CompareStaleness.Fresh;
+        }
+
+        private static EnvironmentTag ParseEnvironment(string? text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return EnvironmentTag.None;
+            }
+
+            foreach (EnvironmentKind kind in Enum.GetValues(typeof(EnvironmentKind)))
+            {
+                if (string.Equals(EnvironmentTag.For(kind).Text, text, StringComparison.OrdinalIgnoreCase))
+                {
+                    return EnvironmentTag.For(kind);
+                }
+            }
+
+            return EnvironmentTag.Custom(text!);
+        }
+
+        private void ShareSavedConnections()
+        {
+            SavedConnections = new ObservableCollection<SavedConnection>(savedConnections);
+            Source.SavedConnections = SavedConnections;
+            Destination.SavedConnections = SavedConnections;
+
+            OnPropertyChanged(nameof(SavedConnections));
+        }
+
+        // ---- Compare (sections 6.1.3, 9.1 and 9.2) --------------------------------------------------
+
         private async Task CompareAsync()
         {
-            var request = new ComparisonRequest(Destination.ConnectionString, Source.ConnectionString, options);
-            var progress = new ProgressViewModel(Destination.Describe(), Source.Describe());
+            if (State == AppState.Comparing)
+            {
+                return;
+            }
 
-            dialogs.ShowModeless(progress);
+            if (!await ConnectionsAreReadyAsync().ConfigureAwait(true))
+            {
+                return;
+            }
 
-            var previousIncluded = Results?.DiffSet.IncludedKeys;
-            var previousExcluded = Results?.DiffSet.ExcludedKeys;
+            var previousResults = Results;
+            var generation = ++compareGeneration;
+            var source = new CancellationTokenSource();
+            cancellation = source;
 
-            IsBusy = true;
+            CancelToasts();
+            State = AppState.Comparing;
+            Progress.StartReading();
+
+            // Section 6.1.5: Data mode is only offered after a schema compare has completed, so it goes
+            // back to disabled while this one runs.
+            IsDataModeEnabled = false;
+            ModeDataCommand.RaiseCanExecuteChanged();
             StatusMessage = "Comparing " + Source.Describe() + " with " + Destination.Describe() + "...";
+            ClearStale();
+            RaiseResultState();
+
+            var request = new ComparisonRequest(Destination.ConnectionString, Source.ConnectionString, options);
+
+            runningCompare = comparisons.CompareAsync(
+                request,
+                new Progress<DatabaseProgress>(report => Progress.ReportSource(report)),
+                new Progress<DatabaseProgress>(report => Progress.ReportDestination(report)),
+                source.Token);
 
             try
             {
-                sourceDatabase = null;
-                destinationDatabase = null;
+                var result = await runningCompare.ConfigureAwait(true);
 
-                var result = await comparisons
-                    .CompareAsync(
-                        request,
-                        new Progress<DatabaseProgress>(report => progress.Origin.Report(report)),
-                        new Progress<DatabaseProgress>(report => progress.Destination.Report(report)),
-                        CancellationToken.None)
-                    .ConfigureAwait(true);
+                // A cancel puts the window back immediately, so a result that arrives afterwards
+                // belongs to a run the user has already abandoned (section 6.2).
+                if (generation != compareGeneration)
+                {
+                    return;
+                }
 
                 sourceDatabase = result.Destination;
                 destinationDatabase = result.Origin;
 
                 var diffSet = new DiffSet(DiffItemBuilder.Build(sourceDatabase, destinationDatabase));
 
-                if (previousIncluded != null)
+                if (previousResults != null)
                 {
-                    diffSet.CarryInclusionFrom(previousIncluded, previousExcluded);
+                    diffSet.CarryInclusionFrom(previousResults.DiffSet.IncludedKeys, previousResults.DiffSet.ExcludedKeys);
                 }
 
                 Results = new ResultsViewModel(diffSet);
+                ApplyStoredViewSettings(diffSet);
                 FocusFirstDifference();
 
-                progress.Complete();
-                StatusMessage = BuildCompletionStatus(diffSet);
+                Progress.Complete();
+                State = AppState.Results;
 
+                // Section 6.1.1: the panel is inline in SETUP and a popover otherwise, so it closes
+                // when results arrive and the chips take over (AC-01).
+                IsConnectionPanelOpen = false;
+                RefreshPanelState();
+
+                IsDataModeEnabled = CompareModeRules.IsDataEnabled(true, CompareModeRules.TablesOnBothSides(diffSet.AllItems));
+                ModeDataCommand.RaiseCanExecuteChanged();
+
+                StatusMessage = BuildCompletionStatus(diffSet);
+                RecordRecentPair();
                 SaveWindowState();
+            }
+            catch (OperationCanceledException)
+            {
+                // CancelCompare already restored the previous state; nothing left to do.
             }
             catch (ComparisonException ex)
             {
-                progress.Fail(ex.Message);
-                StatusMessage = ex.Message;
-                dialogs.ShowError(ex.Location, ex);
+                if (generation == compareGeneration)
+                {
+                    FailCompare(previousResults, ex.Message);
+                    dialogs.ShowError(ex.Location, ex);
+                }
             }
             catch (Exception ex)
             {
-                progress.Fail(ex.Message);
-                StatusMessage = ex.Message;
-                dialogs.ShowError("Comparing Databases", ex);
+                if (generation == compareGeneration)
+                {
+                    FailCompare(previousResults, ex.Message);
+                    dialogs.ShowError("Comparing Databases", ex);
+                }
             }
             finally
             {
-                IsBusy = false;
-                RaiseResultState();
+                if (generation == compareGeneration)
+                {
+                    Progress.Reset();
+                    cancellation = null;
+                    runningCompare = null;
+                    RaiseResultState();
+                }
             }
         }
 
-        /// <summary>Section 9.1 step 5: focus the first Drop if there is one, otherwise the first difference.</summary>
+        /// <summary>
+        /// Section 6.1.3: two Valid sides compare straight away; two Untested sides are tested in
+        /// parallel first and the compare then proceeds automatically if both succeed, otherwise the
+        /// panel opens on the failing side with its error shown.
+        /// </summary>
+        private async Task<bool> ConnectionsAreReadyAsync()
+        {
+            if (ConnectionRules.CanCompare(Source.Validity, Destination.Validity))
+            {
+                return true;
+            }
+
+            if (!ConnectionRules.ShouldTestBothBeforeCompare(Source.Validity, Destination.Validity))
+            {
+                FocusedSide = Source.Validity == ConnectionValidity.Valid ? ConnectionSide.Destination : ConnectionSide.Source;
+                OpenPanel();
+                RefreshPanelState();
+                StatusMessage = "Set up both connections before comparing.";
+                return false;
+            }
+
+            StatusMessage = "Testing both connections...";
+            Progress.StartReading();
+
+            var sourceTest = Source.TestAsync();
+            var destinationTest = Destination.TestAsync();
+
+            await Task.WhenAll(sourceTest, destinationTest).ConfigureAwait(true);
+
+            Progress.Reset();
+
+            if (sourceTest.Result && destinationTest.Result)
+            {
+                return true;
+            }
+
+            FocusedSide = sourceTest.Result ? ConnectionSide.Destination : ConnectionSide.Source;
+            OpenPanel();
+            RefreshPanelState();
+            StatusMessage = "The " + (FocusedSide == ConnectionSide.Source ? "source" : "destination") + " connection could not be tested.";
+            RaiseResultState();
+            return false;
+        }
+
+        private void FailCompare(ResultsViewModel? previousResults, string message)
+        {
+            Results = previousResults;
+            State = previousResults == null ? AppState.Setup : AppState.Results;
+            Progress.Reset();
+            StatusMessage = message;
+            OpenPanel();
+            RefreshPanelState();
+            RaiseResultState();
+        }
+
+        /// <summary>
+        /// Section 6.2 and AC-05: the previous stable state comes back immediately rather than when the
+        /// engine notices, because the engine may not be able to abort a query that is already running.
+        /// The bar keeps saying "Cancelling…" until the engine really stops; if that takes longer than
+        /// two seconds the user gets a non-blocking toast rather than a frozen window.
+        /// </summary>
+        private async void CancelCompare()
+        {
+            if (State != AppState.Comparing)
+            {
+                return;
+            }
+
+            var generation = ++compareGeneration;
+            var task = runningCompare;
+
+            Progress.Cancel();
+            cancellation?.Cancel();
+
+            // Put the window back now: the previous results stay, and the partial results of the run
+            // that was abandoned were never applied to the view.
+            State = Results == null ? AppState.Setup : AppState.Results;
+            StatusMessage = "Comparison cancelled.";
+            RaiseResultState();
+
+            if (task == null)
+            {
+                Progress.Reset();
+                return;
+            }
+
+            var stopped = await Task.WhenAny(task, Task.Delay(TimeSpan.FromSeconds(2))).ConfigureAwait(true);
+
+            if (generation != compareGeneration)
+            {
+                return;
+            }
+
+            if (stopped != task)
+            {
+                ShowToast("Still stopping\u2026");
+            }
+
+            try
+            {
+                await task.ConfigureAwait(true);
+            }
+            catch (Exception)
+            {
+                // The run was abandoned; whatever it reported is not the user's problem.
+            }
+
+            if (generation == compareGeneration)
+            {
+                Progress.Reset();
+            }
+        }
+
         private void FocusFirstDifference()
         {
             var set = Results?.DiffSet;
@@ -295,6 +1021,34 @@ namespace OpenDBDiff.Wpf.ViewModels
             }
         }
 
+        private void ApplyStoredViewSettings(DiffSet diffSet)
+        {
+            var state = settings.Load();
+
+            if (string.Equals(state.DetailMode, DetailMode.Inline.ToString(), StringComparison.Ordinal))
+            {
+                diffSet.DetailMode = DetailMode.Inline;
+            }
+            else if (string.Equals(state.DetailMode, DetailMode.Script.ToString(), StringComparison.Ordinal))
+            {
+                diffSet.DetailMode = DetailMode.Script;
+            }
+
+            if (string.Equals(state.ListViewMode, ListViewMode.Flat.ToString(), StringComparison.Ordinal))
+            {
+                diffSet.ViewMode = ListViewMode.Flat;
+            }
+
+            diffSet.ShowIdentical = state.ShowIdentical;
+
+            if (state.ShowIdentical)
+            {
+                diffSet.StatusFilter.Add(DiffStatus.Identical);
+            }
+        }
+
+        // ---- Apply (sections 6.7 and 6.8) -----------------------------------------------------------
+
         private async Task ApplyAsync()
         {
             var set = Results?.DiffSet;
@@ -310,7 +1064,7 @@ namespace OpenDBDiff.Wpf.ViewModels
                 string.IsNullOrEmpty(Destination.DatabaseName) ? "(unknown)" : Destination.DatabaseName,
                 ServerOf(Destination),
                 Source.Describe(),
-                string.Empty);
+                Destination.Environment);
 
             dialogs.ShowDialog(confirmation);
 
@@ -320,52 +1074,66 @@ namespace OpenDBDiff.Wpf.ViewModels
                 return;
             }
 
-            IsBusy = true;
-            StatusMessage = "Applying " + set.SelectedCount + " changes...";
-
+            var generation = ++applyGeneration;
             var total = set.SelectedCount;
+
+            State = AppState.Applying;
+            StatusMessage = "Applying " + total + " changes...";
+            RaiseResultState();
+
+            var items = set.IncludedItems.ToList();
+            var failures = 0;
 
             try
             {
-                var failures = await Task.Run(() => Apply(set)).ConfigureAwait(true);
+                for (var i = 0; i < items.Count; i++)
+                {
+                    if (generation != applyGeneration)
+                    {
+                        return;
+                    }
+
+                    Progress.ReportApplying(items[i].Key.FullName, i, items.Count);
+
+                    var item = items[i];
+                    var target = ItemFor(item);
+
+                    var report = item.Status == DiffStatus.Create
+                        ? Updater.createNew(target, Destination.ConnectionString, updateConfirmation)
+                        : Updater.alter(target, Destination.ConnectionString, updateConfirmation);
+
+                    if (!string.IsNullOrWhiteSpace(report))
+                    {
+                        failures++;
+                    }
+                }
 
                 StatusMessage = failures == 0
-                    ? string.Format("Applied {0} of {0} changes.", total)
-                    : string.Format("Applied {0} of {1} changes.", total - failures, total);
-
-                dialogs.Inform("Apply", StatusMessage);
+                    ? string.Format(CultureInfo.CurrentCulture, "Applied {0} of {0} changes.", total)
+                    : string.Format(CultureInfo.CurrentCulture, "Applied {0} of {1} changes.", total - failures, total);
             }
             catch (Exception ex)
             {
+                StatusMessage = "Applying the changes failed: " + ex.Message;
                 dialogs.ShowError("Applying changes", ex);
             }
             finally
             {
-                IsBusy = false;
-            }
-        }
-
-        /// <summary>Runs each included item's script against the destination and counts the failures.</summary>
-        private int Apply(DiffSet set)
-        {
-            var connectionString = Destination.ConnectionString;
-            var failures = 0;
-
-            foreach (var item in set.IncludedItems)
-            {
-                var target = ItemFor(item);
-
-                var report = item.Status == DiffStatus.Create
-                    ? Updater.createNew(target, connectionString, updateConfirmation)
-                    : Updater.alter(target, connectionString, updateConfirmation);
-
-                if (!string.IsNullOrWhiteSpace(report))
+                if (generation == applyGeneration)
                 {
-                    failures++;
+                    Progress.Reset();
+                    State = Results == null ? AppState.Setup : AppState.Results;
+
+                    // Section 4: after an apply the destination has moved on, so a successful apply
+                    // marks the visible results stale rather than pretending they still describe it.
+                    if (failures < total)
+                    {
+                        MarkStale(CompareStaleness.Applied);
+                    }
+
+                    RaiseResultState();
                 }
             }
-
-            return failures;
         }
 
         private ISchemaBase ItemFor(DiffItem item)
@@ -386,7 +1154,7 @@ namespace OpenDBDiff.Wpf.ViewModels
 
             if (set != null)
             {
-                dialogs.ShowDialog(new ScriptPreviewViewModel(BuildScript(set), set.SelectedCount));
+                dialogs.ShowDialog(new ScriptPreviewViewModel(BuildScript(set), set.SelectedCount, IsStale));
             }
         }
 
@@ -395,7 +1163,8 @@ namespace OpenDBDiff.Wpf.ViewModels
             try
             {
                 Clipboard.SetText(BuildScript(Results!.DiffSet));
-                StatusMessage = string.Format("Script copied \u00b7 {0} objects", Results.DiffSet.SelectedCount);
+                StatusMessage = string.Format(CultureInfo.CurrentCulture, "Script copied \u00b7 {0} objects", Results.DiffSet.SelectedCount);
+                ShowToast(StatusMessage);
             }
             catch (Exception ex)
             {
@@ -412,7 +1181,7 @@ namespace OpenDBDiff.Wpf.ViewModels
                 return;
             }
 
-            var path = dialogs.AskSaveScriptPath(string.Format("{0}-{1}.sql",
+            var path = dialogs.AskSaveScriptPath(string.Format(CultureInfo.InvariantCulture, "{0}-{1}.sql",
                 string.IsNullOrEmpty(Source.DatabaseName) ? "script" : Source.DatabaseName,
                 DateTime.Now.ToString("yyyyMMdd-HHmm", CultureInfo.InvariantCulture)));
 
@@ -438,7 +1207,7 @@ namespace OpenDBDiff.Wpf.ViewModels
 
             foreach (var item in set.IncludedItems)
             {
-                builder.AppendLine(string.Format("-- {0} {1}", StatusVocabulary.Badge(item.Status), item.Key.FullName));
+                builder.AppendLine(string.Format(CultureInfo.InvariantCulture, "-- {0} {1}", StatusVocabulary.Badge(item.Status), item.Key.FullName));
                 builder.AppendLine(item.Script);
                 builder.AppendLine();
             }
@@ -446,48 +1215,574 @@ namespace OpenDBDiff.Wpf.ViewModels
             return builder.ToString();
         }
 
+        // ---- Strip actions --------------------------------------------------------------------------
+
         private void SetDetailMode(DetailMode mode)
         {
             if (Results != null)
             {
                 Results.DetailMode = mode;
             }
+
+            RaiseViewState();
         }
 
+        private void SetListViewMode(bool grouped)
+        {
+            if (Results != null)
+            {
+                Results.IsGrouped = grouped;
+            }
+
+            RaiseViewState();
+        }
+
+        private void ToggleShowIdentical()
+        {
+            if (Results == null)
+            {
+                return;
+            }
+
+            Results.DiffSet.ShowIdentical = !Results.DiffSet.ShowIdentical;
+
+            if (Results.DiffSet.ShowIdentical)
+            {
+                Results.DiffSet.StatusFilter.Add(DiffStatus.Identical);
+            }
+            else
+            {
+                Results.DiffSet.StatusFilter.Remove(DiffStatus.Identical);
+            }
+
+            Results.CountsChanged();
+            RaiseViewState();
+        }
+
+        /// <summary>Section 6.1 item 3: swaps the two connections and marks the results stale.</summary>
         private void Swap()
         {
-            var source = Source.ConnectionString;
-            Source.ConnectionString = Destination.ConnectionString;
-            Destination.ConnectionString = source;
+            Source.SwapWith(Destination);
             StatusMessage = "Swapped source and destination. Compare again to refresh the results.";
+            MarkStale(CompareStaleness.DirectionSwapped);
             RaiseResultState();
         }
 
-        private void ShowOptions()
+        private void ResetLayout()
         {
-            dialogs.ShowDialog(new OptionsViewModel(options));
-            StatusMessage = "Options changed. Compare again to apply them.";
+            ReviewListWidth = 400;
+
+            if (Results != null)
+            {
+                Results.DiffSet.DetailMode = DetailMode.SideBySide;
+                Results.DiffSet.ViewMode = ListViewMode.Grouped;
+                Results.IsGrouped = true;
+                Results.DetailMode = DetailMode.SideBySide;
+            }
+
+            StatusMessage = "Layout reset.";
+            RaiseViewState();
         }
 
-        private void SaveProject()
+        // ---- The connection panel (section 6.1.1) ---------------------------------------------------
+
+        private void OpenPanel()
         {
+            IsConnectionPanelOpen = true;
+            RefreshPanelState();
+        }
+
+        private void OpenPanelFor(object? side)
+        {
+            var name = side as string;
+
+            if (string.Equals(name, "Destination", StringComparison.OrdinalIgnoreCase))
+            {
+                FocusedSide = ConnectionSide.Destination;
+            }
+            else if (side is ConnectionViewModel connection)
+            {
+                FocusedSide = ReferenceEquals(connection, Destination) ? ConnectionSide.Destination : ConnectionSide.Source;
+            }
+            else
+            {
+                FocusedSide = ConnectionSide.Source;
+            }
+
+            OpenPanel();
+        }
+
+        private void ClosePanel()
+        {
+            // The panel is the only way to set a connection up, so it cannot be closed while there is
+            // nothing else to do: SETUP without the panel would be a dead end.
+            if (State == AppState.Setup && !ConnectionRules.CanInvokeCompare(Source.Validity, Destination.Validity))
+            {
+                StatusMessage = "Both connections are needed before the panel can be closed.";
+                return;
+            }
+
+            IsConnectionPanelOpen = false;
+            RefreshPanelState();
+        }
+
+        /// <summary>Section 6.1.1: "Done validates and closes".</summary>
+        private async Task DonePanelAsync()
+        {
+            if (!ConnectionRules.IsComplete(Source.ServerName, Source.DatabaseName))
+            {
+                FocusedSide = ConnectionSide.Source;
+                StatusMessage = "The source connection needs a server and a database.";
+                RefreshPanelState();
+                return;
+            }
+
+            if (!ConnectionRules.IsComplete(Destination.ServerName, Destination.DatabaseName))
+            {
+                FocusedSide = ConnectionSide.Destination;
+                StatusMessage = "The destination connection needs a server and a database.";
+                RefreshPanelState();
+                return;
+            }
+
+            if (Source.Validity == ConnectionValidity.Untested || Destination.Validity == ConnectionValidity.Untested)
+            {
+                var sourceTest = Source.TestAsync();
+                var destinationTest = Destination.TestAsync();
+
+                await Task.WhenAll(sourceTest, destinationTest).ConfigureAwait(true);
+
+                if (!sourceTest.Result || !destinationTest.Result)
+                {
+                    FocusedSide = sourceTest.Result ? ConnectionSide.Destination : ConnectionSide.Source;
+                    StatusMessage = "A connection could not be tested; the panel stays open.";
+                    RefreshPanelState();
+                    return;
+                }
+            }
+
+            IsConnectionPanelOpen = false;
+            RefreshPanelState();
+            StatusMessage = "Connections ready.";
+        }
+
+        private void RefreshPanelState()
+        {
+            OnPropertyChanged(nameof(IsConnectionPanelOpen));
+            OnPropertyChanged(nameof(IsConnectionPanelInline));
+            OnPropertyChanged(nameof(IsConnectionPanelPopover));
+            OnPropertyChanged(nameof(FocusedSide));
+            OnPropertyChanged(nameof(IsSourceFocused));
+            OnPropertyChanged(nameof(IsDestinationFocused));
+            OnPropertyChanged(nameof(PanelHeading));
+        }
+
+        private void OnConnectionEdited(object? sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(CanInvokeCompare));
+            OnPropertyChanged(nameof(CompareTooltip));
+            OnPropertyChanged(nameof(IsDestinationValid));
+            OnPropertyChanged(nameof(ApplyTooltip));
+            OnPropertyChanged(nameof(CopyScriptCommand));
+            CompareCommand.RaiseCanExecuteChanged();
+            CompareAgainCommand.RaiseCanExecuteChanged();
+            ApplyCommand.RaiseCanExecuteChanged();
+
+            MarkStale(CompareStaleness.ConnectionChanged);
+        }
+
+        private void OnConnectionSaved(object? sender, SavedConnectionEventArgs e)
+        {
+            savedConnections = ConnectionLibraryRules.Save(savedConnections, e.Connection).ToList();
+            ShareSavedConnections();
+            StatusMessage = "Saved the connection " + e.Connection.Name + ".";
             SaveWindowState();
-            dialogs.Inform("Projects", "The connection strings were saved. Named project files are not ported to this front end yet.");
+        }
+
+        // ---- Recent pairs and projects (sections 6.1.6 and 12) --------------------------------------
+
+        private void RecordRecentPair()
+        {
+            var pair = new RecentPair(
+                Source.ServerName,
+                Source.DatabaseName,
+                Destination.ServerName,
+                Destination.DatabaseName,
+                DateTime.UtcNow);
+
+            recentPairs = ConnectionLibraryRules.Record(recentPairs, pair).ToList();
+            RefreshRecentPairs();
+        }
+
+        private void RefreshRecentPairs()
+        {
+            RecentPairs.Clear();
+
+            var now = DateTime.UtcNow;
+
+            foreach (var pair in recentPairs)
+            {
+                RecentPairs.Add(new RecentPairViewModel(pair, now, OpenRecentPair));
+            }
+
+            OnPropertyChanged(nameof(HasRecentPairs));
+        }
+
+        private void RefreshRecentProjects()
+        {
+            RecentProjects.Clear();
+
+            foreach (var path in recentProjects)
+            {
+                RecentProjects.Add(new RecentProjectViewModel(path, OpenRecentProject));
+            }
+
+            OnPropertyChanged(nameof(HasRecentProjects));
+        }
+
+        private void OpenRecentPair(RecentPair pair)
+        {
+            if (pair == null)
+            {
+                return;
+            }
+
+            Source.ApplySavedConnection(new SavedConnection("recent", pair.SourceHost, pair.SourceDatabase, true, string.Empty, Source.Environment.Kind));
+            Destination.ApplySavedConnection(new SavedConnection("recent", pair.DestinationHost, pair.DestinationDatabase, true, string.Empty, Destination.Environment.Kind));
+
+            // Section 6.1.6: choosing a recent pair loads both sides and leaves Compare as the next step.
+            StatusMessage = "Loaded the recent comparison. Compare to refresh the results.";
+            MarkStale(CompareStaleness.ConnectionChanged);
+            RaiseResultState();
+        }
+
+        // ---- Menus (section 12) ---------------------------------------------------------------------
+
+        private void ShowOptions()
+        {
+            var model = new OptionsViewModel(options);
+            var changed = false;
+
+            EventHandler onChanged = (_, _) => changed = true;
+            model.Changed += onChanged;
+
+            try
+            {
+                dialogs.ShowDialog(model);
+            }
+            finally
+            {
+                model.Changed -= onChanged;
+            }
+
+            if (changed)
+            {
+                // Section 9.6: an option that affects the comparison invalidates the visible results.
+                MarkStale(CompareStaleness.OptionsChanged);
+                StatusMessage = "Options changed. Compare again to apply them.";
+            }
         }
 
         private void ResetProject()
         {
             Source.ConnectionString = string.Empty;
             Destination.ConnectionString = string.Empty;
+            Source.Environment = EnvironmentTag.None;
+            Destination.Environment = EnvironmentTag.None;
             Results = null;
-            StatusMessage = "Cleared the connections.";
+            State = AppState.Setup;
+            IsDataModeEnabled = false;
+            Progress.Reset();
+            IsConnectionPanelOpen = true;
+            ClearStale();
+            StatusMessage = "New project. Set up both connections, then compare.";
+            RefreshPanelState();
             RaiseResultState();
         }
 
-        private bool IsDestinationUsable()
+        private void OpenProject()
         {
-            return !string.IsNullOrEmpty(Destination.ServerName) && !string.IsNullOrEmpty(Destination.DatabaseName);
+            var path = dialogs.AskOpenProjectPath();
+
+            if (path == null)
+            {
+                return;
+            }
+
+            OpenProject(path);
         }
+
+        private void OpenRecentProject(string? path)
+        {
+            if (!string.IsNullOrEmpty(path))
+            {
+                OpenProject(path!);
+            }
+        }
+
+        private void OpenProject(string path)
+        {
+            var project = ProjectFile.Load(path);
+
+            if (project == null)
+            {
+                dialogs.Inform("Open project",
+                    "This file is not a project this front end can read. The WinForms .odbd format is not ported yet.");
+                return;
+            }
+
+            ApplyProject(project);
+            RememberRecentProject(path);
+
+            // Section 9.6: a project loaded with different connections invalidates the results.
+            MarkStale(CompareStaleness.ProjectLoaded);
+            StatusMessage = "Loaded the project " + path + ". Compare to refresh the results.";
+            RaiseResultState();
+        }
+
+        private void SaveProject()
+        {
+            SaveWindowState();
+            StatusMessage = "Saved the connections and the window state.";
+            ShowToast("Project saved.");
+        }
+
+        private void SaveProjectAs()
+        {
+            var path = dialogs.AskSaveProjectPath(SuggestedProjectName());
+
+            if (path == null)
+            {
+                return;
+            }
+
+            try
+            {
+                var project = new ProjectFile
+                {
+                    Source = Capture(Source),
+                    Destination = Capture(Destination)
+                };
+
+                project.Save(path);
+                RememberRecentProject(path);
+                SaveWindowState();
+                StatusMessage = "Project written to " + path;
+                ShowToast("Project saved.");
+            }
+            catch (Exception ex)
+            {
+                dialogs.ShowError("Save project as", ex);
+            }
+        }
+
+        private string SuggestedProjectName()
+        {
+            var database = string.IsNullOrEmpty(Destination.DatabaseName) ? "project" : Destination.DatabaseName;
+
+            return database + ".odbdproj";
+        }
+
+        /// <summary>One side of the project file, taken from the card (section 11.1). No credential is copied.</summary>
+        private static ProjectConnection Capture(ConnectionViewModel connection)
+        {
+            return new ProjectConnection
+            {
+                Host = connection.ServerName,
+                Database = connection.DatabaseName,
+                IntegratedSecurity = connection.UseWindowsAuthentication,
+                UserName = connection.UserName,
+                Environment = connection.Environment.Text
+            };
+        }
+
+        /// <summary>Section 11.1: opening a project places both connections in the strip.</summary>
+        private void ApplyProject(ProjectFile project)
+        {
+            if (project.Source != null)
+            {
+                ApplyProjectSide(project.Source, Source);
+            }
+
+            if (project.Destination != null)
+            {
+                ApplyProjectSide(project.Destination, Destination);
+            }
+        }
+
+        private static void ApplyProjectSide(ProjectConnection stored, ConnectionViewModel connection)
+        {
+            var environment = ParseProjectEnvironment(stored.Environment);
+
+            connection.ApplySavedConnection(new SavedConnection(
+                "project",
+                stored.Host ?? string.Empty,
+                stored.Database ?? string.Empty,
+                stored.IntegratedSecurity,
+                stored.UserName ?? string.Empty,
+                environment));
+
+            if (environment == EnvironmentKind.Custom)
+            {
+                connection.CustomEnvironment = stored.Environment ?? string.Empty;
+            }
+        }
+
+        /// <summary>A tag that is not one of the fixed five is the custom tag, keeping its own text.</summary>
+        private static EnvironmentKind ParseProjectEnvironment(string? text)
+        {
+            var value = text ?? string.Empty;
+
+            foreach (EnvironmentKind kind in Enum.GetValues(typeof(EnvironmentKind)))
+            {
+                if (string.Equals(EnvironmentTag.For(kind).Text, value, StringComparison.OrdinalIgnoreCase))
+                {
+                    return kind;
+                }
+            }
+
+            return value.Length > 0 ? EnvironmentKind.Custom : EnvironmentKind.None;
+        }
+
+        private void RememberRecentProject(string path)
+        {
+            recentProjects.RemoveAll(existing => string.Equals(existing, path, StringComparison.OrdinalIgnoreCase));
+            recentProjects.Insert(0, path);
+
+            if (recentProjects.Count > MaxRecentProjects)
+            {
+                recentProjects.RemoveRange(MaxRecentProjects, recentProjects.Count - MaxRecentProjects);
+            }
+
+            RefreshRecentProjects();
+        }
+
+        private void ShowShortcuts()
+        {
+            dialogs.ShowDialog(new ShortcutsViewModel());
+        }
+
+        private void ShowAbout()
+        {
+            dialogs.ShowDialog(new AboutViewModel());
+        }
+
+        private void OpenDocumentation()
+        {
+            OpenUrl("https://github.com/OpenDBDiff/OpenDBDiff");
+        }
+
+        private void OpenReportsFolder()
+        {
+            var folder = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "OpenDBDiff",
+                "Reports");
+
+            try
+            {
+                System.IO.Directory.CreateDirectory(folder);
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(folder) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                dialogs.ShowError("Open reports folder", ex);
+            }
+        }
+
+        private void OpenUrl(string url)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                dialogs.ShowError("Open documentation", ex);
+            }
+        }
+
+        /// <summary>
+        /// Section 12's View → Theme. The dark theme itself is Phase 4, so the choice is remembered and
+        /// the user is told rather than being left with a switch that appears to do nothing.
+        /// </summary>
+        private void SetTheme(string? theme)
+        {
+            Theme = string.IsNullOrEmpty(theme) ? "System" : theme;
+            StatusMessage = string.Format(CultureInfo.CurrentCulture, "Theme set to {0}.", Theme);
+            SaveWindowState();
+
+            if (string.Equals(Theme, "Dark", StringComparison.OrdinalIgnoreCase))
+            {
+                ShowToast("Dark theme arrives with Phase 4; the light theme is used until then.");
+            }
+        }
+
+        // ---- Stale results (section 9.6) ------------------------------------------------------------
+
+        private void MarkStale(CompareStaleness reason)
+        {
+            if (!StaleRules.MakesResultsStale(reason) || Results == null)
+            {
+                return;
+            }
+
+            IsStale = true;
+            Staleness = reason;
+
+            OnPropertyChanged(nameof(IsStale));
+            OnPropertyChanged(nameof(IsStaleBannerVisible));
+            OnPropertyChanged(nameof(StaleReasonText));
+            OnPropertyChanged(nameof(CanApply));
+            OnPropertyChanged(nameof(ApplyTooltip));
+            OnPropertyChanged(nameof(ApplyLabel));
+            ApplyCommand.RaiseCanExecuteChanged();
+        }
+
+        private void ClearStale()
+        {
+            IsStale = false;
+            Staleness = CompareStaleness.Fresh;
+
+            OnPropertyChanged(nameof(IsStale));
+            OnPropertyChanged(nameof(IsStaleBannerVisible));
+            OnPropertyChanged(nameof(StaleReasonText));
+            OnPropertyChanged(nameof(CanApply));
+            OnPropertyChanged(nameof(ApplyTooltip));
+            ApplyCommand.RaiseCanExecuteChanged();
+        }
+
+        // ---- Toasts (section 6.10) ------------------------------------------------------------------
+
+        public void ShowToast(string message, bool isError = false)
+        {
+            var toast = new ToastViewModel(message, isError);
+
+            Toasts.Add(toast);
+
+            // Section 6.10: at most three stacked.
+            while (Toasts.Count > 3)
+            {
+                Toasts.RemoveAt(0);
+            }
+
+            var timer = new DispatcherTimer { Interval = toast.Lifetime };
+
+            timer.Tick += (_, _) =>
+            {
+                timer.Stop();
+                Toasts.Remove(toast);
+            };
+
+            timer.Start();
+        }
+
+        private void CancelToasts()
+        {
+            Toasts.Clear();
+        }
+
+        // ---- Plumbing -------------------------------------------------------------------------------
 
         private static string ServerOf(ConnectionViewModel connection)
         {
@@ -505,16 +1800,45 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         private void RaiseResultState()
         {
+            OnPropertyChanged(nameof(State));
+            OnPropertyChanged(nameof(IsSetup));
+            OnPropertyChanged(nameof(IsComparing));
+            OnPropertyChanged(nameof(IsResults));
+            OnPropertyChanged(nameof(IsRunning));
+            OnPropertyChanged(nameof(IsNotComparing));
             OnPropertyChanged(nameof(Results));
             OnPropertyChanged(nameof(HasResults));
             OnPropertyChanged(nameof(CanApply));
             OnPropertyChanged(nameof(ApplyLabel));
             OnPropertyChanged(nameof(ApplyTooltip));
+            OnPropertyChanged(nameof(CompareLabel));
+            OnPropertyChanged(nameof(CompareTooltip));
+            OnPropertyChanged(nameof(CanInvokeCompare));
+            OnPropertyChanged(nameof(SwapTooltip));
             OnPropertyChanged(nameof(PreSelectionHeading));
+            OnPropertyChanged(nameof(SourceColumnHeader));
+            OnPropertyChanged(nameof(DestinationColumnHeader));
+            OnPropertyChanged(nameof(PreSelectionHint));
+            OnPropertyChanged(nameof(IsDestinationValid));
+            OnPropertyChanged(nameof(IsStaleBannerVisible));
+            OnPropertyChanged(nameof(IsProgressActive));
+            OnPropertyChanged(nameof(IsDataModeEnabled));
+            OnPropertyChanged(nameof(IsConnectionPanelInline));
+            OnPropertyChanged(nameof(IsConnectionPanelPopover));
+            OnPropertyChanged(nameof(StatusMessage));
+            OnPropertyChanged(nameof(ReviewListWidth));
+
+            CompareCommand.RaiseCanExecuteChanged();
+            CompareAgainCommand.RaiseCanExecuteChanged();
+            CancelCommand.RaiseCanExecuteChanged();
+            SwapCommand.RaiseCanExecuteChanged();
             ApplyCommand.RaiseCanExecuteChanged();
             PreviewScriptCommand.RaiseCanExecuteChanged();
             CopyScriptCommand.RaiseCanExecuteChanged();
             SaveScriptAsCommand.RaiseCanExecuteChanged();
+            EditConnectionsCommand.RaiseCanExecuteChanged();
+            ModeDataCommand.RaiseCanExecuteChanged();
+            RaiseViewState();
         }
     }
 }

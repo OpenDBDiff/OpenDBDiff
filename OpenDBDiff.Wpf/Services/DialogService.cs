@@ -66,6 +66,28 @@ namespace OpenDBDiff.Wpf.Services
             return dialog.ShowDialog(Owner) == true ? dialog.FileName : null;
         }
 
+        public string? AskText(string title, string prompt, string initialValue)
+        {
+            var model = new TextPromptViewModel(title, prompt, initialValue);
+
+            ShowDialog(model);
+
+            return model.Result;
+        }
+
+        public string? AskSaveProjectPath(string suggestedFileName)
+        {
+            var dialog = new SaveFileDialog
+            {
+                DefaultExt = ".odbdproj",
+                Filter = "OpenDBDiff project|*.odbdproj|All files|*.*",
+                FileName = suggestedFileName,
+                OverwritePrompt = true
+            };
+
+            return dialog.ShowDialog(Owner) == true ? dialog.FileName : null;
+        }
+
         private DialogWindow Prepare(DialogViewModelBase viewModel)
         {
             var window = new DialogWindow { DataContext = viewModel };

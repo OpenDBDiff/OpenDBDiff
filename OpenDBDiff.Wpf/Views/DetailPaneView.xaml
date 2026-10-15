@@ -122,9 +122,9 @@
             <Border Background="{StaticResource Surface}" Padding="20"
                     Visibility="{Binding Results.HasFocusedItem, Converter={StaticResource InverseBoolToVisibility}}">
                 <StackPanel>
-                    <TextBlock Style="{StaticResource PaneHeading}" Text="{Binding Results.PreSelectionHeading}" />
+                    <TextBlock Style="{StaticResource PaneHeading}" Text="{Binding PreSelectionHeading}" />
                     <TextBlock Style="{StaticResource MutedText}" Margin="0,10,0,0"
-                               Text="Select an object on the left to see its differences." />
+                               Text="{Binding PreSelectionHint}" />
                 </StackPanel>
             </Border>
         </Grid>
