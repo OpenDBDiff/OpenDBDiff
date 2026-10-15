@@ -65,6 +65,49 @@ namespace OpenDBDiff.Wpf.ViewModels
             get { return Item == null ? null : Item.UnsupportedReason; }
         }
 
+        /// <summary>Set when the row should carry the dependency flag of section 9.4.</summary>
+        public bool IsWarning { get; set; }
+
+        /// <summary>
+        /// Section 6.9: a completed object's row shows its result instead of its checkbox. Empty means
+        /// the row has no result yet, which is what the empty-to-visible converter keys off.
+        /// </summary>
+        public string ResultGlyph { get; private set; } = string.Empty;
+
+        public string ResultTooltip { get; private set; } = string.Empty;
+
+        public bool ResultIsFailure { get; private set; }
+
+        /// <summary>Applies an item's apply outcome, or clears it when the run has been left behind.</summary>
+        public void SetResult(ApplyItemOutcome? outcome)
+        {
+            if (outcome == null)
+            {
+                ResultGlyph = string.Empty;
+                ResultTooltip = string.Empty;
+                ResultIsFailure = false;
+                return;
+            }
+
+            switch (outcome.Value)
+            {
+                case ApplyItemOutcome.Succeeded:
+                    ResultGlyph = "\u2713";
+                    ResultTooltip = "Succeeded";
+                    break;
+                case ApplyItemOutcome.Failed:
+                    ResultGlyph = "\u2715";
+                    ResultTooltip = "Failed";
+                    break;
+                default:
+                    ResultGlyph = "\u2013";
+                    ResultTooltip = "Skipped";
+                    break;
+            }
+
+            ResultIsFailure = outcome.Value == ApplyItemOutcome.Failed;
+        }
+
         /// <summary>Bound to the row's check box: null renders the indeterminate state on a group.</summary>
         public bool? CheckBoxState
         {
@@ -84,8 +127,6 @@ namespace OpenDBDiff.Wpf.ViewModels
                     : GroupCheckState.Indeterminate;
             }
         }
-
-        public bool IsWarning { get; private set; }
 
         public bool CanToggle
         {
@@ -126,8 +167,10 @@ namespace OpenDBDiff.Wpf.ViewModels
                 }
                 else
                 {
-                    owner.DiffSet.SetIncluded(Item.Key, value != GroupCheckState.Unchecked);
-                    owner.OnInclusionChanged();
+                    owner.SetIncluded(
+                        Item.Key,
+                        value != GroupCheckState.Unchecked,
+                        (value == GroupCheckState.Unchecked ? "Exclude " : "Include ") + Name);
                 }
             }
         }
@@ -226,6 +269,8 @@ namespace OpenDBDiff.Wpf.ViewModels
     public sealed class ResultsViewModel : Infrastructure.ObservableObject
     {
         private readonly ObservableCollection<ResultsRowViewModel> rows = new ObservableCollection<ResultsRowViewModel>();
+        private readonly List<DependencyWarning> warnings = new List<DependencyWarning>();
+        private readonly Dictionary<DiffItemKey, ApplyItemOutcome> results = new Dictionary<DiffItemKey, ApplyItemOutcome>();
         private ResultsRowViewModel selectedRow;
         private DiffItem focused;
 
@@ -246,6 +291,12 @@ namespace OpenDBDiff.Wpf.ViewModels
         }
 
         public DiffSet DiffSet { get; }
+
+        /// <summary>
+        /// Raised whenever the included set changed. The shell listens, because the undo stack of
+        /// section 9.8 and the dependency check of section 9.4 both have to run on every change.
+        /// </summary>
+        public event EventHandler? InclusionChanged;
 
         public IReadOnlyList<StatusChipViewModel> Chips { get; }
 
@@ -329,10 +380,18 @@ namespace OpenDBDiff.Wpf.ViewModels
                 if (value == true)
                 {
                     DiffSet.IncludeAllVisible();
+                    LastChange = "Select all visible";
                 }
                 else if (value == false)
                 {
                     DiffSet.ExcludeAllVisible();
+                    LastChange = "Clear the selection";
+                }
+                else
+                {
+                    // A tri-state box reporting the indeterminate state is not a request to change
+                    // anything, so nothing is recorded for it.
+                    return;
                 }
 
                 OnInclusionChanged();
@@ -487,7 +546,7 @@ namespace OpenDBDiff.Wpf.ViewModels
             {
                 foreach (var item in DiffSet.FlatItems)
                 {
-                    rows.Add(new ResultsRowViewModel(this, item));
+                    Add(new ResultsRowViewModel(this, item));
                 }
             }
             else
@@ -500,13 +559,23 @@ namespace OpenDBDiff.Wpf.ViewModels
                     {
                         foreach (var item in group.Items.Where(item => DiffSet.ShowIdentical || item.Status != DiffStatus.Identical))
                         {
-                            rows.Add(new ResultsRowViewModel(this, item));
+                            Add(new ResultsRowViewModel(this, item));
                         }
                     }
                 }
             }
 
             RefreshFocusedSelection();
+        }
+
+        /// <summary>
+        /// Adds an item row with its warning flag and its apply result already applied: a row is rebuilt
+        /// on every filter, grouping and inclusion change, so its state cannot be set once and forgotten.
+        /// </summary>
+        private void Add(ResultsRowViewModel row)
+        {
+            ApplyRowState(row);
+            rows.Add(row);
         }
 
         public void Focus(DiffItemKey key)
@@ -526,7 +595,79 @@ namespace OpenDBDiff.Wpf.ViewModels
                 DiffSet.SetIncluded(item.Key, include);
             }
 
+            LastChange = (include ? "Include all of " : "Exclude all of ") + TypeNames.Plural(group.ObjectType);
             OnInclusionChanged();
+        }
+
+        /// <summary>
+        /// Includes or excludes one object, naming the change so the undo stack of section 9.8 can say
+        /// what Ctrl+Z would take back.
+        /// </summary>
+        public void SetIncluded(DiffItemKey key, bool included, string label)
+        {
+            DiffSet.SetIncluded(key, included);
+            LastChange = label;
+            OnInclusionChanged();
+        }
+
+        /// <summary>
+        /// Replaces the whole included set in one step, which is what section 9.4's "Fix all" needs: the
+        /// result is one undoable change rather than one per object it selected.
+        /// </summary>
+        public void ApplyInclusionChange(IReadOnlyList<DiffItemKey> included, string label)
+        {
+            SetInclusion(included);
+            LastChange = label;
+            OnInclusionChanged();
+        }
+
+        /// <summary>
+        /// Restores a snapshot without treating it as a change. Undo and redo use it, because recording
+        /// the restoration would make Ctrl+Z alternate between two states instead of walking back.
+        /// </summary>
+        public void RestoreInclusion(IReadOnlyList<DiffItemKey> included)
+        {
+            SetInclusion(included);
+
+            OnPropertyChanged(nameof(SelectionText));
+            OnPropertyChanged(nameof(DestructiveText));
+            OnPropertyChanged(nameof(HasDestructive));
+            OnPropertyChanged(nameof(DestructiveTooltip));
+            RefreshRows();
+        }
+
+        /// <summary>What the last inclusion change was, for the undo label and the toast.</summary>
+        public string LastChange { get; private set; }
+
+        /// <summary>The change the detail pane is showing, as an index into the change starts.</summary>
+        public int FocusedHunk { get; private set; } = -1;
+
+        /// <summary>
+        /// Raised when F7 or Shift+F7 moved to another change, so the detail pane can scroll to it. The
+        /// scrolling itself belongs to the view; the position belongs to the model.
+        /// </summary>
+        public event EventHandler<int>? HunkFocused;
+
+        public void FocusHunk(int index)
+        {
+            FocusedHunk = index;
+
+            var handler = HunkFocused;
+
+            if (handler != null)
+            {
+                handler(this, index);
+            }
+        }
+
+        private void SetInclusion(IReadOnlyList<DiffItemKey> included)
+        {
+            var wanted = new HashSet<DiffItemKey>(included ?? new List<DiffItemKey>());
+
+            foreach (var item in DiffSet.AllItems)
+            {
+                DiffSet.SetIncluded(item.Key, wanted.Contains(item.Key));
+            }
         }
 
         public void OnInclusionChanged()
@@ -536,6 +677,143 @@ namespace OpenDBDiff.Wpf.ViewModels
             OnPropertyChanged(nameof(HasDestructive));
             OnPropertyChanged(nameof(DestructiveTooltip));
             RefreshRows();
+
+            var handler = InclusionChanged;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+        // ---- Dependency warnings (section 9.4) ------------------------------------------------------
+
+        /// <summary>Everything the rules found, in the order they found it.</summary>
+        public IReadOnlyList<DependencyWarning> Warnings
+        {
+            get { return warnings; }
+        }
+
+        public int WarningCount
+        {
+            get { return warnings.Count; }
+        }
+
+        public int BlockingWarningCount
+        {
+            get { return DependencyRules.BlockingCount(warnings); }
+        }
+
+        public bool HasBlockingWarnings
+        {
+            get { return BlockingWarningCount > 0; }
+        }
+
+        /// <summary>Section 9.4's "Fix {n} dependency problems first", for the Apply tooltip.</summary>
+        public string BlockingText
+        {
+            get { return HasBlockingWarnings ? DependencyRules.FixFirstText(BlockingWarningCount) : string.Empty; }
+        }
+
+        /// <summary>Section 9.4's "Fix all", offered only when every blocking warning has a fix.</summary>
+        public bool CanFixAll
+        {
+            get
+            {
+                var blocking = warnings.Where(warning => warning.IsBlocking).ToList();
+
+                return blocking.Count > 0 && blocking.All(warning => warning.Fix.IsInclude);
+            }
+        }
+
+        public int FixableCount
+        {
+            get { return warnings.Count(warning => warning.IsBlocking && warning.Fix.IsInclude); }
+        }
+
+        public void SetWarnings(IEnumerable<DependencyWarning> newWarnings)
+        {
+            warnings.Clear();
+
+            if (newWarnings != null)
+            {
+                warnings.AddRange(newWarnings);
+            }
+
+            RefreshWarningState();
+        }
+
+        public IReadOnlyList<DependencyWarning> WarningsFor(DiffItemKey key)
+        {
+            return key == null
+                ? new List<DependencyWarning>()
+                : warnings.Where(warning => warning.Item.Equals(key)).ToList();
+        }
+
+        // ---- Apply results (sections 6.9 and 7.2's result icons) ------------------------------------
+
+        public void SetResults(IEnumerable<ApplyItemResult> applyResults)
+        {
+            results.Clear();
+
+            if (applyResults != null)
+            {
+                foreach (var result in applyResults)
+                {
+                    results[result.Key] = result.Outcome;
+                }
+            }
+
+            RefreshResultState();
+        }
+
+        public void ClearResults()
+        {
+            results.Clear();
+            RefreshResultState();
+        }
+
+        public bool HasResults()
+        {
+            return results.Count > 0;
+        }
+
+        private void RefreshWarningState()
+        {
+            OnPropertyChanged(nameof(Warnings));
+            OnPropertyChanged(nameof(WarningCount));
+            OnPropertyChanged(nameof(BlockingWarningCount));
+            OnPropertyChanged(nameof(HasBlockingWarnings));
+            OnPropertyChanged(nameof(BlockingText));
+            OnPropertyChanged(nameof(CanFixAll));
+            OnPropertyChanged(nameof(FixableCount));
+            RefreshRows();
+        }
+
+        private void RefreshResultState()
+        {
+            foreach (var row in rows)
+            {
+                ApplyRowState(row);
+            }
+        }
+
+        /// <summary>
+        /// A row is rebuilt whenever the filter, the grouping or the inclusions change, so both the
+        /// warning flag and the apply result are applied here rather than at the point they were set.
+        /// </summary>
+        private void ApplyRowState(ResultsRowViewModel row)
+        {
+            if (row == null || row.Kind != ResultsRowKind.Item || row.Item == null)
+            {
+                return;
+            }
+
+            row.IsWarning = warnings.Any(warning => warning.Item.Equals(row.Item.Key));
+
+            ApplyItemOutcome outcome;
+
+            row.SetResult(results.TryGetValue(row.Item.Key, out outcome) ? (ApplyItemOutcome?)outcome : null);
         }
 
         public void OnFilterChanged()
@@ -575,12 +853,14 @@ namespace OpenDBDiff.Wpf.ViewModels
         private void SelectAllVisible()
         {
             DiffSet.IncludeAllVisible();
+            LastChange = "Select all visible";
             OnInclusionChanged();
         }
 
         private void ClearSelection()
         {
             DiffSet.ExcludeAllVisible();
+            LastChange = "Clear the selection";
             OnInclusionChanged();
         }
 

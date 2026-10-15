@@ -118,6 +118,33 @@ namespace OpenDBDiff.Wpf.Views
                 return;
             }
 
+            // Section 7.2: Ctrl+Z, Ctrl+Y and Ctrl+A belong to the application unless the user is
+            // typing in a field, where they mean the usual text editing. That is why they are handled
+            // here rather than as window-wide input bindings.
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && !IsTextEditing())
+            {
+                if (e.Key == Key.Z)
+                {
+                    ViewModel?.UndoCommand.Execute(null);
+                    e.Handled = true;
+                    return;
+                }
+
+                if (e.Key == Key.Y)
+                {
+                    ViewModel?.RedoCommand.Execute(null);
+                    e.Handled = true;
+                    return;
+                }
+
+                if (e.Key == Key.A)
+                {
+                    ViewModel?.SelectAllVisibleCommand.Execute(null);
+                    e.Handled = true;
+                    return;
+                }
+            }
+
             // Section 7.2: Esc cancels the running operation, then closes the topmost overlay, then
             // clears the search - in that order.
             if (e.Key == Key.Escape)
@@ -144,6 +171,26 @@ namespace OpenDBDiff.Wpf.Views
 
                 e.Handled = true;
             }
+        }
+
+        /// <summary>
+        /// True when the focused element is a text field, in which case the editing keys belong to it.
+        /// </summary>
+        private static bool IsTextEditing()
+        {
+            var focused = Keyboard.FocusedElement as DependencyObject;
+
+            while (focused != null)
+            {
+                if (focused is TextBox || focused is PasswordBox || focused is RichTextBox)
+                {
+                    return true;
+                }
+
+                focused = System.Windows.Media.VisualTreeHelper.GetParent(focused);
+            }
+
+            return false;
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)

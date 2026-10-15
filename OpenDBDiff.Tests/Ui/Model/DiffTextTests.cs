@@ -106,5 +106,61 @@ namespace OpenDBDiff.Tests.Ui.Model
             // Identical text but reported as an Alter: say only that the definitions differ.
             Assert.AreEqual("Definitions differ", DiffText.Summary(DiffStatus.Alter, "SELECT 1", "SELECT 1"));
         }
+
+        /// <summary>
+        /// Section 6.5.3: the changed words inside a changed line are marked, so an edit to one word does
+        /// not look like a rewritten line. The unchanged parts of the line stay as their own runs.
+        /// </summary>
+        [TestMethod]
+        public void ChangedLine_SplitsIntoChangedAndUnchangedRuns()
+        {
+            var rows = DiffText.SideBySide("SELECT a, b FROM T", "SELECT a, c FROM T");
+
+            var changed = rows.First(row => row.LeftKind == DiffLineKind.Changed);
+
+            Assert.IsTrue(changed.LeftRuns.Any(run => run.IsChanged), "the word that differs is a changed run");
+            Assert.IsTrue(changed.LeftRuns.Any(run => !run.IsChanged), "the words around it are not");
+
+            Assert.AreEqual("SELECT a, b FROM T", string.Concat(changed.LeftRuns.Select(run => run.Text)),
+                "the runs reconstruct the original line exactly");
+            Assert.AreEqual("SELECT a, c FROM T", string.Concat(changed.RightRuns.Select(run => run.Text)));
+        }
+
+        /// <summary>
+        /// Word diffing only compares two strings, so it cannot know whether the line was added, removed
+        /// or altered. The row stamps its own kind onto the runs, which is what the view tints by.
+        /// </summary>
+        [TestMethod]
+        public void WordRuns_CarryTheKindOfTheirLine()
+        {
+            var rows = DiffText.SideBySide("SELECT a, b FROM T", "SELECT a, c FROM T");
+            var changed = rows.First(row => row.LeftKind == DiffLineKind.Changed);
+
+            Assert.IsTrue(changed.LeftRuns.All(run => run.Kind == DiffLineKind.Changed));
+            Assert.IsTrue(changed.RightRuns.All(run => run.Kind == DiffLineKind.Changed));
+        }
+
+        [TestMethod]
+        public void UnchangedLine_IsOneUnchangedRun()
+        {
+            var rows = DiffText.SideBySide("SELECT 1", "SELECT 1");
+
+            var run = rows[0].LeftRuns.Single();
+
+            Assert.AreEqual("SELECT 1", run.Text);
+            Assert.IsFalse(run.IsChanged);
+            Assert.AreEqual(DiffLineKind.Unchanged, run.Kind);
+        }
+
+        [TestMethod]
+        public void FillerLine_IsOneUnchangedRunSoBothSidesStillReconstruct()
+        {
+            var rows = DiffText.SideBySide("SELECT 1\nSELECT 2", "SELECT 1");
+
+            var filler = rows.First(row => row.RightKind == DiffLineKind.Filler);
+
+            Assert.AreEqual("SELECT 2", string.Concat(filler.LeftRuns.Select(run => run.Text)));
+            Assert.AreEqual(string.Empty, string.Concat(filler.RightRuns.Select(run => run.Text)));
+        }
     }
 }

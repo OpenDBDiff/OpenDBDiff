@@ -255,6 +255,62 @@ namespace OpenDBDiff.Tests.Ui.Model
             Assert.AreEqual(3, set.HiddenTypeCount);
         }
 
+        /// <summary>
+        /// Section 6.7: the destructive count is a control, and switching it on narrows the list to the
+        /// destructive changes that are actually selected. A destructive change the user excluded is not
+        /// one of them, and neither is an ordinary change.
+        /// </summary>
+        [TestMethod]
+        public void DestructiveFilter_ShowsOnlyTheSelectedDestructiveChanges()
+        {
+            var dropped = Item(DiffStatus.Drop, "Table", "Legacy");
+            var droppedColumn = Item(DiffStatus.Alter, "Table", "Users");
+            var narrowed = Item(DiffStatus.Alter, "Table", "Orders");
+
+            droppedColumn.DestructiveKinds = DestructiveKinds.DropColumn;
+            narrowed.DestructiveKinds = DestructiveKinds.None;
+            dropped.DestructiveKinds = DestructiveKinds.DropObject;
+
+            var set = Set(dropped, droppedColumn, narrowed);
+
+            // Section 7.1 rule 4: a Drop is not included by default, so it is not one of the selected
+            // destructive changes until the user says so.
+            Assert.AreEqual(1, set.VisibleItems.Count(item => set.IsIncluded(item.Key) && item.IsDestructive));
+
+            set.SetIncluded(dropped.Key, true);
+
+            Assert.AreEqual(2, set.VisibleItems.Count(item => set.IsIncluded(item.Key) && item.IsDestructive));
+
+            set.OnlyDestructiveSelected = true;
+
+            var visible = set.VisibleItems.Select(item => item.Key.FullName).ToList();
+
+            Assert.AreEqual(2, visible.Count);
+            Assert.IsFalse(visible.Contains(Key("Table", "Orders").FullName), "an ordinary change is not a destructive one");
+
+            set.SetIncluded(droppedColumn.Key, false);
+
+            visible = set.VisibleItems.Select(item => item.Key.FullName).ToList();
+
+            Assert.AreEqual(1, visible.Count, "excluding a destructive change takes it out of the filtered list");
+            Assert.IsTrue(visible.Contains(dropped.Key.FullName));
+        }
+
+        [TestMethod]
+        public void DestructiveFilter_OffShowsEverythingAgain()
+        {
+            var dropped = Item(DiffStatus.Drop, "Table", "Legacy");
+            var set = Set(dropped, Item(DiffStatus.Create, "View", "Report"));
+
+            set.SetIncluded(dropped.Key, true);
+
+            set.OnlyDestructiveSelected = true;
+            Assert.AreEqual(1, set.VisibleItems.Count);
+
+            set.OnlyDestructiveSelected = false;
+            Assert.AreEqual(2, set.VisibleItems.Count);
+        }
+
         private static DiffSet Set(params DiffItem[] items)
         {
             return new DiffSet(items);

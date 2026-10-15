@@ -31,6 +31,13 @@
     <SolidColorBrush x:Key="StatusDropBg" Color="#FDE8E6" />
     <SolidColorBrush x:Key="StatusDropFg" Color="#A5210F" />
 
+    <!-- Section 6.5.3: the run of a line that word-level diffing marked as changed, drawn inside the
+         line's own tint so a one-word edit does not look like a rewritten line. The text on these is
+         the normal text colour and clears AA comfortably on all three. -->
+    <SolidColorBrush x:Key="WordAddedBg" Color="#A8DFC0" />
+    <SolidColorBrush x:Key="WordRemovedBg" Color="#F5BDB4" />
+    <SolidColorBrush x:Key="WordChangedBg" Color="#FFD98A" />
+
     <!-- Environment tag (section 6.1.4): Dev green, Test blue, UAT purple, Prod amber, custom grey.
          The model owns these values (EnvironmentPalette) and the tag draws them through HexBrush, so
          these keys exist for the places that cannot reach a view model. -->

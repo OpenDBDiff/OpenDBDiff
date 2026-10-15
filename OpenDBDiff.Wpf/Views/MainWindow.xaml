@@ -25,6 +25,10 @@
         <KeyBinding Key="D1" Modifiers="Control" Command="{Binding ShowSideBySideCommand}" />
         <KeyBinding Key="D2" Modifiers="Control" Command="{Binding ShowInlineCommand}" />
         <KeyBinding Key="D3" Modifiers="Control" Command="{Binding ShowScriptCommand}" />
+        <!-- Section 7.2: F7 and Shift+F7 walk the changes of the focused object. They are plain
+             bindings because no text control wants them. -->
+        <KeyBinding Key="F7" Command="{Binding NextChangeCommand}" />
+        <KeyBinding Key="F7" Modifiers="Shift" Command="{Binding PreviousChangeCommand}" />
     </Window.InputBindings>
 
     <Grid>
@@ -81,6 +85,19 @@
                     <MenuItem Header="Exit" Command="{Binding ExitCommand}" />
                 </MenuItem>
 
+                <MenuItem Header="_Edit">
+                    <!-- Section 9.8: the labels say what Ctrl+Z would take back, so the menu is a
+                         record of what has been selected and deselected. -->
+                    <MenuItem Header="{Binding UndoLabel}" Command="{Binding UndoCommand}" InputGestureText="Ctrl+Z" />
+                    <MenuItem Header="{Binding RedoLabel}" Command="{Binding RedoCommand}" InputGestureText="Ctrl+Y" />
+                    <Separator />
+                    <MenuItem Header="Select all visible" Command="{Binding SelectAllVisibleCommand}" InputGestureText="Ctrl+A" />
+                    <Separator />
+                    <MenuItem Header="Show only selected destructive changes" Command="{Binding ToggleDestructiveFilterCommand}" />
+                    <Separator />
+                    <MenuItem Header="{Binding FixAllLabel}" Command="{Binding FixAllCommand}" />
+                </MenuItem>
+
                 <MenuItem Header="_Compare">
                     <MenuItem Header="Compare" Command="{Binding CompareCommand}" InputGestureText="F5" />
                     <MenuItem Header="Cancel" Command="{Binding CancelCommand}" InputGestureText="Esc" />
@@ -130,6 +147,7 @@
                 <MenuItem Header="_Tools">
                     <MenuItem Header="Options&#x2026;" Command="{Binding OptionsCommand}" />
                     <MenuItem Header="Open reports folder" Command="{Binding OpenReportsFolderCommand}" />
+                    <MenuItem Header="Open this run's report folder" Command="{Binding OpenReportFolderCommand}" />
                 </MenuItem>
 
                 <MenuItem Header="_Help">
@@ -181,26 +199,32 @@
             </DockPanel>
         </Border>
 
-        <!-- Regions D and E, with the splitter of section 6.6. -->
+        <!-- Regions D and E, with the splitter of section 6.6. Section 6.9's report takes the whole
+             row when a run has finished, and the results come back with one click. -->
         <Grid Grid.Row="6">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding ReviewListWidth, Mode=TwoWay}" MinWidth="280" MaxWidth="720" />
-                <ColumnDefinition Width="6" />
-                <ColumnDefinition Width="*" MinWidth="560" />
-            </Grid.ColumnDefinitions>
+            <Grid Visibility="{Binding IsReport, Converter={StaticResource InverseBoolToVisibility}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{Binding ReviewListWidth, Mode=TwoWay}" MinWidth="280" MaxWidth="720" />
+                    <ColumnDefinition Width="6" />
+                    <ColumnDefinition Width="*" MinWidth="560" />
+                </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,0,1,0" Background="{StaticResource Surface}">
-                <views:ReviewListView DataContext="{Binding}" />
-            </Border>
+                <Border Grid.Column="0" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,0,1,0" Background="{StaticResource Surface}">
+                    <views:ReviewListView DataContext="{Binding}" />
+                </Border>
 
-            <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch"
-                          Background="{StaticResource Bg}"
-                          ToolTip="Drag to resize, double-click to reset" />
+                <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch"
+                              Background="{StaticResource Bg}"
+                              ToolTip="Drag to resize, double-click to reset" />
 
-            <views:DetailPaneView Grid.Column="2" DataContext="{Binding}" />
+                <views:DetailPaneView Grid.Column="2" DataContext="{Binding}" />
+            </Grid>
+
+            <views:ApplyReportView DataContext="{Binding}"
+                                   Visibility="{Binding IsReport, Converter={StaticResource BoolToVisibility}}" />
 
             <!-- Section 6.10: toasts, bottom-centre above the action bar. -->
-            <ItemsControl Grid.ColumnSpan="3" ItemsSource="{Binding Toasts}"
+            <ItemsControl ItemsSource="{Binding Toasts}"
                           VerticalAlignment="Bottom" HorizontalAlignment="Center"
                           Margin="0,0,0,12" IsHitTestVisible="False" Panel.ZIndex="20">
                 <ItemsControl.ItemTemplate>

@@ -1,18 +1,23 @@
 <UserControl x:Class="OpenDBDiff.Wpf.Views.ConfirmationView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid Margin="18" Width="640" MaxHeight="620">
+    <!-- Section 6.8 in full: the target, the counts, the destructive callout, the statement list beside
+         the script, the three options, and the typed confirmation once it is warranted. Cancel is the
+         default button, so Enter never applies by accident. -->
+    <Grid Margin="18" Width="880" MaxHeight="720">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*" MinHeight="220" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0" Margin="0,0,0,12">
-            <!-- Section 6.8: the destination's environment tag sits in the title bar, in the tag's own
-                 colours rather than a fixed production palette. -->
+            <!-- The destination's environment tag sits in the title bar, in the tag's own colours rather
+                 than a fixed production palette. -->
             <Border DockPanel.Dock="Right" CornerRadius="4" Padding="7,2"
                     Background="{Binding EnvironmentBackground, Converter={StaticResource HexBrush}}"
                     Visibility="{Binding HasEnvironmentTag, Converter={StaticResource BoolToVisibility}}">
@@ -23,7 +28,6 @@
             <TextBlock Style="{StaticResource PaneHeading}" Text="{Binding Title}" />
         </DockPanel>
 
-        <!-- Target summary card (section 6.8). -->
         <Border Grid.Row="1" Background="{StaticResource SurfaceAlt}" CornerRadius="8" Padding="12" Margin="0,0,0,12">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -40,7 +44,7 @@
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Server}" Margin="0,0,0,2" />
 
                 <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource SmallCapsLabel}" Text="Database" Margin="0,0,12,2" />
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Database}" Margin="0,0,0,2" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Database}" FontWeight="SemiBold" Margin="0,0,0,2" />
 
                 <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource SmallCapsLabel}" Text="Source" Margin="0,0,12,0" />
                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SourceDescription}" />
@@ -54,7 +58,8 @@
                 <TextBlock Text="{Binding AlterCount, StringFormat={}{0} Alter}" Foreground="{StaticResource StatusAlterFg}"
                            FontWeight="Bold" Margin="0,0,16,0" />
                 <TextBlock Text="{Binding DropCount, StringFormat={}{0} Drop}" Foreground="{StaticResource StatusDropFg}"
-                           FontWeight="Bold" />
+                           FontWeight="Bold" Margin="0,0,16,0" />
+                <TextBlock Text="{Binding SelectedCount, StringFormat={}{0} selected}" Style="{StaticResource MutedText}" />
             </StackPanel>
 
             <Border Background="{StaticResource StatusDropBg}" CornerRadius="6" Padding="10" Margin="0,10,0,0"
@@ -63,20 +68,88 @@
             </Border>
         </StackPanel>
 
-        <TextBox Grid.Row="3" Text="{Binding ScriptText, Mode=OneWay}" IsReadOnly="True" MinHeight="200"
-                 FontFamily="{StaticResource CodeFont}" FontSize="13" AcceptsReturn="True"
-                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
-                 Background="{StaticResource Surface}" />
+        <!-- The statements on the left, the script they came from on the right: clicking a statement
+             scrolls the script to it rather than making the reader hunt. -->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+            <DockPanel Grid.Column="0">
+                <TextBlock DockPanel.Dock="Top" Text="{Binding StatementSummary}" Style="{StaticResource MutedText}"
+                           Margin="0,0,0,6" />
+                <ListBox x:Name="StatementList" ItemsSource="{Binding Statements}" BorderThickness="1"
+                         BorderBrush="{StaticResource BorderSubtle}" Background="{StaticResource Surface}"
+                         SelectionChanged="StatementList_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="2,3">
+                                <TextBlock Text="{Binding Header}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Text}" Style="{StaticResource MutedText}"
+                                           FontFamily="{StaticResource CodeFont}" FontSize="11"
+                                           TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsDestructive}" Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource StatusDropFg}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </DockPanel>
+
+            <TextBox x:Name="ScriptBox" Grid.Column="2" Text="{Binding ScriptText, Mode=OneWay}" IsReadOnly="True"
+                     FontFamily="{StaticResource CodeFont}" FontSize="13" AcceptsReturn="True"
+                     VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                     Background="{StaticResource Surface}" BorderThickness="1"
+                     BorderBrush="{StaticResource BorderSubtle}" />
+        </Grid>
+
+        <!-- Section 6.8's three options. -->
+        <StackPanel Grid.Row="4" Margin="0,12,0,0">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Content="Run in a single transaction" IsChecked="{Binding RunInSingleTransaction}"
+                          IsEnabled="{Binding CanRunInSingleTransaction}" VerticalContentAlignment="Center" />
+                <TextBlock Text="{Binding TransactionDisabledReason}" Style="{StaticResource MutedText}"
+                           Foreground="{StaticResource WarningFg}" Margin="10,0,0,0" VerticalAlignment="Center"
+                           TextWrapping="Wrap" MaxWidth="420" />
+            </StackPanel>
+
+            <CheckBox Content="Stop on first error" IsChecked="{Binding StopOnFirstError}" Margin="0,6,0,0" />
+
+            <CheckBox Content="Save a copy of this script before running" IsChecked="{Binding SaveScriptCopy}"
+                      Margin="0,6,0,0" />
+        </StackPanel>
+
+        <!-- The typed confirmation, once the destination is production or something included is
+             destructive (section 6.8). -->
+        <StackPanel Grid.Row="5" Margin="0,12,0,0"
+                    Visibility="{Binding RequiresTypedConfirmation, Converter={StaticResource BoolToVisibility}}">
+            <TextBlock Text="{Binding TypeToConfirmText}" Foreground="{StaticResource StatusDropFg}"
+                       FontWeight="SemiBold" Margin="0,0,0,4" />
+            <TextBox x:Name="TypeToConfirmBox" Text="{Binding TypedConfirmation, UpdateSourceTrigger=PropertyChanged}"
+                     Width="320" HorizontalAlignment="Left" KeyDown="TypeToConfirm_KeyDown" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
             <Button Style="{StaticResource SecondaryButton}" Content="Cancel" Margin="0,0,10,0"
-                    Click="Cancel_Click" IsDefault="True" />
-            <Button Content="{Binding ApplyLabel}" Click="Apply_Click">
+                    Click="Cancel_Click" IsDefault="True" IsCancel="True" />
+            <Button Content="{Binding ApplyLabel}" Click="Apply_Click" IsEnabled="{Binding CanApply}">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding HasDestructive}" Value="True">
                                 <Setter Property="Background" Value="{StaticResource Danger}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CanApply}" Value="False">
+                                <Setter Property="Opacity" Value="0.5" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

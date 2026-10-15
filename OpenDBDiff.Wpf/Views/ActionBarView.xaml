@@ -23,33 +23,60 @@
                        Text="Comparing&#x2026;"
                        Visibility="{Binding IsComparing, Converter={StaticResource BoolToVisibility}}" />
 
-            <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="Bold"
-                       Foreground="{StaticResource Danger}"
-                       Text="{Binding Results.DestructiveText}"
-                       ToolTip="{Binding Results.DestructiveTooltip}"
-                       Visibility="{Binding Results.HasDestructive, Converter={StaticResource BoolToVisibility}}" />
+            <!-- Section 6.7: the destructive count is also the control that narrows the list to those
+                 objects, which is why it is a button rather than a label. -->
+            <Button Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center" FontWeight="Bold"
+                    Foreground="{StaticResource Danger}"
+                    Content="{Binding Results.DestructiveText}"
+                    ToolTip="{Binding Results.DestructiveTooltip}"
+                    Command="{Binding ToggleDestructiveFilterCommand}"
+                    Background="Transparent" BorderThickness="0" Padding="2,0" Cursor="Hand"
+                    Visibility="{Binding Results.HasDestructive, Converter={StaticResource BoolToVisibility}}" />
+
+            <!-- Section 9.4: the blocked state says how many problems stand in the way and fixes them
+                 all in one step, so the user is not left hunting the list for the flagged rows. -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0"
+                        Visibility="{Binding HasBlockingWarnings, Converter={StaticResource BoolToVisibility}}">
+                <TextBlock VerticalAlignment="Center" Foreground="{StaticResource WarningFg}" FontWeight="SemiBold"
+                           Text="{Binding DependencySummary}" Margin="0,0,10,0" />
+                <Button Style="{StaticResource SecondaryButton}" Padding="12,4" MinHeight="30"
+                        Content="{Binding FixAllLabel}" Command="{Binding FixAllCommand}"
+                        ToolTip="Select everything the blocking warnings need, in one step" />
+            </StackPanel>
 
             <StackPanel Grid.Column="3" Orientation="Horizontal">
-                <Button Style="{StaticResource SecondaryButton}" Content="Preview script" Margin="0,0,8,0"
-                        Command="{Binding PreviewScriptCommand}" />
-                <Button Style="{StaticResource SecondaryButton}" Content="Copy script" Margin="0,0,8,0"
-                        Command="{Binding CopyScriptCommand}" />
-                <Button Style="{StaticResource SecondaryButton}" Content="Save as…" Margin="0,0,8,0"
-                        Command="{Binding SaveScriptAsCommand}" />
-                <Button x:Name="ApplyButton"
-                        Command="{Binding ApplyCommand}" MinWidth="260"
-                        ToolTip="{Binding ApplyTooltip}"
-                        Content="{Binding ApplyLabel}">
-                    <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Results.HasDestructive}" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource Danger}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                <!-- Section 6.9: while the report is up, the action bar offers the report's own actions
+                     rather than starting another run. -->
+                <Button Style="{StaticResource SecondaryButton}" Content="Back to results" Margin="0,0,8,0"
+                        Command="{Binding BackToResultsCommand}"
+                        Visibility="{Binding IsReport, Converter={StaticResource BoolToVisibility}}" />
+
+                <StackPanel Orientation="Horizontal"
+                            Visibility="{Binding IsReport, Converter={StaticResource InverseBoolToVisibility}}">
+                    <Button Style="{StaticResource SecondaryButton}" Content="Preview script" Margin="0,0,8,0"
+                            Command="{Binding PreviewScriptCommand}" />
+                    <Button Style="{StaticResource SecondaryButton}" Content="Copy script" Margin="0,0,8,0"
+                            Command="{Binding CopyScriptCommand}" />
+                    <Button Style="{StaticResource SecondaryButton}" Content="Save as&#x2026;" Margin="0,0,8,0"
+                            Command="{Binding SaveScriptAsCommand}" />
+                    <Button x:Name="ApplyButton"
+                            Command="{Binding ApplyCommand}" MinWidth="260"
+                            ToolTip="{Binding ApplyTooltip}"
+                            Content="{Binding ApplyLabel}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Results.HasDestructive}" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource Danger}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding HasBlockingWarnings}" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource BorderStrong}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
             </StackPanel>
         </Grid>
     </Border>

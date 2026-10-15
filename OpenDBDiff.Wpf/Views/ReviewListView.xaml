@@ -49,10 +49,30 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <CheckBox Grid.Column="0" Width="18" Height="18" Margin="0,0,10,0" VerticalAlignment="Center"
-                              IsChecked="{Binding CheckBoxState, Mode=TwoWay}"
-                              IsEnabled="{Binding CanToggle}"
-                              ToolTip="{Binding UnsupportedReason}" />
+                    <!-- Section 6.9: once a run has finished, a row shows its result instead of the
+                         checkbox, and the row keeps the checkbox when the run left it alone. -->
+                    <Grid Grid.Column="0" Width="28" Margin="0,0,10,0">
+                        <CheckBox Width="18" Height="18" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                  IsChecked="{Binding CheckBoxState, Mode=TwoWay}"
+                                  IsEnabled="{Binding CanToggle}"
+                                  ToolTip="{Binding UnsupportedReason}"
+                                  Visibility="{Binding ResultGlyph, Converter={StaticResource EmptyToVisibility}}" />
+
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="Bold"
+                                   Text="{Binding ResultGlyph}" ToolTip="{Binding ResultTooltip}"
+                                   Visibility="{Binding ResultGlyph, Converter={StaticResource NullToVisibility}}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource StatusCreateFg}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ResultIsFailure}" Value="True">
+                                            <Setter Property="Foreground" Value="{StaticResource StatusDropFg}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
 
                     <Border Grid.Column="1" Style="{StaticResource StatusBadge}" Margin="0,0,10,0"
                             Background="{Binding Status, Converter={StaticResource StatusBrush}, ConverterParameter=bg}"

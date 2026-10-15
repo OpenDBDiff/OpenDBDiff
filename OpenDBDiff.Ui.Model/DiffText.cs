@@ -26,6 +26,9 @@ namespace OpenDBDiff.Ui.Model
     /// <summary>One aligned row of the side-by-side view: left is the source, right the destination.</summary>
     public sealed class SideBySideRow
     {
+        private WordDiffPair pair;
+        private bool pairComputed;
+
         public SideBySideRow(string left, string right, DiffLineKind leftKind, DiffLineKind rightKind, int? leftNumber, int? rightNumber)
         {
             Left = left;
@@ -48,6 +51,21 @@ namespace OpenDBDiff.Ui.Model
 
         public int? RightLineNumber { get; }
 
+        /// <summary>
+        /// The left line split into the runs that changed and the runs that did not (section 6.5.3), so
+        /// a one-word edit does not look like a rewritten line. A line that is not a change is one
+        /// unchanged run, and the diff is only computed for the rows that need it.
+        /// </summary>
+        public IReadOnlyList<WordRun> LeftRuns
+        {
+            get { return LeftKind == DiffLineKind.Changed ? Stamp(Pair.Left, LeftKind) : Single(Left, LeftKind); }
+        }
+
+        public IReadOnlyList<WordRun> RightRuns
+        {
+            get { return RightKind == DiffLineKind.Changed ? Stamp(Pair.Right, RightKind) : Single(Right, RightKind); }
+        }
+
         public bool IsChange
         {
             get
@@ -59,6 +77,37 @@ namespace OpenDBDiff.Ui.Model
                     || RightKind == DiffLineKind.Removed
                     || RightKind == DiffLineKind.Changed;
             }
+        }
+
+        private WordDiffPair Pair
+        {
+            get
+            {
+                if (!pairComputed)
+                {
+                    pair = HunkRules.Words(Left, Right);
+                    pairComputed = true;
+                }
+
+                return pair;
+            }
+        }
+
+        private static IReadOnlyList<WordRun> Single(string text, DiffLineKind kind)
+        {
+            return new List<WordRun> { new WordRun(text ?? string.Empty, false, kind) };
+        }
+
+        private static IReadOnlyList<WordRun> Stamp(IReadOnlyList<WordRun> runs, DiffLineKind kind)
+        {
+            var stamped = new List<WordRun>(runs.Count);
+
+            foreach (var run in runs)
+            {
+                stamped.Add(new WordRun(run.Text, run.IsChanged, kind));
+            }
+
+            return stamped;
         }
     }
 

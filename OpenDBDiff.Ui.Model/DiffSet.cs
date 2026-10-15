@@ -114,6 +114,12 @@ namespace OpenDBDiff.Ui.Model
         /// <summary>The Identical chip: hidden until the user asks for them.</summary>
         public bool ShowIdentical { get; set; }
 
+        /// <summary>
+        /// Section 6.7: the destructive count is a control. When it is on, the list shows the selected
+        /// destructive changes and nothing else, so the objects with consequences can be read together.
+        /// </summary>
+        public bool OnlyDestructiveSelected { get; set; }
+
         public string SearchText { get; set; }
 
         /// <summary>Also match inside object definitions; off by default because it is more expensive.</summary>
@@ -488,6 +494,11 @@ namespace OpenDBDiff.Ui.Model
 
         private bool IsVisible(DiffItem item)
         {
+            if (OnlyDestructiveSelected && !(IsIncluded(item.Key) && item.IsDestructive))
+            {
+                return false;
+            }
+
             if (!StatusFilter.Contains(item.Status) && item.Status != DiffStatus.Identical)
             {
                 return false;

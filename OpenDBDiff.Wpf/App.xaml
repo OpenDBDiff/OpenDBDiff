@@ -29,6 +29,7 @@
             <converters:EmptyToVisibilityConverter x:Key="EmptyToVisibility" />
             <converters:HexBrushConverter x:Key="HexBrush" />
             <converters:ValidityDotConverter x:Key="ValidityDot" />
+            <converters:WordRunBrushConverter x:Key="WordRunBrush" />
             <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
 
             <!-- View model to view mapping, so no code names a view for a dialog. -->

@@ -88,6 +88,20 @@ namespace OpenDBDiff.Wpf.Services
             return dialog.ShowDialog(Owner) == true ? dialog.FileName : null;
         }
 
+        /// <summary>Section 6.9's "Save report": HTML by default, CSV when the user picks it.</summary>
+        public string? AskSaveReportPath(string suggestedFileName)
+        {
+            var dialog = new SaveFileDialog
+            {
+                DefaultExt = ".html",
+                Filter = "Report|*.html|Comma separated|*.csv|All files|*.*",
+                FileName = suggestedFileName,
+                OverwritePrompt = true
+            };
+
+            return dialog.ShowDialog(Owner) == true ? dialog.FileName : null;
+        }
+
         private DialogWindow Prepare(DialogViewModelBase viewModel)
         {
             var window = new DialogWindow { DataContext = viewModel };

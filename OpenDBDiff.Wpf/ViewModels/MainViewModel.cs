@@ -45,14 +45,20 @@ namespace OpenDBDiff.Wpf.ViewModels
         private readonly IDialogService dialogs;
         private readonly IUpdateConfirmation updateConfirmation;
         private readonly SqlOption options;
+        private readonly ReportStore reports = new ReportStore();
+        private readonly InclusionHistory history = new InclusionHistory();
 
         private IDatabase? sourceDatabase;
         private IDatabase? destinationDatabase;
+        private IDependencyGraph? dependencies;
+        private ResultsViewModel? subscribedResults;
 
         private CancellationTokenSource? cancellation;
         private Task<ComparisonResult>? runningCompare;
+        private CancellationTokenSource? applyCancellation;
         private int compareGeneration;
         private int applyGeneration;
+        private int hunkIndex = -1;
 
         private List<SavedConnection> savedConnections = new List<SavedConnection>();
         private List<RecentPair> recentPairs = new List<RecentPair>();
@@ -78,7 +84,7 @@ namespace OpenDBDiff.Wpf.ViewModels
 
             CompareCommand = new AsyncRelayCommand(CompareAsync, () => CanInvokeCompare && !IsRunning);
             CompareAgainCommand = new AsyncRelayCommand(CompareAsync, () => CanInvokeCompare && !IsRunning);
-            CancelCommand = new RelayCommand(CancelCompare, () => State == AppState.Comparing);
+            CancelCommand = new RelayCommand(CancelCompare, () => State == AppState.Comparing || State == AppState.Applying);
             SwapCommand = new RelayCommand(Swap, () => !IsRunning);
             OptionsCommand = new RelayCommand(ShowOptions);
             ApplyCommand = new AsyncRelayCommand(ApplyAsync, () => CanApply);
@@ -108,6 +114,21 @@ namespace OpenDBDiff.Wpf.ViewModels
             AboutCommand = new RelayCommand(ShowAbout);
             ThemeCommand = new RelayCommand<string>(SetTheme);
             ExitCommand = new RelayCommand(() => WindowClosingRequested?.Invoke(this, EventArgs.Empty));
+
+            UndoCommand = new RelayCommand(UndoInclusion, () => CanUndo);
+            RedoCommand = new RelayCommand(RedoInclusion, () => CanRedo);
+            SelectAllVisibleCommand = new RelayCommand(SelectAllVisible, () => Results != null);
+            NextChangeCommand = new RelayCommand(() => MoveChange(1), () => HasChanges);
+            PreviousChangeCommand = new RelayCommand(() => MoveChange(-1), () => HasChanges);
+            FocusAttentionCommand = new RelayCommand<DiffItemKey>(FocusItem);
+            FixWarningCommand = new RelayCommand<DependencyWarning>(FixWarning);
+            FixAllCommand = new RelayCommand(FixAll, () => CanFixAllBlocking);
+            ToggleDestructiveFilterCommand = new RelayCommand(ToggleDestructiveFilter, () => Results != null && Results.HasDestructive);
+            CopyReportCommand = new RelayCommand(CopyReport, () => IsReport);
+            SaveReportCommand = new RelayCommand(SaveReport, () => IsReport);
+            RetryFailedCommand = new AsyncRelayCommand(RetryFailedAsync, () => IsReport && (Report?.CanRetryFailed ?? false));
+            BackToResultsCommand = new RelayCommand(BackToResults, () => IsReport);
+            OpenReportFolderCommand = new RelayCommand(OpenReportFolder);
 
             var state = settings.Load();
 
@@ -246,6 +267,261 @@ namespace OpenDBDiff.Wpf.ViewModels
         public RelayCommand<string> ThemeCommand { get; }
 
         public RelayCommand ExitCommand { get; }
+
+        // ---- Section 9.8: undo, and the rest of the review keys ---------------------------------
+
+        public RelayCommand UndoCommand { get; }
+
+        public RelayCommand RedoCommand { get; }
+
+        public RelayCommand SelectAllVisibleCommand { get; }
+
+        public RelayCommand NextChangeCommand { get; }
+
+        public RelayCommand PreviousChangeCommand { get; }
+
+        public RelayCommand<DiffItemKey> FocusAttentionCommand { get; }
+
+        public RelayCommand<DependencyWarning> FixWarningCommand { get; }
+
+        public RelayCommand FixAllCommand { get; }
+
+        public RelayCommand ToggleDestructiveFilterCommand { get; }
+
+        // ---- Section 6.9: the report state --------------------------------------------------------
+
+        public RelayCommand CopyReportCommand { get; }
+
+        public RelayCommand SaveReportCommand { get; }
+
+        public AsyncRelayCommand RetryFailedCommand { get; }
+
+        public RelayCommand BackToResultsCommand { get; }
+
+        public RelayCommand OpenReportFolderCommand { get; }
+
+        /// <summary>The report of the last apply, which is what the REPORT state shows.</summary>
+        public ApplyReportViewModel? Report { get; private set; }
+
+        public bool IsReport
+        {
+            get { return State == AppState.Report && Report != null; }
+        }
+
+        public bool CanUndo
+        {
+            get { return history.CanUndo; }
+        }
+
+        public bool CanRedo
+        {
+            get { return history.CanRedo; }
+        }
+
+        public string UndoLabel
+        {
+            get { return CanUndo ? "Undo " + history.UndoLabel : "Nothing to undo"; }
+        }
+
+        public string RedoLabel
+        {
+            get { return CanRedo ? "Redo " + history.RedoLabel : "Nothing to redo"; }
+        }
+
+        // ---- Section 9.4: dependencies ---------------------------------------------------------------
+
+        public bool HasBlockingWarnings
+        {
+            get { return Results != null && Results.HasBlockingWarnings; }
+        }
+
+        public string DependencySummary
+        {
+            get
+            {
+                if (Results == null || Results.WarningCount == 0)
+                {
+                    return string.Empty;
+                }
+
+                return Results.BlockingWarningCount > 0
+                    ? Results.BlockingText
+                    : "1 dependency warning";
+            }
+        }
+
+        public bool CanFixAllBlocking
+        {
+            get { return Results != null && Results.CanFixAll; }
+        }
+
+        public string FixAllLabel
+        {
+            get
+            {
+                return Results == null
+                    ? "Fix all"
+                    : string.Format("Fix all ({0})", Results.FixableCount);
+            }
+        }
+
+        /// <summary>Section 6.5.5: the banner under the focused object's diff.</summary>
+        public bool HasDependencyBanner
+        {
+            get { return FocusedWarning != null; }
+        }
+
+        public DependencyWarning? FocusedWarning
+        {
+            get
+            {
+                var results = Results;
+
+                if (results == null || results.FocusedItem == null)
+                {
+                    return null;
+                }
+
+                var warnings = results.WarningsFor(results.FocusedItem.Key);
+
+                return warnings.Count > 0 ? warnings[0] : null;
+            }
+        }
+
+        public string DependencyMessage
+        {
+            get { return FocusedWarning == null ? string.Empty : FocusedWarning.Message; }
+        }
+
+        public string DependencyFixLabel
+        {
+            get
+            {
+                var warning = FocusedWarning;
+
+                if (warning == null || !warning.Fix.Exists)
+                {
+                    return string.Empty;
+                }
+
+                return (warning.Fix.IsInclude ? "Select " : "Deselect ") + DependencyRules.Name(warning.Fix.Key);
+            }
+        }
+
+        public bool HasDependencyFix
+        {
+            get { return FocusedWarning != null && FocusedWarning.Fix.Exists; }
+        }
+
+        // ---- Section 6.5.4: the pre-selection overview ------------------------------------------------
+
+        public PreselectionOverview? Overview { get; private set; }
+
+        public IReadOnlyList<OverviewTypeRow> OverviewRows
+        {
+            get { return Overview == null ? new List<OverviewTypeRow>() : Overview.Rows; }
+        }
+
+        /// <summary>The overview's heading while nothing is focused: "{n} differences across {k} types".</summary>
+        public string OverviewHeading
+        {
+            get { return Overview == null ? PreSelectionHeading : Overview.Heading; }
+        }
+
+        public IReadOnlyList<OverviewAttention> AttentionPreview
+        {
+            get
+            {
+                if (Overview == null)
+                {
+                    return new List<OverviewAttention>();
+                }
+
+                return Overview.Attention.Count > AttentionPreviewSize
+                    ? Overview.Attention.Take(AttentionPreviewSize).ToList()
+                    : Overview.Attention;
+            }
+        }
+
+        public int AttentionPreviewSize
+        {
+            get { return 10; }
+        }
+
+        public bool HasAttention
+        {
+            get { return Overview != null && Overview.HasAttention; }
+        }
+
+        /// <summary>How many attention entries the preview leaves out, which the list says in words.</summary>
+        public int AttentionRemainder
+        {
+            get { return Overview == null ? 0 : Math.Max(0, Overview.Attention.Count - AttentionPreviewSize); }
+        }
+
+        public bool HasAttentionRemainder
+        {
+            get { return AttentionRemainder > 0; }
+        }
+
+        public string AttentionRemainderText
+        {
+            get { return AttentionRemainder == 1 ? "1 more needs attention" : AttentionRemainder + " more need attention"; }
+        }
+
+        // ---- Section 6.5.3: hunk navigation ----------------------------------------------------------
+
+        public bool HasChanges
+        {
+            get { return Results != null && HunkStarts.Count > 0; }
+        }
+
+        public string ChangePosition
+        {
+            get
+            {
+                var starts = HunkStarts;
+
+                if (starts.Count == 0)
+                {
+                    return string.Empty;
+                }
+
+                var position = hunkIndex < 0 ? 1 : IndexOfHunk(starts, hunkIndex) + 1;
+
+                return position <= 0 ? "1 of " + starts.Count : position + " of " + starts.Count;
+            }
+        }
+
+        private static int IndexOfHunk(IReadOnlyList<int> starts, int index)
+        {
+            for (var i = 0; i < starts.Count; i++)
+            {
+                if (starts[i] == index)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private IReadOnlyList<int> HunkStarts
+        {
+            get
+            {
+                var results = Results;
+
+                if (results == null)
+                {
+                    return new List<int>();
+                }
+
+                return results.IsInline
+                    ? HunkRules.HunkStarts(results.InlineRows)
+                    : HunkRules.HunkStarts(results.SideBySideRows);
+            }
+        }
 
         /// <summary>Section 6.1 item 9: "Compare" in SETUP, "Compare again  F5" in RESULTS, "Cancel" while COMPARING.</summary>
         public string CompareLabel
@@ -474,7 +750,12 @@ namespace OpenDBDiff.Wpf.ViewModels
             {
                 var set = Results?.DiffSet;
 
-                return set != null && set.CanApply(State, IsStale, IsDestinationValid, false).CanApply;
+                // Section 9.4: a blocking dependency problem stops Apply, whatever else says. The user
+                // gets the count and the way out in the tooltip rather than a greyed-out button with no
+                // explanation.
+                return set != null
+                    && !HasBlockingWarnings
+                    && set.CanApply(State, IsStale, IsDestinationValid, false).CanApply;
             }
         }
 
@@ -487,6 +768,11 @@ namespace OpenDBDiff.Wpf.ViewModels
                 if (set == null)
                 {
                     return "Compare two databases first.";
+                }
+
+                if (HasBlockingWarnings)
+                {
+                    return DependencySummary;
                 }
 
                 var decision = set.CanApply(State, IsStale, IsDestinationValid, false);
@@ -613,6 +899,21 @@ namespace OpenDBDiff.Wpf.ViewModels
             OnPropertyChanged(nameof(IsSideBySideDetail));
             OnPropertyChanged(nameof(IsInlineDetail));
             OnPropertyChanged(nameof(IsScriptDetail));
+        }
+
+        /// <summary>
+        /// Raised when the focused object or the focused change moved: the detail pane, the dependency
+        /// banner of section 6.5.5 and the "n of m" position all read from the focused item.
+        /// </summary>
+        private void RaiseSelectionState()
+        {
+            OnPropertyChanged(nameof(FocusedWarning));
+            OnPropertyChanged(nameof(HasDependencyBanner));
+            OnPropertyChanged(nameof(DependencyMessage));
+            OnPropertyChanged(nameof(DependencyFixLabel));
+            OnPropertyChanged(nameof(HasDependencyFix));
+            OnPropertyChanged(nameof(ChangePosition));
+            OnPropertyChanged(nameof(HasChanges));
         }
 
         public string SetupGuidance
@@ -841,6 +1142,10 @@ namespace OpenDBDiff.Wpf.ViewModels
 
                 Results = new ResultsViewModel(diffSet);
                 ApplyStoredViewSettings(diffSet);
+
+                // The engine's dependency graph, its destructive flags, the overview of section 6.5.4
+                // and the first undo step all belong to this comparison, so they are built together.
+                AttachAnalysis(diffSet);
                 FocusFirstDifference();
 
                 Progress.Complete();
@@ -953,6 +1258,16 @@ namespace OpenDBDiff.Wpf.ViewModels
         /// </summary>
         private async void CancelCompare()
         {
+            if (State == AppState.Applying)
+            {
+                // A cancelled apply is not abandoned: the statements that already ran have changed the
+                // destination, so the session is allowed to stop and report what it did (section 6.9).
+                applyCancellation?.Cancel();
+                Progress.Cancel();
+                StatusMessage = "Cancelling the apply\u2026";
+                return;
+            }
+
             if (State != AppState.Comparing)
             {
                 return;
@@ -1018,6 +1333,7 @@ namespace OpenDBDiff.Wpf.ViewModels
             if (first != null)
             {
                 Results!.Focus(first.Key);
+                RaiseSelectionState();
             }
         }
 
@@ -1047,6 +1363,317 @@ namespace OpenDBDiff.Wpf.ViewModels
             }
         }
 
+        // ---- Dependencies, the overview and the undo stack (sections 9.4, 6.5.4 and 9.8) ---------
+
+        private ISchemaBase ResolveItem(DiffItemKey key)
+        {
+            return key == null || sourceDatabase == null ? null : sourceDatabase.Find(key.FullName);
+        }
+
+        /// <summary>
+        /// Builds what depends on a finished comparison: the engine's dependency graph, the engine's
+        /// destructive flags, the overview of section 6.5.4 and the first entry of the undo stack.
+        /// </summary>
+        /// <remarks>
+        /// Sections 9.7 and 14 put both the graph and the destructive flags in the engine's hands, so
+        /// nothing here reads SQL text to decide whether a change is destructive.
+        /// </remarks>
+        private void AttachAnalysis(DiffSet diffSet)
+        {
+            var results = Results;
+
+            if (results == null)
+            {
+                return;
+            }
+
+            dependencies = SqlServerDependencyGraph.Build(sourceDatabase, diffSet.AllItems, ResolveItem);
+            SqlServerDestructiveAnalysis.Apply(diffSet.AllItems, ResolveItem);
+
+            hunkIndex = -1;
+            Report = null;
+
+            if (subscribedResults != null)
+            {
+                subscribedResults.InclusionChanged -= OnInclusionChanged;
+            }
+
+            subscribedResults = results;
+            results.InclusionChanged += OnInclusionChanged;
+
+            history.Reset("Compare", diffSet.IncludedKeys);
+            results.ClearResults();
+            results.SetWarnings(RecomputeWarnings());
+            RefreshOverview();
+        }
+
+        private IReadOnlyList<DependencyWarning> RecomputeWarnings()
+        {
+            var results = Results;
+
+            if (results == null || dependencies == null)
+            {
+                return new List<DependencyWarning>();
+            }
+
+            var included = new HashSet<DiffItemKey>(results.DiffSet.IncludedKeys);
+
+            return DependencyRules.Analyze(dependencies, results.DiffSet.AllItems, key => included.Contains(key));
+        }
+
+        private void RefreshOverview()
+        {
+            var results = Results;
+
+            Overview = results == null ? null : OverviewRules.Build(results.DiffSet.AllItems, results.Warnings);
+            RaiseOverviewState();
+        }
+
+        private void RaiseOverviewState()
+        {
+            OnPropertyChanged(nameof(Overview));
+            OnPropertyChanged(nameof(OverviewRows));
+            OnPropertyChanged(nameof(OverviewHeading));
+            OnPropertyChanged(nameof(AttentionPreview));
+            OnPropertyChanged(nameof(HasAttention));
+            OnPropertyChanged(nameof(AttentionRemainder));
+            OnPropertyChanged(nameof(HasAttentionRemainder));
+            OnPropertyChanged(nameof(AttentionRemainderText));
+        }
+
+        /// <summary>
+        /// Every inclusion change arrives here: it is recorded as one undoable step, the dependency rules
+        /// are asked again, and the overview is rebuilt. Doing it in one place is what keeps Ctrl+Z and
+        /// the warnings from disagreeing with the list.
+        /// </summary>
+        private void OnInclusionChanged(object? sender, EventArgs e)
+        {
+            var results = Results;
+
+            if (results == null)
+            {
+                return;
+            }
+
+            var label = string.IsNullOrEmpty(results.LastChange) ? "Change the selection" : results.LastChange;
+
+            history.Record(label, results.DiffSet.IncludedKeys);
+
+            results.SetWarnings(RecomputeWarnings());
+            RefreshOverview();
+            RaiseDependencyState();
+            RaiseHistoryState();
+        }
+
+        private void RaiseDependencyState()
+        {
+            OnPropertyChanged(nameof(HasBlockingWarnings));
+            OnPropertyChanged(nameof(DependencySummary));
+            OnPropertyChanged(nameof(CanFixAllBlocking));
+            OnPropertyChanged(nameof(FixAllLabel));
+            OnPropertyChanged(nameof(HasDependencyBanner));
+            OnPropertyChanged(nameof(FocusedWarning));
+            OnPropertyChanged(nameof(DependencyMessage));
+            OnPropertyChanged(nameof(DependencyFixLabel));
+            OnPropertyChanged(nameof(HasDependencyFix));
+            OnPropertyChanged(nameof(CanApply));
+            OnPropertyChanged(nameof(ApplyTooltip));
+            OnPropertyChanged(nameof(HasChanges));
+            OnPropertyChanged(nameof(ChangePosition));
+
+            FixAllCommand.RaiseCanExecuteChanged();
+            FixWarningCommand.RaiseCanExecuteChanged();
+            ApplyCommand.RaiseCanExecuteChanged();
+        }
+
+        private void RaiseHistoryState()
+        {
+            OnPropertyChanged(nameof(CanUndo));
+            OnPropertyChanged(nameof(CanRedo));
+            OnPropertyChanged(nameof(UndoLabel));
+            OnPropertyChanged(nameof(RedoLabel));
+
+            UndoCommand.RaiseCanExecuteChanged();
+            RedoCommand.RaiseCanExecuteChanged();
+        }
+
+        private void RaiseReportState()
+        {
+            OnPropertyChanged(nameof(Report));
+            OnPropertyChanged(nameof(IsReport));
+
+            CopyReportCommand.RaiseCanExecuteChanged();
+            SaveReportCommand.RaiseCanExecuteChanged();
+            RetryFailedCommand.RaiseCanExecuteChanged();
+            BackToResultsCommand.RaiseCanExecuteChanged();
+        }
+
+        private void UndoInclusion()
+        {
+            var results = Results;
+            var step = history.Undo();
+
+            if (results == null || step == null)
+            {
+                return;
+            }
+
+            results.RestoreInclusion(step.Included);
+            results.SetWarnings(RecomputeWarnings());
+            RefreshOverview();
+            RaiseDependencyState();
+            RaiseHistoryState();
+
+            StatusMessage = "Undid " + step.Label + ".";
+            ShowToast(StatusMessage);
+        }
+
+        private void RedoInclusion()
+        {
+            var results = Results;
+            var step = history.Redo();
+
+            if (results == null || step == null)
+            {
+                return;
+            }
+
+            results.RestoreInclusion(step.Included);
+            results.SetWarnings(RecomputeWarnings());
+            RefreshOverview();
+            RaiseDependencyState();
+            RaiseHistoryState();
+
+            StatusMessage = "Redid " + step.Label + ".";
+            ShowToast(StatusMessage);
+        }
+
+        private void SelectAllVisible()
+        {
+            var results = Results;
+
+            if (results == null)
+            {
+                return;
+            }
+
+            if (results.SelectAllCommand.CanExecute(null))
+            {
+                results.SelectAllCommand.Execute(null);
+            }
+        }
+
+        private void FocusItem(DiffItemKey key)
+        {
+            var results = Results;
+
+            if (results == null || key == null)
+            {
+                return;
+            }
+
+            results.Focus(key);
+            RaiseSelectionState();
+        }
+
+        /// <summary>
+        /// Section 9.4's one-click fix. It goes through the included set so it is undoable, because the
+        /// user is expected to look at what it did and sometimes take it back.
+        /// </summary>
+        private void FixWarning(DependencyWarning warning)
+        {
+            var results = Results;
+
+            if (results == null || warning == null || !warning.Fix.Exists)
+            {
+                return;
+            }
+
+            var label = DependencyRules.Name(warning.Fix.Key);
+
+            results.SetIncluded(warning.Fix.Key, warning.Fix.IsInclude, "Fix: " + label);
+
+            StatusMessage = "Fixed the dependency on " + label + ".";
+            ShowToast(StatusMessage);
+        }
+
+        /// <summary>Section 9.4's "Fix all": one step, so one Ctrl+Z takes all of it back.</summary>
+        private void FixAll()
+        {
+            var results = Results;
+
+            if (results == null || !results.CanFixAll)
+            {
+                return;
+            }
+
+            var wanted = new HashSet<DiffItemKey>(results.DiffSet.IncludedKeys);
+            var fixedCount = 0;
+
+            foreach (var warning in results.Warnings.Where(warning => warning.IsBlocking && warning.Fix.Exists))
+            {
+                if (warning.Fix.IsInclude)
+                {
+                    if (wanted.Add(warning.Fix.Key))
+                    {
+                        fixedCount++;
+                    }
+                }
+                else if (wanted.Remove(warning.Fix.Key))
+                {
+                    fixedCount++;
+                }
+            }
+
+            if (fixedCount == 0)
+            {
+                return;
+            }
+
+            results.ApplyInclusionChange(wanted.ToList(), "Fix all dependencies");
+
+            StatusMessage = string.Format(CultureInfo.CurrentCulture, "Fixed {0} dependency problems.", fixedCount);
+            ShowToast(StatusMessage);
+        }
+
+        /// <summary>Section 6.7: the destructive count is a control that narrows the list to those objects.</summary>
+        private void ToggleDestructiveFilter()
+        {
+            var results = Results;
+
+            if (results == null)
+            {
+                return;
+            }
+
+            results.DiffSet.OnlyDestructiveSelected = !results.DiffSet.OnlyDestructiveSelected;
+            results.RefreshRows();
+
+            StatusMessage = results.DiffSet.OnlyDestructiveSelected
+                ? "Showing the selected destructive changes."
+                : "Showing everything.";
+        }
+
+        /// <summary>Section 6.5.3: F7 and Shift+F7 walk the changes of the focused object.</summary>
+        private void MoveChange(int direction)
+        {
+            var results = Results;
+            var starts = HunkStarts;
+
+            if (results == null || starts.Count == 0)
+            {
+                return;
+            }
+
+            hunkIndex = direction >= 0
+                ? HunkRules.Next(starts, hunkIndex)
+                : HunkRules.Previous(starts, hunkIndex);
+
+            results.FocusHunk(hunkIndex);
+
+            RaiseSelectionState();
+        }
+
         // ---- Apply (sections 6.7 and 6.8) -----------------------------------------------------------
 
         private async Task ApplyAsync()
@@ -1059,12 +1686,15 @@ namespace OpenDBDiff.Wpf.ViewModels
                 return;
             }
 
-            var confirmation = new ConfirmationViewModel(
-                set,
-                string.IsNullOrEmpty(Destination.DatabaseName) ? "(unknown)" : Destination.DatabaseName,
+            // The script is the engine's (section 14), built from the same statement list the preview
+            // and the copy use, so what is confirmed is what runs.
+            var script = SqlServerScriptBuilder.ForSelection(set.AllItems, ResolveItem, new HashSet<DiffItemKey>(set.IncludedKeys));
+            var target = new ApplyTarget(
                 ServerOf(Destination),
-                Source.Describe(),
+                string.IsNullOrEmpty(Destination.DatabaseName) ? "(unknown)" : Destination.DatabaseName,
                 Destination.Environment);
+
+            var confirmation = new ConfirmationViewModel(set, target, script, Source.Describe());
 
             dialogs.ShowDialog(confirmation);
 
@@ -1074,71 +1704,222 @@ namespace OpenDBDiff.Wpf.ViewModels
                 return;
             }
 
+            await RunApplyAsync(
+                script,
+                target,
+                confirmation.RunInSingleTransaction,
+                confirmation.StopOnFirstError,
+                confirmation.SaveScriptCopy,
+                set.IncludedKeys).ConfigureAwait(true);
+        }
+
+        /// <summary>
+        /// Runs an apply and turns it into the report of section 6.9. Shared with "Retry failed", so a
+        /// retry is the same operation as the run that produced the failures.
+        /// </summary>
+        private async Task RunApplyAsync(
+            GeneratedScript script,
+            ApplyTarget target,
+            bool useTransaction,
+            bool stopOnFirstError,
+            bool saveScriptCopy,
+            IReadOnlyList<DiffItemKey> included)
+        {
+            var results = Results;
             var generation = ++applyGeneration;
-            var total = set.SelectedCount;
 
-            State = AppState.Applying;
-            StatusMessage = "Applying " + total + " changes...";
-            RaiseResultState();
+            using (var source = new CancellationTokenSource())
+            {
+                applyCancellation = source;
 
-            var items = set.IncludedItems.ToList();
-            var failures = 0;
+                State = AppState.Applying;
+                StatusMessage = string.Format(CultureInfo.CurrentCulture, "Applying {0} changes\u2026", included.Count);
+                Progress.ReportApplying(string.Empty, 0, included.Count);
+
+                if (results != null)
+                {
+                    results.ClearResults();
+                }
+
+                if (saveScriptCopy)
+                {
+                    // Section 6.8's third option exists for the run that never comes back, so the copy is
+                    // written before the first statement rather than with the report afterwards.
+                    try
+                    {
+                        reports.WriteScriptBeforeRun(script.Text, DateTime.Now, target.Database);
+                    }
+                    catch (Exception ex)
+                    {
+                        dialogs.ShowError("Saving a copy of the script", ex);
+                    }
+                }
+
+                var request = new ApplyRequest(included, useTransaction, stopOnFirstError);
+                var progress = new Progress<ApplyProgress>(update =>
+                    Progress.ReportApplying(update.ObjectFullName, update.Done, update.Total));
+
+                ApplyReport report;
+
+                try
+                {
+                    var items = results == null ? new List<DiffItem>() : results.DiffSet.AllItems;
+                    var connectionString = Destination.ConnectionString;
+
+                    report = await Task.Run(
+                        () => SqlServerApplySession.Apply(script, items, request, target, connectionString, progress, source.Token))
+                        .ConfigureAwait(true);
+                }
+                catch (Exception ex)
+                {
+                    StatusMessage = "Applying the changes failed: " + ex.Message;
+                    dialogs.ShowError("Applying changes", ex);
+
+                    State = results == null ? AppState.Setup : AppState.Results;
+                    Progress.Reset();
+                    RaiseResultState();
+                    return;
+                }
+                finally
+                {
+                    applyCancellation = null;
+                }
+
+                if (generation != applyGeneration)
+                {
+                    return;
+                }
+
+                var folder = string.Empty;
+
+                try
+                {
+                    folder = reports.Write(report, script.Text);
+                }
+                catch (Exception ex)
+                {
+                    dialogs.ShowError("Writing the report", ex);
+                }
+
+                Report = new ApplyReportViewModel(report, folder);
+
+                if (results != null)
+                {
+                    results.SetResults(report.Items);
+                }
+
+                Progress.Reset();
+                State = AppState.Report;
+
+                // Section 4: after an apply the destination has moved on, so the results behind the
+                // report are marked stale rather than pretending they still describe it.
+                MarkStale(CompareStaleness.Applied);
+
+                StatusMessage = report.Header + " \u00b7 " + report.OutcomeText;
+                ShowToast(StatusMessage);
+
+                RaiseResultState();
+                RaiseReportState();
+            }
+        }
+
+        /// <summary>Section 6.9's "Retry failed": the failures alone, with the options that produced them.</summary>
+        private async Task RetryFailedAsync()
+        {
+            var report = Report?.Report;
+            var results = Results;
+
+            if (report == null || results == null || !report.CanRetryFailed)
+            {
+                return;
+            }
+
+            var keys = report.FailedKeys;
+
+            if (keys.Count == 0)
+            {
+                return;
+            }
+
+            var script = SqlServerScriptBuilder.ForSelection(results.DiffSet.AllItems, ResolveItem, new HashSet<DiffItemKey>(keys));
+
+            await RunApplyAsync(script, report.Target, report.UsedTransaction, true, false, keys).ConfigureAwait(true);
+        }
+
+        private void CopyReport()
+        {
+            var report = Report;
+
+            if (report == null)
+            {
+                return;
+            }
 
             try
             {
-                for (var i = 0; i < items.Count; i++)
-                {
-                    if (generation != applyGeneration)
-                    {
-                        return;
-                    }
-
-                    Progress.ReportApplying(items[i].Key.FullName, i, items.Count);
-
-                    var item = items[i];
-                    var target = ItemFor(item);
-
-                    var report = item.Status == DiffStatus.Create
-                        ? Updater.createNew(target, Destination.ConnectionString, updateConfirmation)
-                        : Updater.alter(target, Destination.ConnectionString, updateConfirmation);
-
-                    if (!string.IsNullOrWhiteSpace(report))
-                    {
-                        failures++;
-                    }
-                }
-
-                StatusMessage = failures == 0
-                    ? string.Format(CultureInfo.CurrentCulture, "Applied {0} of {0} changes.", total)
-                    : string.Format(CultureInfo.CurrentCulture, "Applied {0} of {1} changes.", total - failures, total);
+                Clipboard.SetText(ReportFormat.ToCsv(report.Report));
+                StatusMessage = "Report copied \u00b7 " + report.Report.TotalCount + " objects";
+                ShowToast(StatusMessage);
             }
             catch (Exception ex)
             {
-                StatusMessage = "Applying the changes failed: " + ex.Message;
-                dialogs.ShowError("Applying changes", ex);
+                dialogs.ShowError("Copying the report", ex);
             }
-            finally
+        }
+
+        private void SaveReport()
+        {
+            var report = Report;
+
+            if (report == null)
             {
-                if (generation == applyGeneration)
-                {
-                    Progress.Reset();
-                    State = Results == null ? AppState.Setup : AppState.Results;
-
-                    // Section 4: after an apply the destination has moved on, so a successful apply
-                    // marks the visible results stale rather than pretending they still describe it.
-                    if (failures < total)
-                    {
-                        MarkStale(CompareStaleness.Applied);
-                    }
-
-                    RaiseResultState();
-                }
+                return;
             }
+
+            var suggested = string.Format(
+                CultureInfo.InvariantCulture,
+                "{0}-{1}.html",
+                string.IsNullOrEmpty(report.Report.Target.Database) ? "report" : report.Report.Target.Database,
+                report.Report.StartedAt.ToLocalTime().ToString("yyyyMMdd-HHmm", CultureInfo.InvariantCulture));
+
+            var path = dialogs.AskSaveReportPath(suggested);
+
+            if (path == null)
+            {
+                return;
+            }
+
+            try
+            {
+                var html = path.EndsWith(".csv", StringComparison.OrdinalIgnoreCase)
+                    ? ReportFormat.ToCsv(report.Report)
+                    : ReportFormat.ToHtml(report.Report);
+
+                System.IO.File.WriteAllText(path, html);
+                StatusMessage = "Report written to " + path;
+            }
+            catch (Exception ex)
+            {
+                dialogs.ShowError("Save report", ex);
+            }
+        }
+
+        /// <summary>Section 6.9's "Back to results": the list, with a result icon per object.</summary>
+        private void BackToResults()
+        {
+            if (Results == null)
+            {
+                return;
+            }
+
+            State = AppState.Results;
+            RaiseResultState();
+            RaiseReportState();
         }
 
         private ISchemaBase ItemFor(DiffItem item)
         {
-            var found = sourceDatabase?.Find(item.Key.FullName);
+            var found = ResolveItem(item.Key);
 
             if (found == null)
             {
@@ -1201,18 +1982,13 @@ namespace OpenDBDiff.Wpf.ViewModels
             }
         }
 
-        private static string BuildScript(DiffSet set)
+        /// <summary>
+        /// The script the preview, the copy, the save and the apply all use. One builder, so a script a
+        /// reader copies is the script a reader runs (section 14).
+        /// </summary>
+        private string BuildScript(DiffSet set)
         {
-            var builder = new StringBuilder();
-
-            foreach (var item in set.IncludedItems)
-            {
-                builder.AppendLine(string.Format(CultureInfo.InvariantCulture, "-- {0} {1}", StatusVocabulary.Badge(item.Status), item.Key.FullName));
-                builder.AppendLine(item.Script);
-                builder.AppendLine();
-            }
-
-            return builder.ToString();
+            return SqlServerScriptBuilder.ForSelection(set.AllItems, ResolveItem, new HashSet<DiffItemKey>(set.IncludedKeys)).Text;
         }
 
         // ---- Strip actions --------------------------------------------------------------------------
@@ -1674,13 +2450,28 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         private void OpenReportsFolder()
         {
-            var folder = System.IO.Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "OpenDBDiff",
-                "Reports");
+            OpenFolder(reports.Root);
+        }
 
+        /// <summary>Section 6.9's link to the folder this run's report and script were written to.</summary>
+        private void OpenReportFolder()
+        {
+            var folder = Report == null || string.IsNullOrEmpty(Report.ReportFolder)
+                ? reports.Root
+                : Report.ReportFolder;
+
+            OpenFolder(folder);
+        }
+
+        private void OpenFolder(string folder)
+        {
             try
             {
+                if (string.IsNullOrEmpty(folder))
+                {
+                    return;
+                }
+
                 System.IO.Directory.CreateDirectory(folder);
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(folder) { UseShellExecute = true });
             }
@@ -1827,6 +2618,18 @@ namespace OpenDBDiff.Wpf.ViewModels
             OnPropertyChanged(nameof(IsConnectionPanelPopover));
             OnPropertyChanged(nameof(StatusMessage));
             OnPropertyChanged(nameof(ReviewListWidth));
+            OnPropertyChanged(nameof(Report));
+            OnPropertyChanged(nameof(IsReport));
+            OnPropertyChanged(nameof(Overview));
+            OnPropertyChanged(nameof(OverviewRows));
+            OnPropertyChanged(nameof(OverviewHeading));
+            OnPropertyChanged(nameof(AttentionPreview));
+            OnPropertyChanged(nameof(HasAttention));
+            OnPropertyChanged(nameof(AttentionRemainder));
+            OnPropertyChanged(nameof(HasAttentionRemainder));
+            OnPropertyChanged(nameof(AttentionRemainderText));
+            OnPropertyChanged(nameof(HasChanges));
+            OnPropertyChanged(nameof(ChangePosition));
 
             CompareCommand.RaiseCanExecuteChanged();
             CompareAgainCommand.RaiseCanExecuteChanged();
@@ -1838,6 +2641,16 @@ namespace OpenDBDiff.Wpf.ViewModels
             SaveScriptAsCommand.RaiseCanExecuteChanged();
             EditConnectionsCommand.RaiseCanExecuteChanged();
             ModeDataCommand.RaiseCanExecuteChanged();
+            SelectAllVisibleCommand.RaiseCanExecuteChanged();
+            NextChangeCommand.RaiseCanExecuteChanged();
+            PreviousChangeCommand.RaiseCanExecuteChanged();
+            ToggleDestructiveFilterCommand.RaiseCanExecuteChanged();
+            CopyReportCommand.RaiseCanExecuteChanged();
+            SaveReportCommand.RaiseCanExecuteChanged();
+            RetryFailedCommand.RaiseCanExecuteChanged();
+            BackToResultsCommand.RaiseCanExecuteChanged();
+            RaiseDependencyState();
+            RaiseHistoryState();
             RaiseViewState();
         }
     }

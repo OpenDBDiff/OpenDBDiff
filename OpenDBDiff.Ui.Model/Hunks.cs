@@ -10,14 +10,27 @@ namespace OpenDBDiff.Ui.Model
     public sealed class WordRun
     {
         public WordRun(string text, bool isChanged)
+            : this(text, isChanged, DiffLineKind.Unchanged)
+        {
+        }
+
+        public WordRun(string text, bool isChanged, DiffLineKind kind)
         {
             Text = text;
             IsChanged = isChanged;
+            Kind = kind;
         }
 
         public string Text { get; }
 
         public bool IsChanged { get; }
+
+        /// <summary>
+        /// The kind of line this run belongs to. Word diffing does not know the line's status - it only
+        /// compares two strings - so the side-by-side row stamps it on the way out, which is what lets
+        /// the view pick the right tint without reaching back up the tree.
+        /// </summary>
+        public DiffLineKind Kind { get; }
     }
 
     /// <summary>Both sides of one changed line, split into same and different runs.</summary>
