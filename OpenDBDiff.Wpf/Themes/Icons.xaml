@@ -30,4 +30,10 @@
     <Geometry x:Key="Icon.SaveProject">M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7 M7 3v4a1 1 0 0 0 1 1h7</Geometry>
     <!-- plug -->
     <Geometry x:Key="Icon.Test">M12 22v-5 M15 8V2 M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z M9 8V2</Geometry>
+    <!-- clock: the Recent comparisons menu (section 6.1.6) -->
+    <Geometry x:Key="Icon.Recent">M 2.0 12.0 A 10.0 10.0 0 1 0 22.0 12.0 A 10.0 10.0 0 1 0 2.0 12.0 Z M12 6v6l4 2</Geometry>
+    <!-- menu: the collapsed menu bar button (section 12) -->
+    <Geometry x:Key="Icon.Menu">M4 6h16 M4 12h16 M4 18h16</Geometry>
+    <!-- refresh-cw: Compare again (section 6.2, 9.6) -->
+    <Geometry x:Key="Icon.Refresh">M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8 M21 3v5h-5 M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16 M8 16H3v5</Geometry>
 </ResourceDictionary>

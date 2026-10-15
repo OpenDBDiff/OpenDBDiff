@@ -14,9 +14,18 @@
 
         <GroupBox Grid.Row="0" Header="Comparison" Padding="6">
             <StackPanel>
-                <CheckBox Content="Ignore white space in code" IsChecked="{Binding IgnoreWhiteSpacesInCode, Mode=TwoWay}" />
+                <!-- Section 11 names this setting "Ignore whitespace in diff"; the engine's property keeps
+                     its own name, but the reader sees the specification's words rather than the WinForms
+                     dialog's. -->
+                <CheckBox Content="Ignore whitespace in diff" IsChecked="{Binding IgnoreWhiteSpacesInCode, Mode=TwoWay}" />
                 <CheckBox Content="Case sensitive" IsChecked="{Binding CaseSensitiveInCode, Mode=TwoWay}" Margin="0,4,0,0" />
                 <CheckBox Content="Reload the comparison after an update" IsChecked="{Binding ReloadComparisonOnUpdate, Mode=TwoWay}" Margin="0,4,0,0" />
+                <!-- Section 11's "Select Drop items by default". Section 7.1 rule 4 makes not selecting
+                     them the default, so this is the switch that overrides a deliberate safety choice and
+                     says so. -->
+                <CheckBox Content="Select missing (DROP) objects by default" Margin="0,10,0,0"
+                          IsChecked="{Binding IncludeDropByDefault, Mode=TwoWay}"
+                          ToolTip="Section 7.1 leaves Drops unselected for safety; this overrides that" />
             </StackPanel>
         </GroupBox>
 

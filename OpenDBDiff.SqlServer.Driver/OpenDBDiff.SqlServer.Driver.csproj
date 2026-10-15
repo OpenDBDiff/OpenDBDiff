@@ -5,6 +5,10 @@
     the schema model, and comparing two of them. Extracted from OpenDBDiff.SqlServer.Ui (net48) so
     that the WPF front end can drive a comparison. The WinForms front end references this project
     too, so there is one implementation of loading and comparing rather than two.
+
+    It references OpenDBDiff.Ui.Model because the redesign's engine contracts (section 14) are stated
+    in that vocabulary - a dependency graph, an item's destructive kinds, a script's statements - and
+    the rules over them must have one definition rather than one per front end.
   -->
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -15,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj" />
     <ProjectReference Include="..\OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj" />
+    <ProjectReference Include="..\OpenDBDiff.Ui.Model\OpenDBDiff.Ui.Model.csproj" />
   </ItemGroup>
 
 </Project>

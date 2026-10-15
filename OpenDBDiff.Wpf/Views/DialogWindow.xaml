@@ -4,6 +4,8 @@
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
+        Background="{StaticResource Surface}"
+        Foreground="{StaticResource Text}"
         Title="{Binding Title}">
     <!--
       Shell for the dialogs the main window opens. Its content is chosen by data template, so a view

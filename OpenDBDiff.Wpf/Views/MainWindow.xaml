@@ -1,245 +1,261 @@
 <Window x:Class="OpenDBDiff.Wpf.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="clr-namespace:OpenDBDiff.Wpf.Controls"
         xmlns:views="clr-namespace:OpenDBDiff.Wpf.Views"
-        xmlns:converters="clr-namespace:OpenDBDiff.Wpf.Converters"
-        Title="{Binding Title}"
+        Title="OpenDBDiff"
         Icon="App.ico"
-        Width="940" Height="683" MinWidth="820" MinHeight="540"
+        Width="1440" Height="900" MinWidth="1024" MinHeight="640"
         WindowStartupLocation="CenterScreen"
+        Background="{StaticResource Bg}"
+        Foreground="{StaticResource Text}"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        SizeChanged="Window_SizeChanged"
         Closing="Window_Closing">
 
-    <Window.Resources>
-        <converters:NodeColourToBrushConverter x:Key="NodeColourToBrush" />
-        <converters:DiffLineToBrushConverter x:Key="DiffLineToBrush" />
-        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-
-        <!--
-          The tree: a checkbox on every object, the folder captions counting what they hold, and the
-          colour coming from the object's status. Same information as the WinForms tree, as data.
-        -->
-        <HierarchicalDataTemplate x:Key="SchemaNodeTemplate" ItemsSource="{Binding Children}">
-            <StackPanel Orientation="Horizontal">
-                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
-                          Visibility="{Binding IsCheckable, Converter={StaticResource BoolToVisibility}}"
-                          VerticalAlignment="Center" Margin="0,0,4,0" />
-                <TextBlock Text="{Binding Text}" VerticalAlignment="Center"
-                           Foreground="{Binding Colour, Converter={StaticResource NodeColourToBrush}}" />
-            </StackPanel>
-        </HierarchicalDataTemplate>
-    </Window.Resources>
+    <Window.InputBindings>
+        <!-- Section 7.2. Ctrl+F, Esc and F1 need the code-behind because they move focus or depend on
+             what is on screen; everything else is a command. -->
+        <KeyBinding Key="F5" Command="{Binding CompareCommand}" />
+        <KeyBinding Key="Enter" Modifiers="Control" Command="{Binding PreviewScriptCommand}" />
+        <KeyBinding Key="Enter" Modifiers="Control,Shift" Command="{Binding ApplyCommand}" />
+        <KeyBinding Key="C" Modifiers="Control,Shift" Command="{Binding CopyScriptCommand}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveScriptAsCommand}" />
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenProjectCommand}" />
+        <KeyBinding Key="S" Modifiers="Control,Shift" Command="{Binding SaveProjectCommand}" />
+        <KeyBinding Key="E" Modifiers="Control" Command="{Binding EditConnectionsCommand}" />
+        <KeyBinding Key="X" Modifiers="Control,Shift" Command="{Binding SwapCommand}" />
+        <KeyBinding Key="D1" Modifiers="Control" Command="{Binding ShowSideBySideCommand}" />
+        <KeyBinding Key="D2" Modifiers="Control" Command="{Binding ShowInlineCommand}" />
+        <KeyBinding Key="D3" Modifiers="Control" Command="{Binding ShowScriptCommand}" />
+        <!-- Section 7.2: F7 and Shift+F7 walk the changes of the focused object. They are plain
+             bindings because no text control wants them. -->
+        <KeyBinding Key="F7" Command="{Binding NextChangeCommand}" />
+        <KeyBinding Key="F7" Modifiers="Shift" Command="{Binding PreviousChangeCommand}" />
+    </Window.InputBindings>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="3" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Top strip: the project buttons on the left, the two database panels either side of the swap button. -->
-        <Grid Grid.Row="0">
+        <!-- Section 12: the menu bar, which is where every legacy capability now lives. At narrow
+             widths the same Menu instance moves into the menu button's popup (see the code-behind). -->
+        <Grid Grid.Row="0" Background="{StaticResource Surface}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="126" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Margin="4,4,4,0">
-                <Button Style="{StaticResource ActionButton}" Command="{Binding OpenProjectCommand}" Margin="2,0,2,6">
-                    <StackPanel>
-                        <Path Style="{StaticResource ActionButtonIcon}" Data="{StaticResource Icon.OpenProject}" />
-                        <TextBlock Style="{StaticResource ActionButtonCaption}" Text="Open project" />
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource ActionButton}" Command="{Binding NewProjectCommand}" Margin="2,0,2,6">
-                    <StackPanel>
-                        <Path Style="{StaticResource ActionButtonIcon}" Data="{StaticResource Icon.NewProject}" />
-                        <TextBlock Style="{StaticResource ActionButtonCaption}" Text="New project" />
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource ActionButton}" Command="{Binding SaveProjectCommand}" Margin="2,0,2,6">
-                    <StackPanel>
-                        <Path Style="{StaticResource ActionButtonIcon}" Data="{StaticResource Icon.SaveProject}" />
-                        <TextBlock Style="{StaticResource ActionButtonCaption}" Text="Save project" />
-                    </StackPanel>
-                </Button>
-            </StackPanel>
+            <Border x:Name="MenuHost" Grid.Column="0" VerticalAlignment="Center">
+                <Menu x:Name="MainMenu" VerticalAlignment="Center">
 
-            <Border Grid.Column="1" Background="{StaticResource DatabasePanel.Background}" Padding="3" MinHeight="175">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="40" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+            <ToggleButton x:Name="MenuButton" Grid.Column="0" Style="{StaticResource IconToggleButton}"
+                          Margin="4,4" HorizontalAlignment="Left"
+                          Visibility="{Binding IsNarrow, Converter={StaticResource BoolToVisibility}}"
+                          ToolTip="Menu" AutomationProperties.Name="Menu">
+                <Path Style="{StaticResource ActionButtonIcon}" Width="16" Height="16"
+                      Data="{StaticResource Icon.Menu}" />
+            </ToggleButton>
 
-                    <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" Padding="6">
-                        <views:ConnectionPanel DataContext="{Binding Source}" />
-                    </Border>
+            <Popup x:Name="MenuPopup" IsOpen="{Binding IsChecked, ElementName=MenuButton}" StaysOpen="False"
+                   Placement="Bottom" PlacementTarget="{Binding ElementName=MenuButton}" AllowsTransparency="True" />
 
-                    <Button Grid.Column="1" Command="{Binding SwapCommand}" Margin="3,0"
-                            ToolTip="Swap source and destination">
-                        <Path Style="{StaticResource ActionButtonIcon}" Data="{StaticResource Icon.Swap}" Stretch="Fill" />
-                    </Button>
 
-                    <Border Grid.Column="2" BorderBrush="Black" BorderThickness="1" Padding="6">
-                        <views:ConnectionPanel DataContext="{Binding Destination}" />
-                    </Border>
-                </Grid>
+                <MenuItem Header="_File">
+                    <MenuItem Header="New project" Command="{Binding NewProjectCommand}" />
+                    <MenuItem Header="Open project&#x2026;" Command="{Binding OpenProjectCommand}" InputGestureText="Ctrl+O" />
+                    <MenuItem Header="Save project" Command="{Binding SaveProjectCommand}" InputGestureText="Ctrl+Shift+S" />
+                    <MenuItem Header="Save project as&#x2026;" Command="{Binding SaveProjectAsCommand}" />
+                    <MenuItem Header="Recent projects" ItemsSource="{Binding RecentProjects}"
+                              IsEnabled="{Binding HasRecentProjects}">
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header" Value="{Binding Path}" />
+                                <Setter Property="Command" Value="{Binding OpenCommand}" />
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="Exit" Command="{Binding ExitCommand}" />
+                </MenuItem>
+
+                <MenuItem Header="_Edit">
+                    <!-- Section 9.8: the labels say what Ctrl+Z would take back, so the menu is a
+                         record of what has been selected and deselected. -->
+                    <MenuItem Header="{Binding UndoLabel}" Command="{Binding UndoCommand}" InputGestureText="Ctrl+Z" />
+                    <MenuItem Header="{Binding RedoLabel}" Command="{Binding RedoCommand}" InputGestureText="Ctrl+Y" />
+                    <Separator />
+                    <MenuItem Header="Select all visible" Command="{Binding SelectAllVisibleCommand}" InputGestureText="Ctrl+A" />
+                    <Separator />
+                    <MenuItem Header="Show only selected destructive changes" Command="{Binding ToggleDestructiveFilterCommand}" />
+                    <Separator />
+                    <MenuItem Header="{Binding FixAllLabel}" Command="{Binding FixAllCommand}" />
+                </MenuItem>
+
+                <MenuItem Header="_Compare">
+                    <MenuItem Header="Compare" Command="{Binding CompareCommand}" InputGestureText="F5" />
+                    <MenuItem Header="Cancel" Command="{Binding CancelCommand}" InputGestureText="Esc" />
+                    <MenuItem Header="Swap source and destination" Command="{Binding SwapCommand}" InputGestureText="Ctrl+Shift+X" />
+                    <Separator />
+                    <MenuItem Header="Schema" Command="{Binding ModeSchemaCommand}" IsCheckable="True" IsChecked="{Binding IsSchemaMode, Mode=OneWay}" />
+                    <MenuItem Header="Data" Command="{Binding ModeDataCommand}" IsCheckable="True" IsChecked="{Binding IsDataMode, Mode=OneWay}" IsEnabled="{Binding IsDataModeEnabled}" ToolTip="{Binding DataModeTooltip}" />
+                    <Separator />
+                    <MenuItem Header="Recent comparisons" ItemsSource="{Binding RecentPairs}"
+                              IsEnabled="{Binding HasRecentPairs}">
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header" Value="{Binding Header}" />
+                                <Setter Property="Command" Value="{Binding OpenCommand}" />
+                                <Setter Property="ToolTip" Value="{Binding Detail}" />
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
+                    </MenuItem>
+                </MenuItem>
+
+                <MenuItem Header="_View">
+                    <MenuItem Header="Show identical objects" Command="{Binding ToggleShowIdenticalCommand}" IsCheckable="True" IsChecked="{Binding IsIdenticalShown, Mode=OneWay}" />
+                    <Separator />
+                    <MenuItem Header="Group by type" Command="{Binding ShowGroupedCommand}" IsCheckable="True" IsChecked="{Binding IsGroupedView, Mode=OneWay}" />
+                    <MenuItem Header="Flat list" Command="{Binding ShowFlatCommand}" IsCheckable="True" IsChecked="{Binding IsFlatView, Mode=OneWay}" />
+                    <Separator />
+                    <MenuItem Header="Detail mode">
+                        <MenuItem Header="Side by side" Command="{Binding ShowSideBySideCommand}" IsCheckable="True" IsChecked="{Binding IsSideBySideDetail, Mode=OneWay}" InputGestureText="Ctrl+1" />
+                        <MenuItem Header="Inline" Command="{Binding ShowInlineCommand}" IsCheckable="True" IsChecked="{Binding IsInlineDetail, Mode=OneWay}" InputGestureText="Ctrl+2" />
+                        <MenuItem Header="Script" Command="{Binding ShowScriptCommand}" IsCheckable="True" IsChecked="{Binding IsScriptDetail, Mode=OneWay}" InputGestureText="Ctrl+3" />
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="Reset layout" Command="{Binding ResetLayoutCommand}" />
+                    <MenuItem Header="Theme">
+                        <MenuItem Header="Light" Command="{Binding ThemeCommand}" CommandParameter="Light" />
+                        <MenuItem Header="Dark" Command="{Binding ThemeCommand}" CommandParameter="Dark" />
+                        <MenuItem Header="System" Command="{Binding ThemeCommand}" CommandParameter="System" />
+                    </MenuItem>
+                </MenuItem>
+
+                <MenuItem Header="_Script">
+                    <MenuItem Header="Preview" Command="{Binding PreviewScriptCommand}" InputGestureText="Ctrl+Enter" />
+                    <MenuItem Header="Copy" Command="{Binding CopyScriptCommand}" InputGestureText="Ctrl+Shift+C" />
+                    <MenuItem Header="Save as&#x2026;" Command="{Binding SaveScriptAsCommand}" InputGestureText="Ctrl+S" />
+                </MenuItem>
+
+                <MenuItem Header="_Tools">
+                    <MenuItem Header="Options&#x2026;" Command="{Binding OptionsCommand}" />
+                    <MenuItem Header="Open reports folder" Command="{Binding OpenReportsFolderCommand}" />
+                    <MenuItem Header="Open this run's report folder" Command="{Binding OpenReportFolderCommand}" />
+                </MenuItem>
+
+                <MenuItem Header="_Help">
+                    <MenuItem Header="Keyboard shortcuts" Command="{Binding ShowShortcutsCommand}" InputGestureText="F1" />
+                    <MenuItem Header="Documentation" Command="{Binding OpenDocumentationCommand}" />
+                    <MenuItem Header="About" Command="{Binding AboutCommand}" />
+                </MenuItem>
+                </Menu>
             </Border>
         </Grid>
 
-        <!-- Work area: the tabs, with the action strip down the right-hand side. -->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="98" />
-            </Grid.ColumnDefinitions>
+        <!-- Region A: the connection strip. -->
+        <views:ConnectionStripView Grid.Row="1" DataContext="{Binding}" />
 
-            <TabControl x:Name="WorkTabs" Grid.Column="0" SelectionChanged="WorkTabs_SelectionChanged">
-                <TabItem Header="Schema">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{Binding SplitterDistance, Mode=TwoWay}" MinWidth="150" />
-                            <ColumnDefinition Width="6" />
-                            <ColumnDefinition Width="*" MinWidth="200" />
-                        </Grid.ColumnDefinitions>
+        <!-- Section 6.1.1: the connection panel, inline in SETUP and below the strip otherwise. -->
+        <views:ConnectionPanelHostView Grid.Row="2" DataContext="{Binding}" />
 
-                        <GroupBox Grid.Column="0" Header="Objects" Padding="4">
-                            <DockPanel>
-                                <StackPanel DockPanel.Dock="Bottom" Margin="0,4,0,0">
-                                    <CheckBox Content="New" IsChecked="{Binding Tree.ShowNewItems, Mode=TwoWay}" />
-                                    <CheckBox Content="Missing" IsChecked="{Binding Tree.ShowMissingItems, Mode=TwoWay}" />
-                                    <CheckBox Content="Different" IsChecked="{Binding Tree.ShowChangedItems, Mode=TwoWay}" />
-                                    <CheckBox Content="Unchanged" IsChecked="{Binding Tree.ShowUnchangedItems, Mode=TwoWay}" />
-                                </StackPanel>
-                                <TreeView x:Name="SchemaTree"
-                                          ItemsSource="{Binding Tree.Nodes}"
-                                          ItemTemplate="{StaticResource SchemaNodeTemplate}"
-                                          SelectedItemChanged="SchemaTree_SelectedItemChanged" />
-                            </DockPanel>
-                        </GroupBox>
-
-                        <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" />
-
-                        <Grid Grid.Column="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-
-                            <!-- Legend: the three colours the WinForms legend documented. -->
-                            <WrapPanel Grid.Row="0" Margin="2,4,2,6">
-                                <Border Style="{StaticResource LegendSwatch}" Background="{StaticResource Status.Create}" />
-                                <TextBlock Style="{StaticResource LegendCaption}" Text="Create new object" />
-                                <Border Style="{StaticResource LegendSwatch}" Background="{StaticResource Status.Alter}" />
-                                <TextBlock Style="{StaticResource LegendCaption}" Text="Alter old object" />
-                                <Border Style="{StaticResource LegendSwatch}" Background="{StaticResource Status.Drop}" />
-                                <TextBlock Style="{StaticResource LegendCaption}" Text="Drop object" />
-                            </WrapPanel>
-
-                            <TabControl Grid.Row="1">
-                                <TabItem Header="New object">
-                                    <controls:SqlEditor Text="{Binding Diff.NewText, Mode=OneWay}" LexerName="sql" IsReadOnly="True" />
-                                </TabItem>
-                                <TabItem Header="Old object">
-                                    <controls:SqlEditor Text="{Binding Diff.OldText, Mode=OneWay}" LexerName="sql" IsReadOnly="True" />
-                                </TabItem>
-                                <TabItem Header="Diff">
-                                    <ListBox ItemsSource="{Binding Diff.Lines}"
-                                             FontFamily="{StaticResource MonospaceFont}"
-                                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                             VirtualizingPanel.IsVirtualizing="False">
-                                        <ListBox.ItemContainerStyle>
-                                            <Style TargetType="ListBoxItem">
-                                                <Setter Property="Padding" Value="2,0" />
-                                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                            </Style>
-                                        </ListBox.ItemContainerStyle>
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Display}"
-                                                           Background="{Binding Kind, Converter={StaticResource DiffLineToBrush}}" />
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                </TabItem>
-                            </TabControl>
-                        </Grid>
-                    </Grid>
-                </TabItem>
-
-                <TabItem Header="Synchronized script">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-
-                        <Border Grid.Row="0" BorderBrush="{x:Static SystemColors.ControlDarkBrush}" BorderThickness="1" Margin="4">
-                            <controls:SqlEditor Text="{Binding SyncScript, Mode=OneWay}" LexerName="sql" IsReadOnly="True" />
-                        </Border>
-
-                        <TextBlock Grid.Row="1" Text="{Binding StatusMessage}" Margin="6,2,6,6" TextWrapping="Wrap" />
-                    </Grid>
-                </TabItem>
-
-                <TabItem Header="Action report">
-                    <TextBox Text="{Binding ActionReport, Mode=OneWay}"
-                             IsReadOnly="True"
-                             FontFamily="{StaticResource MonospaceFont}"
-                             AcceptsReturn="True"
-                             TextWrapping="NoWrap"
-                             VerticalScrollBarVisibility="Auto"
-                             HorizontalScrollBarVisibility="Auto"
-                             Margin="4" />
-                </TabItem>
-            </TabControl>
-
-            <!-- Action strip: icon above caption, in the order the WinForms FlowLayoutPanel used. -->
-            <StackPanel Grid.Column="1" Margin="0,2,2,0">
-                <Button Style="{StaticResource ActionButton}" Command="{Binding CompareCommand}">
-                    <StackPanel>
-                        <Path Style="{StaticResource ActionButtonIcon}" Data="{StaticResource Icon.Compare}" />
-                        <TextBlock Style="{StaticResource ActionButtonCaption}" Text="Compare" />
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource ActionButton}" Command="{Binding OptionsCommand}">
-                    <StackPanel>
-                        <Path Style="{StaticResource ActionButtonIcon}" Data="{StaticResource Icon.Options}" />
-                        <TextBlock Style="{StaticResource ActionButtonCaption}" Text="Options" />
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource ActionButton}" Command="{Binding SaveScriptAsCommand}">
-                    <StackPanel>
-                        <Path Style="{StaticResource ActionButtonIcon}" Data="{StaticResource Icon.SaveAs}" />
-                        <TextBlock Style="{StaticResource ActionButtonCaption}" Text="Save as" />
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource ActionButton}" Command="{Binding CopyScriptCommand}">
-                    <StackPanel>
-                        <Path Style="{StaticResource ActionButtonIcon}" Data="{StaticResource Icon.Copy}" />
-                        <TextBlock Style="{StaticResource ActionButtonCaption}" Text="Copy script" />
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource ActionButton}" Command="{Binding UpdateSelectedCommand}">
-                    <StackPanel>
-                        <Path Style="{StaticResource ActionButtonIcon}" Data="{StaticResource Icon.Update}" />
-                        <TextBlock Style="{StaticResource ActionButtonCaption}" Text="Update selected" />
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource ActionButton}" Command="{Binding CompareDataCommand}">
-                    <StackPanel>
-                        <Path Style="{StaticResource ActionButtonIcon}" Data="{StaticResource Icon.CompareData}" />
-                        <TextBlock Style="{StaticResource ActionButtonCaption}" Text="Compare data" />
-                    </StackPanel>
-                </Button>
-                <Button Style="{StaticResource ActionButton}" Command="{Binding UpdateAllCommand}">
-                    <StackPanel>
-                        <Path Style="{StaticResource ActionButtonIcon}" Data="{StaticResource Icon.UpdateAll}" />
-                        <TextBlock Style="{StaticResource ActionButtonCaption}" Text="Update all" />
-                    </StackPanel>
-                </Button>
-            </StackPanel>
+        <!-- Region B: the 3 px progress track. Its height is reserved whether or not a run is active,
+             so nothing shifts when one starts (section 6.2). -->
+        <Grid Grid.Row="3" Background="{StaticResource BorderSubtle}">
+            <ProgressBar Style="{StaticResource StripProgressBar}"
+                         Visibility="{Binding IsProgressActive, Converter={StaticResource BoolToVisibility}}"
+                         Value="{Binding Progress.FillPercent}"
+                         IsIndeterminate="{Binding Progress.IsIndeterminate}"
+                         ToolTip="{Binding Progress.PerSideTooltip}" />
         </Grid>
+
+        <!-- Region C: the summary bar, with the progress status text and Cancel on its right (6.2). -->
+        <views:SummaryBarView x:Name="SummaryBar" Grid.Row="4" DataContext="{Binding}" />
+
+        <!-- Section 9.6: the stale banner sits under the Summary Bar. -->
+        <Border Grid.Row="5" Style="{StaticResource StaleBanner}"
+                Visibility="{Binding IsStaleBannerVisible, Converter={StaticResource BoolToVisibility}}">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <Button Style="{StaticResource SecondaryButton}" Command="{Binding CompareAgainCommand}"
+                            Padding="12,4" MinHeight="30">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Style="{StaticResource ActionButtonIcon}" Width="14" Height="14"
+                                  Data="{StaticResource Icon.Refresh}" Margin="0,0,6,0" />
+                            <TextBlock Text="Compare again" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <TextBlock Style="{StaticResource StaleBannerText}" Text="{Binding StaleBannerText}" />
+                <TextBlock Style="{StaticResource MutedText}" Margin="10,0,0,0" VerticalAlignment="Center"
+                           Text="{Binding StaleReasonText}" />
+            </DockPanel>
+        </Border>
+
+        <!-- Regions D and E, with the splitter of section 6.6. Section 6.9's report takes the whole
+             row when a run has finished, and the results come back with one click. -->
+        <Grid Grid.Row="6">
+            <Grid Visibility="{Binding IsReport, Converter={StaticResource InverseBoolToVisibility}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{Binding ReviewListWidth, Mode=TwoWay}" MinWidth="280" MaxWidth="720" />
+                    <ColumnDefinition Width="6" />
+                    <ColumnDefinition Width="*" MinWidth="560" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,0,1,0" Background="{StaticResource Surface}">
+                    <views:ReviewListView x:Name="ReviewList" DataContext="{Binding}" />
+                </Border>
+
+                <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch"
+                              Background="{StaticResource Bg}"
+                              ToolTip="Drag to resize, double-click to reset" />
+
+                <Grid Grid.Column="2">
+                    <views:DetailPaneView DataContext="{Binding}" />
+
+                    <!-- Section 6.7.1: the script preview slides over the detail pane rather than opening
+                         a window, so the list and the selection stay visible under it. -->
+                    <views:ScriptPreviewPanelView DataContext="{Binding}"
+                                                  Visibility="{Binding IsScriptPreviewOpen, Converter={StaticResource BoolToVisibility}}" />
+
+                    <!-- Section 7.3's "Show dependencies…", shown the same way, because section 6.10
+                         allows no extra message-box modal. -->
+                    <views:DependenciesPanelView DataContext="{Binding}"
+                                                 Visibility="{Binding IsDependenciesOpen, Converter={StaticResource BoolToVisibility}}" />
+                </Grid>
+            </Grid>
+
+            <views:ApplyReportView DataContext="{Binding}"
+                                   Visibility="{Binding IsReport, Converter={StaticResource BoolToVisibility}}" />
+
+            <!-- Section 6.10: toasts, bottom-centre above the action bar. -->
+            <ItemsControl ItemsSource="{Binding Toasts}"
+                          VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                          Margin="0,0,0,12" IsHitTestVisible="False" Panel.ZIndex="20">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource ToastBorder}">
+                            <TextBlock Style="{StaticResource ToastText}" Text="{Binding Message}" />
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+
+        <!-- Region F: the action bar. -->
+        <views:ActionBarView Grid.Row="7" DataContext="{Binding}" />
+
+        <Border Grid.Row="8" Background="{StaticResource Surface}" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,1,0,0">
+            <TextBlock Text="{Binding StatusMessage}" Margin="14,6" Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" />
+        </Border>
     </Grid>
 </Window>

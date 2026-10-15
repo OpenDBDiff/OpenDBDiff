@@ -1,0 +1,140 @@
+<UserControl x:Class="OpenDBDiff.Wpf.Views.ApplyReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Section 6.9: the report. It replaces the review list and the diff, and it is a real view rather
+         than a dialog, so the results behind it stay one click away. The data context here is the main
+         view model and the report is reached through it. -->
+    <Grid Margin="16" Background="{StaticResource Bg}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Style="{StaticResource PaneHeading}" Text="{Binding Report.Header}" />
+            <TextBlock Style="{StaticResource MutedText}" Text="{Binding Report.TargetText}" Margin="0,4,0,0" />
+        </StackPanel>
+
+        <!-- The banner is green, amber or red, because the first question a reader has is whether the
+             run went through. -->
+        <Border Grid.Row="1" CornerRadius="8" Padding="14,10" Margin="0,0,0,10">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="{StaticResource StatusCreateBg}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Report.IsPartial}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource WarningBg}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Report.IsBad}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource StatusDropBg}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <TextBlock Text="{Binding Report.OutcomeText}" FontWeight="SemiBold" TextWrapping="Wrap">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{StaticResource StatusCreateFg}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Report.IsPartial}" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource WarningFg}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Report.IsBad}" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource StatusDropFg}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Border>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,8">
+            <Button Style="{StaticResource SecondaryButton}" Content="Copy report" Margin="0,0,8,0"
+                    Command="{Binding CopyReportCommand}" />
+            <Button Style="{StaticResource SecondaryButton}" Content="Save report&#x2026;" Margin="0,0,8,0"
+                    Command="{Binding SaveReportCommand}" />
+            <Button Style="{StaticResource SecondaryButton}" Content="{Binding Report.RetryFailedLabel}"
+                    Command="{Binding RetryFailedCommand}"
+                    Visibility="{Binding Report.CanRetryFailed, Converter={StaticResource BoolToVisibility}}" />
+        </StackPanel>
+
+        <ListView Grid.Row="3" ItemsSource="{Binding Report.Rows}" BorderThickness="1"
+                  BorderBrush="{StaticResource BorderSubtle}" Background="{StaticResource Surface}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="2,4">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="22" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="80" />
+                                <ColumnDefinition Width="260" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Section 7.2: the row carries the result icon, so a failed object is
+                                 visible without reading the table. -->
+                            <TextBlock Grid.Column="0" Text="{Binding ResultGlyph}" FontWeight="Bold" TextAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource StatusCreateFg}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsFailed}" Value="True">
+                                                <Setter Property="Foreground" Value="{StaticResource StatusDropFg}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+
+                            <TextBlock Grid.Column="1" Text="{Binding Object}" TextTrimming="CharacterEllipsis"
+                                       ToolTip="{Binding Object}" />
+                            <TextBlock Grid.Column="2" Text="{Binding Action}" Style="{StaticResource MutedText}"
+                                       Margin="10,0" />
+                            <TextBlock Grid.Column="3" Text="{Binding Duration}" Style="{StaticResource MutedText}" />
+                            <TextBlock Grid.Column="4" Text="{Binding Message}" TextTrimming="CharacterEllipsis"
+                                       ToolTip="{Binding Message}" />
+                        </Grid>
+
+                        <!-- A failed row expands to the number, the message, the line and the statement,
+                             which is what a reader needs to act on it. -->
+                        <Expander Margin="22,6,0,0" IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
+                                  Visibility="{Binding HasDetails, Converter={StaticResource BoolToVisibility}}">
+                            <Expander.Header>
+                                <TextBlock Text="Error detail" Style="{StaticResource MutedText}" />
+                            </Expander.Header>
+                            <ItemsControl ItemsSource="{Binding Details}" Margin="0,4,0,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" FontFamily="{StaticResource CodeFont}" FontSize="12"
+                                                   TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Expander>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <DockPanel Grid.Row="4" Margin="0,12,0,0">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button Style="{StaticResource SecondaryButton}" Content="Back to results" Margin="0,0,8,0"
+                        Command="{Binding BackToResultsCommand}" />
+                <Button Style="{StaticResource SecondaryButton}" Content="Compare again" Margin="0,0,8,0"
+                        Command="{Binding CompareAgainCommand}" />
+                <Button Style="{StaticResource TextLinkButton}" Content="{Binding Report.FolderText}"
+                        Command="{Binding OpenReportFolderCommand}" Margin="6,0,0,0" />
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</UserControl>

@@ -2,13 +2,17 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--
-      One database panel. The fields and their order come from SqlServerConnectFront: server,
-      database, authentication, credentials, and a test button whose result is reported inline
-      rather than in a message box.
+      One connection card (section 6.1.1). The fields are in the order the specification lists them:
+      saved connection, server, authentication, credentials, database, test, save as. The environment
+      tag of section 6.1.4 follows them, because the panel is the only place it can be set.
+
+      Phase 2 changes two things from the previous panel: the credentials are hidden altogether under
+      Windows authentication rather than shown disabled, and the test result is the
+      "Connected - SQL Server 2019 - 42 ms" line with an error category.
     -->
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" MinWidth="105" />
+            <ColumnDefinition Width="Auto" MinWidth="96" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -18,57 +22,138 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding Caption}" FontWeight="Bold" Margin="0,0,0,8" />
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding Caption}" FontWeight="Bold" Margin="0,0,0,10" />
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Server:" VerticalAlignment="Center" Margin="0,0,6,4" />
-        <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,4"
+        <!-- 1. Saved connection (section 6.1.6). -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource FieldLabel}" Text="Saved" />
+        <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,6"
+                  ItemsSource="{Binding SavedConnections}"
+                  SelectedItem="{Binding SelectedSavedConnection, Mode=TwoWay}"
+                  DisplayMemberPath="Name"
+                  ToolTip="Pick a saved connection to fill the fields below" />
+
+        <!-- 2. Server host, with the servers already in use. -->
+        <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource FieldLabel}" Text="Server" />
+        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,6"
                   IsEditable="True"
                   Text="{Binding ServerName, UpdateSourceTrigger=PropertyChanged}"
                   ItemsSource="{Binding Servers}"
                   DropDownOpened="Server_DropDownOpened" />
 
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Database:" VerticalAlignment="Center" Margin="0,0,6,4" />
-        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,4"
-                  IsEditable="True"
-                  Text="{Binding DatabaseName, UpdateSourceTrigger=PropertyChanged}"
-                  ItemsSource="{Binding Databases}"
-                  DropDownOpened="Database_DropDownOpened" />
-
-        <!-- Why the list is empty, when it is: an empty drop-down with no explanation reads as a
-             server with no databases rather than as a failed read. -->
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding DatabaseError}"
-                   Foreground="Red" TextWrapping="Wrap" Margin="0,24,0,4"
-                   Visibility="{Binding DatabaseError, Converter={StaticResource NullToVisibility}}" />
-
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="Authentication:" VerticalAlignment="Center" Margin="0,0,6,4" />
-        <ComboBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,4"
+        <!-- 3. Authentication. -->
+        <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource FieldLabel}" Text="Authentication" />
+        <ComboBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,6"
                   SelectedIndex="{Binding AuthenticationIndex, Mode=TwoWay}">
             <ComboBoxItem Content="Windows Authentication" />
             <ComboBoxItem Content="SQL Server Authentication" />
         </ComboBox>
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="User name:" VerticalAlignment="Center" Margin="0,0,6,4" />
-        <TextBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,4"
+        <!-- 4. Credentials: hidden entirely under Windows authentication. -->
+        <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource FieldLabel}" Text="User name"
+                   Visibility="{Binding ShowCredentials, Converter={StaticResource BoolToVisibility}}" />
+        <TextBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,6"
                  Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
-                 IsEnabled="{Binding IsSqlAuthenticationEnabled}" />
+                 Visibility="{Binding ShowCredentials, Converter={StaticResource BoolToVisibility}}" />
 
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="Password:" VerticalAlignment="Center" Margin="0,0,6,4" />
-        <PasswordBox Grid.Row="5" Grid.Column="1" Margin="0,0,0,4"
+        <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource FieldLabel}" Text="Password"
+                   Visibility="{Binding ShowCredentials, Converter={StaticResource BoolToVisibility}}" />
+        <PasswordBox Grid.Row="5" Grid.Column="1" Margin="0,0,0,6"
                      PasswordChanged="Password_PasswordChanged"
-                     IsEnabled="{Binding IsSqlAuthenticationEnabled}" />
+                     Visibility="{Binding ShowCredentials, Converter={StaticResource BoolToVisibility}}"
+                     ToolTip="Never stored in plain text (section 11.3)" />
 
-        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,4,0,0">
-            <Button Command="{Binding TestCommand}" Padding="8,2" Margin="0,0,8,0">
+        <!-- 5. Database: read on demand, with an inline spinner, and an error with a Retry link. -->
+        <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource FieldLabel}" Text="Database" />
+        <ComboBox Grid.Row="6" Grid.Column="1" Margin="0,0,0,2"
+                  IsEditable="True"
+                  Text="{Binding DatabaseName, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding Databases}"
+                  DropDownOpened="Database_DropDownOpened" />
+
+        <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,6"
+                    Visibility="{Binding IsLoadingDatabases, Converter={StaticResource BoolToVisibility}}">
+            <ProgressBar Width="70" Height="4" IsIndeterminate="True" VerticalAlignment="Center" Margin="0,0,8,0" />
+            <TextBlock Style="{StaticResource MutedText}" Text="Reading the database list&#x2026;" VerticalAlignment="Center" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,6"
+                    Visibility="{Binding DatabaseError, Converter={StaticResource NullToVisibility}}">
+            <TextBlock Style="{StaticResource InlineErrorText}" Text="{Binding DatabaseError}" MaxWidth="320"
+                       VerticalAlignment="Center" />
+            <Button Style="{StaticResource TextLinkButton}" Content="Retry" Margin="8,0,0,0"
+                    Command="{Binding RetryDatabasesCommand}" VerticalAlignment="Center" />
+        </StackPanel>
+
+        <!-- Environment tag (section 6.1.4). -->
+        <TextBlock Grid.Row="9" Grid.Column="0" Style="{StaticResource FieldLabel}" Text="Environment" />
+        <StackPanel Grid.Row="9" Grid.Column="1" Margin="0,0,0,6">
+            <StackPanel Orientation="Horizontal">
+                <ComboBox Width="140" SelectedIndex="{Binding EnvironmentIndex, Mode=TwoWay}"
+                          AutomationProperties.Name="Environment tag">
+                    <ComboBoxItem Content="None" />
+                    <ComboBoxItem Content="Dev" />
+                    <ComboBoxItem Content="Test" />
+                    <ComboBoxItem Content="UAT" />
+                    <ComboBoxItem Content="Prod" />
+                    <ComboBoxItem Content="Custom" />
+                </ComboBox>
+                <TextBox Width="80" Margin="6,0,0,0" MaxLength="8"
+                         Text="{Binding CustomEnvironment, UpdateSourceTrigger=PropertyChanged}"
+                         Visibility="{Binding IsCustomEnvironment, Converter={StaticResource BoolToVisibility}}"
+                         ToolTip="Up to 8 characters" />
+            </StackPanel>
+
+            <!-- Section 6.1.4: the suggestion is a proposal with an Accept link, never applied silently. -->
+            <StackPanel Orientation="Horizontal" Margin="0,6,0,0"
+                        Visibility="{Binding HasEnvironmentSuggestion, Converter={StaticResource BoolToVisibility}}">
+                <TextBlock Style="{StaticResource MutedText}" Text="{Binding EnvironmentSuggestionText}"
+                           VerticalAlignment="Center" />
+                <Button Style="{StaticResource TextLinkButton}" Content="Accept" Margin="6,0,0,0"
+                        Command="{Binding AcceptEnvironmentSuggestionCommand}" VerticalAlignment="Center" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- 6. Test connection, with the result inline. -->
+        <StackPanel Grid.Row="10" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,4,0,0">
+            <Button Style="{StaticResource SecondaryButton}" Command="{Binding TestCommand}" Margin="0,0,10,0">
                 <StackPanel Orientation="Horizontal">
                     <Path Style="{StaticResource ActionButtonIcon}" Width="14" Height="14"
-                          Data="{StaticResource Icon.Test}" Margin="0,0,4,0" />
+                          Data="{StaticResource Icon.Test}" Margin="0,0,6,0" />
                     <TextBlock Text="Test connection" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
-            <TextBlock Text="{Binding TestMessage}" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="200" />
+
+            <TextBlock Text="{Binding TestMessage}" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="260"
+                       Visibility="{Binding TestMessage, Converter={StaticResource NullToVisibility}}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasTestFailure}" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource Danger}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <!-- Section 6.7.2: a per-connection standing decision, stored with the connection. Set on
+                 the destination it replaces Apply with Save script… and skips the confirmation. -->
+            <CheckBox Content="Never write to this database from OpenDBDiff" Margin="14,0,0,0"
+                      VerticalAlignment="Center" IsChecked="{Binding NeverWriteToDatabase, Mode=TwoWay}"
+                      ToolTip="Save the script instead of applying it; nothing is ever written to this database" />
+
+            <!-- 7. Save as: stores this card as a saved connection. -->
+            <Button Style="{StaticResource TextLinkButton}" Content="Save as&#x2026;" Margin="12,0,0,0"
+                    Command="{Binding SaveAsCommand}" VerticalAlignment="Center" />
         </StackPanel>
     </Grid>
 </UserControl>

@@ -6,6 +6,7 @@ using OpenDBDiff.Abstractions.Schema;
 using OpenDBDiff.Abstractions.Schema.Events;
 using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.SqlServer.Driver;
+using OpenDBDiff.Ui.Model;
 using OpenDBDiff.SqlServer.Schema.Options;
 
 namespace OpenDBDiff.Wpf.Services
@@ -40,6 +41,13 @@ namespace OpenDBDiff.Wpf.Services
             IProgress<DatabaseProgress> originProgress,
             IProgress<DatabaseProgress> destinationProgress,
             CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Section 9.6's background check reads the destination through the same service that compares it, so
+        /// the connection settings are resolved in one place. It answers null rather than throwing: an
+        /// unreachable database is not a change and must not become an error in the results.
+        /// </summary>
+        Task<DestinationStamp> FingerprintAsync(string connectionString);
     }
 
     /// <summary>
@@ -63,6 +71,11 @@ namespace OpenDBDiff.Wpf.Services
             return Task.Run(
                 () => Compare(request, originProgress, destinationProgress, cancellationToken),
                 cancellationToken);
+        }
+
+        public Task<DestinationStamp> FingerprintAsync(string connectionString)
+        {
+            return Task.Run(() => SqlServerDestinationWatch.Read(connectionString));
         }
 
         private static ComparisonResult Compare(

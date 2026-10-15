@@ -34,7 +34,7 @@ namespace OpenDBDiff.SqlServer.Driver
         /// Splits a script into batches on lines that contain only GO, like SSMS and sqlcmd do.
         /// A plain split on "GO" would also cut words such as GOTO or CATEGORY.
         /// </summary>
-        private static List<string> splitBatches(string script)
+        internal static List<string> splitBatches(string script)
         {
             var batches = new List<string>();
 

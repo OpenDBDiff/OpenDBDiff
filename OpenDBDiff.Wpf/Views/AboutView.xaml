@@ -1,0 +1,22 @@
+<UserControl x:Class="OpenDBDiff.Wpf.Views.AboutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Help -> About. -->
+    <Grid Margin="18" Width="440">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Style="{StaticResource PaneHeading}" Text="{Binding ProductName}" />
+        <TextBlock Grid.Row="1" Style="{StaticResource MutedText}" Margin="0,4,0,10"
+                   Text="{Binding Version, StringFormat=Version {0}}" />
+        <TextBlock Grid.Row="2" Text="{Binding Blurb}" TextWrapping="Wrap" />
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Style="{StaticResource SecondaryButton}" Content="Close" IsCancel="True" Click="Close_Click" />
+        </StackPanel>
+    </Grid>
+</UserControl>

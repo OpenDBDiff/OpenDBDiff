@@ -1,0 +1,289 @@
+<UserControl x:Class="OpenDBDiff.Wpf.Views.DetailPaneView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:OpenDBDiff.Wpf.Converters">
+    <UserControl.Resources>
+        <converters:StatusBrushConverter x:Key="StatusBrush" />
+        <converters:StatusBadgeConverter x:Key="StatusBadge" />
+        <converters:DiffLineBrushConverter x:Key="DiffLineBrush" />
+        <converters:WordRunBrushConverter x:Key="WordRunBrush" />
+
+        <!-- One side of a side-by-side row: the line's tint behind, the changed words tinted again on
+             top (section 6.5.3). Monospace and no wrapping, so a run is a horizontal strip of the same
+             grid the plain text would have been. -->
+        <DataTemplate x:Key="WordRuns">
+            <ItemsControl ItemsSource="{Binding}" VerticalAlignment="Center">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Text}" TextWrapping="NoWrap"
+                                   Background="{Binding Converter={StaticResource WordRunBrush}}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <!-- Region E: the detail pane, diff first (section 6.5). -->
+    <Grid Background="{StaticResource Surface}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- 6.5.1: object name, badge, plain-language summary, mode switch. -->
+        <Grid Grid.Row="0" Margin="16,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Style="{StaticResource StatusBadge}" Margin="0,0,10,0"
+                    Background="{Binding Results.DetailStatus, Converter={StaticResource StatusBrush}, ConverterParameter=bg}"
+                    BorderBrush="{Binding Results.DetailStatus, Converter={StaticResource StatusBrush}, ConverterParameter=border}"
+                    BorderThickness="1">
+                <TextBlock Style="{StaticResource StatusBadgeText}"
+                           Text="{Binding Results.DetailStatus, Converter={StaticResource StatusBadge}}"
+                           Foreground="{Binding Results.DetailStatus, Converter={StaticResource StatusBrush}, ConverterParameter=fg}" />
+            </Border>
+
+            <TextBlock Grid.Column="1" Style="{StaticResource PaneHeading}" Text="{Binding Results.DetailTitle}"
+                       VerticalAlignment="Center" Margin="0,0,12,0" />
+
+            <TextBlock Grid.Column="2" Style="{StaticResource MutedText}" Text="{Binding Results.DetailSummary}"
+                       VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+
+            <StackPanel Grid.Column="3" Orientation="Horizontal">
+                <RadioButton Content="Side by side" Margin="0,0,10,0" VerticalAlignment="Center"
+                             GroupName="DetailMode" IsChecked="{Binding Results.IsSideBySide, Mode=OneWay}"
+                             Command="{Binding ShowSideBySideCommand}" />
+                <RadioButton Content="Inline" Margin="0,0,10,0" VerticalAlignment="Center"
+                             GroupName="DetailMode" IsChecked="{Binding Results.IsInline, Mode=OneWay}"
+                             Command="{Binding ShowInlineCommand}" />
+                <RadioButton Content="Script" VerticalAlignment="Center"
+                             GroupName="DetailMode" IsChecked="{Binding Results.IsScript, Mode=OneWay}"
+                             Command="{Binding ShowScriptCommand}" />
+            </StackPanel>
+        </Grid>
+
+        <!-- 6.5.2: column headers, naming which side is which, and the position within the changes. -->
+        <Grid Grid.Row="1" Height="32" Background="{StaticResource SurfaceAlt}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Style="{StaticResource SmallCapsLabel}" Margin="46,0,0,0" VerticalAlignment="Center"
+                       Text="{Binding SourceColumnHeader}"
+                       Visibility="{Binding Results.IsScript, Converter={StaticResource InverseBoolToVisibility}}" />
+            <TextBlock Grid.Column="1" Style="{StaticResource SmallCapsLabel}" Margin="46,0,0,0" VerticalAlignment="Center"
+                       Text="{Binding DestinationColumnHeader}"
+                       Visibility="{Binding Results.IsSideBySide, Converter={StaticResource BoolToVisibility}}" />
+
+            <!-- Section 6.5.3: F7 and Shift+F7 walk the changes, and this says where they are. -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="0,0,10,0"
+                        Visibility="{Binding HasChanges, Converter={StaticResource BoolToVisibility}}">
+                <Button Style="{StaticResource IconButton}" Command="{Binding PreviousChangeCommand}"
+                        ToolTip="Previous change (Shift+F7)" AutomationProperties.Name="Previous change">
+                    <Path Style="{StaticResource ActionButtonIcon}" Data="M 0,6 L 6,0 L 6,12 Z" Fill="{StaticResource TextMuted}" />
+                </Button>
+                <TextBlock Style="{StaticResource MutedText}" VerticalAlignment="Center" Margin="8,0"
+                           Text="{Binding ChangePosition}" />
+                <Button Style="{StaticResource IconButton}" Command="{Binding NextChangeCommand}"
+                        ToolTip="Next change (F7)" AutomationProperties.Name="Next change">
+                    <Path Style="{StaticResource ActionButtonIcon}" Data="M 0,0 L 6,6 L 0,12 Z" Fill="{StaticResource TextMuted}" />
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Side by side: aligned rows, so both sides share one scroll position. -->
+            <ScrollViewer x:Name="SideBySideScroller" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                          Visibility="{Binding Results.IsSideBySide, Converter={StaticResource BoolToVisibility}}">
+                <ItemsControl ItemsSource="{Binding Results.SideBySideRows}" FontFamily="{StaticResource CodeFont}" FontSize="13">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Height="24">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="36" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="36" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="{Binding LeftLineNumber}" TextAlignment="Right"
+                                           Foreground="{StaticResource TextFaint}" Margin="0,0,8,0"
+                                           Background="{Binding LeftKind, Converter={StaticResource DiffLineBrush}}" />
+                                <Border Grid.Column="1" Background="{Binding LeftKind, Converter={StaticResource DiffLineBrush}}">
+                                    <ContentControl Content="{Binding LeftRuns}" ContentTemplate="{StaticResource WordRuns}" />
+                                </Border>
+                                <TextBlock Grid.Column="2" Text="{Binding RightLineNumber}" TextAlignment="Right"
+                                           Foreground="{StaticResource TextFaint}" Margin="0,0,8,0"
+                                           Background="{Binding RightKind, Converter={StaticResource DiffLineBrush}}" />
+                                <Border Grid.Column="3" Background="{Binding RightKind, Converter={StaticResource DiffLineBrush}}">
+                                    <ContentControl Content="{Binding RightRuns}" ContentTemplate="{StaticResource WordRuns}" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- Inline: one column, unified. -->
+            <ScrollViewer x:Name="InlineScroller" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                          Visibility="{Binding Results.IsInline, Converter={StaticResource BoolToVisibility}}">
+                <ItemsControl ItemsSource="{Binding Results.InlineRows}" FontFamily="{StaticResource CodeFont}" FontSize="13">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Display}" Height="24" TextWrapping="NoWrap"
+                                       Background="{Binding Kind, Converter={StaticResource DiffLineBrush}}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- Script: exactly what would run for this object (section 6.5.2). -->
+            <ScrollViewer Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                          Visibility="{Binding Results.IsScript, Converter={StaticResource BoolToVisibility}}">
+                <TextBox Text="{Binding Results.ScriptText, Mode=OneWay}" IsReadOnly="True" BorderThickness="0"
+                         FontFamily="{StaticResource CodeFont}" FontSize="13" TextWrapping="NoWrap"
+                         Background="{StaticResource Surface}" />
+            </ScrollViewer>
+
+            <!-- Section 6.5: a 12-wide minimap strip at the right edge of the diff shows where the hunks
+                 are. It is inert - no pointer handling - so it never takes a click meant for the diff, and
+                 each band carries its position in a tooltip for a reader who cannot see the marks. -->
+            <Border Grid.Column="1" Width="12" Background="{StaticResource SurfaceAlt}"
+                    BorderBrush="{StaticResource BorderSubtle}" BorderThickness="1,0,0,0"
+                    Visibility="{Binding Results.HasBands, Converter={StaticResource BoolToVisibility}}">
+                <Canvas x:Name="MapCanvas" ClipToBounds="True">
+                    <ItemsControl ItemsSource="{Binding Results.MapBands}" IsHitTestVisible="True">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Canvas.Top">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource MapBandRect}" ConverterParameter="top">
+                                            <Binding Path="Top" />
+                                            <Binding Path="Height" />
+                                            <Binding Path="ActualHeight" ElementName="MapCanvas" />
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Canvas.Left" Value="0" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="12" Background="{Binding Kind, Converter={StaticResource DiffLineBrush}}"
+                                        ToolTip="{Binding Tooltip}"
+                                        AutomationProperties.Name="{Binding Tooltip}">
+                                    <Border.Height>
+                                        <MultiBinding Converter="{StaticResource MapBandRect}" ConverterParameter="height">
+                                            <Binding Path="Top" />
+                                            <Binding Path="Height" />
+                                            <Binding Path="ActualHeight" ElementName="MapCanvas" />
+                                        </MultiBinding>
+                                    </Border.Height>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Canvas>
+            </Border>
+
+            <!-- Section 6.5.4: before anything is focused, the size of the change before any of its
+                 detail: a count per object type and the few things that need attention. -->
+            <Border Grid.Column="0" Background="{StaticResource Surface}" Padding="20"
+                    Visibility="{Binding Results.HasFocusedItem, Converter={StaticResource InverseBoolToVisibility}}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource PaneHeading}" Text="{Binding OverviewHeading}" />
+                        <TextBlock Style="{StaticResource MutedText}" Margin="0,10,0,0"
+                                   Text="{Binding PreSelectionHint}" />
+
+                        <ItemsControl ItemsSource="{Binding OverviewRows}" Margin="0,16,0,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                                        <TextBlock Text="{Binding Title}" Width="140" />
+                                        <TextBlock Text="{Binding DifferenceCount}" FontWeight="Bold" Margin="0,0,16,0" />
+                                        <TextBlock Text="{Binding Create, StringFormat={}{0} Create}" Foreground="{StaticResource StatusCreateFg}" Margin="0,0,12,0" />
+                                        <TextBlock Text="{Binding Alter, StringFormat={}{0} Alter}" Foreground="{StaticResource StatusAlterFg}" Margin="0,0,12,0" />
+                                        <TextBlock Text="{Binding Drop, StringFormat={}{0} Drop}" Foreground="{StaticResource StatusDropFg}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <StackPanel Margin="0,16,0,0"
+                                    Visibility="{Binding HasAttention, Converter={StaticResource BoolToVisibility}}">
+                            <TextBlock Text="Needs attention" Style="{StaticResource SmallCapsLabel}" Margin="0,0,0,8" />
+                            <ItemsControl ItemsSource="{Binding AttentionPreview}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource TextLinkButton}" HorizontalAlignment="Left"
+                                                Command="{Binding DataContext.FocusAttentionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding Key}" Margin="0,0,0,4">
+                                            <TextBlock Text="{Binding Text}" TextWrapping="Wrap">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="{StaticResource TextMuted}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsBlocking}" Value="True">
+                                                                <Setter Property="Foreground" Value="{StaticResource StatusDropFg}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Style="{StaticResource MutedText}" Text="{Binding AttentionRemainderText}"
+                                       Margin="0,4,0,0"
+                                       Visibility="{Binding HasAttentionRemainder, Converter={StaticResource BoolToVisibility}}" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- Section 6.5.5: the dependency warning for the focused object, under its diff, with the way
+             out beside it. A keyboard user reaches the fix without leaving the object. -->
+        <Border Grid.Row="3" Padding="12,8" Background="{StaticResource WarningBg}"
+                BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,1,0,0"
+                Visibility="{Binding HasDependencyBanner, Converter={StaticResource BoolToVisibility}}">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <Button Style="{StaticResource SecondaryButton}" Padding="12,4" MinHeight="28" Margin="0,0,8,0"
+                            Content="{Binding DependencyFixLabel}" Command="{Binding FixWarningCommand}"
+                            CommandParameter="{Binding FocusedWarning}"
+                            IsEnabled="{Binding HasDependencyFix}" />
+                    <Button Style="{StaticResource SecondaryButton}" Padding="12,4" MinHeight="28"
+                            Content="Show dependencies&#x2026;" Command="{Binding ShowFocusedDependenciesCommand}" />
+                </StackPanel>
+                <TextBlock Text="{Binding DependencyMessage}" Foreground="{StaticResource WarningFg}"
+                           TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,12,0" />
+            </DockPanel>
+        </Border>
+    </Grid>
+</UserControl>
