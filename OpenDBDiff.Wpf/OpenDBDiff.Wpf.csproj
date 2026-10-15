@@ -20,6 +20,9 @@
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <RootNamespace>OpenDBDiff.Wpf</RootNamespace>
     <AssemblyName>OpenDBDiff.Wpf</AssemblyName>
+    <!-- The application icon: the same file the WinForms project carries as App.ico, so the file,
+         taskbar and window icons are the ones this application has always used. -->
+    <ApplicationIcon>App.ico</ApplicationIcon>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
@@ -28,6 +31,11 @@
     <ProjectReference Include="..\OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj" />
     <ProjectReference Include="..\OpenDBDiff.SqlServer.Driver\OpenDBDiff.SqlServer.Driver.csproj" />
     <ProjectReference Include="..\OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Packed as a WPF resource as well, for the window to draw it in its title bar and the taskbar. -->
+    <Resource Include="App.ico" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,6 +5,7 @@
         xmlns:views="clr-namespace:OpenDBDiff.Wpf.Views"
         xmlns:converters="clr-namespace:OpenDBDiff.Wpf.Converters"
         Title="{Binding Title}"
+        Icon="App.ico"
         Width="940" Height="683" MinWidth="820" MinHeight="540"
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing">
