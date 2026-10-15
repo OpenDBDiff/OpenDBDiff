@@ -21,12 +21,26 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.SqlServer.Driver
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Wpf", "OpenDBDiff.Wpf\OpenDBDiff.Wpf.csproj", "{317C3EDD-FB5B-4FC8-B24B-1A6B6590BDF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDBDiff.Ui.Model", "OpenDBDiff.Ui.Model\OpenDBDiff.Ui.Model.csproj", "{5E1B3C64-9A2F-4D2E-9C71-8B0F0B7A4E12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E1B3C64-9A2F-4D2E-9C71-8B0F0B7A4E12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E1B3C64-9A2F-4D2E-9C71-8B0F0B7A4E12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E1B3C64-9A2F-4D2E-9C71-8B0F0B7A4E12}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5E1B3C64-9A2F-4D2E-9C71-8B0F0B7A4E12}.Debug|x64.Build.0 = Debug|Any CPU
+		{5E1B3C64-9A2F-4D2E-9C71-8B0F0B7A4E12}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5E1B3C64-9A2F-4D2E-9C71-8B0F0B7A4E12}.Debug|x86.Build.0 = Debug|Any CPU
+		{5E1B3C64-9A2F-4D2E-9C71-8B0F0B7A4E12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E1B3C64-9A2F-4D2E-9C71-8B0F0B7A4E12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E1B3C64-9A2F-4D2E-9C71-8B0F0B7A4E12}.Release|x64.ActiveCfg = Release|Any CPU
+		{5E1B3C64-9A2F-4D2E-9C71-8B0F0B7A4E12}.Release|x64.Build.0 = Release|Any CPU
+		{5E1B3C64-9A2F-4D2E-9C71-8B0F0B7A4E12}.Release|x86.ActiveCfg = Release|Any CPU
+		{5E1B3C64-9A2F-4D2E-9C71-8B0F0B7A4E12}.Release|x86.Build.0 = Release|Any CPU
 		{B9FCA994-9145-4C7E-B04C-32FDAD6E5731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B9FCA994-9145-4C7E-B04C-32FDAD6E5731}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9FCA994-9145-4C7E-B04C-32FDAD6E5731}.Debug|x64.ActiveCfg = Debug|Any CPU

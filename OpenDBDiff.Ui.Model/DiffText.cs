@@ -1,0 +1,248 @@
+using System;
+using System.Collections.Generic;
+using DiffPlex;
+using DiffPlex.DiffBuilder;
+using DiffPlex.DiffBuilder.Model;
+
+namespace OpenDBDiff.Ui.Model
+{
+    public enum DiffLineKind
+    {
+        Unchanged,
+
+        /// <summary>Present only in the source, so it will be created.</summary>
+        Added,
+
+        /// <summary>Present only in the destination, so it will be dropped.</summary>
+        Removed,
+
+        /// <summary>Present on both sides with different text.</summary>
+        Changed,
+
+        /// <summary>Blank filler inserted so the two sides stay aligned (hatched in the design).</summary>
+        Filler
+    }
+
+    /// <summary>One aligned row of the side-by-side view: left is the source, right the destination.</summary>
+    public sealed class SideBySideRow
+    {
+        public SideBySideRow(string left, string right, DiffLineKind leftKind, DiffLineKind rightKind, int? leftNumber, int? rightNumber)
+        {
+            Left = left;
+            Right = right;
+            LeftKind = leftKind;
+            RightKind = rightKind;
+            LeftLineNumber = leftNumber;
+            RightLineNumber = rightNumber;
+        }
+
+        public string Left { get; }
+
+        public string Right { get; }
+
+        public DiffLineKind LeftKind { get; }
+
+        public DiffLineKind RightKind { get; }
+
+        public int? LeftLineNumber { get; }
+
+        public int? RightLineNumber { get; }
+
+        public bool IsChange
+        {
+            get
+            {
+                return LeftKind == DiffLineKind.Added
+                    || LeftKind == DiffLineKind.Removed
+                    || LeftKind == DiffLineKind.Changed
+                    || RightKind == DiffLineKind.Added
+                    || RightKind == DiffLineKind.Removed
+                    || RightKind == DiffLineKind.Changed;
+            }
+        }
+    }
+
+    public sealed class InlineRow
+    {
+        public InlineRow(DiffLineKind kind, string prefix, string text)
+        {
+            Kind = kind;
+            Prefix = prefix;
+            Text = text;
+        }
+
+        public DiffLineKind Kind { get; }
+
+        public string Prefix { get; }
+
+        public string Text { get; }
+
+        public string Display
+        {
+            get { return Prefix + Text; }
+        }
+    }
+
+    /// <summary>
+    /// The diff itself: alignment for the side-by-side view, prefixes for the inline view, and the
+    /// plain-language summary the detail pane header shows (sections 6.5.2, 6.5.3).
+    /// </summary>
+    /// <remarks>
+    /// This is deliberately not in either front end: both shells need the same alignment, and aligning
+    /// two definitions is exactly the kind of thing that should be tested rather than eyeballed.
+    /// </remarks>
+    public static class DiffText
+    {
+        public static IReadOnlyList<SideBySideRow> SideBySide(string sourceDefinition, string destinationDefinition)
+        {
+            var model = new SideBySideDiffBuilder(new Differ())
+                .BuildDiffModel(destinationDefinition ?? string.Empty, sourceDefinition ?? string.Empty);
+
+            var rows = new List<SideBySideRow>();
+            var count = Math.Max(model.NewText.Lines.Count, model.OldText.Lines.Count);
+            var leftNumber = 1;
+            var rightNumber = 1;
+
+            for (var i = 0; i < count; i++)
+            {
+                var source = i < model.NewText.Lines.Count ? model.NewText.Lines[i] : null;
+                var destination = i < model.OldText.Lines.Count ? model.OldText.Lines[i] : null;
+
+                var left = TextOf(source);
+                var right = TextOf(destination);
+
+                if (left == null && right == null)
+                {
+                    continue;
+                }
+
+                var leftKind = KindOf(source, right == null && left != null, destination);
+                var rightKind = KindOf(destination, left == null && right != null, source);
+
+                if (source != null && destination != null
+                    && source.Type == ChangeType.Modified && destination.Type == ChangeType.Modified)
+                {
+                    leftKind = DiffLineKind.Changed;
+                    rightKind = DiffLineKind.Changed;
+                }
+
+                rows.Add(new SideBySideRow(
+                    left,
+                    right,
+                    leftKind,
+                    rightKind,
+                    left == null ? (int?)null : leftNumber++,
+                    right == null ? (int?)null : rightNumber++));
+            }
+
+            return rows;
+        }
+
+        public static IReadOnlyList<InlineRow> Inline(string sourceDefinition, string destinationDefinition)
+        {
+            var model = new InlineDiffBuilder(new Differ())
+                .BuildDiffModel(destinationDefinition ?? string.Empty, sourceDefinition ?? string.Empty);
+
+            var rows = new List<InlineRow>();
+
+            foreach (var line in model.Lines)
+            {
+                switch (line.Type)
+                {
+                    case ChangeType.Inserted:
+                        rows.Add(new InlineRow(DiffLineKind.Added, "+ ", line.Text));
+                        break;
+                    case ChangeType.Deleted:
+                        rows.Add(new InlineRow(DiffLineKind.Removed, "- ", line.Text));
+                        break;
+                    case ChangeType.Modified:
+                        rows.Add(new InlineRow(DiffLineKind.Changed, "~ ", line.Text));
+                        break;
+                    default:
+                        rows.Add(new InlineRow(DiffLineKind.Unchanged, "  ", line.Text));
+                        break;
+                }
+            }
+
+            return rows;
+        }
+
+        /// <summary>
+        /// The header's plain-language summary. The engine will supply this in time (section 14); until
+        /// then it is derived from the diff, which is honest and never claims more than it knows.
+        /// </summary>
+        public static string Summary(DiffStatus status, string sourceDefinition, string destinationDefinition)
+        {
+            switch (status)
+            {
+                case DiffStatus.Create:
+                    return "Whole object is new";
+                case DiffStatus.Drop:
+                    return "Whole object is only in the destination";
+                case DiffStatus.Identical:
+                    return "No differences";
+            }
+
+            var lines = Inline(sourceDefinition, destinationDefinition);
+            var added = 0;
+            var removed = 0;
+
+            foreach (var line in lines)
+            {
+                if (line.Kind == DiffLineKind.Added)
+                {
+                    added++;
+                }
+                else if (line.Kind == DiffLineKind.Removed)
+                {
+                    removed++;
+                }
+            }
+
+            if (added == 0 && removed == 0)
+            {
+                return "Definitions differ";
+            }
+
+            if (added > 0 && removed > 0)
+            {
+                return string.Format("{0} lines added, {1} removed", added, removed);
+            }
+
+            return added > 0
+                ? (added == 1 ? "1 line added" : added + " lines added")
+                : (removed == 1 ? "1 line removed" : removed + " lines removed");
+        }
+
+        private static string TextOf(DiffPiece piece)
+        {
+            if (piece == null || piece.Type == ChangeType.Imaginary)
+            {
+                return null;
+            }
+
+            return piece.Text ?? string.Empty;
+        }
+
+        private static DiffLineKind KindOf(DiffPiece piece, bool aloneOnThisSide, DiffPiece otherSide)
+        {
+            if (piece == null || piece.Type == ChangeType.Imaginary)
+            {
+                return DiffLineKind.Filler;
+            }
+
+            switch (piece.Type)
+            {
+                case ChangeType.Inserted:
+                    return DiffLineKind.Added;
+                case ChangeType.Deleted:
+                    return DiffLineKind.Removed;
+                case ChangeType.Modified:
+                    return DiffLineKind.Changed;
+                default:
+                    // A line that exists on this side only, because the other side is filler.
+                    return aloneOnThisSide ? DiffLineKind.Changed : DiffLineKind.Unchanged;
+            }
+        }
+    }
+}

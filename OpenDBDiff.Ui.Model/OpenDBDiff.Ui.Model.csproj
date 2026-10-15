@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The redesign's data model and rules, with no UI toolkit in it. Section 17.1 of the spec requires
+    the rules to be unit-testable without a UI, and both front ends can use them: the WinForms shell
+    redesigned here and the WPF shell in the other pull request.
+  -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>OpenDBDiff.Ui.Model</RootNamespace>
+    <AssemblyName>OpenDBDiff.Ui.Model</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DiffPlex" Version="1.9.0" />
+  </ItemGroup>
+
+</Project>

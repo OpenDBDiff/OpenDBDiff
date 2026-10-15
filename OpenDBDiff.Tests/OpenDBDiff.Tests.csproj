@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OpenDBDiff.SqlServer.Driver\OpenDBDiff.SqlServer.Driver.csproj" />
+    <ProjectReference Include="..\OpenDBDiff.Ui.Model\OpenDBDiff.Ui.Model.csproj" />
   </ItemGroup>
 
 </Project>
