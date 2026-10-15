@@ -50,7 +50,7 @@ namespace OpenDBDiff.Wpf.Services
         /// </summary>
         public string? LastSaveFolder { get; set; }
 
-        private string? FolderOf(string fileName)
+        private string? FolderOf(string? fileName)
         {
             return string.IsNullOrEmpty(fileName) ? null : System.IO.Path.GetDirectoryName(fileName);
         }

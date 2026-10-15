@@ -46,6 +46,7 @@ namespace OpenDBDiff.Wpf.ViewModels
         private readonly IDialogService dialogs;
         private readonly IUpdateConfirmation updateConfirmation;
         private readonly SqlOption options;
+        private readonly IThemeService themes;
         private readonly ReportStore reports = new ReportStore();
         private readonly InclusionHistory history = new InclusionHistory();
 
@@ -76,11 +77,16 @@ namespace OpenDBDiff.Wpf.ViewModels
         /// </summary>
         private List<string>? pendingInclusion;
 
-        public MainViewModel(IComparisonService comparisons, ISettingsStore settings, IDialogService dialogs)
+        public MainViewModel(
+            IComparisonService comparisons,
+            ISettingsStore settings,
+            IDialogService dialogs,
+            IThemeService themes)
         {
             this.comparisons = comparisons;
             this.settings = settings;
             this.dialogs = dialogs;
+            this.themes = themes;
 
             options = new SqlOption(true);
             updateConfirmation = new WpfUpdateConfirmation(dialogs);
@@ -1468,9 +1474,14 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         // ---- Dependencies, the overview and the undo stack (sections 9.4, 6.5.4 and 9.8) ---------
 
+        /// <summary>
+        /// Finds an item's schema object. It answers null for anything the comparison does not hold, which
+        /// is why every caller that can be reached with a stale key checks first; the script builder's
+        /// contract takes the nullable away because it is only ever handed keys that came from the results.
+        /// </summary>
         private ISchemaBase ResolveItem(DiffItemKey key)
         {
-            return key == null || sourceDatabase == null ? null : sourceDatabase.Find(key.FullName);
+            return key == null || sourceDatabase == null ? null! : sourceDatabase.Find(key.FullName);
         }
 
         /// <summary>
@@ -1762,7 +1773,7 @@ namespace OpenDBDiff.Wpf.ViewModels
                 : "Showing everything.";
         }
 
-        private DiffItem ItemOf(DiffItemKey key)
+        private DiffItem? ItemOf(DiffItemKey key)
         {
             var results = Results;
 
@@ -1783,13 +1794,14 @@ namespace OpenDBDiff.Wpf.ViewModels
         private void IncludeOnly(DiffItemKey key)
         {
             var results = Results;
+            var item = ItemOf(key);
 
-            if (results == null || !IsKnownKey(key))
+            if (results == null || item == null)
             {
                 return;
             }
 
-            results.ApplyInclusionChange(new List<DiffItemKey> { key }, "Include only " + key.FullName);
+            results.ApplyInclusionChange(new List<DiffItemKey> { item.Key }, "Include only " + item.Key.FullName);
         }
 
         /// <summary>
@@ -1806,7 +1818,7 @@ namespace OpenDBDiff.Wpf.ViewModels
                 return;
             }
 
-            var type = key.ObjectType;
+            var type = item.Key.ObjectType;
             var wanted = new HashSet<DiffItemKey>(results.DiffSet.IncludedKeys);
             var changed = 0;
 
@@ -1834,8 +1846,8 @@ namespace OpenDBDiff.Wpf.ViewModels
 
             try
             {
-                Clipboard.SetText(key.FullName);
-                StatusMessage = "Copied " + key.FullName + " to the clipboard.";
+                Clipboard.SetText(item.Key.FullName);
+                StatusMessage = "Copied " + item.Key.FullName + " to the clipboard.";
                 ShowToast(StatusMessage);
             }
             catch (Exception ex)
@@ -1856,7 +1868,7 @@ namespace OpenDBDiff.Wpf.ViewModels
 
             if (string.IsNullOrEmpty(item.Script))
             {
-                StatusMessage = key.FullName + " has no script of its own.";
+                StatusMessage = item.Key.FullName + " has no script of its own.";
                 ShowToast(StatusMessage);
                 return;
             }
@@ -1864,7 +1876,7 @@ namespace OpenDBDiff.Wpf.ViewModels
             try
             {
                 Clipboard.SetText(item.Script);
-                StatusMessage = "Copied the script for " + key.FullName + ".";
+                StatusMessage = "Copied the script for " + item.Key.FullName + ".";
                 ShowToast(StatusMessage);
             }
             catch (Exception ex)
@@ -1877,21 +1889,24 @@ namespace OpenDBDiff.Wpf.ViewModels
         /// Section 7.3's "Show dependencies…": what this object needs and what needs it, from the engine's
         /// graph. Shown as a panel because section 6.10 allows no extra message-box modal.
         /// </summary>
-        private void ShowDependencies(DiffItemKey key)
+        private void ShowDependencies(DiffItemKey? key)
         {
-            if (!IsKnownKey(key))
+            var item = ItemOf(key!);
+
+            if (item == null)
             {
                 return;
             }
 
             var graph = dependencies;
+            var known = item.Key;
 
-            FocusItem(key);
+            FocusItem(known);
 
             DependencyPanel = new DependencyPanelViewModel(
-                key.FullName,
-                graph == null ? new List<DiffItemKey>() : graph.DependenciesOf(key),
-                graph == null ? new List<DiffItemKey>() : graph.DependentsOf(key));
+                known.FullName,
+                graph == null ? new List<DiffItemKey>() : graph.DependenciesOf(known),
+                graph == null ? new List<DiffItemKey>() : graph.DependentsOf(known));
 
             IsDependenciesOpen = true;
             RaiseDependencyPanelState();
@@ -2914,16 +2929,22 @@ namespace OpenDBDiff.Wpf.ViewModels
         /// Section 12's View → Theme. The dark theme itself is Phase 4, so the choice is remembered and
         /// the user is told rather than being left with a switch that appears to do nothing.
         /// </summary>
+        /// <summary>
+        /// Section 13.4: Light, Dark or System. The palette and the window follow immediately, and the
+        /// choice is written with the rest of the settings, so it survives a restart.
+        /// </summary>
         private void SetTheme(string? theme)
         {
-            Theme = string.IsNullOrEmpty(theme) ? "System" : theme;
-            StatusMessage = string.Format(CultureInfo.CurrentCulture, "Theme set to {0}.", Theme);
-            SaveWindowState();
+            // Fully qualified: this class has a Theme property, which shadows the palette type's name.
+            var mode = OpenDBDiff.Ui.Model.Theme.Parse(theme);
 
-            if (string.Equals(Theme, "Dark", StringComparison.OrdinalIgnoreCase))
-            {
-                ShowToast("Dark theme arrives with Phase 4; the light theme is used until then.");
-            }
+            Theme = mode == AppTheme.Dark ? "Dark" : mode == AppTheme.Light ? "Light" : "System";
+
+            themes.Apply(mode);
+
+            StatusMessage = string.Format(CultureInfo.CurrentCulture, "Theme set to {0}.", Theme);
+            ShowToast(StatusMessage);
+            SaveWindowState();
         }
 
         // ---- Stale results (section 9.6) ------------------------------------------------------------

@@ -46,21 +46,23 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         public ResultsRowKind Kind { get; }
 
-        public TypeGroup Group { get; }
+        /// <summary>Set on a group row, null on an item row, which <see cref="Kind"/> is what tells apart.</summary>
+        public TypeGroup? Group { get; private set; }
 
-        public DiffItem Item { get; }
+        /// <summary>Set on an item row, null on a group row.</summary>
+        public DiffItem? Item { get; private set; }
 
-        public string Title { get; }
+        public string Title { get; private set; } = string.Empty;
 
-        public string CountText { get; }
+        public string CountText { get; private set; } = string.Empty;
 
-        public string Name { get; }
+        public string Name { get; private set; } = string.Empty;
 
         public DiffStatus Status { get; }
 
         public bool IsUnsupported { get; }
 
-        public string UnsupportedReason
+        public string? UnsupportedReason
         {
             get { return Item == null ? null : Item.UnsupportedReason; }
         }
@@ -152,20 +154,27 @@ namespace OpenDBDiff.Wpf.ViewModels
         {
             get
             {
-                if (Kind == ResultsRowKind.Group)
+                // Which half is set follows from Kind, so the guard is what the row already promises
+                // rather than a case that can happen.
+                if (Kind == ResultsRowKind.Group && Group != null)
                 {
                     return owner.DiffSet.GroupCheckStateOf(Group);
+                }
+
+                if (Item == null)
+                {
+                    return GroupCheckState.Indeterminate;
                 }
 
                 return owner.DiffSet.IsIncluded(Item.Key) ? GroupCheckState.Checked : GroupCheckState.Unchecked;
             }
             set
             {
-                if (Kind == ResultsRowKind.Group)
+                if (Kind == ResultsRowKind.Group && Group != null)
                 {
                     owner.SetGroupChecked(Group, value);
                 }
-                else
+                else if (Item != null)
                 {
                     owner.SetIncluded(
                         Item.Key,
@@ -271,8 +280,8 @@ namespace OpenDBDiff.Wpf.ViewModels
         private readonly ObservableCollection<ResultsRowViewModel> rows = new ObservableCollection<ResultsRowViewModel>();
         private readonly List<DependencyWarning> warnings = new List<DependencyWarning>();
         private readonly Dictionary<DiffItemKey, ApplyItemOutcome> results = new Dictionary<DiffItemKey, ApplyItemOutcome>();
-        private ResultsRowViewModel selectedRow;
-        private DiffItem focused;
+        private ResultsRowViewModel? selectedRow;
+        private DiffItem? focused;
 
         public ResultsViewModel(DiffSet diffSet)
         {
@@ -459,13 +468,13 @@ namespace OpenDBDiff.Wpf.ViewModels
             get { return !string.IsNullOrEmpty(FooterText); }
         }
 
-        /// <summary>The focused object, which is what the detail pane shows.</summary>
-        public DiffItem FocusedItem
+        /// <summary>The focused object, which is what the detail pane shows. Null before anything is.</summary>
+        public DiffItem? FocusedItem
         {
             get { return focused; }
         }
 
-        public ResultsRowViewModel SelectedRow
+        public ResultsRowViewModel? SelectedRow
         {
             get { return selectedRow; }
             set
@@ -578,8 +587,13 @@ namespace OpenDBDiff.Wpf.ViewModels
             rows.Add(row);
         }
 
-        public void Focus(DiffItemKey key)
+        public void Focus(DiffItemKey? key)
         {
+            if (key == null)
+            {
+                return;
+            }
+
             DiffSet.Focus(key);
             focused = DiffSet.FocusedItem;
 
@@ -637,7 +651,7 @@ namespace OpenDBDiff.Wpf.ViewModels
         }
 
         /// <summary>What the last inclusion change was, for the undo label and the toast.</summary>
-        public string LastChange { get; private set; }
+        public string LastChange { get; private set; } = string.Empty;
 
         /// <summary>The change the detail pane is showing, as an index into the change starts.</summary>
         public int FocusedHunk { get; private set; } = -1;
@@ -866,7 +880,8 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         private void RefreshFocusedSelection()
         {
-            selectedRow = rows.FirstOrDefault(row => row.Kind == ResultsRowKind.Item && focused != null && row.Item.Key.Equals(focused.Key));
+            selectedRow = rows.FirstOrDefault(row =>
+                row.Kind == ResultsRowKind.Item && row.Item != null && focused != null && row.Item.Key.Equals(focused.Key));
 
             foreach (var row in rows)
             {

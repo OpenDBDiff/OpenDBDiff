@@ -59,19 +59,10 @@ namespace OpenDBDiff.Wpf.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch (value is DiffLineKind kind ? kind : DiffLineKind.Unchanged)
-            {
-                case DiffLineKind.Added:
-                    return StatusBrushConverter.Brush(StatusPalette.StatusBackground(DiffStatus.Create));
-                case DiffLineKind.Removed:
-                    return StatusBrushConverter.Brush(StatusPalette.StatusBackground(DiffStatus.Drop));
-                case DiffLineKind.Changed:
-                    return StatusBrushConverter.Brush(StatusPalette.StatusBackground(DiffStatus.Alter));
-                case DiffLineKind.Filler:
-                    return StatusBrushConverter.Brush(StatusPalette.SurfaceAlt);
-                default:
-                    return Brushes.Transparent;
-            }
+            var kind = value is DiffLineKind known ? known : DiffLineKind.Unchanged;
+            var hex = StatusPalette.DiffBackground(kind);
+
+            return hex == null ? Brushes.Transparent : StatusBrushConverter.Brush(hex);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

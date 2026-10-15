@@ -11,7 +11,7 @@ namespace OpenDBDiff.Wpf.Views
     /// </summary>
     public partial class ConfirmationView : UserControl
     {
-        private ConfirmationViewModel subscribed;
+        private ConfirmationViewModel? subscribed;
 
         public ConfirmationView()
         {
@@ -44,7 +44,7 @@ namespace OpenDBDiff.Wpf.Views
         /// Brings the clicked statement into view. A TextBox cannot scroll itself to a character offset,
         /// so the offset is turned into a line and the box scrolls to that line.
         /// </summary>
-        private void OnStatementSelected(object sender, StatementSelectedEventArgs e)
+        private void OnStatementSelected(object? sender, StatementSelectedEventArgs e)
         {
             var offset = e.Offset < 0 ? 0 : e.Offset;
 

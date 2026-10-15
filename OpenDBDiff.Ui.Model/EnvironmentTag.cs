@@ -118,16 +118,57 @@ namespace OpenDBDiff.Ui.Model
     /// </summary>
     public static class EnvironmentPalette
     {
-        public const string DevBackground = "#E3F4EA";
-        public const string DevForeground = "#0F6B38";
-        public const string TestBackground = "#E5ECFF";
-        public const string TestForeground = "#1F4FD1";
-        public const string UatBackground = "#F0E9FB";
-        public const string UatForeground = "#5B21B6";
-        public const string ProdBackground = "#FEF0C7";
-        public const string ProdForeground = "#93370D";
-        public const string CustomBackground = "#EEF0F4";
-        public const string CustomForeground = "#5B6577";
+        // As with StatusPalette, the values live in Theme so section 13.4's dark equivalents are one
+        // definition rather than two. The light values are unchanged.
+        public static string DevBackground
+        {
+            get { return Theme.Current.EnvironmentDevBackground; }
+        }
+
+        public static string DevForeground
+        {
+            get { return Theme.Current.EnvironmentDevForeground; }
+        }
+
+        public static string TestBackground
+        {
+            get { return Theme.Current.EnvironmentTestBackground; }
+        }
+
+        public static string TestForeground
+        {
+            get { return Theme.Current.EnvironmentTestForeground; }
+        }
+
+        public static string UatBackground
+        {
+            get { return Theme.Current.EnvironmentUatBackground; }
+        }
+
+        public static string UatForeground
+        {
+            get { return Theme.Current.EnvironmentUatForeground; }
+        }
+
+        public static string ProdBackground
+        {
+            get { return Theme.Current.EnvironmentProductionBackground; }
+        }
+
+        public static string ProdForeground
+        {
+            get { return Theme.Current.EnvironmentProductionForeground; }
+        }
+
+        public static string CustomBackground
+        {
+            get { return Theme.Current.EnvironmentCustomBackground; }
+        }
+
+        public static string CustomForeground
+        {
+            get { return Theme.Current.EnvironmentCustomForeground; }
+        }
 
         public static string Background(EnvironmentKind kind)
         {

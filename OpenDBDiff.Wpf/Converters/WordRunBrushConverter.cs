@@ -24,15 +24,9 @@ namespace OpenDBDiff.Wpf.Converters
                 return Brushes.Transparent;
             }
 
-            switch (run.Kind)
-            {
-                case DiffLineKind.Added:
-                    return StatusBrushConverter.Brush("#A8DFC0");
-                case DiffLineKind.Removed:
-                    return StatusBrushConverter.Brush("#F5BDB4");
-                default:
-                    return StatusBrushConverter.Brush("#FFD98A");
-            }
+            // Section 6.5.3's tint comes from the palette in force, so the changed words of a line are
+            // drawn in the theme's colours rather than in the light theme's whatever the theme is.
+            return StatusBrushConverter.Brush(Theme.Current.WordTint(run.Kind));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -68,33 +68,112 @@ namespace OpenDBDiff.Ui.Model
     /// </summary>
     public static class StatusPalette
     {
-        public const string Background = "#F4F5F7";
-        public const string Surface = "#FFFFFF";
-        public const string SurfaceAlt = "#EEF0F4";
-        public const string BorderSubtle = "#DDE2EA";
-        public const string BorderStrong = "#CBD2DE";
-        public const string Text = "#1B2230";
-        public const string TextMuted = "#5B6577";
-        public const string TextFaint = "#8A93A5";
-        public const string Accent = "#2F5BEA";
-        public const string AccentBackground = "#E5ECFF";
-        public const string AccentForeground = "#1F4FD1";
-        public const string SelectionBackground = "#EEF3FF";
-        public const string WarningBackground = "#FFF8E6";
-        public const string WarningForeground = "#7A4A00";
-        public const string EnvironmentProductionBackground = "#FEF0C7";
-        public const string EnvironmentProductionForeground = "#93370D";
-        public const string Danger = "#B42318";
-        public const string Focus = "#1F4FD1";
-        public const string Highlight = "#FFE58F";
+        // The values live in Theme (sections 13.2 and 13.4) rather than here, so the palette the shell's
+        // converters read and the palette the XAML tokens define cannot drift apart. These were constants
+        // until the dark theme arrived; they are properties now because the answer depends on the theme in
+        // force, and the light values are unchanged.
+        public static string Background
+        {
+            get { return Theme.Current.Background; }
+        }
+
+        public static string Surface
+        {
+            get { return Theme.Current.Surface; }
+        }
+
+        public static string SurfaceAlt
+        {
+            get { return Theme.Current.SurfaceAlt; }
+        }
+
+        public static string BorderSubtle
+        {
+            get { return Theme.Current.BorderSubtle; }
+        }
+
+        public static string BorderStrong
+        {
+            get { return Theme.Current.BorderStrong; }
+        }
+
+        public static string Text
+        {
+            get { return Theme.Current.Text; }
+        }
+
+        public static string TextMuted
+        {
+            get { return Theme.Current.TextMuted; }
+        }
+
+        public static string TextFaint
+        {
+            get { return Theme.Current.TextFaint; }
+        }
+
+        public static string Accent
+        {
+            get { return Theme.Current.Accent; }
+        }
+
+        public static string AccentBackground
+        {
+            get { return Theme.Current.AccentBackground; }
+        }
+
+        public static string AccentForeground
+        {
+            get { return Theme.Current.AccentForeground; }
+        }
+
+        public static string SelectionBackground
+        {
+            get { return Theme.Current.SelectionBackground; }
+        }
+
+        public static string WarningBackground
+        {
+            get { return Theme.Current.WarningBackground; }
+        }
+
+        public static string WarningForeground
+        {
+            get { return Theme.Current.WarningForeground; }
+        }
+
+        public static string EnvironmentProductionBackground
+        {
+            get { return Theme.Current.EnvironmentProductionBackground; }
+        }
+
+        public static string EnvironmentProductionForeground
+        {
+            get { return Theme.Current.EnvironmentProductionForeground; }
+        }
+
+        public static string Danger
+        {
+            get { return Theme.Current.Danger; }
+        }
+
+        public static string Focus
+        {
+            get { return Theme.Current.Focus; }
+        }
+
+        public static string Highlight
+        {
+            get { return Theme.Current.Highlight; }
+        }
 
         public static string StatusBackground(DiffStatus status)
         {
             switch (status)
             {
-                case DiffStatus.Create: return "#E3F4EA";
-                case DiffStatus.Alter: return "#E5ECFF";
-                case DiffStatus.Drop: return "#FDE8E6";
+                case DiffStatus.Create: return Theme.Current.CreateBackground;
+                case DiffStatus.Alter: return Theme.Current.AlterBackground;
+                case DiffStatus.Drop: return Theme.Current.DropBackground;
                 default: return SurfaceAlt;
             }
         }
@@ -103,9 +182,9 @@ namespace OpenDBDiff.Ui.Model
         {
             switch (status)
             {
-                case DiffStatus.Create: return "#0F6B38";
-                case DiffStatus.Alter: return "#1F4FD1";
-                case DiffStatus.Drop: return "#A5210F";
+                case DiffStatus.Create: return Theme.Current.CreateForeground;
+                case DiffStatus.Alter: return Theme.Current.AlterForeground;
+                case DiffStatus.Drop: return Theme.Current.DropForeground;
                 default: return TextMuted;
             }
         }
@@ -114,11 +193,21 @@ namespace OpenDBDiff.Ui.Model
         {
             switch (status)
             {
-                case DiffStatus.Create: return "#9BD3B4";
-                case DiffStatus.Alter: return "#A9BDF5";
-                case DiffStatus.Drop: return "#F2A9A0";
+                case DiffStatus.Create: return Theme.Current.CreateBorder;
+                case DiffStatus.Alter: return Theme.Current.AlterBorder;
+                case DiffStatus.Drop: return Theme.Current.DropBorder;
                 default: return BorderSubtle;
             }
+        }
+
+        /// <summary>
+        /// The tint a diff line is drawn on (sections 6.5.2 and 13.4). It is not the badge tint: in the
+        /// dark theme a line is a translucent wash over the surface, which is what lets four rows of code
+        /// read as a difference without four blocks of colour in the window.
+        /// </summary>
+        public static string DiffBackground(DiffLineKind kind)
+        {
+            return Theme.Current.DiffBackground(kind);
         }
     }
 

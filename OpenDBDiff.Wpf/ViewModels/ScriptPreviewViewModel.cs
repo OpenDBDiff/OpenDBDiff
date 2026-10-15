@@ -21,13 +21,15 @@ namespace OpenDBDiff.Wpf.ViewModels
             Update(script, objectCount, bundle, isStale);
         }
 
+        // The constructor fills these through Update, which the compiler cannot see through, so they start
+        // empty rather than unassigned.
         /// <summary>Section 6.7.1's title: "Script for {k} selected changes".</summary>
-        public string Title { get; private set; }
+        public string Title { get; private set; } = string.Empty;
 
-        public string Script { get; private set; }
+        public string Script { get; private set; } = string.Empty;
 
         /// <summary>Section 6.7.1's statement count and destructive summary, in the model's one wording.</summary>
-        public string Summary { get; private set; }
+        public string Summary { get; private set; } = string.Empty;
 
         public bool HasDestructive { get; private set; }
 

@@ -14,7 +14,7 @@ namespace OpenDBDiff.Wpf.Views
         /// <summary>Every diff row is 24 px, which is what turns a row index into an offset.</summary>
         private const double RowHeight = 24;
 
-        private ResultsViewModel subscribed;
+        private ResultsViewModel? subscribed;
 
         public DetailPaneView()
         {
@@ -57,7 +57,7 @@ namespace OpenDBDiff.Wpf.Views
             }
         }
 
-        private void OnHunkFocused(object sender, int index)
+        private void OnHunkFocused(object? sender, int index)
         {
             if (index < 0)
             {
