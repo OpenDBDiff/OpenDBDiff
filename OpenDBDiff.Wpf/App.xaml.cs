@@ -26,6 +26,7 @@ namespace OpenDBDiff.Wpf
         private DialogService? dialogs;
         private MainViewModel? viewModel;
         private IThemeService? themes;
+        private IDestinationWatch? destinationWatch;
         private EventHandler? closeRequested;
 
         protected override void OnStartup(StartupEventArgs e)
@@ -41,8 +42,9 @@ namespace OpenDBDiff.Wpf
 
             dialogs = new DialogService();
             themes = new ThemeService(RebuildWindow);
+            destinationWatch = new DestinationWatchService(comparisons);
 
-            viewModel = new MainViewModel(comparisons, settings, dialogs, themes);
+            viewModel = new MainViewModel(comparisons, settings, dialogs, themes, destinationWatch);
 
             // Section 13.4: the theme follows the operating system until the View menu says otherwise, and
             // it is applied before the window is built, so the first window is already the right colours.
@@ -50,6 +52,20 @@ namespace OpenDBDiff.Wpf
 
             MainWindow = CreateWindow();
             MainWindow.Show();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            // Section 9.6's check has no business polling a database after the window that showed the
+            // results has gone.
+            viewModel?.StopWatching();
+
+            if (destinationWatch is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+
+            base.OnExit(e);
         }
 
         private Window CreateWindow()

@@ -47,6 +47,10 @@ namespace OpenDBDiff.Wpf.ViewModels
         private readonly IUpdateConfirmation updateConfirmation;
         private readonly SqlOption options;
         private readonly IThemeService themes;
+        private readonly IDestinationWatch destinationWatch;
+
+        /// <summary>What the background check saw change, for the banner's second line.</summary>
+        private string externalChangeDetail = string.Empty;
         private readonly ReportStore reports = new ReportStore();
         private readonly InclusionHistory history = new InclusionHistory();
 
@@ -81,12 +85,17 @@ namespace OpenDBDiff.Wpf.ViewModels
             IComparisonService comparisons,
             ISettingsStore settings,
             IDialogService dialogs,
-            IThemeService themes)
+            IThemeService themes,
+            IDestinationWatch destinationWatch)
         {
             this.comparisons = comparisons;
             this.settings = settings;
             this.dialogs = dialogs;
             this.themes = themes;
+            this.destinationWatch = destinationWatch;
+
+            // Section 9.6's check reports from a background thread; the view model is bound to a window.
+            this.destinationWatch.Changed += OnDestinationChanged;
 
             options = new SqlOption(true);
             updateConfirmation = new WpfUpdateConfirmation(dialogs);
@@ -776,7 +785,7 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         public string StaleBannerText
         {
-            get { return StaleRules.BannerText; }
+            get { return StaleRules.BannerFor(Staleness); }
         }
 
         public string StaleReasonText
@@ -795,6 +804,10 @@ namespace OpenDBDiff.Wpf.ViewModels
                         return "A different project was loaded.";
                     case CompareStaleness.Applied:
                         return "The destination was modified by an apply.";
+                    case CompareStaleness.ChangedExternally:
+                        return string.IsNullOrEmpty(externalChangeDetail)
+                            ? "The destination changed outside this application."
+                            : "The destination changed outside this application: " + externalChangeDetail + ".";
                     default:
                         return string.Empty;
                 }
@@ -1269,6 +1282,10 @@ namespace OpenDBDiff.Wpf.ViewModels
 
                 Progress.Complete();
                 State = AppState.Results;
+
+                // Section 9.6: the results now describe the destination as it was a moment ago, so this is
+                // where watching it for an outside change begins.
+                await WatchDestinationAsync();
 
                 // Section 6.1.1: the panel is inline in SETUP and a popover otherwise, so it closes
                 // when results arrive and the chips take over (AC-01).
@@ -2984,12 +3001,62 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         // ---- Stale results (section 9.6) ------------------------------------------------------------
 
+        /// <summary>
+        /// Section 9.6's check, started only where it can teach the user something, and never allowed to
+        /// break a comparison that has just succeeded.
+        /// </summary>
+        private async Task WatchDestinationAsync()
+        {
+            var destination = Destination;
+
+            // The destination is checked first so that what follows can use it without a second null test.
+            if (destination == null || string.IsNullOrEmpty(destination.ConnectionString)
+                || !StaleRules.WorthWatching(State, Staleness, true))
+            {
+                destinationWatch.Stop();
+                return;
+            }
+
+            try
+            {
+                await destinationWatch.StartAsync(destination.ConnectionString);
+            }
+            catch (Exception)
+            {
+                destinationWatch.Stop();
+            }
+        }
+
+        /// <summary>Stops watching, e.g. when the window goes away.</summary>
+        public void StopWatching()
+        {
+            destinationWatch.Stop();
+        }
+
+        /// <summary>
+        /// The destination moved under the results. Section 9.6 asks for the stale banner, and the banner
+        /// says which way it moved rather than only that it did.
+        /// </summary>
+        private void OnDestinationChanged(object? sender, string detail)
+        {
+            externalChangeDetail = detail;
+
+            MarkStale(CompareStaleness.ChangedExternally);
+
+            StatusMessage = "The destination changed outside this application: " + detail + ".";
+            OnPropertyChanged(nameof(StaleReasonText));
+        }
+
         private void MarkStale(CompareStaleness reason)
         {
             if (!StaleRules.MakesResultsStale(reason) || Results == null)
             {
                 return;
             }
+
+            // Whatever made the results stale, there is nothing left for the background check to tell the
+            // user, so it stops with them.
+            destinationWatch.Stop();
 
             IsStale = true;
             Staleness = reason;

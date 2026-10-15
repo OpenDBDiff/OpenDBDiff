@@ -52,6 +52,9 @@ namespace OpenDBDiff.Wpf.Views
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             Unsubscribe();
+
+            // Section 9.6's background check should not outlive the window showing the results it describes.
+            ViewModel?.StopWatching();
         }
 
         private void Unsubscribe()
