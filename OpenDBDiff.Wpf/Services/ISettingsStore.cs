@@ -84,6 +84,12 @@ namespace OpenDBDiff.Wpf.Services
         /// <summary>Section 11's "Last used folder for scripts/reports", Documents until one is chosen.</summary>
         public string? LastSaveFolder { get; set; }
 
+        /// <summary>
+        /// The one-time tips that have been shown (section 19, R4). Ids rather than a flag each, because the
+        /// second tip should not need a settings schema change to exist.
+        /// </summary>
+        public List<string>? SeenTips { get; set; }
+
         public bool ShowIdentical { get; set; }
 
         /// <summary>Environment tag per side, as the tag text (section 6.1.4).</summary>

@@ -51,6 +51,9 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         /// <summary>What the background check saw change, for the banner's second line.</summary>
         private string externalChangeDetail = string.Empty;
+
+        /// <summary>The tips already shown, so each is shown once (section 19, R4).</summary>
+        private List<string> seenTips = new List<string>();
         private readonly ReportStore reports = new ReportStore();
         private readonly InclusionHistory history = new InclusionHistory();
 
@@ -119,6 +122,7 @@ namespace OpenDBDiff.Wpf.ViewModels
             PreviewScriptCommand = new RelayCommand(PreviewScript, () => HasScript);
             CloseScriptPreviewCommand = new RelayCommand(CloseScriptPreview, () => IsScriptPreviewOpen);
             ClearSearchCommand = new RelayCommand(ClearSearch, () => Results != null && !string.IsNullOrEmpty(Results.SearchText));
+            DismissDropTipCommand = new RelayCommand(DismissDropTip, () => IsDropTipVisible);
             CopyScriptCommand = new RelayCommand(CopyScript, () => HasScript);
             SaveScriptAsCommand = new RelayCommand(SaveScriptAs, () => HasScript);
             ShowSideBySideCommand = new RelayCommand(() => SetDetailMode(DetailMode.SideBySide));
@@ -383,6 +387,9 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         /// <summary>Section 6.3's clear button, disabled whenever there is nothing to clear.</summary>
         public RelayCommand ClearSearchCommand { get; }
+
+        /// <summary>Section 19's R4 tip, which the user can put away.</summary>
+        public RelayCommand DismissDropTipCommand { get; }
 
         /// <summary>
         /// Raised after the search is cleared, so the window can put the focus back in the review list,
@@ -1078,6 +1085,7 @@ namespace OpenDBDiff.Wpf.ViewModels
             state.IncludeDropByDefault = includeDropByDefault;
             state.IgnoreWhitespace = options.Comparison.IgnoreWhiteSpacesInCode;
             state.LastSaveFolder = dialogs.LastSaveFolder;
+            state.SeenTips = seenTips.ToList();
 
             state.WindowLeft = WindowLeft;
             state.WindowTop = WindowTop;
@@ -1135,6 +1143,7 @@ namespace OpenDBDiff.Wpf.ViewModels
             }
 
             includeDropByDefault = state.IncludeDropByDefault;
+            seenTips = (state.SeenTips ?? new List<string>()).ToList();
             options.Comparison.IgnoreWhiteSpacesInCode = state.IgnoreWhitespace;
             dialogs.LastSaveFolder = state.LastSaveFolder;
 
@@ -1279,6 +1288,9 @@ namespace OpenDBDiff.Wpf.ViewModels
                 AttachAnalysis(diffSet);
                 ApplyPendingInclusion();
                 FocusFirstDifference();
+
+                // Section 19's R4: the one place where the results exist and the rule can be asked.
+                ShowTips(diffSet);
 
                 Progress.Complete();
                 State = AppState.Results;
@@ -3025,6 +3037,44 @@ namespace OpenDBDiff.Wpf.ViewModels
             {
                 destinationWatch.Stop();
             }
+        }
+
+        /// <summary>
+        /// Section 19's R4 tip: shown once, and only when a comparison actually has deletes left unselected,
+        /// because that is the surprise it explains.
+        /// </summary>
+        public bool IsDropTipVisible { get; private set; }
+
+        public string DropTipText
+        {
+            get { return TipRules.DropPreselectionText; }
+        }
+
+        public string DropTipDetail
+        {
+            get { return TipRules.DropPreselectionDetail; }
+        }
+
+        /// <summary>Dismissing is remembered: a tip that comes back is not a tip, it is a nag.</summary>
+        private void DismissDropTip()
+        {
+            IsDropTipVisible = false;
+            OnPropertyChanged(nameof(IsDropTipVisible));
+
+            if (!seenTips.Contains(TipRules.DropPreselectionId))
+            {
+                seenTips.Add(TipRules.DropPreselectionId);
+                SaveWindowState();
+            }
+        }
+
+        private void ShowTips(DiffSet diffSet)
+        {
+            var unselectedDrops = diffSet.AllItems
+                .Count(item => item.Status == DiffStatus.Drop && !diffSet.IsIncluded(item.Key));
+
+            IsDropTipVisible = TipRules.ShowsUnselectedDropTip(seenTips, unselectedDrops, includeDropByDefault);
+            OnPropertyChanged(nameof(IsDropTipVisible));
         }
 
         /// <summary>Stops watching, e.g. when the window goes away.</summary>

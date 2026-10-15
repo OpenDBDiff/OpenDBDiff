@@ -155,9 +155,32 @@
     <Grid Background="{StaticResource Surface}">
         <Grid.RowDefinitions>
             <RowDefinition Height="41" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+        <!-- Section 19's R4: the one-time inline tip. It sits above the list it explains, and it appears
+             until it is dismissed, which is remembered. -->
+        <Border Grid.Row="1" Background="{StaticResource WarningBg}" BorderBrush="{StaticResource BorderSubtle}"
+                BorderThickness="0,0,0,1" Padding="10,8"
+                Visibility="{Binding IsDropTipVisible, Converter={StaticResource BoolToVisibility}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" TextWrapping="Wrap" Foreground="{StaticResource WarningFg}">
+                    <Run Text="{Binding DropTipText, Mode=OneWay}" FontWeight="SemiBold" />
+                    <Run Text="{Binding DropTipDetail, Mode=OneWay}" />
+                </TextBlock>
+                <Button Grid.Column="1" Style="{StaticResource TextLinkButton}" Content="&#x2715;"
+                        VerticalAlignment="Center" Margin="8,0,0,0" Padding="4,0"
+                        Command="{Binding DismissDropTipCommand}"
+                        AutomationProperties.Name="Dismiss this tip"
+                        ToolTip="Do not show this again" />
+            </Grid>
+        </Border>
 
         <Border Grid.Row="0" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,0,0,1">
             <Grid Margin="8,0">
@@ -182,7 +205,7 @@
 
         <ListBox x:Name="Rows"
                  PreviewKeyDown="Rows_PreviewKeyDown"
-                 Grid.Row="1"
+                 Grid.Row="2"
                  ItemsSource="{Binding Results.Rows}"
                  SelectedItem="{Binding Results.SelectedRow, Mode=TwoWay}"
                  ItemTemplateSelector="{StaticResource RowSelector}"
@@ -199,7 +222,7 @@
             </ListBox.ItemContainerStyle>
         </ListBox>
 
-        <TextBlock Grid.Row="2" Text="{Binding Results.FooterText}" Margin="10,6,10,6"
+        <TextBlock Grid.Row="3" Text="{Binding Results.FooterText}" Margin="10,6,10,6"
                    Foreground="{StaticResource TextMuted}"
                    Visibility="{Binding Results.HasFooter, Converter={StaticResource BoolToVisibility}}" />
     </Grid>
