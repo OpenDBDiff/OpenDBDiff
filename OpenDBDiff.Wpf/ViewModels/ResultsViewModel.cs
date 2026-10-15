@@ -539,6 +539,28 @@ namespace OpenDBDiff.Wpf.ViewModels
             }
         }
 
+        /// <summary>
+        /// Section 6.5's minimap: the hunks of whichever diff view is on screen, as fractions of its height.
+        /// It follows the mode, because the two views count rows differently and a band that meant one thing
+        /// in the side-by-side view and another inline would be a lie in one of them.
+        /// </summary>
+        public IReadOnlyList<MapBand> MapBands
+        {
+            get
+            {
+                return focused == null
+                    ? new List<MapBand>()
+                    : DiffSet.DetailMode == DetailMode.Inline
+                        ? DiffMap.Bands(DiffText.Inline(focused.SourceDefinition, focused.DestinationDefinition, DiffSet.IgnoreWhitespace))
+                        : DiffMap.Bands(DiffText.SideBySide(focused.SourceDefinition, focused.DestinationDefinition));
+            }
+        }
+
+        public bool HasBands
+        {
+            get { return MapBands.Count > 0; }
+        }
+
         public string ScriptText
         {
             get { return focused == null ? string.Empty : focused.Script; }
@@ -907,6 +929,8 @@ namespace OpenDBDiff.Wpf.ViewModels
             OnPropertyChanged(nameof(HasFocusedItem));
             OnPropertyChanged(nameof(SideBySideRows));
             OnPropertyChanged(nameof(InlineRows));
+            OnPropertyChanged(nameof(MapBands));
+            OnPropertyChanged(nameof(HasBands));
             OnPropertyChanged(nameof(ScriptText));
             OnPropertyChanged(nameof(ShowDestinationPlaceholder));
             OnPropertyChanged(nameof(ShowSourcePlaceholder));

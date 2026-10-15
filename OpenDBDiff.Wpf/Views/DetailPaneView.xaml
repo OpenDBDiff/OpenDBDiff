@@ -105,8 +105,13 @@
         </Grid>
 
         <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
             <!-- Side by side: aligned rows, so both sides share one scroll position. -->
-            <ScrollViewer x:Name="SideBySideScroller" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+            <ScrollViewer x:Name="SideBySideScroller" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
                           Visibility="{Binding Results.IsSideBySide, Converter={StaticResource BoolToVisibility}}">
                 <ItemsControl ItemsSource="{Binding Results.SideBySideRows}" FontFamily="{StaticResource CodeFont}" FontSize="13">
                     <ItemsControl.ItemTemplate>
@@ -138,7 +143,7 @@
             </ScrollViewer>
 
             <!-- Inline: one column, unified. -->
-            <ScrollViewer x:Name="InlineScroller" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+            <ScrollViewer x:Name="InlineScroller" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
                           Visibility="{Binding Results.IsInline, Converter={StaticResource BoolToVisibility}}">
                 <ItemsControl ItemsSource="{Binding Results.InlineRows}" FontFamily="{StaticResource CodeFont}" FontSize="13">
                     <ItemsControl.ItemTemplate>
@@ -151,16 +156,62 @@
             </ScrollViewer>
 
             <!-- Script: exactly what would run for this object (section 6.5.2). -->
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+            <ScrollViewer Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
                           Visibility="{Binding Results.IsScript, Converter={StaticResource BoolToVisibility}}">
                 <TextBox Text="{Binding Results.ScriptText, Mode=OneWay}" IsReadOnly="True" BorderThickness="0"
                          FontFamily="{StaticResource CodeFont}" FontSize="13" TextWrapping="NoWrap"
                          Background="{StaticResource Surface}" />
             </ScrollViewer>
 
+            <!-- Section 6.5: a 12-wide minimap strip at the right edge of the diff shows where the hunks
+                 are. It is inert - no pointer handling - so it never takes a click meant for the diff, and
+                 each band carries its position in a tooltip for a reader who cannot see the marks. -->
+            <Border Grid.Column="1" Width="12" Background="{StaticResource SurfaceAlt}"
+                    BorderBrush="{StaticResource BorderSubtle}" BorderThickness="1,0,0,0"
+                    Visibility="{Binding Results.HasBands, Converter={StaticResource BoolToVisibility}}">
+                <Canvas x:Name="MapCanvas" ClipToBounds="True">
+                    <ItemsControl ItemsSource="{Binding Results.MapBands}" IsHitTestVisible="True">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Canvas.Top">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource MapBandRect}" ConverterParameter="top">
+                                            <Binding Path="Top" />
+                                            <Binding Path="Height" />
+                                            <Binding Path="ActualHeight" ElementName="MapCanvas" />
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Canvas.Left" Value="0" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="12" Background="{Binding Kind, Converter={StaticResource DiffLineBrush}}"
+                                        ToolTip="{Binding Tooltip}"
+                                        AutomationProperties.Name="{Binding Tooltip}">
+                                    <Border.Height>
+                                        <MultiBinding Converter="{StaticResource MapBandRect}" ConverterParameter="height">
+                                            <Binding Path="Top" />
+                                            <Binding Path="Height" />
+                                            <Binding Path="ActualHeight" ElementName="MapCanvas" />
+                                        </MultiBinding>
+                                    </Border.Height>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Canvas>
+            </Border>
+
             <!-- Section 6.5.4: before anything is focused, the size of the change before any of its
                  detail: a count per object type and the few things that need attention. -->
-            <Border Background="{StaticResource Surface}" Padding="20"
+            <Border Grid.Column="0" Background="{StaticResource Surface}" Padding="20"
                     Visibility="{Binding Results.HasFocusedItem, Converter={StaticResource InverseBoolToVisibility}}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel>
