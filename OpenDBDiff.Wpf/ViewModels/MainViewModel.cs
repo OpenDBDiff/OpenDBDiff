@@ -64,6 +64,17 @@ namespace OpenDBDiff.Wpf.ViewModels
         private List<SavedConnection> savedConnections = new List<SavedConnection>();
         private List<RecentPair> recentPairs = new List<RecentPair>();
         private List<string> recentProjects = new List<string>();
+        private bool includeDropByDefault;
+
+        /// <summary>Where File → Save project writes, once a project has been opened or saved as (section 12).</summary>
+        private string? currentProjectPath;
+
+        /// <summary>
+        /// Section 11.1's inclusionKeys, waiting for the comparison that can receive them. A project's
+        /// included objects only mean something against the items a comparison produces, so they are held
+        /// until one does rather than being applied to nothing.
+        /// </summary>
+        private List<string>? pendingInclusion;
 
         public MainViewModel(IComparisonService comparisons, ISettingsStore settings, IDialogService dialogs)
         {
@@ -1035,6 +1046,10 @@ namespace OpenDBDiff.Wpf.ViewModels
             state.DestinationEnvironment = Destination.Environment.Text;
             state.ConnectionPanelOpen = IsConnectionPanelOpen;
             state.Theme = Theme;
+            state.IncludeDropByDefault = includeDropByDefault;
+            state.IgnoreWhitespace = options.Comparison.IgnoreWhiteSpacesInCode;
+            state.LastSaveFolder = dialogs.LastSaveFolder;
+
             state.WindowLeft = WindowLeft;
             state.WindowTop = WindowTop;
             state.WindowWidth = WindowWidth;
@@ -1089,6 +1104,10 @@ namespace OpenDBDiff.Wpf.ViewModels
             {
                 ReviewListWidth = state.ReviewListWidth;
             }
+
+            includeDropByDefault = state.IncludeDropByDefault;
+            options.Comparison.IgnoreWhiteSpacesInCode = state.IgnoreWhitespace;
+            dialogs.LastSaveFolder = state.LastSaveFolder;
 
             savedConnections = (state.SavedConnections ?? new List<SavedConnectionState>())
                 .Where(entry => !string.IsNullOrWhiteSpace(entry.Name))
@@ -1207,7 +1226,16 @@ namespace OpenDBDiff.Wpf.ViewModels
                 sourceDatabase = result.Destination;
                 destinationDatabase = result.Origin;
 
-                var diffSet = new DiffSet(DiffItemBuilder.Build(sourceDatabase, destinationDatabase));
+                // Section 11's two diff settings are settled before the results are built: the whitespace
+                // option is the engine's comparison option, so it decides what counts as a difference at
+                // all, and the drop default decides what is ticked when the list appears.
+                var ignoreWhitespace = options.Comparison.IgnoreWhiteSpacesInCode;
+                var diffSet = new DiffSet(
+                    DiffItemBuilder.Build(sourceDatabase, destinationDatabase, ignoreWhitespace),
+                    includeDropByDefault)
+                {
+                    IgnoreWhitespace = ignoreWhitespace
+                };
 
                 if (previousResults != null)
                 {
@@ -1220,6 +1248,7 @@ namespace OpenDBDiff.Wpf.ViewModels
                 // The engine's dependency graph, its destructive flags, the overview of section 6.5.4
                 // and the first undo step all belong to this comparison, so they are built together.
                 AttachAnalysis(diffSet);
+                ApplyPendingInclusion();
                 FocusFirstDifference();
 
                 Progress.Complete();
@@ -2548,7 +2577,11 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         private void ShowOptions()
         {
-            var model = new OptionsViewModel(options);
+            var model = new OptionsViewModel(options)
+            {
+                IncludeDropByDefault = includeDropByDefault
+            };
+
             var changed = false;
 
             EventHandler onChanged = (_, _) => changed = true;
@@ -2562,6 +2595,10 @@ namespace OpenDBDiff.Wpf.ViewModels
             {
                 model.Changed -= onChanged;
             }
+
+            // Section 11's drop default is a presentation setting: it decides what is ticked when a list
+            // appears, so on its own it changes nothing that is already on screen.
+            includeDropByDefault = model.IncludeDropByDefault;
 
             if (changed)
             {
@@ -2622,17 +2659,31 @@ namespace OpenDBDiff.Wpf.ViewModels
             ApplyProject(project);
             RememberRecentProject(path);
 
+            currentProjectPath = path;
+            pendingInclusion = project.InclusionKeys == null || project.InclusionKeys.Count == 0
+                ? null
+                : new List<string>(project.InclusionKeys);
+
             // Section 9.6: a project loaded with different connections invalidates the results.
             MarkStale(CompareStaleness.ProjectLoaded);
             StatusMessage = "Loaded the project " + path + ". Compare to refresh the results.";
             RaiseResultState();
         }
 
+        /// <summary>
+        /// File → Save project. Without a project path there is nothing to write over, so it asks for one
+        /// the way section 12's File menu implies; with one it writes the project, which is what the item
+        /// has always claimed to do.
+        /// </summary>
         private void SaveProject()
         {
-            SaveWindowState();
-            StatusMessage = "Saved the connections and the window state.";
-            ShowToast("Project saved.");
+            if (string.IsNullOrEmpty(currentProjectPath))
+            {
+                SaveProjectAs();
+                return;
+            }
+
+            WriteProject(currentProjectPath!);
         }
 
         private void SaveProjectAs()
@@ -2644,24 +2695,76 @@ namespace OpenDBDiff.Wpf.ViewModels
                 return;
             }
 
+            if (WriteProject(path))
+            {
+                currentProjectPath = path;
+                RememberRecentProject(path);
+            }
+        }
+
+        private bool WriteProject(string path)
+        {
             try
             {
                 var project = new ProjectFile
                 {
                     Source = Capture(Source),
-                    Destination = Capture(Destination)
+                    Destination = Capture(Destination),
+                    InclusionKeys = CapturedInclusion()
                 };
 
                 project.Save(path);
-                RememberRecentProject(path);
                 SaveWindowState();
                 StatusMessage = "Project written to " + path;
                 ShowToast("Project saved.");
+                return true;
             }
             catch (Exception ex)
             {
-                dialogs.ShowError("Save project as", ex);
+                dialogs.ShowError("Save project", ex);
+                return false;
             }
+        }
+
+        /// <summary>Section 11.1's inclusionKeys, taken from what is ticked now.</summary>
+        private List<string> CapturedInclusion()
+        {
+            var results = Results;
+
+            return results == null
+                ? new List<string>()
+                : results.DiffSet.IncludedKeys.Select(key => key.FullName).ToList();
+        }
+
+        /// <summary>
+        /// Section 11.1: a project's included objects are re-applied to the comparison it asked for. The
+        /// comparison keeps the section 7.1 defaults until then, and an object the stored list does not
+        /// name is left as the defaults made it rather than being silently excluded.
+        /// </summary>
+        private void ApplyPendingInclusion()
+        {
+            var pending = pendingInclusion;
+            var results = Results;
+
+            if (pending == null || results == null)
+            {
+                return;
+            }
+
+            pendingInclusion = null;
+
+            var wanted = new HashSet<string>(pending, StringComparer.Ordinal);
+            var keys = results.DiffSet.AllItems
+                .Where(item => item.IsSelectable && wanted.Contains(item.Key.FullName))
+                .Select(item => item.Key)
+                .ToList();
+
+            if (keys.Count == 0)
+            {
+                return;
+            }
+
+            results.ApplyInclusionChange(keys, "Include what the project had ticked");
         }
 
         private string SuggestedProjectName()

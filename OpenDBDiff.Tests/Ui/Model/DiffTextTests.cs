@@ -162,5 +162,82 @@ namespace OpenDBDiff.Tests.Ui.Model
             Assert.AreEqual("SELECT 2", string.Concat(filler.LeftRuns.Select(run => run.Text)));
             Assert.AreEqual(string.Empty, string.Concat(filler.RightRuns.Select(run => run.Text)));
         }
+
+        /// <summary>
+        /// The side-by-side view already shows a spacing-only difference as unchanged, which is why
+        /// section 11's option has nothing to do there. Pinned on purpose: it is the library's behaviour,
+        /// and a package bump that changed it would change what the diff viewer reports to a reader.
+        /// </summary>
+        [TestMethod]
+        public void TheSideBySideViewTreatsASpacingOnlyChangeAsUnchanged()
+        {
+            var rows = DiffText.SideBySide("SELECT a,  b FROM T", "SELECT a, b FROM T");
+
+            Assert.IsFalse(rows.Any(row => row.IsChange));
+            Assert.AreEqual("SELECT a,  b FROM T", rows.Single(row => row.Left != null).Left,
+                "the text shown is still the file's");
+        }
+
+        [TestMethod]
+        public void ARealChangeIsStillAChangeInTheSideBySideView()
+        {
+            var rows = DiffText.SideBySide("SELECT a FROM T", "SELECT b FROM T");
+
+            Assert.IsTrue(rows.Any(row => row.IsChange));
+        }
+
+        /// <summary>
+        /// A line that moved is not a spacing change. Ignoring it would hide a real edit behind a setting
+        /// about layout, so the inline pass only pairs lines that normalise to the same string.
+        /// </summary>
+        [TestMethod]
+        public void JoiningOrSplittingLinesIsNotWhitespaceOnly()
+        {
+            var rows = DiffText.Inline("SELECT a,\n       b FROM T", "SELECT a, b FROM T", true);
+
+            Assert.IsTrue(rows.Any(row => row.Kind != DiffLineKind.Unchanged));
+        }
+
+        [TestMethod]
+        public void TheInlineViewCollapsesASpacingOnlyPairOnlyWhenTheOptionIsOn()
+        {
+            // Off, which is the default: the differ reports the pair and the view shows it.
+            var asDiffered = DiffText.Inline("SELECT a FROM T", "SELECT  a  FROM T");
+
+            Assert.IsTrue(asDiffered.Any(row => row.Kind != DiffLineKind.Unchanged));
+
+            // On: one unchanged line, showing the source's text, which is the state the script brings.
+            var relaxed = DiffText.Inline("SELECT a FROM T", "SELECT  a  FROM T", true);
+
+            Assert.IsFalse(relaxed.Any(row => row.Kind != DiffLineKind.Unchanged));
+            Assert.AreEqual(1, relaxed.Count);
+            Assert.AreEqual("SELECT a FROM T", relaxed[0].Text);
+        }
+
+        [TestMethod]
+        public void NormalizingCollapsesWhitespaceRunsAndTrims()
+        {
+            Assert.AreEqual("SELECT a FROM T", DiffText.Normalize("  SELECT\ta\r\n   FROM T  "));
+            Assert.AreEqual(string.Empty, DiffText.Normalize(null));
+            Assert.IsTrue(DiffText.SameIgnoringWhitespace("a  b", "a b"));
+            Assert.IsFalse(DiffText.SameIgnoringWhitespace("a b", "ab"));
+        }
+
+        [TestMethod]
+        public void TheSummaryNamesASpacingOnlyDifferenceWhenItIsIgnored()
+        {
+            // Off, which is the default: the pair counts as a line each way.
+            Assert.AreEqual("1 lines added, 1 removed", DiffText.Summary(DiffStatus.Alter, "SELECT a", "SELECT  a"));
+
+            // On: there is nothing to count, and the header says what the difference actually is.
+            Assert.AreEqual("Only whitespace differs", DiffText.Summary(DiffStatus.Alter, "SELECT a", "SELECT  a", true));
+        }
+
+        [TestMethod]
+        public void ARealDifferenceIsStillReportedAsLinesEvenWithTheOptionOn()
+        {
+            Assert.AreEqual("1 lines added, 1 removed",
+                DiffText.Summary(DiffStatus.Alter, "SELECT a FROM T", "SELECT b FROM T", true));
+        }
     }
 }

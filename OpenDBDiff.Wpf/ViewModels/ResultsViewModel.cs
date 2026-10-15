@@ -519,7 +519,7 @@ namespace OpenDBDiff.Wpf.ViewModels
             {
                 return focused == null
                     ? new List<InlineRow>()
-                    : DiffText.Inline(focused.SourceDefinition, focused.DestinationDefinition);
+                    : DiffText.Inline(focused.SourceDefinition, focused.DestinationDefinition, DiffSet.IgnoreWhitespace);
             }
         }
 

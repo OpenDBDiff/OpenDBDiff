@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Collections.Generic;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
@@ -142,6 +143,11 @@ namespace OpenDBDiff.Ui.Model
     /// </remarks>
     public static class DiffText
     {
+        /// <summary>
+        /// The aligned rows of section 6.5.2. Section 11's "Ignore whitespace in diff" needs nothing here:
+        /// the line differ already treats a row whose sides differ only in spacing as unchanged, which the
+        /// tests pin so a package bump cannot change it quietly.
+        /// </summary>
         public static IReadOnlyList<SideBySideRow> SideBySide(string sourceDefinition, string destinationDefinition)
         {
             var model = new SideBySideDiffBuilder(new Differ())
@@ -189,6 +195,11 @@ namespace OpenDBDiff.Ui.Model
 
         public static IReadOnlyList<InlineRow> Inline(string sourceDefinition, string destinationDefinition)
         {
+            return Inline(sourceDefinition, destinationDefinition, false);
+        }
+
+        public static IReadOnlyList<InlineRow> Inline(string sourceDefinition, string destinationDefinition, bool ignoreWhitespace)
+        {
             var model = new InlineDiffBuilder(new Differ())
                 .BuildDiffModel(destinationDefinition ?? string.Empty, sourceDefinition ?? string.Empty);
 
@@ -213,7 +224,7 @@ namespace OpenDBDiff.Ui.Model
                 }
             }
 
-            return rows;
+            return ignoreWhitespace ? WhitespaceInsensitive(rows) : rows;
         }
 
         /// <summary>
@@ -221,6 +232,11 @@ namespace OpenDBDiff.Ui.Model
         /// then it is derived from the diff, which is honest and never claims more than it knows.
         /// </summary>
         public static string Summary(DiffStatus status, string sourceDefinition, string destinationDefinition)
+        {
+            return Summary(status, sourceDefinition, destinationDefinition, false);
+        }
+
+        public static string Summary(DiffStatus status, string sourceDefinition, string destinationDefinition, bool ignoreWhitespace)
         {
             switch (status)
             {
@@ -232,7 +248,7 @@ namespace OpenDBDiff.Ui.Model
                     return "No differences";
             }
 
-            var lines = Inline(sourceDefinition, destinationDefinition);
+            var lines = Inline(sourceDefinition, destinationDefinition, ignoreWhitespace);
             var added = 0;
             var removed = 0;
 
@@ -250,7 +266,12 @@ namespace OpenDBDiff.Ui.Model
 
             if (added == 0 && removed == 0)
             {
-                return "Definitions differ";
+                // With the option on, a change that is spacing and nothing else is worth naming rather
+                // than leaving as "differs": it is exactly what the reader asked to be told about.
+                var onlySpacing = ignoreWhitespace
+                    && !string.Equals(sourceDefinition ?? string.Empty, destinationDefinition ?? string.Empty, StringComparison.Ordinal);
+
+                return onlySpacing ? "Only whitespace differs" : "Definitions differ";
             }
 
             if (added > 0 && removed > 0)
@@ -261,6 +282,84 @@ namespace OpenDBDiff.Ui.Model
             return added > 0
                 ? (added == 1 ? "1 line added" : added + " lines added")
                 : (removed == 1 ? "1 line removed" : removed + " lines removed");
+        }
+
+        /// <summary>
+        /// Section 11's whitespace-insensitive view of a line: every run of whitespace becomes one space
+        /// and the ends are trimmed. Two lines that reduce to the same string differ only in spacing.
+        /// </summary>
+        public static string Normalize(string line)
+        {
+            if (string.IsNullOrEmpty(line))
+            {
+                return string.Empty;
+            }
+
+            var builder = new StringBuilder(line.Length);
+            var pendingSpace = false;
+
+            foreach (var character in line)
+            {
+                if (char.IsWhiteSpace(character))
+                {
+                    pendingSpace = builder.Length > 0;
+                    continue;
+                }
+
+                if (pendingSpace)
+                {
+                    builder.Append(' ');
+                    pendingSpace = false;
+                }
+
+                builder.Append(character);
+            }
+
+            return builder.ToString();
+        }
+
+        public static bool SameIgnoringWhitespace(string left, string right)
+        {
+            return string.Equals(Normalize(left), Normalize(right), StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Section 11's "Ignore whitespace in diff" in the inline view. The line differ reports a
+        /// spacing-only change as a removed line and an added one - so the inline view shows a change
+        /// where the side-by-side view shows none, and this is the option that makes the two agree. Both
+        /// orders are recognised, because the pair's order depends on which side the line came from, and
+        /// both collapse to one unchanged line: the source's, because the source is the state the script
+        /// is bringing.
+        /// </summary>
+        private static IReadOnlyList<InlineRow> WhitespaceInsensitive(IReadOnlyList<InlineRow> rows)
+        {
+            var relaxed = new List<InlineRow>(rows.Count);
+
+            for (var i = 0; i < rows.Count; i++)
+            {
+                var row = rows[i];
+
+                if (i + 1 < rows.Count && Pairs(row, rows[i + 1]))
+                {
+                    var text = row.Kind == DiffLineKind.Added ? row.Text : rows[i + 1].Text;
+
+                    relaxed.Add(new InlineRow(DiffLineKind.Unchanged, "  ", text));
+                    i++;
+                    continue;
+                }
+
+                relaxed.Add(row);
+            }
+
+            return relaxed;
+        }
+
+        private static bool Pairs(InlineRow first, InlineRow second)
+        {
+            var opposed = (first.Kind == DiffLineKind.Removed && second.Kind == DiffLineKind.Added)
+                || (first.Kind == DiffLineKind.Added && second.Kind == DiffLineKind.Removed);
+
+            return opposed && SameIgnoringWhitespace(first.Text, second.Text);
         }
 
         private static string TextOf(DiffPiece piece)

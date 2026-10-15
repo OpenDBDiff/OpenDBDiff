@@ -25,6 +25,15 @@ namespace OpenDBDiff.Ui.Model
     {
         public static IReadOnlyList<DiffItem> Build(IDatabase source, IDatabase destination)
         {
+            return Build(source, destination, false);
+        }
+
+        /// <summary>
+        /// Section 11's "Ignore whitespace in diff": when it is on, an object whose only difference is
+        /// spacing is described as such rather than as a set of changed lines.
+        /// </summary>
+        public static IReadOnlyList<DiffItem> Build(IDatabase source, IDatabase destination, bool ignoreWhitespace)
+        {
             var items = new List<DiffItem>();
 
             foreach (var item in TopLevelObjectsOf(source))
@@ -40,7 +49,7 @@ namespace OpenDBDiff.Ui.Model
                     SourceDefinition = sourceDefinition,
                     DestinationDefinition = destinationDefinition,
                     Script = status == DiffStatus.Identical ? string.Empty : Script(item),
-                    DiffSummary = DiffText.Summary(status, sourceDefinition, destinationDefinition)
+                    DiffSummary = DiffText.Summary(status, sourceDefinition, destinationDefinition, ignoreWhitespace)
                 };
 
                 items.Add(diffItem);

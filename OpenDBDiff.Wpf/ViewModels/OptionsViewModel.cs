@@ -145,6 +145,13 @@ namespace OpenDBDiff.Wpf.ViewModels
             get { return option; }
         }
 
+        /// <summary>
+        /// Section 11's "Select Drop items by default". It is a WPF-side setting rather than an engine
+        /// option, because the engine has no notion of inclusion, so it is set by the shell when the
+        /// options are accepted.
+        /// </summary>
+        public bool IncludeDropByDefault { get; set; }
+
         public IReadOnlyList<IgnoreFilterViewModel> IgnoreFilters { get; }
 
         public IReadOnlyList<ExclusionPatternViewModel> ExclusionPatterns { get; }

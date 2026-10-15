@@ -23,6 +23,9 @@ namespace OpenDBDiff.Wpf.Services
 
         void ShowError(string location, Exception exception);
 
+        /// <summary>Section 11's "Last used folder for scripts/reports", Documents by default.</summary>
+        string? LastSaveFolder { get; set; }
+
         string? AskSaveScriptPath(string suggestedFileName);
 
         string? AskOpenProjectPath();

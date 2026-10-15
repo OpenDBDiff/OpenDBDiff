@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
@@ -48,6 +49,19 @@ namespace OpenDBDiff.Wpf.Services
         public ProjectConnection? Source { get; set; }
 
         public ProjectConnection? Destination { get; set; }
+
+        /// <summary>
+        /// Section 11.1's additive field: the objects that were ticked when the project was saved, by
+        /// full name.
+        /// </summary>
+        /// <remarks>
+        /// Kept as names rather than as serialised keys, because a name is what a reader can check by eye
+        /// when a project comes back different, and because section 11.1 only asks for the field to be
+        /// additive. A file without it means nothing was recorded, which is not the same as nothing being
+        /// included: the next comparison applies the section 7.1 defaults, exactly as it would for a
+        /// project saved before this field existed.
+        /// </remarks>
+        public List<string> InclusionKeys { get; set; } = new List<string>();
 
         /// <summary>Reads a project file, or returns null when the file is not one this front end wrote.</summary>
         public static ProjectFile? Load(string path)

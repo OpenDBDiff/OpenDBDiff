@@ -311,6 +311,38 @@ namespace OpenDBDiff.Tests.Ui.Model
             Assert.AreEqual(2, set.VisibleItems.Count);
         }
 
+        /// <summary>
+        /// Section 11's "Select Drop items by default". It is the one default section 7.1 rule 4 names as
+        /// a deliberate safety choice, so the switch exists and the default stays off.
+        /// </summary>
+        [TestMethod]
+        public void DropItemsAreIncludedByDefaultOnlyWhenTheOptionSaysSo()
+        {
+            var items = new[] { Item(DiffStatus.Create, "Table", "Users"), Item(DiffStatus.Drop, "Table", "Legacy") };
+
+            Assert.IsFalse(new DiffSet(items).IncludeDropByDefault);
+            Assert.IsFalse(new DiffSet(items).IsIncluded(Key("Table", "Legacy")));
+
+            var optedIn = new DiffSet(items, true);
+
+            Assert.IsTrue(optedIn.IncludeDropByDefault);
+            Assert.IsTrue(optedIn.IsIncluded(Key("Table", "Legacy")));
+            Assert.IsTrue(optedIn.IsIncluded(Key("Table", "Users")));
+        }
+
+        [TestMethod]
+        public void TurningTheOptionOnAndReapplyingTheDefaultsPicksUpTheDrops()
+        {
+            var set = Set(Item(DiffStatus.Drop, "Table", "Legacy"));
+
+            Assert.IsFalse(set.IsIncluded(Key("Table", "Legacy")));
+
+            set.IncludeDropByDefault = true;
+            set.ApplyDefaults();
+
+            Assert.IsTrue(set.IsIncluded(Key("Table", "Legacy")));
+        }
+
         private static DiffSet Set(params DiffItem[] items)
         {
             return new DiffSet(items);

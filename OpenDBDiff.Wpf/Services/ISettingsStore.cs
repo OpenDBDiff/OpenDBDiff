@@ -69,6 +69,21 @@ namespace OpenDBDiff.Wpf.Services
         /// <summary>"Grouped" or "Flat"; Grouped by default (section 11).</summary>
         public string? ListViewMode { get; set; }
 
+        /// <summary>
+        /// Section 11's "Select Drop items by default", off unless the user turns it on. Section 7.1
+        /// rule 4 is the default it overrides, so this is a stored preference rather than a code default.
+        /// </summary>
+        public bool IncludeDropByDefault { get; set; }
+
+        /// <summary>
+        /// Section 11's "Ignore whitespace in diff", held here because the engine's comparison option is
+        /// what implements it and this is how it survives a restart.
+        /// </summary>
+        public bool IgnoreWhitespace { get; set; }
+
+        /// <summary>Section 11's "Last used folder for scripts/reports", Documents until one is chosen.</summary>
+        public string? LastSaveFolder { get; set; }
+
         public bool ShowIdentical { get; set; }
 
         /// <summary>Environment tag per side, as the tag text (section 6.1.4).</summary>

@@ -94,7 +94,13 @@ namespace OpenDBDiff.Ui.Model
         private readonly List<DiffItem> flat = new List<DiffItem>();
 
         public DiffSet(IEnumerable<DiffItem> items)
+            : this(items, false)
         {
+        }
+
+        public DiffSet(IEnumerable<DiffItem> items, bool includeDropByDefault)
+        {
+            IncludeDropByDefault = includeDropByDefault;
             allItems = items.ToList();
             StatusFilter = new HashSet<DiffStatus> { DiffStatus.Create, DiffStatus.Alter, DiffStatus.Drop };
             SearchText = string.Empty;
@@ -278,7 +284,24 @@ namespace OpenDBDiff.Ui.Model
         }
 
         /// <summary>
-        /// Default inclusion: Create and Alter in, Drop out (section 6.4.3 and 7.1 rule 4).
+        /// Section 11's "Select Drop items by default", which is off unless the user turns it on.
+        /// </summary>
+        /// <summary>
+        /// Section 11's "Ignore whitespace in diff": the engine's comparison option, carried here so the
+        /// diff view of an object answers the same way the comparison did.
+        /// </summary>
+        public bool IgnoreWhitespace { get; set; }
+
+        /// <remarks>
+        /// Section 7.1 rule 4 makes the opposite the default, and section 19's R4 is the reason the switch
+        /// exists at all: a team that has always applied drops in one pass should not have to tick a box
+        /// per object, and a team that has not should not find out by dropping a table.
+        /// </remarks>
+        public bool IncludeDropByDefault { get; set; }
+
+        /// <summary>
+        /// Default inclusion: Create and Alter in, Drop out unless section 11's switch says otherwise
+        /// (section 6.4.3 and 7.1 rule 4).
         /// </summary>
         public void ApplyDefaults()
         {
@@ -286,7 +309,7 @@ namespace OpenDBDiff.Ui.Model
 
             foreach (var item in allItems)
             {
-                if (item.IsSelectable && item.Status != DiffStatus.Drop)
+                if (item.IsSelectable && (IncludeDropByDefault || item.Status != DiffStatus.Drop))
                 {
                     included.Add(item.Key);
                 }
