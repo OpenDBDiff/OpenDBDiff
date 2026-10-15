@@ -108,6 +108,49 @@ namespace OpenDBDiff.Tests.Ui.Model
             Assert.AreEqual("print 'a'\r\nprint 'b'\r\n", bundle.Text);
         }
 
+        /// <summary>
+        /// Section 6.7.1 asks the preview for per-object section comments, and the words are the model's
+        /// so the preview, the copy and the saved file cannot drift apart.
+        /// </summary>
+        [TestMethod]
+        public void ASectionHeaderIsAnnotatedIntoTheTextButNotTheStatement()
+        {
+            var statement = Statement("dbo.DeleteScheme", ScriptAction.AlterProcedure, true, false);
+
+            statement.SectionHeader = "ALTER dbo.DeleteScheme";
+
+            var bundle = new ScriptBundle(new[] { statement });
+
+            Assert.AreEqual("-- ALTER dbo.DeleteScheme\r\nprint 'e'\r\n", bundle.Text);
+
+            // The SQL the engine sends is untouched: the comment is the tool's, not SQL Server's.
+            Assert.AreEqual("print 'e'\r\n", statement.Sql);
+            Assert.AreEqual("print 'e'", statement.FirstLine);
+        }
+
+        [TestMethod]
+        public void AStatementWithoutASectionHeaderIsJustItsSql()
+        {
+            var bundle = new ScriptBundle(new[] { Statement("dbo.A", ScriptAction.AddTable, true, false) });
+
+            Assert.AreEqual("print 'a'\r\n", bundle.Text);
+        }
+
+        [TestMethod]
+        public void TheSummaryCountsStatementsAndSaysHowManyAreDestructive()
+        {
+            Assert.AreEqual("2 statements", new ScriptBundle(new[]
+            {
+                Statement("dbo.A", ScriptAction.AddTable, true, false),
+                Statement("dbo.B", ScriptAction.AddTable, true, false)
+            }).Summary);
+
+            Assert.AreEqual("1 statement, 1 destructive", new ScriptBundle(new[]
+            {
+                Statement("dbo.C", ScriptAction.DropTable, true, true)
+            }).Summary);
+        }
+
         private static ScriptStatement Statement(string name, ScriptAction action, bool transactional, bool destructive)
         {
             return new ScriptStatement(name, action, "print '" + name.Substring(name.Length - 1).ToLowerInvariant() + "'\r\n", transactional, destructive);

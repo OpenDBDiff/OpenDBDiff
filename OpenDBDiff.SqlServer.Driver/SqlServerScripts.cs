@@ -100,6 +100,7 @@ namespace OpenDBDiff.SqlServer.Driver
 
             var statements = new List<ScriptStatement>();
             var seen = new HashSet<string>(StringComparer.Ordinal);
+            var owners = new Dictionary<ScriptStatement, DiffItemKey>();
 
             foreach (var pair in pairs)
             {
@@ -123,6 +124,30 @@ namespace OpenDBDiff.SqlServer.Driver
                 var list = byItem.ContainsKey(pair.Key) ? byItem[pair.Key] : byItem[pair.Key] = new List<ScriptStatement>();
 
                 list.Add(statement);
+                owners[statement] = pair.Key;
+            }
+
+            // Section 6.7.1's per-object section comments: the first statement an item contributed, in the
+            // order the script runs, is labelled with the item's name and what is happening to it. The
+            // label is held beside the SQL rather than inside it, so the script a reader copies carries
+            // the comments that make it readable and the script that runs stays the engine's.
+            var headed = new HashSet<DiffItemKey>();
+
+            foreach (var statement in statements)
+            {
+                DiffItemKey owner;
+
+                if (!owners.TryGetValue(statement, out owner) || !headed.Add(owner))
+                {
+                    continue;
+                }
+
+                var ownerItem = Find(items, owner);
+
+                if (ownerItem != null)
+                {
+                    statement.SectionHeader = StatusVocabulary.Badge(ownerItem.Status) + " " + ownerItem.Key.FullName;
+                }
             }
 
             return new GeneratedScript(statements, byItem);

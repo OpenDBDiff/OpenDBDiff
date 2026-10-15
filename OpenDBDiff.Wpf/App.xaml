@@ -49,10 +49,6 @@
                 <views:ConfirmationView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type viewModels:ScriptPreviewViewModel}">
-                <views:ScriptPreviewView />
-            </DataTemplate>
-
             <DataTemplate DataType="{x:Type viewModels:TextPromptViewModel}">
                 <views:TextPromptView />
             </DataTemplate>

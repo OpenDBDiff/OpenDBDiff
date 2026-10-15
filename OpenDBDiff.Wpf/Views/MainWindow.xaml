@@ -16,6 +16,7 @@
              what is on screen; everything else is a command. -->
         <KeyBinding Key="F5" Command="{Binding CompareCommand}" />
         <KeyBinding Key="Enter" Modifiers="Control" Command="{Binding PreviewScriptCommand}" />
+        <KeyBinding Key="Enter" Modifiers="Control,Shift" Command="{Binding ApplyCommand}" />
         <KeyBinding Key="C" Modifiers="Control,Shift" Command="{Binding CopyScriptCommand}" />
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveScriptAsCommand}" />
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenProjectCommand}" />
@@ -217,7 +218,14 @@
                               Background="{StaticResource Bg}"
                               ToolTip="Drag to resize, double-click to reset" />
 
-                <views:DetailPaneView Grid.Column="2" DataContext="{Binding}" />
+                <Grid Grid.Column="2">
+                    <views:DetailPaneView DataContext="{Binding}" />
+
+                    <!-- Section 6.7.1: the script preview slides over the detail pane rather than opening
+                         a window, so the list and the selection stay visible under it. -->
+                    <views:ScriptPreviewPanelView DataContext="{Binding}"
+                                                  Visibility="{Binding IsScriptPreviewOpen, Converter={StaticResource BoolToVisibility}}" />
+                </Grid>
             </Grid>
 
             <views:ApplyReportView DataContext="{Binding}"

@@ -160,14 +160,7 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         public string StatementSummary
         {
-            get
-            {
-                var total = StatementCount == 1 ? "1 statement" : StatementCount + " statements";
-
-                return DestructiveStatementCount == 0
-                    ? total
-                    : string.Format("{0}, {1} destructive", total, DestructiveStatementCount);
-            }
+            get { return script.Bundle.Summary; }
         }
 
         // ---- Options (section 6.8) -----------------------------------------------------------------

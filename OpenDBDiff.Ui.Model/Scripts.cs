@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using OpenDBDiff.Abstractions.Schema;
 
 namespace OpenDBDiff.Ui.Model
@@ -31,6 +32,17 @@ namespace OpenDBDiff.Ui.Model
         public ScriptAction Action { get; }
 
         public string Sql { get; }
+
+        /// <summary>
+        /// The section comment that belongs above this statement (section 6.7.1's
+        /// <c>-- ALTER dbo.DeleteScheme</c>), or null when the statement carries none.
+        /// </summary>
+        /// <remarks>
+        /// Held apart from <see cref="Sql"/> on purpose. The script a reader copies should carry the
+        /// comments that make it readable, and the script that runs should not: the comment is the
+        /// tool's, not SQL Server's, and sending it would put the tool's words in the server's batch.
+        /// </remarks>
+        public string SectionHeader { get; set; }
 
         /// <summary>False for the statements SQL Server refuses inside a transaction (section 6.8).</summary>
         public bool IsTransactional { get; }
@@ -189,7 +201,41 @@ namespace OpenDBDiff.Ui.Model
 
         public string Text
         {
-            get { return string.Concat(Statements.Select(statement => statement.Sql)); }
+            get
+            {
+                var builder = new StringBuilder();
+
+                foreach (var statement in Statements)
+                {
+                    if (!string.IsNullOrEmpty(statement.SectionHeader))
+                    {
+                        // An explicit carriage return and line feed: the script is a file a person opens
+                        // and a server may receive, so its line endings must not depend on the machine
+                        // that generated it. The engine's own SQL is written the same way.
+                        builder.Append("-- ").Append(statement.SectionHeader).Append("\r\n");
+                    }
+
+                    builder.Append(statement.Sql);
+                }
+
+                return builder.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Section 6.7.1's "statement count and a destructive statement summary at top", the same words
+        /// the confirmation dialog of section 6.8 uses.
+        /// </summary>
+        public string Summary
+        {
+            get
+            {
+                var total = Count == 1 ? "1 statement" : Count + " statements";
+
+                return DestructiveCount == 0
+                    ? total
+                    : string.Format("{0}, {1} destructive", total, DestructiveCount);
+            }
         }
 
         /// <summary>Section 6.8's transaction checkbox: on when every statement allows it.</summary>

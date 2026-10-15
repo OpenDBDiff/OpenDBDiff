@@ -89,6 +89,7 @@ namespace OpenDBDiff.Wpf.ViewModels
             OptionsCommand = new RelayCommand(ShowOptions);
             ApplyCommand = new AsyncRelayCommand(ApplyAsync, () => CanApply);
             PreviewScriptCommand = new RelayCommand(PreviewScript, () => HasScript);
+            CloseScriptPreviewCommand = new RelayCommand(CloseScriptPreview, () => IsScriptPreviewOpen);
             CopyScriptCommand = new RelayCommand(CopyScript, () => HasScript);
             SaveScriptAsCommand = new RelayCommand(SaveScriptAs, () => HasScript);
             ShowSideBySideCommand = new RelayCommand(() => SetDetailMode(DetailMode.SideBySide));
@@ -302,6 +303,13 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         /// <summary>The report of the last apply, which is what the REPORT state shows.</summary>
         public ApplyReportViewModel? Report { get; private set; }
+
+        /// <summary>Section 6.7.1's panel, which stays null until it has been opened once.</summary>
+        public ScriptPreviewViewModel? ScriptPreview { get; private set; }
+
+        public bool IsScriptPreviewOpen { get; private set; }
+
+        public RelayCommand CloseScriptPreviewCommand { get; }
 
         public bool IsReport
         {
@@ -1461,6 +1469,11 @@ namespace OpenDBDiff.Wpf.ViewModels
 
             results.SetWarnings(RecomputeWarnings());
             RefreshOverview();
+
+            // Section 6.7.1: the preview re-generates while it is open, so the script on screen is
+            // always the script for the current selection.
+            RegenerateScriptPreview();
+
             RaiseDependencyState();
             RaiseHistoryState();
         }
@@ -1931,12 +1944,66 @@ namespace OpenDBDiff.Wpf.ViewModels
 
         private void PreviewScript()
         {
+            OpenScriptPreview();
+        }
+
+        /// <summary>
+        /// Section 6.7.1: the preview is a panel over the detail pane rather than a window, so the review
+        /// list stays visible and the selection can change under it.
+        /// </summary>
+        private void OpenScriptPreview()
+        {
             var set = Results?.DiffSet;
 
-            if (set != null)
+            if (set == null)
             {
-                dialogs.ShowDialog(new ScriptPreviewViewModel(BuildScript(set), set.SelectedCount, IsStale));
+                return;
             }
+
+            IsScriptPreviewOpen = true;
+            RegenerateScriptPreview();
+            RaiseScriptPreviewState();
+        }
+
+        private void CloseScriptPreview()
+        {
+            IsScriptPreviewOpen = false;
+            RaiseScriptPreviewState();
+        }
+
+        /// <summary>
+        /// Re-generates the open panel, which section 6.7.1 asks for whenever the selection changes. It
+        /// updates the view model in place so the panel does not flicker or lose its scroll position.
+        /// </summary>
+        private void RegenerateScriptPreview()
+        {
+            var set = Results?.DiffSet;
+
+            if (set == null || !IsScriptPreviewOpen)
+            {
+                return;
+            }
+
+            var script = ScriptFor(set);
+
+            if (ScriptPreview == null)
+            {
+                ScriptPreview = new ScriptPreviewViewModel(script.Text, set.SelectedCount, script.Bundle, IsStale);
+            }
+            else
+            {
+                ScriptPreview.Update(script.Text, set.SelectedCount, script.Bundle, IsStale);
+            }
+
+            OnPropertyChanged(nameof(ScriptPreview));
+            CloseScriptPreviewCommand.RaiseCanExecuteChanged();
+        }
+
+        private void RaiseScriptPreviewState()
+        {
+            OnPropertyChanged(nameof(IsScriptPreviewOpen));
+            OnPropertyChanged(nameof(ScriptPreview));
+            CloseScriptPreviewCommand.RaiseCanExecuteChanged();
         }
 
         private void CopyScript()
@@ -1986,9 +2053,14 @@ namespace OpenDBDiff.Wpf.ViewModels
         /// The script the preview, the copy, the save and the apply all use. One builder, so a script a
         /// reader copies is the script a reader runs (section 14).
         /// </summary>
+        private GeneratedScript ScriptFor(DiffSet set)
+        {
+            return SqlServerScriptBuilder.ForSelection(set.AllItems, ResolveItem, new HashSet<DiffItemKey>(set.IncludedKeys));
+        }
+
         private string BuildScript(DiffSet set)
         {
-            return SqlServerScriptBuilder.ForSelection(set.AllItems, ResolveItem, new HashSet<DiffItemKey>(set.IncludedKeys)).Text;
+            return ScriptFor(set).Text;
         }
 
         // ---- Strip actions --------------------------------------------------------------------------
@@ -2528,6 +2600,9 @@ namespace OpenDBDiff.Wpf.ViewModels
             OnPropertyChanged(nameof(ApplyTooltip));
             OnPropertyChanged(nameof(ApplyLabel));
             ApplyCommand.RaiseCanExecuteChanged();
+
+            // Section 9.6's script shelf: the open preview says which comparison the script came from.
+            RegenerateScriptPreview();
         }
 
         private void ClearStale()
@@ -2618,6 +2693,8 @@ namespace OpenDBDiff.Wpf.ViewModels
             OnPropertyChanged(nameof(IsConnectionPanelPopover));
             OnPropertyChanged(nameof(StatusMessage));
             OnPropertyChanged(nameof(ReviewListWidth));
+            OnPropertyChanged(nameof(IsScriptPreviewOpen));
+            OnPropertyChanged(nameof(ScriptPreview));
             OnPropertyChanged(nameof(Report));
             OnPropertyChanged(nameof(IsReport));
             OnPropertyChanged(nameof(Overview));
