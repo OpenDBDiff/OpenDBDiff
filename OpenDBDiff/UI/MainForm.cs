@@ -1,4 +1,5 @@
 using DiffPlex;
+using OpenDBDiff.SqlServer.Driver;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
 using Essy.Tools.InputBox;
@@ -417,9 +418,9 @@ namespace OpenDBDiff.UI
                                         {
                                             switch (selected.Status)
                                             {
-                                                case ObjectStatus.Create: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case ObjectStatus.Alter: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case ObjectStatus.AlterWhitespace: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Create: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
+                                                case ObjectStatus.Alter: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
+                                                case ObjectStatus.AlterWhitespace: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
                                                 default: sb.AppendLine($"Nothing could be found to do for table '{selected.Name}'"); break;
                                             }
                                         }
@@ -429,9 +430,9 @@ namespace OpenDBDiff.UI
                                         {
                                             switch (selected.Status)
                                             {
-                                                case ObjectStatus.Create: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case ObjectStatus.Alter: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case ObjectStatus.AlterWhitespace: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Create: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
+                                                case ObjectStatus.Alter: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
+                                                case ObjectStatus.AlterWhitespace: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
                                                 default: sb.AppendLine($"Nothing could be found to do for stored procedure '{selected.Name}'"); break;
                                             }
                                         }
@@ -441,10 +442,10 @@ namespace OpenDBDiff.UI
                                         {
                                             switch (selected.Status)
                                             {
-                                                case ObjectStatus.Create: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case ObjectStatus.Alter: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case ObjectStatus.AlterWhitespace: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case ObjectStatus.Alter | ObjectStatus.AlterBody: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Create: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
+                                                case ObjectStatus.Alter: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
+                                                case ObjectStatus.AlterWhitespace: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
+                                                case ObjectStatus.Alter | ObjectStatus.AlterBody: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
                                                 default: sb.AppendLine($"Nothing could be found to do for function '{selected.Name}'"); break;
                                             }
                                         }
@@ -454,10 +455,10 @@ namespace OpenDBDiff.UI
                                         {
                                             switch (selected.Status)
                                             {
-                                                case ObjectStatus.Create: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case ObjectStatus.Alter: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case ObjectStatus.AlterWhitespace: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
-                                                case ObjectStatus.Alter | ObjectStatus.AlterBody: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Create: sb.Append(Updater.createNew(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
+                                                case ObjectStatus.Alter: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
+                                                case ObjectStatus.AlterWhitespace: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
+                                                case ObjectStatus.Alter | ObjectStatus.AlterBody: sb.Append(Updater.alter(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
                                                 default: sb.AppendLine($"Nothing could be found to do for view '{selected.Name}'"); break;
                                             }
                                         }
@@ -467,7 +468,7 @@ namespace OpenDBDiff.UI
                                         {
                                             switch (selected.Status)
                                             {
-                                                case ObjectStatus.Create: sb.Append(Updater.addNew(selected, RightDatabaseSelector.ConnectionString)); break;
+                                                case ObjectStatus.Create: sb.Append(Updater.addNew(selected, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
                                                 default: sb.AppendLine($"Nothing could be found to do for '{selected.Name}'"); break;
                                             }
                                         }
@@ -508,8 +509,8 @@ namespace OpenDBDiff.UI
                             ISchemaBase item = (ISchemaBase)inner.Tag;
                             switch (item.Status)
                             {
-                                case ObjectStatus.Create: sb.Append(Updater.createNew(item, RightDatabaseSelector.ConnectionString)); break;
-                                case ObjectStatus.Alter: sb.Append(Updater.alter(item, RightDatabaseSelector.ConnectionString)); break;
+                                case ObjectStatus.Create: sb.Append(Updater.createNew(item, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
+                                case ObjectStatus.Alter: sb.Append(Updater.alter(item, RightDatabaseSelector.ConnectionString, WinFormsUpdateConfirmation.Instance)); break;
                             }
                         }
                     }

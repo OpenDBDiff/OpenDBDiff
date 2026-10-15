@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The SQL Server side of the comparison pipeline, with no UI types in it: loading a database into
+    the schema model, and comparing two of them. Extracted from OpenDBDiff.SqlServer.Ui (net48) so
+    that the WPF front end can drive a comparison. The WinForms front end references this project
+    too, so there is one implementation of loading and comparing rather than two.
+  -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>OpenDBDiff.SqlServer.Driver</RootNamespace>
+    <AssemblyName>OpenDBDiff.SqlServer.Driver</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj" />
+    <ProjectReference Include="..\OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj" />
+  </ItemGroup>
+
+</Project>

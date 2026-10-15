@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Icon geometry, vendored from Lucide (ISC licence, https://lucide.dev) rather than loaded from a
+  CDN: the app ships no network dependency for its chrome. Each icon is the 24x24 stroke geometry
+  of the matching Lucide icon, drawn by the views with an explicit Stroke and StrokeThickness.
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- git-compare -->
+    <Geometry x:Key="Icon.Compare">M 15.0 18.0 A 3.0 3.0 0 1 0 21.0 18.0 A 3.0 3.0 0 1 0 15.0 18.0 Z M 3.0 6.0 A 3.0 3.0 0 1 0 9.0 6.0 A 3.0 3.0 0 1 0 3.0 6.0 Z M13 6h3a2 2 0 0 1 2 2v7 M11 18H8a2 2 0 0 1-2-2V9</Geometry>
+    <!-- settings -->
+    <Geometry x:Key="Icon.Options">M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915 M 9.0 12.0 A 3.0 3.0 0 1 0 15.0 12.0 A 3.0 3.0 0 1 0 9.0 12.0 Z</Geometry>
+    <!-- save -->
+    <Geometry x:Key="Icon.SaveAs">M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7 M7 3v4a1 1 0 0 0 1 1h7</Geometry>
+    <!-- copy -->
+    <Geometry x:Key="Icon.Copy">M 10.0 8.0 H 20.0 A 2.0 2.0 0 0 1 22.0 10.0 V 20.0 A 2.0 2.0 0 0 1 20.0 22.0 H 10.0 A 2.0 2.0 0 0 1 8.0 20.0 V 10.0 A 2.0 2.0 0 0 1 10.0 8.0 Z M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2</Geometry>
+    <!-- check -->
+    <Geometry x:Key="Icon.Update">M20 6 9 17l-5-5</Geometry>
+    <!-- table -->
+    <Geometry x:Key="Icon.CompareData">M12 3v18 M 5.0 3.0 H 19.0 A 2.0 2.0 0 0 1 21.0 5.0 V 19.0 A 2.0 2.0 0 0 1 19.0 21.0 H 5.0 A 2.0 2.0 0 0 1 3.0 19.0 V 5.0 A 2.0 2.0 0 0 1 5.0 3.0 Z M3 9h18 M3 15h18</Geometry>
+    <!-- list-checks -->
+    <Geometry x:Key="Icon.UpdateAll">M13 5h8 M13 12h8 M13 19h8 m3 17 2 2 4-4 m3 7 2 2 4-4</Geometry>
+    <!-- arrow-left-right -->
+    <Geometry x:Key="Icon.Swap">M8 3 4 7l4 4 M4 7h16 m16 21 4-4-4-4 M20 17H4</Geometry>
+    <!-- folder-open -->
+    <Geometry x:Key="Icon.OpenProject">m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2</Geometry>
+    <!-- folder-plus -->
+    <Geometry x:Key="Icon.NewProject">M12 10v6 M9 13h6 M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z</Geometry>
+    <!-- save -->
+    <Geometry x:Key="Icon.SaveProject">M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7 M7 3v4a1 1 0 0 0 1 1h7</Geometry>
+    <!-- plug -->
+    <Geometry x:Key="Icon.Test">M12 22v-5 M15 8V2 M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z M9 8V2</Geometry>
+</ResourceDictionary>

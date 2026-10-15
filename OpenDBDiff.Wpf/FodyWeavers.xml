@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  PropertyChanged.Fody weaves INotifyPropertyChanged into every view model marked
+  [AddINotifyPropertyChangedInterface], so no property setter needs an explicit
+  OnPropertyChanged call and there are no hand-written backing fields with change checks.
+-->
+<Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
+  <PropertyChanged />
+</Weavers>

@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    WPF front end. Targets net10.0-windows (LTS to November 2028) rather than net48, so it consumes
+    the netstandard2.0 schema libraries directly and does not need the net48 UI assemblies.
+
+    UseWindowsForms is on for one reason: the SQL editor is the Scintilla control the WinForms front
+    end already uses (Scintilla5.NET), hosted through WindowsFormsHost so the editing behaviour,
+    lexer and native libraries stay identical. Moving that pane to a pure-WPF editor (AvalonEdit) is
+    a separate change.
+
+    EnableWindowsTargeting lets the Windows desktop reference packs resolve when the project is built
+    on Linux, which keeps the CI leg that builds the whole solution able to compile this project.
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <RootNamespace>OpenDBDiff.Wpf</RootNamespace>
+    <AssemblyName>OpenDBDiff.Wpf</AssemblyName>
+    <!-- The application icon: the same file the WinForms project carries as App.ico, so the file,
+         taskbar and window icons are the ones this application has always used. -->
+    <ApplicationIcon>App.ico</ApplicationIcon>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenDBDiff.Abstractions.Schema\OpenDBDiff.Abstractions.Schema.csproj" />
+    <ProjectReference Include="..\OpenDBDiff.SqlServer.Driver\OpenDBDiff.SqlServer.Driver.csproj" />
+    <ProjectReference Include="..\OpenDBDiff.SqlServer.Schema\OpenDBDiff.SqlServer.Schema.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Packed as a WPF resource as well, for the window to draw it in its title bar and the taskbar. -->
+    <Resource Include="App.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DiffPlex" Version="1.9.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+    <PackageReference Include="Scintilla5.NET" Version="7.0.1" />
+  </ItemGroup>
+
+  <!-- Fody weaves INotifyPropertyChanged into the view models; see FodyWeavers.xml. -->
+  <ItemGroup>
+    <PackageReference Include="Fody" Version="6.9.2" PrivateAssets="all" />
+    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

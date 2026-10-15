@@ -25,4 +25,8 @@
     <EmbeddedResource Include="SqlSnippets\Triggers\with-comments.sql" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OpenDBDiff.SqlServer.Driver\OpenDBDiff.SqlServer.Driver.csproj" />
+  </ItemGroup>
+
 </Project>

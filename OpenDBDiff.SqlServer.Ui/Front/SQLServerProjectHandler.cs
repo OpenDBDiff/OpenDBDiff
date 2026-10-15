@@ -1,5 +1,6 @@
 ﻿using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.Abstractions.Ui;
+using OpenDBDiff.SqlServer.Driver;
 using OpenDBDiff.SqlServer.Schema.Options;
 using System;
 using System.Drawing;
@@ -11,8 +12,8 @@ namespace OpenDBDiff.SqlServer.Ui
     {
         private SqlServerConnectFront DestinationControl;
         private SqlServerConnectFront SourceControl;
-        private SQLServerGenerator SourceGenerator;
-        private SQLServerGenerator DestinationGenerator;
+        private SqlServerGenerator SourceGenerator;
+        private SqlServerGenerator DestinationGenerator;
 
         private SqlOption Option;
 
@@ -58,18 +59,18 @@ namespace OpenDBDiff.SqlServer.Ui
 
         public IDatabaseComparer GetDatabaseComparer()
         {
-            return new SQLServerComparer();
+            return new SqlServerComparer();
         }
 
         public IGenerator SetDestinationGenerator(string connectionString, IOption options)
         {
-            DestinationGenerator = new SQLServerGenerator(connectionString, options);
+            DestinationGenerator = new SqlServerGenerator(connectionString, options);
             return DestinationGenerator;
         }
 
         public IGenerator SetSourceGenerator(string connectionString, IOption options)
         {
-            SourceGenerator = new SQLServerGenerator(connectionString, options);
+            SourceGenerator = new SqlServerGenerator(connectionString, options);
             return SourceGenerator;
         }
 

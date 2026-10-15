@@ -1,12 +1,14 @@
-﻿using OpenDBDiff.Abstractions.Schema.Model;
-using OpenDBDiff.Abstractions.Ui;
+using System;
+using OpenDBDiff.Abstractions.Schema.Model;
 using OpenDBDiff.SqlServer.Schema.Generates;
 using OpenDBDiff.SqlServer.Schema.Model;
-using System;
 
-namespace OpenDBDiff.SqlServer.Ui
+namespace OpenDBDiff.SqlServer.Driver
 {
-    public class SQLServerComparer : IDatabaseComparer
+    /// <summary>
+    /// Compares two SQL Server schema snapshots.
+    /// </summary>
+    public class SqlServerComparer : IDatabaseComparer
     {
         public IDatabase Compare(IDatabase origin, IDatabase destination)
         {
@@ -14,14 +16,13 @@ namespace OpenDBDiff.SqlServer.Ui
             {
                 return Generate.Compare(origin as Database, destination as Database);
             }
-            else if (!(origin is Database))
+
+            if (!(origin is Database))
             {
                 throw new NotSupportedException("Origin database type not supported: " + origin.GetType());
             }
-            else
-            {
-                throw new NotSupportedException("Destination database type not supported: " + destination.GetType());
-            }
+
+            throw new NotSupportedException("Destination database type not supported: " + destination.GetType());
         }
     }
 }

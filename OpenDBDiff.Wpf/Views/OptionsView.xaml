@@ -1,0 +1,57 @@
+<UserControl x:Class="OpenDBDiff.Wpf.Views.OptionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+      The comparison options. The ignore switches are a list rather than thirty hand-placed check
+      boxes: they come from the option object, so the window cannot fall out of step with it.
+    -->
+    <Grid Margin="14" Width="620" Height="520">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <GroupBox Grid.Row="0" Header="Comparison" Padding="6">
+            <StackPanel>
+                <CheckBox Content="Ignore white space in code" IsChecked="{Binding IgnoreWhiteSpacesInCode, Mode=TwoWay}" />
+                <CheckBox Content="Case sensitive" IsChecked="{Binding CaseSensitiveInCode, Mode=TwoWay}" Margin="0,4,0,0" />
+                <CheckBox Content="Reload the comparison after an update" IsChecked="{Binding ReloadComparisonOnUpdate, Mode=TwoWay}" Margin="0,4,0,0" />
+            </StackPanel>
+        </GroupBox>
+
+        <Grid Grid.Row="1" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <GroupBox Grid.Column="0" Header="Ignore these object types" Padding="6">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding IgnoreFilters}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Content="{Binding Caption}" IsChecked="{Binding IsIgnored, Mode=TwoWay}" Margin="0,1" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </GroupBox>
+
+            <GroupBox Grid.Column="1" Header="Excluded objects" Padding="6" Margin="10,0,0,0">
+                <ListView ItemsSource="{Binding ExclusionPatterns}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Type" Width="130" DisplayMemberBinding="{Binding ObjectType}" />
+                            <GridViewColumn Header="Pattern" Width="160" DisplayMemberBinding="{Binding Pattern}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </GroupBox>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="OK" Width="80" Padding="6,3" Click="Ok_Click" />
+        </StackPanel>
+    </Grid>
+</UserControl>

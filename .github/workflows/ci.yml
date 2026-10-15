@@ -46,6 +46,15 @@ jobs:
     # Runs both legs of the test project: net48 (the runtime the GUI ships on) and net10.0.
     - run: dotnet test -c Release --no-build
 
+    # The entry point users double-click: a NativeAOT binary with its own runtime, so it can look for
+    # the desktop runtime and explain its absence. Published here because cross-OS native compilation
+    # is not supported: Linux can build this project but only Windows can publish it.
+    - name: publish launcher
+      run: dotnet publish OpenDBDiff.Launcher/OpenDBDiff.Launcher.csproj -c Release -r win-x64 -o launcher
+
+    - name: put the launcher beside the front end
+      run: Copy-Item launcher/OpenDBDiff.exe OpenDBDiff.Wpf/bin/Release/net10.0-windows/
+
     - name: GUI
       uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
@@ -58,6 +67,32 @@ jobs:
       with:
         name: OpenDBDiff-CLI-${{ env.date }}-${{ env.shorthash }}
         path: OpenDBDiff.CLI\bin\Release\net*
+        retention-days: 14
+
+    # The WPF front end, including the Scintilla native libraries it loads at runtime. Framework
+    # dependent: running it needs the .NET 10 desktop runtime.
+    - name: WPF
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: OpenDBDiff-Wpf-${{ env.date }}-${{ env.shorthash }}
+        path: OpenDBDiff.Wpf\bin\Release\net10.0-windows
+        if-no-files-found: error
+        retention-days: 14
+
+    # The same front end with the desktop runtime inside it, so it starts on a machine that has no
+    # .NET installed at all - which is the only way to warn about a missing runtime before managed
+    # code can run: the apphost checks, and it can only check for something it can be given.
+    - name: publish self-contained
+      run: dotnet publish OpenDBDiff.Wpf/OpenDBDiff.Wpf.csproj -c Release -r win-x64 --self-contained true -o publish/win-x64
+
+    # Uploaded as the folder: the action archives it itself, and zipping it here as well would leave a
+    # zip inside a zip, which some extractors handle badly.
+    - name: WPF self-contained
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: OpenDBDiff-Wpf-win-x64-self-contained-${{ env.date }}-${{ env.shorthash }}
+        path: publish/win-x64
+        if-no-files-found: error
         retention-days: 14
 
   test-linux:
