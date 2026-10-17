@@ -10,14 +10,14 @@ assembly_info:
   assembly_informational_version: "{version}"
 
 before_build:
-- cmd: nuget restore OpenDBDiff.sln
+- cmd: dotnet restore OpenDBDiff.slnx
 
 configuration: 
 - Release
 
 build:
   parallel: true # enable MSBuild parallel builds
-  project: OpenDBDiff.sln
+  project: OpenDBDiff.slnx
   verbosity: minimal
 
 artifacts:
