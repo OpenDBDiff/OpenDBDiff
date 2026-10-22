@@ -73,9 +73,8 @@ namespace OpenDBDiff.UI
                 if ((!String.IsNullOrEmpty(ProjectSelectorHandler.GetSourceDatabaseName()) &&
                      (!String.IsNullOrEmpty(ProjectSelectorHandler.GetDestinationDatabaseName()))))
                 {
-                    Options = Options ?? this.ProjectSelectorHandler.GetDefaultProjectOptions();
-                    var leftGenerator = this.ProjectSelectorHandler.SetSourceGenerator(LeftDatabaseSelector.ConnectionString, Options);
-                    var rightGenerator = this.ProjectSelectorHandler.SetDestinationGenerator(RightDatabaseSelector.ConnectionString, Options);
+                    var leftGenerator = this.ProjectSelectorHandler.SetSourceGenerator(LeftDatabaseSelector.ConnectionString, GetOptions());
+                    var rightGenerator = this.ProjectSelectorHandler.SetDestinationGenerator(RightDatabaseSelector.ConnectionString, GetOptions());
                     IDatabaseComparer databaseComparer = this.ProjectSelectorHandler.GetDatabaseComparer();
 
                     var leftPair = new KeyValuePair<String, IGenerator>(LeftDatabaseSelector.ToString(), leftGenerator);
@@ -526,10 +525,18 @@ namespace OpenDBDiff.UI
 
         private void btnOptions_Click(object sender, EventArgs e)
         {
-            Options = Options ?? ProjectSelectorHandler.GetDefaultProjectOptions();
-            OptionForm form = new OptionForm(this.ProjectSelectorHandler, Options);
-            form.OptionSaved += new OptionControl.OptionEventHandler((option) => Options = option);
+            OptionForm form = new OptionForm(this.ProjectSelectorHandler, GetOptions());
+            form.OptionSaved += new OptionControl.OptionEventHandler((option) =>
+            {
+                Options = option;
+                SavedOptions.Save(option);
+            });
             form.ShowDialog(this);
+        }
+
+        private IOption GetOptions()
+        {
+            return Options = Options ?? SavedOptions.Load(ProjectSelectorHandler.GetDefaultProjectOptions());
         }
 
         private void LoadProjectHandlers()
@@ -596,7 +603,7 @@ namespace OpenDBDiff.UI
                             ProjectSelectorHandler.GetDestinationServerName(),
                             ProjectSelectorHandler.GetDestinationDatabaseName()
                         ),
-                        Options = Options ?? ProjectSelectorHandler.GetDefaultProjectOptions(),
+                        Options = GetOptions(),
                         Type = Project.ProjectType.SQLServer
                     };
 
